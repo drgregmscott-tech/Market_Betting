@@ -167,12 +167,12 @@ methodology, and final scope. No code written, no repo created. Full flow:
     matching the same pattern PGA's Data Golf decision followed.
 
 **Files created:**
-- `ROADMAP.md` (this repo does not exist yet — file is provisional, to be
-  moved into the real repo at Session 1.1)
+- `ROADMAP.md` (repo did not exist yet at time of writing — file was
+  provisional, moved into the real repo at Session 1.1)
 - `SESSION_LOG.md` (same — provisional until Session 1.1)
-- Research artifact (project file, not yet in a repo): *"Building a +EV
-  Prediction-Market System: Edge-Detection Across Sports, Weather, and
-  Down-Ballot Politics"*
+- Research artifact (project file, not yet in a repo at time of writing):
+  *"Building a +EV Prediction-Market System: Edge-Detection Across Sports,
+  Weather, and Down-Ballot Politics"*
 
 **Validation results:**
 - PASS: A real, evidence-backed mechanism was identified for every in-scope
@@ -242,7 +242,7 @@ methodology, and final scope. No code written, no repo created. Full flow:
 - ~~Which single track becomes the actual v1 build~~ — resolved: Fixed-Line
   Pick'em Platforms (see Decisions #17 and ROADMAP.md).
 - ~~Repo name~~ — resolved: `Market_Betting`. Visibility (Private) and actual
-  repo creation still pending — that's real Session 1.1 work, not a decision.
+  repo creation completed at Session 1.1.
 - Data source/API access research per track, especially PrizePicks/Underdog,
   which has no established public API the way an exchange does — genuinely
   unresearched (Open Decision #3).
@@ -255,3 +255,166 @@ methodology, and final scope. No code written, no repo created. Full flow:
 **Status at close of session:** Fully closed out on the viability/scope
 decision. No repo exists yet. Next session should start from ROADMAP.md's Open
 Decisions list, beginning with which track becomes v1.
+
+---
+
+## Session 1.1 — Environment & Repo Setup
+
+**Date completed:** 2026-08-28
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Confirmed via Claude in Chrome (browsing GitHub.com directly) that the
+   `Market_Betting` repo did not yet exist under the user's account — only
+   `DFS_Optimizer`, `DFS_Optimizer_NHL`, `DFS_Optimizer_PGA`,
+   `family-budget-app`, `pharmentor-repo`, and `Scott-Family-Hub` were present.
+2. Got explicit user confirmation before taking the account-changing action of
+   creating a new repository (per this environment's permission rules for
+   account-settings changes), then created `drgregmscott-tech/Market_Betting`
+   directly on GitHub.com: private visibility, no README/gitignore/license
+   auto-added (those were supplied as hand-built files instead, to match the
+   DFS sibling repos' actual conventions rather than GitHub's generic
+   defaults).
+3. Built the full Session 1.1 file set locally (in Claude's own workspace,
+   not directly on GitHub — per the user's standing workflow preference of
+   receiving files to place and push manually via GitHub Desktop):
+   - `requirements.txt` — `pandas`, `numpy`, `requests`, `python-dotenv`
+   - `.gitignore` — standard Python/editor/OS ignores, plus
+     `config/api_keys.env` and `*.env` (secrets), plus working contents of
+     `/data`, `/output`, `/logs` (each kept alive via `.gitkeep`)
+   - `README.md` — project summary, pointers to ROADMAP.md/SESSION_LOG.md/
+     docs/research, repo structure diagram, setup instructions
+   - `config/api_keys.env.example` — template for the real, gitignored
+     `config/api_keys.env`, documenting the venue credential fields expected
+     (Kalshi, Polymarket; pick'em platforms noted as unresearched, tied to
+     Open Decision #3)
+   - Folder structure: `/data`, `/scripts`, `/output`, `/logs`,
+     `/docs/research`, `/config`, each populated with a `.gitkeep` placeholder
+     so empty folders survive being pushed to Git (Git does not track empty
+     directories on its own)
+   - Session 0.1's research artifact copied into
+     `/docs/research/Building_a_+EV_Prediction-Market_System_Edge-Detection_Across_Sports_Weather_and_Down-Ballot_Politics.md`
+4. Verified locally (in Claude's own sandboxed environment, Python 3.12.3)
+   that `pip install -r requirements.txt` resolved cleanly with no conflicts,
+   as a first-pass sanity check before handoff.
+5. Delivered all files to the user with an explicit destination path for each,
+   per the project's standing file-handoff convention.
+6. **GitHub Desktop first-time-publish issue, worked through live with the
+   user:**
+   - User placed the files locally and ran `pip install -r requirements.txt`
+     successfully (see Validation results below for the real numbers).
+   - User could not find the new local folder inside GitHub Desktop — expected,
+     since GitHub Desktop only tracks folders it already knows about (either
+     cloned by it, or explicitly added).
+   - First attempted fix: **File → Add local repository** on the existing
+     folder. This worked to make GitHub Desktop recognize the folder and
+     create a local commit, but it initialized a **new, disconnected** local
+     Git repository — it had no link to the `Market_Betting` repo already
+     created on GitHub.com in step 2.
+   - This surfaced when the user clicked **Publish repository**: GitHub
+     Desktop tried to *create a new repository* on GitHub.com named
+     `Market_Betting` and failed with `Repository creation failed. (name
+     already exists on this account)` — because that repo already existed
+     from step 2.
+   - First correction attempt: pointed the user to **Repository → Repository
+     settings → Remote** to manually set the origin URL to the existing
+     GitHub.com repo. This menu path did not have the expected "Primary
+     remote repository (origin)" field in the user's version of GitHub
+     Desktop — noted as a version/UI difference rather than pursued further.
+   - **Actual fix used:** abandoned trying to attach a remote to the
+     already-initialized local repo. Instead: removed the repo from GitHub
+     Desktop (Repository → Remove..., local files kept), renamed the local
+     folder aside, used **File → Clone repository** to clone the real, empty
+     `drgregmscott-tech/Market_Betting` from GitHub.com fresh (this correctly
+     links local-to-remote automatically, which manually adding a folder does
+     not), copied the project files into the freshly cloned folder, then
+     committed and pushed normally. This resolved cleanly — push succeeded on
+     the first attempt with no further errors.
+7. Verified the final result directly on GitHub.com via Claude in Chrome:
+   confirmed every expected file and folder is present at the correct path,
+   one commit ("Repo Setup") on `main`, correct owner, private visibility
+   intact.
+
+**Files created/modified:**
+- `/README.md`
+- `/requirements.txt`
+- `/.gitignore`
+- `/config/api_keys.env.example`
+- `/config/.gitkeep`, `/data/.gitkeep`, `/output/.gitkeep`, `/logs/.gitkeep`,
+  `/scripts/.gitkeep`
+- `/docs/research/Building_a_+EV_Prediction-Market_System_Edge-Detection_Across_Sports_Weather_and_Down-Ballot_Politics.md`
+- `ROADMAP.md`, `SESSION_LOG.md` (moved from provisional/chat-only status into
+  the actual repo as part of this session's push, alongside the rest — the
+  versions the user pushed were the pre-Session-1.1-closure drafts; this
+  session's closing update is what brings them current)
+
+**Validation results:**
+- PASS — Fresh clone + `pip install -r requirements.txt` runs without error.
+  Confirmed on the user's actual machine (Windows, Python 3.14, via
+  `pythoncore-3.14-64`): `pandas`, `numpy`, `requests` were already present
+  and satisfied; `python-dotenv` installed cleanly (`python_dotenv-1.2.3`,
+  22 KB wheel). One benign pip warning (`dotenv.exe` script installed outside
+  PATH) — informational only, does not affect the install passing.
+- PASS — Python version confirmed and logged: **Python 3.14**
+  (`C:\Users\gmsco\AppData\Local\Python\pythoncore-3.14-64`).
+- PASS — Research artifact from Session 0.1 is present in the repo, not
+  orphaned in chat history. Confirmed live via direct browse of
+  `github.com/drgregmscott-tech/Market_Betting/tree/main/docs/research` —
+  file present at the correct path.
+- Additional spot-check beyond the roadmap's original checklist (performed
+  because the GitHub Desktop publish issue raised real doubt about what
+  actually landed): every other folder (`/config`, `/data`, `/output`,
+  `/logs`, `/scripts`) and file (`README.md`, `requirements.txt`,
+  `.gitignore`) was individually confirmed present at its correct path via
+  direct GitHub.com browsing, not assumed from the local push succeeding.
+
+**Decisions made:**
+1. Repo created directly on GitHub.com first (by Claude, with explicit user
+   confirmation beforehand, since creating a repository is an account-level
+   change), rather than letting GitHub Desktop create it via "Publish" — this
+   was not the original plan, but became the deciding factor in resolving the
+   GitHub Desktop issue (see Corrections below). Established as the preferred
+   pattern for any future sibling repo: create on GitHub.com, then **Clone**
+   in GitHub Desktop, never **Add local repository** for a brand-new project.
+2. No README/gitignore/license auto-generated by GitHub at repo-creation time
+   — all supplied as hand-authored files matching the DFS sibling repos'
+   actual conventions, so the repo's baseline content is intentional rather
+   than generic scaffolding.
+3. `config/api_keys.env.example` added as a documented template even though
+   no real credentials exist yet (Open Decision #3 still unresolved) — gives
+   the next session a concrete shape to fill in rather than starting from
+   nothing.
+4. `.gitkeep` placeholder files used in every otherwise-empty folder — Git
+   does not track empty directories, and the repo structure itself
+   (data/scripts/output/logs/docs/config) is part of what Session 1.1 is
+   meant to establish, so the folders needed to survive the first push.
+
+**Corrections/reversals during the session:**
+1. **GitHub Desktop "Add local repository" → "Clone repository."** Original
+   guidance (based on the user already having files sitting in a local
+   folder) was to use **Add local repository** to bring that existing folder
+   under GitHub Desktop's tracking, then attach it to the GitHub.com remote
+   manually via Repository Settings. This produced a disconnected local repo
+   and a failed "Publish repository" attempt (duplicate name on GitHub.com).
+   The Repository Settings → Remote menu path also did not match what the
+   user's GitHub Desktop version actually showed. Corrected to the more
+   reliable pattern: remove the disconnected local repo from GitHub Desktop,
+   clone the real GitHub.com repo fresh, then copy files into the cloned
+   folder before the first commit. This is now documented in ROADMAP.md's
+   Workflow Preference section so future sibling-repo sessions don't repeat
+   the same detour.
+
+**Open items / deferred validations:**
+- None for this session — all three roadmap validation checkboxes passed,
+  plus the additional full file/folder spot-check.
+- Carried forward, unchanged, from Session 0.1 (still open, tied to Sessions
+  1.2+): Open Decisions #3 (data source access per track, especially
+  PrizePicks/Underdog), #4 (account-limiting policy verification per pick'em
+  platform), and #5 (concrete first estimation model spec).
+
+**Status at close of session:** Fully closed out. Repo `Market_Betting` is
+live on GitHub.com, private, correctly structured, with the Session 0.1
+research artifact archived inside it and a clean local-development
+environment confirmed on the user's actual machine. Next session should pick
+up at Sessions 1.2+ in ROADMAP.md — real investigation of Open Decisions #3–#5
+for the Fixed-Line Pick'em Platforms v1 track.

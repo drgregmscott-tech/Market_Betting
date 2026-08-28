@@ -82,7 +82,7 @@ most professionally saturated categories researched); Crypto (dominated by trade
 already pricing the underlying asset on crypto-native exchanges in real time).
 
 Full sourced research backing this table is preserved in the Session 0.1 research
-artifact — see Phase 0 below for its location.
+artifact — archived in `/docs/research/` as of Session 1.1.
 
 ---
 
@@ -104,6 +104,17 @@ a session's files are ready, Claude provides the finished files and explains
 exactly where each belongs in the repo; the user stages, commits, and pushes (and
 pulls first, if needed) through GitHub Desktop.
 
+**Session 1.1 note on this workflow:** the first-time setup of a brand-new repo
+through GitHub Desktop has one sharp edge worth remembering for future sibling
+projects — see the Session 1.1 entry in SESSION_LOG.md for the specific failure
+mode (GitHub Desktop's "Add local repository" on a folder with no prior Git
+history creates a *new*, disconnected local repository; "Publish repository"
+then tries to create a second, duplicate repo on GitHub.com instead of linking
+to one that already exists there). The reliable pattern is: create the repo on
+GitHub.com first, then use GitHub Desktop's **Clone repository** flow (not
+**Add local repository**) to pull that empty repo down, then copy project files
+into the cloned folder before the first commit.
+
 ## How to use this for session handoff
 
 At the start of each new session, provide:
@@ -114,7 +125,7 @@ At the start of each new session, provide:
 That is the full context a fresh session needs — no need to re-explain the whole
 project.
 
-## Repo Structure (proposed — confirm at Session 1.1)
+## Repo Structure (confirmed, built Session 1.1)
 
 ```
 /Market_Betting
@@ -124,7 +135,7 @@ project.
   /logs          <- session log + automation run logs
   /docs
     /research    <- Session 0.1 research artifact archived here
-  /config        <- api_keys.env (gitignored), venue configs
+  /config        <- api_keys.env (gitignored), api_keys.env.example (template), venue configs
   SESSION_LOG.md
   ROADMAP.md
   README.md
@@ -156,12 +167,12 @@ structure) rather than relying on priors, which changed the plan's shape more
 than once (see SESSION_LOG.md Session 0.1 entry for the full decision trail).
 
 **Outputs:**
-- This ROADMAP.md — the confirmed scope, ranked Track Reference table, and
+- ROADMAP.md — the confirmed scope, ranked Track Reference table, and
   validation methodology.
 - Research artifact: *"Building a +EV Prediction-Market System: Edge-Detection
   Across Sports, Weather, and Down-Ballot Politics"* — full sourced findings
-  behind the Track Reference table. **Not yet archived in a repo** (no repo
-  exists yet) — move to `/docs/research/` at Session 1.1.
+  behind the Track Reference table. Archived in `/docs/research/` as of
+  Session 1.1.
 
 **Validation (required to close session):**
 - [x] A real, evidence-backed mechanism identified for each in-scope track (not
@@ -171,43 +182,48 @@ than once (see SESSION_LOG.md Session 0.1 entry for the full decision trail).
 - [x] Scope explicitly ranked by confidence, not left as an unordered list
 - [x] Out-of-scope categories explicitly named with reasoning, not just omitted
 
-**Handoff notes:** See "Open Decisions" at the end of this document — none of
-them block Phase 0 from being closed, but all of them need answers before Phase
-1 can start for real.
+**Handoff notes:** See "Open Decisions" at the end of this document.
 
 ---
 
 # PHASE 1 — Foundation & Repo Setup
 
-*Not started. Cannot be fully scoped until the v1 track (Open Decision #1) is
-chosen — the data source and estimation-engine sessions differ meaningfully by
-track. Session 1.1 (repo/environment setup) is track-agnostic and can be scoped
-now; later sessions in this phase should get their own detailed cards once a
-track is picked, mirroring how each DFS sibling repo got its own Session 1.2+
-once its data-source situation was actually investigated.*
-
 ### Session 1.1 — Environment & Repo Setup
 
-**Status:** Not started.
+**Status:** ✅ Complete (2026-08-28) — see SESSION_LOG.md for full detail.
 
-**Prerequisites:** Phase 0 complete (done). Repo name decided (Open Decision #2).
+**Prerequisites:** Phase 0 complete. Repo name decided (`Market_Betting`,
+resolved Session 0.1 continuation).
 
 **NFL/NHL/PGA analog:** Session 1.1 — direct copy pattern, contents genuinely new
-(different dependencies expected: likely `pandas`, `numpy`, `requests`, plus
-venue-specific API clients rather than `pulp`/`ortools` from day one — the sizing
-optimizer isn't needed until a track has real flagged opportunities to allocate
-across).
+(dependencies: `pandas`, `numpy`, `requests`, `python-dotenv` — venue-specific
+API clients and the sizing optimizer are deferred until a track has real
+flagged opportunities to allocate across).
 
-**Files touched (planned):**
+**Files touched:**
 - `/requirements.txt`, `/README.md`, `/.gitignore`
-- Folder structure per Repo Structure above
-- `/docs/research/` — Session 0.1's research artifact moved in here
+- `/config/api_keys.env.example` (template; real `config/api_keys.env` is
+  gitignored and not yet created — no venue credentials exist yet)
+- Folder structure per Repo Structure above, each empty folder held in place
+  with a `.gitkeep` placeholder file
+- `/docs/research/Building_a_+EV_Prediction-Market_System_Edge-Detection_Across_Sports_Weather_and_Down-Ballot_Politics.md`
+  — Session 0.1's research artifact, moved in
 
 **Validation (required to close session):**
-- [ ] Fresh clone + `pip install -r requirements.txt` runs without error
-- [ ] Python version confirmed and logged
-- [ ] Research artifact from Session 0.1 is present in the repo, not orphaned in
-      chat history
+- [x] Fresh clone + `pip install -r requirements.txt` runs without error —
+      confirmed on the user's machine (Windows, Python 3.14): all four
+      packages installed/resolved with no errors or conflicts.
+- [x] Python version confirmed and logged — **Python 3.14**
+      (`pythoncore-3.14-64`).
+- [x] Research artifact from Session 0.1 is present in the repo, not orphaned
+      in chat history — confirmed live at
+      `github.com/drgregmscott-tech/Market_Betting/docs/research/`.
+
+**Handoff notes:** Repo is live, private, on `main` branch, single commit
+("Repo Setup"). GitHub Desktop's first-time publish workflow had a wrinkle —
+see SESSION_LOG.md Session 1.1 entry for the specific failure and fix; the
+Repo Structure section above and the Workflow Preference section earlier in
+this document both now carry the corrected pattern for next time.
 
 ### Sessions 1.2+ — Track-Specific Data Ingestion, Estimation Engine, CLV Logging
 
@@ -261,8 +277,7 @@ deferred to a future session, not skipped.
    preference and asked for a structural assessment; the DFS projection-engine
    reuse and full-stack scaffold benefit were the deciding factors.
 2. ~~Repo name and visibility.~~ **Resolved 2026-08-28: `Market_Betting`.**
-   Visibility to be set Private at Session 1.1, matching the DFS sibling repos,
-   unless told otherwise.
+   Created Session 1.1, private, under `drgregmscott-tech`.
 3. **Data source access per track**, not yet researched:
    - Kalshi/Polymarket API access (public, need to confirm what's actually
      available without an account vs. with one)
