@@ -418,3 +418,208 @@ research artifact archived inside it and a clean local-development
 environment confirmed on the user's actual machine. Next session should pick
 up at Sessions 1.2+ in ROADMAP.md — real investigation of Open Decisions #3–#5
 for the Fixed-Line Pick'em Platforms v1 track.
+
+---
+
+## Session 1.1 (continuation) — Open Decisions #3/#4 Research
+
+**Date completed:** 2026-08-28
+**Status:** ✅ Complete — logged here as a continuation of Session 1.1, not a
+separately numbered session, per user direction (this was investigation
+resolving Session 1.1's own still-open items, not new build work).
+
+**What was actually done:**
+1. General web research on PrizePicks/Underdog/DK Pick6 data access confirmed
+   all three platforms lack an official developer API but each run
+   undocumented public endpoints reachable without login or an API key (e.g.
+   `partner-api.prizepicks.com/projections`).
+2. General web research surfaced a widely-repeated but single-sourced claim
+   that PrizePicks demotes winning accounts to Flex-only entries and cuts max
+   entry size once win rate crosses ~55% over 200+ entries.
+3. A full Advanced Research task (task_id `wf-2c042688-db7f-568c-b6a4-77a745d46367`)
+   was run to verify account-limiting policy against primary sources (ToS
+   language) and credible first-hand reports, rather than relying on the
+   general search results. Report archived at
+   `/docs/research/Pickem_Platform_Account_Limiting_Policy_Research.md`.
+
+**Files created:**
+- `/docs/research/Pickem_Platform_Account_Limiting_Policy_Research.md`
+
+**Validation results:**
+- PASS — All three platforms' Terms of Service quoted/paraphrased directly
+  from primary sources, confirming broad sole-discretion authority to limit or
+  close accounts.
+- PASS — The ~55%/200-entry PrizePicks claim was checked against Reddit,
+  forums, X, and journalism; found **no independent corroboration** beyond the
+  single originating affiliate site. Explicitly flagged as unverified in the
+  research artifact rather than treated as fact.
+- PASS — First-hand evidence located (BBB, Trustpilot) showing a real pattern
+  of PrizePicks account closures and withheld withdrawals perceived by users
+  as win-triggered, distinct from (and better-documented than) the specific
+  unverified threshold claim.
+- PASS — State-by-state legal status of the "vs.-the-house" pick'em model
+  documented, including confirmed peer-to-peer alternatives (PrizePicks
+  "Arena," Underdog "Pick 'Em Champions," DK Pick6's native peer-to-peer
+  design).
+
+**Decisions made:**
+1. The 55%/200-entry threshold will not be built into any sizing or risk logic
+   as a hard number — treated as unconfirmed throughout the roadmap.
+2. PrizePicks treated as higher account-closure risk (withdraw frequently);
+   Underdog and DK Pick6 treated as more scalable — reflected in Session 2.6's
+   sizing design once that session is built.
+3. State-level legal footprint is now planned as an explicit check in every
+   track's ingestion session (see Session 1.2 below), not just for pick'em.
+
+**Open items / deferred validations:**
+- None — Open Decisions #3 and #4 are resolved. Remaining research (Kalshi/
+  Polymarket API access, sportsbook odds feeds) is deferred to Sessions 3.1
+  and 6.1 respectively, where it's actually needed — not treated as a Phase 1
+  blocker.
+
+---
+
+## Session 1.2 — Full Roadmap & Session Structure Definition
+
+**Date completed:** 2026-08-28
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. User identified that Session 0.1 had defined project *scope* (six ranked
+   tracks) but never broken it into the session-by-session build map used by
+   the DFS sibling repos — the "Sessions 1.2+" card in ROADMAP.md was still a
+   stub. This session closes that gap.
+2. Built a complete phase/session map covering all six tracks (not just the
+   v1 pick'em track), at the user's explicit direction, in the same card
+   format as the DFS repos: prerequisites, what gets built, files touched,
+   validation checklist, per session.
+3. Structured the map as: Phase 2 (pick'em, v1) as a full original build of
+   every stack layer; Phases 3–6 (arbitrage, weather, politics, sportsbook
+   props) as scaffold-reuse builds, each swapping in only the track-specific
+   estimation model and data source; Phase 7 (flagship/main lines) gated
+   behind an explicit go/no-go checkpoint rather than an assumed build; Phase 8
+   as cross-track portfolio management once 2+ tracks are live.
+4. First review pass: user confirmed the structure was directionally right,
+   then asked Claude to independently assess whether the roadmap, if fully
+   executed, would actually produce a system capable of consistently
+   identifying +EV bets daily across all in-scope tracks — not just whether it
+   was well-organized. This assessment surfaced four real gaps: no defined
+   sample-size threshold for go/no-go checkpoints, no recurring endpoint-health
+   monitoring despite every non-exchange data source being an undocumented
+   endpoint, no realized-outcome/P&L tracking distinct from the CLV proxy, and
+   no explicit statement that the system flags/sizes but does not place bets.
+   User approved all four; Claude added: Session 2.5 (sample-size thresholds +
+   realized-outcome tracking), Session 8.4 (ingestion health monitoring), and
+   an explicit "flags and sizes, does not place" statement in Background &
+   Approach.
+5. User raised a specific concern from Session 0.1 directly: had the roadmap
+   actually captured the track-specific, evidence-based reasoning for why each
+   edge is believed real (not just general validation discipline)? Claude
+   audited the draft against Session 0.1's own five per-venue evaluation
+   criteria (repricing mechanism, fee/vig cost, account-limiting risk,
+   liquidity, legal footprint) by name, across all six tracks. Found liquidity
+   and legal-footprint checks were narrative-only (not explicit session
+   checklist items) for arbitrage, weather, politics, and sportsbook props —
+   only the pick'em track (via the Session 1.1 continuation research) had them
+   as concrete checks. Also found Phase 7's go/no-go was framed as a single
+   up-or-down call on "flagship markets," missing the original research
+   finding that market structure — not sport — determines efficiency at the
+   sub-market level (e.g. Asian handicap soccer vs. that same game's 1X2
+   market).
+6. Fixed both gaps directly: added explicit liquidity and/or legal-footprint
+   validation checkboxes to Sessions 3.2, 4.1, 5.1, and 6.1; rewrote Session
+   7.0 to evaluate market structure at the sub-market-type level rather than
+   as a blanket flagship judgment.
+7. User raised a standing concern, also traceable to Session 0.1: that the
+   project not be re-litigated, session after session, on the basic point that
+   it is not designed to win every bet — it is designed to produce a real edge
+   over the general betting market across a large sample, with real losing
+   stretches expected along the way (the S&P 500 analogy, already established
+   in Session 0.1). User asked this be captured once, permanently, rather than
+   needing to be re-raised. Added directly to ROADMAP.md's Background &
+   Approach section as a one-time, settled statement.
+8. Merged the fully-reviewed roadmap into the real ROADMAP.md, replacing the
+   "Sessions 1.2+" stub with 45 real, buildable session cards across Phases
+   2–8. Updated the Open Decisions section: #3 and #4 marked resolved (with
+   reference to the Session 1.1 continuation research above); #5 marked as
+   deliberately deferred to Session 2.3, not abstract; two new items (#6, #7)
+   added and marked resolved, documenting the liquidity/legal-footprint and
+   Phase 7 sub-market gaps found and fixed during this session's own review.
+
+**Files created/modified:**
+- `ROADMAP.md` — full rewrite of the "Sessions 1.2+" stub into Phases 2–8 (45
+  session cards), plus updates to Background & Approach and Open Decisions.
+- `SESSION_LOG.md` — this entry, plus the Session 1.1 continuation entry above
+  it.
+
+**Validation results:**
+- PASS — All six tracks have complete session breakdowns, not just the v1
+  track (45 total session cards across Phases 2–8).
+- PASS — Every session card includes a stated goal, prerequisites, files
+  touched, and a validation checklist.
+- PASS — User reviewed and approved the roadmap through two substantive
+  revision passes, both of which surfaced and led to fixing real gaps rather
+  than rubber-stamping the first draft.
+- PASS — Sequencing logic (why this phase order) is stated explicitly in its
+  own section, not just asserted.
+- PASS — Cross-checked against Session 0.1's five per-venue evaluation
+  criteria by name, across all six tracks — confirmed present as explicit
+  checks after this session's fixes, not narrative-only.
+
+**Decisions made:**
+1. All six tracks planned in full session-level detail now, rather than
+   scoping one phase at a time — user's explicit direction, departing from the
+   DFS repos' incremental-scoping pattern. Reasoning: this project's edge
+   sources are more heterogeneous across tracks than sport-to-sport variation
+   in the DFS repos, so planning all six up front surfaced real cross-track
+   gaps that phase-by-phase scoping likely would have missed until much later.
+2. Confirmed scope is 6 build tracks — a user restatement as "3 or 4 areas"
+   during this session was an imprecise recollection, not a scope change;
+   re-verified against Session 0.1's own Track Reference table and recorded
+   permanently in ROADMAP.md's Background & Approach.
+3. Research resolving Open Decisions #3/#4 does not get its own session
+   number — logged as a continuation of Session 1.1 (see entry above), since
+   it was investigation closing out Session 1.1's own open items.
+4. Sample-size thresholds and realized-outcome tracking (new Session 2.5) are
+   treated as prerequisites for every later "go/no-go" checkpoint, not
+   optional — every Live Validation Window session (2.9, 3.6, 4.7, 5.7, 6.7)
+   and Phase 7.0 explicitly depend on Session 2.5's output.
+5. Endpoint-health monitoring (new Session 8.4) is deliberately placed in
+   Phase 8, not earlier, since a meaningful cross-track staleness/schema check
+   needs at least 2 live tracks' real ingestion history to design against —
+   each track's own automation session still carries its own basic retry/error
+   handling in the meantime, so this isn't a coverage gap before Phase 8.
+6. "This system flags and sizes, it does not place bets" is now a permanent,
+   explicit statement in Background & Approach, tied directly to this
+   environment's restriction against Claude executing financial trades on the
+   user's behalf.
+
+**Corrections/reversals during the session:**
+1. **Initial draft treated Session 0.1's per-venue evaluation criteria as
+   satisfied by narrative description → corrected to require explicit,
+   checkable session-level validation items.** The first full draft mentioned
+   liquidity, legal footprint, fee/vig cost, repricing mechanism, and
+   account-limiting risk in prose within relevant sessions, but only pick'em
+   (which had real research behind it) had them as concrete checklist items.
+   User's direct question — "are we capturing what we said we'd capture in
+   0.1?" — led to a full audit that found and fixed this for arbitrage,
+   weather, politics, and sportsbook props.
+2. **Phase 7's go/no-go was initially a single track-level judgment →
+   corrected to evaluate market structure at the sub-market-type level.** The
+   original research specifically found market *structure*, not sport,
+   determines efficiency (e.g. Asian handicap soccer is efficient while that
+   same game's 1X2 market is not) — a blanket "is flagship worth building"
+   call would have missed exactly the kind of narrow, real edge this
+   project's other tracks are built to find.
+
+**Open items / deferred validations:**
+- None blocking Phase 2 from starting. Kalshi/Polymarket API access and
+  sportsbook odds feed research remain genuinely open but are deliberately
+  deferred to Sessions 3.1 and 6.1, where they're actually needed — not
+  treated as blockers to the pick'em v1 track.
+
+**Status at close of session:** Fully closed out. ROADMAP.md now contains a
+complete, reviewed, twice-audited session map for all six tracks (45 sessions,
+Phases 2–8). All five of Phase 1's original Open Decisions are resolved or
+deliberately deferred to their actual point of need. Next session is Session
+2.1 — Data Ingestion Prototype, the first real build session of the project.
