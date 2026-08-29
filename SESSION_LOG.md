@@ -623,3 +623,153 @@ complete, reviewed, twice-audited session map for all six tracks (45 sessions,
 Phases 2–8). All five of Phase 1's original Open Decisions are resolved or
 deliberately deferred to their actual point of need. Next session is Session
 2.1 — Data Ingestion Prototype, the first real build session of the project.
+
+---
+
+## Session 2.1 — Data Ingestion Prototype
+
+**Date completed:** 2026-08-29
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Built three throwaway proof-of-reach scripts, one per originally-planned
+   platform: `prototype_underdog.py`, `prototype_prizepicks.py`, and
+   `prototype_dkpick6.py`. Each script's only job was to confirm an endpoint
+   is reachable with no login/API key and to print the real field names
+   returned, per the roadmap's stated goal for this session (proof-of-reach
+   and schema discovery, not a production pipeline).
+2. Live-tested reachability directly (via Claude's own browser tool) before
+   handing scripts to the user. Found Claude's browser tool is blocked by its
+   own safety category filter from visiting prizepicks.com and
+   pick6.draftkings.com at all, but not underdogfantasy.com — so Underdog's
+   endpoint (`api.underdogfantasy.com/beta/v3/over_under_lines`) was
+   confirmed live by Claude directly, with real schema captured from that
+   response, before the user ran anything. PrizePicks and DK Pick6 could not
+   be tested this way; the scripts for those two were built from outside
+   documentation (PrizePicks) or best-guess analogy (DK Pick6) instead, with
+   this limitation stated plainly to the user rather than presented as
+   confirmed.
+3. User ran all three scripts locally:
+   - `prototype_underdog.py` succeeded — 268 lines, real field names matched
+     what Claude had already captured directly.
+   - `prototype_prizepicks.py` succeeded — 21,203 projections, confirming the
+     endpoint documented by outside developers was in fact real and working.
+     Real field names captured, including one naming quirk worth remembering
+     for Session 2.3: the player record inside PrizePicks' `included` list is
+     typed `new_player`, not `player`.
+   - `prototype_dkpick6.py` failed — `404 Client Error: Not Found` on the
+     guessed endpoint `https://api.draftkings.com/pick6/v1/leagues`, as
+     anticipated (this URL was always labeled a guess, not a confirmed one).
+4. User indicated openness to dropping DK Pick6 from scope rather than
+   pursuing the manual browser-Developer-Tools reverse-engineering fallback
+   documented in that script's own docstring.
+5. Roadmap's third validation item (a full day's snapshot, to prove data is
+   genuinely live and to observe stability) needed real elapsed time, not
+   just repeat manual runs close together — this was explained to the user,
+   along with the honest limit that wall-clock time can't be shortened, only
+   the user's manual effort within that time can be. Built
+   `monitor_pickem_endpoints.py`, a new unattended script (not in the
+   original roadmap card) that checks both remaining platforms on a timer in
+   the background, logging a compact summary per check, so the user did not
+   need to manually re-trigger checks throughout the day. Default was set to
+   every 30 minutes for 12 hours; user asked whether a shorter window would
+   suffice, and 6 hours was agreed as sufficient before running.
+6. User ran the monitor script for approximately 10 hours (05:06–15:13,
+   beyond the agreed 6-hour minimum), producing 21 checks. All 21 succeeded
+   for both platforms, with zero failures. Record counts for both platforms
+   moved meaningfully across the window (PrizePicks: ~31,400 → ~22,200;
+   Underdog: 261 → 212 lines), which was read as real evidence of genuinely
+   live, non-cached data rather than treated as an unexplained anomaly.
+7. Folded all of the above into `/docs/research/endpoint_schemas.md`,
+   including the full monitoring results table, before presenting it as
+   ready to close.
+8. User confirmed Session 2.1 as fully closed and DK Pick6 as formally
+   dropped from Track 1's scope.
+
+**Files created/modified:**
+- `/scripts/ingestion/prototype_underdog.py`
+- `/scripts/ingestion/prototype_prizepicks.py`
+- `/scripts/ingestion/prototype_dkpick6.py` (built and run; endpoint not
+  found — kept in the repo per its own docstring's fallback instructions in
+  case DK Pick6 is reconsidered in the future)
+- `/scripts/ingestion/monitor_pickem_endpoints.py` (new — not in the original
+  Session 2.1 roadmap card; built mid-session to solve the "full day's
+  snapshot without requiring manual re-runs" problem)
+- `/docs/research/endpoint_schemas.md`
+- `ROADMAP.md` (Session 2.1 marked complete; DK Pick6 removed from Phase 2's
+  description, the Track Reference table, and Sessions 2.2/2.4/2.6's active
+  validation items; new Open Decision #8 added recording the drop)
+
+**Validation results:**
+- PASS — PrizePicks and Underdog (the two platforms remaining in scope) both
+  return live data successfully with no login/API key. Confirmed via
+  individual test runs and again across 21 unattended checks over ~10 hours
+  with zero failures for either platform. DK Pick6 does not have a working
+  endpoint and is out of scope as of this session — see Decisions below.
+- PASS — Schema documented per platform, from real captured responses (not
+  assumed field names) for both PrizePicks and Underdog. Full field lists
+  recorded in `endpoint_schemas.md`.
+- PASS (by agreement, not literal 24 hours) — Snapshot/stability window of
+  ~10 hours, 21 checks at ~30-minute intervals, run unattended. User and
+  Claude explicitly agreed in advance that this shorter, automated window
+  satisfies the roadmap's intent (proving live data + surfacing failure
+  modes) without requiring a literal calendar day.
+- PASS — Explicit note on what breaks the pull is recorded: nothing did, in
+  this window, for either platform. Documented as a genuine finding rather
+  than an unaddressed checkbox, with the explicit caveat that Session 2.2's
+  production pipeline still needs real retry/error handling regardless,
+  since both remain undocumented endpoints that can change without notice at
+  any time.
+
+**Decisions made:**
+1. **DK Pick6 dropped from Track 1's scope.** No credible public
+   documentation of a Pick6-specific endpoint exists; a best-guess URL
+   (built by analogy to DraftKings' other documented APIs) returned a 404.
+   User chose to drop it rather than pursue manual reverse-engineering via
+   browser Developer Tools, given no guarantee of success and the risk that
+   any real endpoint found that way could require a logged-in session —
+   which would break this project's "no login required" design principle for
+   pick'em ingestion (see Session 0.1 Decision #4 and the account-limiting
+   research). Track 1 proceeds as a two-platform track: PrizePicks and
+   Underdog.
+2. **An automated, unattended monitoring script was built in place of manual
+   repeat runs**, once it became clear the roadmap's "full day's snapshot"
+   validation item needed real elapsed time (to observe genuine data change
+   and any failure mode) rather than effort that could be compressed. This
+   removed the user's need to personally re-trigger checks throughout the
+   day, without shortening the actual observation window.
+3. **A ~10-hour unattended window was accepted as satisfying "a full day's
+   snapshot,"** rather than a literal 24 hours — agreed with the user in
+   advance, based on the validation item's real purpose (proving live data,
+   catching failure modes) rather than the literal word "day." Recorded here
+   explicitly as an agreed scope decision, not a silently lowered bar.
+
+**Corrections/reversals during the session:**
+1. **Original roadmap card assumed all three platforms would be tested with
+   equal confidence → corrected to reflect that Claude's own tools could only
+   confirm one of three live, in real time, before handoff.** Claude's
+   browser tool is blocked by its own safety category filter from visiting
+   prizepicks.com- and pick6.draftkings.com-family domains at all, but not
+   underdogfantasy.com. This was stated to the user plainly before any script
+   was handed over, rather than presenting untested endpoints as confirmed.
+2. **DK Pick6 in scope → DK Pick6 dropped.** See Decision #1. This reverses
+   the original three-platform framing carried in ROADMAP.md's Phase 2
+   description and Track Reference table since Session 0.1/1.2; both were
+   updated as part of closing this session, per the project's standing
+   convention that corrections are logged explicitly, not silently
+   incorporated.
+
+**Open items / deferred validations:**
+- None blocking Session 2.2 from starting. Track 1 proceeds with two
+  platforms (PrizePicks, Underdog) instead of three.
+- If DK Pick6 is ever reconsidered, `prototype_dkpick6.py`'s docstring
+  contains the manual browser-Developer-Tools procedure for finding its real
+  endpoint — this was deliberately left in place rather than deleted.
+
+**Status at close of session:** Fully closed out, by explicit agreement with
+the user. Two of the three originally-planned pick'em platforms are
+confirmed live with documented real schemas; the third (DK Pick6) is
+formally dropped from Track 1's scope, with the reasoning and the option to
+revisit it later both recorded rather than silently dropped. Next session is
+Session 2.2 — Production Data Ingestion Pipeline, now scoped for two
+platforms.

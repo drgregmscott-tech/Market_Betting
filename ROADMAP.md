@@ -92,7 +92,7 @@ play out.
 | Track | Venue(s) | Mechanism | Confidence | Why |
 |---|---|---|---|---|
 | Cross-venue arbitrage | Kalshi, Polymarket, sportsbooks, pick'em — any pair pricing the same real-world outcome differently | Price disagreement between venues, or a single market's YES+NO ≠ $1.00 | **Highest** | Doesn't depend on forecasting skill at all — real, already-realized profits documented (~$40M on Polymarket alone in one measured year) |
-| Fixed-line pick'em platforms | PrizePicks, Underdog, DK Pick6 | Static line set once by platform's own model; fixed-multiplier payout; no live repricing against money flow | **High** | Directly reuses the existing DFS projection-engine pattern — same problem shape (projection vs. fixed number), not a new kind of problem |
+| Fixed-line pick'em platforms | PrizePicks, Underdog (DK Pick6 dropped, Session 2.1 — see below) | Static line set once by platform's own model; fixed-multiplier payout; no live repricing against money flow | **High** | Directly reuses the existing DFS projection-engine pattern — same problem shape (projection vs. fixed number), not a new kind of problem |
 | Weather/climate markets | Kalshi | Ground truth is objectively computable from free public data (NWS/GFS/METAR); retail anchors on round-number thresholds | **High** | Edge is in correctly applying available public data faster/better than a thin, low-attention market — no need to out-think anyone |
 | Down-ballot politics (governor, mayoral, primary — marquee races excluded) | Kalshi, Polymarket | Documented "underconfidence" — prices compressed toward 50%, most extreme in down-ballot subcategories | **Moderate** | Real, qualitatively corroborated across sources, but magnitude is contested (key paper is an unreviewed preprint with an internal data-count discrepancy; a related study's methodology was publicly disputed by Kalshi) |
 | Sportsbook player props (not main lines) | DraftKings, FanDuel | Documented as softer than main lines — less-covered by sharp risk management, slower to react to news | **Moderate** | Real vig-based cost to overcome (~4.6% avg. vs. ~0.85% on Kalshi, one direct comparison) plus account-limiting risk for consistent winners |
@@ -308,20 +308,27 @@ Phase 2 (Fixed-Line Pick'em Platforms, the v1 track) is next.
 
 # PHASE 2 — Track 1 (v1): Fixed-Line Pick'em Platforms
 
-*Full original build of all five/six layers. PrizePicks, Underdog Fantasy, DK
-Pick6 — reusing the DFS projection-engine pattern for the estimation layer, per
-Session 0.1's structural decision.*
+*Full original build of all five/six layers. PrizePicks and Underdog Fantasy —
+reusing the DFS projection-engine pattern for the estimation layer, per
+Session 0.1's structural decision. DK Pick6 was originally in scope for this
+track but was dropped during Session 2.1 — see that session's card and
+Decision #1 below for the full reasoning.*
 
 ### Session 2.1 — Data Ingestion Prototype
-**Status:** Not started
+**Status:** ✅ Complete (2026-08-29) — see SESSION_LOG.md for full detail.
+
 **Prerequisites:** Phase 1 complete.
 
 **What gets built:** A working, non-production script that pulls live
-projections from all three platforms' undocumented public endpoints (confirmed
+projections from each platform's undocumented public endpoints (confirmed
 reachable without login/API key per Session 1.1 continuation research):
 - `partner-api.prizepicks.com/projections`
-- Underdog's equivalent public projections endpoint
-- DraftKings Pick6's equivalent public endpoint
+- `api.underdogfantasy.com/beta/v3/over_under_lines`
+
+DK Pick6 was originally in scope for this session (a third prototype script
+was built and run), but its endpoint could not be found — no credible public
+documentation exists, and a best-guess URL returned a 404. **DK Pick6 was
+dropped from Track 1's scope as a result — see Decision #1 below.**
 
 Goal is proof-of-reach and schema discovery, not a production pipeline yet —
 confirm each endpoint's real response shape, what fields are present (player,
@@ -330,20 +337,60 @@ schema differs from the others.
 
 **Files touched:** `/scripts/ingestion/prototype_prizepicks.py`,
 `/scripts/ingestion/prototype_underdog.py`,
-`/scripts/ingestion/prototype_dkpick6.py`, `/docs/research/endpoint_schemas.md`
-(new — documents the actual field-level schema found per platform)
+`/scripts/ingestion/prototype_dkpick6.py` (built, ran, endpoint not found —
+kept in repo per its own docstring instructions in case DK Pick6 is
+reconsidered later),
+`/scripts/ingestion/monitor_pickem_endpoints.py` (new — unattended
+multi-check monitor built mid-session to gather the day's stability data
+without requiring manual re-runs),
+`/docs/research/endpoint_schemas.md` (new — documents the actual field-level
+schema found per platform, plus the day's monitoring results)
 
 **Validation (required to close session):**
-- [ ] All three endpoints return live data successfully with no login/key
-- [ ] Schema documented per platform (field names, types, what's missing/
-      inconsistent across platforms)
-- [ ] At least one full day's snapshot captured and saved locally as a sanity
-      check on stability
-- [ ] Explicit note on what breaks the pull (rate limiting? headers required?
-      geographic restriction?) so Session 2.2 knows what defenses are needed
+- [x] Both remaining in-scope endpoints (PrizePicks, Underdog) return live
+      data successfully with no login/key — confirmed both individually and
+      across 21 unattended checks over ~10 hours with zero failures
+- [x] Schema documented per platform (field names, types, what's missing/
+      inconsistent across platforms) — real field names captured from live
+      responses for both platforms in `endpoint_schemas.md`
+- [x] At least one full day's snapshot captured and saved locally as a sanity
+      check on stability — ~10-hour unattended monitoring window (21 checks,
+      30-minute cadence), agreed with user as sufficient in place of a
+      literal 24-hour window
+- [x] Explicit note on what breaks the pull — no failures observed in this
+      window for either platform; documented as a real finding, with the
+      caveat that Session 2.2's pipeline still needs real retry/error
+      handling since both are undocumented endpoints that can change without
+      notice at any time
+
+**Decisions made:**
+1. **DK Pick6 dropped from Track 1's scope.** No credible public documentation
+   of a Pick6-specific data endpoint exists (unlike PrizePicks and Underdog,
+   both independently corroborated before this session even started). A
+   best-guess endpoint, built by analogy to DraftKings' other documented
+   APIs, returned a 404. Manually reverse-engineering the real endpoint via
+   browser Developer Tools was possible in principle (documented as a
+   fallback procedure in `prototype_dkpick6.py`'s own docstring) but offered
+   no guarantee of success, and risked requiring a logged-in session — which
+   would break this project's "no login required" design principle for
+   pick'em ingestion (see Session 0.1 Decision #4 and the account-limiting
+   research). User explicitly chose to drop it rather than continue
+   investigating. Track 1 proceeds with two platforms (PrizePicks, Underdog)
+   instead of three.
+2. **A ~10-hour unattended monitoring window, not a literal 24-hour window,
+   was treated as satisfying the "full day's snapshot" validation item.**
+   User asked whether a faster option existed; agreed approach was automating
+   the checks (removing manual re-run effort) rather than shrinking real
+   elapsed time, since the validation item's actual purpose — proving data
+   changes over time and surfacing any failure mode — depends on wall-clock
+   spread, not effort. ~10 hours with 21 checks and zero failures was judged
+   sufficient; noted as a deliberate, agreed scope decision, not a silent
+   shortcut.
 
 **Handoff notes:** This session is allowed to be messy/exploratory — it exists to
-de-risk Session 2.2, not to produce production code.
+de-risk Session 2.2, not to produce production code. Session 2.2 onward should
+treat Track 1 as a two-platform track (PrizePicks, Underdog) per Decision #1
+above.
 
 ---
 
@@ -352,7 +399,7 @@ de-risk Session 2.2, not to produce production code.
 **Prerequisites:** Session 2.1 complete.
 
 **What gets built:** A real, scheduled-ready ingestion pipeline that normalizes
-all three platforms' data into one common schema (matching the "normalized across
+both platforms' data into one common schema (matching the "normalized across
 books" pattern used by third-party odds aggregators, but built in-house), handles
 errors/retries gracefully (since these are undocumented endpoints that can change
 without notice — flagged explicitly in Session 2.1's research), and stores
@@ -363,7 +410,7 @@ snapshots to `/data`.
 data folder), `/logs/ingestion.log`
 
 **Validation (required to close session):**
-- [ ] Pipeline runs end-to-end and produces a normalized dataset across all three
+- [ ] Pipeline runs end-to-end and produces a normalized dataset across both
       platforms
 - [ ] Handles a simulated failure (bad response, empty response, schema change)
       without crashing — logs the failure instead
@@ -408,7 +455,7 @@ weights, and reasoning, same detail level as the existing DFS projection docs)
 
 **What gets built:** The pre-outcome validation layer — for every flagged
 opportunity, log the model's estimate alongside a benchmark (e.g. the consensus
-across all three platforms, or a sharp-book proxy where available) at flag time,
+across both platforms, or a sharp-book proxy where available) at flag time,
 then track how that comparison moves before the event resolves. This is the
 project's core design principle (per Session 0.1, Decision #2) and is what makes
 a model "validated," not just "running."
@@ -485,7 +532,7 @@ fractional-Kelly approach, consistent with what professional sports bettors use)
 that turns a flagged, CLV-positive opportunity into a concrete suggested stake,
 factoring in account-limiting risk per platform (from the Session 1.1
 continuation research — PrizePicks treated as "cash out frequently, assume
-elevated closure risk," Underdog/DK Pick6 as more scalable).
+elevated closure risk," Underdog treated as more scalable).
 
 **Files touched:** `/scripts/sizing/sizing_engine.py`,
 `/docs/sizing_methodology.md`
@@ -494,7 +541,7 @@ elevated closure risk," Underdog/DK Pick6 as more scalable).
 - [ ] Sizing logic produces a concrete stake suggestion for every CLV-positive
       flagged opportunity
 - [ ] Platform-specific risk adjustment is present and documented (not applying
-      identical sizing logic to all three platforms blindly)
+      identical sizing logic to both platforms blindly)
 - [ ] Sanity-checked against a few manual examples (does a bigger edge produce a
       bigger suggested stake, within sane bounds?)
 - [ ] Explicit bankroll cap / max-single-position rule stated and enforced in
@@ -997,7 +1044,7 @@ with adjustments for sportsbook-specific vig and market depth.
 risk — this is the track where that risk is highest and best-documented (per
 Track Reference table: consistent winners get limited on DK/FD sportsbooks in a
 way that doesn't apply the same way to exchanges or, per the pick'em research,
-even to PrizePicks/Underdog/DK Pick6).
+even to PrizePicks/Underdog).
 
 **Files touched:** `/scripts/sizing/sizing_engine.py` (extended)
 
@@ -1145,7 +1192,7 @@ Phase 2–7 build step.
 real multi-source ingestion running to monitor).
 
 **What gets built:** Every non-exchange data source in this project (PrizePicks,
-Underdog, DK Pick6, DK/FD sportsbook props) is an undocumented public endpoint —
+Underdog, DK/FD sportsbook props) is an undocumented public endpoint —
 flagged repeatedly throughout this roadmap as something that "can change without
 notice." Up to this point, every automation session (2.7, 3.4, 4.5, 5.5, 6.5)
 built retry/error-logging into its own pipeline individually, but nothing checks
@@ -1274,6 +1321,17 @@ All five of Phase 1's open decisions are now resolved or deliberately deferred
 to the specific session where they're actually needed — Phase 1 is fully
 scoped. Sessions 2.1 onward are real, buildable session cards; there are no
 remaining blockers to starting Phase 2.
+
+8. **New, opened Session 2.1:** Which pick'em platforms actually belong in
+   Track 1's scope, once real endpoint research (not secondhand
+   characterization) was performed. **Resolved 2026-08-29: DK Pick6 dropped.**
+   No credible public documentation of a Pick6-specific data endpoint was
+   found, and a best-guess URL (built by analogy to DraftKings' other
+   documented APIs) returned a 404. PrizePicks and Underdog were both
+   independently confirmed live, no login/key required, with real schemas
+   documented — see Session 2.1 in SESSION_LOG.md and
+   `/docs/research/endpoint_schemas.md` for full detail. Track 1 proceeds as
+   a two-platform track.
 
 ---
 *Update this file at the close of each future session, per the project's

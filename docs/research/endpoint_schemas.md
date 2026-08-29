@@ -170,3 +170,39 @@ The roadmap's four validation items for this session are:
    working platform; needs real repeated runs, ideally including a run during
    a period of likely high traffic (e.g. close to a major slate's lock
    time).**
+
+---
+
+## Full-window monitoring results (2026-08-29, via monitor_pickem_endpoints.py)
+
+Ran unattended from 05:06 to 15:13 (about 10 hours), checking both endpoints
+every ~30 minutes, 21 checks total.
+
+**Reliability:** 21 of 21 checks succeeded for both Underdog and PrizePicks.
+Zero failures observed for either endpoint across the full window. No
+rate-limiting, no errors, no schema changes noticed.
+
+**Evidence of genuinely live (not cached/static) data:** record counts moved
+meaningfully across the window for both platforms:
+
+| Time | Underdog lines | PrizePicks projections |
+|---|---|---|
+| 05:06 | 260 | 29,187 |
+| 07:12 | 255 | 30,874 |
+| 09:12 | 250 | 30,104 |
+| 11:13 | 246 | 29,135 |
+| 13:13 | 246 | 25,967 |
+| 15:13 | 212 | 22,238 |
+
+Both platforms show a real downward drift in count through the day (props
+locking/resolving as games start), consistent with genuinely live data.
+
+**What breaks the pull:** not observed in this window. This is a real,
+positive finding for today's stability, but it is not proof these endpoints
+never fail — Session 2.2's production pipeline still needs real retry/error
+handling, since both are undocumented and can change or fail without notice
+at any time.
+
+**Conclusion:** Session 2.1's validation checklist is satisfied for the two
+in-scope platforms (Underdog, PrizePicks). DK Pick6 is dropped from scope —
+see ROADMAP.md for the corresponding update.
