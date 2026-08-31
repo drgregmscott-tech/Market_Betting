@@ -510,7 +510,7 @@ accumulated ingested data rather than synthetic fixtures.
 ---
 
 ### Session 2.3 — Estimation Engine v1
-**Status:** Not started
+**Status:** ✅ Complete (2026-08-31) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.2 complete (needs real ingested data to build/test
 against).
 
@@ -521,20 +521,101 @@ the platform's fixed line. This is where **Open Decision #5** gets resolved for
 real, with concrete inputs named (e.g., recent performance window, opponent
 matchup factor, injury/role status, home/away, pace/usage where applicable) —
 exact input list to be finalized with real data in hand, not guessed in advance.
+**Scoped to NFL only for v1** (see Decisions below) — the other five sports
+present in real ingested pick'em data are a stated gap, not a silent one.
 
 **Files touched:** `/scripts/estimation/pickem_model.py`,
 `/docs/research/pickem_estimation_model_spec.md` (new — documents exact inputs,
 weights, and reasoning, same detail level as the existing DFS projection docs)
 
 **Validation (required to close session):**
-- [ ] Model produces a probability estimate for every ingested prop, not just a
-      subset
-- [ ] Model's estimate is sanity-checked against a handful of manually-reasoned
-      examples (does the model agree with obvious cases?)
-- [ ] Model's inputs and weighting logic are documented at the same specificity
-      as the DFS repos' projection engines — no unnamed "black box" factors
-- [ ] Explicit note on what's NOT yet included (e.g. weather for outdoor sports,
-      Vegas team totals) and why, so it's a stated gap, not a silent one
+- [x] Model produces a probability estimate for every ingested prop, not just a
+      subset — **met with agreed v1 scope**: every one of 20,861 real ingested
+      props gets a row with an explicit status in the model's output (nothing
+      silently dropped); every NFL prop with a supported stat type gets a real
+      numeric probability estimate. Non-NFL sports (85% of real volume) and 3
+      stat types nflverse has no matching data for at all are the stated v1
+      boundary — confirmed acceptable by the user for v1.
+- [x] Model's estimate is sanity-checked against a handful of manually-reasoned
+      examples (does the model agree with obvious cases?) — confirmed two ways:
+      (1) against real 2025 QB passing-yards props, modeled probability moved
+      in the correct direction as the platform's line increased, across every
+      tested case; (2) the two computed-formula stat types (Kicking Points,
+      Fantasy Score) were independently hand-recomputed from raw nflverse data
+      outside the model's own code and matched the model's real output exactly
+      for real players (Harrison Butker, Patrick Mahomes).
+- [x] Model's inputs and weighting logic are documented at the same specificity
+      as the DFS repos' projection engines — no unnamed "black box" factors —
+      confirmed in `pickem_estimation_model_spec.md`, including exact source
+      citations for the two PrizePicks scoring formulas used.
+- [x] Explicit note on what's NOT yet included (e.g. weather for outdoor sports,
+      Vegas team totals) and why, so it's a stated gap, not a silent one —
+      confirmed: non-NFL sports, unmapped stat types, no opponent/matchup/
+      injury/home-away/pace/weather adjustment, and the PrizePicks
+      implied-probability assumption are all named explicitly in the spec doc,
+      each with the reason it's excluded rather than guessed at.
+
+**Decisions made:**
+1. **v1 scoped to NFL only**, using nflverse's public weekly player-stats
+   data (no API key required — same source DFS_Optimizer already uses) as
+   the external performance source. Against a real live run of 20,861
+   ingested props, 85% were non-NFL sports; those get a real, visible
+   `model_status="unsupported_sport"` row rather than being silently
+   skipped or force-fit to a sport with no real data source wired in yet.
+   Confirmed acceptable to the user for v1.
+2. **Two inputs only: season average and recency-weighted recent form,
+   blended 50/50.** Mirrors DFS_Optimizer's own first-pass projection
+   pattern (`projections_baseline.py`). The 50/50 blend weight is a
+   deliberate, simple starting point, not a tuned number — re-weighting it
+   against real graded results is explicitly deferred to Session 8.3
+   (Ongoing Recalibration Cadence), once Sessions 2.4/2.5 produce real CLV
+   and outcome data to tune against.
+3. **Player-name matching bug found and fixed before handoff.** nflverse's
+   weekly-stats release has two name columns — `player_name` (abbreviated,
+   e.g. "P.Mahomes") and `player_display_name` (full form, e.g. "Patrick
+   Mahomes"). The model was initially built against the wrong one, which
+   would have silently produced a `no_player_match` result for nearly every
+   real row. Checked directly against a live pull before this was handed
+   off, not assumed — caught and fixed, not discovered later as a bug.
+4. **Stat-type coverage was built entirely from real ingested data, not
+   guessed in advance.** A first real run against 20,861 live props
+   surfaced 1,650 NFL props with an unrecognized `stat_type` string. Each
+   real string was checked individually against nflverse's actual column
+   list before any mapping decision: 10 stat types were mapped from
+   existing simple/composite nflverse columns (1,096 rows); 2 more
+   (`Kicking Points`, `Fantasy Score` — 138 rows) required real scoring
+   *formulas*, confirmed against PrizePicks' own official sources (see
+   Decision #5); 3 (`Longest Rec`, `Longest Completion`, `Longest Rush` —
+   416 rows) were left deliberately unsupported because nflverse has no
+   per-game "longest play" data of any kind to map them to.
+5. **Kicking Points and Fantasy Score formulas confirmed against
+   PrizePicks' own official sources, not assumed.** Kicking Points:
+   confirmed via PrizePicks Support's own reply on X
+   (`x.com/PrizeSupport/status/1963792635933434257`) and PrizePicks' own
+   scoring page — field goals are tiered by distance (0–39 yds = 3 pts,
+   40–49 yds = 4 pts, 50+ yds = 5 pts), PAT made = 1 pt, a missed FG or PAT
+   = −1 pt each, and PrizePicks' own page states this is explicitly not the
+   same stat as Fantasy Score. Fantasy Score: confirmed via the same
+   official page — full-PPR-style scoring across passing/rushing/receiving
+   yards, TDs, interceptions, receptions, fumbles lost, and 2-point
+   conversions. The Fantasy Score formula deliberately omits two rare
+   6-point components (Offensive Fumble Recovery TDs, Kick/Punt/FG Return
+   TDs) because nflverse's closest-named column for return TDs
+   (`pt_return_tds`) was checked directly against real 2025 data and found
+   to fire on punters, not the players who actually returned a kick — using
+   it would have produced a wrong number with false confidence. Left out
+   and documented rather than guessed around; both omitted events are rare
+   (well under 1% of player-games per season).
+6. **Real player-match rate of 96.6%** (2,525 estimated out of 2,663 NFL
+   props with a supported stat type) was confirmed against live data and
+   judged sufficient for v1 by the user — no further name-matching work
+   planned before Session 2.4.
+7. **Model run against `--season 2025` for now, with switching to 2026 data
+   explicitly deferred** (see new Open Decision #9) — nflverse's 2026
+   season release does not exist yet (confirmed directly, returns 404 as of
+   2026-08-31: the 2026 NFL season's first games are 2026-09-07, and
+   nflverse only publishes a season's file once real games from it have
+   been played).
 
 ---
 
@@ -1387,11 +1468,19 @@ opportunities with no visible sign anything was off.
    Session 2.1/3.x/4.x/5.x/6.x's legal-footprint checks (state-by-state
    vs.-the-house bans and peer-to-peer alternatives, also documented in the
    same research artifact).
-5. ~~Scope the first estimation model concretely.~~ **Deferred to Session 2.3
-   by design**, not left abstract — the DFS projection engines were built the
-   same way, with the exact input list finalized once real ingested data is in
-   hand (Session 2.2), not guessed in advance. Session 2.3's card specifies the
-   deliverable at the same detail level as the DFS repos' projection docs.
+5. ~~Scope the first estimation model concretely.~~ **Resolved 2026-08-31
+   (Session 2.3)**, using real ingested data rather than guessed in advance.
+   The model was scoped to NFL only for v1, using nflverse's public weekly
+   player stats as the external data source, with two inputs (season average
+   and recency-weighted recent form, blended 50/50) and a normal-distribution
+   probability estimate against each platform's fixed line. Stat-type
+   coverage — including two real scoring-formula stats (Kicking Points,
+   Fantasy Score) — was built directly from real ingested `stat_type`
+   strings, each checked against nflverse's real column list before being
+   mapped, with the two PrizePicks scoring formulas confirmed against
+   PrizePicks' own official sources rather than assumed. See Session 2.3 in
+   SESSION_LOG.md and `/docs/research/pickem_estimation_model_spec.md` for
+   the full input list, formulas, and verification record.
 6. **New, opened Session 1.2:** Liquidity and legal-footprint checks were
    present for the pick'em track (via Decision #4's research) but had only been
    handled narratively, not as explicit session-level checks, for arbitrage,
@@ -1421,6 +1510,18 @@ remaining blockers to starting Phase 2.
    documented — see Session 2.1 in SESSION_LOG.md and
    `/docs/research/endpoint_schemas.md` for full detail. Track 1 proceeds as
    a two-platform track.
+9. **New, opened Session 2.3:** Once 2026 NFL season data becomes available
+   from nflverse (first 2026 games are 2026-09-07; nflverse's
+   `stats_player_week_2026.parquet` release does not exist until real 2026
+   games have been played — confirmed directly, returns 404 as of
+   2026-08-31), the estimation model should begin folding in real 2026 data
+   instead of running entirely on 2025 season data. **Deliberately left
+   open, not decided in advance:** whether to switch cleanly to
+   `--season 2026` once enough 2026 games exist to be meaningful, or blend
+   2025 and early-2026 data during the transition period to avoid the model
+   swinging on a tiny early-2026 sample. No evidence yet exists to make that
+   call correctly — to be resolved in a future session once real 2026 data
+   starts accumulating.
 
 ---
 *Update this file at the close of each future session, per the project's
