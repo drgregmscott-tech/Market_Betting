@@ -395,7 +395,7 @@ above.
 ---
 
 ### Session 2.2 — Production Data Ingestion Pipeline
-**Status:** Not started
+**Status:** ✅ Complete (2026-08-31) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.1 complete.
 
 **What gets built:** A real, scheduled-ready ingestion pipeline that normalizes
@@ -406,17 +406,106 @@ without notice — flagged explicitly in Session 2.1's research), and stores
 snapshots to `/data`.
 
 **Files touched:** `/scripts/ingestion/ingest_pickem.py` (production version),
-`/scripts/ingestion/schema.py` (shared normalized schema), `/data/pickem/` (new
-data folder), `/logs/ingestion.log`
+`/scripts/ingestion/schema.py` (shared normalized schema),
+`/scripts/ingestion/test_ingest_pickem.py` (new — validation harness using
+synthetic fixtures, not in the original card; built so pipeline correctness
+could be proven without live network access during development), `/data/pickem/`
+(new data folder, `raw/` and `normalized/` subfolders), `/logs/ingestion.log`,
+`run_ingest.bat` (new — repo-root wrapper script; not a project deliverable
+itself, but required for correct scheduled-task execution on Windows, see
+Decisions below).
 
 **Validation (required to close session):**
-- [ ] Pipeline runs end-to-end and produces a normalized dataset across both
-      platforms
-- [ ] Handles a simulated failure (bad response, empty response, schema change)
-      without crashing — logs the failure instead
-- [ ] Confirmed idempotent (running twice in a row doesn't duplicate/corrupt data)
-- [ ] At least 3 consecutive days of real automated pulls captured, reviewed for
-      consistency
+- [x] Pipeline runs end-to-end and produces a normalized dataset across both
+      platforms — confirmed against real live data: first real run produced
+      19,891 combined rows (19,667 PrizePicks + 224 Underdog), correctly
+      joined (real player names, teams, stat types, and lines confirmed by
+      manual spot-check).
+- [x] Handles a simulated failure (bad response, empty response, schema change)
+      without crashing — logs the failure instead. Confirmed via
+      `test_ingest_pickem.py` against synthetic fixtures: empty response,
+      missing top-level schema keys, and a full simulated network failure
+      (both platforms unreachable) were all handled without raising, each
+      logged and each producing a valid (if empty) output file.
+- [x] Confirmed idempotent (running twice in a row doesn't duplicate/corrupt
+      data) — confirmed via `test_ingest_pickem.py`: `latest.csv` is fully
+      overwritten (never appended to) each run, and two runs in a row produce
+      two distinct, correctly separate timestamped snapshot files rather than
+      a duplicated or corrupted single file.
+- [x] At least 3 consecutive days of real automated pulls captured, reviewed for
+      consistency — **the literal "3 days" framing was replaced, by explicit
+      agreement with the user, with an evidence-based standard matching
+      Session 2.1's own precedent** (see Decisions below): (1) 15+ clean
+      automated pulls with zero failures, (2) at least one observed material
+      swing in record counts proving live, non-cached data, and (3) at least
+      one pull captured near real game-lock times. All three were met: **26
+      consecutive successful hourly pulls** (2026-08-30 10:09 UTC through
+      2026-08-31 11:00 UTC) with zero failures; record counts swung from a
+      peak of 26,538 down to a low of 17,067 (~36% movement); and the
+      steepest, clearest drop (26,495 → 17,468 between 17:00–21:00 UTC on
+      8/30) lines up directly with NFL Sunday afternoon kickoff windows in
+      the user's local time, capturing real props expiring off the board as
+      games locked — direct evidence the pipeline holds up under genuine
+      load, not just quiet-hours traffic.
+
+**Decisions made:**
+1. **The roadmap's literal "3 consecutive days" validation language was
+   replaced with an explicit, evidence-based stopping condition** (15+ clean
+   pulls; a real observed count swing; at least one pull near a real
+   game-lock event), agreed with the user rather than followed as a default.
+   Reasoning, recorded plainly: this session's validation question is
+   pipeline *reliability* (does it break under real repeated use?), not a
+   statistical sample-size question — that distinct question belongs to
+   Session 2.5 (Sample-Size Thresholds), which will use real math once real
+   flag-frequency data exists. Importing that rigor into this session would
+   have been both unnecessary and dishonestly precise. This same
+   "elapsed-time-as-default vs. evidence-based stopping condition" pattern
+   was already set by Session 2.1 (which replaced a literal 24-hour window
+   with ~10 hours plus 21 zero-failure checks); this decision applies the
+   same principle a second time, now stated as a reusable standard rather
+   than re-derived from scratch.
+2. **A Windows scheduled-task path bug was found and fixed during this
+   session** — worth recording as a real finding, not just a footnote. The
+   first scheduled-task attempt failed silently overnight (`Last Result:
+   -2147024894` — "the system cannot find the file specified") because the
+   task's non-interactive execution context could not resolve the bare
+   `python` command the way an interactive PowerShell session does.
+   Diagnosed by checking `(Get-Command python).Source`, which revealed the
+   interactive shell was resolving to the unreliable Microsoft Store stub
+   at `WindowsApps\python.exe` — not a real interpreter, and known to behave
+   inconsistently outside interactive use. Fixed by pointing the task at the
+   real interpreter (`C:\Users\gmsco\AppData\Local\Python\pythoncore-3.14-64\python.exe`)
+   via a new wrapper file, `run_ingest.bat`, placed at the repo root. The
+   wrapper also explicitly `cd`s into the repo root before running Python,
+   closing a second latent risk: `schtasks` has no dedicated
+   working-directory flag, and the pipeline's own file paths are relative to
+   the repo root, so a scheduled task launched from a different default
+   directory (commonly `C:\Windows\System32`) could otherwise have written
+   output to the wrong place or failed to find its own folders. This is the
+   kind of undocumented-environment failure mode Session 8.4 (Ingestion
+   Health Monitoring) exists to catch more generally later — noted here as a
+   real, concrete precedent for that future session, not just a one-off fix.
+3. `%USERNAME%` does not reliably expand inside `schtasks /ru` — confirmed
+   directly (`ERROR: No mapping between account names and security IDs was
+   done`). Dropping `/ru` entirely and letting the task default to the
+   currently logged-in user resolved this. Worth remembering for any future
+   Windows Task Scheduler use in this project.
+
+**Corrections/reversals during the session:**
+1. **First scheduled task, created without a working-directory-safe wrapper
+   and pointed at the bare `python` command, silently failed overnight with
+   zero data collected.** Corrected per Decision #2 above. The original
+   overnight window (5:00 PM–5:00 AM) is not counted toward this session's
+   validation — the clock was explicitly restarted once the fix went in at
+   10:09 UTC on 8/30, and only pulls from that point forward are counted in
+   the 26-pull total above.
+
+**Handoff notes:** Track 1's ingestion layer is now production-grade and
+validated under real, repeated, automated use — including one real
+operational failure mode found and fixed along the way, which is itself
+useful signal for Session 8.4 later. Next session is Session 2.3 —
+Estimation Engine v1, which can now be built and tested against real
+accumulated ingested data rather than synthetic fixtures.
 
 ---
 

@@ -773,3 +773,215 @@ formally dropped from Track 1's scope, with the reasoning and the option to
 revisit it later both recorded rather than silently dropped. Next session is
 Session 2.2 — Production Data Ingestion Pipeline, now scoped for two
 platforms.
+
+---
+
+## Session 2.2 — Production Data Ingestion Pipeline
+
+**Date completed:** 2026-08-31
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Built the production ingestion pipeline, replacing Session 2.1's two
+   throwaway prototype scripts: `schema.py` (shared normalized row format
+   both platforms convert into, with field-by-field notes tracing each
+   column back to Session 2.1's real captured field names — including the
+   `new_player` vs. `player` PrizePicks quirk and Underdog's `stat_value`
+   being returned as a string, not a number) and `ingest_pickem.py` (fetches
+   both platforms with retry logic, saves raw snapshots, normalizes into the
+   shared schema, writes both a uniquely-timestamped snapshot and an
+   always-overwritten `latest.csv`, and logs every run to
+   `/logs/ingestion.log`).
+2. Built `test_ingest_pickem.py`, a validation harness using synthetic
+   fixtures shaped like Session 2.1's real captured schemas — not requested
+   explicitly by the roadmap card, but built because this sandbox's network
+   access does not reach prizepicks.com or underdogfantasy.com, so the
+   pipeline's error-handling and idempotency logic needed to be provable
+   without live network access before handoff. Five scenarios tested: normal
+   case, empty response, simulated schema change, simulated total network
+   failure, and idempotency (two runs in a row). All five passed.
+3. User ran the pipeline live on their own machine for the first time:
+   19,891 combined normalized rows (19,667 PrizePicks + 224 Underdog).
+   Manually spot-checked sample rows together — confirmed real player names,
+   teams, sports, stat types, and lines across a real mix of categories
+   (NFL passing yards, tennis, esports), not placeholder or malformed data.
+4. Set up a Windows Task Scheduler task to run the pipeline hourly, to
+   satisfy the roadmap's "3 consecutive days of real automated pulls"
+   validation item. Before committing to a literal multi-day window, the
+   user directly challenged whether that literal duration was actually
+   necessary or just an inherited default. On review, agreed: this
+   session's validation question is pipeline reliability, not statistical
+   sample size (that question is Session 2.5's, to be answered later with
+   real math against real flag-frequency data) — so a literal calendar
+   duration wasn't the right unit of measure. Replaced with an explicit,
+   evidence-based stopping condition instead: 15+ clean automated pulls with
+   zero failures, at least one observed material swing in record counts
+   (proof of live, non-cached data), and at least one pull captured near a
+   real game-lock event. This mirrors the same pattern Session 2.1 already
+   established (replacing a literal 24-hour window with ~10 hours of real
+   evidence).
+5. First scheduled-task attempt, using the bare `python` command with
+   `/ru "%USERNAME%"`, failed immediately at creation
+   (`ERROR: No mapping between account names and security IDs was done`) —
+   `%USERNAME%` does not expand inside `schtasks`. Corrected by dropping
+   `/ru` entirely.
+6. Task was then created successfully and left running overnight
+   (5:00 PM–5:00 AM local). In the morning, the log showed only the
+   original manual run from the day before — the overnight task had not
+   produced any new entries. `schtasks /query ... /v /fo list` showed
+   `Last Result: -2147024894` ("the system cannot find the file
+   specified") — the task had fired on schedule but failed to launch
+   Python. Diagnosed via `(Get-Command python).Source`, which revealed the
+   user's interactive shell resolves `python` to
+   `C:\Users\gmsco\AppData\Local\Microsoft\WindowsApps\python.exe` — a
+   Microsoft Store redirect stub, not a real interpreter, known to behave
+   unreliably outside an interactive session (which a scheduled task is).
+7. Located the user's real Python 3.14 install
+   (`C:\Users\gmsco\AppData\Local\Python\pythoncore-3.14-64\python.exe`,
+   already on record from Session 1.1) via a direct filesystem search.
+   Built `run_ingest.bat`, a small wrapper placed at the repo root that
+   explicitly changes into the repo's root directory before invoking the
+   real Python interpreter directly by full path — closing both the
+   interpreter-resolution problem and a second latent risk (the pipeline's
+   file paths are relative to the repo root, and `schtasks` has no
+   dedicated working-directory flag, so a task launched from a different
+   default directory could otherwise misplace its own output).
+8. Deleted and recreated the scheduled task pointed at `run_ingest.bat`,
+   then force-triggered it immediately (`schtasks /run`) rather than
+   waiting an hour to find out if the fix worked. Confirmed via
+   `Last Result: 0` and a real, correctly-joined new data pull (24,303
+   total rows) that the fix worked.
+9. Per the evidence-based stopping condition agreed in step 4, the overnight
+   window that failed silently was explicitly NOT counted — the clock was
+   restarted from the first successful fixed run (2026-08-30 10:09 UTC).
+   User asked directly whether continuing to run this was actually necessary
+   for the next sessions (2.3 onward) to proceed properly, given reasonable
+   confidence the pipeline already worked. Clarified explicitly: this
+   overnight/full-day run is a reliability check on the pipeline itself for
+   this session's own validation, not a data-gathering step Session 2.3
+   depends on — Session 2.3 can use whatever data exists by the time it
+   starts, live-pulled or historical, and does not require this specific
+   batch. The run continued anyway, specifically to prove the just-fixed
+   pipeline (not just the underlying endpoints, already proven stable in
+   Session 2.1) holds up under real repeated automated use, since a fix
+   that "looks like it worked once" is exactly the kind of unproven claim
+   this project's own validation discipline exists to catch.
+10. Given the user's Central time zone, set a concrete target stop time
+    (~9:00 PM Central) calculated to comfortably clear 15+ hourly pulls and
+    to land inside typical NFL Sunday evening game-lock windows.
+11. User let the task run through 26 consecutive hourly pulls
+    (2026-08-30 10:09 UTC through 2026-08-31 11:00 UTC). Reviewed the full
+    log and per-snapshot row counts together. All three evidence-based
+    conditions were met, with a stronger result than anticipated: record
+    counts swung from a peak of 26,538 down to a low of 17,067 (~36%
+    movement — a larger, clearer swing than Session 2.1's own), and the
+    steepest single stretch of that drop (26,495 → 17,468 between
+    17:00–21:00 UTC on 8/30) lines up directly with NFL Sunday afternoon
+    kickoff windows in the user's local time — direct evidence of the
+    pipeline correctly capturing real props expiring off the board as games
+    locked, not just a quiet-hours pass.
+12. Task Scheduler task deleted (`schtasks /delete`) once validation was
+    confirmed complete, since it was temporary scaffolding for this
+    session's own validation step, not part of the project's real
+    automation (that is Session 2.7's job, deliberately not built early so
+    as not to blur the two sessions together).
+
+**Files created/modified:**
+- `/scripts/ingestion/schema.py`
+- `/scripts/ingestion/ingest_pickem.py`
+- `/scripts/ingestion/test_ingest_pickem.py` (new, not in original card)
+- `/data/pickem/raw/` (new folder, `.gitkeep` placeholder)
+- `/data/pickem/normalized/` (new folder, `.gitkeep` placeholder)
+- `/logs/ingestion.log` (created automatically on first run)
+- `run_ingest.bat` (new, repo root — local Windows Task Scheduler helper,
+  not intended to be committed; recommended addition to `.gitignore` since
+  it hardcodes the user's local Windows username in file paths)
+- `ROADMAP.md` (Session 2.2 marked complete, validation results and
+  decisions recorded)
+
+**Validation results:**
+- PASS — Pipeline runs end-to-end and produces a normalized dataset across
+  both platforms. Confirmed on real live data (19,891 rows on first real
+  run), with a manual spot-check confirming correct joins (real player
+  names/teams/stat types/lines, not placeholder data).
+- PASS — Handles a simulated failure (bad response, empty response, schema
+  change) without crashing. Confirmed via `test_ingest_pickem.py` against
+  synthetic fixtures — empty response, missing top-level keys (simulated
+  schema change), and total simulated network failure all handled cleanly,
+  each logged, none fatal to the run.
+- PASS — Confirmed idempotent. Proven via `test_ingest_pickem.py`:
+  `latest.csv` is overwritten (never appended to) each run; two consecutive
+  runs produce two correctly distinct timestamped snapshots, never a
+  duplicated or corrupted single file.
+- PASS (via an explicitly agreed evidence-based standard, replacing the
+  literal "3 consecutive days" language) — 26 consecutive successful hourly
+  pulls with zero failures (well past the 15-pull bar); a genuine ~36%
+  record-count swing (26,538 → 17,067); and direct evidence of a real
+  game-lock event captured live (steep, clean count drop lining up with NFL
+  Sunday afternoon kickoffs in the user's local time).
+
+**Decisions made:**
+1. The roadmap's literal "3 consecutive days" validation language was
+   replaced with an explicit, evidence-based stopping condition (15+ clean
+   pulls; a real observed count swing; at least one pull near a real
+   game-lock event) — agreed directly with the user rather than followed by
+   default. Reasoning: this session's validation question is pipeline
+   *reliability*, not the *statistical sample size* question that belongs
+   to Session 2.5 later, once real flag-frequency data exists to calculate
+   a real threshold from. This is the same "elapsed-time default →
+   evidence-based standard" correction pattern Session 2.1 already set;
+   this decision restates it as a reusable principle rather than
+   re-deriving it from scratch each time a "how long do we run this" moment
+   comes up in the project.
+2. `run_ingest.bat` was built as a working-directory-safe wrapper around the
+   real Python interpreter, rather than pointing the scheduled task at
+   `python` directly, after that direct approach failed silently overnight.
+   This is now the established pattern for any future Windows-scheduled
+   script in this project, and a concrete, real precedent for the kind of
+   failure mode Session 8.4 (Ingestion Health Monitoring) is designed to
+   catch more systematically later.
+3. Data collected during the overnight window before the scheduled-task fix
+   was explicitly discarded from this session's validation count (the "26
+   pulls" total starts only from the first successful fixed run), rather
+   than being quietly folded in — consistent with the project's standing
+   convention that corrections are documented as corrections, not silently
+   absorbed.
+4. Confirmed and recorded explicitly, at the user's direct request: the
+   data collected during this session's validation run is not itself an
+   input Session 2.3 depends on. Session 2.3 can build and test against
+   whatever ingested data exists by the time it starts. This session's
+   validation run exists solely to prove the pipeline's own reliability
+   under real repeated use — not to produce a specific dataset for later
+   sessions to consume.
+
+**Corrections/reversals during the session:**
+1. **First scheduled-task attempt (`/ru "%USERNAME%"`) → dropped `/ru`
+   entirely.** `%USERNAME%` does not expand inside `schtasks`; the task
+   defaults correctly to the current user without it.
+2. **Bare `python` command in the scheduled task → full-path wrapper
+   (`run_ingest.bat`).** The task's non-interactive execution context could
+   not resolve `python` the way the user's interactive shell does (which
+   itself was resolving to an unreliable Microsoft Store stub, not a real
+   interpreter). The overnight window lost to this failure was not counted
+   toward this session's validation total — the clock restarted from the
+   first successful fixed run.
+3. **Literal "3 consecutive days" validation target → explicit
+   evidence-based stopping condition**, agreed directly with the user after
+   they questioned whether the literal duration was actually necessary.
+   Recorded here as a real correction, not a silent scope reduction — the
+   replacement standard is arguably stricter in what it actually proves
+   (a real game-lock event, a specific count-swing magnitude) than a
+   duration-only requirement would have been.
+
+**Open items / deferred validations:**
+- None blocking Session 2.3 from starting.
+- `run_ingest.bat` should be added to `.gitignore` before or during the next
+  commit, since it hardcodes the user's local Windows username — flagged
+  here so it isn't missed, not treated as a blocker to closing this session.
+
+**Status at close of session:** Fully closed out. The production ingestion
+pipeline is built, tested against synthetic failure scenarios, and proven
+reliable under 26 consecutive hours of real automated use — including one
+real operational failure (a Windows scheduled-task path issue) found and
+fixed along the way, which is now a documented precedent for Session 8.4.
+Next session is Session 2.3 — Estimation Engine v1.
