@@ -106,3 +106,9 @@
 2026-08-31 11:00:04,614 UTC | INFO | PrizePicks: 20472 normalized rows
 2026-08-31 11:00:04,783 UTC | INFO | Underdog: 249 normalized rows
 2026-08-31 11:00:05,230 UTC | INFO | === Ingestion run complete: 20721 total rows (PrizePicks OK, Underdog OK) ===
+2026-08-31 12:01:34,894 UTC | INFO | === Ingestion run starting ===
+2026-08-31 12:01:34,909 UTC | WARNING | Attempt 1/3 failed for https://partner-api.prizepicks.com/projections: HTTPSConnectionPool(host='partner-api.prizepicks.com', port=443): Max retries exceeded with url: /projections?per_page=250 (Caused by NameResolutionError("HTTPSConnection(host='partner-api.prizepicks.com', port=443): Failed to resolve 'partner-api.prizepicks.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-31 12:02:57,589 UTC | WARNING | Attempt 2/3 failed for https://partner-api.prizepicks.com/projections: HTTPSConnectionPool(host='partner-api.prizepicks.com', port=443): Max retries exceeded with url: /projections?per_page=250 (Caused by NameResolutionError("HTTPSConnection(host='partner-api.prizepicks.com', port=443): Failed to resolve 'partner-api.prizepicks.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-31 12:03:04,750 UTC | INFO | PrizePicks: 20612 normalized rows
+2026-08-31 12:03:04,913 UTC | INFO | Underdog: 249 normalized rows
+2026-08-31 12:03:05,870 UTC | INFO | === Ingestion run complete: 20861 total rows (PrizePicks OK, Underdog OK) ===
