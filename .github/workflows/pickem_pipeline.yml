@@ -1,0 +1,91 @@
+name: Pick'em Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions "workflow" -- a set of instructions GitHub itself runs on
+# a schedule, on a temporary computer GitHub provides (a "runner"), separate
+# from your own PC. Every run starts from a completely fresh copy of this
+# repo; nothing written to that temporary computer's disk survives past the
+# end of the run unless this file explicitly saves it back to GitHub first.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo onto the temporary computer.
+# 2. Installs Python and this project's packages (requirements.txt).
+# 3. Runs scripts/run_pipeline.py, which itself runs ingestion ->
+#    estimation -> CLV logging in sequence (Session 2.7).
+# 4. If that script succeeds, commits the updated data/pickem/clv_log.csv,
+#    its snapshot, and the new digest file back to this repo, using a
+#    token GitHub generates automatically for every workflow run
+#    (GITHUB_TOKEN) -- no separate password or secret needed. This step is
+#    what makes clv_log.csv's history durable across runs; see
+#    run_pipeline.py's own docstring for why that matters.
+# 5. If step 3 fails or finds nothing to commit, the workflow stops there --
+#    no commit happens, and the run shows as failed/red on GitHub's Actions
+#    tab so a failure is never silent.
+
+on:
+  schedule:
+    # Runs at the top of every hour, in UTC (GitHub Actions schedules are
+    # always UTC, regardless of where you are). Matches the current Windows
+    # Task Scheduler hourly cadence (SESSION_LOG.md, Session 2.2).
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+    # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
+    # can be triggered by hand for testing without waiting for the next
+    # scheduled hour.
+
+# Prevents two runs from overlapping if one run happens to take longer than
+# an hour -- a second scheduled run will wait for the first to finish rather
+# than starting in parallel and racing to write the same files.
+concurrency:
+  group: pickem-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Required so the final step in this workflow is allowed to commit and
+  # push back to this repo using the automatic GITHUB_TOKEN.
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (ingestion -> estimation -> CLV logging)
+        run: python scripts/run_pipeline.py --season 2025
+
+      - name: Commit and push updated CLV log and digest
+        run: |
+          git config user.name "pickem-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs
+          path: |
+            logs/pipeline.log
+            logs/ingestion.log
+            logs/estimation.log
+            logs/clv_logging.log
+          retention-days: 14
+          if-no-files-found: ignore
