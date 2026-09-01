@@ -1222,8 +1222,8 @@ later. Next session is Session 2.4 — CLV-Equivalent Calibration Logging.
    frozen as a "closing" value. Explicitly did NOT treat this as literal
    sportsbook CLV, since Session 0.1's own research established PrizePicks/
    Underdog run "static, non-repricing lines" — a platform's own price not
-   moving is not evidence of anything, unlike a sportsbook's real closing
-   line.
+   moving is not itself evidence of anything, unlike a sportsbook's real
+   closing line.
 3. **Made one small, additive change to `pickem_model.py`** to support (a)
    above: added a new output column, `resolved_stat_key`, carrying the
    canonical stat the model resolved a prop's raw `stat_type` string down to
@@ -1590,3 +1590,217 @@ recorded here rather than silently absorbed. Next session is Session 2.6 —
 Bankroll & Sizing Logic, which is also where the real, entry-type-specific
 breakeven math from this session first gets applied to an actual sizing
 decision.
+
+---
+
+## Session 2.6 — Bankroll & Sizing Logic
+
+**Date completed:** 2026-09-01
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Before building anything, checked the real repo directly (via Claude in
+   Chrome) and found Session 2.5's files (`outcome_tracker.py`,
+   `weekly_review.py`, `sample_size_methodology.md`) were missing from
+   GitHub, even though Session 2.5 had closed in chat — a real gap between
+   "session closed in conversation" and "session actually pushed," not
+   previously an issue in this project. User confirmed the push had
+   simply been forgotten and completed it; re-checking GitHub directly
+   confirmed all three files were then present, and the session proceeded
+   from there.
+2. Read the real, live contents of `pickem_model.py`, `clv_logger.py`,
+   `outcome_tracker.py`, and `sample_size_methodology.md` directly from
+   GitHub before designing anything, per this project's standing
+   convention.
+3. Made a real, stated scope decision before writing any code: pick'em
+   entries require 2+ legs combined together, and only one entry type has
+   a real, sourced payout multiplier anywhere in this project's research
+   — PrizePicks' 2-pick Power Play (3x payout, sourced in Session 2.5).
+   Rather than guess at a multiplier for any other entry size or for
+   Underdog (no real Underdog payout table has been researched), v1 was
+   scoped to size exactly that one entry type, rejecting every other
+   combination with an explicit reason. This mirrors Session 2.3's own
+   NFL-only scoping decision.
+4. Built `sizing_engine.py`: reads two `flag_id`s from the real
+   `clv_log.csv`, multiplies their model probabilities together for a
+   combined entry probability, runs that through the Kelly criterion,
+   applies quarter-Kelly (`KELLY_FRACTION = 0.25`) for estimation-
+   uncertainty safety, applies a named PrizePicks account-risk dampener
+   (`PLATFORM_RISK_MULTIPLIER["prizepicks"] = 0.70`, reflecting the
+   Session 1.1 continuation research on account closures), and enforces a
+   hard bankroll cap (`MAX_SINGLE_POSITION_PCT = 0.05`) after every other
+   adjustment. Every constant is named and documented as either sourced
+   (the 3x payout) or an explicit, stated judgment call (everything else)
+   — no unnamed factors, matching this project's standing documentation
+   standard.
+5. Built `test_sizing_engine.py` (not in the original card — same
+   reasoning as Session 2.2/2.4/2.5's own test harnesses: this sandbox
+   cannot reach the real repo's live data). Six initial synthetic
+   scenarios — bigger edge produces a bigger stake, a sub-breakeven
+   combined probability produces `no_bet_negative_edge` and $0 (never
+   negative), an extreme edge is correctly capped, a mixed/Underdog leg
+   is rejected with a stated reason, wrong leg counts are rejected, and
+   closed-status legs are filtered before reaching the sizing math — plus
+   an independent hand-check of the Kelly formula itself. All passed, and
+   were also run through a simulated copy of the real repo's folder
+   structure with a fake `clv_log.csv`, to prove the file-lookup and CLI
+   path worked end-to-end, not just the isolated math.
+6. Wrote `sizing_methodology.md`, documenting the Kelly formula with a
+   worked example, and explicitly separating which numbers are sourced
+   (the 3x payout) from which are this project's own stated judgment
+   calls (quarter-Kelly, the platform dampener, the bankroll cap).
+7. User asked directly for an objective assessment of the two judgment-
+   call constants (`KELLY_FRACTION`, `PLATFORM_RISK_MULTIPLIER`) before
+   accepting them. Assessed each separately: quarter-Kelly recommended
+   as-is, since it's standard practice specifically for the kind of
+   estimation uncertainty this model has, and there was no real basis to
+   recommend a different fraction. The 0.70 platform dampener was
+   assessed more critically — flagged plainly that it collapses two
+   different real risks (account-closure risk and general safety margin)
+   into one unsourced number, but that no amount of additional reasoning
+   turns it into a sourced figure without real data on actual account
+   limiting outcomes, which doesn't exist yet. Recommended keeping both
+   as explicitly-labeled placeholders for v1, consistent with this
+   project's existing pattern (Session 2.4's edge threshold, Session
+   2.5's target win rate). User accepted this recommendation as given.
+8. User raised the same-game correlation gap directly and asked to
+   discuss it further rather than deciding immediately. Talked through
+   the real mechanism (two legs from the same game are not fully
+   independent — a blowout, overtime, or injury can move several
+   players' stats together), and the fact that the direction of the bias
+   depends on whether legs are positively or negatively correlated, which
+   isn't known without real data. User's stated instinct: the model
+   should flag same-game pairs as potentially riskier rather than pretend
+   to precisely model the correlation. This exactly matches the dampener
+   approach already used elsewhere in the script.
+9. Built `SAME_GAME_CAUTION_MULTIPLIER = 0.85`, applied whenever both
+   requested legs share the same real `game_id`, and added two new output
+   fields (`same_game_pair`, `same_game_caution_multiplier_applied`) so
+   the flag is always visible when it fires, never a silent adjustment.
+   Added a new synthetic test (`test_7`) proving a same-game pair gets a
+   smaller stake than an otherwise-identical cross-game pair. Updated
+   `sizing_methodology.md` with a new section (4.5) explaining the
+   reasoning and showing real worked numbers.
+10. User ran the full sizing engine against real, live flag pairs pulled
+    directly from the actual `clv_log.csv` (found and provided by Claude
+    via Claude in Chrome), covering three distinct real paths:
+    - A very high-edge same-game pair (Drake Maye Pass+Rush Yards under
+      374.5, model probability 0.9765; Sam Darnold Pass Yards under
+      358.5, model probability 0.9825): correctly produced
+      `status: sized_capped_at_max_position`, $25.00 on a $500 bankroll
+      (5%), with every intermediate value (combined probability 0.9594,
+      raw Kelly 0.9391, quarter-Kelly 0.2348, platform-dampened 0.1643,
+      same-game-dampened 0.1397, uncapped $69.85) hand-verified against
+      the code's own output.
+    - A smaller-edge same-game pair (two different Drake Maye Pass+Rush
+      Yards lines, one over/one under): initially mis-predicted by Claude
+      as a below-breakeven no-bet case — a real error, conflating the
+      57.7% *per-leg* breakeven (Session 2.5) with the true *combined*
+      two-leg breakeven of 1/3 ≈ 33.3% for a 3x-payout entry. The real
+      combined probability (0.365) was actually above 1/3, and the
+      script correctly returned a small positive stake ($3.48, later
+      re-confirmed at that same value with the same-game flag applied).
+      Corrected openly in the same turn once the real output didn't
+      match the prediction, with the corrected math shown directly
+      against the real numbers.
+    - A genuine below-breakeven pair (Jaxon Smith-Njigba Rec Yards under
+      99.5, model probability 0.535; Hunter Henry Rec Yards under 49.5,
+      model probability 0.547): combined probability 0.293, correctly
+      produced `status: no_bet_negative_edge`, raw Kelly −0.0606 (floored
+      to 0, never a negative stake).
+11. User re-ran `test_sizing_engine.py` after updating to the version
+    with the same-game dampener; all 8 checks (including the new
+    `test_7`) passed, matching the predicted same-game vs. cross-game
+    stake split exactly ($25.76 vs. $30.31 on the synthetic fixture).
+
+**Files created/modified:**
+- `/scripts/sizing/sizing_engine.py` (new)
+- `/scripts/sizing/test_sizing_engine.py` (new — not in the original card)
+- `/docs/sizing_methodology.md` (new)
+
+**Validation results:**
+- PASS — Sizing logic produces a concrete stake suggestion for every
+  CLV-positive flagged opportunity. Confirmed on four distinct real flag
+  pairs pulled from the live `clv_log.csv`: two capped at $25.00, one
+  uncapped at $3.48, and one correctly returning $0 with
+  `no_bet_negative_edge` — never a negative number in any case.
+- PASS — Platform-specific risk adjustment present and documented. The
+  0.70 PrizePicks dampener is visible in every real output; Underdog is
+  fully gated off (rejected with a stated reason) rather than sized off
+  an unsourced number.
+- PASS — Sanity-checked against real manual examples: stake rose
+  monotonically with combined probability across every real pair tested
+  ($0 → $3.48 → $25.00-capped), and every intermediate Kelly-formula
+  value was independently hand-verified against the real code output.
+- PASS — Bankroll cap enforced in code, hit twice on real data (both
+  exactly 5% of a $500 bankroll), never exceeded.
+- PASS (added mid-session) — Same-game caution dampener confirmed on both
+  synthetic data (`test_7`, 8/8 checks passing) and real data (the same
+  real flag pair's uncapped stake moved from $15.15 to $12.88 once the
+  flag applied; both real capped-example pairs also correctly showed
+  `same_game_pair: True`).
+
+**Decisions made:**
+1. v1 scoped to exactly one entry type (PrizePicks 2-pick Power Play),
+   reusing Session 2.5's sourced 3x payout — every other combination
+   rejected with a stated reason rather than guessed. See ROADMAP.md's
+   Session 2.6 card, Decision #1.
+2. Fractional Kelly (`KELLY_FRACTION = 0.25`) used, not full Kelly —
+   standard practice given this project's own model has real, named
+   estimation uncertainty (no opponent/injury/pace adjustment yet).
+3. `PLATFORM_RISK_MULTIPLIER["prizepicks"] = 0.70` is a stated, unsourced
+   judgment call, assessed directly with the user and accepted as a v1
+   placeholder rather than delayed pending a number this project's
+   research cannot currently produce.
+4. `SAME_GAME_CAUTION_MULTIPLIER = 0.85` added mid-session, at the user's
+   explicit direction following a discussion of same-game correlation
+   risk — a deliberate "flag as riskier, don't pretend to precisely
+   model" choice, reported explicitly in the output rather than applied
+   silently.
+5. `MAX_SINGLE_POSITION_PCT = 0.05` enforced as a hard ceiling in code,
+   confirmed binding on real data twice this session.
+6. All three judgment-call constants (`KELLY_FRACTION`,
+   `PLATFORM_RISK_MULTIPLIER`, `SAME_GAME_CAUTION_MULTIPLIER`) are
+   explicitly named as placeholders, not derived figures — re-deriving
+   them against real graded outcomes is Session 8.3's job, matching this
+   project's existing pattern (Session 2.4's edge threshold, Session
+   2.5's target win rate).
+
+**Corrections/reversals during the session:**
+1. **Session 2.5's files were missing from the real repo at the start of
+   this session** — closed in chat, but never actually pushed. Found by
+   checking GitHub directly before starting any Session 2.6 work, rather
+   than assuming the prior session's handoff had landed. User confirmed
+   and completed the push; re-verified directly before proceeding.
+2. **A predicted no-bet test case was actually a real, small positive-
+   edge case** — Claude's own error, conflating the 57.7% per-leg
+   breakeven with the true 1/3 combined-probability breakeven for a
+   2-leg entry. Caught and corrected openly against the real script
+   output in the same turn, rather than the prediction being quietly
+   dropped.
+
+**Open items / deferred validations:**
+- None blocking Session 2.7 from starting.
+- Sizing coverage remains limited to the PrizePicks 2-pick Power Play —
+  extending to other entry sizes or to Underdog requires first sourcing
+  those platforms'/entry types' real payout multipliers, not built or
+  guessed at this session.
+- `KELLY_FRACTION`, `PLATFORM_RISK_MULTIPLIER`, and
+  `SAME_GAME_CAUTION_MULTIPLIER` remain unvalidated placeholders by
+  design — re-deriving them against real graded outcomes is Session
+  8.3's job, once Session 2.5's outcome tracking has real data to check
+  against.
+- Open Decisions #10 and #11 (from Session 2.4, re-verifying cross-
+  platform CLV consensus matching and the Underdog appearances-to-games
+  join once Underdog posts real NFL lines) remain open, untouched by
+  this session.
+
+**Status at close of session:** Fully closed out. The sizing engine is
+built, tested against 8 synthetic scenarios, and validated against
+multiple real flag pairs pulled directly from the live `clv_log.csv` —
+covering the capped-stake path, the small-uncapped-stake path, the
+no-bet path, and the same-game caution flag, all on real data. Two
+constants were assessed and accepted as v1 placeholders at the user's
+direct request; a third (the same-game dampener) was added mid-session
+following a real discussion of correlation risk, at the user's explicit
+direction. Next session is Session 2.7 — Automation (GitHub Actions).
