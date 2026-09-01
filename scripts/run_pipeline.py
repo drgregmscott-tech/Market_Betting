@@ -103,13 +103,30 @@ def load_module(path: Path, name: str) -> ModuleType:
     and get real Python exceptions back -- no stdout-parsing, no
     subprocess exit-code guessing. Each script's own __main__ block never
     runs, since it's only triggered when a script is executed directly,
-    not when it's imported like this."""
-    spec = importlib.util.spec_from_file_location(name, path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Could not load {path} as a module.")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    not when it's imported like this.
+
+    Each script (e.g. ingest_pickem.py) does a plain `from schema import
+    ...`-style import of a helper file sitting in its own folder. When a
+    script is run directly (`python ingest_pickem.py`), Python
+    automatically adds that script's own folder to its module search
+    list (sys.path), so the plain import just works. Loading a script
+    this other way (importlib, by file path) does NOT do that step
+    automatically -- so without the two lines below, that plain import
+    fails with "No module named 'schema'", even though the file is
+    sitting right there. Fix: temporarily add the script's own folder to
+    sys.path for the moment it's loaded, then remove it again right
+    after, so the three scripts' folders are never mixed together."""
+    script_dir = str(path.parent)
+    sys.path.insert(0, script_dir)
+    try:
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Could not load {path} as a module.")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        sys.path.remove(script_dir)
 
 
 class PipelineStageFailed(Exception):
