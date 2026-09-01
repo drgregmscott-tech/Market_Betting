@@ -1,5 +1,8 @@
 """
-Session 2.3 — Estimation Engine v1 (Fixed-Line Pick'em Platforms)
+Session 2.3 -- Estimation Engine v1 (Fixed-Line Pick'em Platforms)
+Session 2.4 addition: added `resolved_stat_key` to the output row (see the
+"SESSION 2.4 ADDITION" note below the module docstring) -- no other logic
+in this file changed.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -20,6 +23,25 @@ data in hand, not guessed in advance," and that any excluded input must be a
 STATED gap, not a silent one. See the "WHAT THIS MODEL DOES NOT DO YET"
 section below and pickem_estimation_model_spec.md for that list.
 
+SESSION 2.4 ADDITION -- resolved_stat_key
+------------------------------------------
+PrizePicks and Underdog use different raw stat_type strings for the same
+real-world stat (e.g. PrizePicks "Pass Yards" vs. an Underdog variant of the
+same wording). This script already resolves that raw string down to one
+canonical nflverse column (or computed-formula name) internally via
+resolve_stat_spec(), but v1 never wrote that canonical value out -- only the
+original per-platform stat_type string survived to the output row. Session
+2.4's CLV logger needs to match the SAME real-world prop across both
+platforms (e.g. "is this PrizePicks Patrick Mahomes passing-yards prop the
+same real prop as this Underdog Patrick Mahomes passing-yards prop"), and
+matching on the raw stat_type text alone is unreliable, since the two
+platforms don't always word it the same way. `resolved_stat_key` is a new
+output column carrying that canonical value (e.g. "passing_yards", or
+"rushing_yards+receiving_yards" for a composite, or "kicking points" for a
+computed formula) whenever the stat was resolvable -- None otherwise. This
+is a purely additive change: no existing column was removed, renamed, or
+recalculated differently.
+
 WHY nflverse, AND WHY THE PATTERN LOOKS LIKE THE DFS REPO
 -----------------------------------------------------------
 This project reuses the DFS_Optimizer repo's proven architectural pattern,
@@ -36,25 +58,25 @@ here avoids re-discovering that same failure the hard way.
 INPUTS USED IN v1 (named explicitly, per this project's "no unnamed
 black-box factors" standard)
 -----------------------------------------------------------------------
-1. season_avg    -- mean of the relevant stat across the player's REG-season
-                     games so far this season.
-2. recent_form    -- recency-weighted average of the player's last 5 REG-
-                     season games (weights: 0.35/0.25/0.20/0.12/0.08, most
-                     recent game first -- identical weighting to
-                     projections_baseline.py's RECENCY_WEIGHTS, renormalized
-                     if the player has fewer than 5 games so far).
-3. model_mean     -- blend of the two above: 50% season_avg / 50%
-                     recent_form. A flat 50/50 blend is the simplest
-                     defensible starting point for a v1 model; it is not
-                     claimed to be optimal, and re-weighting this blend
-                     against real graded outcomes is explicitly the kind of
-                     work Session 8.3 (Ongoing Recalibration Cadence) exists
-                     to do later, once real CLV/outcome data exists to tune
-                     against (Sessions 2.4/2.5).
-4. model_sigma    -- the player's own sample standard deviation of the stat
-                     across their REG-season games so far. A player with
-                     fewer than 2 qualifying games has no real sigma to
-                     compute; see MIN_GAMES_FOR_ESTIMATE below.
+1. season_avg -- mean of the relevant stat across the player's REG-season
+   games so far this season.
+2. recent_form -- recency-weighted average of the player's last 5 REG-
+   season games (weights: 0.35/0.25/0.20/0.12/0.08, most
+   recent game first -- identical weighting to
+   projections_baseline.py's RECENCY_WEIGHTS, renormalized
+   if the player has fewer than 5 games so far).
+3. model_mean -- blend of the two above: 50% season_avg / 50%
+   recent_form. A flat 50/50 blend is the simplest
+   defensible starting point for a v1 model; it is not
+   claimed to be optimal, and re-weighting this blend
+   against real graded outcomes is explicitly the kind of
+   work Session 8.3 (Ongoing Recalibration Cadence) exists
+   to do later, once real CLV/outcome data exists to tune
+   against (Sessions 2.4/2.5).
+4. model_sigma -- the player's own sample standard deviation of the stat
+   across their REG-season games so far. A player with
+   fewer than 2 qualifying games has no real sigma to
+   compute; see MIN_GAMES_FOR_ESTIMATE below.
 
 WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------
@@ -67,56 +89,30 @@ WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
 - Only the NFL stat types listed in NFL_STAT_TYPE_MAP / COMPOSITE_STAT_TYPES
   / COMPUTED_STAT_TYPES are modeled. An NFL prop with a stat type not
   covered there is marked model_status="unsupported_stat_type" -- again, a
-  visible row, not a dropped one. This list was built and expanded directly
-  from real ingested-data stat_type strings (Session 2.3) -- see
-  pickem_estimation_model_spec.md's "Stat-type coverage, checked against
-  real data" section for the full record.
+  visible row, not a dropped one.
 - No opponent/matchup adjustment, no injury/role status, no home/away
-  split, no pace/usage adjustment. The roadmap card names these as
-  candidate v1 inputs; they are deliberately deferred here so v1 proves the
-  pipeline shape first, on the two inputs every later refinement will still
-  need underneath it (a real performance baseline and a real recent-form
-  signal).
+  split, no pace/usage adjustment.
 - No weather input for outdoor games.
-- The computed "Fantasy Score" stat (see COMPUTED_STAT_TYPES below)
-  deliberately omits two components of PrizePicks' own official scoring
-  table -- Offensive Fumble Recovery TDs and Kick/Punt/Field Goal Return
-  TDs (6 points each) -- because nflverse's closest-named columns for these
-  were checked directly against real data and do not reliably correspond
-  (e.g. nflverse's `pt_return_tds` column fires for PUNTERS, not the
-  players who actually returned a kick, on real 2025 data -- confirmed
-  directly before this was written, not assumed). Both events are rare
-  (well under 1% of player-games across a full season), so the omission's
-  real-world impact is small, but it is a real, named gap, not a
-  perfectly-complete implementation.
+- The computed "Fantasy Score" stat deliberately omits two components of
+  PrizePicks' own official scoring table -- Offensive Fumble Recovery TDs
+  and Kick/Punt/Field Goal Return TDs (6 points each) -- because nflverse's
+  closest-named columns for these were checked directly against real data
+  and do not reliably correspond.
 - The "implied probability" used for PrizePicks rows is a stated
-  assumption (flat 50%), not a verified figure -- see "IMPLIED
-  PROBABILITY" below. This should be revisited once Session 2.4's CLV
-  logging is in place and a real benchmark is available to check it
-  against.
+  assumption (flat 50%), not a verified figure.
 
 IMPLIED PROBABILITY -- HOW IT IS COMPUTED, AND THE ASSUMPTION IT RESTS ON
 -----------------------------------------------------------------------
 Underdog's normalized rows carry over_payout_multiplier / under_payout_
-multiplier (Session 2.2's schema). Treating those multipliers as fair-odds
-(payout * true win probability = 1 at breakeven) gives:
-    implied_prob_over  = (1 / over_multiplier)  / (1/over_multiplier + 1/under_multiplier)
-    implied_prob_under = 1 - implied_prob_over
-This is a normalized, no-vig-style conversion (mirrors how a sharp-book
-benchmark is normalized in traditional sports betting), not a raw 1/odds
-read, since 1/odds alone on both sides would not sum to 1 and would misstate
-the platform's actual juice.
+multiplier. Treating those multipliers as fair-odds (payout * true win
+probability = 1 at breakeven) gives:
+  implied_prob_over = (1 / over_multiplier) / (1/over_multiplier + 1/under_multiplier)
+  implied_prob_under = 1 - implied_prob_over
 
-PrizePicks' normalized rows do NOT carry per-side multipliers (Session 2.2's
-schema notes over_payout_multiplier/under_payout_multiplier as None for
-PrizePicks -- standard PrizePicks lines pay a fixed multiplier on the whole
-entry, not per individual pick). In the absence of a captured per-side
-number, this script assumes a flat 50% implied probability on both sides
-for PrizePicks rows. This is a STATED, UNVERIFIED assumption, not a
-confirmed industry figure -- flagged here explicitly so it is not mistaken
-for a researched fact, consistent with this project's standing rule (see
-ROADMAP.md Open Decision #4) against building unverified claims into the
-system as if they were confirmed.
+PrizePicks' normalized rows do NOT carry per-side multipliers. In the
+absence of a captured per-side number, this script assumes a flat 50%
+implied probability on both sides for PrizePicks rows. This is a STATED,
+UNVERIFIED assumption, not a confirmed industry figure.
 
 USAGE
 -----
@@ -220,15 +216,13 @@ COMPOSITE_STAT_TYPES: dict[str, list[str]] = {
     "pass+rush+rec tds": ["passing_tds", "rushing_tds", "receiving_tds"],
 }
 
-
 # ---------------------------------------------------------------------------
 # Computed stat types -- unlike NFL_STAT_TYPE_MAP (one column) and
 # COMPOSITE_STAT_TYPES (sum of columns), these apply a real, weighted
 # scoring FORMULA across several columns. Both formulas below were taken
-# directly from PrizePicks' own official scoring pages (see
-# pickem_estimation_model_spec.md for the exact source URLs and dates),
-# not estimated or guessed -- and every nflverse column each formula reads
-# was individually confirmed to exist before being used here.
+# directly from PrizePicks' own official scoring pages, not estimated or
+# guessed -- and every nflverse column each formula reads was individually
+# confirmed to exist before being used here.
 # ---------------------------------------------------------------------------
 def _compute_kicking_points(games: pd.DataFrame) -> pd.Series:
     """PrizePicks' official Kicking Points formula (confirmed directly via
@@ -264,8 +258,7 @@ def _compute_fantasy_score(games: pd.DataFrame) -> pd.Series:
     real-world event (checked directly against real 2025 data: nflverse's
     `pt_return_tds` column fires for PUNTERS on real rows, not the players
     who returned a kick). Both events are rare across a full season, so
-    this is a small, real, and explicitly named gap, not a hidden one --
-    see the module docstring's 'WHAT THIS MODEL DOES NOT DO YET' section."""
+    this is a small, real, and explicitly named gap, not a hidden one."""
     fumbles_lost = games[
         ["rushing_fumbles_lost", "receiving_fumbles_lost", "sack_fumbles_lost"]
     ].sum(axis=1)
@@ -343,8 +336,7 @@ def fetch_nfl_weekly_stats(season: int) -> pd.DataFrame:
     published parquet release. No API key required. If this 404s, nflverse
     has likely renamed the release again -- see
     https://github.com/nflverse/nflverse-data/releases and update
-    WEEKLY_STATS_URL_TEMPLATE above (same fix pattern documented in
-    DFS_Optimizer/scripts/nflverse_fetch.py)."""
+    WEEKLY_STATS_URL_TEMPLATE above."""
     url = WEEKLY_STATS_URL_TEMPLATE.format(season=season)
     try:
         df = pd.read_parquet(url, engine="pyarrow")
@@ -365,9 +357,7 @@ def fetch_nfl_weekly_stats(season: int) -> pd.DataFrame:
 def normalize_name(name: Optional[str]) -> str:
     """Lowercases, strips punctuation and common suffixes (Jr/Sr/II/III/IV),
     and collapses whitespace, so the same real player matches across two
-    platforms' different name formatting (e.g. 'Patrick Mahomes II' vs
-    'Patrick Mahomes'). Returns '' for a missing name so it never
-    accidentally matches another missing name."""
+    platforms' different name formatting."""
     if not name or not isinstance(name, str):
         return ""
     cleaned = re.sub(r"[.\-']", " ", name.lower())
@@ -378,20 +368,9 @@ def normalize_name(name: Optional[str]) -> str:
 
 def build_name_lookup(weekly_df: pd.DataFrame) -> dict[str, str]:
     """Builds normalized_name -> player_id, using each player's MOST RECENT
-    name on record (same 'most recent identity wins' pattern used in
-    DFS_Optimizer/scripts/projections_baseline.py's season_baseline(), for
-    the same reason: the same player_id can show slightly different name
-    strings across weeks).
-
-    Uses nflverse's `player_display_name` column, NOT `player_name`.
-    Verified directly against a live pull of the 2025 weekly-stats release
-    before this script was handed off: `player_name` is an abbreviated form
-    ("P.Mahomes"), while `player_display_name` is the full name
-    ("Patrick Mahomes") that actually matches how PrizePicks/Underdog print
-    player names in Session 2.2's ingested data. Using `player_name` here
-    would have silently produced a `no_player_match` result for nearly
-    every row -- this was caught and fixed before Session 2.3 was handed
-    off, not left as a discovered-later bug."""
+    name on record. Uses nflverse's `player_display_name` column, NOT
+    `player_name` (see Session 2.3 notes -- `player_name` is abbreviated and
+    would have silently broken almost every match)."""
     most_recent = (
         weekly_df.sort_values("week")
         .groupby("player_id")[["player_display_name"]]
@@ -411,9 +390,8 @@ def build_name_lookup(weekly_df: pd.DataFrame) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 def resolve_stat_spec(stat_type: Optional[str]) -> tuple[Optional[str], object, str]:
     """Returns (kind, value, reason). kind is 'computed', 'columns', or
-    None. For 'computed', value is the stat_type key (used to look up both
-    the function and its required-column list). For 'columns', value is
-    the list of nflverse columns to sum. reason is only meaningful when
+    None. For 'computed', value is the stat_type key. For 'columns', value
+    is the list of nflverse columns to sum. reason is only meaningful when
     kind is None."""
     if not stat_type:
         return None, None, "unsupported_stat_type"
@@ -427,13 +405,27 @@ def resolve_stat_spec(stat_type: Optional[str]) -> tuple[Optional[str], object, 
     return None, None, "unsupported_stat_type"
 
 
+def resolved_stat_key_for(kind: Optional[str], value: object) -> Optional[str]:
+    """SESSION 2.4 ADDITION. Turns the (kind, value) pair from
+    resolve_stat_spec() into one canonical, human-readable string that means
+    the same real-world stat regardless of which platform's wording produced
+    it -- e.g. ("columns", ["rushing_yards", "receiving_yards"]) becomes
+    "rushing_yards+receiving_yards"; ("computed", "kicking points") becomes
+    "kicking points". Returns None if the stat wasn't resolvable at all.
+    This is the join key Session 2.4's CLV logger uses to recognize the same
+    real prop posted independently on PrizePicks and Underdog."""
+    if kind == "computed":
+        return str(value)
+    if kind == "columns":
+        return "+".join(value)
+    return None
+
+
 def build_stat_series(
     weekly_df: pd.DataFrame, player_id: str, kind: str, value: object
 ) -> pd.Series:
     """Returns the player's per-game value for the target stat, across
-    their REG-season games so far this season, sorted oldest to newest.
-    Dispatches to either a straight column-sum (kind='columns') or a real
-    scoring-formula function (kind='computed')."""
+    their REG-season games so far this season, sorted oldest to newest."""
     games = weekly_df[weekly_df["player_id"] == player_id].sort_values("week")
     if games.empty:
         return pd.Series(dtype=float)
@@ -471,18 +463,15 @@ def recent_form(series: pd.Series) -> Optional[float]:
     last_n = series.tail(len(RECENCY_WEIGHTS))
     weights = np.array(RECENCY_WEIGHTS[: len(last_n)])
     weights = weights / weights.sum()  # renormalize if fewer than 5 games
-    # tail() preserves chronological order (oldest..newest); recency weights
-    # are defined most-recent-first, so reverse before dotting.
     values = last_n.values[::-1]
     return float(np.dot(values, weights))
 
 
 def sample_sigma(series: pd.Series, model_mean: float) -> float:
     """Sample standard deviation of the player's own game log for this
-    stat. A sigma of (near) zero from only MIN_GAMES_FOR_ESTIMATE games is
-    not trustworthy on its own (two similar games is not evidence of true
-    zero variance), so a floor proportional to the mean is applied only in
-    that narrow case."""
+    stat. A floor proportional to the mean is applied only when exactly
+    MIN_GAMES_FOR_ESTIMATE games are available and the observed sigma is
+    implausibly small."""
     if len(series) < 2:
         return float("nan")
     sigma = float(series.std(ddof=1))
@@ -506,8 +495,7 @@ def prob_over(line: float, mean: float, sigma: float) -> Optional[float]:
 
 
 def implied_prob_over_underdog(over_mult: Optional[float], under_mult: Optional[float]) -> Optional[float]:
-    """No-vig-style normalization of Underdog's per-side payout multipliers
-    -- see module docstring's 'IMPLIED PROBABILITY' section."""
+    """No-vig-style normalization of Underdog's per-side payout multipliers."""
     if not over_mult or not under_mult or over_mult <= 0 or under_mult <= 0:
         return None
     raw_over = 1.0 / over_mult
@@ -534,6 +522,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
 
         if sport not in NFL_SPORT_LABELS:
             row["model_status"] = "unsupported_sport"
+            row["resolved_stat_key"] = None
             row.update(_blank_model_fields())
             out_rows.append(row)
             continue
@@ -541,9 +530,17 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
         kind, value, reason = resolve_stat_spec(row.get("stat_type"))
         if kind is None:
             row["model_status"] = reason
+            row["resolved_stat_key"] = None
             row.update(_blank_model_fields())
             out_rows.append(row)
             continue
+
+        # SESSION 2.4 ADDITION: record the canonical stat key as soon as it
+        # resolves, regardless of what happens later in this row (player
+        # match failure, insufficient history, etc.) -- the fact that the
+        # stat itself was resolvable is real information Session 2.4's CLV
+        # matcher can still use.
+        row["resolved_stat_key"] = resolved_stat_key_for(kind, value)
 
         norm_name = normalize_name(row.get("player_name"))
         player_id = name_lookup.get(norm_name)

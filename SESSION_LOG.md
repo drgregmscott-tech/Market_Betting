@@ -1197,3 +1197,247 @@ official documentation rather than approximated, and one real bug
 (`pt_return_tds` not measuring what its name suggests) both caught via
 direct verification against live data before being shipped, not discovered
 later. Next session is Session 2.4 — CLV-Equivalent Calibration Logging.
+
+---
+
+
+## Session 2.4 — CLV-Equivalent Calibration Logging
+
+**Date completed:** 2026-09-01
+**Status:** ⚠️ Complete with caveats
+
+**What was actually done:**
+1. Read Session 2.3's real `pickem_model.py` and Session 2.2's `schema.py`
+   directly from GitHub before building anything, per this project's
+   standing convention.
+2. Built `clv_logger.py` — the pre-outcome validation layer. For every prop
+   Session 2.3's model marks `model_status="estimated"` where the model's
+   probability clears a stated edge threshold (`FLAG_EDGE_THRESHOLD = 0.03`,
+   an explicit placeholder, not derived from graded data — see Decisions
+   below), the script logs the flag to `data/pickem/clv_log.csv` and tracks
+   it against two benchmarks until the prop disappears from the feed
+   (treated as game-lock): (a) a same-moment cross-platform consensus match
+   against the other platform, when the same real prop is priced there too,
+   and (b) the prop's own last-seen price before it drops out of a run,
+   frozen as a "closing" value. Explicitly did NOT treat this as literal
+   sportsbook CLV, since Session 0.1's own research established PrizePicks/
+   Underdog run "static, non-repricing lines" — a platform's own price not
+   moving is not evidence of anything, unlike a sportsbook's real closing
+   line.
+3. **Made one small, additive change to `pickem_model.py`** to support (a)
+   above: added a new output column, `resolved_stat_key`, carrying the
+   canonical stat the model resolved a prop's raw `stat_type` string down to
+   (e.g. `"passing_yards"`, or `"rushing_yards+receiving_yards"` for a
+   composite). Needed because PrizePicks and Underdog word the same real
+   stat differently, and matching on raw text alone would be unreliable. No
+   existing column, calculation, or behavior in the file changed.
+4. Built `test_clv_logger.py`, a synthetic-fixture validation harness
+   (same reasoning as Session 2.2's `test_ingest_pickem.py`: this sandbox's
+   network doesn't reach the real endpoints, so matching/open/close/
+   idempotency logic needed to be provable without live data before
+   handoff). Six scenarios: new flag with a real consensus match, new flag
+   with none available, a sub-threshold row correctly NOT flagged, an open
+   flag correctly refreshed (not duplicated) across a second run including
+   its own line moving, a flag correctly transitioning to `closed` with
+   frozen values and a correct `clv_edge_at_close` calculation once its
+   prop disappears, and running the identical file through the logger twice
+   producing no duplication. All six passed, plus a full integration check
+   (real file discovery, real CSV write, real snapshot write).
+5. Wrote `docs/clv_methodology.md` documenting both benchmarks, the stated
+   threshold, the log schema, and named gaps — matching the specificity
+   level of Session 2.3's own model spec doc.
+6. **Threshold decision, confirmed with user directly:** kept
+   `FLAG_EDGE_THRESHOLD` at 0.03 for this session's real-data validation
+   run rather than tuning it blind before any real flags existed.
+7. **Validation-window duration, decided directly with user, before any
+   live run:** the original roadmap card's implicit expectation of "one
+   real week" of logged data was challenged by the user as an inherited
+   default, not a derived number — same pattern as Session 2.1 and Session
+   2.2's own corrections. Replaced with four explicit, evidence-based
+   conditions (15+ new flags; 3+ closed; 1+ closed flag with a real
+   consensus match; zero pipeline failures) and a target checkpoint of ~17
+   hours, matching Session 2.2's own real validation window (~15–26 hours)
+   rather than a full calendar week.
+8. User set up the same kind of temporary scheduled-task validation
+   scaffolding Session 2.2 used: a new local-only wrapper,
+   `run_full_pipeline.bat` (repo root, not committed — same reasoning as
+   `run_ingest.bat`), chaining `ingest_pickem.py` →
+   `pickem_model.py --season 2025` → `clv_logger.py`, run hourly via
+   Windows Task Scheduler.
+9. **First log review surfaced an apparent gap** (ingestion fired hourly at
+   13:00–16:00, then jumped to 17:39 with no 17:00 entry) that looked like
+   a missed scheduled run. User clarified directly: the 13:00–16:00 entries
+   predated the new scheduled task (leftover from earlier same-day manual
+   testing) — 17:39 was the task's real first run. No actual failure;
+   corrected the misread before it wasted investigation time on a
+   non-issue.
+10. **Second review (after ~17 hours, 3,205 total flags logged, 272
+    closed) found a real anomaly:** every single closed flag showed
+    `consensus_available = False` — not just mostly false, all 3,205 rows
+    in the log, with zero Underdog rows present at all. Investigated
+    directly against live data rather than guessing:
+    - First hypothesis (platform-string casing mismatch in
+      `pickem_model.py`'s `row.get("platform") == "underdog"` check) —
+      checked directly against `normalized/latest.csv` and ruled out;
+      `platform` values were correctly lowercase.
+    - Real cause found: the `sport` column was blank for 234 of 244
+      Underdog rows in the live data (10 showed `CFB`; zero showed `NFL`).
+      Traced into `ingest_pickem.py`'s `normalize_underdog()`: `sport` is
+      read from `game_attrs`, joined via
+      `games_by_id.get(appearance["match_id"])`. Pulled a real raw
+      Underdog snapshot (`underdog_20260901T093802Z.json`) directly and
+      confirmed a real game's own `id` (182897) and a real appearance's
+      `match_id` (438) do not correspond — the join was failing.
+    - Checked the payload's real top-level keys directly
+      (`appearances`, `games`, `over_under_lines`, `players`, `providers`,
+      `solo_games`) — no separate `matches` collection exists that the
+      code was missing.
+    - Checked whether game `438` existed anywhere in `games` or
+      `solo_games` by direct ID search — it did not, in either list.
+    - Checked the REAL, decisive question directly: whether Underdog's
+      live `games`/`solo_games` lists contain any `NFL` sport_id at all
+      right now. They do not — only `CFB` and `TENNIS`. **Root cause
+      confirmed: Underdog has not posted real NFL lines yet as of
+      2026-09-01 (real NFL season starts 2026-09-07); this is a real,
+      external, calendar-driven fact, not a pipeline defect.** Since
+      `pickem_model.py` is NFL-only in v1 scope, zero Underdog rows could
+      ever have reached `model_status="estimated"` this week regardless of
+      any code correctness.
+    - While investigating, found a real, separate, smaller issue: only 89
+      of 217 real Underdog `appearances` (41%) successfully joined to a
+      real `games`/`solo_games` record, even for the sports Underdog does
+      carry live right now (CFB, tennis). Cause not yet determined
+      (plausible explanation: appearances referencing games not yet
+      published into the feed that far ahead; not confirmed). This was
+      NOT fixed this session — see Open items below — because it does not
+      change this session's core finding (Underdog genuinely has zero NFL
+      data right now) and fixing it blind, without real NFL data to test
+      the fix against, risks a false sense of confidence.
+11. **User decided directly, given the finding:** close Session 2.4 now
+    rather than wait several more days for Underdog to post real NFL
+    lines. The cross-platform consensus-matching mechanism is confirmed
+    correct on synthetic data (`test_clv_logger.py` scenario 1) but is
+    explicitly NOT yet confirmed on live NFL data, since none exists yet
+    to test against — recorded here as a stated, not silent, gap, tied to
+    a specific future trigger (Underdog posting real NFL lines, expected
+    on or shortly before 2026-09-07).
+
+**Files created/modified:**
+- `/scripts/calibration/clv_logger.py` (new)
+- `/scripts/calibration/test_clv_logger.py` (new)
+- `/docs/clv_methodology.md` (new)
+- `/scripts/estimation/pickem_model.py` (modified — added
+  `resolved_stat_key` output column only; no other logic changed)
+- `run_full_pipeline.bat` (new, repo root — local-only Windows Task
+  Scheduler wrapper, not committed, same convention as `run_ingest.bat`)
+- `data/pickem/clv_log.csv`, `data/pickem/clv_snapshots/` (created
+  automatically on first real run)
+
+**Validation results:**
+- PASS — All 6 synthetic test scenarios in `test_clv_logger.py` passed
+  before live handoff, plus a full integration check (real file discovery,
+  real CSV write, real snapshot write).
+- PASS (via explicit, agreed evidence-based conditions, replacing the
+  roadmap's original "one real week" framing — same correction pattern as
+  Sessions 2.1/2.2) — real live validation run, ~17 hours
+  (2026-08-31 17:39 UTC through 2026-09-01 09:42 UTC): 3,205 total flags
+  logged (well past the 15-flag bar), 272 closed (well past the 3-flag
+  bar), zero pipeline failures across every logged run.
+- DEFERRED, not failed — "1+ closed flag with a real cross-platform
+  consensus match" was not achievable this week. Root cause confirmed
+  directly against live data: Underdog has zero real NFL lines posted as
+  of 2026-09-01 (season starts 2026-09-07), and Track 1's model is
+  NFL-only in v1 scope. This is an external, calendar-driven fact, not a
+  code defect — the consensus-matching code itself is confirmed correct
+  against synthetic data. Re-verification against live NFL data is
+  explicitly deferred, not silently dropped — see Open items below.
+
+**Decisions made:**
+1. `FLAG_EDGE_THRESHOLD = 0.03` kept as-is for this session's real-data
+   validation run, confirmed directly with the user rather than tuned
+   blind before any real flags existed. Still an explicit placeholder, not
+   a researched figure — revisiting it against real graded results
+   remains Session 8.3's job.
+2. The roadmap's original "one real week" validation expectation was
+   replaced with four explicit, evidence-based conditions and a ~17-hour
+   target checkpoint, matching Session 2.2's own real validation window —
+   same "elapsed-time-as-default → evidence-based standard" correction
+   this project has now applied a third time (Sessions 2.1, 2.2, 2.4).
+3. Two independent, distinct benchmarks (cross-platform consensus;
+   own-line movement to close) are logged side by side, unblended, rather
+   than combined into one number — deliberately, so a future session can
+   judge which one (if either) actually correlates with real graded
+   outcomes once Session 2.5 exists to check that.
+4. `resolved_stat_key` was added to `pickem_model.py`'s output rather than
+   attempting fuzzy text matching on each platform's raw `stat_type`
+   string in `clv_logger.py` — an exact-match-only approach, accepted to
+   risk missing some real matches (if a stat resolves on only one platform)
+   rather than risk a wrong match (comparing two different real stats
+   as if they were the same one).
+5. **Given the confirmed root cause (Underdog has no real NFL data yet,
+   not a bug), the session was closed now rather than delayed several more
+   days waiting for Underdog to post NFL lines.** Live confirmation of
+   cross-platform consensus matching is explicitly deferred to a future
+   check once Underdog posts real NFL lines — tracked as a new Open
+   Decision (#10) below, not silently dropped.
+6. The real, separate 41% Underdog appearances-to-games join gap found
+   during this session's investigation was deliberately NOT fixed this
+   session. Reasoning: fixing it blind, with no real NFL data to test the
+   fix against, risks false confidence that the real problem (which
+   affects `sport`, `game_start_time`, and therefore cross-platform
+   matching) is solved when it may not be. Tracked as a new Open Decision
+   (#11) below, tied to the same future trigger as Decision #5.
+
+**Corrections/reversals during the session:**
+1. **First hypothesis (platform-string casing bug in `pickem_model.py`) →
+   ruled out by direct data check, replaced with the real cause (a broken
+   `sport` field, traced to a `games`/`appearances` ID join that doesn't
+   resolve — itself ultimately explained by Underdog having no real NFL
+   games live yet, not a code defect at all).** Recorded as a real
+   investigation trail, not silently corrected — each hypothesis was
+   checked directly against live data before being accepted or discarded,
+   per this project's standing convention.
+2. **An apparent missed scheduled run (13:00–16:00 ingestion entries, then
+   a gap to 17:39) was initially treated as a possible reliability
+   failure.** User clarified directly: those entries predated the
+   scheduled task's creation (same-day manual testing). No real failure
+   occurred; corrected before further time was spent investigating a
+   non-issue.
+
+**Open items / deferred validations:**
+- **New Open Decision #10 (opened this session):** Live confirmation that
+  cross-platform consensus matching works correctly on real NFL data is
+  deferred until Underdog posts real NFL lines — expected on or shortly
+  before 2026-09-07 (real season start). Once that happens, re-run the
+  same kind of short validation window used in this session and confirm
+  at least one real closed flag shows `consensus_available = True` with a
+  sane `consensus_edge` value.
+- **New Open Decision #11 (opened this session):** The Underdog
+  `appearances` → `games`/`solo_games` join in `ingest_pickem.py`'s
+  `normalize_underdog()` only resolved for 41% of real appearances checked
+  (89 of 217) in a live 2026-09-01 snapshot. Cause not yet confirmed —
+  plausibly appearances referencing games not yet published that far
+  ahead into the feed, but not verified. This directly affects whether
+  `sport` and `game_start_time` populate correctly for Underdog rows once
+  real NFL games do appear, and therefore whether Open Decision #10 above
+  can actually be resolved when the time comes. Should be investigated
+  before or alongside Decision #10's re-check, not assumed fine.
+- PrizePicks' `NFL1H` (first-half props, 552 rows) and `NFLSZN`
+  (season-long props, 1,324 rows) are excluded from v1 by the same exact
+  `"nfl"` string match that correctly excludes non-NFL sports — noted
+  during this session's investigation as a real, defensible scope boundary
+  (arguably different market types from a full-game prop), but was not
+  explicitly named as excluded before this session. Not fixed or resolved
+  here; flagged for a future session to decide whether either should be
+  brought into scope.
+
+**Status at close of session:** Closed by explicit agreement with the
+user, with two real, named, tied-to-a-specific-future-trigger deferrals
+(Open Decisions #10 and #11) rather than unresolved loose ends. The CLV
+logger itself is fully built, tested on synthetic data, and proven
+reliable on ~17 hours of real live PrizePicks data with zero pipeline
+failures — the piece not yet provable is cross-platform matching on real
+NFL data, which cannot exist until Underdog itself posts real NFL lines.
+Next session is Session 2.5 — Sample-Size Thresholds & Realized-Outcome
+Tracking, though Open Decisions #10/#11 should be revisited once real NFL
+data exists, independent of Session 2.5's own start.

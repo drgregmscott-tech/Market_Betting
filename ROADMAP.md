@@ -620,28 +620,31 @@ weights, and reasoning, same detail level as the existing DFS projection docs)
 ---
 
 ### Session 2.4 — CLV-Equivalent Calibration Logging
-**Status:** Not started
-**Prerequisites:** Session 2.3 complete.
 
-**What gets built:** The pre-outcome validation layer — for every flagged
-opportunity, log the model's estimate alongside a benchmark (e.g. the consensus
-across both platforms, or a sharp-book proxy where available) at flag time,
-then track how that comparison moves before the event resolves. This is the
-project's core design principle (per Session 0.1, Decision #2) and is what makes
-a model "validated," not just "running."
+Status: ⚠️ Complete with caveats (2026-09-01) — see SESSION_LOG.md for full detail. Prerequisites: Session 2.3 complete.
 
-**Files touched:** `/scripts/calibration/clv_logger.py`,
-`/data/pickem/clv_log.csv` (or equivalent structured store), `/docs/clv_methodology.md`
+What gets built: The pre-outcome validation layer — for every flagged opportunity, log the model's estimate alongside a benchmark at flag time, then track how that comparison moves before the event resolves. Built as clv_logger.py, logging TWO distinct benchmarks side by side rather than one blended number: (1) cross-platform consensus (the same real prop's price on the other platform, at flag time, when available) and (2) own-line movement to close (the prop's own last-seen price before it drops off the board). Neither is literal sportsbook CLV — Session 0.1 already established PrizePicks/ Underdog run static, non-repricing lines, so a platform's own price failing to move is not itself evidence of anything.
 
-**Validation (required to close session):**
-- [ ] Every flagged opportunity from Session 2.3's model gets a CLV-equivalent
-      entry logged automatically, not manually
-- [ ] Logging captures both the flag-time estimate and a real benchmark
-      comparison (not just the model's own confidence)
-- [ ] At least one real week of logged data collected and reviewed for
-      completeness (no silently-dropped entries)
-- [ ] Log format is durable/queryable — a future session can pull "all flags from
-      the last N days" without custom one-off code
+Files touched: /scripts/calibration/clv_logger.py, /scripts/calibration/test_clv_logger.py (new — synthetic-fixture validation harness, not in the original card, built for the same reason Session 2.2's test harness was), /docs/clv_methodology.md, /scripts/estimation/pickem_model.py (small additive change — see Decision #4 below), /data/pickem/clv_log.csv, /data/pickem/clv_snapshots/.
+
+Validation (required to close session):
+
+ Every flagged opportunity from Session 2.3's model gets a CLV-equivalent entry logged automatically — confirmed on real live data: 3,205 total flags logged across a ~17-hour real validation window (2026-08-31 17:39 UTC – 2026-09-01 09:42 UTC), zero pipeline failures.
+ Logging captures both the flag-time estimate and a real benchmark comparison — confirmed: both cross-platform consensus and own-line movement-to-close are logged on every row, explicitly labeled and never blended.
+ At least one real window of logged data collected and reviewed for completeness — the roadmap's original "one real week" framing was replaced with four explicit, evidence-based conditions, agreed directly with the user (same correction pattern as Sessions 2.1/2.2): 15+ new flags (met — 3,205), 3+ closed (met — 272), zero pipeline failures (met), and 1+ closed flag with a real consensus match.
+ 1+ closed flag with a real cross-platform consensus match — NOT MET, explicitly deferred, not failed. Root cause confirmed directly against live data: Underdog has posted zero real NFL lines as of 2026-09-01 (real NFL season starts 2026-09-07); Track 1's model is NFL-only in v1 scope. This is an external, calendar-driven fact, not a code defect — the consensus-matching logic itself is confirmed correct against synthetic data (test_clv_logger.py). See Open Decision #10 below for the re-verification trigger.
+ Log format is durable/queryable — confirmed: clv_log.csv is a single, fully-overwritten CSV per run (never appended-and-duplicated), plus a timestamped snapshot per run in clv_snapshots/, matching Session 2.2's own snapshot pattern. A future session can query "all flags from the last N days" directly against the snapshot folder or filter the main log's timestamp columns, with no custom one-off code needed.
+
+Decisions made:
+
+FLAG_EDGE_THRESHOLD = 0.03 (a model probability at least 3 percentage points from the platform's own implied probability) — a stated, unvalidated placeholder, confirmed with the user before the live validation run rather than tuned blind. Re-deriving this against real graded results remains Session 8.3's job (Ongoing Recalibration Cadence).
+Two distinct benchmarks logged side by side (cross-platform consensus; own-line movement to close), never blended into one number — deliberately, so Session 2.5 onward can determine which one, if either, actually correlates with real graded outcomes.
+The roadmap's original "one real week" validation duration was replaced with four explicit, evidence-based conditions and a ~17-hour target checkpoint (matching Session 2.2's own real validation window), agreed directly with the user — the third time this project has applied the "elapsed-time-as-default → evidence-based standard" correction (after Sessions 2.1 and 2.2).
+pickem_model.py (Session 2.3's file) received one small, additive change: a new resolved_stat_key output column, giving clv_logger.py a reliable, exact-match way to recognize the same real prop across both platforms (raw stat_type wording differs by platform; the canonical resolved stat does not). No existing column, calculation, or behavior changed.
+Given the confirmed external root cause, Session 2.4 was closed now rather than delayed several more days for Underdog to post real NFL lines. Live confirmation of cross-platform consensus matching on real NFL data is explicitly deferred — see Open Decision #10.
+A real, separate data-quality gap found during this session's investigation (Underdog's appearances→games join only resolved for 41% of real records checked) was deliberately NOT fixed this session, since there is no real NFL data yet to test a fix against, and fixing it blind risks false confidence. See Open Decision #11.
+
+Handoff notes: The CLV logger itself is fully built and proven reliable on real live PrizePicks data. The one piece not yet provable — cross-platform matching against real NFL data — cannot be proven until Underdog itself posts real NFL lines, which is outside this project's control. Session 2.5 does not need to wait on this, but Open Decisions #10 and #11 should be revisited as soon as real NFL data appears on Underdog (expected on or shortly before 2026-09-07), independent of whichever session is active at that time.
 
 ---
 
@@ -1522,6 +1525,8 @@ remaining blockers to starting Phase 2.
    swinging on a tiny early-2026 sample. No evidence yet exists to make that
    call correctly — to be resolved in a future session once real 2026 data
    starts accumulating.
+10. New, opened Session 2.4: Cross-platform CLV consensus matching (clv_logger.py) is confirmed correct against synthetic data but not yet against real NFL data, because Underdog has posted zero real NFL lines as of 2026-09-01 (confirmed directly against a live raw snapshot — Underdog's games/solo_games lists currently contain only CFB and TENNIS sport_ids). The real NFL season starts 2026-09-07. Action needed: once Underdog posts real NFL lines, re-run a short validation window (same pattern as this session's ~17-hour check) and confirm at least one real closed flag shows consensus_available = True with a sane consensus_edge value. Not tied to any specific future session number — should happen as soon as the real data exists, whichever session is active at that point.
+11. New, opened Session 2.4: ingest_pickem.py's normalize_underdog() joins each appearances record to a games/solo_games record via appearances[].match_id. In a live 2026-09-01 snapshot, this join only resolved for 89 of 217 real appearances (41%) — meaning sport and game_start_time come back blank for the majority of Underdog rows right now, for whatever sports Underdog does currently carry (CFB, tennis). Cause not yet confirmed — plausibly appearances referencing games not yet published that far ahead into the feed, but this is a real, undocumented, can-change-without-notice endpoint (per Session 2.1's own standing caveat), so it should be verified, not assumed. Action needed: investigate this gap's real cause before or alongside Open Decision #10's re-check, since an unresolved join would keep suppressing sport for real NFL rows too, even once Underdog posts them — which would silently re-break Open Decision #10's own resolution.
 
 ---
 *Update this file at the close of each future session, per the project's
