@@ -649,7 +649,7 @@ Handoff notes: The CLV logger itself is fully built and proven reliable on real 
 ---
 
 ### Session 2.5 — Sample-Size Thresholds & Realized-Outcome Tracking
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-01) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.4 complete.
 
 **What gets built:** Two related pieces, both foundational for every later
@@ -671,27 +671,86 @@ Handoff notes: The CLV logger itself is fully built and proven reliable on real 
 
 **Files touched:** `/docs/sample_size_methodology.md` (new),
 `/scripts/calibration/outcome_tracker.py` (new),
-`/data/pickem/outcome_log.csv` (new — separate from `clv_log.csv`)
+`/scripts/calibration/weekly_review.py` (new — not in the original card;
+added mid-session once the user redesigned this session's approach from a
+one-time gate to a recurring cadence, see Decision #2 below),
+`/data/pickem/outcome_log.csv` (new — separate from `clv_log.csv`),
+`/data/pickem/review_log.csv` (new — not in the original card, holds
+`weekly_review.py`'s permanent review history),
+`/scripts/estimation/pickem_model.py` (docstring-only correction, see
+Decision #3 below — no logic changed),
+`/docs/clv_methodology.md` (new section added, same correction)
 
 **Validation (required to close session):**
-- [ ] Sample-size threshold calculated and documented with the reasoning shown,
-      not just a final number asserted
-- [ ] Outcome tracker can accept a manually-reported bet result (placed bet →
-      outcome) and store it durably, linked back to the original CLV log entry
-      for that flagged opportunity
-- [ ] Confirmed the two logs (CLV and outcome) can be joined/compared later —
-      e.g. "did high-CLV flags actually win more" is a queryable question, not
-      just a hoped-for correlation
+- [x] Sample-size threshold calculated and documented with the reasoning
+      shown — real breakeven (≈57.7%, sourced from PrizePicks' own
+      published 2-pick Power Play payout) and real target sample (≈3,725
+      graded legs), full derivation in `sample_size_methodology.md`.
+- [x] Outcome tracker can accept a manually-reported bet result and store
+      it durably, linked to the CLV log — confirmed on real data: recorded
+      real graded outcomes against two actual `flag_id`s from the live
+      `clv_log.csv` (`prizepicks|13961517`, `prizepicks|14252061`), both
+      correctly pulled real context by `flag_id` lookup. `--pending`
+      correctly reported 3,205 of 3,207 real flags still ungraded.
+- [x] Confirmed the two logs (CLV and outcome) can be joined/compared
+      later — confirmed on real data via `weekly_review.py --report`,
+      which joins `outcome_log.csv` against `clv_log.csv` on `flag_id` and
+      reports win rate alongside the breakeven and full-sample references.
 
-**Handoff notes:** This session also formalizes something implicit until now:
-**this system flags and sizes opportunities for the user to act on manually — it
-does not place bets itself.** That's a deliberate design decision, not a gap:
-consistent with this environment's restriction against Claude executing
-financial trades or transfers on a user's behalf, and because the whole point of
-the outcome tracker above depends on the user reporting what they actually did,
-which may reasonably differ from what the system suggested. This should be
-stated plainly in the real ROADMAP.md's Background & Approach section once this
-draft is merged, so no future session mistakes "flagged" for "placed."
+**Decisions made:**
+1. **Sample size treated as a recurring weekly review, not a one-time gate.**
+   The original card implied validating once the full ≈3,725-leg threshold
+   is reached. User redirected this mid-session: build to "a reasonable
+   working point," then run an indefinite recurring review (weekly, by
+   user's explicit choice) that gets more accurate over time as more real
+   data accumulates, rather than blocking all progress on one large number.
+   `weekly_review.py` implements this: a 30-leg interim floor (mirroring
+   Session 2.4's own "15+ flags" reporting minimum) below which no
+   recalibration recommendation is given; above it, every review reports
+   real numbers next to both fixed reference points (57.7% breakeven,
+   3,725-leg full threshold) so a provisional read is never visually
+   confused with a statistically solid one.
+2. **This pulls part of Session 8.3's job forward.** Session 8.3 ("Ongoing
+   Recalibration Cadence") was scoped to wait for Phase 8 (2+ live tracks)
+   because a *cross-track* cadence needs multiple tracks to be meaningful.
+   A *single-track* weekly review has no such dependency and starts now.
+   Session 8.3's own card should build on this single-track review, not
+   start from a blank design, once Phase 8 begins.
+3. **Real correction found and resolved: the flat 50% "implied probability"
+   used for PrizePicks rows (Session 2.3) was being confused with — and
+   should never be confused with — the real, entry-type-specific breakeven
+   win rate (57.7% for a 2-pick Power Play) this session derived.** These
+   answer two different questions: 50% is a flagging-sensitivity
+   threshold, chosen before any entry type is known; 57.7% is the real
+   breakeven for one specific, named entry type, only meaningful once an
+   entry type is actually chosen (Session 2.6's job). No code changed —
+   `pickem_model.py`'s docstring and `clv_methodology.md` were both
+   updated to state this distinction explicitly, closing a real point of
+   confusion rather than leaving it to cause the same question again in a
+   future session.
+4. **Two placeholder outcome records used during real-data testing must
+   not be treated as real results.** The two `flag_id`s recorded during
+   this session's validation (`prizepicks|13961517`,
+   `prizepicks|14252061`) belong to props whose games have not been played
+   yet (2026-09-09 kickoff) — the win/loss values used were arbitrary,
+   solely to prove the pipeline works end-to-end. These were recorded only
+   in Claude's own sandbox test copy, not pushed to the real repo — the
+   user's real `outcome_log.csv` does not yet exist and starts clean.
+
+**Handoff notes:** This session also formalizes something implicit until
+now: **this system flags and sizes opportunities for the user to act on
+manually — it does not place bets itself.** That's a deliberate design
+decision, not a gap: consistent with this environment's restriction
+against Claude executing financial trades or transfers on a user's behalf,
+and because the whole point of the outcome tracker depends on the user
+reporting what they actually did, which may reasonably differ from what
+the system suggested. Real bet placement and the first live weekly review
+did not happen this session (no real bets exist yet to grade) — this is
+expected, ongoing usage rather than a deferred validation item, since the
+weekly review is designed to run indefinitely, not to gate this session's
+close. Next session is 2.6 — Bankroll & Sizing Logic, which is also where
+the real, entry-type-specific breakeven math (Decision #3 above) actually
+gets applied for the first time.
 
 ---
 
@@ -1527,6 +1586,18 @@ remaining blockers to starting Phase 2.
    starts accumulating.
 10. New, opened Session 2.4: Cross-platform CLV consensus matching (clv_logger.py) is confirmed correct against synthetic data but not yet against real NFL data, because Underdog has posted zero real NFL lines as of 2026-09-01 (confirmed directly against a live raw snapshot — Underdog's games/solo_games lists currently contain only CFB and TENNIS sport_ids). The real NFL season starts 2026-09-07. Action needed: once Underdog posts real NFL lines, re-run a short validation window (same pattern as this session's ~17-hour check) and confirm at least one real closed flag shows consensus_available = True with a sane consensus_edge value. Not tied to any specific future session number — should happen as soon as the real data exists, whichever session is active at that point.
 11. New, opened Session 2.4: ingest_pickem.py's normalize_underdog() joins each appearances record to a games/solo_games record via appearances[].match_id. In a live 2026-09-01 snapshot, this join only resolved for 89 of 217 real appearances (41%) — meaning sport and game_start_time come back blank for the majority of Underdog rows right now, for whatever sports Underdog does currently carry (CFB, tennis). Cause not yet confirmed — plausibly appearances referencing games not yet published that far ahead into the feed, but this is a real, undocumented, can-change-without-notice endpoint (per Session 2.1's own standing caveat), so it should be verified, not assumed. Action needed: investigate this gap's real cause before or alongside Open Decision #10's re-check, since an unresolved join would keep suppressing sport for real NFL rows too, even once Underdog posts them — which would silently re-break Open Decision #10's own resolution.
+
+12. New, opened Session 2.5: `weekly_review.py`'s real first run has not
+    happened yet — no real bets have been placed or graded as of this
+    session's close. Not treated as a blocker (see Session 2.5's Handoff
+    notes: the weekly review is designed as an indefinite, ongoing
+    practice, not a one-time deferred validation item), but flagged here
+    so a future session picking up this thread knows the review history
+    in `review_log.csv` genuinely starts empty, not just under-sampled.
+    Action needed: once the user places and reports a first real bet,
+    run `weekly_review.py --run` for real and confirm the interim-floor
+    behavior (Section 6 of `sample_size_methodology.md`) holds on a real,
+    small sample the same way it did on synthetic and placeholder data.
 
 ---
 *Update this file at the close of each future session, per the project's

@@ -114,6 +114,31 @@ absence of a captured per-side number, this script assumes a flat 50%
 implied probability on both sides for PrizePicks rows. This is a STATED,
 UNVERIFIED assumption, not a confirmed industry figure.
 
+SESSION 2.5 CLARIFICATION -- 50% here is NOT a claimed real breakeven
+------------------------------------------------------------------------
+This 50% answers a narrow, specific question: "is this prop interesting
+enough to flag at all?" It is a flagging-sensitivity threshold, chosen for
+maximum sensitivity at the point a prop is evaluated -- BEFORE any real
+entry type (2-pick, 3-pick, 4-pick, Flex) has been chosen for it, since
+that choice happens downstream, when entries are actually assembled.
+
+This is a DIFFERENT question from "what real win rate does a specific
+PrizePicks entry type need to break even?" -- that real breakeven is
+entry-type-specific (e.g. a 2-pick Power Play's real breakeven, derived
+from PrizePicks' own published 3x payout, is sqrt(1/3) ~= 57.7%, not 50% --
+see docs/sample_size_methodology.md, Section 2). Applying an entry-type
+breakeven like 57.7% HERE, upstream of entry selection, would be just as
+wrong as 50% is for describing real breakeven -- a different flagged leg
+could end up in a different entry type with a different real breakeven.
+Real breakeven economics belong in Session 2.6 (Bankroll & Sizing Logic),
+once a specific entry type is actually being sized -- not in this file.
+
+See docs/clv_methodology.md's own "Session 2.5" section for the full
+explanation of why these are two different numbers, not one figure with an
+error in it. No code in this file changed as a result of this
+clarification -- it exists solely to prevent this same confusion from
+recurring in a future session.
+
 USAGE
 -----
 pip install pandas numpy pyarrow --break-system-packages

@@ -93,3 +93,13 @@
 2026-09-01 11:38:23,513 UTC | INFO | Existing CLV log has 3207 rows before this run
 2026-09-01 11:38:28,309 UTC | INFO | Wrote 3207 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
 2026-09-01 11:38:28,355 UTC | INFO | Run summary: {'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260901T113821Z.csv', 'rows_in_estimates': 29645, 'newly_flagged': 0, 'newly_closed': 0, 'still_open': 2934, 'total_logged': 3207, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}
+2026-09-01 12:38:23,183 UTC | INFO | === CLV logging run starting ===
+2026-09-01 12:38:23,319 UTC | INFO | Loaded 30038 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260901T123821Z.csv
+2026-09-01 12:38:23,345 UTC | INFO | Existing CLV log has 3207 rows before this run
+2026-09-01 12:38:28,339 UTC | INFO | Wrote 3209 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
+2026-09-01 12:38:28,381 UTC | INFO | Run summary: {'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260901T123821Z.csv', 'rows_in_estimates': 30038, 'newly_flagged': 2, 'newly_closed': 0, 'still_open': 2934, 'total_logged': 3209, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}
+2026-09-01 13:38:26,514 UTC | INFO | === CLV logging run starting ===
+2026-09-01 13:38:26,648 UTC | INFO | Loaded 30187 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260901T133825Z.csv
+2026-09-01 13:38:26,670 UTC | INFO | Existing CLV log has 3209 rows before this run
+2026-09-01 13:38:31,386 UTC | INFO | Wrote 3216 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
+2026-09-01 13:38:31,427 UTC | INFO | Run summary: {'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260901T133825Z.csv', 'rows_in_estimates': 30187, 'newly_flagged': 7, 'newly_closed': 0, 'still_open': 2934, 'total_logged': 3216, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}

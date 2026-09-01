@@ -1441,3 +1441,152 @@ NFL data, which cannot exist until Underdog itself posts real NFL lines.
 Next session is Session 2.5 — Sample-Size Thresholds & Realized-Outcome
 Tracking, though Open Decisions #10/#11 should be revisited once real NFL
 data exists, independent of Session 2.5's own start.
+
+---
+
+## Session 2.5 — Sample-Size Thresholds & Realized-Outcome Tracking
+
+**Date completed:** 2026-09-01
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Calculated the real sample-size threshold for Track 1: derived PrizePicks'
+   real per-leg breakeven win rate for a 2-pick Power Play (√(1/3) ≈ 57.7%,
+   from PrizePicks' own published 3x payout — not assumed), then used a
+   standard one-sample proportion power calculation (α=0.05, power=0.80,
+   target true win rate 60%) to arrive at ≈3,725 graded legs needed for
+   standard statistical confidence. Documented in full, including the
+   reasoning behind each chosen parameter, in `sample_size_methodology.md`.
+2. Built `outcome_tracker.py`, a second log (separate from Session 2.4's
+   `clv_log.csv`) recording real, manually-reported bet outcomes, linked by
+   `flag_id`. Tested against six synthetic scenarios (win with payout, loss,
+   unknown flag_id handled without crashing, pending list, report, duplicate
+   re-report treated as a correction not an overwrite) before being sent to
+   the user — all six passed.
+3. User pointed out ≈3,725 graded legs was a large number to treat as a
+   single gate, and redirected the session's design: build to a reasonable
+   working point now, then run an indefinite recurring review (weekly, by
+   the user's explicit choice) that recalibrates over time as real data
+   accumulates, rather than blocking on one large threshold. This was
+   discussed as three named options (A: wait for the full threshold; B: a
+   smaller interim checkpoint; C: auto-grade a broader pool of
+   flagged-but-not-bet legs against public final stats) — user chose a
+   fourth, better-fitting option not originally on the list: a genuinely
+   recurring cadence, not a bigger or smaller one-time checkpoint.
+4. Built `weekly_review.py` to implement this: a 30-leg interim floor below
+   which no recalibration recommendation is given (mirroring Session 2.4's
+   own "15+ flags" reporting minimum); above it, every run reports real
+   numbers (this period and cumulative) next to the fixed 57.7%
+   breakeven and 3,725-leg full threshold; every run also checks (a) a
+   calibration gap (does the model's stated confidence match real win
+   rate) and (b) whether higher-edge flags actually outperform lower-edge
+   flags, producing a recommendation only — no automatic changes to
+   `pickem_model.py` or `clv_logger.py`. Tested against a 50-leg synthetic
+   dataset (below-floor case, full run, second same-day run, history) —
+   all scenarios passed.
+5. `sample_size_methodology.md`'s Section 6 was rewritten to record this as
+   a real, explicit decision (recurring review, not a single gate), including
+   the point that this pulls part of Session 8.3's job forward for this one
+   track, ahead of the cross-track version Session 8.3 will eventually build.
+6. Real-data test of both scripts, requested by the user: pulled the actual
+   live `clv_log.csv` from GitHub via Claude in Chrome (3,207 real flag
+   rows, 273 closed). Recorded two real flag_ids (`prizepicks|13961517`,
+   `prizepicks|14252061`) through `outcome_tracker.py` — both correctly
+   pulled real context by `flag_id` lookup; `--pending` correctly reported
+   3,205 remaining. Ran `weekly_review.py --run` against this real (2-leg)
+   outcome log — correctly identified the sample as below the 30-leg floor
+   and withheld a recalibration recommendation, exactly as designed.
+   **Both graded outcomes used were placeholders for pipeline-testing
+   purposes only** — the underlying games have not been played yet
+   (2026-09-09 kickoff) — and were recorded only in Claude's own sandbox
+   copy of the repo, not pushed to the user's real `outcome_log.csv`
+   (which does not yet exist in the real repo).
+7. While reviewing the real `clv_log.csv` pulled in step 6, noticed every
+   PrizePicks row uses a flat 50% implied probability, producing some very
+   large edge values. User raised this, noting uncertainty about whether a
+   different approach had been decided previously. Checked directly against
+   the full real record (`pickem_model.py`'s own docstring, all of Session
+   2.3's Decisions in ROADMAP.md and SESSION_LOG.md) — confirmed no
+   different decision exists on record; the flat 50% has been a stated,
+   unverified Session 2.3 assumption throughout.
+8. Discussed with the user whether to change the 50% to the real 57.7%
+   breakeven derived earlier this session. Recommended against a direct
+   substitution: 50% and 57.7% answer different questions (50% is a
+   flagging-sensitivity threshold used before any entry type is chosen;
+   57.7% is one specific entry type's real breakeven, only meaningful once
+   an entry type is actually being sized) — swapping one flat number for
+   another flat number would still be wrong for every entry type other than
+   a 2-pick Power Play. User agreed. Added a clarifying section to both
+   `pickem_model.py`'s docstring and `clv_methodology.md`, stating the
+   distinction explicitly. No code logic changed — confirmed the edited
+   `pickem_model.py` still parses cleanly before handoff.
+
+**Files created/modified:**
+- `/docs/sample_size_methodology.md` (new)
+- `/scripts/calibration/outcome_tracker.py` (new)
+- `/scripts/calibration/weekly_review.py` (new — not in the original card)
+- `/data/pickem/outcome_log.csv` (new — starts empty in the real repo)
+- `/data/pickem/review_log.csv` (new — not in the original card, starts empty)
+- `/scripts/estimation/pickem_model.py` (docstring-only correction)
+- `/docs/clv_methodology.md` (new section added)
+
+**Validation results:**
+- PASS — Sample-size threshold calculated and documented with full reasoning
+  shown (real breakeven, chosen power-analysis parameters each explained,
+  not just asserted).
+- PASS — Outcome tracker records real, manually-reported results and links
+  them to the CLV log — confirmed on real live data (two real flag_ids from
+  the actual `clv_log.csv`, both correctly pulled real context; `--pending`
+  correctly reported 3,205 of 3,207 real flags remaining).
+- PASS — The two logs can be joined/compared — confirmed on real data via
+  `weekly_review.py --report`'s join logic.
+
+**Decisions made:**
+1. Sample size treated as a recurring weekly review, not a one-time gate —
+   user's explicit direction, departing from the original card's framing.
+   See ROADMAP.md's Session 2.5 card, Decision #1, for full reasoning.
+2. This pulls part of Session 8.3's job (Ongoing Recalibration Cadence)
+   forward to a single-track cadence starting now, rather than waiting for
+   Phase 8's 2+-track cross-track version.
+3. The flat 50% PrizePicks "implied probability" (Session 2.3) and the real
+   57.7% entry-type-specific breakeven (derived this session) are
+   deliberately kept as two separate, differently-scoped numbers, not
+   merged — real breakeven economics are Session 2.6's job, not this
+   session's or Session 2.3's. No code changed; both relevant files'
+   documentation was corrected instead.
+4. The two placeholder outcome records used for real-data pipeline testing
+   are explicitly not real graded results and were not pushed to the real
+   repo — noted here so no future session mistakes them for real data if
+   they're ever encountered.
+
+**Corrections/reversals during the session:**
+1. **Original three-option framing (A: wait for full threshold, B: smaller
+   interim checkpoint, C: auto-grade a broader pool) → user chose a fourth,
+   better-fitting option (recurring weekly cadence) not on the original
+   list.** Recorded as a real redirection, not a refinement of one of the
+   three offered options.
+2. **A flat 50%-to-57.7% substitution in `pickem_model.py` was proposed,
+   then reconsidered and not made**, once it became clear 57.7% is only
+   correct for one specific entry type. Corrected to a documentation-only
+   fix instead of a code change, per Decision #3 above.
+
+**Open items / deferred validations:**
+- **New Open Decision #12 (opened this session):** No real bets have been
+  placed or graded as of this session's close — `weekly_review.py`'s first
+  real run has not happened. Not a blocker to closing this session (the
+  weekly review is designed as an ongoing practice, not a one-time
+  deliverable), but flagged so a future session knows `review_log.csv`
+  genuinely starts empty. Action needed: once the user places and reports
+  a first real bet, run `weekly_review.py --run` for real.
+- Open Decisions #10 and #11 (from Session 2.4) remain open, tied to
+  Underdog posting real NFL lines (expected on or shortly before
+  2026-09-07) — untouched by this session, carried forward unchanged.
+
+**Status at close of session:** Fully closed out. All three original
+roadmap validation items are met, confirmed against real live data where
+possible. The recurring-review redesign and the implied-probability
+clarification are both real, user-directed changes from the original card,
+recorded here rather than silently absorbed. Next session is Session 2.6 —
+Bankroll & Sizing Logic, which is also where the real, entry-type-specific
+breakeven math from this session first gets applied to an actual sizing
+decision.

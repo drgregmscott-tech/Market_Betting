@@ -206,3 +206,11 @@
 2026-09-01 11:38:06,380 UTC | INFO | PrizePicks: 29405 normalized rows
 2026-09-01 11:38:06,930 UTC | INFO | Underdog: 240 normalized rows
 2026-09-01 11:38:07,565 UTC | INFO | === Ingestion run complete: 29645 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-01 12:38:02,995 UTC | INFO | === Ingestion run starting ===
+2026-09-01 12:38:06,482 UTC | INFO | PrizePicks: 29799 normalized rows
+2026-09-01 12:38:06,629 UTC | INFO | Underdog: 239 normalized rows
+2026-09-01 12:38:07,274 UTC | INFO | === Ingestion run complete: 30038 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-01 13:38:03,452 UTC | INFO | === Ingestion run starting ===
+2026-09-01 13:38:07,372 UTC | INFO | PrizePicks: 29949 normalized rows
+2026-09-01 13:38:07,545 UTC | INFO | Underdog: 238 normalized rows
+2026-09-01 13:38:08,177 UTC | INFO | === Ingestion run complete: 30187 total rows (PrizePicks OK, Underdog OK) ===

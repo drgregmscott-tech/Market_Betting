@@ -56,6 +56,45 @@ Both benchmarks are recorded side by side on every row, explicitly labeled,
 rather than blended into a single number, so nothing is silently favored
 ahead of real evidence.
 
+## What "the platform's own implied probability" means for PrizePicks —
+## clarified during Session 2.5, a real correction, recorded here
+
+PrizePicks' rows use a flat 50% as "the platform's own implied probability"
+throughout this document and in `pickem_model.py`. **This 50% is a flagging
+sensitivity threshold, not a claim about PrizePicks' real breakeven win
+rate.** Session 2.5 derived the actual real breakeven for a specific,
+common entry type (a 2-pick Power Play: √(1/3) ≈ 57.7%, from PrizePicks'
+own published 3x payout — see `sample_size_methodology.md`, Section 2) and
+this surfaced a real point of confusion worth stating plainly: 50% and
+57.7% are answering two different questions, and neither should be
+mistaken for the other.
+
+- **50% (used here, in `clv_logger.py` and `pickem_model.py`) answers:**
+  "is this prop interesting enough to flag and log at all?" At the moment
+  a prop is flagged, no entry type has been chosen yet — the same flagged
+  leg could end up in a 2-pick, 3-pick, 4-pick, or Flex entry, each with
+  its **own, different** real breakeven. A single flat number was needed
+  at this stage regardless, and 50% (maximum flagging sensitivity) was the
+  explicit, stated placeholder chosen — not a claim that PrizePicks is
+  priced like a coin flip.
+- **57.7% (used only in `sample_size_methodology.md`) answers:** "for one
+  specific, named entry type actually played, what real win rate is
+  needed to break even?" This number is entry-type-specific and only
+  becomes the right question once a specific entry type is chosen — which
+  happens downstream of flagging, at the point a flagged leg is actually
+  sized into a real entry. **That real breakeven economics work is Session
+  2.6's job (Bankroll & Sizing Logic), not Session 2.3's or 2.4's** — this
+  is noted here so a future session doesn't try to retrofit 57.7% (or any
+  other single entry type's breakeven) into the flagging/CLV layer, where
+  no single number is correct across every possible entry type a flag
+  could end up in.
+
+No code changed as a result of this clarification — `FLAG_EDGE_THRESHOLD`
+and the flat-50% PrizePicks assumption in `pickem_model.py` are unchanged.
+This section exists solely to close the ambiguity between the two numbers,
+which had genuinely caused confusion (see SESSION_LOG.md, Session 2.5
+entry) before being resolved.
+
 ## What counts as "flagged" — a stated, unvalidated threshold
 
 `FLAG_EDGE_THRESHOLD = 0.03` in `clv_logger.py`. A prop is logged only when
