@@ -26,10 +26,15 @@ name: Pick'em Pipeline
 
 on:
   schedule:
-    # Runs at the top of every hour, in UTC (GitHub Actions schedules are
-    # always UTC, regardless of where you are). Matches the current Windows
-    # Task Scheduler hourly cadence (SESSION_LOG.md, Session 2.2).
-    - cron: "0 * * * *"
+    # Runs 7 minutes past every hour, in UTC (GitHub Actions schedules are
+    # always UTC, regardless of where you are). Deliberately NOT at the
+    # exact top of the hour (":00") -- GitHub's own documentation warns
+    # that jobs scheduled for the exact top of the hour hit the busiest
+    # slot on their infrastructure and are the most likely to be delayed
+    # or skipped. Still an hourly cadence, matching Windows Task
+    # Scheduler's hourly pattern (SESSION_LOG.md, Session 2.2) -- just
+    # offset by a few minutes.
+    - cron: "7 * * * *"
   workflow_dispatch: {}
     # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
     # can be triggered by hand for testing without waiting for the next
