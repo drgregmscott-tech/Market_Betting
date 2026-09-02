@@ -84,6 +84,7 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import re
 import time
 from dataclasses import fields
 from datetime import datetime, timezone
@@ -349,7 +350,13 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                         or player_attrs.get("sport_id")
                         or player_attrs.get("sport")
                     ),
-                    stat_type=over_under.get("display_stat"),
+                    # FIX (2026-09-02): fall back to parsing the real stat
+                    # name from selection_subheader free text when
+                    # Underdog's clean display_stat field is empty. See
+                    # _stat_type_from_subheader()'s own docstring above for
+                    # why this is needed and what it does/doesn't fix.
+                    stat_type=over_under.get("display_stat")
+                    or _stat_type_from_subheader(line),
                     line=_to_float(line.get("stat_value")),
                     over_payout_multiplier=_extract_multiplier(line, "Higher"),
                     under_payout_multiplier=_extract_multiplier(line, "Lower"),
@@ -375,6 +382,44 @@ def _extract_multiplier(line: dict, option_label: str) -> Optional[float]:
         choice = opt.get("choice") or opt.get("choice_display") or ""
         if option_label.lower() in str(choice).lower():
             return _to_float(opt.get("payout_multiplier"))
+    return None
+
+
+# FIX (2026-09-02, sport-inventory finding): Underdog leaves `display_stat`
+# empty on every line for at least three real, currently-active categories
+# -- early NFL season-long "Series" props, CFB, and Tennis (confirmed live
+# against real matches, e.g. Carlos Alcaraz, real match starting
+# 2026-09-03) -- not just NFL as first assumed. Previously this meant
+# stat_type came through blank for all of them, so pickem_model.py could
+# only report the uninformative "unsupported_sport"/"unsupported_stat_type"
+# with no real stat name attached -- there was no way to even see what was
+# being missed. The real stat name is not missing from Underdog's data; it
+# is just not in the clean field this file originally read. It IS present
+# as free text on each price option, e.g. "Higher 33.5 Games Played" or
+# "Higher 8.5 Regular Season Games Started". This function extracts just
+# the stat-name portion of that text as a fallback, so a genuinely
+# unsupported stat is at least reported BY NAME (this project's standing
+# "every unsupported stat type is named, not dropped" rule) instead of as
+# a blank. This does NOT make these stats estimable by itself -- that is
+# a separate, real decision about building real support for each sport
+# (see ROADMAP.md's sport-inventory open decision) -- it only makes the
+# real gap visible instead of invisible.
+_SUBHEADER_STAT_PATTERN = re.compile(
+    r"^(?:Higher|Lower)\s+[\d.]+\s+(.+)$", re.IGNORECASE
+)
+
+
+def _stat_type_from_subheader(line: dict) -> Optional[str]:
+    options = line.get("options")
+    if not isinstance(options, list):
+        return None
+    for opt in options:
+        subheader = opt.get("selection_subheader")
+        if not isinstance(subheader, str) or not subheader.strip():
+            continue
+        match = _SUBHEADER_STAT_PATTERN.match(subheader.strip())
+        if match:
+            return match.group(1).strip()
     return None
 
 
