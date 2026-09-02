@@ -2223,3 +2223,166 @@ responsiveness are all built and verified against real live data. One new
 open item (#13) is carried forward, not blocking, and not silently
 absorbed. Next session is Session 2.9 — Live Paper-Trading Validation
 Window, per ROADMAP.md.
+
+---
+
+## Session 2.9 (continuation) — Pipeline Correctness Fixes & Sport-Coverage Discovery
+
+**Date completed:** 2026-09-02
+**Status:** ✅ Complete (as prerequisite/discovery work — see Status note below;
+this is distinct from Session 2.9's own defined validation-window scope, which
+has not started)
+
+**Context:** Session 2.9 proper (ROADMAP.md) is a soak-test/go-no-go review —
+no new code, just watching real data accumulate. That window can't meaningfully
+start until real games exist to bet on (NFL season starts 2026-09-07). Opening
+this session by reading the live repo state (per this project's standing
+session-open convention) surfaced three real, live bugs standing between the
+pipeline and that window even being possible — this entry documents fixing
+those, plus a scope correction on what "done" means for this track.
+
+**What was actually done:**
+1. Spot-checked **Open Decision #13** (near-100% `first_flagged_model_prob`
+   observed on the live frontend) against the real `clv_log.csv`, not just the
+   dashboard view. Found the real distribution is mostly normal — only 4.9% of
+   3,461 open flags sat at 99–100% probability, another 6.6% at 95–99%; 74.3%
+   sat in the ordinary 50–85% range. The near-100% impression came from
+   `app.js` sorting the open-flags table by `first_flagged_edge` descending,
+   which surfaces exactly the highest-probability rows first — a display
+   artifact, not an estimation bug. **Resolved, no code change needed.**
+2. Investigated **Open Decision #11** (Underdog join only resolving 41% of
+   appearances) by reading `normalize_underdog()` in `ingest_pickem.py`
+   directly and comparing it against a live Underdog snapshot. Found the real
+   cause: Underdog's feed splits scheduled events across `games` (team
+   sports), `solo_games` (individual sports — tennis), and a third,
+   undocumented category tagged `match_type: "Series"` whose match ID exists
+   in neither list. The code only ever read `games`. Live check confirmed 129
+   of 190 real appearances in that moment were real NFL props tagged
+   `"Series"` — meaning Open Decision #10's "Underdog has zero NFL lines"
+   finding was already stale.
+3. Fixed `normalize_underdog()`: added a `solo_games` lookup, a fallback join
+   (`games` → `solo_games`), and a fallback to the player's own `sport_id`
+   field when neither game container exists yet. Verified against the live
+   feed before and after: sport resolution went from 89/217 (41%) to 191/191
+   (100%) real appearances.
+4. Manually triggered the fixed pipeline (`run_ingest.bat` locally, then the
+   GitHub Actions workflow via its `workflow_dispatch` trigger) to validate
+   for real rather than waiting on the next scheduled hour. First manual
+   workflow run (**#10**) failed with a new, different crash:
+   `AttributeError: 'float' object has no attribute 'strip'` in
+   `pickem_model.py`'s `resolve_stat_spec()`. Root cause: pandas represents a
+   genuinely blank `stat_type` cell as `NaN` (a float), and the existing guard
+   `if not stat_type` doesn't catch `NaN` because `not float('nan')` is
+   `False` in Python. This bug pre-existed but was never exercised before,
+   since rows with no resolved sport were discarded upstream before reaching
+   this function — fixing item 3 above is what surfaced it.
+5. Fixed `resolve_stat_spec()`: replaced the guard with
+   `isinstance(stat_type, str)`, which correctly catches `None`, `NaN`, and
+   any other non-string value the same way. Reproduced the exact real crash
+   locally with a `NaN` input, confirmed the fix resolves it, confirmed
+   normal string inputs are unaffected. Re-ran the workflow (**#12**) — green,
+   26,464/26,464 rows estimated, no crash.
+6. User asked, correctly, why Underdog still showed zero flagged rows even
+   after both fixes. Investigated using inference only (no direct visibility
+   into the estimation stage's real per-row output, since it was never
+   committed to GitHub) and gave a wrong answer — guessed the 3% flagging
+   threshold wasn't being cleared. **This was a real miss, corrected below.**
+7. Fixed the visibility gap that caused item 6's wrong guess: added a
+   `output/estimation/latest.csv` write to `pickem_model.py` (mirroring
+   `ingest_pickem.py`'s own existing `latest.csv` pattern) and added that path
+   to `pickem_pipeline.yml`'s commit step. Deliberately did NOT commit the
+   hourly timestamped files, to avoid unbounded repo growth — same boundary
+   ingestion's own timestamped snapshots already respect.
+8. With real per-row visibility now available (workflow run **#13**), found
+   the real, correct answer: zero Underdog rows had ever reached a computed
+   edge at all. 92 rows were CFB/Tennis (`unsupported_sport` — correct, known
+   v1 scope boundary). The other 178 were real NFL rows correctly tagged
+   `sport = NFL` by item 3's fix, but ALL of them came back
+   `unsupported_stat_type` with a **blank** stat name — not a wording
+   mismatch as first assumed.
+9. User pushed back a second time: the investigation kept narrowing to NFL
+   specifically, when the project's actual scope is +EV bets across all
+   markets, and other sports (tennis, CFB, baseball) are live right now while
+   the NFL season hasn't started. This was a fair, repeated correction — see
+   Corrections/reversals below.
+10. Traced the blank-stat-name rows to their real cause: Underdog never
+    populates the clean `display_stat` field for any of these three
+    categories — NFL "Series" props, CFB, or Tennis. Pulled a real live
+    example directly (Carlos Alcaraz, "Higher 33.5 Games Played", real match
+    starting 2026-09-03) and confirmed the real stat name exists only as free
+    text on the price option itself (`selection_subheader`), never in a
+    clean field.
+11. Fixed `ingest_pickem.py` a second time: added
+    `_stat_type_from_subheader()`, a regex-based fallback
+    (`"Higher/Lower {number} {stat name}"`) used only when the clean field is
+    empty. Verified against the full live feed: 245 of 263 live lines (93%)
+    now resolve a real stat name, including genuine per-match tennis props
+    (Aces, Double Faults, Games Won, Points Won, Breakpoints Won) that were
+    previously completely invisible. 18 lines still return no stat name and
+    are left as a stated, unexplained gap rather than forced.
+12. Re-ran the workflow after this final fix — green, confirmed via
+    `output/estimation/latest.csv` that the real breakdown matches
+    prediction: 178 named `unsupported_stat_type` rows (real stat names now
+    attached), 86 `unsupported_sport` rows (correctly named, correctly out of
+    the NFL-only model's current scope), only 18 residual blanks.
+
+**Decisions made:**
+1. `solo_games` is treated as **optional** in `normalize_underdog()`'s schema
+   check (the pipeline won't abort if Underdog ever drops it), consistent
+   with this file's existing "keep running on a partial schema, log and skip"
+   design rather than the stricter all-or-nothing check used for the other
+   four top-level lists.
+2. Only `output/estimation/latest.csv` is committed to GitHub, not the hourly
+   timestamped snapshot files — matches the existing boundary already applied
+   to ingestion's own timestamped output, to avoid unbounded repo growth.
+3. The three ingestion/estimation fixes made in this session are scoped to
+   **visibility and correctness** (making real stats and sports show up
+   correctly, by name, without crashing) — not to building real estimation
+   support for Tennis, CFB, or NFL season-long props. That remains real,
+   separate, undecided work.
+
+**Corrections/reversals during the session:**
+1. **Wrong guess on why Underdog showed zero flags → real answer found via
+   direct evidence.** First explanation (edge threshold not cleared) was
+   inference without the data to back it up. Corrected once
+   `output/estimation/latest.csv` existed and could be checked directly — the
+   real cause was structural (blank stat names), not a threshold question.
+   Recorded as a real miss, not silently revised.
+2. **NFL-only investigation frame → corrected to all-sports frame, twice.**
+   First correction: user pointed out CFB/Tennis were being treated as
+   "known scope, nothing to fix" without actually checking what was in that
+   bucket — which turned out to share the exact same root cause as the NFL
+   issue and included real, live, currently-tradeable tennis props. Second
+   correction: user pointed out the investigation was still narrowing back to
+   "which two extra sports" instead of the project's actual stated scope —
+   +EV bets across all betting markets, not one or two additional sports
+   layered onto NFL. This reframed the next session's real open item (see
+   Open Decisions below) from a narrow "add Tennis/CFB" ask into a proper
+   full-market inventory.
+
+**Open items / deferred validations:**
+- **New Open Decision #14** (see ROADMAP.md): a full inventory of every sport
+  currently live on both pick'em platforms, checked against what's actually
+  gradeable, is needed before this track's real scope can be called
+  complete — not just whichever sport happened to be in front of the model
+  that week. Not started this session; scoped as its own session below.
+- Session 2.9's own defined validation window (sample-size threshold, real
+  graded outcomes, go/no-go decision) has **not** started — nothing in this
+  session's work substitutes for it. It remains blocked on the 2026-09-07
+  NFL season start, same as before this session began.
+- The 18 Underdog lines that still return no stat name even after item 11's
+  fix are a real, unexplained residual gap. Not investigated further this
+  session — worth a look once broader sport coverage is being scoped, not
+  urgent on its own.
+
+**Status at close of session:** Complete as prerequisite/discovery work, not
+as Session 2.9's own defined scope. Three real, live bugs found and fixed,
+each verified against real live data (not synthetic) before and after: the
+Underdog join gap, a hidden estimation crash the join fix exposed, and a
+stat-name visibility gap affecting NFL, CFB, and Tennis alike. One process gap
+also fixed (estimation output is now visible on GitHub going forward, not just
+during the run that produced it). The real Session 2.9 soak-test window still
+has not begun — that remains blocked on the 2026-09-07 NFL season start, as it
+was before this session. Next session, **Session 2.10 — Cross-Sport +EV
+Inventory (Track 1)**, addresses new Open Decision #14 before Session 2.9's
+validation window is revisited, per ROADMAP.md.
