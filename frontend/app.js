@@ -12,6 +12,25 @@
 
   const DATA_URL = "data/clv_log.csv";
 
+  // ---------------------------------------------------------------------
+  // Sizing constants -- ported exactly from scripts/sizing/sizing_engine.py.
+  // Any change to the Python script's constants must be mirrored here by
+  // hand; there is no shared source of truth between the two, so this
+  // block should be checked against the script whenever either changes.
+  // ---------------------------------------------------------------------
+  const SUPPORTED_LEG_COUNT = 2;
+  const SUPPORTED_PLATFORMS = new Set(["prizepicks"]);
+  const ENTRY_PAYOUT_MULTIPLIER = 3.0;
+  const ENTRY_NET_ODDS_B = ENTRY_PAYOUT_MULTIPLIER - 1.0;
+  const KELLY_FRACTION = 0.25;
+  const PLATFORM_RISK_MULTIPLIER = { prizepicks: 0.70, underdog: 0.85 };
+  const MAX_SINGLE_POSITION_PCT = 0.05;
+  const MIN_BANKROLL = 1.0;
+  const SAME_GAME_CAUTION_MULTIPLIER = 0.85;
+
+  // Selected legs for the sizing calculator: Map<flag_id, row>
+  const selectedLegs = new Map();
+
   function parseCSV(text) {
     // Minimal CSV parser: handles quoted fields containing commas, but this
     // dataset has none observed — kept defensive rather than assuming.
@@ -185,8 +204,12 @@
     tbody.innerHTML = sorted
       .map((r) => {
         const edge = toNum(r.first_flagged_edge);
+        const checked = selectedLegs.has(r.flag_id) ? "checked" : "";
         return `
         <tr>
+          <td class="checkbox-cell">
+            <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
+          </td>
           <td class="name-cell">${r.player_name || "—"}</td>
           <td>${r.team || "—"}</td>
           <td>${r.stat_type || "—"}</td>
@@ -198,6 +221,202 @@
         </tr>`;
       })
       .join("");
+
+    tbody.querySelectorAll("input[type=checkbox]").forEach((cb) => {
+      cb.addEventListener("change", (e) => onLegToggle(e, sorted));
+    });
+  }
+
+  function escapeAttr(s) {
+    return String(s == null ? "" : s).replace(/"/g, "&quot;");
+  }
+
+  function onLegToggle(e, currentOpenRows) {
+    const flagId = e.target.getAttribute("data-flag-id");
+    const row = currentOpenRows.find((r) => r.flag_id === flagId);
+    if (!row) return;
+
+    if (e.target.checked) {
+      if (selectedLegs.size >= SUPPORTED_LEG_COUNT && !selectedLegs.has(flagId)) {
+        // Already have two selected -- drop the oldest so the newest
+        // check always wins, rather than silently refusing the click.
+        const oldestKey = selectedLegs.keys().next().value;
+        selectedLegs.delete(oldestKey);
+      }
+      selectedLegs.set(flagId, row);
+    } else {
+      selectedLegs.delete(flagId);
+    }
+
+    renderSelectedLegs();
+    renderSizingResult();
+    syncCheckboxes();
+  }
+
+  function syncCheckboxes() {
+    document.querySelectorAll("#openTableBody input[type=checkbox]").forEach((cb) => {
+      cb.checked = selectedLegs.has(cb.getAttribute("data-flag-id"));
+    });
+  }
+
+  function renderSelectedLegs() {
+    const wrap = document.getElementById("sizingSelectedLegs");
+    if (!selectedLegs.size) {
+      wrap.innerHTML = `<p class="empty-note">None selected. Check two PrizePicks flags in the table above.</p>`;
+      return;
+    }
+    wrap.innerHTML = Array.from(selectedLegs.values())
+      .map(
+        (r) => `
+        <div class="leg-chip">
+          <div class="leg-chip-info">
+            <span class="leg-chip-name">${r.player_name || "—"} &mdash; ${r.stat_type || "—"} ${r.flagged_side || ""}</span>
+            <span class="leg-chip-detail">${r.platform || "—"} · line ${r.last_seen_line || r.first_flagged_line || "—"} · model prob ${
+              toNum(r.first_flagged_model_prob) !== null ? (toNum(r.first_flagged_model_prob) * 100).toFixed(1) + "%" : "—"
+            }</span>
+          </div>
+          <button class="leg-chip-remove" data-remove-flag-id="${escapeAttr(r.flag_id)}">Remove</button>
+        </div>`
+      )
+      .join("");
+
+    wrap.querySelectorAll("[data-remove-flag-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedLegs.delete(btn.getAttribute("data-remove-flag-id"));
+        renderSelectedLegs();
+        renderSizingResult();
+        syncCheckboxes();
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Sizing math -- mirrors sizing_engine.py's size_entry() exactly.
+  // ---------------------------------------------------------------------
+  function sizeEntry(legs, bankroll) {
+    const platforms = new Set(legs.map((l) => l.platform));
+
+    if (legs.length !== SUPPORTED_LEG_COUNT) {
+      return { status: "rejected", reason: `Select exactly ${SUPPORTED_LEG_COUNT} legs (2-pick Power Play) — currently ${legs.length} selected.` };
+    }
+    if (platforms.size !== 1 || !SUPPORTED_PLATFORMS.has([...platforms][0])) {
+      return {
+        status: "rejected",
+        reason: `Only platform(s) ${[...SUPPORTED_PLATFORMS].join(", ")} are supported — selected leg(s) are from ${[...platforms].join(", ")}. No sourced payout multiplier exists yet for any other platform.`,
+      };
+    }
+    for (const leg of legs) {
+      if (toNum(leg.first_flagged_model_prob) === null) {
+        return { status: "rejected", reason: `Flag ${leg.flag_id} has no model probability logged — cannot size it.` };
+      }
+      if (!leg.game_id) {
+        return { status: "rejected", reason: `Flag ${leg.flag_id} has no game_id logged — required for the same-game caution check.` };
+      }
+    }
+    if (!(bankroll >= MIN_BANKROLL)) {
+      return { status: "rejected", reason: `Bankroll must be at least $${MIN_BANKROLL}.` };
+    }
+
+    const pCombined = legs.reduce((p, l) => p * toNum(l.first_flagged_model_prob), 1.0);
+    const fRaw = (pCombined * (ENTRY_NET_ODDS_B + 1.0) - 1.0) / ENTRY_NET_ODDS_B;
+    const fQuarter = Math.max(fRaw, 0) * KELLY_FRACTION;
+
+    const platform = legs[0].platform;
+    const dampener = PLATFORM_RISK_MULTIPLIER[platform];
+
+    const gameIds = new Set(legs.map((l) => l.game_id));
+    const sameGamePair = gameIds.size === 1;
+    const sameGameMultiplier = sameGamePair ? SAME_GAME_CAUTION_MULTIPLIER : 1.0;
+
+    const fDampened = fQuarter * dampener * sameGameMultiplier;
+
+    const uncappedStake = bankroll * fDampened;
+    const capAmount = bankroll * MAX_SINGLE_POSITION_PCT;
+    const capped = uncappedStake > capAmount;
+    let finalStake = Math.min(uncappedStake, capAmount);
+
+    let status;
+    if (fRaw <= 0) {
+      status = "no_bet_negative_edge";
+      finalStake = 0;
+    } else if (capped) {
+      status = "sized_capped_at_max_position";
+    } else {
+      status = "sized";
+    }
+
+    return {
+      status,
+      platform,
+      combinedEntryProbability: pCombined,
+      rawKellyFraction: fRaw,
+      quarterKellyFraction: fQuarter,
+      platformRiskMultiplier: dampener,
+      sameGamePair,
+      sameGameMultiplier,
+      dampenedKellyFraction: fDampened,
+      bankroll,
+      uncappedStake,
+      capAmount,
+      finalStake,
+    };
+  }
+
+  function statusLabel(status) {
+    switch (status) {
+      case "sized": return "Sized";
+      case "sized_capped_at_max_position": return "Sized — capped at 5% of bankroll";
+      case "no_bet_negative_edge": return "No bet — combined edge is not positive";
+      default: return status;
+    }
+  }
+
+  function renderSizingResult() {
+    const el = document.getElementById("sizingResult");
+    const bankrollRaw = document.getElementById("bankrollInput").value;
+    const bankroll = toNum(bankrollRaw);
+
+    if (selectedLegs.size === 0) {
+      el.hidden = true;
+      return;
+    }
+
+    if (bankroll === null) {
+      el.hidden = false;
+      el.className = "sizing-result rejected";
+      el.innerHTML = `<p class="sizing-reject-text">Enter a current bankroll above to size this entry.</p>`;
+      return;
+    }
+
+    const legs = Array.from(selectedLegs.values());
+    const result = sizeEntry(legs, bankroll);
+    el.hidden = false;
+
+    if (result.status === "rejected") {
+      el.className = "sizing-result rejected";
+      el.innerHTML = `<p class="sizing-reject-text">${result.reason}</p>`;
+      return;
+    }
+
+    el.className = "sizing-result";
+    const stakeColor = result.status === "no_bet_negative_edge" ? "" : "";
+    el.innerHTML = `
+      <div class="sizing-stake-line">
+        <span class="sizing-stake-value">$${result.finalStake.toFixed(2)}</span>
+        <span class="sizing-stake-status">${statusLabel(result.status)}</span>
+      </div>
+      <div class="sizing-breakdown">
+        <div><span>Combined entry probability</span><span>${(result.combinedEntryProbability * 100).toFixed(1)}%</span></div>
+        <div><span>Raw Kelly fraction</span><span>${(result.rawKellyFraction * 100).toFixed(2)}%</span></div>
+        <div><span>Quarter-Kelly fraction</span><span>${(result.quarterKellyFraction * 100).toFixed(2)}%</span></div>
+        <div><span>Platform risk multiplier</span><span>${result.platformRiskMultiplier.toFixed(2)}×</span></div>
+        <div><span>Same-game pair</span><span>${result.sameGamePair ? "Yes (0.85× caution applied)" : "No"}</span></div>
+        <div><span>Dampened Kelly fraction</span><span>${(result.dampenedKellyFraction * 100).toFixed(2)}%</span></div>
+        <div><span>Bankroll entered</span><span>$${result.bankroll.toFixed(2)}</span></div>
+        <div><span>Uncapped suggested stake</span><span>$${result.uncappedStake.toFixed(2)}</span></div>
+        <div><span>5% bankroll cap</span><span>$${result.capAmount.toFixed(2)}</span></div>
+      </div>
+    `;
   }
 
   function renderClosedTable(closed) {
@@ -244,6 +463,9 @@
       renderChart(closed);
       renderOpenTable(open);
       renderClosedTable(closed);
+      renderSelectedLegs();
+
+      document.getElementById("bankrollInput").addEventListener("input", renderSizingResult);
 
       setText("asOf", new Date().toLocaleString(undefined, {
         month: "short", day: "numeric", hour: "numeric", minute: "2-digit"

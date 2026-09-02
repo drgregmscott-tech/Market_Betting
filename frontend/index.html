@@ -61,12 +61,13 @@
   <section class="panel" id="open-panel">
     <div class="panel-head">
       <h2>Currently flagged opportunities</h2>
-      <p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. This is not bet sizing &mdash; <code>sizing_engine.py</code> is still a manual, bankroll-aware step run separately. See note below the table.</p>
+      <p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. Check exactly two PrizePicks flags to size them as a 2-pick Power Play entry below.</p>
     </div>
     <div class="table-wrap">
       <table id="openTable">
         <thead>
           <tr>
+            <th class="checkbox-col"></th>
             <th>Player</th>
             <th>Team</th>
             <th>Stat</th>
@@ -81,7 +82,35 @@
       </table>
     </div>
     <p id="openEmpty" class="empty-note" hidden>No open flags right now.</p>
-    <p class="sizing-note">Sizing suggestions are not shown here because no automated sizing output exists yet &mdash; sizing stays a manual step so a real bankroll figure can be entered by hand.</p>
+  </section>
+
+  <section class="panel" id="sizing-panel">
+    <div class="panel-head">
+      <h2>Sizing calculator</h2>
+      <p class="panel-note">
+        Runs the exact same math as <code>scripts/sizing/sizing_engine.py</code> &mdash; quarter-Kelly, the PrizePicks
+        account-risk dampener, the same-game caution factor, and the 5%-of-bankroll cap &mdash; entirely in your
+        browser. Your bankroll figure is never saved anywhere; it resets the moment you leave or reload this page.
+        This stays exactly as manual as the script: one entry (two legs) at a time, and it has no memory of any
+        stake you've already placed, so update the bankroll figure yourself between entries.
+      </p>
+    </div>
+
+    <div class="sizing-body">
+      <div class="sizing-selection">
+        <span class="sizing-label">Selected legs</span>
+        <div id="sizingSelectedLegs" class="selected-legs">
+          <p class="empty-note">None selected. Check two PrizePicks flags in the table above.</p>
+        </div>
+      </div>
+
+      <div class="sizing-input-row">
+        <label for="bankrollInput" class="sizing-label">Current bankroll ($)</label>
+        <input type="number" id="bankrollInput" min="1" step="1" placeholder="e.g. 500" />
+      </div>
+
+      <div id="sizingResult" class="sizing-result" hidden></div>
+    </div>
   </section>
 
   <section class="panel" id="closed-panel">
