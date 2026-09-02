@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market_Betting — Pick'em Track</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">MB</span>
+      <div class="brand-text">
+        <h1>Market_Betting</h1>
+        <p>Track 1 — Fixed-line pick&rsquo;em (PrizePicks / Underdog)</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="meta-label">Data as of</span>
+      <span id="asOf" class="meta-value">—</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="panel" id="summary-panel">
+    <div class="stat-row" id="statRow">
+      <div class="stat">
+        <span class="stat-value" id="statOpen">—</span>
+        <span class="stat-label">Open flags</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statClosed">—</span>
+        <span class="stat-label">Closed &amp; graded</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statCumEdge">—</span>
+        <span class="stat-label">Cumulative CLV edge</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statHitRate">—</span>
+        <span class="stat-label">Positive-edge rate</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="trend-panel">
+    <div class="panel-head">
+      <h2>Cumulative CLV-equivalent edge</h2>
+      <p class="panel-note">Running sum of <code>clv_edge_at_close</code> over every closed flag, in the order each line closed. This is the project&rsquo;s long-run trendline &mdash; expected to include real losing stretches.</p>
+    </div>
+    <div id="chartWrap" class="chart-wrap">
+      <svg id="trendChart" viewBox="0 0 900 320" preserveAspectRatio="none" role="img" aria-label="Cumulative CLV edge over time"></svg>
+    </div>
+    <p id="chartEmpty" class="empty-note" hidden>No closed, graded flags yet. This chart fills in as flagged lines resolve.</p>
+  </section>
+
+  <section class="panel" id="open-panel">
+    <div class="panel-head">
+      <h2>Currently flagged opportunities</h2>
+      <p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. This is not bet sizing &mdash; <code>sizing_engine.py</code> is still a manual, bankroll-aware step run separately. See note below the table.</p>
+    </div>
+    <div class="table-wrap">
+      <table id="openTable">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Stat</th>
+            <th>Side</th>
+            <th>Platform</th>
+            <th>Line</th>
+            <th>Model edge</th>
+            <th>Game time</th>
+          </tr>
+        </thead>
+        <tbody id="openTableBody"></tbody>
+      </table>
+    </div>
+    <p id="openEmpty" class="empty-note" hidden>No open flags right now.</p>
+    <p class="sizing-note">Sizing suggestions are not shown here because no automated sizing output exists yet &mdash; sizing stays a manual step so a real bankroll figure can be entered by hand.</p>
+  </section>
+
+  <section class="panel" id="closed-panel">
+    <div class="panel-head">
+      <h2>Recently closed flags</h2>
+      <p class="panel-note">The last 25 lines to resolve, most recent first.</p>
+    </div>
+    <div class="table-wrap">
+      <table id="closedTable">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Stat</th>
+            <th>Side</th>
+            <th>Platform</th>
+            <th>Closing line</th>
+            <th>CLV edge at close</th>
+            <th>Closed</th>
+          </tr>
+        </thead>
+        <tbody id="closedTableBody"></tbody>
+      </table>
+    </div>
+    <p id="closedEmpty" class="empty-note" hidden>No closed flags yet.</p>
+  </section>
+
+  <p id="loadError" class="load-error" hidden>
+    Could not load <code>data/clv_log.csv</code>. This page reads that file from its own build, so a fresh Cloudflare Pages deploy is needed after any pipeline run for this page to update.
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including the hourly pipeline&rsquo;s own commits.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
