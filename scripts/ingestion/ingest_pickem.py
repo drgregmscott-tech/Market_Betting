@@ -280,6 +280,18 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
     players_by_id = {str(p.get("id")): p for p in players}
     appearances_by_id = {str(a.get("id")): a for a in appearances}
     games_by_id = {str(g.get("id")): g for g in games}
+    # FIX (Open Decision #11, resolved 2026-09-02): Underdog's real feed
+    # carries a SEPARATE list, `solo_games`, for individual-sport events
+    # (e.g. tennis) — team-sport events live in `games`. The original code
+    # only ever read `games`, so every solo-sport appearance failed this
+    # join and came back with blank sport/game_start_time. `solo_games` is
+    # treated as optional (payload.get(...) or []) rather than required in
+    # the isinstance check above, consistent with this file's existing
+    # "keep running on a partial schema, log and skip" design — if Underdog
+    # ever drops this key, ingestion should not abort over it.
+    solo_games_by_id = {
+        str(g.get("id")): g for g in (payload.get("solo_games") or [])
+    }
 
     for line in lines:
         try:
@@ -297,7 +309,8 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
             player_attrs = player.get("attributes", player)  # tolerate either shape
 
             match_id = str(appearance.get("match_id", ""))
-            game = games_by_id.get(match_id, {})
+            # FIX (Open Decision #11): check games first, then solo_games.
+            game = games_by_id.get(match_id) or solo_games_by_id.get(match_id, {})
             game_attrs = game.get("attributes", game)
 
             player_name = (
@@ -313,7 +326,29 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     source_line_id=str(line.get("id")),
                     player_name=player_name or None,
                     team=appearance.get("team_id") or player_attrs.get("team"),
-                    sport=game_attrs.get("sport_id") or game_attrs.get("sport"),
+                    # FIX (Open Decision #11, and supersedes Open Decision
+                    # #10's "Underdog has zero NFL lines" finding, which is
+                    # now stale): confirmed live 2026-09-02 that Underdog
+                    # posts real NFL props ahead of kickoff tagged
+                    # match_type="Series", whose match_id exists in NEITHER
+                    # `games` nor `solo_games` yet (the game container isn't
+                    # published that far ahead). Previously this meant
+                    # sport=None for every one of these real NFL rows, so
+                    # pickem_model.py silently treated them as
+                    # unsupported_sport. Underdog's own player records
+                    # already carry a real sport_id (confirmed live:
+                    # "sport_id": "NFL" on real player rows) — falling back
+                    # to it lets a prop tag correctly as NFL before its game
+                    # container exists. game_start_time is NOT fixed by
+                    # this — it stays genuinely blank until Underdog
+                    # publishes the real game container, which is a real,
+                    # stated data gap, not a bug to guess around.
+                    sport=(
+                        game_attrs.get("sport_id")
+                        or game_attrs.get("sport")
+                        or player_attrs.get("sport_id")
+                        or player_attrs.get("sport")
+                    ),
                     stat_type=over_under.get("display_stat"),
                     line=_to_float(line.get("stat_value")),
                     over_payout_multiplier=_extract_multiplier(line, "Higher"),
