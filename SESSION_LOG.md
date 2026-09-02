@@ -1200,7 +1200,6 @@ later. Next session is Session 2.4 — CLV-Equivalent Calibration Logging.
 
 ---
 
-
 ## Session 2.4 — CLV-Equivalent Calibration Logging
 
 **Date completed:** 2026-09-01
@@ -1382,8 +1381,8 @@ later. Next session is Session 2.4 — CLV-Equivalent Calibration Logging.
    Decision (#10) below, not silently dropped.
 6. The real, separate 41% Underdog appearances-to-games join gap found
    during this session's investigation was deliberately NOT fixed this
-   session. Reasoning: fixing it blind, with no real NFL data to test the
-   fix against, risks false confidence that the real problem (which
+   session. Reasoning: fixing it blind, with no real NFL data to test
+   the fix against, risks false confidence that the real problem (which
    affects `sport`, `game_start_time`, and therefore cross-platform
    matching) is solved when it may not be. Tracked as a new Open Decision
    (#11) below, tied to the same future trigger as Decision #5.
@@ -1443,7 +1442,6 @@ Tracking, though Open Decisions #10/#11 should be revisited once real NFL
 data exists, independent of Session 2.5's own start.
 
 ---
-
 ## Session 2.5 — Sample-Size Thresholds & Realized-Outcome Tracking
 
 **Date completed:** 2026-09-01
@@ -2009,3 +2007,219 @@ a registration-delay issue rather than a broken feature — no external
 support ticket was ultimately needed. One open item (irregular scheduled
 cadence) is noted for future attention but does not block moving forward.
 Next session is Session 2.8 — Frontend (Cloudflare Pages).
+
+
+---
+
+## Session 2.8 — Frontend (Cloudflare Pages)
+
+**Date completed:** 2026-09-02
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Read the DFS sibling repos' existing frontend (`dfs_optimizer_frontend/`)
+   directly on GitHub before building anything. Found it to be a single
+   static HTML file with no framework and no build step, but one that
+   requires the user to manually drag-and-drop a CSV to view it — not a
+   fit here, since this session's whole point is showing *live automated*
+   data with no manual step. Built a new static `/frontend/` from scratch
+   instead, following the same "single static file, no framework" spirit
+   but wired to read real pipeline output automatically.
+2. Read `output/digest/digest_latest.md` and `data/pickem/clv_log.csv`
+   directly before choosing a data source. Found the digest is a 500+ KB
+   growing text file, a poor fit for a webpage to parse. `clv_log.csv` is
+   a single, continuously-updated structured file with a `status` column
+   (open/closed) and a `clv_edge_at_close` column — the right single
+   source for both the flagged-opportunities table and the performance
+   trendline. `output/estimation/` was also checked and ruled out — it
+   writes a new timestamped file every hourly run with no single "latest"
+   file to point a static page at.
+3. Built `/frontend/index.html`, `/frontend/style.css`, `/frontend/app.js`
+   — plain HTML/CSS/JS, no framework, matching the DFS repos' static-file
+   pattern. `app.js` fetches `data/clv_log.csv` client-side, parses it,
+   and renders a summary stat row, an SVG trendline chart (hand-drawn, no
+   charting library), and two tables (open flags, recently closed flags).
+4. Attempted first Cloudflare Pages setup via the dashboard's newer unified
+   "Create application" flow. This silently created a **Worker**
+   (`market-betting`, under `/workers/services/...`) rather than a
+   **Pages** project — confirmed by the presence of a "Deploy command"
+   field (`npx wrangler deploy`), which only exists on Workers. Cloudflare
+   then tried to prepare the whole repo to run as a program and began
+   installing `requirements.txt`'s Python packages (`pandas`, `numpy`,
+   etc. — needed by the pipeline scripts, not the frontend), and the build
+   never completed. Diagnosed by reading the build log directly rather
+   than assuming; root cause confirmed before attempting any fix.
+5. User deleted the failed Worker project. Rebuilt it correctly via the
+   dashboard's legacy "Continue to Pages" → "Import an existing Git
+   repository" flow, which is the genuine Pages product. Settings used:
+   framework preset **None**; build command
+   `mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv`;
+   build output directory `frontend`; root directory `/`; production
+   branch `main`. First deploy succeeded (1m 25s) once `/frontend/` was
+   actually pushed to GitHub (an initial deploy attempt ran before the
+   three frontend files had been committed locally — caught immediately
+   by checking the build's "Assets uploaded" list, which showed only the
+   copied `clv_log.csv` and none of the frontend files).
+6. Checked the live site's actual numbers against the real data rather
+   than assuming a successful deploy meant a correct page. Found the
+   "cumulative CLV edge" stat read **+11,262.6%** — not plausible. Traced
+   the cause: the chart summed the raw `clv_edge_at_close` percentage
+   across all 404 closed flags, and summing a percentage across hundreds
+   of independent flags grows without bound and stops meaning anything,
+   even though every individual flag's edge was a normal, believable size
+   (confirmed real values like 8%, 28%, 48% directly in the CSV). Fixed by
+   changing the stat and the trendline to a **running average** per closed
+   flag instead of a running sum — this is also the more correct match to
+   the roadmap's "is the system right more often than chance, over a large
+   sample" goal. Re-verified live after the fix: **+27.9% average edge**,
+   a plausible number.
+7. Checked mobile responsiveness on the live site. The connected browser's
+   window would not resize in this environment, so verified instead by
+   loading the live page inside a 390px-wide iframe injected into the
+   page, and separately confirmed programmatically that both tables'
+   scroll containers report `scrollWidth > clientWidth` (888px of content
+   in a 399px box) and that `scrollLeft` actually moves — the tables
+   scroll independently of the page rather than breaking the layout.
+   Confirmed visually as well: stat grid switches to 2 columns, chart and
+   footer render cleanly, nothing overflows the viewport.
+8. Read `scripts/sizing/sizing_engine.py` directly before deciding how to
+   handle the roadmap card's "sizing suggestions" language. Found it is a
+   manual, per-entry calculator, not a batch job: it requires a human to
+   name exactly two specific flag IDs (PrizePicks only — no sourced payout
+   multiplier exists for any other platform/leg-count combination) and a
+   real bankroll figure typed in fresh each run; it has no memory of
+   bankroll across runs. Confirmed with the user this reflects a genuine
+   design constraint, not just a missing config value — nothing in the
+   project decides which two of 3,452+ open flags should be paired into
+   an entry, so full automation would require inventing a new leg-pairing
+   strategy from nothing, which was explicitly out of scope for this
+   session.
+9. User decided sizing should stay part of Session 2.8 rather than being
+   deferred, and confirmed it should remain exactly as manual as the
+   script already is (no in-page bankroll tracking across entries either
+   — the user carries that themselves, same as running the CLI twice).
+10. Added a sizing calculator to the frontend: a checkbox on every open-flag
+    table row, a "Selected legs" panel, and a bankroll input field. When
+    exactly two PrizePicks legs are checked and a bankroll is entered, the
+    page runs the same math as `sizing_engine.py` — quarter-Kelly, the
+    0.70× PrizePicks account-risk dampener, the 0.85× same-game caution
+    multiplier, and the 5%-of-bankroll cap — ported by hand into
+    JavaScript (`sizeEntry()` in `app.js`), since the site is static and
+    cannot call the Python script directly. The bankroll figure is never
+    saved anywhere; it lives only in the browser tab for that session.
+    Clear rejection messages are shown (not exactly two legs selected,
+    mixed platforms, missing bankroll) rather than a blank or silently
+    wrong result.
+11. Verified the ported JavaScript math against the real Python formula
+    before handing it over: ran the same three test cases (a normal
+    entry, a same-game entry, a negative-edge entry) through both a
+    Python reimplementation and the new JavaScript side by side — every
+    intermediate number matched exactly. Also built a headless DOM test
+    harness (Node + jsdom) to run the actual shipped `app.js` and
+    `index.html` end to end — simulated checking two PrizePicks boxes and
+    typing a bankroll, confirmed the page rendered the correct dollar
+    figure, and confirmed all three rejection paths produce clear,
+    specific messages rather than failing silently.
+12. Selected two real open PrizePicks flags on the live deployed site and
+    entered a real bankroll, confirming the calculator works correctly
+    against genuine live data end to end (not just the local test
+    harness): returned `$25.00, Sized — capped at 5% of bankroll`, with a
+    full, internally consistent breakdown.
+13. While testing the sizing calculator against live data, noticed nearly
+    every open flag's `first_flagged_model_prob` reads extremely close to
+    100% (and `first_flagged_edge` correspondingly reads +50.0% for
+    effectively every open row checked). This may be legitimate for
+    certain stat/line combinations, or may indicate the estimation step
+    is saturating for some inputs — not investigated further this
+    session, since it's a data-quality question upstream of both the
+    dashboard and the sizing calculator, not a bug in either. Flagged to
+    the user directly rather than silently building on top of it. See
+    Decisions and Open items below, and new Open Decision #13 in
+    ROADMAP.md.
+
+**Files created/modified:**
+- `/frontend/index.html` (new)
+- `/frontend/style.css` (new)
+- `/frontend/app.js` (new)
+- Cloudflare Pages project `market-betting` (new — dashboard configuration,
+  not a repo file; connected to `drgregmscott-tech/Market_Betting`, branch
+  `main`, auto-deploying on every push)
+- `ROADMAP.md` (Session 2.8 card marked complete; new Open Decision #13
+  added)
+- `SESSION_LOG.md` (this entry)
+
+**Validation results:**
+- [x] Frontend deploys successfully and is reachable at a live URL —
+  `https://market-betting.pages.dev`, confirmed live, auto-redeploying on
+  every push to `main` including the hourly pipeline's own automated
+  commits (verified directly: a real pipeline-triggered push produced a
+  new successful deploy with no manual action taken).
+- [x] Displays current flagged opportunities pulled from real automated
+  output, not mock data — confirmed the page's row counts (3,452 open,
+  404 closed) exactly match the real `clv_log.csv`'s real row count
+  (3,856 total rows, confirmed directly via GitHub's own line count).
+- [x] Displays a CLV-performance trendline view — present, and corrected
+  mid-session from a meaningless raw-sum metric (+11,262.6%) to a
+  believable running-average metric (+27.9%), verified live after the
+  fix.
+- [x] Confirmed working on both desktop and mobile view — see item 7
+  above for the specific checks performed.
+
+**Decisions made:**
+1. Sizing is shown via an **interactive client-side calculator**, not
+   automated per-flag output — this mirrors `sizing_engine.py`'s real,
+   deliberate design (manual, per-entry, no persisted bankroll) rather
+   than inventing new automation (a leg-pairing strategy) that doesn't
+   exist anywhere else in the project. Bankroll is never persisted
+   anywhere; it resets when the browser tab closes.
+2. Cloudflare Pages projects for this repo must be created via the
+   dashboard's **"Continue to Pages" → "Import an existing Git
+   repository"** path, not the newer unified "Create application" flow —
+   the unified flow silently produces a Worker instead of a Pages
+   project for a plain static site. Recorded here as a standing gotcha
+   for any future sibling-project Cloudflare Pages setup.
+3. The trendline and its headline stat use a **running average** of
+   per-flag CLV edge, not a running sum — a sum grows without bound as
+   more flags close and stops representing anything real; the average is
+   what actually answers "is this system right more often than chance,"
+   which is the roadmap's stated north star.
+
+**Corrections/reversals during the session:**
+1. **Unified Cloudflare "Create application" flow → legacy "Continue to
+   Pages" flow.** The first deploy attempt used the newer dashboard flow
+   and produced a Worker, not a Pages project, causing a build failure
+   (see item 4 above). Corrected by deleting the Worker and recreating
+   the project via the legacy Pages-specific import flow.
+2. **First live deploy included no frontend files.** The first successful
+   Cloudflare build only uploaded `data/clv_log.csv` (the build
+   command's own output) — `/frontend/index.html`, `style.css`, and
+   `app.js` had not actually been committed and pushed yet at that point.
+   Caught by checking the deploy's "Assets uploaded" list directly rather
+   than assuming a green build meant a correct one. Corrected once the
+   three files were actually pushed.
+3. **"Cumulative CLV edge" (running sum) → "Average CLV edge" (running
+   average).** See item 6 and Decision #3 above. Caught by checking the
+   live page's actual numbers against a plausibility check, not by
+   assuming a successful, error-free deploy meant a correct result.
+
+**Open items / deferred validations:**
+- **New Open Decision #13** (see ROADMAP.md): nearly every open flag's
+  `first_flagged_model_prob` observed live is extremely close to 100%,
+  which may be legitimate or may indicate an estimation-step issue for
+  some stat types. Not yet investigated. Action needed: spot-check
+  `first_flagged_model_prob` for a handful of these open flags (e.g. a
+  low-line "Sacks Under 1.5" PrizePicks flag) against
+  `pickem_estimation_model_spec.md`'s actual formula to confirm the value
+  is a genuine model output, not a bug or placeholder. This affects the
+  sizing calculator's real-world reliability directly, since the
+  probability feeds straight into the Kelly calculation — the calculator
+  itself is verified correct given whatever probability it's handed, but
+  a bad input still produces a misleading suggested stake.
+
+**Status at close of session:** Fully closed out, including sizing, per the
+user's explicit request to fold sizing into this session rather than defer
+it. Live dashboard, corrected trendline, sizing calculator, and mobile
+responsiveness are all built and verified against real live data. One new
+open item (#13) is carried forward, not blocking, and not silently
+absorbed. Next session is Session 2.9 — Live Paper-Trading Validation
+Window, per ROADMAP.md.
