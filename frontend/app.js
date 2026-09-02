@@ -84,7 +84,13 @@
     const open = rows.filter((r) => r.status === "open");
     const closed = rows.filter((r) => r.status === "closed" && toNum(r.clv_edge_at_close) !== null);
 
-    const cumEdge = closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0);
+    // Average edge per closed flag, not a raw sum. Summing a percentage
+    // across hundreds of independent flags produces a number with no real
+    // meaning (it grows without bound as more flags close). The average is
+    // the honest "is this system right more often than chance" signal.
+    const avgEdge = closed.length
+      ? closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0) / closed.length
+      : null;
     const positive = closed.filter((r) => toNum(r.clv_edge_at_close) > 0).length;
     const hitRate = closed.length ? (positive / closed.length) * 100 : null;
 
@@ -92,8 +98,8 @@
     setText("statClosed", String(closed.length));
 
     const cumEl = document.getElementById("statCumEdge");
-    cumEl.textContent = closed.length ? fmtEdge(cumEdge) : "—";
-    cumEl.className = "stat-value " + (closed.length ? edgeClass(cumEdge).replace("edge-", "") : "");
+    cumEl.textContent = avgEdge === null ? "—" : fmtEdge(avgEdge);
+    cumEl.className = "stat-value " + (avgEdge === null ? "" : edgeClass(avgEdge).replace("edge-", ""));
 
     setText("statHitRate", hitRate === null ? "—" : hitRate.toFixed(0) + "%");
 
@@ -116,10 +122,14 @@
       return ta - tb;
     });
 
-    let cum = 0;
-    const points = sorted.map((r) => {
-      cum += toNum(r.clv_edge_at_close) || 0;
-      return cum;
+    // Running average edge as each flag closes, not a running sum — a sum
+    // grows without bound as more flags close and stops meaning anything.
+    // The average is what shows whether the system holds an edge over time,
+    // including real losing stretches, the way the project's roadmap asks for.
+    let runningSum = 0;
+    const points = sorted.map((r, i) => {
+      runningSum += toNum(r.clv_edge_at_close) || 0;
+      return runningSum / (i + 1);
     });
 
     const W = 900, H = 320, PAD = 36;
@@ -152,7 +162,7 @@
         ${sorted.length} closed flag${sorted.length === 1 ? "" : "s"}
       </text>
       <text x="${W - PAD}" y="16" fill="${lineColor}" font-size="11" font-family="monospace" text-anchor="end">
-        ${fmtEdge(finalVal)} cumulative
+        ${fmtEdge(finalVal)} average edge
       </text>
     `;
   }

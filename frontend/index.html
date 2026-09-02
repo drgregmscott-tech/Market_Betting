@@ -38,7 +38,7 @@
       </div>
       <div class="stat">
         <span class="stat-value" id="statCumEdge">—</span>
-        <span class="stat-label">Cumulative CLV edge</span>
+        <span class="stat-label">Average CLV edge</span>
       </div>
       <div class="stat">
         <span class="stat-value" id="statHitRate">—</span>
@@ -49,11 +49,11 @@
 
   <section class="panel" id="trend-panel">
     <div class="panel-head">
-      <h2>Cumulative CLV-equivalent edge</h2>
-      <p class="panel-note">Running sum of <code>clv_edge_at_close</code> over every closed flag, in the order each line closed. This is the project&rsquo;s long-run trendline &mdash; expected to include real losing stretches.</p>
+      <h2>Running average CLV-equivalent edge</h2>
+      <p class="panel-note">Running average of <code>clv_edge_at_close</code> across every closed flag, in the order each line closed &mdash; not a running sum, which grows without bound as more flags close and stops meaning anything. This is the project&rsquo;s long-run trendline &mdash; expected to include real losing stretches.</p>
     </div>
     <div id="chartWrap" class="chart-wrap">
-      <svg id="trendChart" viewBox="0 0 900 320" preserveAspectRatio="none" role="img" aria-label="Cumulative CLV edge over time"></svg>
+      <svg id="trendChart" viewBox="0 0 900 320" preserveAspectRatio="none" role="img" aria-label="Running average CLV edge over time"></svg>
     </div>
     <p id="chartEmpty" class="empty-note" hidden>No closed, graded flags yet. This chart fills in as flagged lines resolve.</p>
   </section>
