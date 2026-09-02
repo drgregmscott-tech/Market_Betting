@@ -418,7 +418,24 @@ def resolve_stat_spec(stat_type: Optional[str]) -> tuple[Optional[str], object, 
     None. For 'computed', value is the stat_type key. For 'columns', value
     is the list of nflverse columns to sum. reason is only meaningful when
     kind is None."""
-    if not stat_type:
+    # FIX (2026-09-02, surfaced by Open Decision #11's fix): the old check
+    # `if not stat_type` correctly catches a real Python None, but pandas
+    # represents a genuinely blank/missing cell as NaN -- a float -- and
+    # `not float('nan')` is False in Python, so a NaN slipped past this
+    # check and crashed on `.strip()` below with
+    # "AttributeError: 'float' object has no attribute 'strip'". This did
+    # not happen before Open Decision #11's ingestion fix because rows
+    # with no resolved sport were discarded upstream before ever reaching
+    # this function; now that real NFL/tennis rows resolve a sport
+    # correctly, some of them carry a genuinely missing stat_type and
+    # reach here for the first time. Checking `isinstance(stat_type, str)`
+    # catches None, NaN, and any other non-string value the same way,
+    # and reports it through the same "unsupported_stat_type" reason this
+    # function already uses for a plain missing value -- consistent with
+    # this project's "every unsupported stat type is named, not dropped"
+    # rule, and critically: a bad stat_type on one row must never crash
+    # the whole batch again.
+    if not isinstance(stat_type, str) or not stat_type.strip():
         return None, None, "unsupported_stat_type"
     key = stat_type.strip().lower()
     if key in COMPUTED_STAT_TYPES:
