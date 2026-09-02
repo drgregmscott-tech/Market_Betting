@@ -31,7 +31,7 @@ Output:
 import requests
 from collections import Counter
 
-PRIZEPICKS_URL = "https://api.prizepicks.com/projections?per_page=10000"
+PRIZEPICKS_URL = "https://partner-api.prizepicks.com/projections?per_page=10000"
 UNDERDOG_URL = "https://api.underdogfantasy.com/beta/v3/over_under_lines"
 
 HEADERS = {
@@ -49,6 +49,11 @@ def scan_prizepicks():
         resp.raise_for_status()
     except Exception as exc:
         print(f"FAILED to reach PrizePicks: {exc}")
+        print(
+            "If this is a 403, PrizePicks' bot-protection may want an "
+            "Origin/Referer header matching app.prizepicks.com — report "
+            "the exact error back rather than retrying blindly."
+        )
         return
 
     data = resp.json()
@@ -57,16 +62,19 @@ def scan_prizepicks():
     # League/sport info lives on "league" objects; projections reference
     # them via relationships. We count how many live projections exist
     # per league name, which is what "currently listed" means here.
+    # (Matches the real join logic in ingest_pickem.py's
+    # normalize_prizepicks(), confirmed against the live production
+    # schema — league id/type keys are strings there, so we match that.)
     leagues_by_id = {}
     for item in included:
         if item.get("type") == "league":
-            leagues_by_id[item["id"]] = item.get("attributes", {}).get("name", "UNKNOWN")
+            leagues_by_id[str(item["id"])] = item.get("attributes", {}).get("name", "UNKNOWN")
 
     league_counts = Counter()
     projections = [d for d in data.get("data", []) if d.get("type") == "projection"]
     for proj in projections:
         rel = proj.get("relationships", {}).get("league", {}).get("data")
-        league_id = rel.get("id") if rel else None
+        league_id = str(rel.get("id")) if rel else None
         league_name = leagues_by_id.get(league_id, f"unknown_league_id_{league_id}")
         league_counts[league_name] += 1
 
