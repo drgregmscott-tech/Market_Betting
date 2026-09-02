@@ -682,6 +682,21 @@ def run(season: int) -> dict:
     result_df.to_csv(out_path, index=False)
     log.info("Wrote %d rows to %s", len(result_df), out_path)
 
+    # ADDITION (2026-09-02, visibility-gap fix): also write a fixed-name
+    # latest.csv, overwritten every run -- same pattern ingest_pickem.py
+    # already uses for data/pickem/normalized/latest.csv. The timestamped
+    # file above is kept for local history but is NOT committed to GitHub
+    # (same as ingestion's own timestamped snapshots); committing a new
+    # ~26,000-row file every hour would grow the repo without bound.
+    # latest.csv is the one path the pipeline workflow commits, so this
+    # stage's real, row-by-row output (including per-row model_status and
+    # computed edge -- e.g. for Underdog rows) becomes something that can
+    # actually be checked after the fact, instead of only being visible on
+    # a GitHub Actions runner that's already gone by the next run.
+    latest_path = OUTPUT_DIR / "latest.csv"
+    result_df.to_csv(latest_path, index=False)
+    log.info("Wrote %d rows to %s", len(result_df), latest_path)
+
     return {
         "rows_in": len(props_df),
         "rows_out": len(result_df),
