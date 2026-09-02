@@ -286,6 +286,71 @@ per your direction that there isn't enough information yet.
 
 ---
 
+## Major finding, confirmed live: Kalshi's own public API answers most of
+## Part 2's open question directly
+
+**This changes the shape of the decision.** Checked directly (not from a
+web search) by pulling real, live data from Kalshi's own production API,
+right now:
+
+```
+GET https://external-api.kalshi.com/trade-api/v2/markets?status=open&limit=5
+```
+
+This returned five real, currently open markets — **with no API key, no
+login, and no account of any kind** — including MLB game/spread/total
+markets, EPL/La Liga/Serie A soccer markets, and multi-leg combination
+contracts. Kalshi's own documentation confirms this is not a narrow or
+special-case endpoint: the full public Trade API (markets, events, order
+books, series — everything needed to see what's tradeable and at what
+price) is openly documented and requires authentication only for the
+parts that place trades or manage a portfolio, not for reading market
+data.
+
+**What this means for the Part 2 open decision:** the original question
+was "should this project reach Kalshi's markets through PrizePicks' or
+Underdog's wrapper?" That question mostly dissolves once it's confirmed
+Kalshi's real markets are directly, publicly reachable on their own —
+there is no evident reason to route through a wrapper company (which adds
+an unknown fee/terms layer and unknown reliability) when the source
+itself is open with no gate at all. This mirrors exactly the same shape
+of finding as `nflverse` for NFL: an official, no-key, free data source
+beats a scraped or wrapped one every time this project has found one.
+
+**A separate, real question this surfaces, worth naming explicitly:**
+Kalshi's own markets, confirmed live just now, already include sports
+markets (MLB, EPL, La Liga, Serie A moneylines/spreads/totals) — the
+exact same *shape* of market this project's Track 5/6 (sportsbook props,
+flagship lines) describes, and arguably closer in spirit to Track 2
+(cross-venue arbitrage, since these are exchange-style prices that can be
+compared against a sportsbook's) than to Track 3's original weather/
+politics framing. **Track 3 was scoped in Session 0.1 specifically around
+weather/climate and narrow down-ballot politics — it did not anticipate
+Kalshi expanding this far into direct sports markets.** This is worth
+your attention independent of the PrizePicks/Underdog wrapper question.
+
+## Revised recommendation (still your call, not a decision made here)
+
+Given the above, the more useful next step is probably **not** further
+research into PrizePicks Predict or Underdog Exchange as access paths —
+since Kalshi's own API already answers "can this be reached publicly,"
+and answers it better than any wrapper could. The more useful open
+questions now are:
+1. Does Track 3's original scope (weather/climate, narrow politics) need
+   to be revisited now that Kalshi is confirmed to directly offer sports
+   markets — a much bigger opportunity than originally scoped, and one
+   with a confirmed, trivially-reachable public data source?
+2. Should Track 3 be reprioritized relative to Track 1, given Track 3 was
+   originally ranked third by confidence, largely before this direct,
+   frictionless API access was confirmed?
+
+These are real, project-level scope questions, named here rather than
+decided — this session (2.10) was scoped to Track 1's sport inventory,
+so acting on Track 3's scope is a decision for you to make, potentially
+as its own session.
+
+---
+
 ## Handoff notes for `sport_inventory_scan.py`
 
 The version already sent to you has the corrected PrizePicks endpoint
