@@ -1091,6 +1091,57 @@ it's the system doing exactly what it's supposed to do before capital is at risk
 
 ---
 
+### Session 2.10 — Cross-Sport +EV Inventory (Track 1)
+**Status:** Not started
+**Prerequisites:** Session 2.9 (continuation) complete — real per-row
+visibility (`output/estimation/latest.csv`) and correct sport/stat-name
+resolution for both platforms are in place.
+
+**Why this exists:** Addresses Open Decision #14. This project's stated scope
+is +EV bets across all betting markets, not one or two sports. Track 1's
+model has been NFL-only since Session 2.3's scoping decision, and repeated
+investigation this session kept narrowing back to individual sports (first
+NFL, then "add Tennis and CFB") rather than asking the actual right
+question — this session exists to ask it properly, once, deliberately.
+
+**What gets built:** No estimation code yet — this is an inventory and
+scoping session, the same spirit as Session 2.3's original model-scoping
+work. For every sport currently live on PrizePicks and Underdog (checked
+live, not from memory or assumption):
+- What real sports are actually listed right now (both platforms, pulled
+  live)
+- For each: does a real, current public data source exist to grade it
+  against? (`nflverse` only covers NFL — MLB, Tennis, and CFB each need
+  their own answer, not yet researched)
+- Which are structurally close to workable now (a per-game stat, a public
+  stats API or scrapeable source) vs. genuine build-outs (no public data
+  source, or a fundamentally different market structure)
+
+**Files touched:** `/docs/research/sport_inventory.md` (new — the actual
+inventory and per-sport findings), possibly `ROADMAP.md` if new sessions need
+to be added for whichever sports turn out workable.
+
+**Validation (required to close session):**
+- [ ] Every sport currently listed on PrizePicks confirmed live (not assumed
+      from a past session)
+- [ ] Every sport currently listed on Underdog confirmed live (not assumed)
+- [ ] For each sport found: a real, named answer on data-source availability
+      (found and confirmed, or confirmed not to exist — not left unchecked)
+- [ ] At least MLB explicitly checked, since it's mid-season right now and
+      was missed entirely this session despite being a live, obvious
+      candidate
+- [ ] Clear, named list of which sports are candidates for near-term
+      estimation-model support vs. which require real build-out vs. which
+      are ruled out, with reasoning for each
+
+**Handoff notes:** The point of this session is to stop this track's scope
+from silently narrowing to whichever sport is easiest to see at the moment.
+A sport being ruled out here (no viable data source, market structure
+doesn't fit) is a legitimate, useful outcome — the failure mode this session
+guards against is a sport never being checked at all.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
@@ -1815,33 +1866,36 @@ remaining blockers to starting Phase 2.
    swinging on a tiny early-2026 sample. No evidence yet exists to make that
    call correctly — to be resolved in a future session once real 2026 data
    starts accumulating.
-10. New, opened Session 2.4: Cross-platform CLV consensus matching
-    (`clv_logger.py`) is confirmed correct against synthetic data but not yet
-    against real NFL data, because Underdog has posted zero real NFL lines as
-    of 2026-09-01 (confirmed directly against a live raw snapshot —
-    Underdog's games/solo_games lists currently contain only CFB and TENNIS
-    sport_ids). The real NFL season starts 2026-09-07. Action needed: once
-    Underdog posts real NFL lines, re-run a short validation window (same
-    pattern as this session's ~17-hour check) and confirm at least one real
-    closed flag shows `consensus_available = True` with a sane
-    `consensus_edge` value. Not tied to any specific future session number —
-    should happen as soon as the real data exists, whichever session is
-    active at that point.
-11. New, opened Session 2.4: `ingest_pickem.py`'s `normalize_underdog()`
-    joins each appearances record to a games/solo_games record via
-    `appearances[].match_id`. In a live 2026-09-01 snapshot, this join only
-    resolved for 89 of 217 real appearances (41%) — meaning `sport` and
-    `game_start_time` come back blank for the majority of Underdog rows
-    right now, for whatever sports Underdog does currently carry (CFB,
-    tennis). Cause not yet confirmed — plausibly appearances referencing
-    games not yet published that far ahead into the feed, but this is a
-    real, undocumented, can-change-without-notice endpoint (per Session
-    2.1's own standing caveat), so it should be verified, not assumed.
-    Action needed: investigate this gap's real cause before or alongside
-    Open Decision #10's re-check, since an unresolved join would keep
-    suppressing `sport` for real NFL rows too, even once Underdog posts
-    them — which would silently re-break Open Decision #10's own
-    resolution.
+10. ~~New, opened Session 2.4: Cross-platform CLV consensus matching...~~
+    **Superseded 2026-09-02 (Session 2.9 continuation):** the "Underdog has
+    zero real NFL lines" finding this decision was based on is now stale.
+    Live confirmation: Underdog does post real NFL props ahead of kickoff,
+    tagged `match_type: "Series"` — but these are all season-long totals
+    (Season Rush Yards, Season Pass TDs, etc.), not the weekly per-game props
+    this model estimates, and the `games`/`solo_games` join gap that was
+    suppressing them is fixed (see Open Decision #11 below). Real per-game
+    Underdog NFL lines still do not exist as of this update, since the
+    season hasn't started (2026-09-07). Action still needed once real
+    per-game lines exist: same re-check this decision originally called for.
+11. ~~New, opened Session 2.4: `ingest_pickem.py`'s `normalize_underdog()`
+    joins each appearances record...~~ **Resolved 2026-09-02 (Session 2.9
+    continuation):** real cause found and fixed. Underdog's feed splits
+    scheduled events across `games` (team sports), `solo_games` (individual
+    sports), and a third, undocumented category tagged `match_type:
+    "Series"` whose match ID exists in neither list. `normalize_underdog()`
+    only ever read `games`. Fixed by adding a `solo_games` lookup, a
+    `games`→`solo_games` fallback join, and a fallback to the player's own
+    `sport_id` field when neither game container exists yet. Verified live,
+    before/after: sport resolution went from 89/217 (41%) to 191/191 (100%)
+    real appearances. A second, related gap was found and fixed the same
+    session: Underdog also never populates a clean stat-name field for these
+    same categories (NFL "Series", CFB, Tennis) — the real stat name only
+    exists as free text on the price option itself (e.g. "Higher 33.5 Games
+    Played"). Fixed via a regex fallback parser; verified against the live
+    feed at 245/263 lines (93%) resolving a real stat name, including real,
+    currently-tradeable Tennis props (Aces, Double Faults, Games Won). 18
+    lines still return no stat name — a real, small, unexplained residual
+    gap, not investigated further.
 12. New, opened Session 2.5: `weekly_review.py`'s real first run has not
     happened yet — no real bets have been placed or graded as of this
     session's close. Not treated as a blocker (see Session 2.5's Handoff
@@ -1853,19 +1907,31 @@ remaining blockers to starting Phase 2.
     run `weekly_review.py --run` for real and confirm the interim-floor
     behavior (Section 6 of `sample_size_methodology.md`) holds on a real,
     small sample the same way it did on synthetic and placeholder data.
-13. New, opened Session 2.8: nearly every open flag's `first_flagged_model_prob`
-    observed on the live frontend is extremely close to 100% (and
-    `first_flagged_edge` correspondingly reads +50.0% for effectively every
-    open row checked). This may be legitimate — e.g. a very generous line
-    like "Sacks Under 1.5" can genuinely carry a near-certain real
-    probability — or may indicate the estimation step is saturating for some
-    stat types. Not investigated this session; the sizing calculator built in
-    Session 2.8 correctly uses whatever probability is stored, so this is a
-    data-quality question upstream of sizing, not a bug in the calculator
-    itself. Action needed: spot-check `first_flagged_model_prob` against
-    `pickem_estimation_model_spec.md`'s actual formula for a handful of these
-    open flags (e.g. Derick Hall, Sacks Under 1.5, PrizePicks) to confirm the
-    value is a genuine model output and not a bug or placeholder.
+13. ~~New, opened Session 2.8: nearly every open flag's `first_flagged_model_prob`
+    observed on the live frontend is extremely close to 100%~~ **Resolved
+    2026-09-02 (Session 2.9 continuation):** checked the real distribution in
+    `clv_log.csv` directly rather than the dashboard view — only 4.9% of
+    3,461 open flags sat at 99–100%, another 6.6% at 95–99%; 74.3% sat in the
+    ordinary 50–85% range. The near-100% impression came from `app.js`
+    sorting the open-flags table by `first_flagged_edge` descending, which
+    surfaces exactly the highest-probability rows first — a display sort
+    artifact, not an estimation-model bug. No code change needed.
+14. New, opened Session 2.9 (continuation): this project's stated scope is
+    +EV bets across all betting markets — not one or two sports layered onto
+    NFL. Track 1's estimation model is currently NFL-only by a Session 2.3
+    scoping decision, and while diagnosing Open Decision #11 this session,
+    real, currently-live, non-NFL markets kept surfacing without being
+    looked for on purpose — real Tennis props (Aces, Games Won, Double
+    Faults) on matches happening this week, real CFB props, and MLB (still
+    mid-season right now) was never even checked. The real decision needed
+    is not "should we add Tennis" — that repeats the same narrow framing
+    this decision exists to correct. It is: a full, deliberate inventory of
+    every sport currently live on both pick'em platforms, checked against
+    whether a real public data source exists to grade it (nflverse only
+    covers NFL — MLB, tennis, and CFB each need their own answer, not yet
+    researched), to find every daily +EV opportunity actually available
+    right now rather than whichever sport happened to be in front of the
+    model. Action needed: Session 2.10, below.
 
 ---
 *Update this file at the close of each future session, per the project's
