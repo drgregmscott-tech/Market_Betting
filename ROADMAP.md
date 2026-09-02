@@ -890,25 +890,46 @@ them against. Next session is Session 2.7 — Automation (GitHub Actions).
 ---
 
 ### Session 2.7 — Automation (GitHub Actions)
-**Status:** Not started
+**Status:** ✅ Complete
 **Prerequisites:** Session 2.6 complete.
 
-**What gets built:** Scheduled automation (matching the DFS repos' GitHub
-Actions pattern) that runs ingestion → estimation → CLV logging → sizing on a
-recurring schedule appropriate to the pick'em platforms' update cadence, and
-produces a digest of flagged opportunities.
+**What actually got built:** Scheduled automation that runs ingestion →
+estimation → CLV logging on an hourly schedule, then writes a digest of
+currently open flagged opportunities. Sizing (`sizing_engine.py`) is
+deliberately **not** part of the automated run — see Decision #1 below;
+this is a real, deliberate deviation from the card's original "ingestion
+→ estimation → CLV logging → sizing" description.
 
-**Files touched:** `.github/workflows/pickem_pipeline.yml`,
-`/scripts/run_pipeline.py` (orchestrator), `/output/digest/`
+**Files touched:** `.github/workflows/pickem_pipeline.yml` (new),
+`/scripts/run_pipeline.py` (new, orchestrator), `/output/digest/` (new),
+`/requirements.txt` (modified — added `pyarrow`)
 
 **Validation (required to close session):**
-- [ ] Workflow runs successfully on GitHub Actions' own infrastructure (not just
-      locally) at least 3 times on schedule
-- [ ] Failure in one step (e.g. ingestion) doesn't silently corrupt downstream
-      steps — pipeline fails loudly and logs why
-- [ ] Digest output is complete and matches what a manual run would produce
-- [ ] Secrets (if any needed) are handled via GitHub Actions secrets, not
-      committed anywhere
+- [x] Workflow runs successfully on GitHub Actions' own infrastructure (not just
+      locally) at least 3 times on schedule — 4 confirmed real "Scheduled"-
+      trigger runs (#5–#8), all green, all producing real auto-commits.
+- [x] Failure in one step (e.g. ingestion) doesn't silently corrupt downstream
+      steps — pipeline fails loudly and logs why — proven twice for real, not
+      just by design: a `ModuleNotFoundError` (run #1) and a missing-dependency
+      error (run #2) each stopped the pipeline before CLV logging ran, and
+      `clv_log.csv` was correctly left untouched both times.
+- [x] Digest output is complete and matches what a manual run would produce —
+      confirmed against real overnight data: 30,373 real props ingested, 126
+      newly flagged, real September NFL game dates.
+- [x] Secrets (if any needed) are handled via GitHub Actions secrets, not
+      committed anywhere — no secrets needed at all (PrizePicks/Underdog
+      endpoints are unauthenticated); trivially satisfied.
+
+**Handoff notes:** GitHub's scheduled ("cron") trigger took real, extended
+troubleshooting to get firing at all — see SESSION_LOG.md for the full
+trail. Once firing, observed gaps between scheduled runs were **2h16m,
+4h19m, and 5h9m — not the intended hourly cadence.** This looks like
+GitHub's documented behavior of delaying/coalescing scheduled triggers
+under load, not a bug in this workflow; the validation checkbox above is
+satisfied on its literal terms (3+ real scheduled runs), but **actual
+cadence should not be assumed to be hourly** until observed over a longer
+window. Worth revisiting once NFL season data volume ramps up (season
+starts ~Sept 7) and freshness starts to matter more.
 
 ---
 

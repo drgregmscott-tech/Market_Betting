@@ -1804,3 +1804,208 @@ constants were assessed and accepted as v1 placeholders at the user's
 direct request; a third (the same-game dampener) was added mid-session
 following a real discussion of correlation risk, at the user's explicit
 direction. Next session is Session 2.7 — Automation (GitHub Actions).
+
+---
+
+## Session 2.7 — Automation (GitHub Actions)
+
+**Date completed:** 2026-09-02
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Read the live `ingest_pickem.py`, `pickem_model.py`, `clv_logger.py`, and
+   `sizing_engine.py` directly from GitHub before writing anything, per this
+   project's standing pattern.
+2. Identified a real architecture problem before writing code: GitHub
+   Actions runners are stateless between runs — nothing written to disk
+   during a run survives to the next one unless explicitly committed back.
+   `clv_logger.py` depends on reading the *previous* run's `clv_log.csv` to
+   correctly tell "still open" from "closed" (a flag not seen in the
+   current pull is treated as closed). Without persistence, every run
+   would start from an empty log and misclassify every prior flag as
+   closed with meaningless closing values — silently corrupting the CLV
+   history this project's whole validation methodology depends on. Raised
+   this with the user before writing any code; user approved having the
+   workflow auto-commit `clv_log.csv` and its snapshot back to the repo
+   using GitHub's built-in `GITHUB_TOKEN`.
+3. Read `sizing_engine.py` directly and found it requires a human to name
+   two specific flag IDs and a real bankroll figure — there's nothing for
+   an unattended job to decide there. Scoped automation to ingestion →
+   estimation → CLV logging → digest only, leaving sizing as a manual step
+   the user runs himself — consistent with this project's standing "flags
+   and sizes, never places bets" rule.
+4. Built `scripts/run_pipeline.py`: imports the three existing scripts as
+   modules (not subprocess) so real Python exceptions propagate; aborts
+   *before* calling `clv_logger.py` if ingestion or estimation returns
+   suspiciously empty data, specifically to prevent the corruption
+   scenario in (2); writes `output/digest/digest_latest.md` (a plain
+   table of currently open flags, sorted by edge — sizing stays manual, so
+   this is what a person scans to pick a pair worth sizing) and a dated
+   copy per run; logs to `logs/pipeline.log`.
+5. Built `.github/workflows/pickem_pipeline.yml`: scheduled trigger plus
+   manual `workflow_dispatch`, installs dependencies, runs the
+   orchestrator, then commits `clv_log.csv`/snapshot/digest back to the
+   repo only if the pipeline succeeded.
+6. **Run #1 (first real GitHub Actions execution) failed:**
+   `ModuleNotFoundError: No module named 'schema'`. Root cause:
+   `ingest_pickem.py` does a plain `from schema import ...` of a sibling
+   file in its own folder — this only resolves automatically when Python
+   runs the script directly (`python ingest_pickem.py`), which adds that
+   folder to `sys.path`. Loading the script via `importlib` (what
+   `run_pipeline.py` does) doesn't do that automatically. Fixed by
+   temporarily inserting each script's own folder onto `sys.path` for the
+   duration of its load, then removing it — verified the pipeline never
+   touched `clv_log.csv` before this failure, confirming the safety design
+   in (4) worked as intended on a real failure, not just in theory.
+7. **Run #2 failed differently:** `ModuleNotFoundError: No module named
+   'pyarrow'`. Root cause: `pickem_model.py` reads nflverse's parquet
+   files, which requires `pyarrow` — present on the user's local machine
+   (apparently a side effect of installing something else) but never
+   listed in `requirements.txt`. Ingestion had already succeeded in this
+   run (31,076 real rows); confirmed the orchestrator correctly stopped
+   before CLV logging rather than running it on a broken estimation step.
+   Fixed by adding `pyarrow` to `requirements.txt`.
+8. **Run #3 succeeded end-to-end** — first fully clean run: real commit
+   from `pickem-pipeline-bot`, `clv_log.csv` updated (2,979 rows changed),
+   new dated snapshot, both digest files written.
+9. User ran `pip freeze` on the local machine and asked about three
+   packages present locally but not in `requirements.txt`
+   (`beautifulsoup4`, `fastparquet`, `PuLP`). Answered directly: none were
+   needed, proven by run #3's own success with only the five packages
+   actually listed. `PuLP` is most likely staged ahead of a future
+   ILP-optimizer session (matching the DFS repos' pattern); the other two
+   are most likely artifacts of prototype/troubleshooting scripts, not the
+   production path. No `requirements.txt` change made on this basis.
+10. **Extended, real troubleshooting of GitHub's scheduled ("cron")
+    trigger not firing at all**, spanning roughly 5 hours of the session:
+    - Initial schedule set to `0 * * * *` (top of hour), then proactively
+      moved to `7 * * * *` before any evidence of a problem, based on
+      GitHub's own documented guidance that top-of-hour is their busiest,
+      most delay-prone scheduling slot.
+    - After ~3 hours with zero scheduled firings (only manual runs
+      showing), user asked for the schedule to be temporarily set to
+      every 5 minutes (`*/5 * * * *`) to shorten the feedback loop rather
+      than waiting up to an hour per test.
+    - Systematically ruled out, one at a time, checked directly against
+      the live repo/account rather than assumed: file syntax/content
+      (confirmed correct via direct GitHub view each time), Actions
+      billing/quota (7 of 2,000 included minutes used), workflow-disabled
+      state (no warning banner present), repo Actions permissions (set to
+      allow-all, read/write confirmed working via successful auto-commits),
+      and a GitHub-wide platform incident (status page showed none).
+    - At user's request, manually triggered the *current* file directly
+      (run #4) specifically to isolate "is it the file or the schedule" —
+      succeeded cleanly in 1m 12s, proving the file itself was correct and
+      the problem was specific to the scheduled trigger.
+    - Tried a documented community workaround: a trivial re-push of the
+      workflow file (comment-only change, no functional difference) to
+      "kick" GitHub into re-registering the schedule.
+    - **Run #5 fired as a genuine `"Triggered via schedule"` run
+      approximately 1h39m after that re-push** — confirming the schedule
+      was not permanently broken, just very slow (about 1h40m) to register
+      after a schedule change. This matches community-reported behavior,
+      not officially documented by GitHub.
+    - User initially asked to park this as a deferred item for a future
+      session; before that could be finalized, user observed run #5 live
+      and the plan changed to reverting to the intended hourly cadence and
+      continuing to watch rather than deferring.
+    - Reverted schedule to `7 * * * *` (final, intended value) immediately
+      after run #5 confirmed the trigger worked, to stop the 5-minute
+      testing cadence from continuing to hit PrizePicks/Underdog
+      overnight. User pushed this before ending the session for the day.
+    - **Runs #6, #7, and #8 all fired overnight as genuine scheduled runs**
+      (all `"Scheduled"` trigger, all succeeded, all produced real
+      auto-commits) — confirmed the next morning by reading run timestamps
+      and the commit history directly, cross-checking that every
+      successful run had a matching `pickem-pipeline-bot` commit.
+11. Spot-checked the real overnight digest (`output/digest/digest_latest.md`,
+    run #8, 2026-09-02T09:32:05Z): 30,373 rows ingested, 126 newly flagged,
+    0 newly closed, 3,452 still open, 3,856 total ever logged, real
+    September NFL game dates in the open-flags table — confirmed the
+    digest reflects real data correctly, not just a plausible-looking
+    placeholder.
+
+**Files created/modified:**
+- `/scripts/run_pipeline.py` (new)
+- `.github/workflows/pickem_pipeline.yml` (new)
+- `/requirements.txt` (modified — added `pyarrow`)
+
+**Validation results:**
+- PASS — Workflow runs successfully on GitHub Actions' own infrastructure
+  at least 3 times on schedule. 4 confirmed real scheduled runs (#5–#8),
+  all green, all with matching real auto-commits.
+- PASS — Failure in one step doesn't silently corrupt downstream steps.
+  Proven twice on real failures (runs #1 and #2), not just by design:
+  `clv_log.csv` was correctly untouched both times the pipeline stopped
+  early.
+- PASS — Digest output complete and matches what a manual run would
+  produce. Confirmed against real overnight data (see item 11 above).
+- PASS — Secrets, if any needed, handled via GitHub Actions secrets, not
+  committed anywhere. No secrets needed at all; none committed. Trivially
+  satisfied.
+
+**Decisions made:**
+1. Sizing (`sizing_engine.py`) explicitly excluded from the automated
+   pipeline's scope. Automation covers ingestion → estimation → CLV
+   logging → digest only; sizing stays a manual step run by the user,
+   since it requires naming specific flag IDs and a real bankroll figure
+   that an unattended job has no basis to choose. A real, deliberate
+   deviation from the original roadmap card's description — see
+   ROADMAP.md.
+2. `clv_log.csv` persistence handled via the workflow auto-committing back
+   to the repo using GitHub's built-in `GITHUB_TOKEN` — necessary because
+   GitHub Actions runners are stateless between runs and `clv_logger.py`
+   depends on reading the prior run's output.
+3. Schedule set to hourly (`7 * * * *`, off the exact top of the hour),
+   matching the existing Windows Task Scheduler cadence as a known-safe
+   baseline. Actual observed cadence in practice is slower and irregular
+   (see Open items below) — worth revisiting, not blocking.
+4. `run_pipeline.py` loads the three underlying scripts via `importlib`
+   rather than `subprocess`, so real Python exceptions (not just exit
+   codes) propagate to the orchestrator and can be caught, logged, and
+   used to decide whether it's safe to proceed to the next stage.
+
+**Corrections/reversals during the session:**
+1. **`run_pipeline.py`'s first real run failed with `ModuleNotFoundError:
+   No module named 'schema'`** — `importlib`-based loading doesn't
+   replicate Python's automatic `sys.path` behavior when a script is run
+   directly. Fixed by temporarily adding each script's own folder to
+   `sys.path` for the duration of its load.
+2. **Second real run failed with `ModuleNotFoundError: No module named
+   'pyarrow'`** — present locally, missing from `requirements.txt`. Fixed
+   by adding it.
+3. **Initial plan to "park" GitHub Actions scheduling as a deferred item
+   was reversed mid-conversation** once a genuine scheduled run (#5) was
+   observed live — the underlying problem turned out to be a one-time,
+   slow (~1h40m) schedule-registration delay rather than a persistently
+   broken feature, so the session continued to a real close instead of
+   deferring.
+
+**Open items / deferred validations:**
+- **Scheduled-run cadence is irregular in practice.** Observed gaps
+  between real scheduled runs were 2h16m, 4h19m, and 5h9m — not the
+  intended hourly cadence, despite the schedule being correctly set to
+  `7 * * * *`. This looks like GitHub's documented behavior of
+  delaying/coalescing scheduled triggers under load on their end, not a
+  bug in this workflow, but hasn't been observed over a long enough
+  window to characterize with confidence. Revisit once NFL season data
+  volume ramps up (season starts ~Sept 7) and freshness starts to matter
+  more; local Windows Task Scheduler remains the reliable hourly path in
+  the meantime, untouched by any of this.
+- `data/pickem/clv_snapshots/` grows by one file per successful run
+  forever (roughly 24/day if hourly cadence is eventually achieved). Not
+  a problem yet; worth a pruning step in a future session once it's
+  actually a nuisance.
+- Open Decisions #10 and #11 (from Session 2.4) remain open, untouched by
+  this session.
+
+**Status at close of session:** Fully closed out. All four roadmap
+validation items pass on real evidence, not just design: 4 genuine
+GitHub-triggered scheduled runs, two real (not simulated) failure cases
+proving the pipeline fails safely, and a real overnight digest confirmed
+against real data. The GitHub-side scheduling delay that dominated this
+session's troubleshooting time resolved itself once properly diagnosed as
+a registration-delay issue rather than a broken feature — no external
+support ticket was ultimately needed. One open item (irregular scheduled
+cadence) is noted for future attention but does not block moving forward.
+Next session is Session 2.8 — Frontend (Cloudflare Pages).
