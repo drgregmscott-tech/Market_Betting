@@ -1,16 +1,28 @@
 # Sport Inventory — Track 1 (Fixed-Line Pick'em Platforms)
 
 Session: 2.10 — Cross-Sport +EV Inventory
-Status: **DRAFT — not final.** Underdog is confirmed directly. PrizePicks is
-not yet checked (see "How to finish this document" below) because Claude's
-browser tool cannot reach prizepicks.com. MLB needs a second check at a
-different time of day before this document can be treated as complete.
+Status: **DRAFT — not final, and Part 2 is intentionally left as an open
+research item, not a decision, per direction that there isn't enough
+information yet to decide anything.** Underdog's pick'em product is partly
+checked. PrizePicks pick'em is not yet checked. Both companies' non-pick'em
+products are named but not yet investigated in enough depth to act on.
 
 This document exists to stop Track 1's scope from silently narrowing to
 whichever sport happens to be visible at the moment (Open Decision #14).
-It records, for every sport actually seen live on each platform: whether a
+It records, for every sport actually seen on each platform: whether a
 public data source exists to grade it, and whether it's a near-term
 candidate, a real build-out, or ruled out.
+
+---
+
+# Part 1 — Pick'em sport inventory (Track 1's original scope)
+
+**A term used throughout this part:** a "snapshot" means one single
+live pull of data at one moment in time. A snapshot only shows what is
+tradeable *right then* — it does not show every sport a platform supports,
+because a sport with no games in progress at that moment will not appear,
+even if the platform fully supports it and it will appear again later that
+same day.
 
 ---
 
@@ -31,6 +43,27 @@ tell whether a prediction was right — so that sport cannot be estimated or
 sized, no matter how many lines are available for it.
 
 ---
+
+## Why one snapshot is not enough (confirmed independently)
+
+A third-party developer tool that reads Underdog's same public pick'em
+endpoint (the one this project's own `ingest_pickem.py` already uses)
+describes its coverage as **16 leagues total**. A comparable tool for
+PrizePicks' equivalent endpoint describes **29 leagues total**. This
+project's one afternoon snapshot on 2026-09-02 found lines in only 3
+sports on Underdog. That gap — 3 seen vs. 16 supported — is the clearest
+possible confirmation that a single snapshot cannot answer "what sports
+does this platform offer." It can only answer "what sports were tradeable
+at that exact moment." Those are different questions, and this project's
+validation checklist requires the second one, not the first.
+
+**What this means for closing this session:** the plan of "run the scan
+script once more in the evening" is not enough on its own to satisfy the
+roadmap card's requirement that every sport be confirmed live or confirmed
+absent. Multiple snapshots spread across a day (and ideally across a week,
+since some sports like CFB and college basketball only play on certain
+days) are needed to build a real list — see "What still needs to happen"
+at the end of this part.
 
 ## Confirmed live right now — Underdog
 
@@ -120,18 +153,143 @@ also help settle this.
 
 ---
 
-## What still needs to happen before this session can close
+## What still needs to happen before Part 1 can close
 
-1. Run `sport_inventory_scan.py` on your machine and send back the output —
-   this is the only way to check PrizePicks at all, and gives a second,
-   independent read on Underdog.
-2. Re-run the scan again in the evening (US time) specifically to settle
-   the MLB question and catch any sport that wasn't live during today's
-   afternoon snapshot.
-3. Once both of those are in hand, Claude will fill in the PrizePicks rows
-   of the tables above, finalize the candidates list, and — only if new
-   sessions are actually warranted (e.g. a real MLB build-out session) —
-   propose specific additions to ROADMAP.md for your review.
-4. Only after you and Claude agree this session's validation checklist is
-   fully satisfied will ROADMAP.md and SESSION_LOG.md be updated to close
-   Session 2.10.
+1. Run `sport_inventory_scan.py` on your machine (fixed endpoint, see
+   handoff notes) and send back the output — this is the only way to
+   check PrizePicks at all, and gives a second, independent read on
+   Underdog.
+2. Run the scan several more times, spread across at least one full day
+   (morning/afternoon/evening) and ideally a few different days, since a
+   single evening re-check only adds one more moment in time, not real
+   day-of-week or time-of-day coverage. Each run should be logged with
+   its own timestamp so the sport list can be built up as a **union**
+   across runs, not treated as a single truth.
+3. Once enough runs are in hand to have seen the platforms' real range
+   (a working stopping condition — matching this project's own standing
+   practice, e.g. Session 2.1's evidence-based stopping rule, rather than
+   a fixed number picked in advance — might be: no new sport appears
+   across 3 consecutive runs spread across different times of day), Claude
+   will fill in the PrizePicks rows, finalize the candidates list, and
+   propose any warranted ROADMAP.md additions.
+4. Only after you and Claude agree Part 1's validation checklist is fully
+   satisfied will ROADMAP.md and SESSION_LOG.md be updated for that part
+   of Session 2.10.
+
+---
+
+# Part 2 — Product-scope finding: platforms now span multiple tracks
+
+**Status: newly found, not yet a decision. This section names the
+question — it does not answer it. Answering it is a decision for you.**
+
+## What is a "product" here, and why does it matter
+
+This project's six tracks (see ROADMAP.md) are organized around *how a
+bet is structured* — for example, Track 1 is fixed-line pick'em (a static
+line that does not move once set), Track 2 is cross-venue arbitrage, Track
+3 is Kalshi/Polymarket-style event contracts. Each track was scoped around
+one specific mechanism, because Session 0.1 found that the mechanism (not
+the sport, and not the company offering it) is what determines whether a
+real, evidence-backed edge is likely to exist.
+
+This project's ingestion pipeline currently treats "Underdog" as
+synonymous with "the fixed-line pick'em product," because that is the
+only part of Underdog it was ever pointed at.
+
+## What was found
+
+**PrizePicks (checked via web search, since Claude's browser cannot reach
+prizepicks.com directly):** PrizePicks launched "PrizePicks Predict" on
+2025-11-14 — this is a **direct partnership with Kalshi itself**, not a
+separate company. Two sub-products exist inside the PrizePicks app:
+- **Team Picks** — moneylines, spreads, and totals on sports team
+  outcomes. Live in 30 states + D.C. as of the most recent source found.
+- **Culture Picks** — Yes/No event contracts on pop culture, politics,
+  entertainment awards, and real-world events including weather. Live in
+  47–48 states + D.C.
+
+Both are described consistently across multiple independent sources as
+literal **Kalshi-listed contracts**, run through a named regulated entity
+(Performance Predictions II, LLC, a Futures Commission Merchant registered
+with the National Futures Association) — not PrizePicks' own market, just
+PrizePicks' app used as a storefront for Kalshi's real market. This is a
+materially stronger finding than Underdog's, because it isn't just
+"structurally similar to Track 3" — it may be **literally the same
+underlying market this project already has as Track 3's stated scope**
+(Kalshi/Polymarket weather/climate, Kalshi/Polymarket down-ballot
+politics), reachable through a company (PrizePicks) this project's
+pipeline already talks to.
+
+**Underdog (checked directly on its own marketing site):** advertises
+several products under the single "Underdog" brand beyond pick'em:
+
+| Product (as advertised on Underdog's own site) | What it structurally is | Relationship to existing tracks |
+|---|---|---|
+| Pick'em (Higher/Lower player props) | Fixed, non-repricing line | Track 1 — already in scope, already built |
+| **Underdog Exchange ("UDX")** | A CFTC-regulated event-contract exchange, run through a named regulated entity (Aristotle Exchange DCM, Inc. / Aristotle Exchange DCO, Inc.) — a **different** regulated entity than PrizePicks Predict's, not a Kalshi partnership as far as found so far | Structurally resembles Track 3, but not yet confirmed to be the *same underlying market* the way PrizePicks Predict is |
+| **Spreads, moneylines, totals, parlays** | Traditional sportsbook-style odds that reprice as action comes in | Structurally closer to Track 5/6 (sportsbook props / flagship sportsbook lines) |
+| **"Crash" and live in-game props (e.g. a live at-bat multiplier feature)** | Repriced continuously, in real time, during a live event | Doesn't clearly match any existing track — closest is a live/in-play variant of Track 5/6, which this project hasn't scoped at all |
+
+## Why this is not yet a decision
+
+You're right that there isn't enough here yet to decide anything. What's
+confirmed so far is that these products *exist* and, in PrizePicks'
+case, that the underlying market is very likely the same one already in
+Track 3's scope. What's **not yet known**, and would need real research
+(not a web search) before any decision makes sense:
+- Whether PrizePicks Predict's contracts are reachable through a public,
+  no-login endpoint the way pick'em is, or whether they require an
+  account and KYC the way a normal Kalshi account would — this changes
+  everything about whether it's actually easier to reach via PrizePicks
+  than via Kalshi directly.
+- Whether the *terms* (fees, contract structure, what's tradeable) differ
+  between buying a Kalshi contract through PrizePicks vs. through Kalshi
+  directly — a wrapper company can add its own fee or restrict which
+  contracts are exposed.
+- Whether Underdog Exchange (UDX) is its own genuinely separate market
+  (its own liquidity, its own contract terms) or, like PrizePicks
+  Predict, actually a wrapper around some other exchange's real market —
+  not yet checked.
+- What Underdog's "Crash" and live in-game products actually are
+  mechanically (repricing rules, whether they're even a "bet" in the
+  sense this project cares about, or closer to a casino-style game) —
+  not yet checked at all.
+
+## Open Decision (proposed — not yet added to ROADMAP.md, deliberately
+left as a research item rather than a decision point)
+
+**Once the above is actually researched: should PrizePicks Predict
+(and, if it turns out to be structurally similar, Underdog Exchange) be
+treated as an alternate access path into Track 3, rather than a new
+track of their own — and if so, does reaching Kalshi's real market
+through PrizePicks' wrapper offer any real advantage (e.g. reusing an
+account/pipeline relationship this project is already building for
+Track 1) over reaching Kalshi directly, which Track 3's own session
+plan already assumes?**
+
+This is named here as the shape of the eventual decision, not decided —
+per your direction that there isn't enough information yet.
+
+## What still needs to happen for Part 2
+
+1. Real investigation (not a web search) of whether PrizePicks Predict's
+   Kalshi-sourced contracts are reachable through a public, no-login
+   endpoint — the same kind of live check this project did for pick'em
+   back in Session 2.1, applied to this new product.
+2. The same check for Underdog Exchange (UDX).
+3. A basic mechanical description of Underdog's "Crash" and live in-game
+   products, so it's at least clear whether they're a betting market at
+   all in this project's sense, before spending any more time on them.
+4. Once that real research exists, revisit the Open Decision above with
+   actual facts rather than marketing-site descriptions.
+
+---
+
+## Handoff notes for `sport_inventory_scan.py`
+
+The version already sent to you has the corrected PrizePicks endpoint
+(`partner-api.prizepicks.com`, not `api.prizepicks.com` — the original
+version's 403 error was Claude's own mistake, using an endpoint it never
+verified against the real, working production script). No further script
+changes are needed before your next run.
