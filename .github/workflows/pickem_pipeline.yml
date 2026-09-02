@@ -15,7 +15,12 @@ name: Pick'em Pipeline
 # 3. Runs scripts/run_pipeline.py, which itself runs ingestion ->
 #    estimation -> CLV logging in sequence (Session 2.7).
 # 4. If that script succeeds, commits the updated data/pickem/clv_log.csv,
-#    its snapshot, and the new digest file back to this repo, using a
+#    its snapshot, the new digest file, and the estimation stage's own
+#    latest.csv (added 2026-09-02 -- see run() in pickem_model.py -- so
+#    each stage's real per-row output, including model_status and
+#    computed edge for every platform, is actually checkable after the
+#    fact instead of only existing on a runner that's already gone) back
+#    to this repo, using a
 #    token GitHub generates automatically for every workflow run
 #    (GITHUB_TOKEN) -- no separate password or secret needed. This step is
 #    what makes clv_log.csv's history durable across runs; see
@@ -83,7 +88,7 @@ jobs:
         run: |
           git config user.name "pickem-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/
+          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv
           git diff --cached --quiet && echo "No changes to commit." && exit 0
           git commit -m "Automated pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push
