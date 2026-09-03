@@ -1092,7 +1092,13 @@ it's the system doing exactly what it's supposed to do before capital is at risk
 ---
 
 ### Session 2.10 — Cross-Sport +EV Inventory (Track 1)
-**Status:** Not started
+**Status:** ✅ Complete, with one validation item deferred to a bounded,
+automated follow-up — not a new numbered session. See SESSION_LOG.md for
+the full write-up and `/docs/research/sport_inventory.md` for the
+complete findings. Closing the deferred item (Underdog's full sport
+list) is expected in early-to-mid September 2026, once
+`.github/workflows/sport_inventory_scan.yml`'s 4-day scheduled run
+window ends — see that section of SESSION_LOG.md for the exact plan.
 **Prerequisites:** Session 2.9 (continuation) complete — real per-row
 visibility (`output/estimation/latest.csv`) and correct sport/stat-name
 resolution for both platforms are in place.
@@ -1122,15 +1128,18 @@ inventory and per-sport findings), possibly `ROADMAP.md` if new sessions need
 to be added for whichever sports turn out workable.
 
 **Validation (required to close session):**
-- [ ] Every sport currently listed on PrizePicks confirmed live (not assumed
-      from a past session)
+- [x] Every sport currently listed on PrizePicks confirmed live (not assumed
+      from a past session) — 29 leagues confirmed via a live pull
 - [ ] Every sport currently listed on Underdog confirmed live (not assumed)
-- [ ] For each sport found: a real, named answer on data-source availability
+      — **deferred, with a real automated mechanism now running** (see
+      "Handoff notes" below), not left open-ended
+- [x] For each sport found: a real, named answer on data-source availability
       (found and confirmed, or confirmed not to exist — not left unchecked)
-- [ ] At least MLB explicitly checked, since it's mid-season right now and
+      — includes the long tail, not just the largest sports
+- [x] At least MLB explicitly checked, since it's mid-season right now and
       was missed entirely this session despite being a live, obvious
       candidate
-- [ ] Clear, named list of which sports are candidates for near-term
+- [x] Clear, named list of which sports are candidates for near-term
       estimation-model support vs. which require real build-out vs. which
       are ruled out, with reasoning for each
 
@@ -1139,6 +1148,28 @@ from silently narrowing to whichever sport is easiest to see at the moment.
 A sport being ruled out here (no viable data source, market structure
 doesn't fit) is a legitimate, useful outcome — the failure mode this session
 guards against is a sport never being checked at all.
+
+**Deferred item — real mechanism, not a vague TODO:** confirming Underdog's
+full sport list turned out to require genuine time-of-day/day-of-week
+spread that can't be produced in one sitting (checked directly — no
+sports-catalog endpoint exists on Underdog's API as a shortcut). A
+GitHub Actions workflow (`.github/workflows/sport_inventory_scan.yml`)
+now runs the scan 3x/day for 4 days (12 runs) automatically, writing
+dated results to `docs/research/scans/`, verified working end-to-end via
+one real manual run before being left unattended (see SESSION_LOG.md for
+that verification). When the window ends: read the accumulated files,
+build the real union list, update `/docs/research/sport_inventory.md`,
+and disable the workflow — it's explicitly temporary.
+
+**Also produced this session, beyond the original scope (see
+SESSION_LOG.md for full detail):** a product-scope finding that both
+PrizePicks and Underdog now offer products beyond fixed-line pick'em
+(PrizePicks Predict is a direct Kalshi partnership; Underdog Exchange is
+a separate CFTC-regulated exchange). This was investigated and a
+recommendation reached (Track 3's existing scope and ranking should
+stand as-is — see SESSION_LOG.md's reasoning, which re-applied Session
+0.1's own five ranking criteria against real, newly-gathered evidence
+rather than treating the new data as automatic grounds for rescoping).
 
 ---
 
@@ -1916,22 +1947,45 @@ remaining blockers to starting Phase 2.
     sorting the open-flags table by `first_flagged_edge` descending, which
     surfaces exactly the highest-probability rows first — a display sort
     artifact, not an estimation-model bug. No code change needed.
-14. New, opened Session 2.9 (continuation): this project's stated scope is
-    +EV bets across all betting markets — not one or two sports layered onto
-    NFL. Track 1's estimation model is currently NFL-only by a Session 2.3
-    scoping decision, and while diagnosing Open Decision #11 this session,
-    real, currently-live, non-NFL markets kept surfacing without being
-    looked for on purpose — real Tennis props (Aces, Games Won, Double
-    Faults) on matches happening this week, real CFB props, and MLB (still
-    mid-season right now) was never even checked. The real decision needed
-    is not "should we add Tennis" — that repeats the same narrow framing
-    this decision exists to correct. It is: a full, deliberate inventory of
-    every sport currently live on both pick'em platforms, checked against
-    whether a real public data source exists to grade it (nflverse only
-    covers NFL — MLB, tennis, and CFB each need their own answer, not yet
-    researched), to find every daily +EV opportunity actually available
-    right now rather than whichever sport happened to be in front of the
-    model. Action needed: Session 2.10, below.
+14. ~~New, opened Session 2.9 (continuation): this project's stated scope is
+    +EV bets across all betting markets...~~ **Resolved 2026-09-03
+    (Session 2.10).** Full inventory completed: 29 PrizePicks leagues
+    confirmed live, real data-source answers found for every sport
+    including the long tail (strong candidates: NFL, MLB, NBA, EPL,
+    ESPN-API-covered non-EPL soccer, UFC, F1, golf; genuine gaps: KBO,
+    NPB, handball, badminton, most esports; Tennis has real volume but no
+    adequate free data source). Underdog's full list is the one piece not
+    fully closed — deferred to a bounded, already-running automated
+    follow-up rather than left open (see Session 2.10's card above and
+    SESSION_LOG.md for the verification record).
+15. **New, opened Session 2.10:** confirming Underdog's complete current
+    sport list required real time-of-day/day-of-week spread that a single
+    session can't produce (checked directly — no shortcut endpoint exists
+    on Underdog's API). A GitHub Actions workflow now gathers this
+    automatically over a defined 4-day, 12-run window
+    (`.github/workflows/sport_inventory_scan.yml`) rather than leaving it
+    as an indefinite TODO. **Action needed:** once the window ends (early-
+    to-mid September 2026), read the accumulated files in
+    `docs/research/scans/`, finish `/docs/research/sport_inventory.md`'s
+    Underdog tables, and disable the workflow.
+16. **New, opened Session 2.10:** both PrizePicks and Underdog were found
+    to now offer products beyond fixed-line pick'em — PrizePicks Predict
+    (a direct Kalshi partnership, live in most states) and Underdog
+    Exchange (a separate CFTC-regulated exchange via Aristotle Exchange,
+    not confirmed to be a Kalshi wrapper the same way). Re-applying
+    Session 0.1's own five ranking criteria (repricing mechanism, fee/vig,
+    account-limiting risk, liquidity, legal footprint) against real,
+    newly-gathered evidence (Kalshi's own public API confirmed live and
+    fully open with no key; real sports-market liquidity checked directly
+    and found thin; Kalshi's sports contracts specifically found to be in
+    active, unresolved multi-state legal conflict, including criminal
+    charges filed by Arizona) **did not support expanding Track 3's scope
+    to Kalshi's direct sports markets.** Recommendation: Track 3's
+    original scope (weather/climate, narrow down-ballot politics) and
+    ranking stand as originally set — see SESSION_LOG.md for the full
+    evidence-by-evidence writeup. This is logged as a recommendation for
+    review, not an applied decision, consistent with how every other
+    ranking call in this project has been made.
 
 ---
 *Update this file at the close of each future session, per the project's
