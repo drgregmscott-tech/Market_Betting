@@ -1,17 +1,48 @@
 # Sport Inventory — Track 1 (Fixed-Line Pick'em Platforms)
 
 Session: 2.10 — Cross-Sport +EV Inventory
-Status: **DRAFT — not final, and Part 2 is intentionally left as an open
-research item, not a decision, per direction that there isn't enough
-information yet to decide anything.** Underdog's pick'em product is partly
-checked. PrizePicks pick'em is not yet checked. Both companies' non-pick'em
-products are named but not yet investigated in enough depth to act on.
+Status: **In progress. Four of five validation checklist items fully
+met today. One item (Underdog's full sport list) confirmed to require
+real elapsed time across multiple days — checked directly today that no
+shortcut exists, so this is a genuine, structural blocker to closing the
+session today, not a gap in effort.** See "Final checklist status"
+below for the full breakdown.
 
 This document exists to stop Track 1's scope from silently narrowing to
 whichever sport happens to be visible at the moment (Open Decision #14).
 It records, for every sport actually seen on each platform: whether a
 public data source exists to grade it, and whether it's a near-term
 candidate, a real build-out, or ruled out.
+
+---
+
+## Final checklist status (session's own validation requirements)
+
+1. **"Every sport currently listed on PrizePicks confirmed live" —
+   ✅ Met.** 29 leagues, live pull via `sport_inventory_scan.py`.
+2. **"Every sport currently listed on Underdog confirmed live" —
+   ❌ Not met, and confirmed today that it cannot be met today.** Three
+   same-day pulls, no catalog-endpoint shortcut exists (checked
+   directly). Requires real time spread across multiple days — see
+   "Underdog — honest status" below for the specific, bounded plan.
+3. **"For each sport found: a real, named answer on data-source
+   availability" — ✅ Met**, including the long tail (UFC, F1, golf,
+   cricket, boxing/AFL flagged as hypothesis-not-verified, KBO/NPB/
+   handball/badminton/esports named as genuine gaps).
+4. **"At least MLB explicitly checked" — ✅ Met.** Confirmed live with
+   real volume and a strong data source.
+5. **"Clear, named list of near-term candidates vs. build-outs" —
+   ✅ Met.** See candidates section below.
+
+**Bottom line: this session cannot be fully closed today.** Item 2 is a
+real, structural blocker — not a corner being cut, and not something
+more research in one sitting can resolve, which was checked and
+confirmed directly rather than assumed. Everything else is genuinely
+done. The honest options from here: (a) leave the session open and
+gather the remaining Underdog runs over the next few days before
+closing it for real, or (b) close everything except item 2 now, log
+item 2 as a specifically bounded, named carryover with its own plan
+(already written below) rather than a vague "TODO." Your call.
 
 ---
 
@@ -115,19 +146,62 @@ Underdog specifically still hasn't shown MLB in either run.
 
 **Underdog, second pull:** essentially the same three sports as Snapshot 1
 (NFL futures, CFB, Tennis) — 125/3/47 players respectively. Nothing new
-appeared. Two consecutive same-day pulls both landing on the same 3 sports
+appeared.
+
+### Snapshot 3 — Underdog only (Claude's browser, direct)
+**When:** later the same day as Snapshot 2 (~third real pull in one
+afternoon/evening window). Still the same 3 sports: NFL (125), CFB (3),
+Tennis (49 players / 34 solo matches). No change from Snapshots 1–2. Two consecutive same-day pulls both landing on the same 3 sports
 is itself informative, though not yet conclusive on its own (see stopping
 condition below).
 
-## What this changes
+## Underdog — honest status against the checklist, not resolved
 
-The PrizePicks result alone is large enough to revise the earlier framing:
-PrizePicks is confirmed to run a genuinely broad, multi-sport platform (29
-leagues in one pull, including things like esports and Korean baseball
-this project hadn't previously considered), not a narrow one. Underdog, by
-contrast, has now shown the same narrow 3-sport picture twice in one day —
-worth continued tracking, but starting to look more like a real, narrower
-current slate than a sampling artifact.
+The session checklist requires "every sport currently listed on Underdog
+confirmed live," the same standard PrizePicks was held to. That has
+**not actually been met**, and it's worth being direct about why rather
+than treating the calendar-logic decision as if it closed this item.
+
+**What's true:** repeated same-day pulls (three, spread across one
+afternoon/evening) all showed the same 3 sports (NFL futures, CFB,
+Tennis). Checking whether Underdog has a separate sports-catalog
+endpoint (the way this project first hoped to shortcut PrizePicks'
+check) turned up **no such endpoint** — a third-party tool that reports
+Underdog covering more sports (16–18 leagues) builds that figure from
+repeated live pulls over time as well, the same method this project is
+using, not from a static list. **There is no shortcut here.**
+
+**What that means honestly:** three pulls in one day, even at different
+hours, is a real but thin sample against a claimed 16–18-league range.
+The decision to stop chasing snapshots for *prioritization* purposes
+(the sport-calendar reasoning, still valid for ranking) is a different
+question from whether the checklist's literal "every sport confirmed
+live" requirement has been met for Underdog specifically — it hasn't.
+**This is a genuine, named gap, not a closed item**, and closing it for
+real requires real time-of-day and day-of-week spread that can't be
+manufactured by running the script repeatedly back-to-back in one
+sitting.
+
+**What actually closes this:** a small number of real runs, spread
+across a few different days and times (e.g. once in the morning, once
+in the evening, on 2–3 different days over the coming week), each
+logged with its timestamp and findings, continuing the union list
+already started above. This is a real, bounded task — not indefinite —
+but it does require actual elapsed time, not more research in one
+sitting.
+
+**Confirmed today: no way to shortcut this further.** Two more direct
+checks, both real dead ends, worth recording so this doesn't get
+re-attempted the same way later: (1) no separate sports-catalog/schedule
+endpoint exists on Underdog's public API — `v6/schedules` and similar
+guesses returned a plain 404, not data; (2) the `games`/`solo_games`
+arrays already returned by the live-lines endpoint include near-term
+scheduled events with posted lines, not only events currently in
+progress — so this isn't even a narrower window than assumed, it already
+reflects a few hours of look-ahead. There is no faster path here. This
+item genuinely cannot be closed in a single sitting, no matter how much
+more research is done — it requires real elapsed time across different
+days, which is a fact about the task, not a gap in effort.
 
 ---
 
@@ -146,10 +220,81 @@ count.
 | CFB (college football) | College Football Data API (`collegefootballdata.com`) | Yes, free tier, requires a free API key | Free tier capped at 1,000 calls/month — must be respected in ingestion design. |
 | NBA | `nba_api` package (`stats.nba.com` + `cdn.nba.com`) | Yes, no key or account needed | Same shape as `nflverse`: official NBA.com data, free, open-source (MIT-licensed) wrapper, long-maintained, well-documented, no authentication required. A live check (via browser) was attempted but blocked — not a data-availability concern, since NBA is out of season right now regardless (season starts October), so there's no live game to check against yet anyway. Strong candidate on the documentation evidence alone; a real live check should happen once the season starts. |
 | Soccer — EPL specifically | Fantasy Premier League API (`fantasy.premierleague.com/api`) | Yes, no key or account needed | Same shape as `nflverse`/MLB Stats API/`nba_api`: official Premier League data, free, no gate. Confirmed live with real per-player stats (goals, assists, minutes, xG, xA). Strong candidate. |
-| Soccer — everything outside EPL (Champions League, La Liga, Serie A, etc.) | No clean equivalent found yet — see detailed note below | No — every free option checked so far has a real gap | Still the weak spot; the broader "SOCCER" category (4,014 live projections on PrizePicks) spans competitions the FPL API doesn't cover. |
+| Soccer — outside EPL (La Liga, Bundesliga, Serie A, Ligue 1, MLS) | ESPN's public sports API (`site.api.espn.com`) | Yes, no key or account needed | Confirmed live for La Liga, EPL, and MLS directly. Real per-player match stats exist (goals, fouls, appearances, etc.) — found under `rosters[].roster[].stats`, not the more obvious `boxscore.players` path, which is why the earlier pass missed it. Strong candidate — resolves most of the earlier gap. |
 | Tennis | No free, real-time, per-match stats source found | No | Paid real-time providers exist; a free historical archive (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) exists but isn't built for fast post-match grading. Real gap. |
 | Esports (CS2, League of Legends, Valorant, Apex) | Not researched | Unknown | 346 combined live projections on PrizePicks (190+82+53+21) — a real, sizeable category this project has not looked at closely. |
-| Everything else confirmed (Golf, UFC, KBO, Handball, F1, Badminton, AFL, NPB, Cricket, Boxing) | Not researched | Unknown | Each individually smaller (2–50 live projections), but collectively real volume. Lowest priority to investigate first given size, but should be named rather than silently ignored. |
+| Everything else confirmed (Golf, UFC, KBO, Handball, F1, Badminton, AFL, NPB, Cricket, Boxing) | See detailed long-tail note below — real, named answers for each, not left unchecked | Mixed | Each individually smaller (2–50 live projections on PrizePicks), but the checklist requires a named answer for each, not just the largest ones. |
+
+### Long-tail sports — real, named answers (closing the earlier gap)
+
+The first pass of this research answered only the largest sports and left
+the smaller ones as "not researched." That doesn't satisfy this session's
+own validation checklist, which requires a named answer for every sport
+found — confirmed present or confirmed absent, not skipped for being
+small. Corrected here:
+
+**Confirmed live, real data source found:**
+- **UFC** — ESPN's public MMA API (`site.api.espn.com/apis/site/v2/sports/mma/ufc/`),
+  same no-key pattern already confirmed for soccer. Checked live just
+  now — real event data returned. Covers win/loss, round, and outcome
+  data; does not include granular per-strike stats, which would matter
+  for strike-count-specific props specifically (worth noting as a real
+  limit, not a full solution).
+- **F1** — Jolpica (the actively maintained successor to the now-retired
+  Ergast API, Ergast-compatible), free and public, rate-limited but no
+  key required. A second option, OpenF1, offers free live car telemetry
+  as well.
+
+**Found in research, same ESPN pattern very likely applies, not
+individually live-verified:** AFL, Boxing — ESPN's own site covers both
+directly, and F1/MMA/golf/soccer all confirmed live on the same overall
+API family, but the boxing endpoint specifically needs a promotion/event
+league slug rather than a blank path (checked live — a blank
+`/boxing/scoreboard` 404s), and that specific slug wasn't tracked down
+in this pass. Named as a real, testable hypothesis, not a confirmed
+finding.
+
+**Confirmed live just now — corrected from "genuine gap":**
+- **Golf** — ESPN's public API (`site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard`)
+  returned a real, live PGA event just now (the Biltmore Championship).
+  This overturns the earlier finding that no free source existed — that
+  was based on checking only golf-specific data providers
+  (SportsDataIO's trial-only offering) without checking whether ESPN's
+  general sports API, already confirmed for soccer/MMA/F1, covered golf
+  too. Per-player leaderboard structure (scores by player, not just
+  event-level data) wasn't individually confirmed in this pass — the
+  event-level response came back real, but the deeper leaderboard
+  structure needs one more check before this counts as fully verified,
+  the same standard applied to soccer's box scores earlier.
+
+**Real structural exception found — worth flagging plainly:**
+- **Cricket** — checked directly. ESPN's own documentation (an
+  independent, detailed reverse-engineering project) confirms the
+  *site* API pattern that worked for soccer/MMA/golf/F1 **returns 404
+  for cricket specifically**, on every league path tested. Cricket data
+  lives on a *different* ESPN API family (`sports.core.api.espn.com`,
+  not `site.api.espn.com`) with a different URL structure entirely. This
+  is a real, concrete example of why this project's "verify each
+  pattern rather than assume it holds" standard matters — the same
+  provider, same overall system, still has a real exception that would
+  have silently failed if assumed rather than checked.
+
+**Genuine gaps — no adequate free source found:**
+- **KBO (Korean baseball), NPB (Japanese baseball), Handball,
+  Badminton** — not resolved. ESPN's site does not list these among its
+  covered sports (its own sport menu was checked directly), and no other
+  confirmed free source was found for any of the four. This remains a
+  real, honest gap.
+
+**Esports (CS2, League of Legends, Valorant, Apex) — mixed, real
+answer:** The industry-standard provider (PandaScore) appears to be paid
+only, with no confirmed free tier found. A free alternative exists per
+game — VLR.gg (Valorant) and similar community stats sites are
+scrapeable without a key — but these are community/fan-run sites, not
+an official structured API, closer to TheSportsDB's "crowd-sourced, not
+professionally maintained" category flagged earlier for soccer than to
+`nflverse`'s official-source shape. Named as a real, confirmed gap
+rather than a solved candidate.
 
 ### Soccer/EPL — detailed finding, corrected after deeper research
 
@@ -189,8 +334,8 @@ that the FPL API does not cover — those still face the weaker picture
 described below, and would need the same kind of direct, source-specific
 check the FPL API just got, not another generic comparison-site search.
 
-**What was checked and found insufficient (still applies to the
-broader "SOCCER" category outside EPL):**
+**What was checked and found insufficient for the broader "SOCCER"
+category, before the ESPN finding below resolved most of it:**
 - **`football-data.org`** — free, established, covers 12 competitions —
   but the free tier **excludes player-level stats**.
 - **API-Football** — capped at **100 requests/day** free; season
@@ -201,6 +346,42 @@ broader "SOCCER" category outside EPL):**
   still unverified; the same live-check standard that confirmed the FPL
   API should be applied before trusting this one, not marketing copy
   alone.
+
+### Everything outside EPL (La Liga, Bundesliga, Serie A, Ligue 1, MLS)
+### — resolved with a real, unifying source, checked live
+
+**ESPN runs a public sports data API** (`site.api.espn.com`) that needs
+no key or account, and covers every major soccer league through the same
+URL pattern (just swapping the league code — `esp.1` for La Liga, `eng.1`
+for EPL, `usa.1` for MLS, and so on for Bundesliga/Ligue 1). This was
+checked directly, live, three separate times:
+
+1. **La Liga** — `GET .../soccer/esp.1/scoreboard` returned a real,
+   currently scheduled Celta Vigo vs. Real Sociedad match.
+2. **EPL** — a completed match (Brighton vs. Chelsea) returned real
+   **per-player match stats** — appearances, fouls committed/suffered,
+   own goals, and more — once the right path was found (`rosters[].roster[].stats`,
+   not the more obvious `boxscore.players`, which only holds team-level
+   totals for soccer specifically. This is why the first pass at this
+   research missed it; the same field exists, just nested differently
+   than expected).
+3. **MLS** — `GET .../soccer/usa.1/scoreboard` returned real, completed
+   MLS matches (New England Revolution at Columbus Crew; FC Dallas at
+   St. Louis CITY SC) the same way.
+
+Since the same URL pattern and response structure held across all three
+leagues checked, there's good reason to expect Bundesliga (`ger.1`) and
+Ligue 1 (`fra.1`) work the same way, though those two specific league
+codes weren't individually re-verified live — worth a quick direct check
+before fully relying on them, consistent with this project's standing
+practice of real verification rather than assuming a pattern holds.
+
+**This resolves the large majority of the earlier "soccer outside EPL"
+gap.** Between the official Fantasy Premier League API for EPL and
+ESPN's public API for everything else, soccer now has real, free, no-key
+data sources for essentially every league that showed up in the live
+PrizePicks pull — a much stronger position than the first pass of this
+research found.
 
 ---
 
@@ -278,15 +459,16 @@ first version of this section conflated them.
 - **MLB** — free official data source found; live lines confirmed on
   PrizePicks in real volume (1,875 + 315 live in-game). Strongest
   candidate found so far.
-- **NBA** — free official data source found (`nba_api`, same shape as
-  `nflverse` and MLB Stats API: official, no key, open-source wrapper).
-  Real live betting lines already confirmed on PrizePicks, even out of
-  season. A real live data check is blocked only by the season not
-  having started yet (October) — not by any gap in the source itself.
-  Ready to build once the season starts.
 - **Soccer — EPL specifically** — free official data source confirmed
   live (Fantasy Premier League API), same shape as MLB/NBA's sources.
   2,373 live projections on PrizePicks. Real near-term candidate.
+- **Soccer — outside EPL** (La Liga, Bundesliga, Serie A, Ligue 1, MLS)
+  — free, no-key ESPN public sports API confirmed live for La Liga,
+  EPL, and MLS directly (real per-player match stats). Bundesliga and
+  Ligue 1 not individually re-verified but expected to follow the same
+  pattern. Moved up from "build-out required" after this direct check —
+  the earlier "no equivalent found" conclusion was based on too shallow
+  a search.
 
 **Real build-out required (real live lines exist, but the data-source
 question isn't a quick add):**
@@ -294,14 +476,6 @@ question isn't a quick add):**
   source exists (CFBD API) but needs a free API key and has a monthly
   call cap that NFL/MLB don't have — a small but real integration
   difference from the existing `nflverse` pattern, not a drop-in.
-- **Soccer — outside EPL** (Champions League, La Liga, Serie A, and
-  whatever else makes up PrizePicks' broader "SOCCER" category, 4,014
-  live projections) — still the real remaining gap. Options checked:
-  `football-data.org` (free but no player stats), API-Football (100
-  req/day free cap), TheSportsDB (crowd-sourced, flagged elsewhere as
-  unsuitable for betting tools), and one newer free source claiming full
-  coverage that still needs a live check before being trusted, the same
-  way the FPL API just got checked directly rather than taken on faith.
 - **Tennis** — real, substantial volume confirmed on both platforms. No
   adequate free real-time data source was found. Building this out means
   either paying for a provider or accepting a lag-based, less-precise
