@@ -2386,3 +2386,170 @@ has not begun — that remains blocked on the 2026-09-07 NFL season start, as it
 was before this session. Next session, **Session 2.10 — Cross-Sport +EV
 Inventory (Track 1)**, addresses new Open Decision #14 before Session 2.9's
 validation window is revisited, per ROADMAP.md.
+
+---
+
+## Session 2.10 — Cross-Sport +EV Inventory (Track 1)
+
+**Date completed:** 2026-09-03
+**Status:** ✅ Complete, with one validation item deferred to a bounded,
+automated follow-up (not left open-ended, not a new numbered session).
+
+**Context:** Addresses Open Decision #14 (opened Session 2.9 continuation).
+Track 1's estimation model has been NFL-only since Session 2.3, and every
+prior attempt to broaden it kept narrowing back to "which one or two extra
+sports" rather than asking the real question once, deliberately. This
+session exists to do that properly.
+
+**What was actually done:**
+
+1. **PrizePicks and Underdog checked live**, not from memory. PrizePicks:
+   29 distinct leagues confirmed in one live pull (22,657–26,215
+   projections across runs), a much broader platform than any prior
+   session had assumed. Underdog: 3 sports confirmed live across four
+   separate same-day pulls (NFL season-long futures, CFB, Tennis) — MLB
+   notably absent from every pull despite being mid-season, flagged as a
+   real finding pending further confirmation (see deferred item below).
+
+2. **Real, named data-source answers found for every sport**, not just
+   the largest. Strong candidates with official, free, no-key sources
+   confirmed live: **NFL** (`nflverse`, already in production), **MLB**
+   (MLB Stats API), **NBA** (`nba_api`, official NBA.com data — out of
+   season so a live spot-check has to wait for October, but the source
+   itself is confirmed), **EPL** (the official Fantasy Premier League
+   API, confirmed live with real per-player stats), **soccer outside
+   EPL** — La Liga, Bundesliga, Ligue 1, MLS (ESPN's public sports API,
+   confirmed live for La Liga/EPL/MLS directly; real per-player stats
+   found under `rosters[].roster[].stats`, not the more obvious
+   `boxscore.players` path), **UFC** and **golf** (same ESPN API family,
+   confirmed live), **F1** (Jolpica, the maintained successor to the
+   now-retired Ergast API). Real, honest gaps found and named rather than
+   skipped: **Tennis** (no adequate free real-time source), **KBO, NPB,
+   handball, badminton** (nothing found), most **esports** (the
+   professional provider is paid-only; free alternatives are
+   community-run, not official). **Cricket** is a real, useful structural
+   exception worth remembering: the same ESPN URL pattern that worked for
+   every other sport checked returns 404 for cricket specifically — it
+   lives on a separate ESPN API family entirely. **CFB** has a working
+   source (CFBD API) but needs a free key and has a 1,000-call/month cap,
+   unlike NFL/MLB/NBA's uncapped sources.
+
+3. **Sport prioritization corrected mid-session** after conflating two
+   different questions. The first pass ranked sports by today's live
+   snapshot volume, which ranked NBA as "structurally smaller" than
+   soccer/MLB — wrong, since NBA being small in one September snapshot is
+   a season-calendar artifact (NBA starts in October), not a real fact
+   about its size. Corrected using real, sourced US betting-popularity
+   data instead: NFL, college football, NBA, MLB, soccer, NHL, MMA/UFC,
+   tennis, golf, boxing (top 10, in that order). NASCAR was raised as a
+   hypothesis and explicitly not confirmed — it did not appear in any
+   popularity source checked, and was named as unconfirmed rather than
+   added on assumption.
+
+4. **A real bug found and fixed in the research tooling itself**: the
+   first version of `sport_inventory_scan.py` used `api.prizepicks.com`,
+   which 403s. The confirmed, working production endpoint (already used
+   by `ingest_pickem.py` since Session 2.2) is `partner-api.prizepicks.com`
+   — fixed, and the league-matching logic was rewritten to mirror
+   `ingest_pickem.py`'s real, confirmed join logic rather than guessed
+   again.
+
+5. **A second, related research thread opened and substantially
+   resolved**: both PrizePicks and Underdog were found to offer products
+   beyond fixed-line pick'em. PrizePicks Predict is a direct Kalshi
+   partnership (Team Picks: moneylines/spreads/totals, live in 30
+   states; Culture Picks: Yes/No event contracts, live in 47–48 states),
+   run through a named regulated entity (Performance Predictions II,
+   LLC). Underdog Exchange (UDX) is a separate CFTC-regulated exchange
+   via Aristotle Exchange DCM/DCO — not confirmed to be a Kalshi wrapper
+   the same way. Checking Kalshi's own public API directly (no login, no
+   key — confirmed live) mostly answered the resulting question of
+   whether to route through these wrappers: there's no reason to, since
+   Kalshi's real markets are already fully open on their own.
+
+6. **Track 3's scope and ranking re-tested against real evidence, using
+   the same five criteria Session 0.1 used** (repricing mechanism,
+   fee/vig, account-limiting risk, liquidity, legal footprint) — not
+   re-litigated on opinion, per direction received mid-session. Findings:
+   Kalshi's sports-contract repricing mechanism matches Track 6 (already
+   correctly ranked lowest-confidence), not Track 3. Fee schedule
+   confirmed low (peaks at 1.75% at a 50¢ price) but this was already
+   priced into Kalshi's existing ranking, not new evidence specific to
+   sports. Liquidity checked directly on real MLB moneyline markets
+   several days out: mostly zero or near-zero volume, 9–12¢ wide
+   spreads. Legal footprint checked directly: Kalshi's sports contracts
+   specifically are in active, unresolved conflict with over a dozen
+   states, including a Nevada court-extended ban and criminal charges
+   filed by Arizona (20 counts) — none of this touches Kalshi's weather/
+   climate contracts. **Recommendation: Track 3's original scope and
+   ranking should stand as originally set** — logged as a recommendation
+   for review, not an applied decision.
+
+7. **Deferred item, with a real, verified mechanism, not a vague TODO**:
+   confirming Underdog's complete sport list needs real time spread
+   across multiple days — checked directly that no shortcut exists (no
+   sports-catalog endpoint on Underdog's API; the `games`/`solo_games`
+   data already includes near-term scheduled events, not just this-
+   instant lines, so this wasn't even a narrower window than assumed).
+   Built `scripts/ingestion/sport_inventory_scan_automated.py` (writes
+   dated JSON snapshots instead of printing to a screen) and
+   `.github/workflows/sport_inventory_scan.yml` (runs it 3x/day for 4
+   days — 12 runs — and commits results back to the repo automatically).
+   **Verified working end-to-end before being left unattended**: found
+   and fixed a real repo misconfiguration first (Actions workflow
+   permissions were set to read-only, which would have silently failed
+   every commit-back step) via GitHub Settings → Actions → General →
+   Workflow permissions → switched to "Read and write permissions."
+   Manually triggered one real run via `workflow_dispatch`, watched it
+   succeed (48s), and read the actual committed output file directly
+   from GitHub to confirm real data (26,215 PrizePicks projections
+   across 30 leagues, including two new ones — Darts, Lacrosse — not
+   seen in any manual pull) rather than trusting a green checkmark alone.
+
+**Corrections/reversals during the session:**
+1. **Plan to keep re-running snapshots indefinitely → replaced with
+   calendar logic, at the user's direction.** The original plan assumed
+   a sport's absence from a snapshot was mostly random noise requiring
+   more sampling. Corrected: it's mostly explained by the public sports
+   calendar, which doesn't need repeated sampling to check.
+2. **NBA ranked "structurally smaller" than soccer/MLB → corrected.**
+   Based on today's live-snapshot volume, which conflated "current
+   season timing" with "real size." Fixed using real popularity data
+   (see item 3 above).
+3. **PrizePicks endpoint bug** — see item 4 above.
+4. **"Soccer has no equivalent to `nflverse`" → substantially reversed**
+   after the user directly pushed back on a too-shallow first pass. The
+   first check only compared generic third-party football-API listings
+   without checking whether the leagues themselves ran open data
+   infrastructure the way NFL/MLB/NBA's sources do. The official Fantasy
+   Premier League API and ESPN's public sports API both resolved most of
+   what was initially reported as a real gap.
+5. **"No free source for golf" → reversed** once ESPN's API (already
+   confirmed for soccer/UFC) was checked for golf specifically rather
+   than assuming the earlier golf-specific-provider search was
+   sufficient.
+
+**Files touched:**
+- `/docs/research/sport_inventory.md` (new) — full inventory, data-source
+  findings, priority list, Part 2 product-scope findings and Track 3
+  reassessment, and the deferred item's exact closing plan.
+- `scripts/ingestion/sport_inventory_scan.py` (new) — manual scan script
+  (fixed PrizePicks endpoint).
+- `scripts/ingestion/sport_inventory_scan_automated.py` (new) — same
+  scan, built for unattended scheduled runs.
+- `.github/workflows/sport_inventory_scan.yml` (new) — bounded, temporary
+  4-day/12-run schedule; should be disabled once the deferred item closes.
+- `docs/research/scans/` (new directory) — one real file already present
+  from the verification run (`scan_2026-09-03T12-41-06Z.json`); more
+  will accumulate automatically.
+- `ROADMAP.md` — Session 2.10 card closed with the deferral noted; Open
+  Decision #14 resolved; two new Open Decisions (#15 deferred-item
+  closing plan, #16 Track 3 reassessment recommendation) added.
+
+**Next session:** No new session number needed yet. The immediate next
+action is calendar-driven, not a build session: once the 4-day scan
+window ends (see Open Decision #15), read the accumulated files and
+close out Underdog's sport-list confirmation in
+`/docs/research/sport_inventory.md`, then disable the workflow. Session
+2.9's real soak-test window remains blocked on the 2026-09-07 NFL season
+start, unchanged from before this session.
