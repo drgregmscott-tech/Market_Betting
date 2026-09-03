@@ -144,7 +144,7 @@ count.
 | NFL | `nflverse` (already in use, `pickem_model.py`) | Yes | Already the project's production source. No change needed. |
 | MLB | MLB Stats API (`statsapi.mlb.com`) | Yes, no key or account needed | Official MLB source. Near real-time box scores and player-level stats. Confirmed present on PrizePicks (1,875 live projections). Strong near-term candidate. |
 | CFB (college football) | College Football Data API (`collegefootballdata.com`) | Yes, free tier, requires a free API key | Free tier capped at 1,000 calls/month — must be respected in ingestion design. |
-| NBA | Public stats sources exist (e.g. `stats.nba.com`'s unofficial-but-widely-used endpoints) — not yet verified directly by this project | Likely yes, not confirmed | Confirmed present on PrizePicks (194 live projections + 48 season-long). Data source needs a real, direct check before treating as confirmed — not yet done. |
+| NBA | `nba_api` package (`stats.nba.com` + `cdn.nba.com`) | Yes, no key or account needed | Same shape as `nflverse`: official NBA.com data, free, open-source (MIT-licensed) wrapper, long-maintained, well-documented, no authentication required. A live check (via browser) was attempted but blocked — not a data-availability concern, since NBA is out of season right now regardless (season starts October), so there's no live game to check against yet anyway. Strong candidate on the documentation evidence alone; a real live check should happen once the season starts. |
 | Soccer (general + EPL specifically) | Public stats sources are fragmented across competitions; no single free, comprehensive source confirmed yet | Not yet confirmed | Largest non-NFL category on PrizePicks by volume (4,014 general + 2,373 EPL = 6,387 combined) — the single biggest sport this project hasn't investigated a data source for at all. Worth prioritizing if this track expands. |
 | Tennis | No free, real-time, per-match stats source found | No | Paid real-time providers exist; a free historical archive (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) exists but isn't built for fast post-match grading. Real gap. |
 | Esports (CS2, League of Legends, Valorant, Apex) | Not researched | Unknown | 346 combined live projections on PrizePicks (190+82+53+21) — a real, sizeable category this project has not looked at closely. |
@@ -226,6 +226,12 @@ first version of this section conflated them.
 - **MLB** — free official data source found; live lines confirmed on
   PrizePicks in real volume (1,875 + 315 live in-game). Strongest
   candidate found so far.
+- **NBA** — free official data source found (`nba_api`, same shape as
+  `nflverse` and MLB Stats API: official, no key, open-source wrapper).
+  Real live betting lines already confirmed on PrizePicks, even out of
+  season. A real live data check is blocked only by the season not
+  having started yet (October) — not by any gap in the source itself.
+  Ready to build once the season starts.
 
 **Real build-out required (real live lines exist, but the data-source
 question isn't a quick add):**
@@ -240,12 +246,6 @@ question isn't a quick add):**
 - **Soccer/EPL** — large current live volume (6,387 combined live
   projections) and confirmed real popularity (#5 nationally). No data
   source research done yet.
-- **NBA** — corrected up from the earlier draft's "deprioritized"
-  bucket. Confirmed #3 nationally by real betting-audience data, despite
-  low current live-line volume (season starts October). No data source
-  research done yet, and should not be treated as lower-priority than
-  soccer/EPL just because today's snapshot happened to catch it out of
-  season.
 
 **Event-driven, not season-driven (real, but a different kind of
 research question — worth revisiting around specific major events
