@@ -145,10 +145,62 @@ count.
 | MLB | MLB Stats API (`statsapi.mlb.com`) | Yes, no key or account needed | Official MLB source. Near real-time box scores and player-level stats. Confirmed present on PrizePicks (1,875 live projections). Strong near-term candidate. |
 | CFB (college football) | College Football Data API (`collegefootballdata.com`) | Yes, free tier, requires a free API key | Free tier capped at 1,000 calls/month — must be respected in ingestion design. |
 | NBA | `nba_api` package (`stats.nba.com` + `cdn.nba.com`) | Yes, no key or account needed | Same shape as `nflverse`: official NBA.com data, free, open-source (MIT-licensed) wrapper, long-maintained, well-documented, no authentication required. A live check (via browser) was attempted but blocked — not a data-availability concern, since NBA is out of season right now regardless (season starts October), so there's no live game to check against yet anyway. Strong candidate on the documentation evidence alone; a real live check should happen once the season starts. |
-| Soccer (general + EPL specifically) | Public stats sources are fragmented across competitions; no single free, comprehensive source confirmed yet | Not yet confirmed | Largest non-NFL category on PrizePicks by volume (4,014 general + 2,373 EPL = 6,387 combined) — the single biggest sport this project hasn't investigated a data source for at all. Worth prioritizing if this track expands. |
+| Soccer — EPL specifically | Fantasy Premier League API (`fantasy.premierleague.com/api`) | Yes, no key or account needed | Same shape as `nflverse`/MLB Stats API/`nba_api`: official Premier League data, free, no gate. Confirmed live with real per-player stats (goals, assists, minutes, xG, xA). Strong candidate. |
+| Soccer — everything outside EPL (Champions League, La Liga, Serie A, etc.) | No clean equivalent found yet — see detailed note below | No — every free option checked so far has a real gap | Still the weak spot; the broader "SOCCER" category (4,014 live projections on PrizePicks) spans competitions the FPL API doesn't cover. |
 | Tennis | No free, real-time, per-match stats source found | No | Paid real-time providers exist; a free historical archive (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) exists but isn't built for fast post-match grading. Real gap. |
 | Esports (CS2, League of Legends, Valorant, Apex) | Not researched | Unknown | 346 combined live projections on PrizePicks (190+82+53+21) — a real, sizeable category this project has not looked at closely. |
 | Everything else confirmed (Golf, UFC, KBO, Handball, F1, Badminton, AFL, NPB, Cricket, Boxing) | Not researched | Unknown | Each individually smaller (2–50 live projections), but collectively real volume. Lowest priority to investigate first given size, but should be named rather than silently ignored. |
+
+### Soccer/EPL — detailed finding, corrected after deeper research
+
+**Correction to the earlier version of this section:** the first pass
+only checked generic "football API" comparison sites and concluded
+soccer had no equivalent to `nflverse`. That was too shallow — it never
+checked whether the league itself runs official public data
+infrastructure, the way it should have from the start (this is exactly
+the same class of source that made NFL, MLB, and NBA strong candidates).
+Checked properly this time, and the picture for **EPL specifically** is
+now much better than first reported.
+
+**EPL — real, strong data source confirmed, live, right now:**
+The Premier League runs its own official **Fantasy Premier League API**
+(`fantasy.premierleague.com/api`) — free, no key, no login, and
+extensively used by developers for years (multiple maintained wrappers
+and MCP servers found independently). Verified directly, live:
+
+```
+GET https://fantasy.premierleague.com/api/bootstrap-static/
+```
+
+returned real data for **651 current players**, each with real
+per-player stats — goals, assists, minutes played, expected goals (xG),
+expected assists (xA), and injury/availability status — plus a real,
+current gameweek record (Gameweek 2, matching the actual 2026 season
+calendar). This is the same shape of source as `nflverse`, the MLB Stats
+API, and `nba_api`: official, free, no gate. **EPL should move out of
+"weakest data source" and into the same near-term-candidate tier as
+MLB and NBA.**
+
+**What this does and doesn't cover:** this only solves EPL specifically
+(2,373 of PrizePicks' 6,387 combined soccer live projections). The
+broader "SOCCER" category (4,014 live projections) likely spans
+additional competitions (Champions League, La Liga, Serie A, and others)
+that the FPL API does not cover — those still face the weaker picture
+described below, and would need the same kind of direct, source-specific
+check the FPL API just got, not another generic comparison-site search.
+
+**What was checked and found insufficient (still applies to the
+broader "SOCCER" category outside EPL):**
+- **`football-data.org`** — free, established, covers 12 competitions —
+  but the free tier **excludes player-level stats**.
+- **API-Football** — capped at **100 requests/day** free; season
+  coverage on the free tier not confirmed for the current live season.
+- **TheSportsDB** — free but crowd-sourced/community-edited; explicitly
+  flagged elsewhere as unsuitable for betting tools.
+- **A newer free source claiming full player stats, no rate limits** —
+  still unverified; the same live-check standard that confirmed the FPL
+  API should be applied before trusting this one, not marketing copy
+  alone.
 
 ---
 
@@ -232,6 +284,9 @@ first version of this section conflated them.
   season. A real live data check is blocked only by the season not
   having started yet (October) — not by any gap in the source itself.
   Ready to build once the season starts.
+- **Soccer — EPL specifically** — free official data source confirmed
+  live (Fantasy Premier League API), same shape as MLB/NBA's sources.
+  2,373 live projections on PrizePicks. Real near-term candidate.
 
 **Real build-out required (real live lines exist, but the data-source
 question isn't a quick add):**
@@ -239,13 +294,18 @@ question isn't a quick add):**
   source exists (CFBD API) but needs a free API key and has a monthly
   call cap that NFL/MLB don't have — a small but real integration
   difference from the existing `nflverse` pattern, not a drop-in.
+- **Soccer — outside EPL** (Champions League, La Liga, Serie A, and
+  whatever else makes up PrizePicks' broader "SOCCER" category, 4,014
+  live projections) — still the real remaining gap. Options checked:
+  `football-data.org` (free but no player stats), API-Football (100
+  req/day free cap), TheSportsDB (crowd-sourced, flagged elsewhere as
+  unsuitable for betting tools), and one newer free source claiming full
+  coverage that still needs a live check before being trusted, the same
+  way the FPL API just got checked directly rather than taken on faith.
 - **Tennis** — real, substantial volume confirmed on both platforms. No
   adequate free real-time data source was found. Building this out means
   either paying for a provider or accepting a lag-based, less-precise
   grading source — a real decision for the user.
-- **Soccer/EPL** — large current live volume (6,387 combined live
-  projections) and confirmed real popularity (#5 nationally). No data
-  source research done yet.
 
 **Event-driven, not season-driven (real, but a different kind of
 research question — worth revisiting around specific major events
