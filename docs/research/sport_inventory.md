@@ -351,6 +351,115 @@ as its own session.
 
 ---
 
+## Real reassessment: Kalshi's direct sports markets, against Session 0.1's
+## own five criteria
+
+Free API access is a real fact, but it is only one of the five factors
+Session 0.1 used to rank every track (repricing mechanism, fee/vig cost,
+account-limiting risk, liquidity, legal footprint). Confirmed real access
+does not by itself justify expanding Track 3's scope — that only follows
+if the *other four* criteria hold up too, the same way Session 0.1 judged
+every other track. What follows is that same check, run against real
+evidence gathered just now, not assumption.
+
+**1. Repricing mechanism.** Kalshi's sports markets (MLB, EPL, La Liga
+etc., confirmed live above) are continuously repriced by a real,
+matched order book — the same mechanism Session 0.1 already evaluated for
+"flagship exchange sports markets," which is **Track 6, already ranked
+lowest confidence**, specifically because a continuously repriced market
+against public information has already absorbed what's publicly knowable
+by the time a retail trader sees it. This is a *different* mechanism than
+Track 3's original weather/politics scope, which was ranked high
+precisely because those markets are thin and slow-moving, not
+continuously arbitraged by professional traders the way sports markets
+are.
+
+**2. Fee/vig cost.** Confirmed from Kalshi's own published fee schedule:
+`fee = round(0.07 × contracts × price × (1 − price), 2)`. This peaks at a
+real **1.75% at a 50¢ price** (a coin-flip market) and falls off toward
+either extreme. This is a genuinely low cost compared to a traditional
+sportsbook's ~4.6% average vig (the same comparison Session 0.1 already
+used to justify Track 1/pick'em's high ranking) — but this fact was
+already true of Kalshi generally, before today; it is not new evidence
+specific to sports contracts, and does not by itself change anything.
+
+**3. Account-limiting risk.** Not yet researched specifically for
+sports-contract trading on Kalshi (as opposed to Kalshi's other
+categories). Exchanges structurally don't limit winners the way pick'em
+platforms do (this was already part of Session 0.1's reasoning for why
+arbitrage/exchange tracks rank higher than pick'em on this factor) — but
+that has not been separately confirmed for the sports-contract product
+specifically. Treated as an open item, not a finding either way.
+
+**4. Liquidity — checked directly, real numbers.** This is the criterion
+that actually changes the picture. Pulled live MLB moneyline markets for
+games three days out (2026-09-05): most showed **zero or near-zero real
+trading volume** (`volume_24h: 0`, `open_interest: 0` on several), and
+even the most active one sampled had only **262 contracts total** traded.
+Bid/ask spreads on these same markets ran **9–12 cents wide** on a
+dollar-denominated contract — a real, wide spread that would cost far
+more to cross than the 1.75% fee-schedule number above suggests, since
+that fee formula assumes trading at the posted price, not paying the full
+spread to get filled. **This is real evidence that Kalshi's sports
+markets, at least this far ahead of game time, are thin** — a
+structurally different liquidity picture than either a mainstream
+sportsbook (which quotes a full slate with tight spreads well ahead of
+game time) or Kalshi's own weather/politics markets, which is what Track
+3 was actually built and validated around.
+
+**5. Legal footprint — checked directly, and this is the decisive
+factor.** Kalshi's sports event contracts specifically (not its other
+categories) are the subject of **active, ongoing, multi-state legal
+conflict** right now: cease-and-desist orders and/or lawsuits from at
+least a dozen states (Nevada, New Jersey, Connecticut, Illinois,
+Tennessee, Rhode Island, Maryland, Arizona, and others), a Nevada federal
+court extending a ban on Kalshi's sports contracts specifically, and
+**criminal charges filed by Arizona** (20 misdemeanor counts) directly
+against Kalshi's sports and election wagering activity. Courts are
+actively split — Tennessee's federal court sided with Kalshi on
+preemption; Nevada's did not. This is a genuinely elevated, unresolved
+legal-risk category **specific to the sports-contract product**, not
+Kalshi's weather/climate contracts, which do not appear anywhere in this
+litigation. This is exactly the kind of risk Session 0.1 named "legal
+footprint" to capture, and exactly why Track 3 was originally scoped
+narrowly (weather/climate, *narrow* down-ballot politics only) rather
+than broadly across everything Kalshi lists.
+
+## What the evidence actually supports
+
+Applying Session 0.1's own method to real data gathered today, the
+evidence does **not** support expanding Track 3 into Kalshi's direct
+sports markets:
+- The repricing mechanism matches Track 6 (already correctly ranked
+  lowest-confidence) more than Track 3.
+- The one genuinely new, favorable fact (free public API access) was
+  already priced into Kalshi's existing ranking — it isn't new evidence
+  about the *sports* product specifically.
+- Real liquidity checked directly is thin, at least for games several
+  days out.
+- Real legal footprint checked directly is the most actively contested,
+  least settled category found anywhere in this project's research so
+  far — actively fought in court, with at least one state (Arizona)
+  pursuing criminal charges.
+
+**Recommendation, not a decision:** Track 3's original scope (weather/
+climate, narrow down-ballot politics) should stay as originally ranked.
+The free, no-login API access confirmed today is a genuine, useful fact
+for **building** Track 3 when its own session comes up (it de-risks the
+data-access question Session 0.1 flagged as unresolved) — but it is not,
+on the evidence gathered, a reason to expand Track 3's scope into direct
+sports contracts, or to move Track 3 ahead of Track 2 (arbitrage) in
+priority. If anything, this reinforces Track 6's original "lowest
+confidence" ranking, since it's now confirmed with real data (not just
+reasoning) that Kalshi's own sports markets show the same thin-liquidity,
+contested-legality profile that ranking already predicted.
+
+This stays a recommendation for your review, not an applied decision —
+consistent with how every other ranking call in this project has been
+made.
+
+---
+
 ## Handoff notes for `sport_inventory_scan.py`
 
 The version already sent to you has the corrected PrizePicks endpoint
