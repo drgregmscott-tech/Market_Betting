@@ -152,26 +152,75 @@ count.
 
 ---
 
+## Why more snapshots were dropped as the plan
+
+The original plan was to keep re-running the scan until sightings
+stopped adding new sports. That plan assumed a sport being absent from
+any one pull was mostly random noise. **It isn't** — it's mostly
+explained by the sports calendar, which is public and doesn't need to be
+inferred from repeated sampling. A sport not showing up today is either
+"off-season, expected" or "in-season and genuinely absent" — a fixed,
+checkable fact against real schedule dates, not something another random
+snapshot resolves. Confirmed with the user directly: further snapshot
+runs are not the right next step. What matters is real volume, already
+confirmed, prioritized against the calendar — not chasing a "complete"
+list that isn't really the point.
+
+## Priority list — corrected to real US sports-betting popularity, not
+## today's live-snapshot volume
+
+**A correction, worth stating plainly:** the first version of this
+priority list ranked NBA as "structurally smaller" than soccer/MLB,
+based on how few NBA lines happened to be live in today's snapshot. That
+was wrong for the same reason the earlier snapshot-chasing plan was
+wrong — NBA being small today is a season-calendar artifact (the NBA
+season starts in October), not a real fact about its size. Fixed here
+using real, sourced US betting-popularity data instead of today's
+snapshot.
+
+**Real, sourced top 10, by US betting handle/audience (not today's live
+count):**
+
+| Rank | Sport | Basis |
+|---|---|---|
+| 1 | NFL | Clear largest by a wide margin — ~$30B legal US handle in the 2025 season alone (American Gaming Association estimate) |
+| 2 | College football | Consistently ranked directly behind NFL specifically for betting volume, distinct from NBA/MLB |
+| 3 | NBA | Largest betting *audience* by some measures (~40% of US bettors bet basketball); heavy in-game prop volume. Today's snapshot showing it small is season-timing only — corrected here |
+| 4 | MLB | Consistently top-tier; in-season right now |
+| 5 | Soccer (mostly EPL/Champions League/La Liga, not MLS domestically) | Real and growing; multiple sources confirm international competitions drive the real US betting volume, not MLS |
+| 6 | NHL | Solid, real, playoffs spike hard |
+| 7 | MMA/UFC | Real, disproportionately heavy per-fan betting rate; event-driven, not season-driven |
+| 8 | Tennis | Appears consistently across sources; real year-round volume |
+| 9 | Golf | Smaller but real, named in multiple sources |
+| 10 | Boxing | Smaller than UFC, also event-driven |
+
+**NASCAR was named as a hypothesis but not confirmed** — it did not
+appear as a top-10 sport in any of the sources checked for this
+correction. Worth a direct, separate check if it matters for this
+project, rather than assumed onto the list without evidence, holding it
+to the same standard as everything else here.
+
+**What today's live snapshot is actually useful for:** confirming a
+sport is *currently tradeable on these specific platforms right now* —
+real and useful for near-term ingestion planning — but not as a ranking
+of which sports matter most. The two are different questions, and the
+first version of this section conflated them.
+
 ## What still needs to happen before Part 1 can close
 
-1. Continue running `sport_inventory_scan.py` across more times of day
-   (and ideally a few different days) to keep building the union list and
-   watch for anything that hasn't shown up yet in either platform's live
-   snapshots.
-2. Real stopping condition (matching this project's own standing
-   practice): stop adding new snapshots once **3 consecutive runs, spread
-   across different times of day, add zero new sports** to the union
-   list. Not met yet — only 2 runs so far, and this run already added a
-   large number of new sports.
-3. For sports newly confirmed above with no data source check yet
-   (soccer/EPL above all, given its real size; NBA; esports), do the same
-   kind of direct data-source research already done for MLB/CFB/Tennis
-   before treating any of them as real candidates.
-4. Once the stopping condition is met and data-source checks are done for
-   the sports that matter by volume, finalize the candidates list below
-   and only then propose any ROADMAP.md additions.
+1. Data-source research for the sports that matter most by real
+   popularity above, prioritized in this order: **NBA** (largest
+   confirmed correction — should not have been deprioritized), soccer/
+   EPL (largest current live volume, zero research done), MLB (already
+   strong, mostly done).
+2. Once those have real data-source answers, finalize the candidates
+   list below and propose any warranted ROADMAP.md additions.
+3. No further snapshot runs required — sport *prioritization* is now
+   settled by real popularity data; live snapshots remain useful only
+   for confirming current tradeable status on these two platforms
+   specifically, not for ranking importance.
 
-## Candidates (draft — will be finalized once the stopping condition above is met)
+## Candidates (draft — data-source research for NBA and soccer/EPL still pending)
 
 **Near-term candidate (data source ready, real live lines confirmed):**
 - **MLB** — free official data source found; live lines confirmed on
@@ -188,14 +237,28 @@ question isn't a quick add):**
   adequate free real-time data source was found. Building this out means
   either paying for a provider or accepting a lag-based, less-precise
   grading source — a real decision for the user.
-- **Soccer/EPL** — the largest newly-confirmed category by volume
-  (6,387 combined live projections), but no data source research has
-  been done at all yet. Worth real investigation given its size, before
-  it's judged either way.
+- **Soccer/EPL** — large current live volume (6,387 combined live
+  projections) and confirmed real popularity (#5 nationally). No data
+  source research done yet.
+- **NBA** — corrected up from the earlier draft's "deprioritized"
+  bucket. Confirmed #3 nationally by real betting-audience data, despite
+  low current live-line volume (season starts October). No data source
+  research done yet, and should not be treated as lower-priority than
+  soccer/EPL just because today's snapshot happened to catch it out of
+  season.
 
-**Not yet assessed at all (confirmed live, no data-source research done):**
-NBA, esports (CS2/LoL/Valorant/Apex), Golf, UFC, KBO, Handball, F1,
-Badminton, AFL, NPB, Cricket, Boxing.
+**Event-driven, not season-driven (real, but a different kind of
+research question — worth revisiting around specific major events
+rather than as a standing seasonal priority):**
+UFC, boxing.
+
+**Smaller by real popularity data (not confirmed top-10; real but lower
+priority):**
+NHL, golf, esports (CS2/LoL/Valorant/Apex), KBO, handball, F1,
+badminton, AFL, NPB, cricket.
+
+**Named but unconfirmed — needs its own direct check, not assumed:**
+NASCAR.
 
 **Ruled out:**
 - None yet. Nothing checked so far has come back with no live lines at
