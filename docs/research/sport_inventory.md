@@ -65,116 +65,142 @@ since some sports like CFB and college basketball only play on certain
 days) are needed to build a real list — see "What still needs to happen"
 at the end of this part.
 
-## Confirmed live right now — Underdog
+## Confirmed live — snapshot log
 
-Checked directly by Claude, via Underdog's live public endpoint
-(`api.underdogfantasy.com/beta/v3/over_under_lines`), on 2026-09-02
-(mid-afternoon, US time). This is a snapshot at one moment — the mix will
-change hour to hour.
+Each row below is one real, independent pull. Sports are tracked as a
+**union across all runs** — once a sport appears in any run, it stays on
+the "confirmed present" list even if a later run doesn't show it (that
+just means nothing in that sport was live at that later moment).
 
-| Sport (Underdog `sport_id`) | Container | Count seen | What kind of props |
+### Snapshot 1 — Underdog only (Claude's browser, direct)
+**When:** 2026-09-02, mid-afternoon US time.
+
+| Sport (`sport_id`) | Container | Count | What kind of props |
 |---|---|---|---|
-| NFL | `appearances` tagged `match_type: "Series"` | 125 players | Season-long futures (e.g. "Higher 8.5 Regular Season Games Started") — **not weekly game props**, since the regular season has not started yet (starts 2026-09-07) |
-| CFB (college football) | `games` (1 live game) + some `appearances` | 3 players | Per-game props, real live game found |
-| Tennis | `solo_games` (40 live matches) | 54 players, 76 appearances | Per-match props (e.g. Aces, Double Faults, Games Won) |
-| MLB | — | **0 found** | Not present in this particular snapshot — see note below |
+| NFL | `appearances` (`match_type: "Series"`) | 125 players | Season-long futures only — season hasn't started |
+| CFB | `games` (1 live game) | 3 players | Per-game props |
+| Tennis | `solo_games` (40 matches) | 54 players, 76 appearances | Per-match props |
 
-**MLB note:** MLB is mid-season right now, so its complete absence from
-this one snapshot is more likely a timing artifact (this snapshot happened
-to catch a moment with no MLB lines posted yet) than genuine unavailability.
-The roadmap card for this session explicitly requires MLB to be checked —
-this snapshot does not satisfy that requirement on its own. **Action
-needed:** re-run the scan below in the evening (US time), when MLB games
-are more likely to be in progress, before treating "MLB not on Underdog" as
-a real finding.
+### Snapshot 2 — PrizePicks (fixed) + Underdog, both via `sport_inventory_scan.py`
+**When:** 2026-09-02, ~19:19 local (00:19 UTC 2026-09-03), run on your machine.
 
----
+**PrizePicks — first successful check, and it landed a big result: 29
+distinct leagues live in one pull**, closely matching the ~29-league figure
+independently reported by the third-party tool referenced earlier. This
+single run already answers most of the "is PrizePicks bigger than 3
+sports" question on its own:
 
-## PrizePicks — not yet checked
+| League | Live projections | League | Live projections |
+|---|---|---|---|
+| NFL | 5,197 | LoL (esports) | 82 |
+| CFB | 4,511 | VAL (Valorant, esports) | 53 |
+| SOCCER (general) | 4,014 | EUROGOLF | 50 |
+| EPL (English Premier League) | 2,373 | NBASZN (season-long) | 48 |
+| MLB | 1,875 | UFC | 46 |
+| NFLSZN (season-long) | 1,318 | KBO (Korean baseball) | 40 |
+| Tennis | 1,179 | HANDBALL | 36 |
+| NFL1H (1st half) | 634 | F1 | 31 |
+| MLBLIVE (live in-game) | 315 | BAD (Badminton) | 26 |
+| NBA | 194 | AFL (Australian football) | 22 |
+| CS2 (Counter-Strike, esports) | 190 | APEX (esports) | 21 |
+| NHLSZN (season-long) | 143 | NPB (Japanese baseball) | 18 |
+| CFB1H (1st half) | 138 | CRICKET | 10 |
+| CFBSZN (season-long) | 86 | NFL1Q (1st quarter) | 5 |
+| | | BOXING | 2 |
 
-Claude's browser tool is blocked by its own safety category filter from
-reaching `prizepicks.com`, the same restriction recorded back in Session
-2.1. This has not changed. PrizePicks cannot be inventoried from Claude's
-side at all.
+**MLB confirmed present on PrizePicks** (1,875 live projections, plus a
+separate 315-projection live in-game "MLBLIVE" category) — this directly
+answers the open MLB question from Snapshot 1, at least for PrizePicks.
+Underdog specifically still hasn't shown MLB in either run.
 
-**Action needed:** run the attached `sport_inventory_scan.py` on your own
-machine (same pattern as Session 2.1's prototype scripts). It prints a
-league-by-league breakdown of every live PrizePicks projection at the
-moment you run it, plus a second, independent read of Underdog for
-comparison. Paste the output back and Claude will fold it into this
-document and finish the "candidates" table below.
+**Underdog, second pull:** essentially the same three sports as Snapshot 1
+(NFL futures, CFB, Tennis) — 125/3/47 players respectively. Nothing new
+appeared. Two consecutive same-day pulls both landing on the same 3 sports
+is itself informative, though not yet conclusive on its own (see stopping
+condition below).
+
+## What this changes
+
+The PrizePicks result alone is large enough to revise the earlier framing:
+PrizePicks is confirmed to run a genuinely broad, multi-sport platform (29
+leagues in one pull, including things like esports and Korean baseball
+this project hadn't previously considered), not a narrow one. Underdog, by
+contrast, has now shown the same narrow 3-sport picture twice in one day —
+worth continued tracking, but starting to look more like a real, narrower
+current slate than a sampling artifact.
 
 ---
 
 ## Data source availability, by sport
 
 This is the actual gate: a sport can have plenty of betting lines and still
-be unbuildable if there's nowhere to check what really happened.
+be unbuildable if there's nowhere to check what really happened. This
+table now covers every sport confirmed live in the snapshots above —
+updated after the PrizePicks pull roughly tripled the confirmed sport
+count.
 
 | Sport | Data source found | Free / public? | Notes |
 |---|---|---|---|
 | NFL | `nflverse` (already in use, `pickem_model.py`) | Yes | Already the project's production source. No change needed. |
-| MLB | MLB Stats API (`statsapi.mlb.com`) | Yes, no key or account needed | Official MLB source. Near real-time box scores and player-level stats. Strong candidate — same "official, free, no-key" shape as `nflverse`. |
-| CFB (college football) | College Football Data API (`collegefootballdata.com`) | Yes, free tier, but requires a free API key | Free tier is capped at 1,000 calls/month — workable for this project's likely call volume, but the cap must be respected in any ingestion design, unlike `nflverse`/MLB which have no such limit. |
-| Tennis | No free, real-time, per-match stats source found | No | Paid real-time providers exist (Sportradar and similar) but all require a paid plan. A free historical dataset (Jeff Sackmann's public `tennis_atp`/`tennis_wta` match archives on GitHub) exists but updates with a lag and is not built for grading a specific prop shortly after a match ends. This is a real gap, not a "not researched yet" gap. |
-
----
-
-## Candidates (draft — will be finalized once PrizePicks is checked)
-
-**Near-term candidate (data source ready, real live lines confirmed):**
-- **MLB** — free official data source found; presence on the platforms
-  still needs the evening re-check noted above before this is confirmed
-  rather than assumed.
-
-**Real build-out required (real live lines exist, but the data-source
-question isn't a quick add):**
-- **CFB** — real live game and props confirmed on Underdog. Data source
-  exists (CFBD API) but needs a free API key and has a monthly call cap
-  that NFL/MLB don't have — a small but real integration difference from
-  the existing `nflverse` pattern, not a drop-in.
-- **Tennis** — real, substantial volume confirmed on Underdog (54 players,
-  76 appearances at this snapshot alone). No adequate free real-time data
-  source was found. Building this out would mean either paying for a
-  provider or accepting a lag-based, less-precise grading source — a real
-  decision for the user, not a default "yes, build it."
-
-**Ruled out:**
-- None yet. Nothing checked so far has come back with no live lines at
-  all — the question for every sport checked has been data-source
-  availability, not whether it's actually traded.
-
-**Not yet checked:** everything on PrizePicks, and any sport that might
-exist on either platform outside the categories already seen (e.g. NBA,
-NHL, soccer, esports, golf) — none of those appeared in this snapshot, but
-"didn't appear in one snapshot" is not the same as "confirmed absent." A
-second, later-in-day check (the same run needed for the MLB question) will
-also help settle this.
+| MLB | MLB Stats API (`statsapi.mlb.com`) | Yes, no key or account needed | Official MLB source. Near real-time box scores and player-level stats. Confirmed present on PrizePicks (1,875 live projections). Strong near-term candidate. |
+| CFB (college football) | College Football Data API (`collegefootballdata.com`) | Yes, free tier, requires a free API key | Free tier capped at 1,000 calls/month — must be respected in ingestion design. |
+| NBA | Public stats sources exist (e.g. `stats.nba.com`'s unofficial-but-widely-used endpoints) — not yet verified directly by this project | Likely yes, not confirmed | Confirmed present on PrizePicks (194 live projections + 48 season-long). Data source needs a real, direct check before treating as confirmed — not yet done. |
+| Soccer (general + EPL specifically) | Public stats sources are fragmented across competitions; no single free, comprehensive source confirmed yet | Not yet confirmed | Largest non-NFL category on PrizePicks by volume (4,014 general + 2,373 EPL = 6,387 combined) — the single biggest sport this project hasn't investigated a data source for at all. Worth prioritizing if this track expands. |
+| Tennis | No free, real-time, per-match stats source found | No | Paid real-time providers exist; a free historical archive (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) exists but isn't built for fast post-match grading. Real gap. |
+| Esports (CS2, League of Legends, Valorant, Apex) | Not researched | Unknown | 346 combined live projections on PrizePicks (190+82+53+21) — a real, sizeable category this project has not looked at closely. |
+| Everything else confirmed (Golf, UFC, KBO, Handball, F1, Badminton, AFL, NPB, Cricket, Boxing) | Not researched | Unknown | Each individually smaller (2–50 live projections), but collectively real volume. Lowest priority to investigate first given size, but should be named rather than silently ignored. |
 
 ---
 
 ## What still needs to happen before Part 1 can close
 
-1. Run `sport_inventory_scan.py` on your machine (fixed endpoint, see
-   handoff notes) and send back the output — this is the only way to
-   check PrizePicks at all, and gives a second, independent read on
-   Underdog.
-2. Run the scan several more times, spread across at least one full day
-   (morning/afternoon/evening) and ideally a few different days, since a
-   single evening re-check only adds one more moment in time, not real
-   day-of-week or time-of-day coverage. Each run should be logged with
-   its own timestamp so the sport list can be built up as a **union**
-   across runs, not treated as a single truth.
-3. Once enough runs are in hand to have seen the platforms' real range
-   (a working stopping condition — matching this project's own standing
-   practice, e.g. Session 2.1's evidence-based stopping rule, rather than
-   a fixed number picked in advance — might be: no new sport appears
-   across 3 consecutive runs spread across different times of day), Claude
-   will fill in the PrizePicks rows, finalize the candidates list, and
-   propose any warranted ROADMAP.md additions.
-4. Only after you and Claude agree Part 1's validation checklist is fully
-   satisfied will ROADMAP.md and SESSION_LOG.md be updated for that part
-   of Session 2.10.
+1. Continue running `sport_inventory_scan.py` across more times of day
+   (and ideally a few different days) to keep building the union list and
+   watch for anything that hasn't shown up yet in either platform's live
+   snapshots.
+2. Real stopping condition (matching this project's own standing
+   practice): stop adding new snapshots once **3 consecutive runs, spread
+   across different times of day, add zero new sports** to the union
+   list. Not met yet — only 2 runs so far, and this run already added a
+   large number of new sports.
+3. For sports newly confirmed above with no data source check yet
+   (soccer/EPL above all, given its real size; NBA; esports), do the same
+   kind of direct data-source research already done for MLB/CFB/Tennis
+   before treating any of them as real candidates.
+4. Once the stopping condition is met and data-source checks are done for
+   the sports that matter by volume, finalize the candidates list below
+   and only then propose any ROADMAP.md additions.
+
+## Candidates (draft — will be finalized once the stopping condition above is met)
+
+**Near-term candidate (data source ready, real live lines confirmed):**
+- **MLB** — free official data source found; live lines confirmed on
+  PrizePicks in real volume (1,875 + 315 live in-game). Strongest
+  candidate found so far.
+
+**Real build-out required (real live lines exist, but the data-source
+question isn't a quick add):**
+- **CFB** — real live games and props confirmed on both platforms. Data
+  source exists (CFBD API) but needs a free API key and has a monthly
+  call cap that NFL/MLB don't have — a small but real integration
+  difference from the existing `nflverse` pattern, not a drop-in.
+- **Tennis** — real, substantial volume confirmed on both platforms. No
+  adequate free real-time data source was found. Building this out means
+  either paying for a provider or accepting a lag-based, less-precise
+  grading source — a real decision for the user.
+- **Soccer/EPL** — the largest newly-confirmed category by volume
+  (6,387 combined live projections), but no data source research has
+  been done at all yet. Worth real investigation given its size, before
+  it's judged either way.
+
+**Not yet assessed at all (confirmed live, no data-source research done):**
+NBA, esports (CS2/LoL/Valorant/Apex), Golf, UFC, KBO, Handball, F1,
+Badminton, AFL, NPB, Cricket, Boxing.
+
+**Ruled out:**
+- None yet. Nothing checked so far has come back with no live lines at
+  all — the question for every sport checked has been data-source
+  availability, not whether it's actually traded.
 
 ---
 
