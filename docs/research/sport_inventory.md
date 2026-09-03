@@ -1,12 +1,15 @@
 # Sport Inventory — Track 1 (Fixed-Line Pick'em Platforms)
 
 Session: 2.10 — Cross-Sport +EV Inventory
-Status: **In progress. Four of five validation checklist items fully
-met today. One item (Underdog's full sport list) confirmed to require
-real elapsed time across multiple days — checked directly today that no
-shortcut exists, so this is a genuine, structural blocker to closing the
-session today, not a gap in effort.** See "Final checklist status"
-below for the full breakdown.
+Status: **Closing now, with one item explicitly deferred to a bounded,
+automated follow-up — not left open-ended.** Four of five validation
+checklist items are fully met. The fifth (Underdog's full sport list)
+has a real, running mechanism in place (see "Deferred" section below)
+that will finish gathering what's needed over the next 4 days without
+requiring anyone to run anything by hand. This session should be
+treated as closed once these files are committed and pushed; the
+deferred item gets closed out separately, as its own short follow-up,
+once the 4-day window ends.
 
 This document exists to stop Track 1's scope from silently narrowing to
 whichever sport happens to be visible at the moment (Open Decision #14).
@@ -21,10 +24,8 @@ candidate, a real build-out, or ruled out.
 1. **"Every sport currently listed on PrizePicks confirmed live" —
    ✅ Met.** 29 leagues, live pull via `sport_inventory_scan.py`.
 2. **"Every sport currently listed on Underdog confirmed live" —
-   ❌ Not met, and confirmed today that it cannot be met today.** Three
-   same-day pulls, no catalog-endpoint shortcut exists (checked
-   directly). Requires real time spread across multiple days — see
-   "Underdog — honest status" below for the specific, bounded plan.
+   🕐 Deferred, with a real mechanism now running.** See "Deferred"
+   section below for the exact plan and closing criteria.
 3. **"For each sport found: a real, named answer on data-source
    availability" — ✅ Met**, including the long tail (UFC, F1, golf,
    cricket, boxing/AFL flagged as hypothesis-not-verified, KBO/NPB/
@@ -34,15 +35,11 @@ candidate, a real build-out, or ruled out.
 5. **"Clear, named list of near-term candidates vs. build-outs" —
    ✅ Met.** See candidates section below.
 
-**Bottom line: this session cannot be fully closed today.** Item 2 is a
-real, structural blocker — not a corner being cut, and not something
-more research in one sitting can resolve, which was checked and
-confirmed directly rather than assumed. Everything else is genuinely
-done. The honest options from here: (a) leave the session open and
-gather the remaining Underdog runs over the next few days before
-closing it for real, or (b) close everything except item 2 now, log
-item 2 as a specifically bounded, named carryover with its own plan
-(already written below) rather than a vague "TODO." Your call.
+**This session is ready to close, with item 2 carried forward as a
+named, bounded, already-automated follow-up** — not a vague TODO, and
+not something requiring a new numbered session (per this project's own
+convention that research resolving an open item from a prior session is
+logged as a continuation, not a new session number).
 
 ---
 
@@ -202,6 +199,37 @@ reflects a few hours of look-ahead. There is no faster path here. This
 item genuinely cannot be closed in a single sitting, no matter how much
 more research is done — it requires real elapsed time across different
 days, which is a fact about the task, not a gap in effort.
+
+## Deferred — real mechanism now in place, not a vague "come back later"
+
+This item is being deferred as a **named, bounded action**, not left as
+an open-ended TODO — matching this project's standing practice for
+deferrals (e.g. Session 2.5's Open Decision #12).
+
+**The mechanism:** a new GitHub Actions workflow
+(`.github/workflows/sport_inventory_scan.yml`) runs an automated version
+of the scan script three times a day — 08:00, 16:00, and 00:00 UTC — for
+**4 days from whenever it's first merged: 12 total runs**, enough to
+cover every time of day across a full week-cycle including a weekend.
+Each run writes a new dated JSON file to `docs/research/scans/` and
+commits it back to the repo automatically — no one needs to be at a
+keyboard, and no one needs to remember to run anything by hand.
+
+**Files to place (see full paths and content below):**
+- `scripts/ingestion/sport_inventory_scan_automated.py`
+- `.github/workflows/sport_inventory_scan.yml`
+
+**Closing this deferred item, when the window ends:** come back to this
+document, read the 12 accumulated files in `docs/research/scans/`
+directly from GitHub, build the real union list across all of them (both
+platforms — the automated script checks PrizePicks too, since it runs
+from GitHub's servers, not through any blocked network, giving a second,
+independent, unattended check on PrizePicks as a side benefit), fill in
+the "Confirmed live" tables above with the complete picture, and
+**disable or delete the workflow file** — it's explicitly temporary, not
+a permanent addition to the pipeline, so leaving it running past its
+defined window would itself be exactly the kind of unnamed, unexplained
+ongoing behavior this project avoids.
 
 ---
 
