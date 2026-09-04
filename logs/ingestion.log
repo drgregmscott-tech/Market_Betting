@@ -1126,3 +1126,5 @@
 2026-09-04 23:09:33,162 UTC | INFO | === Polymarket ingestion run complete: 20702 rows (OK) ===
 2026-09-04 23:09:35,416 UTC | INFO | === Venue matcher run starting ===
 2026-09-04 23:09:35,901 UTC | INFO | === Venue matcher run complete: 2 candidate pairs from 1629 Kalshi rows x 20702 Polymarket rows ===
+2026-09-04 23:13:41,878 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 23:13:42,402 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 1629 Kalshi rows x 20702 Polymarket rows ===

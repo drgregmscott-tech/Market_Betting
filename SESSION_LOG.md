@@ -2553,3 +2553,223 @@ close out Underdog's sport-list confirmation in
 `/docs/research/sport_inventory.md`, then disable the workflow. Session
 2.9's real soak-test window remains blocked on the 2026-09-07 NFL season
 start, unchanged from before this session.
+## Session 3.1 — Multi-Venue Data Ingestion
+
+**Date completed:** 2026-09-04
+**Status:** ⚠️ Complete with caveats — Climate and Weather + Commodities half
+fully built and validated; Politics/Elections deliberately deferred (see Open
+Decision #20); a real, live matched pair between venues has not yet been
+observed (see Open Decision #17).
+
+**What was actually done:**
+
+Built the four files the roadmap card called for, then found and fixed a real
+chain of bugs while trying to validate them against live data — each one
+only surfaced because the fix before it worked well enough to expose the next
+layer underneath.
+
+1. **`schema_exchange.py`** (new) — a second, parallel normalized schema for
+   exchange-style YES/NO contract pricing (four separate prices: yes_bid,
+   yes_ask, no_bid, no_ask), kept deliberately separate from Session 2.2's
+   `schema.py` rather than forcing Kalshi/Polymarket's order-book pricing
+   into a schema built for fixed-line pick'em odds.
+
+2. **Kalshi and Polymarket API access confirmed and documented** (closes the
+   first validation checkbox): both platforms' market-data read endpoints
+   require no API key and no account. Confirmed live: Kalshi's base URL
+   (`api.elections.kalshi.com`, despite the "elections" subdomain, covers all
+   categories), Polymarket's three-API split (Gamma for markets/events, Data
+   API for positions, CLOB for order-book depth — this project only needs
+   Gamma). Rate limits not formally published by either vendor; both were
+   hit and handled empirically during this session (see below).
+
+3. **`ingest_kalshi.py` rebuilt twice**, not once. The first version pulled
+   Kalshi's entire open-market catalog with no filter and paged as deep as
+   practical. This failed in several real, sequential ways (see
+   Corrections/reversals). The final version instead: (a) pulls Kalshi's
+   full series list once via `GET /series` (13,816 series, confirmed public,
+   no pagination needed), (b) filters client-side to series whose category
+   is `"Climate and Weather"` (367) or `"Commodities"` (81) — 448 series
+   total, matching Session 0.1's original Track 3 edge thesis exactly, (c)
+   pulls each matching series's open markets individually via
+   `GET /markets?series_ticker=<ticker>&status=open`. A real run: 448 target
+   series, 1,629 genuine single-question markets kept, 0 filtered as combo
+   listings (confirming combo-style contracts are a Sports-category
+   phenomenon, not something Climate/Commodities needs defending against —
+   though the structural filter is left in place regardless, at negligible
+   cost, rather than assumed unnecessary).
+
+4. **`ingest_polymarket.py` fixed three times** against real, live bugs (see
+   Corrections/reversals): a pagination-termination bug that silently capped
+   real data at ~100 events forever, a page-level failure that discarded an
+   entire run's already-collected data, and a real, still-unexplained 422
+   error from Polymarket's Gamma API at a consistent offset (2,100) every
+   run. The final version keeps whatever it collected before that wall
+   rather than losing it — real runs consistently yield ~20,700 normalized
+   rows across ~2,100 events (multiple markets per event, e.g. multi-
+   candidate races, expanding the row count).
+
+5. **`venue_matcher.py` built, then fixed twice more** after real testing
+   surfaced two different problems: a real performance bug (naive n×m
+   comparison became ~126 million comparisons at Kalshi's true scale,
+   looking hung rather than just slow — fixed with time-bucketing, verified
+   at 2.55 seconds for the same real-scale data) and a real correctness bug
+   found on the FIRST non-zero real result this session produced — two
+   "matches" that turned out to be false positives on inspection (an 8.0+
+   magnitude earthquake market matched against 9.0+ and 6.5+ magnitude
+   markets, purely on shared generic wording and a shared close time). Fixed
+   by requiring that, when both titles contain numbers, at least one number
+   actually matches — with a further fix on top of that fix, since the first
+   attempt let both titles' shared *year* ("before 2027") count as a
+   spurious numeric match. Verified against three real cases: the false-
+   positive earthquake pairs (now correctly rejected), the genuine NYC
+   temperature match from earlier in the session (still correctly accepted,
+   since both sides genuinely share the number 86), and a same-topic pair
+   with no numbers at all (still matches on words/time alone, confirming the
+   new check doesn't block genuine matches that never had a number to
+   compare).
+
+6. **Real diagnostic scripts built along the way, kept in the repo for reuse
+   rather than thrown away**: `composition_check.py` (keyword-based category
+   breakdown of each venue's real data), `sample_titles.py` (prints real,
+   random titles from an "unclassified" bucket — this is what surfaced the
+   combo-listing discovery), `discover_kalshi_series.py` (confirmed
+   `GET /series` works without auth and produced the real 13,816-series,
+   18-category breakdown that made the targeted-pull redesign possible).
+
+7. **A real, live matched pair was NOT found** by the end of this session.
+   The final, fully-fixed pipeline (1,629 real Kalshi Climate/Weather +
+   Commodities markets vs. ~20,700 real Polymarket markets) returned 0
+   candidates on its last real run. The matcher's correctness has been
+   validated thoroughly against real title text assembled into test cases
+   (see item 5), but not against a live pair that arrived together from a
+   real simultaneous pull. **Decision, made explicitly with the user:** this
+   is deferred rather than chased further this session — validated as
+   thoroughly as current conditions allow, with the expectation that a live
+   match becomes checkable once real conditions produce genuine overlap
+   (e.g. an active storm or extreme-heat event both venues list). See Open
+   Decision #17.
+
+**Files created/modified:**
+- `/scripts/ingestion/schema_exchange.py` (new)
+- `/scripts/ingestion/ingest_kalshi.py` (new, rebuilt twice — see above)
+- `/scripts/ingestion/ingest_polymarket.py` (new, fixed three times — see
+  above)
+- `/scripts/ingestion/venue_matcher.py` (new, fixed twice after initial
+  build — see above)
+- `/scripts/ingestion/composition_check.py` (new, diagnostic — kept)
+- `/scripts/ingestion/sample_titles.py` (new, diagnostic — kept)
+- `/scripts/ingestion/discover_kalshi_series.py` (new, diagnostic — kept)
+- `/.gitignore` (new — repo had none before this session; added specifically
+  to exclude `data/exchange/raw/` after a real 338.50 MB file exceeded
+  GitHub's 100 MB push limit; raw snapshots are still written locally every
+  run for debugging, just no longer committed)
+
+**Validation results (against the roadmap card's original checklist):**
+- [x] **Kalshi and Polymarket API access confirmed and documented** — pass,
+  see item 2 above.
+- [ ] **Venue-matching logic correctly identifies the same real-world
+  event/outcome across at least 2 venues in a real test** — **partial
+  pass.** The logic has been validated correctness-wise against real title
+  text (genuine matches accepted, real false positives rejected, edge cases
+  handled), but a live, real, simultaneously-pulled matched pair has not yet
+  occurred. Deferred per item 7 above and Open Decision #17 — not treated as
+  a session blocker, but explicitly not a full pass either.
+- [x] **Normalized schema extended to cover exchange-style pricing
+  (YES/NO contracts)** — pass, `schema_exchange.py`.
+
+**Decisions made:**
+1. **Target Kalshi's Climate and Weather + Commodities series specifically,
+   not its full catalog.** Confirmed via real evidence (a 200,000-record
+   pull that was 99.5% combo/multi-leg listings and still found zero
+   weather markets) that a blind full-catalog pull is unworkable at Kalshi's
+   real scale. Confirmed via `GET /series` that these two categories map
+   directly onto Session 0.1's original Track 3 edge thesis, so this is a
+   real scope match, not a convenient narrowing.
+2. **Defer Politics/Elections ingestion to a future session.** Kalshi has
+   3,949 series across Politics + Elections combined, but Session 0.1's real
+   decision was narrow, down-ballot races specifically — a filter for that
+   distinction doesn't exist yet, and pulling all of Politics/Elections
+   as-is would reintroduce the same kind of scope drift this project has
+   caught and corrected before (see SESSION_LOG.md history on NFL-only
+   narrowing). See Open Decision #20.
+3. **Defer chasing a live matched pair further this session** (item 7,
+   above) rather than continuing to search — agreed directly with the user.
+
+**Corrections/reversals during the session:**
+1. **Kalshi page-size/cap tuning, three rounds.** Started at limit=200/
+   cap=25 pages (~5,000 markets, hit cap). Raised to Kalshi's documented
+   real max (limit=1000) and cap=60 (60,000 markets, still hit cap).
+   Discovered via `composition_check.py`/`sample_titles.py` that the vast
+   majority of that pull was multi-leg combo listings, not single-question
+   markets. Attempted a `market_type == "binary"` filter — **tested against
+   a real run and had ZERO effect** (every combo listing also carries
+   `market_type: "binary"`) — reversed and replaced with a structural title
+   check instead (two or more comma-separated "yes "/"no "-prefixed
+   segments). Raised the cap to 200 pages to compensate — still found only
+   30 real single-question markets, suspiciously few. Root-caused to combo
+   listings likely being created continuously and crowding out single-
+   question markets further back in Kalshi's result order. **Final fix
+   (real reversal, not more page-cap tuning): switched to the targeted,
+   category-based series pull described above**, which made the page-cap
+   problem moot entirely.
+2. **Polymarket pagination-termination bug.** Original logic treated "this
+   page came back shorter than the limit I requested" as "no more data" —
+   confirmed live that Polymarket's Gamma API silently caps real page size
+   below whatever is requested, so this stopped real pagination after page
+   1 every run, forever. Fixed to only stop on a genuinely empty page.
+3. **Polymarket page-level failure discarding an entire run's data.** A
+   real run hit an HTTP 422 error on page 22 (after 21 real, successful
+   pages) and the original code let that exception propagate all the way up,
+   losing all 2,100 already-collected events and reporting 0 rows for the
+   whole run. Fixed to keep already-collected pages when a later page fails,
+   only treating a first-page failure as fully fatal.
+4. **A file-size problem, found from a real screenshot, not a log message.**
+   A 338.50 MB raw Kalshi snapshot exceeded GitHub's 100 MB push limit. No
+   `.gitignore` existed in the repo before this session — added one,
+   excluding `data/exchange/raw/` specifically, while keeping local raw
+   snapshots for debugging.
+5. **`venue_matcher.py` performance.** Naive n×m comparison became ~126
+   million real comparisons once Kalshi's real scale was known, looking
+   hung rather than slow. Fixed with time-bucketing (verified 2.55 seconds
+   at real 60,000×2,100 scale) without changing which pairs can match.
+6. **`venue_matcher.py` correctness — false positives.** The first two real,
+   non-zero matches this session produced were both false positives on
+   inspection (different earthquake magnitude thresholds, matched on shared
+   generic wording and close time alone). Added a numeric-compatibility
+   check — which itself had a bug on first attempt (a shared *year* number
+   counted as a spurious match) — fixed by excluding year-like numbers from
+   the comparison.
+
+**Open items / deferred validations:**
+- **Open Decision #17 (new):** no live, real matched pair has been observed
+  between Kalshi (Climate/Weather + Commodities) and Polymarket as of
+  2026-09-04. Matcher correctness is validated against real title text in
+  constructed test cases, not a live simultaneous find. Action needed: watch
+  for genuine overlap in future runs (e.g. active storm/extreme-heat events
+  both venues list) and confirm a real match when one appears — not treated
+  as a session blocker, but a real, standing gap worth closing when
+  conditions allow.
+- **Open Decision #18 (new):** Kalshi's 448-series targeted pull hit
+  repeated `429 Too Many Requests` responses during a real run; existing
+  retry logic recovered every time and no data was lost, but this was not
+  load-tested deliberately. Before Session 3.4 (Automation), add a
+  deliberate pause between per-series requests rather than relying on
+  reactive retries alone.
+- **Open Decision #19 (new):** Polymarket's Gamma API `/events` endpoint
+  fails with a consistent HTTP 422 error at offset=2100 on every real run
+  this session. The current fix keeps data collected before the failure
+  (see Corrections/reversals #3), but the root cause — a real API limit vs.
+  the query running past the true count of currently active events — is not
+  confirmed.
+- **Open Decision #20 (new):** Kalshi's Politics/Elections categories
+  (3,949 series combined) are deliberately not ingested yet. Needs a real,
+  defined filter for "narrow down-ballot races" (matching Session 0.1's
+  actual scope) before that half of this session's original card can be
+  built — not simply "pull all of Politics/Elections."
+
+**Next session:** Session 3.2 (Arbitrage Detection Logic) can proceed on
+the Climate/Weather + Commodities ingestion built this session, with Open
+Decision #17 (no live match yet) carried forward as a known, named gap
+rather than a blocker — Session 3.2's own validation checklist should
+account for this when it's reached.

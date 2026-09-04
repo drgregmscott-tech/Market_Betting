@@ -1,5 +1,6 @@
 """
-Session 3.1 — Kalshi Ingestion (Multi-Venue Data Ingestion)
+Session 3.1 / 3.1b — Kalshi Ingestion (Multi-Venue Data Ingestion +
+Narrow Down-Ballot Politics/Elections)
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -8,7 +9,7 @@ into the common exchange-venue schema defined in schema_exchange.py, the
 same defensive pattern Session 2.2's ingest_pickem.py established for the
 pick'em platforms.
 
-TARGETED PULL, NOT A FULL-CATALOG FIREHOSE — REAL REVERSAL THIS SESSION
+TARGETED PULL, NOT A FULL-CATALOG FIREHOSE — REAL REVERSAL FROM SESSION 3.1
 -------------------------------------------------------------------------
 Earlier versions of this script pulled Kalshi's ENTIRE open-market catalog
 (GET /markets with no series filter) and paged as deep as practical hoping
@@ -27,21 +28,76 @@ searching for a needle in an ever-growing haystack, this script now:
 1. Pulls the full series list once (GET /series, confirmed public).
 2. Filters, client-side, to series whose category is "Climate and Weather"
    or "Commodities" — the two categories matching Session 0.1's actual
-   edge thesis (see ROADMAP.md's Track 3 scoping). "Politics"/"Elections"
-   (3,949 combined series) are DELIBERATELY deferred, not pulled here —
-   Session 0.1's real decision was narrow, down-ballot races specifically,
-   not politics broadly, and that narrower filter hasn't been built yet.
-   Pulling all of Politics/Elections now would reintroduce the same kind
-   of scope drift this project has caught and corrected before.
+   edge thesis (see ROADMAP.md's Track 3 scoping).
 3. For each matching series (~448), pulls its open markets directly via
    GET /markets?series_ticker=<ticker>&status=open — a small, targeted
    call per series, rather than paging through the unfiltered firehose.
 
 This is a real, deliberate scope narrowing WITHIN Kalshi ingestion, logged
-explicitly as such — not a silent one. It does not narrow the PROJECT's
-scope (Politics/Elections remains on the roadmap, just not built yet).
+explicitly as such — not a silent one.
 
-ACCESS — RESOLVED THIS SESSION (Open Decision #3, Kalshi half)
+SESSION 3.1b — NARROW DOWN-BALLOT POLITICS/ELECTIONS, ADDED THIS SESSION
+-------------------------------------------------------------------------
+Session 3.1 deliberately left Kalshi's "Politics" (2,296 series, confirmed
+live 2026-09-04) and "Elections" (1,704 series, confirmed live) categories
+unpulled — Session 0.1's real scope decision was narrow, down-ballot races
+specifically (individual U.S. House seats and individual state-legislature
+seats), not politics or national elections broadly. Pulling either category
+whole would have reintroduced the same scope drift this project has caught
+and corrected before (see Open Decision #20 in ROADMAP.md).
+
+This session designed and applied a real, checkable filter for "narrow
+down-ballot," built directly from live data rather than assumed:
+
+- The "Politics" category (2,296 series) was checked directly and found to
+  contain ZERO individual-district race series — it is national political
+  news, executive-branch actions, and officeholder-status questions (e.g.
+  "Jared Polis out as Governor of Colorado?"), not races. It is NOT pulled
+  by this filter.
+- The "Elections" category (1,704 series) is where real race series live.
+  Checked directly, three distinct tiers were found:
+  1. Individual U.S. House district races (89 series) — Kalshi tags these
+     "House" (excluding the separate "House Combos" tag, which covers
+     multi-race combo contracts, not single races) and uses a structural
+     ticker pattern: "HOUSE" or "KXHOUSE" followed by a two-letter state
+     code and a district number (e.g. HOUSECA9, KXHOUSEMO5, KXHOUSEUT02,
+     HOUSEAKAL for an at-large seat). This structural check — the same
+     kind of approach already used by _is_combo_title() below — correctly
+     excludes non-district House-tagged series like "Next DCCC Chair,"
+     "Will Republicans lose control of the House?" and combo contracts
+     (verified against all 116 "House"-tagged series: 89 real district
+     races matched, all 27 non-matches confirmed by inspection to be
+     leadership races, chamber-control aggregates, or state-level
+     candidate-status news, not district races).
+  2. Individual state-legislature district races (4 series found live:
+     California State Senate District 26, Pennsylvania State House
+     District 12, Maryland State Senate District 2, Missouri State Senate
+     District 8) — identified by a structural title pattern ("State
+     House/Senate/Assembly District <number>"), the same kind of title-
+     text race identifier already observed live in Polymarket's own
+     election-market titles per Open Decision #20's original note.
+  3. City/county-level district races (14 series found live — 13 NYC City
+     Council district seats, 1 Los Angeles City Council district seat) —
+     a real, genuinely down-ballot tier, but one level below "House/State
+     seats" as Session 0.1's scope was literally worded. These are pulled
+     and clearly labeled as their own tier (see category-tagging below),
+     NOT silently merged into the House/state-legislature count and NOT
+     silently dropped — whether to keep city/county races in this track's
+     ongoing scope is flagged as an open decision for confirmation rather
+     than decided unilaterally here (see ROADMAP.md/SESSION_LOG.md).
+  Statewide races (Governor: 71 series; U.S. Senate: 121 series) were
+  checked directly and confirmed to be exactly what Session 0.1 called
+  "marquee" — one race per state, high media attention — and are
+  deliberately EXCLUDED by this filter, matching the "not national or
+  marquee races" half of Open Decision #20's definition.
+
+Each matched series is tagged with a specific category string at write time
+(e.g. "Elections - US House District") instead of Kalshi's generic
+"Elections" category, so every row's down-ballot tier is visible directly
+in the output CSV without needing to re-derive it from the ticker or title
+later.
+
+ACCESS — RESOLVED SESSION 3.1 (Open Decision #3, Kalshi half)
 ------------------------------------------------------------------
 Confirmed live 2026-09-04: both GET /series and GET /markets require NO
 API key and NO account. This is an OFFICIAL, documented part of Kalshi's
@@ -110,9 +166,70 @@ REQUEST_TIMEOUT_SECONDS = 15
 
 # Real Kalshi category names, confirmed live 2026-09-04 against GET
 # /series (13,816 total series). Matches Session 0.1's Track 3 scope
-# ("Climate/Commodities") directly — see this file's module docstring for
-# why Politics/Elections is deliberately not included yet.
+# ("Climate/Commodities") directly. Pulled in full — every series in these
+# two categories is in scope, no further filtering needed.
 TARGET_CATEGORIES = ["Climate and Weather", "Commodities"]
+
+# Session 3.1b — the Kalshi category real down-ballot race series live in.
+# Confirmed live 2026-09-04: "Politics" (2,296 series) contains no
+# individual-district race series at all; "Elections" (1,704 series) does.
+# Series in this category are NOT pulled in full — only the narrow subset
+# matched by classify_down_ballot() below is kept. See module docstring for
+# the full evidence trail.
+DOWN_BALLOT_CATEGORY = "Elections"
+
+# Structural ticker pattern for individual U.S. House district races,
+# confirmed live 2026-09-04 against all 116 series Kalshi tags "House"
+# (excluding "House Combos"). Matches e.g. HOUSECA9, KXHOUSEMO5,
+# KXHOUSEUT02, HOUSEAKAL (at-large), KXHOUSENJ11SPECIAL (special election).
+# Deliberately does NOT match leadership races ("Next DCCC Chair"), chamber-
+# control aggregates ("Will Republicans lose control of the House?"), or
+# combo contracts — verified directly, not assumed (see module docstring).
+_HOUSE_DISTRICT_TICKER_PATTERN = re.compile(
+    r"^K?X?HOUSE([A-Z]{2})(\d{1,3}[A-Z]{0,2}|AL)(SPECIAL)?$"
+)
+
+# Structural title pattern for individual state-legislature district races,
+# confirmed live 2026-09-04 (e.g. "Pennsylvania State House District 12
+# winner," "Missouri State Senate District 8 winner").
+_STATE_LEG_DISTRICT_PATTERN = re.compile(
+    r"state (house|senate|assembly) district \d+", re.IGNORECASE
+)
+
+# Structural title pattern for city/county-level district races (e.g. "NYC
+# City Council District 4," "Los Angeles City Council District 13
+# winner"). Kept as its OWN tier, not merged into the House/state-
+# legislature down-ballot count — see module docstring's Open Decision
+# note on whether this tier should stay in Track 4's scope going forward.
+_CITY_COUNTY_DISTRICT_PATTERN = re.compile(
+    r"city council district \d+|county (commission|council) district \d+"
+    r"|school board district \d+",
+    re.IGNORECASE,
+)
+
+
+def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]) -> Optional[str]:
+    """Returns a specific down-ballot tier label for a series confirmed to
+    be a genuine, individual-district race, or None if the series is not
+    in scope (statewide/national races, leadership races, chamber-control
+    aggregates, combo contracts, or anything else in the Elections
+    category that isn't a real district race). This is the actual,
+    checkable "narrow down-ballot" filter Open Decision #20 called for —
+    built from live examples, not a subjective per-race judgment call."""
+    tags = tags or []
+    title = title or ""
+
+    if "House" in tags and "House Combos" not in tags:
+        if _HOUSE_DISTRICT_TICKER_PATTERN.match(ticker or ""):
+            return "Elections - US House District"
+
+    if _STATE_LEG_DISTRICT_PATTERN.search(title):
+        return "Elections - State Legislature District"
+
+    if _CITY_COUNTY_DISTRICT_PATTERN.search(title):
+        return "Elections - City/County District"
+
+    return None
 
 
 def setup_logging() -> logging.Logger:
@@ -164,12 +281,16 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
 
 def fetch_target_series_tickers():
     """Pulls Kalshi's full series list once and filters, client-side, to
-    this project's target categories. Confirmed live 2026-09-04: GET
-    /series returns ALL series in one call (no pagination needed — 13,816
-    returned directly), each with a real 'category' field, so no category
-    query-parameter guessing is needed. Returns (matching_tickers,
-    all_series) — all_series is kept so run() can build a ticker->category
-    map without a second API call."""
+    this project's target categories, PLUS the narrow down-ballot subset
+    of the Elections category (Session 3.1b). Confirmed live 2026-09-04:
+    GET /series returns ALL series in one call (no pagination needed —
+    13,816 returned directly), each with a real 'category' field and a
+    'tags' field, so no category query-parameter guessing is needed.
+    Returns (matching_tickers, all_series, down_ballot_tier_by_ticker) —
+    all_series is kept so run() can build a ticker->category map without a
+    second API call; down_ballot_tier_by_ticker lets run() tag each
+    down-ballot row with its specific tier instead of the generic
+    "Elections" category."""
     payload = _fetch_with_retries(KALSHI_SERIES_ENDPOINT)
     all_series = payload.get("series", payload if isinstance(payload, list) else [])
     if not isinstance(all_series, list):
@@ -178,19 +299,35 @@ def fetch_target_series_tickers():
             "may have changed."
         )
 
-    matching_tickers = [
+    climate_commodity_tickers = [
         s.get("ticker")
         for s in all_series
         if s.get("category") in TARGET_CATEGORIES and s.get("ticker")
     ]
+
+    down_ballot_tier_by_ticker: dict[str, str] = {}
+    for s in all_series:
+        if s.get("category") != DOWN_BALLOT_CATEGORY or not s.get("ticker"):
+            continue
+        tier = classify_down_ballot(s.get("ticker"), s.get("title"), s.get("tags"))
+        if tier:
+            down_ballot_tier_by_ticker[s.get("ticker")] = tier
+
+    matching_tickers = climate_commodity_tickers + list(down_ballot_tier_by_ticker.keys())
+
     log.info(
-        "Series discovery: %d total series pulled, %d match target "
-        "categories %s",
+        "Series discovery: %d total series pulled, %d match Climate/"
+        "Commodities, %d match narrow down-ballot (House: %d, state "
+        "legislature: %d, city/county: %d) — %d target series total",
         len(all_series),
+        len(climate_commodity_tickers),
+        len(down_ballot_tier_by_ticker),
+        sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - US House District"),
+        sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - State Legislature District"),
+        sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - City/County District"),
         len(matching_tickers),
-        TARGET_CATEGORIES,
     )
-    return matching_tickers, all_series
+    return matching_tickers, all_series, down_ballot_tier_by_ticker
 
 
 def fetch_markets_for_series(tickers: list[str]) -> list[dict]:
@@ -366,6 +503,10 @@ def run() -> dict:
     summary = {
         "pulled_at": pulled_at,
         "kalshi_target_series_count": 0,
+        "kalshi_down_ballot_series_count": 0,
+        "kalshi_down_ballot_house_count": 0,
+        "kalshi_down_ballot_state_leg_count": 0,
+        "kalshi_down_ballot_city_county_count": 0,
         "kalshi_raw_records_pulled": 0,
         "kalshi_combo_records_filtered_out": 0,
         "kalshi_rows_kept": 0,
@@ -373,18 +514,38 @@ def run() -> dict:
     }
 
     log.info(
-        "=== Kalshi ingestion run starting (Climate and Weather + Commodities) ==="
+        "=== Kalshi ingestion run starting (Climate and Weather + "
+        "Commodities + narrow down-ballot Elections) ==="
     )
 
     try:
-        target_tickers, all_series = fetch_target_series_tickers()
+        target_tickers, all_series, down_ballot_tier_by_ticker = (
+            fetch_target_series_tickers()
+        )
         summary["kalshi_target_series_count"] = len(target_tickers)
+        summary["kalshi_down_ballot_series_count"] = len(down_ballot_tier_by_ticker)
+        summary["kalshi_down_ballot_house_count"] = sum(
+            1 for t in down_ballot_tier_by_ticker.values()
+            if t == "Elections - US House District"
+        )
+        summary["kalshi_down_ballot_state_leg_count"] = sum(
+            1 for t in down_ballot_tier_by_ticker.values()
+            if t == "Elections - State Legislature District"
+        )
+        summary["kalshi_down_ballot_city_county_count"] = sum(
+            1 for t in down_ballot_tier_by_ticker.values()
+            if t == "Elections - City/County District"
+        )
 
         # Map ticker -> category, so each row can be tagged with its real
         # category even though the /markets response itself doesn't
-        # include one — filled in below, not guessed.
+        # include one — filled in below, not guessed. Down-ballot tickers
+        # get their specific tier label instead of the generic Kalshi
+        # category, so a row's tier is visible directly in the output CSV.
         category_by_ticker = {
-            s.get("ticker"): s.get("category")
+            s.get("ticker"): down_ballot_tier_by_ticker.get(
+                s.get("ticker"), s.get("category")
+            )
             for s in all_series
             if s.get("ticker") in target_tickers
         }
@@ -409,9 +570,14 @@ def run() -> dict:
         summary["kalshi_rows_kept"] = len(rows)
         summary["kalshi_ok"] = True
         log.info(
-            "Kalshi: %d target series, %d raw records pulled, %d filtered "
-            "out as combo listings, %d single-question rows kept",
+            "Kalshi: %d target series (%d down-ballot: %d House, %d state "
+            "legislature, %d city/county), %d raw records pulled, %d "
+            "filtered out as combo listings, %d single-question rows kept",
             len(target_tickers),
+            summary["kalshi_down_ballot_series_count"],
+            summary["kalshi_down_ballot_house_count"],
+            summary["kalshi_down_ballot_state_leg_count"],
+            summary["kalshi_down_ballot_city_county_count"],
             raw_count,
             raw_count - len(rows),
             len(rows),

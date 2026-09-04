@@ -1180,33 +1180,75 @@ entirely — it's pure price comparison across venues, so several Phase 2 sessio
 collapse or don't apply.*
 
 ### Session 3.1 — Multi-Venue Data Ingestion
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-04) — see SESSION_LOG.md for full
+detail. Climate and Weather + Commodities half fully built and validated;
+Politics/Elections deliberately deferred to Session 3.1b (below); no live
+matched pair observed yet (Open Decision #17).
 **Prerequisites:** Phase 2 fully complete (reuses its ingestion pattern).
 
-**What gets built:** Generalizes the Phase 2 ingestion pattern to pull the same
-real-world outcome's pricing from multiple venues simultaneously — Kalshi,
-Polymarket, sportsbooks, and the pick'em platforms already integrated in Phase 2.
-Kalshi/Polymarket API access needs to be investigated here specifically (flagged
-as unresearched in Open Decision #3 — the pick'em research covered platforms 1-3,
-not the exchanges).
+**What was built:** Generalizes the Phase 2 ingestion pattern to pull the same
+real-world outcome's pricing from Kalshi and Polymarket. Kalshi ingestion
+targets its "Climate and Weather" and "Commodities" series categories
+specifically (448 series, confirmed via `GET /series`) rather than its full
+catalog — a full-catalog pull was tried first and found unworkable at Kalshi's
+real scale (99.5%+ combo/multi-leg contracts even 200,000 records deep). See
+SESSION_LOG.md for the full bug-fixing story.
 
-**Files touched:** `/scripts/ingestion/ingest_kalshi.py`,
-`/scripts/ingestion/ingest_polymarket.py`, `/scripts/ingestion/venue_matcher.py`
-(matches the same real-world event across venues)
+**Files touched:** `/scripts/ingestion/schema_exchange.py` (new),
+`/scripts/ingestion/ingest_kalshi.py` (new), `/scripts/ingestion/ingest_polymarket.py`
+(new), `/scripts/ingestion/venue_matcher.py` (new — matches the same real-world
+event across venues), plus three diagnostic scripts kept in the repo
+(`composition_check.py`, `sample_titles.py`, `discover_kalshi_series.py`) and a
+new repo-root `.gitignore`.
 
 **Validation (required to close session):**
-- [ ] Kalshi and Polymarket API access confirmed and documented (auth method,
+- [x] Kalshi and Polymarket API access confirmed and documented (auth method,
       rate limits, what's free vs. requires an account)
 - [ ] Venue-matching logic correctly identifies the same real-world event/outcome
-      across at least 2 venues in a real test
-- [ ] Normalized schema extended to cover exchange-style pricing (YES/NO
+      across at least 2 venues in a real test — **partial:** validated
+      against real title text in constructed test cases (including catching
+      and fixing two real false-positive matches); no live simultaneous match
+      observed yet. See Open Decision #17.
+- [x] Normalized schema extended to cover exchange-style pricing (YES/NO
       contracts), not just sportsbook-style odds
+
+---
+
+### Session 3.1b — Kalshi Politics/Elections Ingestion (Narrow Down-Ballot)
+**Status:** Not started
+**Prerequisites:** Session 3.1 complete. Does not block Sessions 3.2–3.4 —
+arbitrage detection, sizing, and automation are all built to work on whatever
+venues are already ingested, so this can be built whenever convenient rather
+than gating the rest of Phase 3.
+
+**What gets built:** Extends `ingest_kalshi.py`'s targeted-series pattern to
+Kalshi's Politics and Elections categories (2,287 + 1,662 = 3,949 series
+combined, confirmed via `GET /series`) — but filtered down to the narrow,
+down-ballot races Session 0.1 actually found edge in (individual House/State
+seats, not national or marquee races), not the full 3,949. The real, defined
+"narrow down-ballot" filter has to be designed here first — see Open Decision
+#20 for the starting point (a race-type/district-code pattern, already
+observed live in Polymarket's own election-market titles, e.g. "Will [X] win
+the WA-02 House seat?").
+
+**Files touched:** `/scripts/ingestion/ingest_kalshi.py` (extended, not
+rebuilt — adds a second target-category set alongside Climate/Commodities)
+
+**Validation (required to close session):**
+- [ ] A real, checkable definition of "narrow down-ballot" is documented and
+      applied as an actual filter (race type, geographic level, or similar —
+      not a subjective judgment call per race)
+- [ ] Real narrow down-ballot series pulled and confirmed against Session
+      0.1's original scope (not simply all of Politics/Elections)
+- [ ] Venue-matching re-run against the expanded Kalshi data to check for
+      real overlap with Polymarket's own down-ballot election markets
 
 ---
 
 ### Session 3.2 — Arbitrage Detection Logic
 **Status:** Not started
-**Prerequisites:** Session 3.1 complete.
+**Prerequisites:** Session 3.1 complete (with Open Decision #17 — no live
+matched pair yet — carried forward as a known gap, not a blocker).
 
 **What gets built:** Pure price-comparison logic — flags cases where the same
 outcome is priced inconsistently across venues (including single-market YES+NO ≠
@@ -1986,6 +2028,46 @@ remaining blockers to starting Phase 2.
     evidence-by-evidence writeup. This is logged as a recommendation for
     review, not an applied decision, consistent with how every other
     ranking call in this project has been made.
+17. **New, opened Session 3.1:** no live, real matched pair has been
+    observed between Kalshi (Climate/Weather + Commodities) and Polymarket
+    as of 2026-09-04. `venue_matcher.py`'s correctness has been validated
+    against real title text assembled into constructed test cases —
+    including catching and fixing two real false-positive matches
+    (mismatched earthquake magnitude thresholds) — but not against a pair
+    that arrived together from a real, live, simultaneous pull. **Action
+    needed:** watch for genuine overlap in future runs (e.g. an active
+    storm or extreme-heat event both venues list) and confirm a real match
+    when one appears. Not treated as a blocker for Session 3.2, but a real,
+    named gap — decided explicitly with the user rather than chased
+    further in Session 3.1.
+18. **New, opened Session 3.1:** Kalshi's targeted 448-series pull hit
+    repeated `429 Too Many Requests` responses on a real run. Existing
+    retry logic recovered every time with no data lost, but this was not a
+    deliberate load test. **Action needed:** before Session 3.4
+    (Automation), add a deliberate pause between per-series requests in
+    `ingest_kalshi.py` rather than relying on reactive retries alone,
+    especially for unattended runs.
+19. **New, opened Session 3.1:** Polymarket's Gamma API `/events` endpoint
+    fails with a consistent HTTP 422 error at offset=2100 on every real run
+    this session (reproduced multiple times, same exact offset). The
+    current fix in `ingest_polymarket.py` keeps data collected before the
+    failure rather than losing it, but the root cause — a real, undocumented
+    API limit vs. the query running past the true count of currently active
+    events for this filter — is not confirmed. Not a blocker; a real,
+    named gap for whoever next has reason to look at Polymarket ingestion
+    depth.
+20. **New, opened Session 3.1:** Kalshi's Politics and Elections categories
+    (2,287 + 1,662 = 3,949 series combined, confirmed via `GET /series`)
+    are deliberately not ingested yet. Session 0.1's real scope decision
+    was narrow, down-ballot races specifically (individual House/State
+    seats), not politics broadly — pulling all of Politics/Elections
+    as-is would reintroduce the kind of scope drift this project has
+    caught and corrected before. **Action needed:** define a real,
+    checkable filter for "narrow down-ballot" (e.g. matching on race-type
+    patterns like the "House seat" / district-code naming pattern already
+    observed live in Polymarket's own election-market titles) before
+    building Kalshi's Politics/Elections ingestion. Tracked as Session 3.1b
+    above.
 
 ---
 *Update this file at the close of each future session, per the project's
