@@ -59,6 +59,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -190,9 +191,45 @@ def fetch_kalshi_markets() -> list[dict]:
 # missing/renamed field on one row causes that row to be skipped (with a
 # warning), not the whole run to fail.
 # --------------------------------------------------------------------------
+_COMBO_LEG_PATTERN = re.compile(r"^\s*(yes|no)\s", re.IGNORECASE)
+
+
+def _is_combo_title(title: Optional[str]) -> bool:
+    """Detects Kalshi's multi-leg combo-contract titles by STRUCTURE, not
+    by market_type.
+
+    REVERSAL (Session 3.1, fifth real run, 2026-09-04): the market_type
+    filter added earlier this session was tested against a real run and
+    had ZERO effect — kalshi_rows stayed at exactly 60,000 with no rows
+    filtered, meaning every one of these comma-jammed combo titles
+    actually does carry market_type == "binary", same as the simple
+    single-question markets. The working theory that combo contracts
+    carry a distinct market_type value is WRONG and is corrected here,
+    not silently dropped — see this project's standing rule that
+    corrections get logged as real reversals. The real, working
+    distinction turned out to be the TITLE's own structure: a combo
+    contract is a single binary settlement ("did every listed leg hit"),
+    so it is still, correctly, market_type == "binary" — but its title
+    lists every leg, each one prefixed with "yes " or "no " and separated
+    by commas (e.g. "no Real Madrid wins by more than 2.5 goals,no
+    Cincinnati -1.5 first 5 innings,yes Purdue wins by over 33.5
+    points"). A genuine single-question title (e.g. "Will the maximum
+    temperature be >86° on Sep 5, 2026?") never has this shape. This
+    function flags a title as a combo listing if at least two of its
+    comma-separated segments start with "yes " or "no " — two rather than
+    one, so a title that happens to contain a single embedded comma isn't
+    mistakenly flagged.
+    """
+    if not title:
+        return False
+    segments = title.split(",")
+    leg_like_segments = sum(1 for seg in segments if _COMBO_LEG_PATTERN.match(seg))
+    return leg_like_segments >= 2
+
+
 def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContract]:
     rows: list[NormalizedContract] = []
-    skipped_non_binary: dict[str, int] = {}
+    skipped_combo_titles = 0
 
     for page in pages:
         markets = page.get("markets")
@@ -205,30 +242,9 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
 
         for record in markets:
             try:
-                # FILTER FOUND AND ADDED (Session 3.1, fourth real run,
-                # 2026-09-04): a real run's title-sample check found that
-                # the vast majority of Kalshi's "open markets" pull (59,068
-                # of 60,000 real rows) were NOT single-question markets
-                # like the temperature contracts this project sampled
-                # earlier — their "title" field is dozens of individual
-                # outcomes concatenated with commas (e.g. team names, run
-                # totals, player props), consistent with Kalshi's
-                # documented "multivariate markets" contract type, a
-                # structurally different combo/multi-leg product, not the
-                # single yes/no question venue_matcher.py is built to
-                # compare against Polymarket. Every genuinely single-
-                # question market this project has directly observed
-                # carries market_type == "binary" — every OTHER value is
-                # filtered out here, and every distinct non-binary value
-                # actually seen is counted and logged below (not assumed
-                # in advance), so the next real run tells us directly
-                # whether this filter is catching the right thing rather
-                # than this comment asserting it with more confidence than
-                # the evidence supports.
-                market_type = record.get("market_type")
-                if market_type != "binary":
-                    key = str(market_type)
-                    skipped_non_binary[key] = skipped_non_binary.get(key, 0) + 1
+                title = record.get("title")
+                if _is_combo_title(title):
+                    skipped_combo_titles += 1
                     continue
 
                 rows.append(
@@ -236,7 +252,7 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                         platform="kalshi",
                         source_market_id=str(record.get("ticker")),
                         event_id=record.get("event_ticker"),
-                        title=record.get("title"),
+                        title=title,
                         # Category is not present on the market object
                         # itself in this endpoint's response — a real,
                         # named gap, not a silent None. See
@@ -258,15 +274,14 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                 log.warning("Skipped one malformed Kalshi record: %s", exc)
                 continue
 
-    if skipped_non_binary:
-        total_skipped = sum(skipped_non_binary.values())
+    if skipped_combo_titles:
         log.warning(
-            "Filtered out %d non-binary Kalshi record(s), by market_type: %s. "
-            "These are combo/multivariate-style contracts (see this "
-            "function's own comment for why), not single-question markets "
-            "venue_matcher.py can meaningfully compare against Polymarket.",
-            total_skipped,
-            skipped_non_binary,
+            "Filtered out %d Kalshi record(s) whose title looks like a "
+            "multi-leg combo listing (two or more comma-separated "
+            "'yes '/'no '-prefixed segments), not a single real-world "
+            "question — see _is_combo_title()'s docstring for why "
+            "market_type alone could not be used for this.",
+            skipped_combo_titles,
         )
 
     return rows
