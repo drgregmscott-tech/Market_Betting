@@ -79,17 +79,36 @@ down-ballot," built directly from live data rather than assumed:
   3. City/county-level district races (14 series found live — 13 NYC City
      Council district seats, 1 Los Angeles City Council district seat) —
      a real, genuinely down-ballot tier, but one level below "House/State
-     seats" as Session 0.1's scope was literally worded. These are pulled
-     and clearly labeled as their own tier (see category-tagging below),
-     NOT silently merged into the House/state-legislature count and NOT
-     silently dropped — whether to keep city/county races in this track's
-     ongoing scope is flagged as an open decision for confirmation rather
-     than decided unilaterally here (see ROADMAP.md/SESSION_LOG.md).
+     seats" as Session 0.1's scope was literally worded. Checked directly
+     and DECIDED, together with the project owner, NOT to include this
+     tier for now: the test applied was whether a real, independent,
+     per-seat probability estimate can be built to compare against
+     Kalshi's price, the same test the state-legislature tier passed (see
+     below). For city/county races, only ad hoc journalism naming a
+     handful of competitive seats per cycle was found — no systematic,
+     per-seat forecast model covering every district. Kalshi's own live
+     order books confirmed this isn't just a research gap: 6 of the 7 NYC
+     City Council series sampled had NO open market running at all; the
+     one that did (LA City Council District 13) is itself one of the
+     handful of seats that gets real news coverage, not representative of
+     the rest. This is a "can't yet determine a real edge" result, not a
+     "no edge exists" result — see classify_down_ballot() below for the
+     specifics, and revisit if a comprehensive per-seat local-election
+     forecast source is found later.
   Statewide races (Governor: 71 series; U.S. Senate: 121 series) were
   checked directly and confirmed to be exactly what Session 0.1 called
   "marquee" — one race per state, high media attention — and are
   deliberately EXCLUDED by this filter, matching the "not national or
   marquee races" half of Open Decision #20's definition.
+
+Real per-seat public forecast data was also confirmed live for the two
+included tiers, giving each a genuine basis for an independent edge
+estimate (not just a structural naming pattern to pull the right rows):
+ElectIndex (electindex.com) publishes a probabilistic forecast for every
+2026 U.S. House race AND all 88 state-legislative chambers on the 2026
+ballot; multistate.us separately publishes a baseline partisan-lean number
+for all 7,388 state-legislative seats nationwide. No comparable per-seat
+source was found for city/county races (see above).
 
 Each matched series is tagged with a specific category string at write time
 (e.g. "Elections - US House District") instead of Kalshi's generic
@@ -198,9 +217,23 @@ _STATE_LEG_DISTRICT_PATTERN = re.compile(
 
 # Structural title pattern for city/county-level district races (e.g. "NYC
 # City Council District 4," "Los Angeles City Council District 13
-# winner"). Kept as its OWN tier, not merged into the House/state-
-# legislature down-ballot count — see module docstring's Open Decision
-# note on whether this tier should stay in Track 4's scope going forward.
+# winner"). NOT currently pulled — kept here, dead but documented, so this
+# can be switched back on quickly if the reason below changes.
+#
+# DECISION (2026-09-04, made directly with the project owner): city/county
+# races are EXCLUDED from this filter for now. The test applied was
+# whether a real, independent, per-seat probability estimate can be built
+# to compare against Kalshi's price — the same test State Legislature
+# passed (see below). For city/county races, live research found only
+# journalism naming a handful of competitive seats each cycle (e.g. City &
+# State NY's "races to watch"), not a systematic per-seat forecast model
+# covering every district. Checked directly against Kalshi's own live
+# order books too: 6 of 7 NYC City Council series sampled had NO open
+# market at all; the one that did (LA City Council District 13) is itself
+# one of the handful of seats that gets real news coverage, not
+# representative of the rest. This is a "can't yet determine a real edge"
+# result, not a "no edge exists" result — revisit if a comprehensive,
+# per-seat local-election forecast source is found later.
 _CITY_COUNTY_DISTRICT_PATTERN = re.compile(
     r"city council district \d+|county (commission|council) district \d+"
     r"|school board district \d+",
@@ -210,12 +243,23 @@ _CITY_COUNTY_DISTRICT_PATTERN = re.compile(
 
 def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]) -> Optional[str]:
     """Returns a specific down-ballot tier label for a series confirmed to
-    be a genuine, individual-district race, or None if the series is not
-    in scope (statewide/national races, leadership races, chamber-control
-    aggregates, combo contracts, or anything else in the Elections
-    category that isn't a real district race). This is the actual,
-    checkable "narrow down-ballot" filter Open Decision #20 called for —
-    built from live examples, not a subjective per-race judgment call."""
+    be a genuine, individual-district race with a real, checkable basis
+    for an independent edge estimate, or None if the series is not in
+    scope. This is the actual, checkable "narrow down-ballot" filter Open
+    Decision #20 called for — built from live examples, not a subjective
+    per-race judgment call.
+
+    Two tiers are in scope:
+    - US House district races: comprehensive, per-seat public forecast
+      data exists (e.g. ElectIndex covers every 2026 U.S. House race).
+    - State-legislature district races: comprehensive, per-seat public
+      data also exists (ElectIndex covers all 88 state-legislative
+      chambers on the 2026 ballot; multistate.us has baseline partisan-
+      lean data for all 7,388 state-legislative seats nationwide).
+
+    City/county-level district races (NYC/LA City Council, etc.) are
+    checked for and deliberately NOT returned as a tier — see the
+    DECISION note above _CITY_COUNTY_DISTRICT_PATTERN for why."""
     tags = tags or []
     title = title or ""
 
@@ -226,8 +270,12 @@ def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]
     if _STATE_LEG_DISTRICT_PATTERN.search(title):
         return "Elections - State Legislature District"
 
+    # City/county district races are deliberately excluded — see DECISION
+    # note above. Left as an explicit, named no-op (rather than simply
+    # omitted) so a future session doesn't have to re-derive why this
+    # pattern exists but isn't used.
     if _CITY_COUNTY_DISTRICT_PATTERN.search(title):
-        return "Elections - City/County District"
+        return None
 
     return None
 
@@ -318,13 +366,13 @@ def fetch_target_series_tickers():
     log.info(
         "Series discovery: %d total series pulled, %d match Climate/"
         "Commodities, %d match narrow down-ballot (House: %d, state "
-        "legislature: %d, city/county: %d) — %d target series total",
+        "legislature: %d) — %d target series total. City/county district "
+        "races are deliberately excluded (see classify_down_ballot()).",
         len(all_series),
         len(climate_commodity_tickers),
         len(down_ballot_tier_by_ticker),
         sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - US House District"),
         sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - State Legislature District"),
-        sum(1 for t in down_ballot_tier_by_ticker.values() if t == "Elections - City/County District"),
         len(matching_tickers),
     )
     return matching_tickers, all_series, down_ballot_tier_by_ticker
@@ -506,7 +554,6 @@ def run() -> dict:
         "kalshi_down_ballot_series_count": 0,
         "kalshi_down_ballot_house_count": 0,
         "kalshi_down_ballot_state_leg_count": 0,
-        "kalshi_down_ballot_city_county_count": 0,
         "kalshi_raw_records_pulled": 0,
         "kalshi_combo_records_filtered_out": 0,
         "kalshi_rows_kept": 0,
@@ -531,10 +578,6 @@ def run() -> dict:
         summary["kalshi_down_ballot_state_leg_count"] = sum(
             1 for t in down_ballot_tier_by_ticker.values()
             if t == "Elections - State Legislature District"
-        )
-        summary["kalshi_down_ballot_city_county_count"] = sum(
-            1 for t in down_ballot_tier_by_ticker.values()
-            if t == "Elections - City/County District"
         )
 
         # Map ticker -> category, so each row can be tagged with its real
@@ -571,13 +614,12 @@ def run() -> dict:
         summary["kalshi_ok"] = True
         log.info(
             "Kalshi: %d target series (%d down-ballot: %d House, %d state "
-            "legislature, %d city/county), %d raw records pulled, %d "
-            "filtered out as combo listings, %d single-question rows kept",
+            "legislature), %d raw records pulled, %d filtered out as "
+            "combo listings, %d single-question rows kept",
             len(target_tickers),
             summary["kalshi_down_ballot_series_count"],
             summary["kalshi_down_ballot_house_count"],
             summary["kalshi_down_ballot_state_leg_count"],
-            summary["kalshi_down_ballot_city_county_count"],
             raw_count,
             raw_count - len(rows),
             len(rows),
