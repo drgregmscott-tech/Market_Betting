@@ -226,3 +226,38 @@
 2026-09-02 16:54:31,433 UTC | INFO | PrizePicks: 31890 normalized rows
 2026-09-02 16:54:31,596 UTC | INFO | Underdog: 268 normalized rows
 2026-09-02 16:54:32,348 UTC | INFO | === Ingestion run complete: 32158 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-04 18:54:24,541 UTC | INFO | === Kalshi ingestion run starting ===
+2026-09-04 18:54:24,796 UTC | INFO | Kalshi page 1: 200 markets, next cursor present
+2026-09-04 18:54:24,974 UTC | INFO | Kalshi page 2: 200 markets, next cursor present
+2026-09-04 18:54:25,091 UTC | INFO | Kalshi page 3: 200 markets, next cursor present
+2026-09-04 18:54:25,224 UTC | INFO | Kalshi page 4: 200 markets, next cursor present
+2026-09-04 18:54:25,390 UTC | INFO | Kalshi page 5: 200 markets, next cursor present
+2026-09-04 18:54:25,551 UTC | INFO | Kalshi page 6: 200 markets, next cursor present
+2026-09-04 18:54:25,680 UTC | INFO | Kalshi page 7: 200 markets, next cursor present
+2026-09-04 18:54:25,809 UTC | INFO | Kalshi page 8: 200 markets, next cursor present
+2026-09-04 18:54:25,924 UTC | INFO | Kalshi page 9: 200 markets, next cursor present
+2026-09-04 18:54:26,066 UTC | INFO | Kalshi page 10: 200 markets, next cursor present
+2026-09-04 18:54:26,224 UTC | INFO | Kalshi page 11: 200 markets, next cursor present
+2026-09-04 18:54:26,371 UTC | INFO | Kalshi page 12: 200 markets, next cursor present
+2026-09-04 18:54:26,521 UTC | INFO | Kalshi page 13: 200 markets, next cursor present
+2026-09-04 18:54:26,712 UTC | INFO | Kalshi page 14: 200 markets, next cursor present
+2026-09-04 18:54:26,863 UTC | INFO | Kalshi page 15: 200 markets, next cursor present
+2026-09-04 18:54:27,008 UTC | INFO | Kalshi page 16: 200 markets, next cursor present
+2026-09-04 18:54:27,144 UTC | INFO | Kalshi page 17: 200 markets, next cursor present
+2026-09-04 18:54:27,317 UTC | INFO | Kalshi page 18: 200 markets, next cursor present
+2026-09-04 18:54:27,498 UTC | INFO | Kalshi page 19: 200 markets, next cursor present
+2026-09-04 18:54:27,662 UTC | INFO | Kalshi page 20: 200 markets, next cursor present
+2026-09-04 18:54:27,831 UTC | INFO | Kalshi page 21: 200 markets, next cursor present
+2026-09-04 18:54:27,988 UTC | INFO | Kalshi page 22: 200 markets, next cursor present
+2026-09-04 18:54:28,146 UTC | INFO | Kalshi page 23: 200 markets, next cursor present
+2026-09-04 18:54:28,316 UTC | INFO | Kalshi page 24: 200 markets, next cursor present
+2026-09-04 18:54:28,471 UTC | INFO | Kalshi page 25: 200 markets, next cursor present
+2026-09-04 18:54:28,471 UTC | WARNING | Kalshi pagination hit MAX_PAGES (25) without an empty cursor — stopped early. Real market count may be larger than what was pulled this run.
+2026-09-04 18:54:28,809 UTC | INFO | Kalshi: 5000 normalized rows across 25 page(s)
+2026-09-04 18:54:28,966 UTC | INFO | === Kalshi ingestion run complete: 5000 rows (OK) ===
+2026-09-04 18:54:32,037 UTC | INFO | === Polymarket ingestion run starting ===
+2026-09-04 18:54:32,399 UTC | INFO | Polymarket page 1: 100 events
+2026-09-04 18:54:32,476 UTC | INFO | Polymarket: 1221 normalized rows across 1 page(s)
+2026-09-04 18:54:32,513 UTC | INFO | === Polymarket ingestion run complete: 1221 rows (OK) ===
+2026-09-04 18:54:37,052 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 18:54:41,506 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 5000 Kalshi rows x 1221 Polymarket rows ===
