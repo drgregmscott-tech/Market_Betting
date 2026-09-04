@@ -153,12 +153,37 @@ def _parse_close_time(value: Optional[str]) -> Optional[datetime]:
 def find_candidate_matches(
     kalshi_rows: list[dict], polymarket_rows: list[dict]
 ) -> list[dict]:
-    """Compares every Kalshi row against every Polymarket row. This is
-    O(n*m) — acceptable at Session 3.1's real data volumes (Kalshi's
-    open-market count and Polymarket's active-event count are each in the
-    thousands, not millions), but flagged here as a real scaling limit a
-    future session should revisit if either venue's live count grows an
-    order of magnitude."""
+    """Compares Kalshi rows against Polymarket rows using a TIME-BUCKETED
+    approach, not a full n*m scan of every pair.
+
+    BUG FOUND AND FIXED (Session 3.1, third real run, 2026-09-04): the
+    original version of this function compared every Kalshi row against
+    every Polymarket row unconditionally — with Kalshi's real confirmed
+    count at 60,000 rows and Polymarket's at roughly 2,100, that is about
+    126 million comparisons, which ran long enough on a real run that it
+    looked hung rather than just slow. This function's own docstring
+    originally called the naive approach "acceptable... in the thousands,
+    not millions" and flagged revisiting it "if either venue's live count
+    grows an order of magnitude" — that threshold was already crossed by
+    Kalshi's real, confirmed count, and this was not re-checked against
+    the real numbers once they came in. This is a real correction, not a
+    silent optimization: the fix does not change WHICH pairs can match
+    (close-time proximity is already a hard requirement for any real
+    match — see the module docstring), it only skips pairs that could
+    never have passed that requirement in the first place.
+
+    HOW THE BUCKETING WORKS: every row's close_time is rounded down into a
+    fixed-width time bucket (width = CLOSE_TIME_TOLERANCE_HOURS, the same
+    tolerance already used for real matching). A Kalshi row can only match
+    a Polymarket row in its OWN bucket or an immediately ADJACENT bucket —
+    covering the case where two close times are within tolerance of each
+    other but fall just either side of a bucket boundary. This turns the
+    comparison count from (Kalshi rows x Polymarket rows) into roughly
+    (Kalshi rows x average Polymarket rows per bucket), which is small in
+    practice since real close times cluster around a limited number of
+    real-world moments (e.g. many contracts closing at midnight, or at a
+    game's real start time), not spread evenly across all of history.
+    """
     candidates: list[dict] = []
 
     kalshi_parsed = [
@@ -170,15 +195,37 @@ def find_candidate_matches(
         for row in polymarket_rows
     ]
 
+    bucket_seconds = CLOSE_TIME_TOLERANCE_HOURS * 3600.0
+
+    def _bucket_key(dt: Optional[datetime]) -> Optional[int]:
+        if dt is None:
+            return None
+        return int(dt.timestamp() // bucket_seconds)
+
+    # Index Polymarket rows by bucket so a Kalshi row only has to check the
+    # small number of Polymarket rows near it in time, not all of them.
+    polymarket_by_bucket: dict[int, list] = {}
+    for p_row, p_words, p_close in polymarket_parsed:
+        bucket = _bucket_key(p_close)
+        if bucket is None:
+            continue  # no close_time to bucket on — same real, named skip
+            # as the original version (can't confirm close-time proximity).
+        polymarket_by_bucket.setdefault(bucket, []).append((p_row, p_words, p_close))
+
     for k_row, k_words, k_close in kalshi_parsed:
-        for p_row, p_words, p_close in polymarket_parsed:
+        k_bucket = _bucket_key(k_close)
+        if k_bucket is None:
+            continue
+
+        # Check the row's own bucket plus both neighbors, to catch real
+        # matches that fall just either side of a bucket boundary.
+        nearby_polymarket_rows = []
+        for offset in (-1, 0, 1):
+            nearby_polymarket_rows.extend(polymarket_by_bucket.get(k_bucket + offset, []))
+
+        for p_row, p_words, p_close in nearby_polymarket_rows:
             similarity = _jaccard_similarity(k_words, p_words)
             if similarity < MIN_TITLE_SIMILARITY:
-                continue
-
-            if k_close is None or p_close is None:
-                # Can't confirm close-time proximity — logged as a real,
-                # named skip rather than silently guessed as a match.
                 continue
 
             gap_hours = abs((k_close - p_close).total_seconds()) / 3600.0
