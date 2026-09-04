@@ -2773,3 +2773,200 @@ the Climate/Weather + Commodities ingestion built this session, with Open
 Decision #17 (no live match yet) carried forward as a known, named gap
 rather than a blocker — Session 3.2's own validation checklist should
 account for this when it's reached.
+
+---
+
+## Session 3.1b — Kalshi Politics/Elections Ingestion (Narrow Down-Ballot)
+
+**Date completed:** 2026-09-04
+**Status:** ✅ Complete, with one specific matching-logic gap carried
+forward to Session 3.2 (not a blocker for closing this session).
+
+**What was actually done:**
+
+1. **Checked Kalshi's "Politics" and "Elections" categories directly, live,
+   before designing any filter.** "Politics" (2,296 series) was confirmed
+   to contain ZERO individual-district race series — it is national
+   political news and officeholder-status questions (e.g. "Jared Polis
+   out as Governor of Colorado?"), not races, and is correctly excluded
+   entirely. "Elections" (1,704 series) is where real race series live.
+
+2. **Designed and validated a real, checkable "narrow down-ballot" filter**
+   against live data, resolving Open Decision #20. Three distinct tiers
+   were found and checked individually:
+   - **U.S. House district races (89 series, confirmed live):** Kalshi
+     tags these "House" (excluding the separate "House Combos" tag) and
+     uses a structural ticker pattern (state code + district number, e.g.
+     `HOUSECA9`, `KXHOUSEMO5`, `HOUSEAKAL` for an at-large seat). Verified
+     against all 116 "House"-tagged series: the structural check correctly
+     kept all 89 real district races and correctly excluded all 27
+     non-matches (leadership races, chamber-control aggregates, combo
+     contracts) on inspection.
+   - **State-legislature district races (4 series found live):** California
+     State Senate District 26, Pennsylvania State House District 12,
+     Maryland State Senate District 2, Missouri State Senate District 8 —
+     identified by a structural title pattern ("State House/Senate/Assembly
+     District <number>").
+   - **City/county district races (14 series found live — 13 NYC City
+     Council, 1 Los Angeles City Council):** checked and found NOT to pass
+     the same bar as the other two tiers — see Decision 1 below.
+   - Statewide races (Governor: 71 series; U.S. Senate: 121 series) were
+     confirmed to be exactly the "marquee" races Open Decision #20 said to
+     exclude, and are not pulled.
+
+3. **Extended `ingest_kalshi.py`** with a new `classify_down_ballot()`
+   function implementing the filter above, plus a `DOWN_BALLOT_CATEGORY`
+   constant and structural regex patterns for each tier. Down-ballot rows
+   are tagged with a specific category string at write time (e.g.
+   "Elections - US House District") instead of Kalshi's generic
+   "Elections" category, so a row's tier is visible directly in the output
+   CSV. Unit-tested the classification function against the real examples
+   gathered live (House, state-legislature, city/county, Governor, Senate)
+   before delivery — every case classified correctly.
+
+4. **Ran the real filtering logic live** against Kalshi's full, current
+   series list (13,817 series pulled) to confirm the numbers designed
+   against didn't drift: 448 Climate/Commodities series (unchanged from
+   Session 3.1), 93 narrow down-ballot series (89 House + 4 state
+   legislature), 541 target series total. This was run directly against
+   the live API rather than through the full GitHub Actions pipeline,
+   since no such pipeline exists yet for this script (see Decision 3
+   below).
+
+5. **Checked Polymarket for real overlap**, addressing the third
+   validation checkbox. Searched Polymarket's public search API for each
+   of Kalshi's real down-ballot races:
+   - **U.S. House tier: real, live matches confirmed.** All 5 House races
+     checked (MO-05, WA-08, UT-02, NY-17, CA-09) have a corresponding
+     Polymarket market, using a consistent "XX-## House Election Winner"
+     naming pattern. This is the first genuine live, simultaneously-
+     available cross-venue matched pair this project has found (Session
+     3.1 found none for Climate/Weather — see Open Decision #17).
+   - **State-legislature tier: no overlap found.** None of the 4 real
+     Kalshi state-legislature races (Missouri, Maryland, California,
+     Pennsylvania) have a matching Polymarket market. Polymarket does list
+     some state-legislature races (a Wyoming one was found), just not
+     these four.
+
+6. **Found a real, specific reason `venue_matcher.py` would still miss the
+   MO-05 match even though it exists**, by running the actual real data
+   for both venues through the matcher's real logic (not just checking
+   that a matching market exists on each venue). Title similarity and the
+   numeric-compatibility check both pass easily for the MO-05 pair. The
+   close-time-proximity check (6-hour tolerance) does NOT pass: Kalshi's
+   `close_time` for this contract is `2027-11-03` (the swearing-in/
+   contract-expiration date), while Polymarket's `endDate` is
+   `2026-11-04` (the actual election date) — a gap of roughly a year, far
+   outside tolerance. Checked two other Kalshi down-ballot tickers
+   (Pennsylvania House District 12, Missouri Senate District 8) and found
+   the identical `2027-11-03` pattern, confirming this is systematic to
+   how Kalshi structures these political contracts, not a one-off data
+   issue. See Open Decision #21.
+
+**Files created/modified:**
+- `/scripts/ingestion/ingest_kalshi.py` (extended — added
+  `DOWN_BALLOT_CATEGORY`, `classify_down_ballot()`, structural regex
+  patterns for each tier, updated `fetch_target_series_tickers()` and
+  `run()` to pull and tag the narrow down-ballot subset alongside the
+  existing Climate/Commodities pull)
+
+**Validation results (against the roadmap card's original checklist):**
+- [x] **A real, checkable definition of "narrow down-ballot" is documented
+  and applied as an actual filter** — pass. See items 2–3 above;
+  `classify_down_ballot()` is the filter, tested against real examples.
+- [x] **Real narrow down-ballot series pulled and confirmed against
+  Session 0.1's original scope** — pass. 93 real series (89 House + 4
+  state legislature) confirmed live against the filter logic, matching
+  Session 0.1's "individual House/State seats" scope; city/county and
+  statewide races correctly excluded (see Decision 1).
+- [ ] **Venue-matching re-run against the expanded Kalshi data to check for
+  real overlap with Polymarket's own down-ballot election markets** —
+  **partial pass.** Real overlap WAS found for the U.S. House tier (5/5
+  races checked have a live Polymarket match) — a first for this project.
+  However, `venue_matcher.py`'s existing close-time-proximity logic would
+  not actually catch this match as currently configured, for the specific,
+  confirmed reason in item 6 above. Deferred to Session 3.2 rather than
+  fixed here — see Decision 3 and Open Decision #21.
+
+**Decisions made:**
+1. **City/county district races (NYC/LA City Council) are excluded from
+   the narrow down-ballot filter, for now — decided directly with the
+   user against an explicit test.** The user's standing rule: include a
+   tier only if a real +EV edge can be determined; if that can't easily be
+   determined, leave it out. The test applied was whether a real,
+   independent, per-seat probability estimate can be built to compare
+   against Kalshi's price. State legislature passed this test (see
+   Decision 2). City/county did not: live research found only ad hoc
+   journalism naming a handful of competitive seats per cycle (e.g. City &
+   State NY's "races to watch"), not a systematic per-seat forecast model
+   covering every district. Kalshi's own live order books confirmed this
+   isn't just a research gap: 6 of 7 NYC City Council series sampled had
+   NO open market running at all; the one that did (LA City Council
+   District 13) is itself one of the handful of seats that gets real news
+   coverage, not representative of the rest. This is logged as a "can't
+   yet determine a real edge" result, not a "no edge exists" result — the
+   detection pattern is left in `ingest_kalshi.py`, dead but documented,
+   so this can be switched back on if a comprehensive per-seat local-
+   election forecast source is found later.
+2. **State-legislature district races are included, on the same test.**
+   Real, comprehensive, per-seat public forecast data was confirmed live:
+   ElectIndex publishes a probabilistic forecast for all 88 state-
+   legislative chambers on the 2026 ballot; multistate.us separately
+   publishes a baseline partisan-lean number for all 7,388 state-
+   legislative seats nationwide. This gives a genuine, independent basis
+   for an edge estimate, the same test the House tier already passes via
+   well-known federal election forecasting sources.
+3. **The real end-to-end pipeline run (fetching markets for all 541 target
+   series, writing `kalshi_latest.csv`, committing it back) was not
+   performed this session.** Checked directly: no GitHub Actions workflow
+   exists yet for `ingest_kalshi.py`/`ingest_polymarket.py` (only
+   `pickem_pipeline.yml` and `sport_inventory_scan.yml` exist in
+   `.github/workflows/`) — wiring this pipeline into an automated,
+   schedulable workflow is Session 3.4 (Automation Adaptation), not yet
+   started. In its place, the real filtering logic was run directly
+   against Kalshi's live API (item 4 above) to confirm correctness without
+   waiting on automation that isn't built yet.
+4. **The `venue_matcher.py` close-time bug found in item 6 is NOT fixed in
+   this session**, even though a fix is now well-understood. Changing
+   venue-matching logic is Session 3.2's (Arbitrage Detection Logic)
+   domain, not this ingestion session's — decided directly with the user
+   rather than editing another session's file unilaterally.
+
+**Corrections/reversals during the session:** None — the filter design
+held up against live validation without needing revision, and the one
+real surprise (Kalshi's close_time representing the swearing-in date, not
+the election date, for down-ballot political contracts) was a new finding
+rather than a correction of something built this session.
+
+**Open items / deferred validations:**
+- **Open Decision #20 is now RESOLVED** — see Decisions 1–2 above for the
+  real, evidence-based narrow down-ballot definition.
+- **New Open Decision #21:** `venue_matcher.py`'s close-time-proximity
+  check (6-hour tolerance, tuned against Session 3.1's weather-market
+  data) does not account for Kalshi's down-ballot political contracts
+  setting `close_time` to the post-election swearing-in/expiration date
+  rather than the election date itself — confirmed across 3 real tickers
+  (MO-05, PA House District 12, MO Senate District 8), all showing the
+  same `2027-11-03` pattern regardless of race type. Polymarket's
+  `endDate` for the same real races is the actual election date
+  (`2026-11-04`), so a real, live matched pair (MO-05, confirmed present
+  on both venues) would currently be missed by the matcher as configured.
+  **Action needed, before Session 3.2's matching logic is considered
+  final for down-ballot politics:** either derive a second, election-date-
+  specific timestamp for Kalshi's political contracts to match against
+  (rather than relying on `close_time` alone), or add a per-category
+  matching rule that relaxes/replaces the close-time check for the
+  Elections category specifically. Not a blocker for closing this
+  session, per direct agreement with the user.
+- City/county down-ballot races remain a named, revisitable exclusion (see
+  Decision 1) — no further action needed unless a comprehensive per-seat
+  local-election forecast source is found.
+
+**Next session:** No specific ingestion work is required next for Track 4
+— the narrow down-ballot filter is built and validated. Session 3.2
+(Arbitrage Detection Logic) should account for Open Decision #21 when it
+reaches down-ballot politics specifically, in addition to the existing
+Open Decision #17 (Climate/Weather, no live match yet). Session 3.4
+(Automation Adaptation) is still where the actual GitHub Actions workflow
+for this pipeline gets built — nothing changed about that timing this
+session.

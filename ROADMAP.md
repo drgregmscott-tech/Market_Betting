@@ -1215,40 +1215,60 @@ new repo-root `.gitignore`.
 ---
 
 ### Session 3.1b — Kalshi Politics/Elections Ingestion (Narrow Down-Ballot)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-04) — see SESSION_LOG.md for full detail.
+Narrow down-ballot filter designed, built, and validated against live data.
+One specific matching-logic gap (Open Decision #21) carried forward to
+Session 3.2 rather than fixed here, by direct agreement with the user.
 **Prerequisites:** Session 3.1 complete. Does not block Sessions 3.2–3.4 —
 arbitrage detection, sizing, and automation are all built to work on whatever
 venues are already ingested, so this can be built whenever convenient rather
 than gating the rest of Phase 3.
 
-**What gets built:** Extends `ingest_kalshi.py`'s targeted-series pattern to
-Kalshi's Politics and Elections categories (2,287 + 1,662 = 3,949 series
-combined, confirmed via `GET /series`) — but filtered down to the narrow,
-down-ballot races Session 0.1 actually found edge in (individual House/State
-seats, not national or marquee races), not the full 3,949. The real, defined
-"narrow down-ballot" filter has to be designed here first — see Open Decision
-#20 for the starting point (a race-type/district-code pattern, already
-observed live in Polymarket's own election-market titles, e.g. "Will [X] win
-the WA-02 House seat?").
+**What was built:** Extended `ingest_kalshi.py`'s targeted-series pattern to
+Kalshi's Elections category (1,704 series, confirmed via `GET /series`) —
+filtered down to two real, checkable tiers: individual U.S. House district
+races (89 series) and individual state-legislature district races (4
+series), 93 total, matching Session 0.1's actual "individual House/State
+seats" scope. Kalshi's "Politics" category (2,296 series) was checked
+directly and confirmed to contain no individual-race series at all, so it is
+not pulled. City/county district races (14 series found live — NYC/LA City
+Council) were checked against a real +EV-edge test and deliberately excluded
+for now — see SESSION_LOG.md's Decision 1 for the full evidence trail. A new
+`classify_down_ballot()` function implements the filter; down-ballot rows are
+tagged with their specific tier (e.g. "Elections - US House District")
+instead of Kalshi's generic "Elections" category.
 
 **Files touched:** `/scripts/ingestion/ingest_kalshi.py` (extended, not
 rebuilt — adds a second target-category set alongside Climate/Commodities)
 
-**Validation (required to close session):**
-- [ ] A real, checkable definition of "narrow down-ballot" is documented and
+**Validation (against this card's original checklist):**
+- [x] A real, checkable definition of "narrow down-ballot" is documented and
       applied as an actual filter (race type, geographic level, or similar —
       not a subjective judgment call per race)
-- [ ] Real narrow down-ballot series pulled and confirmed against Session
-      0.1's original scope (not simply all of Politics/Elections)
+- [x] Real narrow down-ballot series pulled and confirmed against Session
+      0.1's original scope (not simply all of Politics/Elections) — 93 real
+      series confirmed live (89 House + 4 state legislature)
 - [ ] Venue-matching re-run against the expanded Kalshi data to check for
-      real overlap with Polymarket's own down-ballot election markets
+      real overlap with Polymarket's own down-ballot election markets —
+      **partial pass.** A real, live matched pair WAS found (U.S. House tier:
+      5/5 races checked have a matching Polymarket market — the first live
+      cross-venue match this project has found). However, `venue_matcher.py`
+      as currently configured would not catch it: Kalshi's `close_time` for
+      these contracts is the post-election swearing-in date, not the
+      election date, breaking the matcher's close-time-proximity check. See
+      Open Decision #21 — carried forward to Session 3.2, not fixed here.
 
 ---
 
 ### Session 3.2 — Arbitrage Detection Logic
 **Status:** Not started
 **Prerequisites:** Session 3.1 complete (with Open Decision #17 — no live
-matched pair yet — carried forward as a known gap, not a blocker).
+matched pair yet for Climate/Weather — carried forward as a known gap, not
+a blocker) and Session 3.1b complete (with Open Decision #21 — a real, live
+matched pair exists for down-ballot U.S. House races, but `venue_matcher.py`'s
+close-time-proximity check needs a fix specific to Kalshi's political-contract
+timestamps before it will actually catch it — see SESSION_LOG.md's Session
+3.1b entry).
 
 **What gets built:** Pure price-comparison logic — flags cases where the same
 outcome is priced inconsistently across venues (including single-market YES+NO ≠
@@ -2056,18 +2076,41 @@ remaining blockers to starting Phase 2.
     events for this filter — is not confirmed. Not a blocker; a real,
     named gap for whoever next has reason to look at Polymarket ingestion
     depth.
-20. **New, opened Session 3.1:** Kalshi's Politics and Elections categories
-    (2,287 + 1,662 = 3,949 series combined, confirmed via `GET /series`)
-    are deliberately not ingested yet. Session 0.1's real scope decision
-    was narrow, down-ballot races specifically (individual House/State
-    seats), not politics broadly — pulling all of Politics/Elections
-    as-is would reintroduce the kind of scope drift this project has
-    caught and corrected before. **Action needed:** define a real,
-    checkable filter for "narrow down-ballot" (e.g. matching on race-type
-    patterns like the "House seat" / district-code naming pattern already
-    observed live in Polymarket's own election-market titles) before
-    building Kalshi's Politics/Elections ingestion. Tracked as Session 3.1b
-    above.
+20. **Opened Session 3.1, RESOLVED Session 3.1b (2026-09-04):** Kalshi's
+    Politics and Elections categories (2,287 + 1,662 = 3,949 series
+    combined, confirmed via `GET /series`) were deliberately not ingested
+    in Session 3.1. Session 3.1b checked both categories directly and
+    found the real, checkable distinction: "Politics" (2,296 series)
+    contains no individual-race series at all (national news and
+    officeholder-status questions); "Elections" (1,704 series) is where
+    real races live, and within it, individual U.S. House district races
+    (89 series, structural ticker pattern) and individual state-
+    legislature district races (4 series, structural title pattern) pass
+    a real per-seat forecast-data-availability test, while city/county
+    races (14 series) do not — see SESSION_LOG.md's Session 3.1b entry for
+    the full evidence trail. 93 real down-ballot series are now ingested.
+21. **New, opened Session 3.1b:** `venue_matcher.py`'s close-time-
+    proximity check (6-hour tolerance, tuned against Session 3.1's weather-
+    market data) does not account for Kalshi's down-ballot political
+    contracts setting `close_time` to the post-election swearing-in/
+    contract-expiration date rather than the election date itself —
+    confirmed across 3 real tickers (MO-05, PA House District 12, MO
+    Senate District 8), all showing the same `2027-11-03` close_time
+    regardless of race type. Polymarket's `endDate` for the same real races
+    is the actual election date (e.g. `2026-11-04` for MO-05). A real, live
+    matched pair for MO-05 was confirmed present on both venues — title
+    similarity and the numeric-compatibility check both pass easily — but
+    the close-time check as currently configured would still reject it,
+    since the two venues' timestamps are roughly a year apart for the same
+    real-world race. **Action needed, before Session 3.2's matching logic
+    is considered final for down-ballot politics:** either derive a second,
+    election-date-specific timestamp for Kalshi's political contracts to
+    match against, or add a per-category matching rule that relaxes/
+    replaces the close-time check for the Elections category specifically.
+    Not a blocker for closing Session 3.1b — carried forward by direct
+    agreement with the user, since changing `venue_matcher.py`'s matching
+    logic belongs to Session 3.2's scope, not the ingestion session that
+    found the issue.
 
 ---
 *Update this file at the close of each future session, per the project's
