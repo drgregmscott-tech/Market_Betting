@@ -6,45 +6,59 @@ WHAT THIS SCRIPT IS
 Pulls live market data from Kalshi's real-money exchange and normalizes it
 into the common exchange-venue schema defined in schema_exchange.py, the
 same defensive pattern Session 2.2's ingest_pickem.py established for the
-pick'em platforms:
-1. Pulls live data from Kalshi's public market-data endpoint.
-2. Normalizes Kalshi's raw shape into the one common exchange schema.
-3. Survives a bad response, an empty response, or a schema change WITHOUT
-   crashing — logs the failure and continues.
-4. Writes output so running the pipeline twice does not duplicate or
-   corrupt any stored data (same idempotency pattern as ingest_pickem.py).
-5. Logs every run to /logs/ingestion.log.
+pick'em platforms.
+
+TARGETED PULL, NOT A FULL-CATALOG FIREHOSE — REAL REVERSAL THIS SESSION
+-------------------------------------------------------------------------
+Earlier versions of this script pulled Kalshi's ENTIRE open-market catalog
+(GET /markets with no series filter) and paged as deep as practical hoping
+the markets this project actually cares about would surface. A real run
+showed why that doesn't work: Kalshi's catalog is dominated by combo/
+multi-leg contracts (199,019 of 200,000 raw records in one real run), and
+even paging 200,000 records deep turned up ZERO real weather markets —
+they were apparently buried even further back by the sheer volume of
+combo listings. Confirmed directly against Kalshi's own real,
+unauthenticated `GET /series` endpoint (2026-09-04, 13,816 total series
+returned, no API key required): Kalshi's series are organized into named
+categories, and this project's actual in-scope categories per Session
+0.1 — "Climate and Weather" (367 series) and "Commodities" (81 series) —
+are a small, fully enumerable slice of the whole catalog. Rather than
+searching for a needle in an ever-growing haystack, this script now:
+1. Pulls the full series list once (GET /series, confirmed public).
+2. Filters, client-side, to series whose category is "Climate and Weather"
+   or "Commodities" — the two categories matching Session 0.1's actual
+   edge thesis (see ROADMAP.md's Track 3 scoping). "Politics"/"Elections"
+   (3,949 combined series) are DELIBERATELY deferred, not pulled here —
+   Session 0.1's real decision was narrow, down-ballot races specifically,
+   not politics broadly, and that narrower filter hasn't been built yet.
+   Pulling all of Politics/Elections now would reintroduce the same kind
+   of scope drift this project has caught and corrected before.
+3. For each matching series (~448), pulls its open markets directly via
+   GET /markets?series_ticker=<ticker>&status=open — a small, targeted
+   call per series, rather than paging through the unfiltered firehose.
+
+This is a real, deliberate scope narrowing WITHIN Kalshi ingestion, logged
+explicitly as such — not a silent one. It does not narrow the PROJECT's
+scope (Politics/Elections remains on the roadmap, just not built yet).
 
 ACCESS — RESOLVED THIS SESSION (Open Decision #3, Kalshi half)
 ------------------------------------------------------------------
-Confirmed live 2026-09-04, via direct unauthenticated pull against
-production: Kalshi's market-data read endpoints require NO API key and NO
-account. This is different from Track 1's two platforms in one important
-way: Kalshi's public-data access is an OFFICIAL, documented part of
-Kalshi's own API (https://docs.kalshi.com), not an undocumented endpoint
-found by inspection. Kalshi is a CFTC-regulated exchange, so this script
-is reading the same public market data Kalshi's own site displays, through
-the same interface Kalshi tells developers to use — not a workaround.
-Authenticated endpoints (placing orders, viewing a personal portfolio)
-DO require an RSA-PSS-signed request and real API credentials — this
-script never touches those, since Session 3.1 is read-only ingestion.
+Confirmed live 2026-09-04: both GET /series and GET /markets require NO
+API key and NO account. This is an OFFICIAL, documented part of Kalshi's
+own API (https://docs.kalshi.com), not an undocumented endpoint found by
+inspection. Authenticated endpoints (placing orders, viewing a personal
+portfolio) DO require an RSA-PSS-signed request and real API credentials
+— this script never touches those, since Session 3.1 is read-only
+ingestion.
 
 Base URL used: https://api.elections.kalshi.com/trade-api/v2 (Kalshi's own
 docs note this is the general-purpose base despite the "elections"
-subdomain name — confirmed covers weather/climate and all other
-categories, not just elections).
-
-Rate limits: not yet load-tested by this project. Kalshi's own docs
-describe a tiered token-bucket system for authenticated trading traffic;
-public read-only traffic has not been separately quantified here. This
-script paginates conservatively (LIMIT_PER_PAGE below) and should be
-watched during Session 3.1's own validation pass rather than assumed safe
-at higher volume.
+subdomain name).
 
 WHERE OUTPUT GOES
 ------------------
-/data/exchange/raw/kalshi_<timestamp>.json — the exact, unmodified response
-    for each page pulled, saved every run.
+/data/exchange/raw/kalshi_<timestamp>.json — the exact, unmodified series
+    list and per-series market responses pulled, saved every run.
 /data/exchange/normalized/kalshi_markets_<timestamp>.csv — one normalized
     snapshot per run.
 /data/exchange/normalized/kalshi_latest.csv — always overwritten each run.
@@ -79,6 +93,7 @@ NORMALIZED_DIR = BASE_DIR / "data" / "exchange" / "normalized"
 LOG_PATH = BASE_DIR / "logs" / "ingestion.log"
 
 KALSHI_BASE_URL = "https://api.elections.kalshi.com/trade-api/v2"
+KALSHI_SERIES_ENDPOINT = f"{KALSHI_BASE_URL}/series"
 KALSHI_MARKETS_ENDPOINT = f"{KALSHI_BASE_URL}/markets"
 
 HEADERS = {
@@ -92,26 +107,12 @@ HEADERS = {
 MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
-LIMIT_PER_PAGE = 1000  # Kalshi's own docs confirm 1000 is the real per-page
-# maximum for this endpoint (1-1000 allowed, 100 is only the default when
-# no limit is given).
-MAX_PAGES = 200  # RAISED (Session 3.1, sixth real run, 2026-09-04): a real
-# run at the previous cap (60 pages / 60,000 raw records) kept only 30
-# single-question markets after the new combo-listing filter — suspiciously
-# few, given a single city's temperature contracts alone produced about 10
-# markets in earlier samples. The real, likely explanation: Kalshi's
-# /markets endpoint appears to return combo/multi-leg listings clustered
-# toward the front of its result order (plausibly because many are
-# freshly created right around game time), so a 60-page window mostly
-# shows combo listings and reaches few of the real single-question
-# markets sitting further back in the true full list. Raising this cap no
-# longer risks the file-size problem from earlier in this session, since
-# combo listings are now filtered out before being written to the
-# normalized CSV — the raw record count pulled can be much larger without
-# the final saved file growing to match. 200 pages (up to 200,000 raw
-# records) is chosen as comfortably above Kalshi's own documented "tens
-# of thousands of markets" scale, to actually reach a real empty cursor
-# rather than stopping at another arbitrary window.
+
+# Real Kalshi category names, confirmed live 2026-09-04 against GET
+# /series (13,816 total series). Matches Session 0.1's Track 3 scope
+# ("Climate/Commodities") directly — see this file's module docstring for
+# why Politics/Elections is deliberately not included yet.
+TARGET_CATEGORIES = ["Climate and Weather", "Commodities"]
 
 
 def setup_logging() -> logging.Logger:
@@ -136,9 +137,7 @@ log = setup_logging()
 
 
 # --------------------------------------------------------------------------
-# Fetching — cursor-paginated, since Kalshi returns a bounded page per call
-# with a "cursor" field for the next page (confirmed live 2026-09-04: an
-# empty string cursor means no further pages).
+# Fetching
 # --------------------------------------------------------------------------
 def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
     last_error = None
@@ -163,34 +162,76 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
     raise RuntimeError(f"All attempts failed for {url}: {last_error}")
 
 
-def fetch_kalshi_markets() -> list[dict]:
-    """Pulls every open market across all pages. Returns the raw page
-    payloads (not yet normalized) so save_raw_snapshot can archive exactly
-    what Kalshi returned, same as ingest_pickem.py does for its platforms."""
+def fetch_target_series_tickers():
+    """Pulls Kalshi's full series list once and filters, client-side, to
+    this project's target categories. Confirmed live 2026-09-04: GET
+    /series returns ALL series in one call (no pagination needed — 13,816
+    returned directly), each with a real 'category' field, so no category
+    query-parameter guessing is needed. Returns (matching_tickers,
+    all_series) — all_series is kept so run() can build a ticker->category
+    map without a second API call."""
+    payload = _fetch_with_retries(KALSHI_SERIES_ENDPOINT)
+    all_series = payload.get("series", payload if isinstance(payload, list) else [])
+    if not isinstance(all_series, list):
+        raise RuntimeError(
+            "GET /series response was not in the expected shape — schema "
+            "may have changed."
+        )
+
+    matching_tickers = [
+        s.get("ticker")
+        for s in all_series
+        if s.get("category") in TARGET_CATEGORIES and s.get("ticker")
+    ]
+    log.info(
+        "Series discovery: %d total series pulled, %d match target "
+        "categories %s",
+        len(all_series),
+        len(matching_tickers),
+        TARGET_CATEGORIES,
+    )
+    return matching_tickers, all_series
+
+
+def fetch_markets_for_series(tickers: list[str]) -> list[dict]:
+    """Pulls open markets for each target series individually. Each
+    series's failure is isolated — one bad/unreachable series must not
+    lose markets already pulled for the others, same 'don't discard real
+    partial progress' principle applied to ingest_polymarket.py's page-
+    level failures earlier this session."""
     pages: list[dict] = []
-    cursor = ""
-    for page_num in range(1, MAX_PAGES + 1):
-        params = {"status": "open", "limit": LIMIT_PER_PAGE}
-        if cursor:
-            params["cursor"] = cursor
-        payload = _fetch_with_retries(KALSHI_MARKETS_ENDPOINT, params=params)
-        pages.append(payload)
-        cursor = payload.get("cursor") or ""
-        log.info(
-            "Kalshi page %d: %d markets, next cursor %s",
-            page_num,
-            len(payload.get("markets", [])),
-            "present" if cursor else "empty (last page)",
-        )
-        if not cursor:
-            break
-    else:
+    failed_tickers: list[str] = []
+
+    for i, ticker in enumerate(tickers, 1):
+        try:
+            payload = _fetch_with_retries(
+                KALSHI_MARKETS_ENDPOINT,
+                params={"series_ticker": ticker, "status": "open"},
+            )
+            market_count = len(payload.get("markets", []))
+            pages.append(payload)
+            if i % 50 == 0 or i == len(tickers):
+                log.info(
+                    "Fetched markets for %d/%d target series so far "
+                    "(most recent: %s, %d markets)",
+                    i,
+                    len(tickers),
+                    ticker,
+                    market_count,
+                )
+        except RuntimeError as exc:
+            failed_tickers.append(ticker)
+            log.warning("Failed to fetch markets for series %s: %s", ticker, exc)
+            continue
+
+    if failed_tickers:
         log.warning(
-            "Kalshi pagination hit MAX_PAGES (%d) without an empty cursor — "
-            "stopped early. Real market count may be larger than what was "
-            "pulled this run.",
-            MAX_PAGES,
+            "%d of %d target series could not be fetched this run: %s",
+            len(failed_tickers),
+            len(tickers),
+            failed_tickers[:20],  # cap the printed list — could be long
         )
+
     return pages
 
 
@@ -203,31 +244,14 @@ _COMBO_LEG_PATTERN = re.compile(r"^\s*(yes|no)\s", re.IGNORECASE)
 
 
 def _is_combo_title(title: Optional[str]) -> bool:
-    """Detects Kalshi's multi-leg combo-contract titles by STRUCTURE, not
-    by market_type.
-
-    REVERSAL (Session 3.1, fifth real run, 2026-09-04): the market_type
-    filter added earlier this session was tested against a real run and
-    had ZERO effect — kalshi_rows stayed at exactly 60,000 with no rows
-    filtered, meaning every one of these comma-jammed combo titles
-    actually does carry market_type == "binary", same as the simple
-    single-question markets. The working theory that combo contracts
-    carry a distinct market_type value is WRONG and is corrected here,
-    not silently dropped — see this project's standing rule that
-    corrections get logged as real reversals. The real, working
-    distinction turned out to be the TITLE's own structure: a combo
-    contract is a single binary settlement ("did every listed leg hit"),
-    so it is still, correctly, market_type == "binary" — but its title
-    lists every leg, each one prefixed with "yes " or "no " and separated
-    by commas (e.g. "no Real Madrid wins by more than 2.5 goals,no
-    Cincinnati -1.5 first 5 innings,yes Purdue wins by over 33.5
-    points"). A genuine single-question title (e.g. "Will the maximum
-    temperature be >86° on Sep 5, 2026?") never has this shape. This
-    function flags a title as a combo listing if at least two of its
-    comma-separated segments start with "yes " or "no " — two rather than
-    one, so a title that happens to contain a single embedded comma isn't
-    mistakenly flagged.
-    """
+    """Detects Kalshi's multi-leg combo-contract titles by STRUCTURE
+    (see this project's SESSION_LOG.md for the full discovery story of
+    why market_type alone can't be used for this). Kept as a defensive
+    check even with the new targeted series pull — Climate and Weather/
+    Commodities are not known to carry combo-style contracts, but this
+    costs nothing to leave in place in case that assumption is ever
+    wrong, and it's cheaper to filter defensively than to assume a
+    category is combo-free without having checked every series in it."""
     if not title:
         return False
     segments = title.split(",")
@@ -261,10 +285,11 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                         source_market_id=str(record.get("ticker")),
                         event_id=record.get("event_ticker"),
                         title=title,
-                        # Category is not present on the market object
-                        # itself in this endpoint's response — a real,
-                        # named gap, not a silent None. See
-                        # schema_exchange.py's field notes.
+                        # Category IS now known (this run only pulled
+                        # target-category series), filled in by the
+                        # caller in run() via a ticker->category map, not
+                        # guessed here — the raw market object itself
+                        # still doesn't carry a category field.
                         category=None,
                         yes_bid=_to_float(record.get("yes_bid_dollars")),
                         yes_ask=_to_float(record.get("yes_ask_dollars")),
@@ -285,10 +310,7 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
     if skipped_combo_titles:
         log.warning(
             "Filtered out %d Kalshi record(s) whose title looks like a "
-            "multi-leg combo listing (two or more comma-separated "
-            "'yes '/'no '-prefixed segments), not a single real-world "
-            "question — see _is_combo_title()'s docstring for why "
-            "market_type alone could not be used for this.",
+            "multi-leg combo listing, not a single real-world question.",
             skipped_combo_titles,
         )
 
@@ -307,10 +329,16 @@ def _to_float(value) -> Optional[float]:
 # --------------------------------------------------------------------------
 # Output writers
 # --------------------------------------------------------------------------
-def save_raw_snapshot(pages: list[dict], pulled_at_compact: str) -> Path:
+def save_raw_snapshot(
+    series_list: list[dict], market_pages: list[dict], pulled_at_compact: str
+) -> Path:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     out_path = RAW_DIR / f"kalshi_{pulled_at_compact}.json"
-    out_path.write_text(json.dumps(pages, indent=2))
+    out_path.write_text(
+        json.dumps(
+            {"all_series": series_list, "market_pages": market_pages}, indent=2
+        )
+    )
     return out_path
 
 
@@ -337,26 +365,53 @@ def run() -> dict:
 
     summary = {
         "pulled_at": pulled_at,
+        "kalshi_target_series_count": 0,
         "kalshi_raw_records_pulled": 0,
         "kalshi_combo_records_filtered_out": 0,
         "kalshi_rows_kept": 0,
         "kalshi_ok": False,
     }
 
-    log.info("=== Kalshi ingestion run starting ===")
+    log.info(
+        "=== Kalshi ingestion run starting (Climate and Weather + Commodities) ==="
+    )
 
     try:
-        pages = fetch_kalshi_markets()
-        save_raw_snapshot(pages, pulled_at_compact)
-        raw_count = sum(len(page.get("markets", [])) for page in pages)
-        rows = normalize_kalshi(pages, pulled_at)
+        target_tickers, all_series = fetch_target_series_tickers()
+        summary["kalshi_target_series_count"] = len(target_tickers)
+
+        # Map ticker -> category, so each row can be tagged with its real
+        # category even though the /markets response itself doesn't
+        # include one — filled in below, not guessed.
+        category_by_ticker = {
+            s.get("ticker"): s.get("category")
+            for s in all_series
+            if s.get("ticker") in target_tickers
+        }
+
+        market_pages = fetch_markets_for_series(target_tickers)
+        save_raw_snapshot(all_series, market_pages, pulled_at_compact)
+
+        raw_count = sum(len(page.get("markets", [])) for page in market_pages)
+        rows = normalize_kalshi(market_pages, pulled_at)
+
+        # Fill in the real category per row using the series->category
+        # map built above (matched via event_ticker's series prefix,
+        # since the market object itself has no category field).
+        for row in rows:
+            for ticker, category in category_by_ticker.items():
+                if row.event_id and row.event_id.startswith(ticker):
+                    row.category = category
+                    break
+
         summary["kalshi_raw_records_pulled"] = raw_count
         summary["kalshi_combo_records_filtered_out"] = raw_count - len(rows)
         summary["kalshi_rows_kept"] = len(rows)
         summary["kalshi_ok"] = True
         log.info(
-            "Kalshi: %d raw records pulled, %d filtered out as combo "
-            "listings, %d single-question rows kept",
+            "Kalshi: %d target series, %d raw records pulled, %d filtered "
+            "out as combo listings, %d single-question rows kept",
+            len(target_tickers),
             raw_count,
             raw_count - len(rows),
             len(rows),
