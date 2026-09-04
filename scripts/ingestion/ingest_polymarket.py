@@ -90,7 +90,25 @@ MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
 LIMIT_PER_PAGE = 200
-MAX_PAGES = 25  # hard safety cap, same reasoning as ingest_kalshi.py
+MAX_PAGES = 60  # hard safety cap, same reasoning as ingest_kalshi.py
+
+# BUG FOUND AND FIXED (Session 3.1, first real run, 2026-09-04): this
+# script originally treated "the page came back shorter than the limit I
+# asked for" as "this was the last page" (a common, usually-safe
+# pagination assumption). Confirmed live that Polymarket's Gamma API does
+# NOT follow that assumption — a request for limit=200 came back with
+# exactly 100 events, even though far more than 100 active events exist on
+# Polymarket. The API silently caps the real per-page size below whatever
+# limit is requested, rather than returning fewer rows only because the
+# real data ran out. The original logic read that capped page as "no more
+# data," so the script silently stopped after page 1 every run and never
+# pulled the rest of Polymarket's real active events — a real, meaningful
+# under-count, not a cosmetic issue, since it also means venue_matcher.py
+# was only ever comparing Kalshi's data against a small, arbitrary slice
+# of Polymarket's. Fixed by treating an EMPTY page (zero rows) as the only
+# real end-of-data signal, and tracking the page-over-page ROW LENGTH
+# actually received (not the requested limit) to compute the next offset,
+# since the two can now differ.
 
 
 def setup_logging() -> logging.Logger:
@@ -164,10 +182,29 @@ def fetch_polymarket_events() -> list[list]:
             )
             break
         pages.append(payload)
-        log.info("Polymarket page %d: %d events", page_num, len(payload))
-        if len(payload) < LIMIT_PER_PAGE:
-            break  # short page — this was the last one
-        offset += LIMIT_PER_PAGE
+        received = len(payload)
+        log.info(
+            "Polymarket page %d: %d events (requested limit %d)",
+            page_num,
+            received,
+            LIMIT_PER_PAGE,
+        )
+        if received == 0:
+            break  # a genuinely empty page — this really was the last one
+        if received < LIMIT_PER_PAGE:
+            # Fixed 2026-09-04: a short page is NOT proof of end-of-data on
+            # this API (see the bug note above) — keep paginating using the
+            # REAL received count as the offset step, not the requested
+            # limit, and let an empty page (above) be the real stop signal.
+            log.info(
+                "Page %d returned fewer rows (%d) than requested (%d) — "
+                "Polymarket's known per-page cap, not necessarily end of "
+                "data. Continuing pagination.",
+                page_num,
+                received,
+                LIMIT_PER_PAGE,
+            )
+        offset += received
     else:
         log.warning(
             "Polymarket pagination hit MAX_PAGES (%d) without a short page "
