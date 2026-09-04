@@ -91,9 +91,18 @@ HEADERS = {
 MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
-LIMIT_PER_PAGE = 200  # conservative; see rate-limit note above
-MAX_PAGES = 25  # hard safety cap — ~5,000 markets; prevents a runaway loop
-# if Kalshi's cursor pagination ever returns a cursor that never terminates.
+LIMIT_PER_PAGE = 1000  # Kalshi's own docs confirm 1000 is the real per-page
+# maximum for this endpoint (1-1000 allowed, 100 is only the default when
+# no limit is given). The first real run of this script used 200 and hit
+# its MAX_PAGES safety cap after only 5,000 of Kalshi's real "tens of
+# thousands" of open markets (per Kalshi's own API vendor docs) — raising
+# this to the documented real maximum cuts the number of pages needed by
+# 5x for the same total market count.
+MAX_PAGES = 60  # hard safety cap — ~60,000 markets at the new page size;
+# prevents a runaway loop if Kalshi's cursor pagination ever returns a
+# cursor that never terminates. Raised from Session 3.1's first real run,
+# which showed the true open-market count is meaningfully above the old
+# 5,000-market cap.
 
 
 def setup_logging() -> logging.Logger:
