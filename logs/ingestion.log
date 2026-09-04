@@ -603,3 +603,5 @@
 2026-09-04 19:21:11,772 UTC | INFO | Polymarket: 20713 normalized rows across 21 page(s)
 2026-09-04 19:21:12,373 UTC | INFO | === Polymarket ingestion run complete: 20713 rows (OK) ===
 2026-09-04 19:21:14,302 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 19:24:55,012 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 19:25:00,048 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 60000 Kalshi rows x 20713 Polymarket rows ===
