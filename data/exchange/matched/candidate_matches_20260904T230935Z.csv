@@ -1,0 +1,3 @@
+kalshi_source_market_id,kalshi_title,kalshi_yes_ask,kalshi_no_ask,polymarket_source_market_id,polymarket_title,polymarket_yes_ask,polymarket_no_ask,title_similarity,close_time_gap_hours
+KXEARTHQUAKECALIFORNIA-27,Will there be an at least 8 magnitude earthquake in California before 2027?,0.05,0.96,0x234cb84f9e92194f93c6df4990e7e52c6948ec4d61400cd2dd74018ad2448152,9.0 or above earthquake before 2027?,0.068,0.945,0.375,0.0
+KXEARTHQUAKECALIFORNIA-27,Will there be an at least 8 magnitude earthquake in California before 2027?,0.05,0.96,0x2fe2f420a7de9c259d37f7f1606a0c81ad16b6d45afe4e1125db3941a3903a7a,Magnitude 6.5+ earthquake in LA before 2027?,0.108,0.956,0.5,0.0
