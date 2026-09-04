@@ -88,6 +88,56 @@ _STOPWORDS = {
     "are", "or", "and", "than", "more", "less", "for", "by",
 }
 
+_NUMBER_PATTERN = re.compile(r"\d+\.?\d*")
+
+
+def _extract_numbers(title: Optional[str]) -> set[float]:
+    """Pulls every number out of a title EXCLUDING year-like numbers (e.g.
+    '86', '9.0', '6.5' are kept; '2026', '2027' are dropped).
+
+    BUG FOUND AND FIXED (same real earthquake pairs, immediately after
+    adding this check): the first version of this function counted
+    ANY shared number as a match — including the year. 'earthquake...
+    before 2027' and '...earthquake before 2027' share the number 2027
+    purely because they're both talking about the same TIME PERIOD, not
+    because they agree on the actual threshold (8.0 vs 9.0 magnitude).
+    Without excluding year-like numbers, the fix this function exists for
+    doesn't work at all — confirmed directly: testing against the real
+    earthquake titles still produced 2 candidates before this exclusion
+    was added, for exactly this reason. A 4-digit integer in a plausible
+    calendar-year range (2000-2099, comfortably covering this project's
+    real operating window) is treated as a date, not a threshold, and
+    excluded here.
+    """
+    if not title:
+        return set()
+    numbers = {float(n) for n in _NUMBER_PATTERN.findall(title)}
+    return {n for n in numbers if not (n == int(n) and 2000 <= n <= 2099)}
+
+
+def _numbers_are_compatible(a: set[float], b: set[float]) -> bool:
+    """REAL BUG FOUND AND FIXED (Session 3.1, first real matches found,
+    2026-09-04): venue_matcher.py's first two genuine non-zero results
+    both turned out to be FALSE MATCHES on inspection — 'at least 8
+    magnitude earthquake in California' matched against both '9.0 or
+    above earthquake' and 'Magnitude 6.5+ earthquake in LA', purely on
+    shared generic wording ('earthquake', 'before', '2027') and a shared
+    close time. Word similarity and close-time proximity alone cannot
+    tell two DIFFERENT real-world thresholds apart — an 8.0+ earthquake
+    and a 9.0+ earthquake are genuinely different bets with different real
+    odds, not the same event worded two ways. This function adds a
+    required check: if both titles contain at least one number, at least
+    one of those numbers must actually match. If either title has no
+    number at all, this check is skipped (not every real match involves a
+    numeric threshold — e.g. two differently-worded yes/no questions about
+    the same binary event). This is a necessary check, not a replacement
+    for title similarity or close-time proximity — all three must still
+    agree for a pair to be proposed.
+    """
+    if not a or not b:
+        return True  # nothing to compare — don't block on this check
+    return bool(a & b)
+
 
 def setup_logging() -> logging.Logger:
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -187,11 +237,21 @@ def find_candidate_matches(
     candidates: list[dict] = []
 
     kalshi_parsed = [
-        (row, _title_words(row.get("title")), _parse_close_time(row.get("close_time")))
+        (
+            row,
+            _title_words(row.get("title")),
+            _parse_close_time(row.get("close_time")),
+            _extract_numbers(row.get("title")),
+        )
         for row in kalshi_rows
     ]
     polymarket_parsed = [
-        (row, _title_words(row.get("title")), _parse_close_time(row.get("close_time")))
+        (
+            row,
+            _title_words(row.get("title")),
+            _parse_close_time(row.get("close_time")),
+            _extract_numbers(row.get("title")),
+        )
         for row in polymarket_rows
     ]
 
@@ -205,14 +265,16 @@ def find_candidate_matches(
     # Index Polymarket rows by bucket so a Kalshi row only has to check the
     # small number of Polymarket rows near it in time, not all of them.
     polymarket_by_bucket: dict[int, list] = {}
-    for p_row, p_words, p_close in polymarket_parsed:
+    for p_row, p_words, p_close, p_numbers in polymarket_parsed:
         bucket = _bucket_key(p_close)
         if bucket is None:
             continue  # no close_time to bucket on — same real, named skip
             # as the original version (can't confirm close-time proximity).
-        polymarket_by_bucket.setdefault(bucket, []).append((p_row, p_words, p_close))
+        polymarket_by_bucket.setdefault(bucket, []).append(
+            (p_row, p_words, p_close, p_numbers)
+        )
 
-    for k_row, k_words, k_close in kalshi_parsed:
+    for k_row, k_words, k_close, k_numbers in kalshi_parsed:
         k_bucket = _bucket_key(k_close)
         if k_bucket is None:
             continue
@@ -223,13 +285,16 @@ def find_candidate_matches(
         for offset in (-1, 0, 1):
             nearby_polymarket_rows.extend(polymarket_by_bucket.get(k_bucket + offset, []))
 
-        for p_row, p_words, p_close in nearby_polymarket_rows:
+        for p_row, p_words, p_close, p_numbers in nearby_polymarket_rows:
             similarity = _jaccard_similarity(k_words, p_words)
             if similarity < MIN_TITLE_SIMILARITY:
                 continue
 
             gap_hours = abs((k_close - p_close).total_seconds()) / 3600.0
             if gap_hours > CLOSE_TIME_TOLERANCE_HOURS:
+                continue
+
+            if not _numbers_are_compatible(k_numbers, p_numbers):
                 continue
 
             candidates.append(
