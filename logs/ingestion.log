@@ -785,3 +785,259 @@
 2026-09-04 19:35:48,232 UTC | WARNING | Filtered out 59970 Kalshi record(s) whose title looks like a multi-leg combo listing (two or more comma-separated 'yes '/'no '-prefixed segments), not a single real-world question — see _is_combo_title()'s docstring for why market_type alone could not be used for this.
 2026-09-04 19:35:48,232 UTC | INFO | Kalshi: 30 normalized rows across 60 page(s)
 2026-09-04 19:35:48,241 UTC | INFO | === Kalshi ingestion run complete: 30 rows (OK) ===
+2026-09-04 19:38:15,660 UTC | INFO | === Kalshi ingestion run starting ===
+2026-09-04 19:38:16,421 UTC | INFO | Kalshi page 1: 1000 markets, next cursor present
+2026-09-04 19:38:16,830 UTC | INFO | Kalshi page 2: 1000 markets, next cursor present
+2026-09-04 19:38:17,233 UTC | INFO | Kalshi page 3: 1000 markets, next cursor present
+2026-09-04 19:38:17,663 UTC | INFO | Kalshi page 4: 1000 markets, next cursor present
+2026-09-04 19:38:18,088 UTC | INFO | Kalshi page 5: 1000 markets, next cursor present
+2026-09-04 19:38:18,450 UTC | INFO | Kalshi page 6: 1000 markets, next cursor present
+2026-09-04 19:38:18,869 UTC | INFO | Kalshi page 7: 1000 markets, next cursor present
+2026-09-04 19:38:19,281 UTC | INFO | Kalshi page 8: 1000 markets, next cursor present
+2026-09-04 19:38:19,692 UTC | INFO | Kalshi page 9: 1000 markets, next cursor present
+2026-09-04 19:38:20,161 UTC | INFO | Kalshi page 10: 1000 markets, next cursor present
+2026-09-04 19:38:20,500 UTC | INFO | Kalshi page 11: 1000 markets, next cursor present
+2026-09-04 19:38:20,875 UTC | INFO | Kalshi page 12: 1000 markets, next cursor present
+2026-09-04 19:38:21,276 UTC | INFO | Kalshi page 13: 1000 markets, next cursor present
+2026-09-04 19:38:21,680 UTC | INFO | Kalshi page 14: 1000 markets, next cursor present
+2026-09-04 19:38:22,037 UTC | INFO | Kalshi page 15: 1000 markets, next cursor present
+2026-09-04 19:38:22,463 UTC | INFO | Kalshi page 16: 1000 markets, next cursor present
+2026-09-04 19:38:22,944 UTC | INFO | Kalshi page 17: 1000 markets, next cursor present
+2026-09-04 19:38:23,332 UTC | INFO | Kalshi page 18: 1000 markets, next cursor present
+2026-09-04 19:38:23,696 UTC | INFO | Kalshi page 19: 1000 markets, next cursor present
+2026-09-04 19:38:24,199 UTC | INFO | Kalshi page 20: 1000 markets, next cursor present
+2026-09-04 19:38:24,653 UTC | INFO | Kalshi page 21: 1000 markets, next cursor present
+2026-09-04 19:38:24,990 UTC | INFO | Kalshi page 22: 1000 markets, next cursor present
+2026-09-04 19:38:25,374 UTC | INFO | Kalshi page 23: 1000 markets, next cursor present
+2026-09-04 19:38:25,755 UTC | INFO | Kalshi page 24: 1000 markets, next cursor present
+2026-09-04 19:38:26,094 UTC | INFO | Kalshi page 25: 1000 markets, next cursor present
+2026-09-04 19:38:26,425 UTC | INFO | Kalshi page 26: 1000 markets, next cursor present
+2026-09-04 19:38:26,857 UTC | INFO | Kalshi page 27: 1000 markets, next cursor present
+2026-09-04 19:38:27,187 UTC | INFO | Kalshi page 28: 1000 markets, next cursor present
+2026-09-04 19:38:27,614 UTC | INFO | Kalshi page 29: 1000 markets, next cursor present
+2026-09-04 19:38:28,027 UTC | INFO | Kalshi page 30: 1000 markets, next cursor present
+2026-09-04 19:38:28,380 UTC | INFO | Kalshi page 31: 1000 markets, next cursor present
+2026-09-04 19:38:28,835 UTC | INFO | Kalshi page 32: 1000 markets, next cursor present
+2026-09-04 19:38:29,184 UTC | INFO | Kalshi page 33: 1000 markets, next cursor present
+2026-09-04 19:38:29,568 UTC | INFO | Kalshi page 34: 1000 markets, next cursor present
+2026-09-04 19:38:29,927 UTC | INFO | Kalshi page 35: 1000 markets, next cursor present
+2026-09-04 19:38:30,333 UTC | INFO | Kalshi page 36: 1000 markets, next cursor present
+2026-09-04 19:38:30,749 UTC | INFO | Kalshi page 37: 1000 markets, next cursor present
+2026-09-04 19:38:31,146 UTC | INFO | Kalshi page 38: 1000 markets, next cursor present
+2026-09-04 19:38:31,535 UTC | INFO | Kalshi page 39: 1000 markets, next cursor present
+2026-09-04 19:38:31,984 UTC | INFO | Kalshi page 40: 1000 markets, next cursor present
+2026-09-04 19:38:32,520 UTC | INFO | Kalshi page 41: 1000 markets, next cursor present
+2026-09-04 19:38:32,900 UTC | INFO | Kalshi page 42: 1000 markets, next cursor present
+2026-09-04 19:38:33,204 UTC | INFO | Kalshi page 43: 1000 markets, next cursor present
+2026-09-04 19:38:33,718 UTC | INFO | Kalshi page 44: 1000 markets, next cursor present
+2026-09-04 19:38:34,198 UTC | INFO | Kalshi page 45: 1000 markets, next cursor present
+2026-09-04 19:38:34,691 UTC | INFO | Kalshi page 46: 1000 markets, next cursor present
+2026-09-04 19:38:35,131 UTC | INFO | Kalshi page 47: 1000 markets, next cursor present
+2026-09-04 19:38:35,607 UTC | INFO | Kalshi page 48: 1000 markets, next cursor present
+2026-09-04 19:38:35,982 UTC | INFO | Kalshi page 49: 1000 markets, next cursor present
+2026-09-04 19:38:36,380 UTC | INFO | Kalshi page 50: 1000 markets, next cursor present
+2026-09-04 19:38:36,737 UTC | INFO | Kalshi page 51: 1000 markets, next cursor present
+2026-09-04 19:38:37,194 UTC | INFO | Kalshi page 52: 1000 markets, next cursor present
+2026-09-04 19:38:37,583 UTC | INFO | Kalshi page 53: 1000 markets, next cursor present
+2026-09-04 19:38:37,987 UTC | INFO | Kalshi page 54: 1000 markets, next cursor present
+2026-09-04 19:38:38,315 UTC | INFO | Kalshi page 55: 1000 markets, next cursor present
+2026-09-04 19:38:38,626 UTC | INFO | Kalshi page 56: 1000 markets, next cursor present
+2026-09-04 19:38:38,962 UTC | INFO | Kalshi page 57: 1000 markets, next cursor present
+2026-09-04 19:38:39,265 UTC | INFO | Kalshi page 58: 1000 markets, next cursor present
+2026-09-04 19:38:39,606 UTC | INFO | Kalshi page 59: 1000 markets, next cursor present
+2026-09-04 19:38:39,954 UTC | INFO | Kalshi page 60: 1000 markets, next cursor present
+2026-09-04 19:38:40,323 UTC | INFO | Kalshi page 61: 1000 markets, next cursor present
+2026-09-04 19:38:40,695 UTC | INFO | Kalshi page 62: 1000 markets, next cursor present
+2026-09-04 19:38:41,017 UTC | INFO | Kalshi page 63: 1000 markets, next cursor present
+2026-09-04 19:38:41,380 UTC | INFO | Kalshi page 64: 1000 markets, next cursor present
+2026-09-04 19:38:41,764 UTC | INFO | Kalshi page 65: 1000 markets, next cursor present
+2026-09-04 19:38:42,129 UTC | INFO | Kalshi page 66: 1000 markets, next cursor present
+2026-09-04 19:38:42,473 UTC | INFO | Kalshi page 67: 1000 markets, next cursor present
+2026-09-04 19:38:42,903 UTC | INFO | Kalshi page 68: 1000 markets, next cursor present
+2026-09-04 19:38:43,264 UTC | INFO | Kalshi page 69: 1000 markets, next cursor present
+2026-09-04 19:38:43,603 UTC | INFO | Kalshi page 70: 1000 markets, next cursor present
+2026-09-04 19:38:44,035 UTC | INFO | Kalshi page 71: 1000 markets, next cursor present
+2026-09-04 19:38:44,444 UTC | INFO | Kalshi page 72: 1000 markets, next cursor present
+2026-09-04 19:38:44,899 UTC | INFO | Kalshi page 73: 1000 markets, next cursor present
+2026-09-04 19:38:45,339 UTC | INFO | Kalshi page 74: 1000 markets, next cursor present
+2026-09-04 19:38:45,699 UTC | INFO | Kalshi page 75: 1000 markets, next cursor present
+2026-09-04 19:38:46,082 UTC | INFO | Kalshi page 76: 1000 markets, next cursor present
+2026-09-04 19:38:46,601 UTC | INFO | Kalshi page 77: 1000 markets, next cursor present
+2026-09-04 19:38:47,003 UTC | INFO | Kalshi page 78: 1000 markets, next cursor present
+2026-09-04 19:38:47,386 UTC | INFO | Kalshi page 79: 1000 markets, next cursor present
+2026-09-04 19:38:47,759 UTC | INFO | Kalshi page 80: 1000 markets, next cursor present
+2026-09-04 19:38:48,136 UTC | INFO | Kalshi page 81: 1000 markets, next cursor present
+2026-09-04 19:38:48,491 UTC | INFO | Kalshi page 82: 1000 markets, next cursor present
+2026-09-04 19:38:48,868 UTC | INFO | Kalshi page 83: 1000 markets, next cursor present
+2026-09-04 19:38:49,274 UTC | INFO | Kalshi page 84: 1000 markets, next cursor present
+2026-09-04 19:38:49,733 UTC | INFO | Kalshi page 85: 1000 markets, next cursor present
+2026-09-04 19:38:50,138 UTC | INFO | Kalshi page 86: 1000 markets, next cursor present
+2026-09-04 19:38:50,534 UTC | INFO | Kalshi page 87: 1000 markets, next cursor present
+2026-09-04 19:38:50,910 UTC | INFO | Kalshi page 88: 1000 markets, next cursor present
+2026-09-04 19:38:51,412 UTC | INFO | Kalshi page 89: 1000 markets, next cursor present
+2026-09-04 19:38:51,851 UTC | INFO | Kalshi page 90: 1000 markets, next cursor present
+2026-09-04 19:38:52,220 UTC | INFO | Kalshi page 91: 1000 markets, next cursor present
+2026-09-04 19:38:52,617 UTC | INFO | Kalshi page 92: 1000 markets, next cursor present
+2026-09-04 19:38:52,969 UTC | INFO | Kalshi page 93: 1000 markets, next cursor present
+2026-09-04 19:38:53,397 UTC | INFO | Kalshi page 94: 1000 markets, next cursor present
+2026-09-04 19:38:53,865 UTC | INFO | Kalshi page 95: 1000 markets, next cursor present
+2026-09-04 19:38:54,289 UTC | INFO | Kalshi page 96: 1000 markets, next cursor present
+2026-09-04 19:38:54,691 UTC | INFO | Kalshi page 97: 1000 markets, next cursor present
+2026-09-04 19:38:55,105 UTC | INFO | Kalshi page 98: 1000 markets, next cursor present
+2026-09-04 19:38:55,474 UTC | INFO | Kalshi page 99: 1000 markets, next cursor present
+2026-09-04 19:38:55,852 UTC | INFO | Kalshi page 100: 1000 markets, next cursor present
+2026-09-04 19:38:56,390 UTC | INFO | Kalshi page 101: 1000 markets, next cursor present
+2026-09-04 19:38:56,843 UTC | INFO | Kalshi page 102: 1000 markets, next cursor present
+2026-09-04 19:38:57,384 UTC | INFO | Kalshi page 103: 1000 markets, next cursor present
+2026-09-04 19:38:57,800 UTC | INFO | Kalshi page 104: 1000 markets, next cursor present
+2026-09-04 19:38:58,238 UTC | INFO | Kalshi page 105: 1000 markets, next cursor present
+2026-09-04 19:38:58,647 UTC | INFO | Kalshi page 106: 1000 markets, next cursor present
+2026-09-04 19:38:59,034 UTC | INFO | Kalshi page 107: 1000 markets, next cursor present
+2026-09-04 19:38:59,427 UTC | INFO | Kalshi page 108: 1000 markets, next cursor present
+2026-09-04 19:38:59,830 UTC | INFO | Kalshi page 109: 1000 markets, next cursor present
+2026-09-04 19:39:00,236 UTC | INFO | Kalshi page 110: 1000 markets, next cursor present
+2026-09-04 19:39:00,629 UTC | INFO | Kalshi page 111: 1000 markets, next cursor present
+2026-09-04 19:39:00,948 UTC | INFO | Kalshi page 112: 1000 markets, next cursor present
+2026-09-04 19:39:01,419 UTC | INFO | Kalshi page 113: 1000 markets, next cursor present
+2026-09-04 19:39:02,512 UTC | INFO | Kalshi page 114: 1000 markets, next cursor present
+2026-09-04 19:39:02,928 UTC | INFO | Kalshi page 115: 1000 markets, next cursor present
+2026-09-04 19:39:03,445 UTC | INFO | Kalshi page 116: 1000 markets, next cursor present
+2026-09-04 19:39:04,031 UTC | INFO | Kalshi page 117: 1000 markets, next cursor present
+2026-09-04 19:39:04,845 UTC | INFO | Kalshi page 118: 1000 markets, next cursor present
+2026-09-04 19:39:05,280 UTC | INFO | Kalshi page 119: 1000 markets, next cursor present
+2026-09-04 19:39:05,782 UTC | INFO | Kalshi page 120: 1000 markets, next cursor present
+2026-09-04 19:39:06,202 UTC | INFO | Kalshi page 121: 1000 markets, next cursor present
+2026-09-04 19:39:06,614 UTC | INFO | Kalshi page 122: 1000 markets, next cursor present
+2026-09-04 19:39:07,044 UTC | INFO | Kalshi page 123: 1000 markets, next cursor present
+2026-09-04 19:39:07,482 UTC | INFO | Kalshi page 124: 1000 markets, next cursor present
+2026-09-04 19:39:07,873 UTC | INFO | Kalshi page 125: 1000 markets, next cursor present
+2026-09-04 19:39:08,341 UTC | INFO | Kalshi page 126: 1000 markets, next cursor present
+2026-09-04 19:39:08,788 UTC | INFO | Kalshi page 127: 1000 markets, next cursor present
+2026-09-04 19:39:09,166 UTC | INFO | Kalshi page 128: 1000 markets, next cursor present
+2026-09-04 19:39:09,667 UTC | INFO | Kalshi page 129: 1000 markets, next cursor present
+2026-09-04 19:39:10,095 UTC | INFO | Kalshi page 130: 1000 markets, next cursor present
+2026-09-04 19:39:10,598 UTC | INFO | Kalshi page 131: 1000 markets, next cursor present
+2026-09-04 19:39:11,056 UTC | INFO | Kalshi page 132: 1000 markets, next cursor present
+2026-09-04 19:39:11,498 UTC | INFO | Kalshi page 133: 1000 markets, next cursor present
+2026-09-04 19:39:11,994 UTC | INFO | Kalshi page 134: 1000 markets, next cursor present
+2026-09-04 19:39:12,424 UTC | INFO | Kalshi page 135: 1000 markets, next cursor present
+2026-09-04 19:39:12,871 UTC | INFO | Kalshi page 136: 1000 markets, next cursor present
+2026-09-04 19:39:13,274 UTC | INFO | Kalshi page 137: 1000 markets, next cursor present
+2026-09-04 19:39:13,717 UTC | INFO | Kalshi page 138: 1000 markets, next cursor present
+2026-09-04 19:39:14,124 UTC | INFO | Kalshi page 139: 1000 markets, next cursor present
+2026-09-04 19:39:14,530 UTC | INFO | Kalshi page 140: 1000 markets, next cursor present
+2026-09-04 19:39:14,962 UTC | INFO | Kalshi page 141: 1000 markets, next cursor present
+2026-09-04 19:39:15,443 UTC | INFO | Kalshi page 142: 1000 markets, next cursor present
+2026-09-04 19:39:15,819 UTC | INFO | Kalshi page 143: 1000 markets, next cursor present
+2026-09-04 19:39:16,227 UTC | INFO | Kalshi page 144: 1000 markets, next cursor present
+2026-09-04 19:39:16,634 UTC | INFO | Kalshi page 145: 1000 markets, next cursor present
+2026-09-04 19:39:17,047 UTC | INFO | Kalshi page 146: 1000 markets, next cursor present
+2026-09-04 19:39:17,428 UTC | INFO | Kalshi page 147: 1000 markets, next cursor present
+2026-09-04 19:39:17,803 UTC | INFO | Kalshi page 148: 1000 markets, next cursor present
+2026-09-04 19:39:18,253 UTC | INFO | Kalshi page 149: 1000 markets, next cursor present
+2026-09-04 19:39:18,652 UTC | INFO | Kalshi page 150: 1000 markets, next cursor present
+2026-09-04 19:39:19,027 UTC | INFO | Kalshi page 151: 1000 markets, next cursor present
+2026-09-04 19:39:19,517 UTC | INFO | Kalshi page 152: 1000 markets, next cursor present
+2026-09-04 19:39:19,977 UTC | INFO | Kalshi page 153: 1000 markets, next cursor present
+2026-09-04 19:39:20,404 UTC | INFO | Kalshi page 154: 1000 markets, next cursor present
+2026-09-04 19:39:20,855 UTC | INFO | Kalshi page 155: 1000 markets, next cursor present
+2026-09-04 19:39:21,333 UTC | INFO | Kalshi page 156: 1000 markets, next cursor present
+2026-09-04 19:39:21,803 UTC | INFO | Kalshi page 157: 1000 markets, next cursor present
+2026-09-04 19:39:22,268 UTC | INFO | Kalshi page 158: 1000 markets, next cursor present
+2026-09-04 19:39:22,725 UTC | INFO | Kalshi page 159: 1000 markets, next cursor present
+2026-09-04 19:39:23,101 UTC | INFO | Kalshi page 160: 1000 markets, next cursor present
+2026-09-04 19:39:23,536 UTC | INFO | Kalshi page 161: 1000 markets, next cursor present
+2026-09-04 19:39:24,063 UTC | INFO | Kalshi page 162: 1000 markets, next cursor present
+2026-09-04 19:39:24,435 UTC | INFO | Kalshi page 163: 1000 markets, next cursor present
+2026-09-04 19:39:24,840 UTC | INFO | Kalshi page 164: 1000 markets, next cursor present
+2026-09-04 19:39:25,172 UTC | INFO | Kalshi page 165: 1000 markets, next cursor present
+2026-09-04 19:39:25,547 UTC | INFO | Kalshi page 166: 1000 markets, next cursor present
+2026-09-04 19:39:25,941 UTC | INFO | Kalshi page 167: 1000 markets, next cursor present
+2026-09-04 19:39:26,346 UTC | INFO | Kalshi page 168: 1000 markets, next cursor present
+2026-09-04 19:39:26,777 UTC | INFO | Kalshi page 169: 1000 markets, next cursor present
+2026-09-04 19:39:27,218 UTC | INFO | Kalshi page 170: 1000 markets, next cursor present
+2026-09-04 19:39:27,733 UTC | INFO | Kalshi page 171: 1000 markets, next cursor present
+2026-09-04 19:39:28,203 UTC | INFO | Kalshi page 172: 1000 markets, next cursor present
+2026-09-04 19:39:28,634 UTC | INFO | Kalshi page 173: 1000 markets, next cursor present
+2026-09-04 19:39:29,105 UTC | INFO | Kalshi page 174: 1000 markets, next cursor present
+2026-09-04 19:39:29,515 UTC | INFO | Kalshi page 175: 1000 markets, next cursor present
+2026-09-04 19:39:30,027 UTC | INFO | Kalshi page 176: 1000 markets, next cursor present
+2026-09-04 19:39:30,528 UTC | INFO | Kalshi page 177: 1000 markets, next cursor present
+2026-09-04 19:39:31,045 UTC | INFO | Kalshi page 178: 1000 markets, next cursor present
+2026-09-04 19:39:31,490 UTC | INFO | Kalshi page 179: 1000 markets, next cursor present
+2026-09-04 19:39:32,037 UTC | INFO | Kalshi page 180: 1000 markets, next cursor present
+2026-09-04 19:39:32,494 UTC | INFO | Kalshi page 181: 1000 markets, next cursor present
+2026-09-04 19:39:32,967 UTC | INFO | Kalshi page 182: 1000 markets, next cursor present
+2026-09-04 19:39:33,515 UTC | INFO | Kalshi page 183: 1000 markets, next cursor present
+2026-09-04 19:39:34,130 UTC | INFO | Kalshi page 184: 1000 markets, next cursor present
+2026-09-04 19:39:34,763 UTC | INFO | Kalshi page 185: 1000 markets, next cursor present
+2026-09-04 19:39:35,331 UTC | INFO | Kalshi page 186: 1000 markets, next cursor present
+2026-09-04 19:39:35,866 UTC | INFO | Kalshi page 187: 1000 markets, next cursor present
+2026-09-04 19:39:36,444 UTC | INFO | Kalshi page 188: 1000 markets, next cursor present
+2026-09-04 19:39:36,895 UTC | INFO | Kalshi page 189: 1000 markets, next cursor present
+2026-09-04 19:39:37,421 UTC | INFO | Kalshi page 190: 1000 markets, next cursor present
+2026-09-04 19:39:37,861 UTC | INFO | Kalshi page 191: 1000 markets, next cursor present
+2026-09-04 19:39:38,353 UTC | INFO | Kalshi page 192: 1000 markets, next cursor present
+2026-09-04 19:39:38,759 UTC | INFO | Kalshi page 193: 1000 markets, next cursor present
+2026-09-04 19:39:39,167 UTC | INFO | Kalshi page 194: 1000 markets, next cursor present
+2026-09-04 19:39:39,616 UTC | INFO | Kalshi page 195: 1000 markets, next cursor present
+2026-09-04 19:39:40,006 UTC | INFO | Kalshi page 196: 1000 markets, next cursor present
+2026-09-04 19:39:40,405 UTC | INFO | Kalshi page 197: 1000 markets, next cursor present
+2026-09-04 19:39:40,915 UTC | INFO | Kalshi page 198: 1000 markets, next cursor present
+2026-09-04 19:39:41,333 UTC | INFO | Kalshi page 199: 1000 markets, next cursor present
+2026-09-04 19:39:41,718 UTC | INFO | Kalshi page 200: 1000 markets, next cursor present
+2026-09-04 19:39:41,719 UTC | WARNING | Kalshi pagination hit MAX_PAGES (200) without an empty cursor — stopped early. Real market count may be larger than what was pulled this run.
+2026-09-04 19:39:56,389 UTC | WARNING | Filtered out 199019 Kalshi record(s) whose title looks like a multi-leg combo listing (two or more comma-separated 'yes '/'no '-prefixed segments), not a single real-world question — see _is_combo_title()'s docstring for why market_type alone could not be used for this.
+2026-09-04 19:39:56,390 UTC | INFO | Kalshi: 200000 raw records pulled, 199019 filtered out as combo listings, 981 single-question rows kept
+2026-09-04 19:39:56,424 UTC | INFO | === Kalshi ingestion run complete: 981 single-question rows kept (OK) ===
+2026-09-04 19:40:30,391 UTC | INFO | === Polymarket ingestion run starting ===
+2026-09-04 19:40:30,931 UTC | INFO | Polymarket page 1: 100 events (requested limit 200)
+2026-09-04 19:40:30,931 UTC | INFO | Page 1 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:31,916 UTC | INFO | Polymarket page 2: 100 events (requested limit 200)
+2026-09-04 19:40:31,916 UTC | INFO | Page 2 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:32,213 UTC | INFO | Polymarket page 3: 100 events (requested limit 200)
+2026-09-04 19:40:32,213 UTC | INFO | Page 3 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:32,778 UTC | INFO | Polymarket page 4: 100 events (requested limit 200)
+2026-09-04 19:40:32,779 UTC | INFO | Page 4 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:33,359 UTC | INFO | Polymarket page 5: 100 events (requested limit 200)
+2026-09-04 19:40:33,360 UTC | INFO | Page 5 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:33,932 UTC | INFO | Polymarket page 6: 100 events (requested limit 200)
+2026-09-04 19:40:33,932 UTC | INFO | Page 6 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:34,567 UTC | INFO | Polymarket page 7: 100 events (requested limit 200)
+2026-09-04 19:40:34,567 UTC | INFO | Page 7 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:35,083 UTC | INFO | Polymarket page 8: 100 events (requested limit 200)
+2026-09-04 19:40:35,083 UTC | INFO | Page 8 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:35,666 UTC | INFO | Polymarket page 9: 100 events (requested limit 200)
+2026-09-04 19:40:35,667 UTC | INFO | Page 9 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:36,095 UTC | INFO | Polymarket page 10: 100 events (requested limit 200)
+2026-09-04 19:40:36,095 UTC | INFO | Page 10 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:36,351 UTC | INFO | Polymarket page 11: 100 events (requested limit 200)
+2026-09-04 19:40:36,351 UTC | INFO | Page 11 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:36,823 UTC | INFO | Polymarket page 12: 100 events (requested limit 200)
+2026-09-04 19:40:36,824 UTC | INFO | Page 12 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:37,160 UTC | INFO | Polymarket page 13: 100 events (requested limit 200)
+2026-09-04 19:40:37,160 UTC | INFO | Page 13 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:37,629 UTC | INFO | Polymarket page 14: 100 events (requested limit 200)
+2026-09-04 19:40:37,630 UTC | INFO | Page 14 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:37,956 UTC | INFO | Polymarket page 15: 100 events (requested limit 200)
+2026-09-04 19:40:37,957 UTC | INFO | Page 15 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:38,498 UTC | INFO | Polymarket page 16: 100 events (requested limit 200)
+2026-09-04 19:40:38,498 UTC | INFO | Page 16 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:38,949 UTC | INFO | Polymarket page 17: 100 events (requested limit 200)
+2026-09-04 19:40:38,949 UTC | INFO | Page 17 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:39,454 UTC | INFO | Polymarket page 18: 100 events (requested limit 200)
+2026-09-04 19:40:39,454 UTC | INFO | Page 18 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:39,738 UTC | INFO | Polymarket page 19: 100 events (requested limit 200)
+2026-09-04 19:40:39,738 UTC | INFO | Page 19 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:40,407 UTC | INFO | Polymarket page 20: 100 events (requested limit 200)
+2026-09-04 19:40:40,407 UTC | INFO | Page 20 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:40,779 UTC | INFO | Polymarket page 21: 100 events (requested limit 200)
+2026-09-04 19:40:40,780 UTC | INFO | Page 21 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:40:40,979 UTC | WARNING | Attempt 1/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:40:44,249 UTC | WARNING | Attempt 2/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:40:47,462 UTC | WARNING | Attempt 3/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:40:47,462 UTC | WARNING | Page 22 failed after retries (All attempts failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false) — stopping pagination here and keeping the 21 page(s) already collected, rather than discarding a real, partially-successful run.
+2026-09-04 19:40:48,803 UTC | INFO | Polymarket: 20713 normalized rows across 21 page(s)
+2026-09-04 19:40:49,356 UTC | INFO | === Polymarket ingestion run complete: 20713 rows (OK) ===
+2026-09-04 19:40:51,024 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 19:40:51,322 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 981 Kalshi rows x 20713 Polymarket rows ===
