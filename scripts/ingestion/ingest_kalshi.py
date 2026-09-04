@@ -94,16 +94,24 @@ RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
 LIMIT_PER_PAGE = 1000  # Kalshi's own docs confirm 1000 is the real per-page
 # maximum for this endpoint (1-1000 allowed, 100 is only the default when
-# no limit is given). The first real run of this script used 200 and hit
-# its MAX_PAGES safety cap after only 5,000 of Kalshi's real "tens of
-# thousands" of open markets (per Kalshi's own API vendor docs) — raising
-# this to the documented real maximum cuts the number of pages needed by
-# 5x for the same total market count.
-MAX_PAGES = 60  # hard safety cap — ~60,000 markets at the new page size;
-# prevents a runaway loop if Kalshi's cursor pagination ever returns a
-# cursor that never terminates. Raised from Session 3.1's first real run,
-# which showed the true open-market count is meaningfully above the old
-# 5,000-market cap.
+# no limit is given).
+MAX_PAGES = 200  # RAISED (Session 3.1, sixth real run, 2026-09-04): a real
+# run at the previous cap (60 pages / 60,000 raw records) kept only 30
+# single-question markets after the new combo-listing filter — suspiciously
+# few, given a single city's temperature contracts alone produced about 10
+# markets in earlier samples. The real, likely explanation: Kalshi's
+# /markets endpoint appears to return combo/multi-leg listings clustered
+# toward the front of its result order (plausibly because many are
+# freshly created right around game time), so a 60-page window mostly
+# shows combo listings and reaches few of the real single-question
+# markets sitting further back in the true full list. Raising this cap no
+# longer risks the file-size problem from earlier in this session, since
+# combo listings are now filtered out before being written to the
+# normalized CSV — the raw record count pulled can be much larger without
+# the final saved file growing to match. 200 pages (up to 200,000 raw
+# records) is chosen as comfortably above Kalshi's own documented "tens
+# of thousands of markets" scale, to actually reach a real empty cursor
+# rather than stopping at another arbitrary window.
 
 
 def setup_logging() -> logging.Logger:
@@ -329,7 +337,9 @@ def run() -> dict:
 
     summary = {
         "pulled_at": pulled_at,
-        "kalshi_rows": 0,
+        "kalshi_raw_records_pulled": 0,
+        "kalshi_combo_records_filtered_out": 0,
+        "kalshi_rows_kept": 0,
         "kalshi_ok": False,
     }
 
@@ -338,10 +348,19 @@ def run() -> dict:
     try:
         pages = fetch_kalshi_markets()
         save_raw_snapshot(pages, pulled_at_compact)
+        raw_count = sum(len(page.get("markets", [])) for page in pages)
         rows = normalize_kalshi(pages, pulled_at)
-        summary["kalshi_rows"] = len(rows)
+        summary["kalshi_raw_records_pulled"] = raw_count
+        summary["kalshi_combo_records_filtered_out"] = raw_count - len(rows)
+        summary["kalshi_rows_kept"] = len(rows)
         summary["kalshi_ok"] = True
-        log.info("Kalshi: %d normalized rows across %d page(s)", len(rows), len(pages))
+        log.info(
+            "Kalshi: %d raw records pulled, %d filtered out as combo "
+            "listings, %d single-question rows kept",
+            raw_count,
+            raw_count - len(rows),
+            len(rows),
+        )
     except Exception as exc:  # noqa: BLE001 — an outage must not crash the
         # whole pipeline; write whatever we have (nothing, in this case).
         log.error("Kalshi ingestion failed for this run: %s", exc)
@@ -353,12 +372,11 @@ def run() -> dict:
     write_normalized_csv(latest_path, rows)  # overwrite, not append
 
     log.info(
-        "=== Kalshi ingestion run complete: %d rows (%s) ===",
+        "=== Kalshi ingestion run complete: %d single-question rows kept (%s) ===",
         len(rows),
         "OK" if summary["kalshi_ok"] else "FAILED",
     )
 
-    summary["total_rows"] = len(rows)
     summary["snapshot_path"] = str(snapshot_path)
     return summary
 
