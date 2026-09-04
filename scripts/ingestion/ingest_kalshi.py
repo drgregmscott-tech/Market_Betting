@@ -192,6 +192,7 @@ def fetch_kalshi_markets() -> list[dict]:
 # --------------------------------------------------------------------------
 def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContract]:
     rows: list[NormalizedContract] = []
+    skipped_non_binary: dict[str, int] = {}
 
     for page in pages:
         markets = page.get("markets")
@@ -204,6 +205,32 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
 
         for record in markets:
             try:
+                # FILTER FOUND AND ADDED (Session 3.1, fourth real run,
+                # 2026-09-04): a real run's title-sample check found that
+                # the vast majority of Kalshi's "open markets" pull (59,068
+                # of 60,000 real rows) were NOT single-question markets
+                # like the temperature contracts this project sampled
+                # earlier — their "title" field is dozens of individual
+                # outcomes concatenated with commas (e.g. team names, run
+                # totals, player props), consistent with Kalshi's
+                # documented "multivariate markets" contract type, a
+                # structurally different combo/multi-leg product, not the
+                # single yes/no question venue_matcher.py is built to
+                # compare against Polymarket. Every genuinely single-
+                # question market this project has directly observed
+                # carries market_type == "binary" — every OTHER value is
+                # filtered out here, and every distinct non-binary value
+                # actually seen is counted and logged below (not assumed
+                # in advance), so the next real run tells us directly
+                # whether this filter is catching the right thing rather
+                # than this comment asserting it with more confidence than
+                # the evidence supports.
+                market_type = record.get("market_type")
+                if market_type != "binary":
+                    key = str(market_type)
+                    skipped_non_binary[key] = skipped_non_binary.get(key, 0) + 1
+                    continue
+
                 rows.append(
                     NormalizedContract(
                         platform="kalshi",
@@ -230,6 +257,17 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                 # never take down the whole run.
                 log.warning("Skipped one malformed Kalshi record: %s", exc)
                 continue
+
+    if skipped_non_binary:
+        total_skipped = sum(skipped_non_binary.values())
+        log.warning(
+            "Filtered out %d non-binary Kalshi record(s), by market_type: %s. "
+            "These are combo/multivariate-style contracts (see this "
+            "function's own comment for why), not single-question markets "
+            "venue_matcher.py can meaningfully compare against Polymarket.",
+            total_skipped,
+            skipped_non_binary,
+        )
 
     return rows
 
