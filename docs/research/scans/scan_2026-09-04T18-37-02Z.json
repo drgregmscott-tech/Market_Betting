@@ -1,0 +1,58 @@
+{
+  "run_timestamp_utc": "2026-09-04T18-37-02Z",
+  "prizepicks": {
+    "total_projections": 41852,
+    "league_counts": {
+      "NFL": 5736,
+      "SOCCER": 12358,
+      "DARTS": 96,
+      "EPL1H": 112,
+      "EPL": 4090,
+      "VAL": 22,
+      "CS2": 30,
+      "FIBA": 12,
+      "MLB": 9627,
+      "TENNIS": 934,
+      "MLBLIVE": 1461,
+      "CFB": 4331,
+      "CFB1H": 154,
+      "CRICKET": 10,
+      "CFL": 18,
+      "CFBSZN": 79,
+      "APEX": 23,
+      "NPB": 30,
+      "AFL": 39,
+      "LoL": 86,
+      "KBO": 23,
+      "HANDBALL": 18,
+      "UFC": 113,
+      "R6": 44,
+      "F1": 16,
+      "NASCAR": 16,
+      "LAX": 29,
+      "NFL1H": 640,
+      "NFLSZN": 1318,
+      "BOXING": 2,
+      "NHLSZN": 143,
+      "NBA": 194,
+      "NBASZN": 48
+    }
+  },
+  "underdog": {
+    "total_lines": 343,
+    "total_appearances": 222,
+    "games_sport_id_counts": {},
+    "solo_games_sport_id_counts": {
+      "TENNIS": 34
+    },
+    "players_sport_id_counts": {
+      "NFL": 145,
+      "CFB": 2,
+      "TENNIS": 63
+    },
+    "appearances_match_type_counts": {
+      "Series": 147,
+      "SoloGame": 75
+    }
+  }
+}
