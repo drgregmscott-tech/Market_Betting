@@ -164,7 +164,30 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> list:
 def fetch_polymarket_events() -> list[list]:
     """Pulls every open, active event across all pages. Returns the raw
     page payloads (each a list of event dicts) so save_raw_snapshot can
-    archive exactly what Polymarket returned."""
+    archive exactly what Polymarket returned.
+
+    BUG FOUND AND FIXED (Session 3.1, second real run, 2026-09-04): the
+    previous version let a single failed page raise all the way up to
+    run(), whose broad except block then discarded every page already
+    collected — a real run that successfully pulled 21 pages (2,100 real
+    events) lost all of them the moment page 22 failed, and reported 0
+    rows for the whole run. This is the same mistake Session 2.2's
+    ingest_pickem.py was explicitly built to avoid at the platform level
+    (one platform's failure must not cost the other platform's already-
+    fetched data) — here the same principle applies one level down, at
+    the page level within a single platform.
+
+    The real run's page 22 failed with HTTP 422 (Unprocessable Entity) at
+    offset=2100. The exact cause is not fully confirmed — it may be a real
+    maximum-offset limit on this endpoint, or the query running past the
+    real number of currently active events for this filter combination —
+    but either interpretation points to the same correct behavior: a 422
+    during PAGINATION (as opposed to the very first page failing outright)
+    is treated as "no more real data reachable this way," not as a fatal
+    error. The pages already collected are kept and returned; a 422 (or
+    any other failure) on page 1 itself still surfaces as a real, named
+    failure, since there is no partial data to fall back to in that case.
+    """
     pages: list[list] = []
     offset = 0
     for page_num in range(1, MAX_PAGES + 1):
@@ -174,7 +197,22 @@ def fetch_polymarket_events() -> list[list]:
             "active": "true",
             "closed": "false",
         }
-        payload = _fetch_with_retries(POLYMARKET_EVENTS_ENDPOINT, params=params)
+        try:
+            payload = _fetch_with_retries(POLYMARKET_EVENTS_ENDPOINT, params=params)
+        except RuntimeError as exc:
+            if page_num == 1:
+                # No partial data exists yet — this really is a fatal
+                # failure for this run, same as before.
+                raise
+            log.warning(
+                "Page %d failed after retries (%s) — stopping pagination "
+                "here and keeping the %d page(s) already collected, "
+                "rather than discarding a real, partially-successful run.",
+                page_num,
+                exc,
+                len(pages),
+            )
+            break
         if not isinstance(payload, list):
             log.error(
                 "Polymarket /events response was not a list — schema may "
