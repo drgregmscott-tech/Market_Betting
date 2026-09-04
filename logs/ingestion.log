@@ -261,3 +261,117 @@
 2026-09-04 18:54:32,513 UTC | INFO | === Polymarket ingestion run complete: 1221 rows (OK) ===
 2026-09-04 18:54:37,052 UTC | INFO | === Venue matcher run starting ===
 2026-09-04 18:54:41,506 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 5000 Kalshi rows x 1221 Polymarket rows ===
+2026-09-04 19:03:09,261 UTC | INFO | === Kalshi ingestion run starting ===
+2026-09-04 19:03:09,626 UTC | INFO | Kalshi page 1: 1000 markets, next cursor present
+2026-09-04 19:03:10,049 UTC | INFO | Kalshi page 2: 1000 markets, next cursor present
+2026-09-04 19:03:10,497 UTC | INFO | Kalshi page 3: 1000 markets, next cursor present
+2026-09-04 19:03:10,875 UTC | INFO | Kalshi page 4: 1000 markets, next cursor present
+2026-09-04 19:03:11,306 UTC | INFO | Kalshi page 5: 1000 markets, next cursor present
+2026-09-04 19:03:11,686 UTC | INFO | Kalshi page 6: 1000 markets, next cursor present
+2026-09-04 19:03:12,125 UTC | INFO | Kalshi page 7: 1000 markets, next cursor present
+2026-09-04 19:03:12,650 UTC | INFO | Kalshi page 8: 1000 markets, next cursor present
+2026-09-04 19:03:13,100 UTC | INFO | Kalshi page 9: 1000 markets, next cursor present
+2026-09-04 19:03:13,493 UTC | INFO | Kalshi page 10: 1000 markets, next cursor present
+2026-09-04 19:03:13,876 UTC | INFO | Kalshi page 11: 1000 markets, next cursor present
+2026-09-04 19:03:15,580 UTC | INFO | Kalshi page 12: 1000 markets, next cursor present
+2026-09-04 19:03:15,922 UTC | INFO | Kalshi page 13: 1000 markets, next cursor present
+2026-09-04 19:03:16,224 UTC | INFO | Kalshi page 14: 1000 markets, next cursor present
+2026-09-04 19:03:16,503 UTC | INFO | Kalshi page 15: 1000 markets, next cursor present
+2026-09-04 19:03:16,846 UTC | INFO | Kalshi page 16: 1000 markets, next cursor present
+2026-09-04 19:03:17,195 UTC | INFO | Kalshi page 17: 1000 markets, next cursor present
+2026-09-04 19:03:17,519 UTC | INFO | Kalshi page 18: 1000 markets, next cursor present
+2026-09-04 19:03:17,872 UTC | INFO | Kalshi page 19: 1000 markets, next cursor present
+2026-09-04 19:03:18,153 UTC | INFO | Kalshi page 20: 1000 markets, next cursor present
+2026-09-04 19:03:18,420 UTC | INFO | Kalshi page 21: 1000 markets, next cursor present
+2026-09-04 19:03:18,876 UTC | INFO | Kalshi page 22: 1000 markets, next cursor present
+2026-09-04 19:03:19,262 UTC | INFO | Kalshi page 23: 1000 markets, next cursor present
+2026-09-04 19:03:19,679 UTC | INFO | Kalshi page 24: 1000 markets, next cursor present
+2026-09-04 19:03:20,090 UTC | INFO | Kalshi page 25: 1000 markets, next cursor present
+2026-09-04 19:03:20,526 UTC | INFO | Kalshi page 26: 1000 markets, next cursor present
+2026-09-04 19:03:20,908 UTC | INFO | Kalshi page 27: 1000 markets, next cursor present
+2026-09-04 19:03:21,345 UTC | INFO | Kalshi page 28: 1000 markets, next cursor present
+2026-09-04 19:03:21,796 UTC | INFO | Kalshi page 29: 1000 markets, next cursor present
+2026-09-04 19:03:22,177 UTC | INFO | Kalshi page 30: 1000 markets, next cursor present
+2026-09-04 19:03:24,435 UTC | INFO | Kalshi page 31: 1000 markets, next cursor present
+2026-09-04 19:03:24,689 UTC | INFO | Kalshi page 32: 1000 markets, next cursor present
+2026-09-04 19:03:25,034 UTC | INFO | Kalshi page 33: 1000 markets, next cursor present
+2026-09-04 19:03:25,394 UTC | INFO | Kalshi page 34: 1000 markets, next cursor present
+2026-09-04 19:03:25,803 UTC | INFO | Kalshi page 35: 1000 markets, next cursor present
+2026-09-04 19:03:26,079 UTC | INFO | Kalshi page 36: 1000 markets, next cursor present
+2026-09-04 19:03:26,405 UTC | INFO | Kalshi page 37: 1000 markets, next cursor present
+2026-09-04 19:03:26,789 UTC | INFO | Kalshi page 38: 1000 markets, next cursor present
+2026-09-04 19:03:27,073 UTC | INFO | Kalshi page 39: 1000 markets, next cursor present
+2026-09-04 19:03:27,396 UTC | INFO | Kalshi page 40: 1000 markets, next cursor present
+2026-09-04 19:03:27,807 UTC | INFO | Kalshi page 41: 1000 markets, next cursor present
+2026-09-04 19:03:28,085 UTC | INFO | Kalshi page 42: 1000 markets, next cursor present
+2026-09-04 19:03:28,363 UTC | INFO | Kalshi page 43: 1000 markets, next cursor present
+2026-09-04 19:03:28,643 UTC | INFO | Kalshi page 44: 1000 markets, next cursor present
+2026-09-04 19:03:28,918 UTC | INFO | Kalshi page 45: 1000 markets, next cursor present
+2026-09-04 19:03:29,332 UTC | INFO | Kalshi page 46: 1000 markets, next cursor present
+2026-09-04 19:03:29,719 UTC | INFO | Kalshi page 47: 1000 markets, next cursor present
+2026-09-04 19:03:30,114 UTC | INFO | Kalshi page 48: 1000 markets, next cursor present
+2026-09-04 19:03:30,920 UTC | INFO | Kalshi page 49: 1000 markets, next cursor present
+2026-09-04 19:03:32,364 UTC | INFO | Kalshi page 50: 1000 markets, next cursor present
+2026-09-04 19:03:32,873 UTC | INFO | Kalshi page 51: 1000 markets, next cursor present
+2026-09-04 19:03:33,742 UTC | INFO | Kalshi page 52: 1000 markets, next cursor present
+2026-09-04 19:03:34,885 UTC | INFO | Kalshi page 53: 1000 markets, next cursor present
+2026-09-04 19:03:35,389 UTC | INFO | Kalshi page 54: 1000 markets, next cursor present
+2026-09-04 19:03:35,747 UTC | INFO | Kalshi page 55: 1000 markets, next cursor present
+2026-09-04 19:03:36,154 UTC | INFO | Kalshi page 56: 1000 markets, next cursor present
+2026-09-04 19:03:36,581 UTC | INFO | Kalshi page 57: 1000 markets, next cursor present
+2026-09-04 19:03:36,967 UTC | INFO | Kalshi page 58: 1000 markets, next cursor present
+2026-09-04 19:03:37,387 UTC | INFO | Kalshi page 59: 1000 markets, next cursor present
+2026-09-04 19:03:37,772 UTC | INFO | Kalshi page 60: 1000 markets, next cursor present
+2026-09-04 19:03:37,772 UTC | WARNING | Kalshi pagination hit MAX_PAGES (60) without an empty cursor — stopped early. Real market count may be larger than what was pulled this run.
+2026-09-04 19:03:42,341 UTC | INFO | Kalshi: 60000 normalized rows across 60 page(s)
+2026-09-04 19:03:44,226 UTC | INFO | === Kalshi ingestion run complete: 60000 rows (OK) ===
+2026-09-04 19:03:46,908 UTC | INFO | === Polymarket ingestion run starting ===
+2026-09-04 19:03:47,321 UTC | INFO | Polymarket page 1: 100 events (requested limit 200)
+2026-09-04 19:03:47,321 UTC | INFO | Page 1 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:47,617 UTC | INFO | Polymarket page 2: 100 events (requested limit 200)
+2026-09-04 19:03:47,617 UTC | INFO | Page 2 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:47,837 UTC | INFO | Polymarket page 3: 100 events (requested limit 200)
+2026-09-04 19:03:47,837 UTC | INFO | Page 3 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:48,742 UTC | INFO | Polymarket page 4: 100 events (requested limit 200)
+2026-09-04 19:03:48,742 UTC | INFO | Page 4 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:49,053 UTC | INFO | Polymarket page 5: 100 events (requested limit 200)
+2026-09-04 19:03:49,054 UTC | INFO | Page 5 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:49,305 UTC | INFO | Polymarket page 6: 100 events (requested limit 200)
+2026-09-04 19:03:49,306 UTC | INFO | Page 6 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:49,569 UTC | INFO | Polymarket page 7: 100 events (requested limit 200)
+2026-09-04 19:03:49,569 UTC | INFO | Page 7 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:49,860 UTC | INFO | Polymarket page 8: 100 events (requested limit 200)
+2026-09-04 19:03:49,860 UTC | INFO | Page 8 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:50,177 UTC | INFO | Polymarket page 9: 100 events (requested limit 200)
+2026-09-04 19:03:50,177 UTC | INFO | Page 9 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:50,510 UTC | INFO | Polymarket page 10: 100 events (requested limit 200)
+2026-09-04 19:03:50,510 UTC | INFO | Page 10 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:50,781 UTC | INFO | Polymarket page 11: 100 events (requested limit 200)
+2026-09-04 19:03:50,781 UTC | INFO | Page 11 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:51,769 UTC | INFO | Polymarket page 12: 100 events (requested limit 200)
+2026-09-04 19:03:51,770 UTC | INFO | Page 12 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:52,053 UTC | INFO | Polymarket page 13: 100 events (requested limit 200)
+2026-09-04 19:03:52,054 UTC | INFO | Page 13 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:53,138 UTC | INFO | Polymarket page 14: 100 events (requested limit 200)
+2026-09-04 19:03:53,138 UTC | INFO | Page 14 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:53,579 UTC | INFO | Polymarket page 15: 100 events (requested limit 200)
+2026-09-04 19:03:53,580 UTC | INFO | Page 15 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:54,179 UTC | INFO | Polymarket page 16: 100 events (requested limit 200)
+2026-09-04 19:03:54,179 UTC | INFO | Page 16 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:54,739 UTC | INFO | Polymarket page 17: 100 events (requested limit 200)
+2026-09-04 19:03:54,740 UTC | INFO | Page 17 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:55,047 UTC | INFO | Polymarket page 18: 100 events (requested limit 200)
+2026-09-04 19:03:55,047 UTC | INFO | Page 18 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:55,437 UTC | INFO | Polymarket page 19: 100 events (requested limit 200)
+2026-09-04 19:03:55,438 UTC | INFO | Page 19 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:57,118 UTC | INFO | Polymarket page 20: 100 events (requested limit 200)
+2026-09-04 19:03:57,119 UTC | INFO | Page 20 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:57,396 UTC | INFO | Polymarket page 21: 100 events (requested limit 200)
+2026-09-04 19:03:57,397 UTC | INFO | Page 21 returned fewer rows (100) than requested (200) — Polymarket's known per-page cap, not necessarily end of data. Continuing pagination.
+2026-09-04 19:03:57,605 UTC | WARNING | Attempt 1/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:04:00,838 UTC | WARNING | Attempt 2/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:04:04,654 UTC | WARNING | Attempt 3/3 failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:04:04,655 UTC | ERROR | Polymarket ingestion failed for this run: All attempts failed for https://gamma-api.polymarket.com/events: 422 Client Error: Unprocessable Entity for url: https://gamma-api.polymarket.com/events?limit=200&offset=2100&active=true&closed=false
+2026-09-04 19:04:04,659 UTC | INFO | === Polymarket ingestion run complete: 0 rows (FAILED) ===
+2026-09-04 19:04:08,372 UTC | INFO | === Venue matcher run starting ===
+2026-09-04 19:04:09,767 UTC | INFO | === Venue matcher run complete: 0 candidate pairs from 60000 Kalshi rows x 0 Polymarket rows ===

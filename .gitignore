@@ -1,0 +1,29 @@
+# Session 3.1 — added to fix a real problem found this session: Kalshi's
+# raw market-data snapshot hit ~51 MB at a real run's market count (60,000
+# markets), right at GitHub's 50 MB warning line and on track to cross its
+# 100 MB hard push limit as this project's caps are raised further. Every
+# ingestion run also creates a NEW, separately-named raw file (see
+# ingest_kalshi.py / ingest_polymarket.py's save_raw_snapshot functions),
+# so committing these forever grows the repo, run after run, even if any
+# single file stays under the limit.
+#
+# DECISION (2026-09-04): raw JSON snapshots for exchange-style venues
+# (Kalshi, Polymarket) are still written locally every run — kept for
+# debugging a future schema change, the same reason Session 2.2's
+# ingest_pickem.py saves raw snapshots for the pick'em platforms — but are
+# no longer committed to the repo. The normalized CSV (a small fraction of
+# the raw size, since it keeps only the 14 fields this project actually
+# uses) remains the real, committed historical record for these venues.
+# This is a deliberate, named deviation from Session 2.2's original
+# "commit raw + normalized every run" pattern, not a silent one — that
+# pattern was built around the pick'em platforms' much smaller real data
+# volume and does not scale to an exchange with tens of thousands of
+# open markets.
+data/exchange/raw/
+
+# Standard Python housekeeping — not yet present in this repo, added
+# alongside the entry above since a .gitignore did not exist before this
+# session.
+__pycache__/
+*.pyc
+.venv/
