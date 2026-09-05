@@ -1,6 +1,6 @@
 """
-Session 3.1 / 3.1b — Kalshi Ingestion (Multi-Venue Data Ingestion +
-Narrow Down-Ballot Politics/Elections)
+Session 3.1 / 3.1b / 3.2 - Kalshi Ingestion (Multi-Venue Data Ingestion +
+Narrow Down-Ballot Politics/Elections + Arbitrage Detection Logic support)
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -9,38 +9,38 @@ into the common exchange-venue schema defined in schema_exchange.py, the
 same defensive pattern Session 2.2's ingest_pickem.py established for the
 pick'em platforms.
 
-TARGETED PULL, NOT A FULL-CATALOG FIREHOSE — REAL REVERSAL FROM SESSION 3.1
+TARGETED PULL, NOT A FULL-CATALOG FIREHOSE - REAL REVERSAL FROM SESSION 3.1
 -------------------------------------------------------------------------
 Earlier versions of this script pulled Kalshi's ENTIRE open-market catalog
 (GET /markets with no series filter) and paged as deep as practical hoping
 the markets this project actually cares about would surface. A real run
 showed why that doesn't work: Kalshi's catalog is dominated by combo/
 multi-leg contracts (199,019 of 200,000 raw records in one real run), and
-even paging 200,000 records deep turned up ZERO real weather markets —
+even paging 200,000 records deep turned up ZERO real weather markets -
 they were apparently buried even further back by the sheer volume of
 combo listings. Confirmed directly against Kalshi's own real,
 unauthenticated `GET /series` endpoint (2026-09-04, 13,816 total series
 returned, no API key required): Kalshi's series are organized into named
 categories, and this project's actual in-scope categories per Session
-0.1 — "Climate and Weather" (367 series) and "Commodities" (81 series) —
+0.1 - "Climate and Weather" (367 series) and "Commodities" (81 series) -
 are a small, fully enumerable slice of the whole catalog. Rather than
 searching for a needle in an ever-growing haystack, this script now:
 1. Pulls the full series list once (GET /series, confirmed public).
 2. Filters, client-side, to series whose category is "Climate and Weather"
-   or "Commodities" — the two categories matching Session 0.1's actual
+   or "Commodities" - the two categories matching Session 0.1's actual
    edge thesis (see ROADMAP.md's Track 3 scoping).
 3. For each matching series (~448), pulls its open markets directly via
-   GET /markets?series_ticker=<ticker>&status=open — a small, targeted
+   GET /markets?series_ticker=<ticker>&status=open - a small, targeted
    call per series, rather than paging through the unfiltered firehose.
 
 This is a real, deliberate scope narrowing WITHIN Kalshi ingestion, logged
-explicitly as such — not a silent one.
+explicitly as such - not a silent one.
 
-SESSION 3.1b — NARROW DOWN-BALLOT POLITICS/ELECTIONS, ADDED THIS SESSION
+SESSION 3.1b - NARROW DOWN-BALLOT POLITICS/ELECTIONS
 -------------------------------------------------------------------------
 Session 3.1 deliberately left Kalshi's "Politics" (2,296 series, confirmed
 live 2026-09-04) and "Elections" (1,704 series, confirmed live) categories
-unpulled — Session 0.1's real scope decision was narrow, down-ballot races
+unpulled - Session 0.1's real scope decision was narrow, down-ballot races
 specifically (individual U.S. House seats and individual state-legislature
 seats), not politics or national elections broadly. Pulling either category
 whole would have reintroduced the same scope drift this project has caught
@@ -50,19 +50,19 @@ This session designed and applied a real, checkable filter for "narrow
 down-ballot," built directly from live data rather than assumed:
 
 - The "Politics" category (2,296 series) was checked directly and found to
-  contain ZERO individual-district race series — it is national political
+  contain ZERO individual-district race series - it is national political
   news, executive-branch actions, and officeholder-status questions (e.g.
   "Jared Polis out as Governor of Colorado?"), not races. It is NOT pulled
   by this filter.
 - The "Elections" category (1,704 series) is where real race series live.
   Checked directly, three distinct tiers were found:
-  1. Individual U.S. House district races (89 series) — Kalshi tags these
+  1. Individual U.S. House district races (89 series) - Kalshi tags these
      "House" (excluding the separate "House Combos" tag, which covers
      multi-race combo contracts, not single races) and uses a structural
      ticker pattern: "HOUSE" or "KXHOUSE" followed by a two-letter state
      code and a district number (e.g. HOUSECA9, KXHOUSEMO5, KXHOUSEUT02,
-     HOUSEAKAL for an at-large seat). This structural check — the same
-     kind of approach already used by _is_combo_title() below — correctly
+     HOUSEAKAL for an at-large seat). This structural check - the same
+     kind of approach already used by _is_combo_title() below - correctly
      excludes non-district House-tagged series like "Next DCCC Chair,"
      "Will Republicans lose control of the House?" and combo contracts
      (verified against all 116 "House"-tagged series: 89 real district
@@ -72,32 +72,20 @@ down-ballot," built directly from live data rather than assumed:
   2. Individual state-legislature district races (4 series found live:
      California State Senate District 26, Pennsylvania State House
      District 12, Maryland State Senate District 2, Missouri State Senate
-     District 8) — identified by a structural title pattern ("State
+     District 8) - identified by a structural title pattern ("State
      House/Senate/Assembly District <number>"), the same kind of title-
      text race identifier already observed live in Polymarket's own
      election-market titles per Open Decision #20's original note.
-  3. City/county-level district races (14 series found live — 13 NYC City
-     Council district seats, 1 Los Angeles City Council district seat) —
+  3. City/county-level district races (14 series found live - 13 NYC City
+     Council district seats, 1 Los Angeles City Council district seat) -
      a real, genuinely down-ballot tier, but one level below "House/State
      seats" as Session 0.1's scope was literally worded. Checked directly
      and DECIDED, together with the project owner, NOT to include this
-     tier for now: the test applied was whether a real, independent,
-     per-seat probability estimate can be built to compare against
-     Kalshi's price, the same test the state-legislature tier passed (see
-     below). For city/county races, only ad hoc journalism naming a
-     handful of competitive seats per cycle was found — no systematic,
-     per-seat forecast model covering every district. Kalshi's own live
-     order books confirmed this isn't just a research gap: 6 of the 7 NYC
-     City Council series sampled had NO open market running at all; the
-     one that did (LA City Council District 13) is itself one of the
-     handful of seats that gets real news coverage, not representative of
-     the rest. This is a "can't yet determine a real edge" result, not a
-     "no edge exists" result — see classify_down_ballot() below for the
-     specifics, and revisit if a comprehensive per-seat local-election
-     forecast source is found later.
+     tier for now - see SESSION_LOG.md's Session 3.1b entry for the full
+     evidence trail.
   Statewide races (Governor: 71 series; U.S. Senate: 121 series) were
   checked directly and confirmed to be exactly what Session 0.1 called
-  "marquee" — one race per state, high media attention — and are
+  "marquee" - one race per state, high media attention - and are
   deliberately EXCLUDED by this filter, matching the "not national or
   marquee races" half of Open Decision #20's definition.
 
@@ -116,14 +104,29 @@ Each matched series is tagged with a specific category string at write time
 in the output CSV without needing to re-derive it from the ticker or title
 later.
 
-ACCESS — RESOLVED SESSION 3.1 (Open Decision #3, Kalshi half)
+SESSION 3.2 - REAL YES_ASK_SIZE / YES_BID_SIZE NOW CAPTURED
+-------------------------------------------------------------------------
+Live validation of Session 3.2's arbitrage detector against real Kalshi
+data (multiple KXHIGHPHIL weather strikes, the real KXHOUSEMO5 down-ballot
+race - 2026-09-05) found that Kalshi's `liquidity_dollars` field reads
+"0.0000" on every real market checked, even ones with substantial real
+size resting on the book (one real KXHOUSEMO5 leg had 116.02 contracts at
+its best ask). That field is therefore useless as a liquidity signal for
+Kalshi specifically - see liquidity_check.py's Session 3.2 notes for the
+full evidence trail and the fix. The real, populated fields Kalshi's
+market payload DOES carry - `yes_ask_size_fp` and `yes_bid_size_fp` - are
+now captured into the normalized schema (`schema_exchange.py`'s new
+`yes_ask_size` / `yes_bid_size` columns) so the arbitrage detector's
+liquidity check has real numbers to work with for Kalshi rows.
+
+ACCESS - RESOLVED SESSION 3.1 (Open Decision #3, Kalshi half)
 ------------------------------------------------------------------
 Confirmed live 2026-09-04: both GET /series and GET /markets require NO
 API key and NO account. This is an OFFICIAL, documented part of Kalshi's
 own API (https://docs.kalshi.com), not an undocumented endpoint found by
 inspection. Authenticated endpoints (placing orders, viewing a personal
 portfolio) DO require an RSA-PSS-signed request and real API credentials
-— this script never touches those, since Session 3.1 is read-only
+- this script never touches those, since Session 3.1 is read-only
 ingestion.
 
 Base URL used: https://api.elections.kalshi.com/trade-api/v2 (Kalshi's own
@@ -132,11 +135,11 @@ subdomain name).
 
 WHERE OUTPUT GOES
 ------------------
-/data/exchange/raw/kalshi_<timestamp>.json — the exact, unmodified series
-    list and per-series market responses pulled, saved every run.
-/data/exchange/normalized/kalshi_markets_<timestamp>.csv — one normalized
-    snapshot per run.
-/data/exchange/normalized/kalshi_latest.csv — always overwritten each run.
+/data/exchange/raw/kalshi_<timestamp>.json - the exact, unmodified series
+list and per-series market responses pulled, saved every run.
+/data/exchange/normalized/kalshi_markets_<timestamp>.csv - one normalized
+snapshot per run.
+/data/exchange/normalized/kalshi_latest.csv - always overwritten each run.
 
 USAGE
 -----
@@ -159,7 +162,7 @@ import requests
 from schema_exchange import NORMALIZED_EXCHANGE_COLUMNS, NormalizedContract
 
 # --------------------------------------------------------------------------
-# Paths — all relative to the repo root. Run this script from the repo root
+# Paths - all relative to the repo root. Run this script from the repo root
 # (or adjust BASE_DIR) so these resolve correctly.
 # --------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -185,14 +188,14 @@ REQUEST_TIMEOUT_SECONDS = 15
 
 # Real Kalshi category names, confirmed live 2026-09-04 against GET
 # /series (13,816 total series). Matches Session 0.1's Track 3 scope
-# ("Climate/Commodities") directly. Pulled in full — every series in these
+# ("Climate/Commodities") directly. Pulled in full - every series in these
 # two categories is in scope, no further filtering needed.
 TARGET_CATEGORIES = ["Climate and Weather", "Commodities"]
 
-# Session 3.1b — the Kalshi category real down-ballot race series live in.
+# Session 3.1b - the Kalshi category real down-ballot race series live in.
 # Confirmed live 2026-09-04: "Politics" (2,296 series) contains no
 # individual-district race series at all; "Elections" (1,704 series) does.
-# Series in this category are NOT pulled in full — only the narrow subset
+# Series in this category are NOT pulled in full - only the narrow subset
 # matched by classify_down_ballot() below is kept. See module docstring for
 # the full evidence trail.
 DOWN_BALLOT_CATEGORY = "Elections"
@@ -203,7 +206,7 @@ DOWN_BALLOT_CATEGORY = "Elections"
 # KXHOUSEUT02, HOUSEAKAL (at-large), KXHOUSENJ11SPECIAL (special election).
 # Deliberately does NOT match leadership races ("Next DCCC Chair"), chamber-
 # control aggregates ("Will Republicans lose control of the House?"), or
-# combo contracts — verified directly, not assumed (see module docstring).
+# combo contracts - verified directly, not assumed (see module docstring).
 _HOUSE_DISTRICT_TICKER_PATTERN = re.compile(
     r"^K?X?HOUSE([A-Z]{2})(\d{1,3}[A-Z]{0,2}|AL)(SPECIAL)?$"
 )
@@ -217,13 +220,13 @@ _STATE_LEG_DISTRICT_PATTERN = re.compile(
 
 # Structural title pattern for city/county-level district races (e.g. "NYC
 # City Council District 4," "Los Angeles City Council District 13
-# winner"). NOT currently pulled — kept here, dead but documented, so this
+# winner"). NOT currently pulled - kept here, dead but documented, so this
 # can be switched back on quickly if the reason below changes.
 #
 # DECISION (2026-09-04, made directly with the project owner): city/county
 # races are EXCLUDED from this filter for now. The test applied was
 # whether a real, independent, per-seat probability estimate can be built
-# to compare against Kalshi's price — the same test State Legislature
+# to compare against Kalshi's price - the same test State Legislature
 # passed (see below). For city/county races, live research found only
 # journalism naming a handful of competitive seats each cycle (e.g. City &
 # State NY's "races to watch"), not a systematic per-seat forecast model
@@ -232,7 +235,7 @@ _STATE_LEG_DISTRICT_PATTERN = re.compile(
 # market at all; the one that did (LA City Council District 13) is itself
 # one of the handful of seats that gets real news coverage, not
 # representative of the rest. This is a "can't yet determine a real edge"
-# result, not a "no edge exists" result — revisit if a comprehensive,
+# result, not a "no edge exists" result - revisit if a comprehensive,
 # per-seat local-election forecast source is found later.
 _CITY_COUNTY_DISTRICT_PATTERN = re.compile(
     r"city council district \d+|county (commission|council) district \d+"
@@ -246,7 +249,7 @@ def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]
     be a genuine, individual-district race with a real, checkable basis
     for an independent edge estimate, or None if the series is not in
     scope. This is the actual, checkable "narrow down-ballot" filter Open
-    Decision #20 called for — built from live examples, not a subjective
+    Decision #20 called for - built from live examples, not a subjective
     per-race judgment call.
 
     Two tiers are in scope:
@@ -258,7 +261,7 @@ def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]
       lean data for all 7,388 state-legislative seats nationwide).
 
     City/county-level district races (NYC/LA City Council, etc.) are
-    checked for and deliberately NOT returned as a tier — see the
+    checked for and deliberately NOT returned as a tier - see the
     DECISION note above _CITY_COUNTY_DISTRICT_PATTERN for why."""
     tags = tags or []
     title = title or ""
@@ -270,7 +273,7 @@ def classify_down_ballot(ticker: str, title: Optional[str], tags: Optional[list]
     if _STATE_LEG_DISTRICT_PATTERN.search(title):
         return "Elections - State Legislature District"
 
-    # City/county district races are deliberately excluded — see DECISION
+    # City/county district races are deliberately excluded - see DECISION
     # note above. Left as an explicit, named no-op (rather than simply
     # omitted) so a future session doesn't have to re-derive why this
     # pattern exists but isn't used.
@@ -331,10 +334,10 @@ def fetch_target_series_tickers():
     """Pulls Kalshi's full series list once and filters, client-side, to
     this project's target categories, PLUS the narrow down-ballot subset
     of the Elections category (Session 3.1b). Confirmed live 2026-09-04:
-    GET /series returns ALL series in one call (no pagination needed —
+    GET /series returns ALL series in one call (no pagination needed -
     13,816 returned directly), each with a real 'category' field and a
     'tags' field, so no category query-parameter guessing is needed.
-    Returns (matching_tickers, all_series, down_ballot_tier_by_ticker) —
+    Returns (matching_tickers, all_series, down_ballot_tier_by_ticker) -
     all_series is kept so run() can build a ticker->category map without a
     second API call; down_ballot_tier_by_ticker lets run() tag each
     down-ballot row with its specific tier instead of the generic
@@ -343,7 +346,7 @@ def fetch_target_series_tickers():
     all_series = payload.get("series", payload if isinstance(payload, list) else [])
     if not isinstance(all_series, list):
         raise RuntimeError(
-            "GET /series response was not in the expected shape — schema "
+            "GET /series response was not in the expected shape - schema "
             "may have changed."
         )
 
@@ -366,7 +369,7 @@ def fetch_target_series_tickers():
     log.info(
         "Series discovery: %d total series pulled, %d match Climate/"
         "Commodities, %d match narrow down-ballot (House: %d, state "
-        "legislature: %d) — %d target series total. City/county district "
+        "legislature: %d) - %d target series total. City/county district "
         "races are deliberately excluded (see classify_down_ballot()).",
         len(all_series),
         len(climate_commodity_tickers),
@@ -380,7 +383,7 @@ def fetch_target_series_tickers():
 
 def fetch_markets_for_series(tickers: list[str]) -> list[dict]:
     """Pulls open markets for each target series individually. Each
-    series's failure is isolated — one bad/unreachable series must not
+    series's failure is isolated - one bad/unreachable series must not
     lose markets already pulled for the others, same 'don't discard real
     partial progress' principle applied to ingest_polymarket.py's page-
     level failures earlier this session."""
@@ -414,14 +417,14 @@ def fetch_markets_for_series(tickers: list[str]) -> list[dict]:
             "%d of %d target series could not be fetched this run: %s",
             len(failed_tickers),
             len(tickers),
-            failed_tickers[:20],  # cap the printed list — could be long
+            failed_tickers[:20],  # cap the printed list - could be long
         )
 
     return pages
 
 
 # --------------------------------------------------------------------------
-# Normalizer — defensive by design, same reasoning as ingest_pickem.py: a
+# Normalizer - defensive by design, same reasoning as ingest_pickem.py: a
 # missing/renamed field on one row causes that row to be skipped (with a
 # warning), not the whole run to fail.
 # --------------------------------------------------------------------------
@@ -432,7 +435,7 @@ def _is_combo_title(title: Optional[str]) -> bool:
     """Detects Kalshi's multi-leg combo-contract titles by STRUCTURE
     (see this project's SESSION_LOG.md for the full discovery story of
     why market_type alone can't be used for this). Kept as a defensive
-    check even with the new targeted series pull — Climate and Weather/
+    check even with the new targeted series pull - Climate and Weather/
     Commodities are not known to carry combo-style contracts, but this
     costs nothing to leave in place in case that assumption is ever
     wrong, and it's cheaper to filter defensively than to assume a
@@ -452,7 +455,7 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
         markets = page.get("markets")
         if not isinstance(markets, list):
             log.error(
-                "Kalshi page missing expected 'markets' list — schema may "
+                "Kalshi page missing expected 'markets' list - schema may "
                 "have changed. Skipping this page for this run."
             )
             continue
@@ -473,13 +476,20 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                         # Category IS now known (this run only pulled
                         # target-category series), filled in by the
                         # caller in run() via a ticker->category map, not
-                        # guessed here — the raw market object itself
+                        # guessed here - the raw market object itself
                         # still doesn't carry a category field.
                         category=None,
                         yes_bid=_to_float(record.get("yes_bid_dollars")),
                         yes_ask=_to_float(record.get("yes_ask_dollars")),
                         no_bid=_to_float(record.get("no_bid_dollars")),
                         no_ask=_to_float(record.get("no_ask_dollars")),
+                        # Session 3.2 addition - see this file's own
+                        # "SESSION 3.2" module-docstring section and
+                        # liquidity_check.py for why these two fields
+                        # exist and why liquidity_dollars (below) is not
+                        # trusted for Kalshi rows despite being pulled.
+                        yes_ask_size=_to_float(record.get("yes_ask_size_fp")),
+                        yes_bid_size=_to_float(record.get("yes_bid_size_fp")),
                         volume=_to_float(record.get("volume_fp")),
                         liquidity=_to_float(record.get("liquidity_dollars")),
                         close_time=record.get("close_time"),
@@ -487,7 +497,7 @@ def normalize_kalshi(pages: list[dict], pulled_at: str) -> list[NormalizedContra
                         pulled_at=pulled_at,
                     )
                 )
-            except Exception as exc:  # noqa: BLE001 — one bad record must
+            except Exception as exc:  # noqa: BLE001 - one bad record must
                 # never take down the whole run.
                 log.warning("Skipped one malformed Kalshi record: %s", exc)
                 continue
@@ -542,7 +552,7 @@ def write_normalized_csv(path: Path, rows: list[NormalizedContract]) -> None:
 # Main pipeline
 # --------------------------------------------------------------------------
 def run() -> dict:
-    """Runs one full ingestion pass. Never raises — every failure mode is
+    """Runs one full ingestion pass. Never raises - every failure mode is
     caught, logged, and reflected in the summary instead, same contract as
     ingest_pickem.py's run()."""
     pulled_at = datetime.now(timezone.utc).isoformat()
@@ -582,7 +592,7 @@ def run() -> dict:
 
         # Map ticker -> category, so each row can be tagged with its real
         # category even though the /markets response itself doesn't
-        # include one — filled in below, not guessed. Down-ballot tickers
+        # include one - filled in below, not guessed. Down-ballot tickers
         # get their specific tier label instead of the generic Kalshi
         # category, so a row's tier is visible directly in the output CSV.
         category_by_ticker = {
@@ -624,7 +634,7 @@ def run() -> dict:
             raw_count - len(rows),
             len(rows),
         )
-    except Exception as exc:  # noqa: BLE001 — an outage must not crash the
+    except Exception as exc:  # noqa: BLE001 - an outage must not crash the
         # whole pipeline; write whatever we have (nothing, in this case).
         log.error("Kalshi ingestion failed for this run: %s", exc)
         rows = []
