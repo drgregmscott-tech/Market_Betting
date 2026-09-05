@@ -1261,14 +1261,14 @@ rebuilt — adds a second target-category set alongside Climate/Commodities)
 ---
 
 ### Session 3.2 — Arbitrage Detection Logic
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-05) — see SESSION_LOG.md for full detail,
+including two real bugs found and fixed against live Kalshi/Polymarket data
+mid-session (Open Decision #21's fix, and a previously-unknown Kalshi
+liquidity-field defect).
 **Prerequisites:** Session 3.1 complete (with Open Decision #17 — no live
 matched pair yet for Climate/Weather — carried forward as a known gap, not
-a blocker) and Session 3.1b complete (with Open Decision #21 — a real, live
-matched pair exists for down-ballot U.S. House races, but `venue_matcher.py`'s
-close-time-proximity check needs a fix specific to Kalshi's political-contract
-timestamps before it will actually catch it — see SESSION_LOG.md's Session
-3.1b entry).
+a blocker) and Session 3.1b complete (with Open Decision #21 — now resolved
+this session, see below).
 
 **What gets built:** Pure price-comparison logic — flags cases where the same
 outcome is priced inconsistently across venues (including single-market YES+NO ≠
@@ -1280,22 +1280,53 @@ a real arbitrage) and **legal footprint** (confirms both venues in a flagged pai
 are legally available in the user's jurisdiction before the opportunity is
 surfaced, not just priced).
 
-**Files touched:** `/scripts/arbitrage/detector.py`,
+**Files touched:** `/scripts/arbitrage/detector.py` (new),
 `/scripts/arbitrage/liquidity_check.py` (new),
 `/docs/venue_legal_footprint.md` (new — per-venue, per-state availability
-reference, checked at flag time)
+reference, checked at flag time), `/scripts/ingestion/venue_matcher.py`
+(modified — Open Decision #21 fix), `/scripts/ingestion/schema_exchange.py`
+(modified — two new fields added mid-session after a real Kalshi data
+defect was found), `/scripts/ingestion/ingest_kalshi.py` (modified — same
+reason)
 
 **Validation (required to close session):**
-- [ ] Detection logic correctly flags a known historical or simulated arbitrage
-      case
-- [ ] Fee-adjusted profit calculation confirmed accurate (manually cross-checked
-      on at least 2 real examples)
-- [ ] False-positive check: confirms it does NOT flag price differences that
-      don't actually clear fees
-- [ ] Liquidity check confirmed: a flagged opportunity includes the real
-      available size at that price, not just the headline price
-- [ ] Legal footprint check confirmed: a flagged opportunity is suppressed or
-      clearly labeled if either venue isn't legally available to the user
+- [x] Detection logic correctly flags a known historical or simulated arbitrage
+      case — confirmed both single-venue (same-market YES+NO) and
+      cross-venue (matched-pair) shapes against constructed test cases, then
+      re-run against real live Kalshi/Polymarket prices for the real MO-05
+      down-ballot race (see below) with the correct real-world result: no
+      arbitrage, since real markets are efficient right now.
+- [x] Fee-adjusted profit calculation confirmed accurate (manually cross-checked
+      on at least 2 real examples) — hand-computed Kalshi's and Polymarket's
+      own published fee formulas and confirmed exact agreement with each
+      venue's own published fee table (e.g. Polymarket Politics at 30¢ =
+      $0.84/100 shares; Kalshi at 30¢ = $1.47/100 contracts).
+- [x] False-positive check: confirms it does NOT flag price differences that
+      don't actually clear fees — confirmed on a razor-thin constructed case
+      and, more importantly, on real current MO-05 prices (real gross costs
+      of $1.00–$1.05, correctly producing zero flags). Caught and fixed a
+      real floating-point rounding bug along the way where an exact-
+      breakeven case was silently dropped.
+- [x] Liquidity check confirmed: a flagged opportunity includes the real
+      available size at that price, not just the headline price — **a real
+      bug was found here against live data and fixed within this session,
+      not deferred.** Kalshi's `liquidity_dollars` field was found to read
+      `"0.0000"` on every real Kalshi market pulled (multiple KXHIGHPHIL
+      weather strikes, both real legs of KXHOUSEMO5), despite real,
+      substantial size resting on the book. Fixed by capturing Kalshi's
+      real `yes_ask_size_fp`/`yes_bid_size_fp` fields (new
+      `schema_exchange.py`/`ingest_kalshi.py` columns) and using those for
+      Kalshi legs specifically, while keeping Polymarket's own `liquidity`
+      field (confirmed real and populated) for Polymarket legs. Re-validated
+      against the real MO-05 data after the fix: correctly reports a real,
+      non-zero fillable size instead of a false $0.00.
+- [x] Legal footprint check confirmed: a flagged opportunity is suppressed or
+      clearly labeled if either venue isn't legally available to the user —
+      mechanism confirmed working (Kalshi's real, confirmed Sports-contract
+      state restrictions are modeled and would suppress/label a flag if this
+      project's tracks ever included Kalshi Sports). Honest, named gap: no
+      comparably detailed Polymarket-specific state-restriction list was
+      found this session — see Open Decision #22 below.
 
 ---
 
@@ -2089,28 +2120,34 @@ remaining blockers to starting Phase 2.
     a real per-seat forecast-data-availability test, while city/county
     races (14 series) do not — see SESSION_LOG.md's Session 3.1b entry for
     the full evidence trail. 93 real down-ballot series are now ingested.
-21. **New, opened Session 3.1b:** `venue_matcher.py`'s close-time-
-    proximity check (6-hour tolerance, tuned against Session 3.1's weather-
-    market data) does not account for Kalshi's down-ballot political
-    contracts setting `close_time` to the post-election swearing-in/
-    contract-expiration date rather than the election date itself —
-    confirmed across 3 real tickers (MO-05, PA House District 12, MO
-    Senate District 8), all showing the same `2027-11-03` close_time
-    regardless of race type. Polymarket's `endDate` for the same real races
-    is the actual election date (e.g. `2026-11-04` for MO-05). A real, live
-    matched pair for MO-05 was confirmed present on both venues — title
-    similarity and the numeric-compatibility check both pass easily — but
-    the close-time check as currently configured would still reject it,
-    since the two venues' timestamps are roughly a year apart for the same
-    real-world race. **Action needed, before Session 3.2's matching logic
-    is considered final for down-ballot politics:** either derive a second,
-    election-date-specific timestamp for Kalshi's political contracts to
-    match against, or add a per-category matching rule that relaxes/
-    replaces the close-time check for the Elections category specifically.
-    Not a blocker for closing Session 3.1b — carried forward by direct
-    agreement with the user, since changing `venue_matcher.py`'s matching
-    logic belongs to Session 3.2's scope, not the ingestion session that
-    found the issue.
+21. ~~New, opened Session 3.1b: `venue_matcher.py`'s close-time-proximity
+    check does not account for Kalshi's down-ballot political contracts
+    setting `close_time` to the post-election swearing-in date...~~
+    **Resolved 2026-09-05 (Session 3.2), confirmed against real live data.**
+    Kalshi rows tagged with an Elections category now match against
+    Polymarket using a separate, 400-day close-time tolerance (vs. the
+    default 6 hours) plus a raised title-similarity bar (0.5 vs. 0.35) to
+    compensate for the looser time check — see `venue_matcher.py`'s own
+    "SESSION 3.2 FIX" docstring section for the full rationale. Verified
+    live: pulled the real `KXHOUSEMO5-26-R`/`-D` markets (real close_time
+    `2027-11-03T15:00:00Z`) and the real Polymarket "MO-05 House Election
+    Winner" markets (real endDate `2026-11-04T00:00:00Z`, an 8,751-hour
+    gap) and confirmed the matcher now correctly proposes both legs as
+    candidate matches (title similarity 0.625, well above the 0.5 bar).
+22. **New, opened Session 3.2:** no comparably detailed Polymarket-specific
+    state-by-state legal-restriction list was found this session, unlike
+    Kalshi's confirmed Sports-contract restriction list (AZ, MA, MD, MI,
+    MT, NV, OH). `detector.py`'s `fully_available_states()` currently
+    returns `both_available_nationally = True` for every flagged pair as a
+    result, since none of this project's current tracks intersect Kalshi's
+    one confirmed restriction and no comparable Polymarket restriction was
+    found — a named, honest gap (see `/docs/venue_legal_footprint.md`),
+    not a verified clean bill of health. **Action needed:** research
+    Polymarket US's (QCX LLC) real state-by-state availability with the
+    same depth Kalshi Sports already has, before this project's scope
+    reaches a track where a Polymarket-side restriction could actually
+    matter (most relevant once Track 6 — flagship sports/exchange markets
+    — is built, per Session 3.2's own legal-footprint doc).
 
 ---
 *Update this file at the close of each future session, per the project's

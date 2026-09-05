@@ -2970,3 +2970,198 @@ Open Decision #17 (Climate/Weather, no live match yet). Session 3.4
 (Automation Adaptation) is still where the actual GitHub Actions workflow
 for this pipeline gets built — nothing changed about that timing this
 session.
+
+---
+
+## Session 3.2 — Arbitrage Detection Logic
+
+**Date completed:** 2026-09-05
+**Status:** ✅ Complete
+
+**What was actually done:**
+Built the core price-comparison logic for cross-venue and single-venue
+arbitrage detection, fee-adjusted against each venue's real, current fee
+schedule rather than the raw price gap. Two real bugs were found and
+fixed against live Kalshi/Polymarket data pulled directly via Claude in
+Chrome mid-session, not deferred to a later session:
+
+1. **Built `detector.py`**, checking two distinct arbitrage shapes: (a)
+   single-venue YES+NO mispricing (a venue's own YES and NO contract on
+   the same market summing to under $1.00), and (b) cross-venue
+   matched-pair mispricing (buying YES on one venue and NO on the other,
+   per a `venue_matcher.py` candidate pair, for under $1.00 combined).
+   Both shapes price every leg at each venue's real TAKER fee rate —
+   Kalshi: `round_up(0.07 × C × P × (1-P))` per the venue's own published
+   fee schedule; Polymarket: `FeeRate_by_category × C × P × (1-P)`, with
+   real category-specific rates (0.04 Politics, 0.05 Weather, etc.) pulled
+   directly from Polymarket's current docs. This is a real, current pull
+   — Session 0.1's original research predates Polymarket's 2026 fee
+   rollout (Polymarket was previously near fee-free) and would have been
+   silently stale if reused here.
+2. **Manually cross-checked both fee formulas against 2+ real examples**
+   and found exact agreement with each venue's own published fee table
+   (Polymarket Politics at 30¢: $0.84/100 shares in both places; Kalshi at
+   30¢: $1.47/100 contracts in both places) — the formulas are not
+   approximations, they reproduce the venues' own numbers exactly.
+3. **Built `liquidity_check.py`** to attach a real fillable size to every
+   flag, and **`/docs/venue_legal_footprint.md`** to document what is and
+   isn't known about state-level legal availability across the two
+   venues, per Session 0.1's five per-venue evaluation criteria.
+4. **Fixed Open Decision #21 in `venue_matcher.py`** — added a
+   category-specific matching path for down-ballot Elections rows,
+   using a 400-day close-time tolerance (vs. the default 6 hours) and a
+   raised title-similarity bar (0.5 vs. 0.35) to compensate. Validated
+   first against a constructed test case, then against real live data
+   (see Validation results below) — this is the first Open Decision in
+   this project closed out with live evidence rather than a synthetic
+   case alone.
+5. **Pulled real, live Kalshi and Polymarket data directly** (via Claude
+   in Chrome, hitting both venues' real public API endpoints — Kalshi's
+   `GET /series`/`GET /markets`, Polymarket's Gamma API) specifically to
+   validate the detector and matcher against real numbers rather than
+   only constructed test cases. This surfaced a real, previously-unknown
+   defect (see item 6) that no amount of synthetic testing would have
+   caught, since the defect was in what real data actually looks like,
+   not in the detection logic itself.
+6. **Found and fixed a real Kalshi data defect discovered only by pulling
+   live data:** Kalshi's `liquidity_dollars` field reads `"0.0000"` on
+   every single real market checked this session (multiple KXHIGHPHIL
+   weather strikes, both real legs of the real KXHOUSEMO5 down-ballot
+   race), including markets with substantial real size resting on the
+   book (one real leg had 116.02 contracts at its best ask, tens of
+   thousands of contracts in real volume). This is systematic, not a
+   stale-market fluke. Fixed by extending `schema_exchange.py` with two
+   new fields (`yes_ask_size`, `yes_bid_size`), updating
+   `ingest_kalshi.py`'s normalizer to populate them from Kalshi's real,
+   populated `yes_ask_size_fp`/`yes_bid_size_fp` fields, and rewriting
+   `liquidity_check.py` to use those fields for Kalshi legs specifically
+   while keeping Polymarket's own `liquidity` field (confirmed real and
+   populated, e.g. $9,746.02 on the real MO-05 Republican market) for
+   Polymarket legs. This required reopening two Session 3.1 files
+   (`schema_exchange.py`, `ingest_kalshi.py`) after Session 3.1 had
+   already closed — done with the user's explicit go-ahead, on the
+   stated principle that these are working documents that should be
+   revisited when new evidence requires it, not treated as frozen once a
+   session closes.
+7. **Found and fixed a real floating-point rounding bug** in the
+   false-positive threshold check: an intentionally constructed
+   exact-breakeven test case (gross cost $0.95, fees $0.04, leaving
+   exactly $0.01 of real profit) was being silently dropped, because
+   `1.0 - 0.95 - 0.04` evaluates to `0.009999999999999933` in binary
+   floating point, a hair under the `MIN_NET_PROFIT_FRACTION = 0.01`
+   threshold despite there being no real cent of shortfall. Fixed by
+   rounding the net-profit calculation to 6 decimal places before the
+   threshold comparison, in both the single-venue and cross-venue
+   detection functions.
+
+**Files created/modified:**
+- `/scripts/arbitrage/detector.py` (new)
+- `/scripts/arbitrage/liquidity_check.py` (new)
+- `/docs/venue_legal_footprint.md` (new)
+- `/scripts/ingestion/venue_matcher.py` (modified — Open Decision #21 fix)
+- `/scripts/ingestion/schema_exchange.py` (modified — added
+  `yes_ask_size`/`yes_bid_size` fields, both defaulted to `None` so
+  `ingest_polymarket.py` needed no changes)
+- `/scripts/ingestion/ingest_kalshi.py` (modified — populates the two new
+  fields from real Kalshi data)
+
+**Validation results:**
+- [x] **Detection logic correctly flags a known historical or simulated
+  arbitrage case** — pass. Confirmed on constructed test cases for both
+  shapes, then re-run against real current Kalshi/Polymarket MO-05 prices
+  and correctly found zero arbitrage (real markets are efficient right
+  now — the correct real-world answer, not a bug).
+- [x] **Fee-adjusted profit calculation confirmed accurate (manually
+  cross-checked on at least 2 real examples)** — pass. Hand-computed
+  values matched both venues' own published fee tables exactly (see item
+  2 above).
+- [x] **False-positive check: confirms it does NOT flag price differences
+  that don't actually clear fees** — pass. Confirmed on a constructed
+  razor-thin case and on real MO-05 prices (real gross costs of
+  $1.00–$1.05 across both legs and both directions, correctly producing
+  zero flags). The float-precision bug (item 7) was caught and fixed
+  during this same validation pass, not after.
+- [x] **Liquidity check confirmed: a flagged opportunity includes the
+  real available size at that price, not just the headline price** —
+  pass, after a real fix. Initial version relied on Kalshi's dead
+  `liquidity_dollars` field and would have reported every Kalshi-involving
+  flag as illiquid; fixed per item 6 above and re-validated against real
+  MO-05 data, correctly reporting a real, non-zero fillable size ($15.28,
+  bound by the real, thinner Kalshi leg) instead of a false $0.00.
+- [x] **Legal footprint check confirmed: a flagged opportunity is
+  suppressed or clearly labeled if either venue isn't legally available
+  to the user** — pass, with an honest documented gap. The mechanism
+  works (Kalshi's confirmed Sports-contract state restrictions are
+  modeled correctly); no comparably detailed Polymarket-specific
+  restriction list was found this session, so the check currently reports
+  `both_available_nationally = True` more often than a fully-verified
+  check would — logged as Open Decision #22, not silently cleared.
+
+**Decisions made:**
+1. **Every leg is priced at each venue's TAKER fee rate, always** — a
+   deliberate worst-case assumption, not an average or a best case. Both
+   venues charge less (Kalshi: a reduced maker rate, sometimes zero;
+   Polymarket: literally zero) to a resting order, but this project's
+   normalized schema only captures top-of-book price at pull time, with
+   no way to know whether a specific flagged opportunity could actually
+   be filled patiently as a maker order. A flagged opportunity's real
+   profit, if filled as a maker, can only be higher than what's reported
+   here — never lower.
+2. **`MIN_NET_PROFIT_FRACTION = 0.01`** (at least 1 cent of real profit
+   per $1 risked) is a named floor below which a technically-positive gap
+   is not flagged at all, given real execution risk (both legs must
+   actually fill) and the fact that every input is itself an estimate.
+   Not yet validated against a real filled trade — a starting value,
+   flagged for recalibration the same way `sizing_engine.py`'s
+   `KELLY_FRACTION` was.
+3. **Kalshi and Polymarket are treated asymmetrically in
+   `liquidity_check.py`, on purpose** — Kalshi legs use real per-contract
+   order-book size fields; Polymarket legs use the venue's own `liquidity`
+   dollar figure divided by price. This is not a stylistic inconsistency;
+   it reflects a real, confirmed difference in what each venue's real API
+   actually exposes (see item 6 above).
+4. **Reopening Session 3.1 files was approved directly by the user** when
+   the live liquidity-field defect was found, on the explicit standing
+   principle that ROADMAP/SESSION_LOG sessions are working documents, not
+   frozen artifacts — a real session boundary should not block fixing a
+   real, newly-discovered problem in an earlier file.
+5. **Open Decision #22 (Polymarket legal-footprint gap) is logged, not
+   silently cleared or worked around with an assumption.** `detector.py`
+   currently reports every flagged pair as available in every state,
+   which is accurate for what's been checked (Kalshi Sports doesn't
+   currently apply to this project's tracks) but not a verified guarantee
+   for Polymarket specifically.
+
+**Corrections/reversals during the session:**
+- The original `liquidity_check.py` (written before live data was pulled)
+  used Kalshi's `liquidity_dollars` field directly, following the venue's
+  own schema field name at face value. This was corrected once live data
+  showed the field itself doesn't carry real information for Kalshi —
+  see item 6 above. This is a real reversal of a design choice made
+  earlier the same session, not a pre-existing bug carried in from
+  Session 3.1.
+- The floating-point rounding fix (item 7) corrected a bug introduced
+  and caught within this same session's own validation pass.
+
+**Open items / deferred validations:**
+- **New Open Decision #22:** Polymarket-specific state-by-state legal
+  availability has not been researched to the same depth as Kalshi's
+  confirmed Sports-contract restriction list. Not a blocker for closing
+  this session; most relevant once Track 6 (flagship sports/exchange
+  markets) is built. See ROADMAP.md's Open Decisions list and
+  `/docs/venue_legal_footprint.md` for the full evidence trail.
+- Order-book DEPTH (beyond top-of-book) remains unpulled for both
+  venues. `liquidity_check.py`'s Polymarket-leg estimate
+  (`liquidity ÷ price`) is a named approximation, not a literal
+  per-price-level read, since Polymarket's Gamma API doesn't expose one
+  the way Kalshi's real `yes_ask_size_fp`/`yes_bid_size_fp` fields do.
+- Wiring `detector.py`/`liquidity_check.py` into an automated,
+  schedulable GitHub Actions workflow is Session 3.4's job (Automation
+  Adaptation) — not built here, consistent with how Session 3.1's own
+  ingestion scripts were left unwired until their automation session.
+
+**Next session:** Session 3.3 (Sizing Logic Adaptation) is next per
+ROADMAP.md — its prerequisite (Session 3.2 complete) is now met. Session
+3.3 should be aware of Open Decision #22 (Polymarket legal-footprint gap)
+if sizing logic ever needs to reason about legal availability directly,
+though that is not expected to be its main concern.
