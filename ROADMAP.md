@@ -1331,7 +1331,7 @@ reason)
 ---
 
 ### Session 3.3 — Sizing Logic Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-05)
 **Prerequisites:** Session 3.2 complete.
 
 **What gets built:** Adapts Phase 2's sizing engine for arbitrage's different
@@ -1341,10 +1341,32 @@ positions, rather than single-position edge sizing).
 **Files touched:** `/scripts/sizing/sizing_engine.py` (extended, not rebuilt)
 
 **Validation (required to close session):**
-- [ ] Sizing correctly accounts for capital needing to sit in two venues
-      simultaneously
-- [ ] Execution-risk buffer included (price can move between detecting and
-      executing both legs)
+- [x] Sizing correctly accounts for capital needing to sit in two venues
+      simultaneously — confirmed via two separate bankroll inputs
+      (`--kalshi-bankroll`, `--polymarket-bankroll`) and a new
+      open-positions ledger (`data/arbitrage/open_positions.csv`) that
+      tracks real committed capital per venue and correctly reduces
+      available capital on subsequent sizing calls; settlement correctly
+      frees it back up.
+- [x] Execution-risk buffer included (price can move between detecting and
+      executing both legs) — `EXECUTION_RISK_BUFFER = 0.85` applied to
+      sized contract count. Sanity-checked against real live Kalshi data
+      (see SESSION_LOG.md): real quoted PRICE was stable across the real
+      windows checked, but real order-book SIZE moved up to 67% in 13
+      real minutes on one market — confirming the buffer targets the
+      right kind of risk, though its specific magnitude is only weakly
+      validated by one real data point (see Open Decision #23).
+
+**Real bug found and fixed within this session, against live data:**
+`detector.py`'s `fillable_size_dollars` field is a real CONTRACT COUNT,
+not real dollars (per `liquidity_check.py`'s own docstring). The first
+version of this session's sizing math treated it as dollars directly,
+which would have materially misstated real per-leg capital on any
+low-priced leg — confirmed directly against Kalshi's real MO-05
+Republican leg ($0.20 ask, 15.28 real contracts: real cost is $3.06, not
+$15.28). Fixed by sizing in contracts throughout and converting to real
+per-leg dollar cost only at the end, using each leg's own ask price. See
+SESSION_LOG.md for the full before/after and re-validation record.
 
 ---
 
@@ -2148,6 +2170,32 @@ remaining blockers to starting Phase 2.
     reaches a track where a Polymarket-side restriction could actually
     matter (most relevant once Track 6 — flagship sports/exchange markets
     — is built, per Session 3.2's own legal-footprint doc).
+23. **New, opened Session 3.3:** `EXECUTION_RISK_BUFFER = 0.85` in
+    `sizing_engine.py` is a named placeholder, sanity-checked but not
+    fully validated against real data this session. Real live Kalshi
+    quotes (MO-05, `KXHIGHPHIL`) were pulled twice, roughly 13–30 real
+    minutes apart: quoted PRICE was completely unchanged both times, but
+    real order-book SIZE at the best price moved as much as 67% in 13
+    real minutes on one market. This confirms the buffer targets the
+    right kind of risk (size, not price), but a single real before/after
+    pair is too thin a sample to confirm 0.85 is the right magnitude —
+    the one real data point observed (67% swing) exceeds the 15% haircut
+    currently applied. **Action needed:** once Session 3.4's automation
+    is producing repeated, regular snapshots, pull a proper sample of
+    real size swings over realistic execution-time windows and
+    recalibrate `EXECUTION_RISK_BUFFER` against real evidence, the same
+    way Session 8.3 is already planned to do for `KELLY_FRACTION`.
+24. **New, opened Session 3.3, informational — not a blocker:**
+    `sizing_engine.py`'s arbitrage sizing has been validated against
+    constructed test cases and against real Kalshi order-book numbers
+    plugged into a labeled test flag, but not yet against a genuine LIVE
+    positive arbitrage opportunity end-to-end, since none existed at the
+    time of testing (14 real markets checked across MO-05, `KXHIGHPHIL`,
+    and `KXHIGHNY` were all priced $1.01–$1.04, consistently efficient —
+    matching Session 3.2's own finding). **Action needed:** the first
+    time `detector.py` produces a real, live positive flag (once Session
+    3.4's automation is running continuously), confirm `arbitrage size`
+    against it end-to-end as a final real-world check.
 
 ---
 *Update this file at the close of each future session, per the project's

@@ -3165,3 +3165,195 @@ ROADMAP.md — its prerequisite (Session 3.2 complete) is now met. Session
 3.3 should be aware of Open Decision #22 (Polymarket legal-footprint gap)
 if sizing logic ever needs to reason about legal availability directly,
 though that is not expected to be its main concern.
+
+
+## Session 3.3 — Sizing Logic Adaptation
+
+**Date completed:** 2026-09-05
+**Status:** ✅ Complete
+
+**What was actually done:**
+Extended `sizing_engine.py` (Session 2.6's pick'em sizing script) to also
+size arbitrage positions from Session 3.2's `detector.py` output, without
+rebuilding or altering the existing pick'em code. Full flow:
+
+1. Established up front that arbitrage sizing is a genuinely different
+   problem from pick'em's Kelly-based sizing, not a variant of it — an
+   arbitrage position is a locked, guaranteed-profit trade once both legs
+   fill, so there is no win/loss probability to size against. Its real
+   risks are (a) capital needing to sit at two venues simultaneously, not
+   drawn from one shared pool, and (b) execution ("legging") risk between
+   detecting a price gap and actually placing both real orders.
+2. Added two new sizing inputs, `--kalshi-bankroll` and
+   `--polymarket-bankroll`, kept as separate real dollar figures rather
+   than one combined bankroll, matching the real mechanics: a position
+   requires the same dollar amount sitting in both accounts at once.
+3. Added a small new open-positions ledger,
+   `data/arbitrage/open_positions.csv`, with `record_open_arbitrage_position()`
+   and `settle_arbitrage_position()` functions (same pattern as Session
+   2.5's `outcome_tracker.py`), so sizing a new position correctly
+   subtracts capital already committed to earlier, still-open positions
+   at each venue.
+4. Added `EXECUTION_RISK_BUFFER = 0.85`, a named haircut on sized
+   contract count, same "named judgment call, not a sourced number"
+   posture as `KELLY_FRACTION`.
+5. Added `MAX_ARBITRAGE_POSITION_PCT = 0.05`, capping a single position
+   at 5% of the user's total combined bankroll, mirroring pick'em's
+   `MAX_SINGLE_POSITION_PCT` pattern.
+6. Validated against constructed test cases first (thin per-venue
+   balances correctly binding position size, the ledger correctly
+   reducing available capital on a second sizing call, settlement
+   correctly freeing that capital back up, and a same-venue YES+NO flag
+   being explicitly rejected rather than mis-sized) — same
+   constructed-then-real validation order as Session 3.2.
+7. **Ran the corrected script against real, live Kalshi order-book data
+   this session** (`KXHOUSEMO5`, `KXHIGHPHIL`, `KXHIGHNY` — this
+   project's actual down-ballot-politics and weather tracks) and found a
+   real, second bug in the process (see below), which was fixed and
+   re-validated before this session closed, not deferred.
+8. **Real bug found and fixed against live data:** `detector.py`'s
+   `fillable_size_dollars` field is actually a CONTRACT COUNT, not real
+   dollars — `liquidity_check.py`'s own docstring says this explicitly
+   ("a contract count IS a dollar notional amount," referring to each
+   contract's $1 PAYOUT, not its purchase cost). The first version of
+   `size_arbitrage_position()` treated that count as if it were already
+   real dollars of capital. Confirmed the real-world impact directly:
+   Kalshi's real MO-05 Republican leg has `yes_ask=$0.20` and
+   `yes_ask_size=15.28` real contracts — the real cost to buy all 15.28
+   is $3.06, not $15.28. Fixed by reworking the sizing math to operate in
+   contracts throughout, converting to real per-leg dollar cost
+   (`contracts × that leg's own ask price`) only at the point a dollar
+   figure is actually needed. Re-validated against both the full
+   constructed test suite and the real MO-05 numbers after the fix:
+   correctly reports ~$2.60/$9.74 real per-leg cost (asymmetric, matching
+   each leg's real price) instead of the old, wrong $12.99/$12.99
+   (identical, treating contract count as dollars on both legs).
+9. **Checked for a genuine live arbitrage opportunity to size against, as
+   a real positive case — none currently exists.** Checked 14 real
+   markets live across MO-05, `KXHIGHPHIL`, and `KXHIGHNY`: every single
+   one showed real `yes_ask + no_ask` between $1.01 and $1.04 (a few
+   cents ABOVE the $1.00 arbitrage threshold, never below it). This is
+   systematic across all 14 real markets checked, not an isolated stale
+   quote, and matches Session 3.2's own finding that real markets are
+   currently efficient. `arbitrage size` was validated against real
+   numbers plugged into a labeled test flag (see below) rather than a
+   genuine live positive case, since none existed to test against.
+10. **Objective sanity-check performed on both named constants, using
+    real numbers rather than judgment alone:**
+    - `EXECUTION_RISK_BUFFER = 0.85`: pulled the same real MO-05 and
+      Philadelphia weather markets twice, roughly 13–30 real minutes
+      apart. Real quoted PRICE was completely unchanged across every
+      market checked both times. Real order-book SIZE at the best price
+      was not stable — one real Philadelphia strike's bid size dropped
+      67% (1.56 → 0.52 contracts) in 13 real minutes. This confirms the
+      buffer is aimed at the right kind of risk (size risk, which moved;
+      not price risk, which didn't, in this real sample) but the single
+      real data point showing a 67% swing is larger than the 15% haircut
+      currently applied — a real, if thin-sample, signal that 0.85 may
+      be too lenient. Not changed this session (sample size of one
+      real before/after pair does not support a confident recalibration
+      — flagged as a candidate for Session 8.3 once a proper repeated-
+      pull sample exists).
+    - `MAX_ARBITRAGE_POSITION_PCT = 0.05`: computed real per-leg dollar
+      liquidity (real ask price × real order-book size) across the same
+      14 real markets — ranging $0.56 to $95.14. Cross-referenced against
+      the 5% cap at several bankroll sizes: at a $200 bankroll the cap
+      ($10) binds before real liquidity almost every time; at $1,000 the
+      two are roughly evenly mixed; at $5,000 the cap ($250) almost never
+      binds, since observed real liquidity in this project's actual
+      tracks rarely exceeds it. Conclusion: the constant itself is
+      reasonable, but whether it ever actually matters depends heavily on
+      bankroll size — logged as context for whoever tunes this later,
+      not changed.
+
+**Files created/modified:**
+- `/scripts/sizing/sizing_engine.py` (extended — added arbitrage sizing
+  functions, the open-positions ledger, and new `arbitrage`/`pickem` CLI
+  subcommands; existing pick'em code and behavior unchanged, confirmed via
+  regression test)
+
+**Validation results:**
+- [x] **Sizing correctly accounts for capital needing to sit in two
+  venues simultaneously** — pass. Confirmed the thinner venue's balance
+  (not a shared pool) correctly becomes the binding constraint, confirmed
+  the open-positions ledger correctly reduces available capital at each
+  venue independently on a subsequent sizing call, and confirmed
+  settling a position correctly frees that venue's capital back up.
+- [x] **Execution-risk buffer included** — pass. Confirmed the 0.85
+  haircut is applied to the sized contract count and reported explicitly
+  on every result, both before and after the unit-mismatch fix.
+- [x] **Real bug found during validation was fixed within this session,
+  not deferred** — pass. The contracts-vs-dollars mismatch was caught
+  by deliberately testing against real Kalshi order-book numbers (not
+  just constructed cases), fixed, and re-validated against both the full
+  constructed suite and the real numbers that exposed it.
+- [x] **Same-venue (single-venue YES+NO) flag explicitly rejected, not
+  mis-sized** — pass. `size_arbitrage_position()` refuses a flag where
+  `platform_a == platform_b` with a clear reason, since that shape has no
+  real two-venue capital-lockup risk to size.
+- [x] **Pick'em sizing regression check** — pass. Existing pick'em
+  behavior reproduced exactly under the new `pickem` CLI subcommand.
+
+**Decisions made:**
+1. **Bankroll is two separate numbers for arbitrage sizing, never one
+   combined figure** — reflects the real mechanics of needing the same
+   dollar amount sitting at both venues simultaneously, not drawn from a
+   shared pool.
+2. **A new open-positions ledger (`data/arbitrage/open_positions.csv`)
+   tracks real committed capital per venue, not real settlement
+   duration** — this project has no real settlement-timing data for
+   either venue yet, and inventing a number would repeat exactly the
+   kind of guess this project's standing rules forbid. The ledger tracks
+   what CAN be known honestly (capital is locked) without guessing at
+   what can't (for how long).
+3. **`EXECUTION_RISK_BUFFER = 0.85` is a haircut on position SIZE, not on
+   required profit margin** — a deliberate choice once real data showed
+   quoted size moves faster than quoted price in this project's actual
+   markets (see item 10 above), though the specific magnitude is only
+   weakly validated by a single real data point.
+4. **The contracts-vs-dollars unit fix (item 8) was treated as a real bug
+   to fix immediately upon discovery, not a design choice to defer** —
+   consistent with Session 3.2's own standing practice of fixing real
+   defects found during validation within the same session, not carrying
+   them forward.
+
+**Corrections/reversals during the session:**
+- The first version of `size_arbitrage_position()` treated
+  `detector.py`'s `fillable_size_dollars` field as real dollars of
+  capital. This was corrected after real live Kalshi data (MO-05's
+  15.28-contract, $0.20-ask real order book) showed the field is
+  actually a contract count, and the bug would have materially misstated
+  real per-leg capital requirements on any real, low-priced leg (the
+  normal case). See item 8 above for the full before/after.
+- `record_open_arbitrage_position()` initially referenced a result field
+  (`expected_profit_dollars`) that didn't exist under that name in
+  `size_arbitrage_position()`'s return value, caught by running
+  `arbitrage record-open` end-to-end during validation rather than
+  trusting the code path unexercised. Fixed to reference the correct
+  field name before this session closed.
+
+**Open items / deferred validations:**
+- **Sizing has not yet been run against a genuine LIVE positive
+  arbitrage flag** — real markets checked this session (MO-05,
+  `KXHIGHPHIL`, `KXHIGHNY`, 14 markets total) are all currently
+  efficient, consistent with Session 3.2's own finding. Validated
+  instead against real market numbers plugged into a labeled test flag.
+  Not a blocker for closing this session, since the sizing math itself
+  has been validated both ways (constructed cases, and real numbers) —
+  but a true end-to-end real-flag run is still owed once one exists.
+- **`EXECUTION_RISK_BUFFER = 0.85` recalibration** — the real 67%
+  size swing observed in 13 minutes on one real market suggests 0.85
+  may be too lenient, but a sample of one real before/after pair is too
+  thin to act on. Candidate for Session 8.3, once repeated automated
+  snapshots (Session 3.4) provide a real distribution to check against.
+- **`MAX_ARBITRAGE_POSITION_PCT = 0.05`** — not changed; its practical
+  effect depends heavily on the bankroll size actually used (see item 10
+  above). No action needed unless Greg's real trading bankroll changes
+  materially.
+- Wiring the sizing engine into an automated workflow remains Session
+  3.4's job (Automation Adaptation) — not built here, same as
+  Session 3.2's detection scripts were left unwired until their own
+  automation session.
+
+**Next session:** Session 3.4 (Automation Adaptation) is next per
+ROADMAP.md — its prerequisite (Session 3.3 complete) is now met.
