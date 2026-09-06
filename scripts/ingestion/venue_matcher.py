@@ -289,6 +289,59 @@ def _parse_close_time(value: Optional[str]) -> Optional[datetime]:
         return None
 
 
+_DISTRICT_CODE_PATTERN = re.compile(r"\b([a-z]{2})-0*(\d{1,2})\b")
+
+
+def _extract_district_codes(title: Optional[str]) -> set[tuple[str, int]]:
+    """Pulls a (state abbreviation, district number) code out of a title,
+    e.g. "WA-08" -> ("wa", 8), "MI-7" -> ("mi", 7). Returns a set since a
+    title could in principle mention more than one; in practice every
+    real title checked has exactly one or zero.
+
+    REAL BUG FOUND AND FIXED (Session 3.4, first live automated
+    arbitrage_pipeline.yml run, 2026-09-06): _find_elections_matches()
+    was proposing candidate pairs like Kalshi's "Will a Republican win
+    the House race for WA-08?" against Polymarket's "Will the
+    Republican Party win the IN-08 House seat?" - Washington's 8th
+    District and Indiana's 8th District, two different real-world
+    races, reported with a 90-cent-per-dollar "arbitrage." The cause:
+    _title_words() tokenizes "WA-08" into "wa" and "08" as SEPARATE
+    words (the hyphen splits them), so the shared token "08" satisfied
+    both the Jaccard title-similarity bar (title_similarity does not
+    know "08" is a district number, not a generic word) AND
+    _numbers_are_compatible()'s "at least one number must match" check
+    (which only compares raw numbers, with no idea that "8" needs to be
+    paired with the SAME state to mean the same district). Confirmed
+    live: 10 flags from this run's real output, several with a 400-day
+    close-time gap and a 0.5+ title-similarity score, none of them the
+    same real race. This function - and the check built on it in
+    _find_elections_matches() below - fixes this at the source: for a
+    down-ballot title, "same district number" is only meaningful
+    together with "same state," so both must be extracted and compared
+    as a pair, not as two independent, order-blind checks."""
+    if not title:
+        return set()
+    return {
+        (state.lower(), int(district))
+        for state, district in _DISTRICT_CODE_PATTERN.findall(title.lower())
+    }
+
+
+def _district_codes_compatible(a: set[tuple[str, int]], b: set[tuple[str, int]]) -> bool:
+    """Elections-specific version of _numbers_are_compatible(): if BOTH
+    titles have an extractable (state, district) code, at least one
+    pair must match exactly - a shared district number with a
+    different state is a genuine mismatch, not merely an unconfirmed
+    one. If either title has no extractable code (e.g. a state-
+    legislature title without a two-letter/number pattern), this check
+    is skipped rather than blocking a real match on a formatting
+    difference this function cannot see past - the existing title-
+    similarity and number checks still apply in that case."""
+    if not a or not b:
+        return True
+    return bool(a & b)
+
+
 def _is_down_ballot_category(category: Optional[str]) -> bool:
     """True for either down-ballot Elections tier ingest_kalshi.py tags
     ("Elections - US House District", "Elections - State Legislature
@@ -390,6 +443,7 @@ def _find_elections_matches(kalshi_parsed: list, polymarket_parsed: list) -> lis
     for k_row, k_words, k_close, k_numbers in election_kalshi_rows:
         if k_close is None:
             continue
+        k_district_codes = _extract_district_codes(k_row.get("title"))
         for p_row, p_words, p_close, p_numbers in polymarket_parsed:
             if p_close is None:
                 continue
@@ -403,6 +457,17 @@ def _find_elections_matches(kalshi_parsed: list, polymarket_parsed: list) -> lis
                 continue
 
             if not _numbers_are_compatible(k_numbers, p_numbers):
+                continue
+
+            # Session 3.4 fix - see _extract_district_codes()'s
+            # docstring for the real false-positive pairs (e.g.
+            # WA-08 vs IN-08) this check exists to stop. Applied only
+            # here, not in _find_bucketed_matches(), since this is
+            # specifically where the wide 400-day tolerance and raised
+            # similarity bar made a shared district NUMBER look like
+            # enough evidence on its own.
+            p_district_codes = _extract_district_codes(p_row.get("title"))
+            if not _district_codes_compatible(k_district_codes, p_district_codes):
                 continue
 
             candidates.append(
