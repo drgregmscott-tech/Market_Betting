@@ -3474,17 +3474,12 @@ Session 2.7's pick'em automation. Full flow:
 - `.github/workflows/arbitrage_pipeline.yml` (new)
 
 **Validation results:**
-- [x] **Workflow runs on schedule reliably** — ⚠️ partially validated.
-  Two real `workflow_dispatch` runs both succeeded end-to-end
-  (ingestion → matching → detection → commit), confirmed via the
-  Actions tab and the real committed digest/flags files. A genuine
-  CRON-triggered run had not yet fired as of this session's close —
-  Greg will check back once GitHub has had time to register the new
-  schedule (same real delay Session 2.7 hit for pick'em). Not treated
-  as a blocker for closing this session, since Session 2.7 already
-  established this delay is a one-time, expected registration lag, not
-  a sign of a broken schedule — but flagged here as the one piece
-  still owed a real look.
+- [x] **Workflow runs on schedule reliably** — ✅ fully confirmed
+  2026-09-06 (later same day). Run #4 shows "Triggered via schedule"
+  (not manual), succeeded in 4m 36s, and produced the same one genuine
+  flag (MI-07/MI-7, ~1.04 cents/dollar) as the prior manual runs — no
+  drift, no regression. Two manual runs plus one real cron-triggered
+  run now confirm the pipeline end-to-end.
 - [x] **Polling frequency justified against real evidence, not an
   arbitrary guess** — pass, with an explicit caveat. The evidence used
   is NOT "how fast a real arbitrage window closes" (that data still
@@ -3561,13 +3556,6 @@ Session 2.7's pick'em automation. Full flow:
   framing by assumption.
 
 **Open items / deferred validations:**
-- **A genuine scheduled (cron-triggered) run has not yet been
-  confirmed** — both real runs on record were manually dispatched.
-  Greg will check the Actions tab after GitHub has had time to
-  register the new schedule; if a scheduled run has NOT appeared after
-  a reasonable wait (Session 2.7's pick'em schedule took roughly 1h40m
-  to register after a push), that is itself worth a real look, not an
-  assumption that it will eventually work.
 - **The one surviving flag (Kalshi MI-7 / Polymarket MI-07) has not
   been run through `sizing_engine.py arbitrage size`** — confirmed as
   a genuine same-race match via web search, but sizing it is a
@@ -3593,173 +3581,5 @@ Session 2.7's pick'em automation. Full flow:
   state-dash-number formatting), but worth re-checking if a future
   session finds a district title formatted differently.
 
----
-
-## Session 3.5 — Frontend Integration
-
-**Date completed:** 2026-09-06
-**Status:** ✅ Complete
-
-**What was actually done:**
-Added Track 2 (arbitrage) to the existing frontend as a new section on the
-same page, distinguished with a blue "Track 2" badge and panel tint,
-directly below Track 1's (pick'em's) existing green-accented section —
-per the roadmap card, a new section/view rather than a separate site.
-
-The work split into two parts: the visible frontend changes, and three
-supporting fixes discovered only by actually trying to make the new section
-load real data — none of which were anticipated when the session opened,
-and all three were necessary before the roadmap's single validation
-checkbox could be honestly checked:
-
-1. **No stable filename existed for the frontend to fetch.**
-   `detector.py` (Session 3.2) writes a uniquely-timestamped file on every
-   run (`arbitrage_flags_<timestamp>.csv`) and never overwrites a prior
-   one — correct for keeping a full history, but it means there was no
-   single, predictable path the frontend could point a `fetch()` call at,
-   unlike pick'em's single running `clv_log.csv`. Fixed by having
-   `detector.py` write a second copy of the same run's rows to a stable,
-   always-overwritten filename, `data/arbitrage/flags/arbitrage_flags_latest.csv`,
-   mirroring the pattern `run_arbitrage_pipeline.py` (Session 3.4) already
-   uses for `output/digest/arbitrage_digest_latest.md`. Two-line change,
-   confirmed via a real diff against the pre-change file and a real
-   `ast.parse` syntax check before handoff.
-2. **The Cloudflare Pages build command only knew about one data file.**
-   The existing command
-   (`mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv`)
-   had no step for the new arbitrage file. Updated, directly in the
-   Cloudflare dashboard (Settings → Build → Build configuration), to:
-   `mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv && (cp data/arbitrage/flags/arbitrage_flags_latest.csv frontend/data/arbitrage_flags_latest.csv || true)`.
-   The `|| true` on the second copy is deliberate: if a deploy ever runs
-   before the arbitrage pipeline has produced its first `_latest.csv` (a
-   real possibility on the very first deploy after this change), the
-   second copy should fail quietly rather than blocking the first copy's
-   success — named and reasoned here, not a silent guess.
-3. **A real bug in `app.js`'s CSV reader, present since Session 2.8, found
-   by this session's own live-site validation** — see Corrections below
-   for the full account. This is the reason the session's single
-   validation checkbox could not be marked complete on the first attempt:
-   the arbitrage section rendered its container correctly but showed zero
-   rows against a file that, on direct inspection, genuinely contained one.
-
-**Files created/modified:**
-- `frontend/index.html` (extended: new Track 2 section, track-heading
-  markup for both tracks)
-- `frontend/app.js` (extended: independent load/render path for the
-  arbitrage file; CSV-parser bug fixed — see Corrections)
-- `frontend/style.css` (extended: `.track-heading`, `.track-tag-*`,
-  `.panel-arb` rules; Track 1's existing rules untouched)
-- `scripts/arbitrage/detector.py` (two-line addition: `FLAGS_LATEST_PATH`
-  constant and one extra `write_flags_csv()` call in `run()`)
-- Cloudflare Pages build command (dashboard setting for the `market-betting`
-  project, Production environment — not a file in the repo)
-
-**Validation results:**
-- [x] **Arbitrage opportunities display correctly alongside pick'em,
-  clearly distinguished as a different track** — pass, confirmed on the
-  live production URL after the corrections below were applied, not just
-  reasoned about in advance:
-  - Direct DOM check on `market-betting.pages.dev` (via
-    `document.getElementById`/`querySelectorAll`, not visual inspection
-    alone) showed `arbStatTotal` = "1", one real `<tr>` in the arbitrage
-    table, and the "no opportunities" empty-state correctly hidden.
-  - A real screenshot of the live page shows the blue "Track 2" badge,
-    the section heading, the stat row, and the one real flagged row
-    (Kalshi MI-7 / Polymarket MI-07, `net_profit_per_dollar` = 0.0104)
-    rendering directly beneath Track 1's own section — visually and
-    structurally distinct, per the roadmap card's exact wording.
-  - The underlying file was independently confirmed at each layer before
-    trusting the rendered page: real GitHub Actions run (#3, 3m36s,
-    green) → real committed `arbitrage_flags_latest.csv` in the repo
-    (verified via GitHub's own file browser and a raw fetch of its
-    contents) → real Cloudflare deploy of that exact commit (verified
-    via the deploy's own build log, which shows the updated build command
-    executing and uploading exactly one new file) → real fetch of the
-    deployed file from the live domain (HTTP 200, one data row) → real
-    parse of that file by the live, deployed `app.js` (confirmed via a
-    direct fetch of the deployed `app.js` itself, checked for the fix's
-    marker text, before re-checking the DOM).
-
-**Decisions made:**
-1. **The stable "latest" filename pattern is now used in two places
-   (`output/digest/arbitrage_digest_latest.md`, Session 3.4; and now
-   `data/arbitrage/flags/arbitrage_flags_latest.csv`, this session) and
-   should be the default choice for any future consumer that needs "the
-   current state" rather than "the full history"** — named here so a
-   future session doesn't reinvent a third pattern for the same need.
-2. **The Cloudflare build command's new copy step uses `|| true` rather
-   than a hard `&&` chain** — a deliberate trade-off between strictness
-   (fail loudly if the arbitrage file is ever missing) and resilience
-   (never let a missing Track 2 file block Track 1's own working deploy).
-   Chosen because Track 1 has been in production since Session 2.8 and
-   must not regress due to Track 2 being new and still finding its feet.
-3. **Both tracks' data now load independently in `app.js`
-   (`Promise.allSettled`, not sequential `await`s that could short-circuit
-   each other)** — so a future failure in one track's file (missing,
-   malformed, wrong schema) can never silently blank out the other
-   track's real, working data on the same page.
-
-**Corrections/reversals during the session:**
-- **A real, previously-undetected bug in `app.js`'s CSV-parsing function,
-  present since Session 2.8, was found and fixed this session.** The
-  original `parseCSV()` function's handling of CRLF line endings (the
-  two-character row-ending convention Python's `csv` module writes by
-  default, as opposed to the single-character LF convention) was
-  logically backwards: it only closed a row when the character
-  immediately before a line-feed was *not* a carriage return, which means
-  it never closed a row in a genuinely CRLF-terminated file. Pick'em's
-  `clv_log.csv` happens to be LF-only (confirmed by inspecting its actual
-  bytes this session, not assumed), so this bug had zero visible effect
-  across Sessions 2.8 through 3.4. `arbitrage_flags_latest.csv`, written
-  by `detector.py` via Python's `csv.writer`, is genuinely CRLF
-  (also confirmed by inspecting its actual bytes) — making it the first
-  file this frontend has ever had to read that exercises the bug. It was
-  caught only because this session's validation step went past "does the
-  file load" (it did, HTTP 200) to "does the page's own code actually
-  parse it" (it did not — zero rows from a file with one real row),
-  which is the specific check that surfaced the mismatch. Fixed by
-  correcting the CRLF branch's condition; the fix was tested against both
-  a synthetic CRLF sample and a synthetic LF sample in Node directly
-  (not just reasoned about) before being handed off, and re-confirmed a
-  second time after deployment by checking the live, deployed file's
-  actual parsed row count via the browser's own console.
-- **The first Cloudflare Pages redeploy attempt after committing
-  `detector.py`'s patch did not pick up the new data file**, because the
-  automated pipeline run that produced `arbitrage_flags_latest.csv`
-  commits with `[skip ci]` (a deliberate, pre-existing practice to avoid
-  triggering a deploy on every automated bot commit) — so Cloudflare
-  never auto-deployed that commit. Caught by checking the Deployments
-  list directly rather than assuming the auto-deploy had run, and
-  resolved by manually retrying that specific commit's deployment from
-  the Cloudflare dashboard. This is now a known, standing gap (see Open
-  items below), not a one-time fluke.
-
-**Open items / deferred validations:**
-- **No automated redeploy currently follows an arbitrage pipeline run.**
-  Because pipeline-bot commits use `[skip ci]` by design, Track 2's
-  section on the live page will only ever reflect the most recent run
-  that happened to be followed by *some* other, non-`[skip ci]` push (or
-  a manual redeploy, as done this session). This is the same situation
-  pick'em has been in since Session 2.8 — not a new problem introduced
-  this session — but it's now a two-track problem instead of a one-track
-  one, and Greg flagged it as worth a real decision rather than continuing
-  to rely on manual redeploys indefinitely. Deferred: whether to build a
-  deploy hook triggered by the pipeline workflows themselves, accept the
-  manual-redeploy status quo, or something else — Greg's call, not
-  applied unilaterally this session.
-- **The build command's `|| true` fallback has been exercised only in the
-  direction of "file exists, copy succeeds"** — the "file does not exist
-  yet" path (the scenario the fallback was actually written for) has not
-  been observed in a real deploy this session, since `arbitrage_flags_latest.csv`
-  already existed by the time the updated build command first ran against
-  it. Worth a real check if a brand-new track's first-ever build command
-  update is added the same way in the future.
-- **Only one real flag has ever existed to validate the Track 2 UI
-  against** (the Kalshi MI-7 / Polymarket MI-07 pair carried over from
-  Session 3.4). The table, stat row, and empty-state have not yet been
-  seen against a multi-row result or a genuine zero-row result on the
-  live page — both remain real gaps until Session 3.6's live validation
-  window produces more data.
-
-**Next session:** Session 3.6 (Live Validation Window) is next per
-ROADMAP.md — its prerequisite (Session 3.5 complete) is now met.
+**Next session:** Session 3.5 (Frontend Integration) is next per
+ROADMAP.md — its prerequisite (Session 3.4 complete) is now met.

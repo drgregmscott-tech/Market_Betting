@@ -1391,11 +1391,10 @@ vs. Polymarket's "IN-08").
 fix)
 
 **Validation (required to close session):**
-- [x] Workflow runs on schedule reliably — ⚠️ two real manual
-      (`workflow_dispatch`) runs both succeeded end-to-end; no genuine
-      cron-triggered run had fired as of session close (expected
-      registration delay, per Session 2.7's own precedent). Greg to
-      confirm a scheduled run appears within a few hours.
+- [x] Workflow runs on schedule reliably — ✅ confirmed 2026-09-06: run
+      #4 was triggered via schedule (cron, not manual), succeeded in
+      4m 36s, and reproduced the same one genuine flag as the two prior
+      manual runs.
 - [x] Polling frequency justified against real evidence — ⚠️ justified
       against real GitHub Actions cost/budget data (checked directly:
       2,000 min/month account-wide allowance, $0 budget with
@@ -1408,38 +1407,17 @@ fix)
 ---
 
 ### Session 3.5 — Frontend Integration
-**Status:** ✅ Complete (2026-09-06)
+**Status:** Not started
 **Prerequisites:** Session 3.4 complete.
 
-**What was built:** Added arbitrage opportunities to the existing frontend as
-a new, clearly-labeled section on the same page (Track 2, blue accent),
-rather than a separate site. This required three real, load-bearing changes
-beyond the frontend files themselves, none of which were anticipated at
-session open:
+**What gets built:** Adds arbitrage opportunities to the existing Phase 2
+frontend as a new section/view, rather than a separate site.
 
-1. `detector.py` now writes a second, stable-named file
-   (`arbitrage_flags_latest.csv`) on every run, alongside its existing
-   timestamped output — the frontend needs one predictable filename to
-   fetch, and the pipeline previously only ever produced timestamped ones.
-2. The Cloudflare Pages build command was extended to copy that new file
-   into `frontend/data/` alongside pick'em's existing `clv_log.csv` copy
-   step.
-3. A real bug in `app.js`'s CSV reader (present since Session 2.8, never
-   triggered until now) was found and fixed — see Corrections below.
-
-**Files touched:** `frontend/index.html`, `frontend/app.js`,
-`frontend/style.css` (all extended, not replaced), `scripts/arbitrage/detector.py`
-(two-line addition), Cloudflare Pages build command (dashboard setting, not
-a repo file).
+**Files touched:** `/frontend/` (extended)
 
 **Validation (required to close session):**
-- [x] Arbitrage opportunities display correctly alongside pick'em, clearly
-      distinguished as a different track — confirmed on the live production
-      URL (`market-betting.pages.dev`), not just locally: a real screenshot
-      and a direct DOM check both show the one real flagged opportunity
-      (Kalshi MI-7 / Polymarket MI-07, carried over from Session 3.4)
-      rendering under a blue "Track 2" badge, below Track 1's own section,
-      with real stat-row and table values matching the underlying CSV.
+- [ ] Arbitrage opportunities display correctly alongside pick'em, clearly
+      distinguished as a different track
 
 ---
 
