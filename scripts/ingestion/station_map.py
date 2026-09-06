@@ -108,8 +108,37 @@ SERIES_TICKER_TO_STATION: dict[str, str] = {
     # -- named, unresolved gaps (see module docstring - do not treat as
     # confirmed) --
     "KXHIGHHOU": "KHOU", "KXLOWHOU": "KHOU",  # Hobby vs Bush - see notes
-    "KXHIGHCHI": "KORD", "KXLOWCHI": "KORD",  # O'Hare vs Midway - see notes
+    "KXHIGHOU": "KHOU", "KXHIGHTHOU": "KHOU", "KXLOWTHOU": "KHOU",
+    # ^ SESSION 4.1 CORRECTION (2026-09-06, found from the real first live
+    # run, not assumed in advance): Kalshi runs at least three distinct
+    # ticker spellings for Houston high temp (KXHIGHHOU, KXHIGHOU,
+    # KXHIGHTHOU) and two for low (KXLOWHOU, KXLOWTHOU) - confirmed live,
+    # all real series, not a typo on this project's side. All point to
+    # the same real city/question and are mapped to the same placeholder
+    # station (KHOU) pending the Hobby-vs-Bush confirmation noted above.
+    "KXHIGHCHI": "KORD", "KXLOWCHI": "KORD", "KXLOWTCHI": "KORD",
+    # ^ same correction pattern - KXLOWTCHI was missing on the first pass.
+
+    # -- SESSION 4.1 CORRECTION: real ticker variants missed on the first
+    # pass, found from the actual first live run's "unmapped" warnings
+    # (2026-09-06) rather than assumed complete in advance. Confirmed
+    # each of these names the same real city already mapped above under
+    # a different ticker spelling. --
+    "KXLOWTLAX": "KLAX",   # LA low - KXLOWLAX already mapped, this is a
+                           # second real ticker for the same city
+    "KXLOWTMIA": "KMIA",   # Miami low - only the high was mapped before
+    "KXLOWTNYC": "KNYC",   # NYC low - a second real ticker spelling
+    "KXHIGHTEMPDEN": "KDEN",  # Denver high - a third real ticker spelling
+    "KXLOWTDEN": "KDEN",      # Denver low - was missing entirely
+    "KXLOWTAUS": "KAUS",      # Austin low - was missing entirely
 }
+
+# SESSION 4.1 CORRECTION: found live, not a station-mapping gap at all -
+# KXHIGHUS ("High temp in United States") asks about the whole country,
+# not one city. No single station can answer it, so it does not belong
+# in SERIES_TICKER_TO_STATION at any station code - it belongs in its own
+# excluded category, same treatment as an international series.
+NATIONAL_AGGREGATE_SERIES_OUT_OF_SCOPE = ["KXHIGHUS"]
 
 # Reference-only: cities confirmed live on weather.com/kalshi's own
 # station list but not yet matched to a live series ticker in this

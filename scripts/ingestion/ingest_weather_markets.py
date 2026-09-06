@@ -63,7 +63,11 @@ from typing import Optional
 import requests
 
 from schema_weather import NORMALIZED_WEATHER_COLUMNS, NormalizedWeatherMarket
-from station_map import station_for_series, INTERNATIONAL_SERIES_OUT_OF_SCOPE
+from station_map import (
+    station_for_series,
+    INTERNATIONAL_SERIES_OUT_OF_SCOPE,
+    NATIONAL_AGGREGATE_SERIES_OUT_OF_SCOPE,
+)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 RAW_DIR = BASE_DIR / "data" / "weather" / "raw"
@@ -282,6 +286,7 @@ def run() -> dict:
         "pulled_at": pulled_at,
         "temp_series_found": 0,
         "international_series_skipped": 0,
+        "national_aggregate_series_skipped": 0,
         "unmapped_series_skipped": 0,
         "series_ingested": 0,
         "rows_kept": 0,
@@ -302,6 +307,10 @@ def run() -> dict:
 
             if ticker in INTERNATIONAL_SERIES_OUT_OF_SCOPE:
                 summary["international_series_skipped"] += 1
+                continue
+
+            if ticker in NATIONAL_AGGREGATE_SERIES_OUT_OF_SCOPE:
+                summary["national_aggregate_series_skipped"] += 1
                 continue
 
             station_id = station_for_series(ticker)
@@ -334,9 +343,11 @@ def run() -> dict:
         summary["ok"] = True
         log.info(
             "Weather markets: %d temperature series found, %d international "
-            "(skipped, out of scope), %d unmapped (skipped, named gap), "
-            "%d series ingested, %d market rows kept.",
+            "(skipped, out of scope), %d national-aggregate (skipped, out "
+            "of scope), %d unmapped (skipped, named gap), %d series "
+            "ingested, %d market rows kept.",
             summary["temp_series_found"], summary["international_series_skipped"],
+            summary["national_aggregate_series_skipped"],
             summary["unmapped_series_skipped"], summary["series_ingested"], len(rows),
         )
     except Exception as exc:  # noqa: BLE001
