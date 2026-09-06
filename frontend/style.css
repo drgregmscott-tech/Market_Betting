@@ -11,6 +11,13 @@
   --rule: #1d2b24;
   --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  /* Track 2 (arbitrage) accent — deliberately a different hue from
+     Track 1's green so the two tracks are visually distinguishable at a
+     glance, per Session 3.5's validation requirement. */
+  --accent-arb: #5b9df0;
+  --panel-arb-border: #1e2a3a;
+  --panel-arb-bg: #101722;
 }
 
 * { box-sizing: border-box; }
@@ -135,6 +142,61 @@ main {
   max-width: 68ch;
 }
 
+/* ---------- track headings (new, Session 3.5) ---------- */
+/* Marks the start of each track's section on the page so the two tracks
+   are clearly distinguished, per Session 3.5's validation requirement,
+   without needing separate pages. */
+
+.track-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 6px;
+  padding-bottom: 4px;
+}
+
+.track-heading:not(:first-of-type) {
+  border-top: 1px solid var(--rule);
+  padding-top: 22px;
+}
+
+.track-heading h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+}
+
+.track-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 3px 9px;
+  border-radius: 20px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.track-tag-pickem {
+  color: var(--bg);
+  background: var(--accent-pos);
+}
+
+.track-tag-arb {
+  color: var(--bg);
+  background: var(--accent-arb);
+}
+
+/* Track 2 panels reuse .panel's layout but carry the blue accent border
+   and a slightly different background tint so scrolling past the
+   divider still reads as "a different track," not just a new table. */
+.panel-arb {
+  border-color: var(--panel-arb-border);
+  background: var(--panel-arb-bg);
+}
+
 /* ---------- summary stats ---------- */
 
 .stat-row {
@@ -214,6 +276,9 @@ tbody td {
 
 tbody td.name-cell {
   font-family: var(--sans);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 tbody tr:last-child td { border-bottom: none; }

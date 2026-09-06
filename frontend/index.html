@@ -3,148 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market_Betting — Pick'em Track</title>
+<title>Market_Betting — Multi-Track Dashboard</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="site-header">
-  <div class="header-inner">
-    <div class="brand">
-      <span class="brand-mark">MB</span>
-      <div class="brand-text">
-        <h1>Market_Betting</h1>
-        <p>Track 1 — Fixed-line pick&rsquo;em (PrizePicks / Underdog)</p>
-      </div>
-    </div>
-    <div class="header-meta">
-      <span class="meta-label">Data as of</span>
-      <span id="asOf" class="meta-value">—</span>
-    </div>
-  </div>
+<div class="header-inner">
+<div class="brand">
+<span class="brand-mark">MB</span>
+<div class="brand-text">
+<h1>Market_Betting</h1>
+<p>Multi-track +EV dashboard</p>
+</div>
+</div>
+<div class="header-meta">
+<span class="meta-label">Data as of</span>
+<span id="asOf" class="meta-value">—</span>
+</div>
+</div>
 </header>
 
 <main>
 
-  <section class="panel" id="summary-panel">
-    <div class="stat-row" id="statRow">
-      <div class="stat">
-        <span class="stat-value" id="statOpen">—</span>
-        <span class="stat-label">Open flags</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="statClosed">—</span>
-        <span class="stat-label">Closed &amp; graded</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="statCumEdge">—</span>
-        <span class="stat-label">Average CLV edge</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="statHitRate">—</span>
-        <span class="stat-label">Positive-edge rate</span>
-      </div>
-    </div>
-  </section>
+<!-- ================================================================ -->
+<!-- TRACK 1 — PICK'EM                                                  -->
+<!-- ================================================================ -->
+<div class="track-heading track-heading-pickem">
+<span class="track-tag track-tag-pickem">Track 1</span>
+<h2>Fixed-line pick&rsquo;em (PrizePicks / Underdog)</h2>
+</div>
 
-  <section class="panel" id="trend-panel">
-    <div class="panel-head">
-      <h2>Running average CLV-equivalent edge</h2>
-      <p class="panel-note">Running average of <code>clv_edge_at_close</code> across every closed flag, in the order each line closed &mdash; not a running sum, which grows without bound as more flags close and stops meaning anything. This is the project&rsquo;s long-run trendline &mdash; expected to include real losing stretches.</p>
-    </div>
-    <div id="chartWrap" class="chart-wrap">
-      <svg id="trendChart" viewBox="0 0 900 320" preserveAspectRatio="none" role="img" aria-label="Running average CLV edge over time"></svg>
-    </div>
-    <p id="chartEmpty" class="empty-note" hidden>No closed, graded flags yet. This chart fills in as flagged lines resolve.</p>
-  </section>
+<section class="panel" id="summary-panel">
+<div class="stat-row" id="statRow">
+<div class="stat">
+<span class="stat-value" id="statOpen">—</span>
+<span class="stat-label">Open flags</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="statClosed">—</span>
+<span class="stat-label">Closed &amp; graded</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="statCumEdge">—</span>
+<span class="stat-label">Average CLV edge</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="statHitRate">—</span>
+<span class="stat-label">Positive-edge rate</span>
+</div>
+</div>
+</section>
 
-  <section class="panel" id="open-panel">
-    <div class="panel-head">
-      <h2>Currently flagged opportunities</h2>
-      <p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. Check exactly two PrizePicks flags to size them as a 2-pick Power Play entry below.</p>
-    </div>
-    <div class="table-wrap">
-      <table id="openTable">
-        <thead>
-          <tr>
-            <th class="checkbox-col"></th>
-            <th>Player</th>
-            <th>Team</th>
-            <th>Stat</th>
-            <th>Side</th>
-            <th>Platform</th>
-            <th>Line</th>
-            <th>Model edge</th>
-            <th>Game time</th>
-          </tr>
-        </thead>
-        <tbody id="openTableBody"></tbody>
-      </table>
-    </div>
-    <p id="openEmpty" class="empty-note" hidden>No open flags right now.</p>
-  </section>
+<section class="panel" id="trend-panel">
+<div class="panel-head">
+<h2>Running average CLV-equivalent edge</h2>
+<p class="panel-note">Running average of <code>clv_edge_at_close</code> across every closed flag, in the order each line closed &mdash; not a running sum, which grows without bound as more flags close and stops meaning anything. This is the project&rsquo;s long-run trendline &mdash; expected to include real losing stretches.</p>
+</div>
+<div id="chartWrap" class="chart-wrap">
+<svg id="trendChart" viewBox="0 0 900 320" preserveAspectRatio="none" role="img" aria-label="Running average CLV edge over time"></svg>
+</div>
+<p id="chartEmpty" class="empty-note" hidden>No closed, graded flags yet. This chart fills in as flagged lines resolve.</p>
+</section>
 
-  <section class="panel" id="sizing-panel">
-    <div class="panel-head">
-      <h2>Sizing calculator</h2>
-      <p class="panel-note">
-        Runs the exact same math as <code>scripts/sizing/sizing_engine.py</code> &mdash; quarter-Kelly, the PrizePicks
-        account-risk dampener, the same-game caution factor, and the 5%-of-bankroll cap &mdash; entirely in your
-        browser. Your bankroll figure is never saved anywhere; it resets the moment you leave or reload this page.
-        This stays exactly as manual as the script: one entry (two legs) at a time, and it has no memory of any
-        stake you've already placed, so update the bankroll figure yourself between entries.
-      </p>
-    </div>
+<section class="panel" id="open-panel">
+<div class="panel-head">
+<h2>Currently flagged opportunities</h2>
+<p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. Check exactly two PrizePicks flags to size them as a 2-pick Power Play entry below.</p>
+</div>
+<div class="table-wrap">
+<table id="openTable">
+<thead>
+<tr>
+<th class="checkbox-col"></th>
+<th>Player</th>
+<th>Team</th>
+<th>Stat</th>
+<th>Side</th>
+<th>Platform</th>
+<th>Line</th>
+<th>Model edge</th>
+<th>Game time</th>
+</tr>
+</thead>
+<tbody id="openTableBody"></tbody>
+</table>
+</div>
+<p id="openEmpty" class="empty-note" hidden>No open flags right now.</p>
+</section>
 
-    <div class="sizing-body">
-      <div class="sizing-selection">
-        <span class="sizing-label">Selected legs</span>
-        <div id="sizingSelectedLegs" class="selected-legs">
-          <p class="empty-note">None selected. Check two PrizePicks flags in the table above.</p>
-        </div>
-      </div>
+<section class="panel" id="sizing-panel">
+<div class="panel-head">
+<h2>Sizing calculator</h2>
+<p class="panel-note">
+Runs the exact same math as <code>scripts/sizing/sizing_engine.py</code> &mdash; quarter-Kelly, the PrizePicks
+account-risk dampener, the same-game caution factor, and the 5%-of-bankroll cap &mdash; entirely in your
+browser. Your bankroll figure is never saved anywhere; it resets the moment you leave or reload this page.
+This stays exactly as manual as the script: one entry (two legs) at a time, and it has no memory of any
+stake you've already placed, so update the bankroll figure yourself between entries.
+</p>
+</div>
 
-      <div class="sizing-input-row">
-        <label for="bankrollInput" class="sizing-label">Current bankroll ($)</label>
-        <input type="number" id="bankrollInput" min="1" step="1" placeholder="e.g. 500" />
-      </div>
+<div class="sizing-body">
+<div class="sizing-selection">
+<span class="sizing-label">Selected legs</span>
+<div id="sizingSelectedLegs" class="selected-legs">
+<p class="empty-note">None selected. Check two PrizePicks flags in the table above.</p>
+</div>
+</div>
 
-      <div id="sizingResult" class="sizing-result" hidden></div>
-    </div>
-  </section>
+<div class="sizing-input-row">
+<label for="bankrollInput" class="sizing-label">Current bankroll ($)</label>
+<input type="number" id="bankrollInput" min="1" step="1" placeholder="e.g. 500" />
+</div>
 
-  <section class="panel" id="closed-panel">
-    <div class="panel-head">
-      <h2>Recently closed flags</h2>
-      <p class="panel-note">The last 25 lines to resolve, most recent first.</p>
-    </div>
-    <div class="table-wrap">
-      <table id="closedTable">
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Stat</th>
-            <th>Side</th>
-            <th>Platform</th>
-            <th>Closing line</th>
-            <th>CLV edge at close</th>
-            <th>Closed</th>
-          </tr>
-        </thead>
-        <tbody id="closedTableBody"></tbody>
-      </table>
-    </div>
-    <p id="closedEmpty" class="empty-note" hidden>No closed flags yet.</p>
-  </section>
+<div id="sizingResult" class="sizing-result" hidden></div>
+</div>
+</section>
 
-  <p id="loadError" class="load-error" hidden>
-    Could not load <code>data/clv_log.csv</code>. This page reads that file from its own build, so a fresh Cloudflare Pages deploy is needed after any pipeline run for this page to update.
-  </p>
+<section class="panel" id="closed-panel">
+<div class="panel-head">
+<h2>Recently closed flags</h2>
+<p class="panel-note">The last 25 lines to resolve, most recent first.</p>
+</div>
+<div class="table-wrap">
+<table id="closedTable">
+<thead>
+<tr>
+<th>Player</th>
+<th>Stat</th>
+<th>Side</th>
+<th>Platform</th>
+<th>Closing line</th>
+<th>CLV edge at close</th>
+<th>Closed</th>
+</tr>
+</thead>
+<tbody id="closedTableBody"></tbody>
+</table>
+</div>
+<p id="closedEmpty" class="empty-note" hidden>No closed flags yet.</p>
+</section>
+
+<p id="loadError" class="load-error" hidden>
+Could not load <code>data/clv_log.csv</code>. This page reads that file from its own build, so a fresh Cloudflare Pages deploy is needed after any pipeline run for this page to update.
+</p>
+
+<!-- ================================================================ -->
+<!-- TRACK 2 — ARBITRAGE                                                -->
+<!-- ================================================================ -->
+<div class="track-heading track-heading-arb">
+<span class="track-tag track-tag-arb">Track 2</span>
+<h2>Cross-venue arbitrage (Kalshi + Polymarket)</h2>
+</div>
+
+<section class="panel panel-arb" id="arb-summary-panel">
+<div class="stat-row" id="arbStatRow">
+<div class="stat">
+<span class="stat-value" id="arbStatTotal">—</span>
+<span class="stat-label">Flags this run</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="arbStatSingle">—</span>
+<span class="stat-label">Single-venue (YES+NO)</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="arbStatCross">—</span>
+<span class="stat-label">Cross-venue pairs</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="arbStatFillable">—</span>
+<span class="stat-label">Fillable at flagged size</span>
+</div>
+</div>
+</section>
+
+<section class="panel panel-arb" id="arb-open-panel">
+<div class="panel-head">
+<h2>Currently flagged arbitrage opportunities</h2>
+<p class="panel-note">
+Output of the latest automated run of <code>scripts/run_arbitrage_pipeline.py</code>, sorted by net profit
+per dollar risked, after each venue's real taker fee is subtracted. This table replaces itself completely
+on every run &mdash; it is a point-in-time snapshot, not a running log the way the pick&rsquo;em CLV chart
+above is. Sizing a flagged pair is still a manual step
+(<code>sizing_engine.py arbitrage size</code>) &mdash; this page never sizes or places anything.
+</p>
+</div>
+<div class="table-wrap">
+<table id="arbTable">
+<thead>
+<tr>
+<th>Type</th>
+<th>Venue A</th>
+<th>Market A</th>
+<th>Ask A</th>
+<th>Venue B</th>
+<th>Market B</th>
+<th>Ask B</th>
+<th>Net profit / $1</th>
+<th>Fillable</th>
+<th>Legal footprint</th>
+</tr>
+</thead>
+<tbody id="arbTableBody"></tbody>
+</table>
+</div>
+<p id="arbEmpty" class="empty-note" hidden>No arbitrage opportunities flagged on the latest run. Per this project's own findings, zero flags is a legitimate outcome, not evidence of a broken pipeline.</p>
+</section>
+
+<p id="arbLoadError" class="load-error" hidden>
+Could not load <code>data/arbitrage_flags_latest.csv</code>. This page reads that file from its own build, so a
+fresh Cloudflare Pages deploy is needed after any arbitrage pipeline run for this section to update. See
+Session 3.5's notes if this file has never existed in a deploy yet.
+</p>
 
 </main>
 
 <footer class="site-footer">
-  <p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including the hourly pipeline&rsquo;s own commits.</p>
+<p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including both tracks&rsquo; own pipeline commits.</p>
 </footer>
 
 <script src="app.js"></script>
