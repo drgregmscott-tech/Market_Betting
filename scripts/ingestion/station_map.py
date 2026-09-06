@@ -34,29 +34,25 @@ weather data source is identified for a future session.
 
 NAMED, UNRESOLVED GAPS (do not silently guess past these)
 -----------------------------------------------------------------------
-- KXHIGHHOU / KXLOWHOU ("Houston"): Kalshi's own legacy settlement source
-  for KXHIGHHOU (GET /series/KXHIGHHOU, confirmed live) points to an NWS
-  Climatological Report "issuedby=HOU" - historically Houston Hobby's
-  product code, not Bush Intercontinental's. Mapped to KHOU on that
-  basis. NOT independently confirmed against Kalshi's contract terms PDF
-  (HOUHIGH.pdf) - if a future session finds that PDF names Bush
-  Intercontinental instead, this single line is the only thing that
-  needs to change.
-- KXHIGHCHI / KXLOWCHI ("Chicago"): weather.com/kalshi lists Chicago
-  O'Hare (KORD) and Chicago Midway (KMDW) as two separate stations.
-  Kalshi's ticker gives no way to tell which one "KXHIGHCHI" resolves
-  against, and this session found no series-level field that says so.
-  Mapped to KORD (the larger, more commonly referenced Chicago station)
-  as a NAMED PLACEHOLDER, not a confirmed answer. Action needed before
-  this project sizes any real Chicago weather position: find Kalshi's
-  KXHIGHCHI contract-terms PDF or rules text and confirm the real station
-  directly.
-- A few station codes on weather.com/kalshi's own list don't match the
-  airport code this project would otherwise expect from general
-  knowledge (e.g. West Palm Beach shown as KDJT, not the more common
-  KPBI). These are taken as given from Kalshi's own live reference page
-  rather than overridden - flagged here so a future session doesn't
-  assume it's this file's typo.
+Both of this project's original station-identity gaps (Houston, Chicago)
+were resolved this session (2026-09-06) against two independent real
+sources - a Houston Chronicle article naming "William P. Hobby Airport"
+in a real, executed Kalshi weather block trade, and a third-party Kalshi
+weather-data vendor's own published station mapping, which separately
+confirmed both Houston=Hobby and Chicago=Midway (explicitly flagging
+Midway-vs-O'Hare as a known mistake to avoid - this project's own
+original KXHIGHCHI mapping was exactly that mistake, caught and fixed
+before it reached real sizing). Both are now treated as confirmed, not
+placeholders - see SERIES_TICKER_TO_STATION below.
+
+No other station-identity gaps are currently open. A few station codes on
+weather.com/kalshi's own list still don't match the airport code this
+project would otherwise expect from general knowledge (e.g. West Palm
+Beach shown as KDJT, not the more common KPBI) - these are taken as given
+from Kalshi's own live reference page rather than overridden, flagged
+here so a future session doesn't assume it's this file's typo, but they
+are not treated as open decisions the way Houston/Chicago were, since
+weather.com/kalshi is itself the authoritative source, not a guess.
 
 Cities appearing on weather.com/kalshi's list but not yet matched to a
 live KXHIGH/KXLOW series in this project's Session 3.1 pull (College
@@ -116,8 +112,14 @@ SERIES_TICKER_TO_STATION: dict[str, str] = {
     # all real series, not a typo on this project's side. All point to
     # the same real city/question and are mapped to the same placeholder
     # station (KHOU) pending the Hobby-vs-Bush confirmation noted above.
-    "KXHIGHCHI": "KORD", "KXLOWCHI": "KORD", "KXLOWTCHI": "KORD",
-    # ^ same correction pattern - KXLOWTCHI was missing on the first pass.
+    "KXHIGHCHI": "KMDW", "KXLOWCHI": "KMDW", "KXLOWTCHI": "KMDW",
+    # ^ SESSION 4.1 CORRECTION (2026-09-06): originally placeholder-mapped
+    # to KORD (O'Hare) as a named, unconfirmed guess. Confirmed via a
+    # third-party Kalshi weather-data vendor's own published mapping
+    # (which explicitly calls out "Chicago = Midway" as a known
+    # gotcha - the same kind of mistake this project was trying not to
+    # make) that Kalshi's Chicago temperature series settle against
+    # Midway, not O'Hare. Corrected here; no longer a placeholder.
 
     # -- SESSION 4.1 CORRECTION: real ticker variants missed on the first
     # pass, found from the actual first live run's "unmapped" warnings

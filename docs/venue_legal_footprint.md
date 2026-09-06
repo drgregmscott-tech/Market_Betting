@@ -72,6 +72,31 @@ restriction list was found. **This is a real, named limitation, not a
 verified guarantee** — every flagged row's `legal_footprint_note` field
 says so explicitly, and repeats the same standing instruction below.
 
+## Session 4.1 addendum — Track 3 (Weather/Climate, Kalshi)
+
+Session 4.1 built real ingestion for Kalshi's temperature-threshold
+markets, all of which live under Kalshi's "Climate and Weather" category
+— confirmed live, 2026-09-06, none carry the "Sports" tag this document's
+one confirmed Kalshi restriction applies to. Per this document's own
+framing above, that means Track 3 inherits the same status already
+recorded for Commodities and Elections: **not confirmed restricted, and
+not confirmed clean either** — no dedicated state-by-state legal check
+has been run for Climate/Weather specifically, the same honest gap this
+document already names for the other two non-Sports tracks. Session 4.1
+did not close this gap; it confirmed the gap's existing description
+already covers a track it hadn't been written for by name yet, and adds
+this one paragraph so a future reader doesn't have to re-derive that
+Track 3 falls under the "not Sports" umbrella above by inference alone.
+
+**Nothing in this session's real data ingestion (24 US city stations, all
+domestic) intersects any of the restrictions named above** — no Track 3
+weather market comes from a Sports-tagged series, and Minnesota's
+platform-level law (not trader-level, see above) doesn't change whether
+an individual trader can act on a flagged Track 3 opportunity. This
+document's existing standing instruction (confirm live eligibility before
+placing a real trade) applies to Track 3 exactly as written above; no new
+instruction was needed.
+
 ## Standing instruction
 
 **Always confirm current availability using each venue's own live
