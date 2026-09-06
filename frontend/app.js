@@ -67,9 +67,26 @@ function parseCSV(text) {
       if (c === '"') { inQuotes = true; }
       else if (c === ",") { row.push(field); field = ""; }
       else if (c === "\n") {
-        if (text[i - 1] !== "\r") { row.push(field); field = ""; rows.push(row); row = []; }
+        // End of row for LF-only files, and the second half of a CRLF
+        // pair (the \r just before this was already handled below).
+        row.push(field); field = ""; rows.push(row); row = [];
       }
-      else if (c === "\r") { /* skip, handled with \n */ }
+      else if (c === "\r") {
+        // Only end the row here for a lone CR. If this CR is followed
+        // by LF (a CRLF pair -- what Python's csv module writes by
+        // default, e.g. detector.py's output), let the "\n" branch
+        // above end the row instead, so the row isn't ended twice and,
+        // more importantly, so it gets ended at all: the previous
+        // version of this check only fired when the PRECEDING
+        // character was not "\r", which is backwards and silently
+        // dropped every row in any CRLF file. Confirmed via Session
+        // 3.5's own live-site check: arbitrage_flags_latest.csv (CRLF,
+        // from Python's csv.writer) parsed to zero rows under the old
+        // logic despite loading successfully over the network; pick'em's
+        // clv_log.csv (LF-only) was never affected, which is why this
+        // went unnoticed for five prior sessions.
+        if (text[i + 1] !== "\n") { row.push(field); field = ""; rows.push(row); row = []; }
+      }
       else { field += c; }
     }
   }
