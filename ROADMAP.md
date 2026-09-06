@@ -119,6 +119,39 @@ data on every flagged opportunity** (see Phase 3) — a model that produces
 plausible-looking output but isn't logging its own price-vs-benchmark comparison
 does not count as complete, even if it runs without error.
 
+## Rule for sessions left open across other work (added Session 3.6)
+
+**Real incident this rule exists to prevent:** Session 3.5's complete entry
+was dropped from `SESSION_LOG.md`/`ROADMAP.md` because a separate session
+closing out a leftover Session 3.4 item produced its own updated copy of
+both files, without either session confirming the other's version had
+already been committed to GitHub. Both files "looked done," but each was
+missing the other's real work — caught and manually reconciled at the start
+of Session 3.6 (see that session's entry for the full recovery).
+
+**The actual failure was not a broken prerequisite** — Session 3.4 and 3.5
+were sequential, not overlapping. The risk is broader than strict
+prerequisites: **any time a session is left open (status other than ✅
+Complete or ❌ Blocked) while later sessions proceed — including sessions in
+a different phase whose only stated prerequisite is a phase, not the
+specific open session** — a future close-out of the open session can start
+from a stale copy of these files and silently overwrite real work done in
+between.
+
+**Standing rule:** before closing out ANY session (marking it ✅ Complete in
+ROADMAP.md), first pull the actual current `SESSION_LOG.md` and
+`ROADMAP.md` from GitHub directly — not a copy handed over earlier in a
+different chat — and check for any session entries added after the one
+being closed. If any exist, merge the closing session's update into that
+current version (same reconciliation approach used to fix the 3.4/3.5 gap),
+never simply append to a possibly-stale copy.
+
+**Applies now, specifically:** Session 3.6 is being left open (real
+sample size not yet reached — see that session's entry). If Phase 4, 5, or
+any other session's work happens before 3.6 is revisited, whoever closes
+3.6 must pull the live files from GitHub first and check for those sessions'
+entries before writing anything, per the rule above.
+
 ## Workflow preference — GitHub Desktop
 
 Same as the DFS projects: the user commits and pushes through GitHub Desktop, not
@@ -1407,32 +1440,73 @@ fix)
 ---
 
 ### Session 3.5 — Frontend Integration
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-06)
 **Prerequisites:** Session 3.4 complete.
 
-**What gets built:** Adds arbitrage opportunities to the existing Phase 2
-frontend as a new section/view, rather than a separate site.
+**What was built:** Added arbitrage opportunities to the existing frontend as
+a new, clearly-labeled section on the same page (Track 2, blue accent),
+rather than a separate site. This required three real, load-bearing changes
+beyond the frontend files themselves, none of which were anticipated at
+session open:
 
-**Files touched:** `/frontend/` (extended)
+1. `detector.py` now writes a second, stable-named file
+   (`arbitrage_flags_latest.csv`) on every run, alongside its existing
+   timestamped output — the frontend needs one predictable filename to
+   fetch, and the pipeline previously only ever produced timestamped ones.
+2. The Cloudflare Pages build command was extended to copy that new file
+   into `frontend/data/` alongside pick'em's existing `clv_log.csv` copy
+   step.
+3. A real bug in `app.js`'s CSV reader (present since Session 2.8, never
+   triggered until now) was found and fixed — see Corrections below.
+
+**Files touched:** `frontend/index.html`, `frontend/app.js`,
+`frontend/style.css` (all extended, not replaced), `scripts/arbitrage/detector.py`
+(two-line addition), Cloudflare Pages build command (dashboard setting, not
+a repo file).
 
 **Validation (required to close session):**
-- [ ] Arbitrage opportunities display correctly alongside pick'em, clearly
-      distinguished as a different track
+- [x] Arbitrage opportunities display correctly alongside pick'em, clearly
+      distinguished as a different track — confirmed on the live production
+      URL (`market-betting.pages.dev`), not just locally: a real screenshot
+      and a direct DOM check both show the one real flagged opportunity
+      (Kalshi MI-7 / Polymarket MI-07, carried over from Session 3.4)
+      rendering under a blue "Track 2" badge, below Track 1's own section,
+      with real stat-row and table values matching the underlying CSV.
 
 ---
 
 ### Session 3.6 — Live Validation Window
-**Status:** Not started
+**Status:** ⚠️ In progress, left open intentionally — see SESSION_LOG.md for
+full detail. **Before closing this session, read "Rule for sessions left
+open across other work" above and pull the live files from GitHub first.**
 **Prerequisites:** Session 3.5 complete.
 
 **What gets built:** Same soak-test pattern as Session 2.9, adapted — since
 arbitrage has no estimation model, "validation" here means confirming flagged
 opportunities were real and executable, not a CLV comparison. Realized-outcome
-reporting (per Session 2.5's tracker) still applies here too, since arbitrage
-positions do get placed and resolve.
+reporting reuses Session 3.3's existing `sizing_engine.py` arbitrage ledger
+(`record-open`/`settle`) directly — confirmed this session that it already
+covers this need; nothing new was built for that half.
+
+Sample size for arbitrage cannot use Session 2.5's breakeven-based method
+(no win probability exists to size against — see
+`docs/arbitrage_sample_size_methodology.md`, new this session). Real target,
+derived from a standard zero-failure statistical convention applied to
+Session 3.4's own measured 90% pre-fix defect rate: **30 confirmed-clean
+distinct opportunities per detection mechanism (90 total across the
+detector's three mechanisms)**. This session closes on a smaller, explicitly
+named interim floor instead (≥1 per mechanism, or a documented zero-found
+finding) — see SESSION_LOG.md Decision #3 for the full reasoning.
+
+**Files touched:** `scripts/calibration/arbitrage_flag_tracker.py` (new),
+`docs/arbitrage_sample_size_methodology.md` (new).
 
 **Validation (required to close session):**
-- [ ] Minimum sample size of flagged opportunities reached
+- [ ] Minimum sample size of flagged opportunities reached — interim floor
+      status as of 2026-09-06: `elections_wide` met (1 distinct real
+      opportunity); `single_venue` and `bucketed` not met (0 each). Re-check
+      via `arbitrage_flag_tracker.py --scan --report` after more real runs
+      accumulate.
 - [ ] Spot-checked sample confirms flagged opportunities were genuinely
       executable at the prices logged (not stale/unavailable by execution time)
 - [ ] Go/no-go decision recorded
