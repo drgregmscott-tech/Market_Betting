@@ -47,28 +47,52 @@ name: Arbitrage Pipeline
 # are observed to close (not an arbitrary guess)." As of this session,
 # that real evidence does not exist yet -- Session 3.2/3.3 found real
 # markets consistently efficient (14 markets checked, all priced
-# $1.01-$1.04, no genuine arbitrage window to time the closing of), and
-# the one real related data point available (Session 3.3: quoted PRICE
-# unchanged but order-book SIZE moving as much as 67% in 13 real minutes
-# on one market) measures execution risk, not how fast a genuine mispricing
-# itself would close. 15 minutes is used here as a DELIBERATE, NAMED
-# PLACEHOLDER -- frequent enough to start collecting real timing data once
-# a genuine flag does occur, infrequent enough (roughly 540 Kalshi requests
-# per run, each with a real per-series pause -- see
-# KALSHI_PER_SERIES_PAUSE_SECONDS in ingest_kalshi.py -- so a run takes
-# real minutes, not seconds) not to risk overlapping runs or rate limits.
-# This is explicitly flagged, here and in SESSION_LOG.md, as a placeholder
-# to recalibrate in Session 3.6 (Live Validation Window) once real flagged-
-# opportunity timing data exists -- not presented as an evidence-based
-# final answer.
+# $1.01-$1.04, no genuine arbitrage window to time the closing of).
+# Unlike the pick'em track (Session 2.4's CLV logging, which grades
+# itself against a closing line and genuinely needs frequent snapshots
+# to do that accurately), this detector never compares a run against a
+# past run -- every run is a self-contained check of whether both sides
+# of a locked position can be bought for under $1.00 RIGHT NOW. Polling
+# frequency here is only about the odds of a snapshot landing inside a
+# real mispricing's real (currently unknown) lifetime, not about
+# building a trend.
+#
+# 6 runs/day (every 4 hours) is used here as a DELIBERATE, NAMED
+# PLACEHOLDER, chosen against two real, checked constraints rather than
+# an arbitrary guess:
+# - Cost: real GitHub Actions history (both prior manual runs of this
+#   workflow) shows one run takes just under 4 minutes of runner time.
+#   At 6 runs/day this is about 720 runner-minutes/month -- combined
+#   with pickem_pipeline.yml's own real ~960 runner-minutes/month
+#   (hourly, ~1m20s/run per its own real run history), this keeps the
+#   account's combined Actions usage under its 2,000-minute/month
+#   included allowance (GitHub Free plan, confirmed live via the
+#   account's own billing page 2026-09-06), leaving headroom for the
+#   DFS optimizer repos that also draw from this same account-wide pool.
+#   The earlier 15-minute placeholder this replaced would have used
+#   roughly 11,500 runner-minutes/month by itself -- confirmed, not
+#   estimated, to be a real budget problem, not a theoretical one.
+# - Kalshi rate-limit exposure: 6 runs/day keeps total daily requests to
+#   Kalshi (~540/run) far lower than a 15-minute cadence would, which
+#   matters given Kalshi's real rate limit has never been published (see
+#   ingest_kalshi.py's own ACCESS note).
+# This gives Session 3.6 (Live Validation Window) several real snapshots
+# per day to learn from -- enough to start building real evidence on how
+# long a genuine mispricing stays open -- while the person reviewing the
+# digest still only needs to check it once a day, since every run's
+# result accumulates in output/digest/arbitrage_digest_latest.md and the
+# committed flags/matches files regardless of how often it's checked.
+# This cadence is still explicitly flagged, here and in SESSION_LOG.md,
+# as a placeholder to recalibrate once Session 3.6 produces real timing
+# data -- not presented as a final, evidence-based answer.
 on:
   schedule:
-    # Runs every 15 minutes. Not on the exact quarter-hour marks ("*/15")
-    # for the same reason pickem_pipeline.yml avoids the exact top of the
-    # hour -- GitHub's own documentation warns that jobs scheduled for
-    # the busiest, most predictable slots on their infrastructure are the
-    # most likely to be delayed or skipped.
-    - cron: "4,19,34,49 * * * *"
+    # Runs 6 times a day, roughly every 4 hours, offset from the exact
+    # hour for the same reason pickem_pipeline.yml avoids the exact top
+    # of the hour -- GitHub's own documentation warns that jobs
+    # scheduled for the busiest, most predictable slots on their
+    # infrastructure are the most likely to be delayed or skipped.
+    - cron: "11 1,5,9,13,17,21 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
   # can be triggered by hand for testing without waiting for the next
@@ -89,15 +113,13 @@ permissions:
 jobs:
   run-arbitrage-pipeline:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
-    # Shorter than pickem_pipeline.yml's 30 minutes, deliberately: this
-    # workflow runs every 15 minutes (see the polling-frequency note
-    # above), so a single run must never be allowed to still be going
-    # when the next one is due to start. If a real run ever needs more
-    # than 12 minutes (e.g. Kalshi's per-series pull grows past its
-    # current ~540 series), that is itself a signal to revisit either
-    # this timeout or the 15-minute cadence together, not to raise this
-    # number alone.
+    timeout-minutes: 30
+    # Matches pickem_pipeline.yml's own timeout. With runs spaced 4
+    # hours apart (see the polling-frequency note above) there is no
+    # longer a tight overlap risk the way there was at the earlier
+    # 15-minute placeholder cadence, so this no longer needs to be cut
+    # unusually short -- 30 minutes is a generous ceiling against a real
+    # run that currently takes under 4 minutes.
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
