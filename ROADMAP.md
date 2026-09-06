@@ -1408,17 +1408,38 @@ fix)
 ---
 
 ### Session 3.5 — Frontend Integration
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-06)
 **Prerequisites:** Session 3.4 complete.
 
-**What gets built:** Adds arbitrage opportunities to the existing Phase 2
-frontend as a new section/view, rather than a separate site.
+**What was built:** Added arbitrage opportunities to the existing frontend as
+a new, clearly-labeled section on the same page (Track 2, blue accent),
+rather than a separate site. This required three real, load-bearing changes
+beyond the frontend files themselves, none of which were anticipated at
+session open:
 
-**Files touched:** `/frontend/` (extended)
+1. `detector.py` now writes a second, stable-named file
+   (`arbitrage_flags_latest.csv`) on every run, alongside its existing
+   timestamped output — the frontend needs one predictable filename to
+   fetch, and the pipeline previously only ever produced timestamped ones.
+2. The Cloudflare Pages build command was extended to copy that new file
+   into `frontend/data/` alongside pick'em's existing `clv_log.csv` copy
+   step.
+3. A real bug in `app.js`'s CSV reader (present since Session 2.8, never
+   triggered until now) was found and fixed — see Corrections below.
+
+**Files touched:** `frontend/index.html`, `frontend/app.js`,
+`frontend/style.css` (all extended, not replaced), `scripts/arbitrage/detector.py`
+(two-line addition), Cloudflare Pages build command (dashboard setting, not
+a repo file).
 
 **Validation (required to close session):**
-- [ ] Arbitrage opportunities display correctly alongside pick'em, clearly
-      distinguished as a different track
+- [x] Arbitrage opportunities display correctly alongside pick'em, clearly
+      distinguished as a different track — confirmed on the live production
+      URL (`market-betting.pages.dev`), not just locally: a real screenshot
+      and a direct DOM check both show the one real flagged opportunity
+      (Kalshi MI-7 / Polymarket MI-07, carried over from Session 3.4)
+      rendering under a blue "Track 2" badge, below Track 1's own section,
+      with real stat-row and table values matching the underlying CSV.
 
 ---
 
