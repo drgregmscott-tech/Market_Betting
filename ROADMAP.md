@@ -1516,7 +1516,7 @@ finding) — see SESSION_LOG.md Decision #3 for the full reasoning.
 # PHASE 4 — Track 3: Weather/Climate Markets (Kalshi)
 
 ### Session 4.1 — Data Ingestion (Kalshi + Public Weather Data)
-**Status:** Not started
+**Status:** ✅ Complete
 **Prerequisites:** Phase 2 complete (reuses ingestion pattern); Kalshi API access
 already resolved in Session 3.1 if Phase 3 is done first — otherwise resolve here.
 
@@ -1528,17 +1528,46 @@ criteria, this session also captures each market's real order-book depth
 assumed adequate) and confirms Kalshi's current legal availability to the user
 (**legal footprint**), rather than deferring either check to a later session.
 
-**Files touched:** `/scripts/ingestion/ingest_weather_markets.py`,
-`/scripts/ingestion/ingest_nws_gfs_metar.py`
+**What actually got built (real drift from the card above, logged per this
+project's standing practice):** "NWS, GFS, METAR" turned out to be one real,
+free API, not three — see SESSION_LOG.md's Session 4.1 entry for the live
+evidence. `ingest_nws_gfs_metar.py` was built as `ingest_nws_weather_data.py`
+instead, and a second new file, `schema_weather.py`, plus a third,
+`station_map.py` (a hand-built, real-data-confirmed city-to-station reference
+table), were added beyond the original card — needed once it became clear
+Kalshi runs several different ticker spellings per city and settles some
+cities against a private-labeled but METAR-sourced feed, not NWS directly.
+
+**Files touched:** `/scripts/ingestion/ingest_weather_markets.py` (new),
+`/scripts/ingestion/ingest_nws_weather_data.py` (new, replaces the
+originally-planned `ingest_nws_gfs_metar.py` — see above),
+`/scripts/ingestion/schema_weather.py` (new),
+`/scripts/ingestion/station_map.py` (new),
+`/docs/weather_data_freshness_check.md` (new),
+`/docs/nws_settlement_gap_resolution.md` (new),
+`/docs/venue_legal_footprint.md` (extended with a Track 3 addendum, not
+rewritten)
 
 **Validation (required to close session):**
-- [ ] Kalshi weather market data and public weather data both ingest
-      successfully and can be joined on the same real-world event
-- [ ] Data freshness confirmed adequate for the market's resolution timing (data
-      arrives before markets need to be evaluated)
-- [ ] Order-book depth/liquidity captured per market, not just the top price
-- [ ] Legal footprint confirmed and documented for Kalshi in the user's
-      jurisdiction
+- [x] Kalshi weather market data and public weather data both ingest
+      successfully and can be joined on the same real-world event — pass,
+      confirmed against real committed data (576 rows, 62 series, 24 US
+      stations); Philadelphia spot-checked directly: same `KPHL` station code
+      in both files, real plausible temperatures, sane market pricing.
+- [x] Data freshness confirmed adequate for the market's resolution timing (data
+      arrives before markets need to be evaluated) — pass, real evidence in
+      `docs/weather_data_freshness_check.md`: forecast data available
+      31–34 real hours before the earliest market close for that date;
+      observed data for grading arrives within minutes of a local day ending.
+- [x] Order-book depth/liquidity captured per market, not just the top price —
+      pass, came through automatically via `yes_ask_size`/`yes_bid_size` on
+      every real row (same fields Session 3.2 already added for arbitrage).
+- [x] Legal footprint confirmed and documented for Kalshi in the user's
+      jurisdiction — pass, by reference: `docs/venue_legal_footprint.md`'s
+      existing Session 3.2 finding (Kalshi's only confirmed restriction is
+      Sports-specific) extended with a one-paragraph addendum naming Track 3
+      explicitly, plus a live, direct check this session confirming Kansas
+      specifically (the user's own state) is fully available.
 
 ---
 
@@ -2337,6 +2366,63 @@ remaining blockers to starting Phase 2.
     repos' automation), and treat the arbitrage pipeline's cadence as
     the first, lowest-cost lever to pull back if the account ever
     trends toward its ceiling.
+28. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
+    the roadmap card's "NWS, GFS, METAR" wording implied three separate
+    public data feeds. Checked live: NWS's own public API
+    (`api.weather.gov`) already returns both an official gridded
+    forecast (built from blended model guidance, GFS included) and
+    METAR-sourced station observations, in structured JSON, for free,
+    with no key. Pulling raw GFS grib2 files or raw METAR text
+    separately would re-derive what this one API already computes, for
+    no additional real information. Session 4.1 built on this one API
+    rather than three feeds — see `ingest_nws_weather_data.py`'s module
+    docstring for the full reasoning, and SESSION_LOG.md's Session 4.1
+    entry for the live evidence.
+29. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
+    Kalshi's weather series settlement sources are NOT uniform. A live
+    check of six real series found five settle against "The Weather
+    Company" (a 2026-09-02 contract migration, confirmed via Kalshi's
+    own contract-terms metadata) and one legacy series (Houston) still
+    settles directly against an NWS Climatological Report. Checked
+    further and RESOLVED: `weather.com/kalshi`'s own reference page
+    states its data is "METAR airport observations relayed via The
+    Weather Company" for a fixed, named list of 37 government-station
+    codes — the same underlying government data this project's own NWS
+    pipeline already pulls for those same station codes. This is a real,
+    confirmed naming difference in Kalshi's settlement-source field, not
+    a private/proprietary data source this project can't independently
+    replicate. See SESSION_LOG.md's Session 4.1 entry for the full
+    evidence trail.
+30. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
+    two of Kalshi's weather cities (Houston, Chicago) each have two real
+    candidate airports, and this project's ticker alone could not say
+    which one Kalshi settles against. RESOLVED via two independent real
+    sources: a Houston Chronicle article about an actual executed Kalshi
+    weather trade naming "William P. Hobby Airport" explicitly, and a
+    third-party Kalshi weather-data vendor's own published station
+    mapping, which separately confirmed Houston=Hobby (KHOU) AND
+    Chicago=Midway (KMDW) — the latter corrected this project's own
+    original placeholder guess (O'Hare), caught before it reached any
+    real sizing decision. See `station_map.py`'s module docstring.
+31. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
+    a real, live comparison of this project's own NWS-based daily
+    high/low against Kalshi's actual settlement record (Philadelphia,
+    2026-09-05) found a small gap (0.2–0.9°F). Investigated directly
+    against real 5-minute-resolution station data: the gap is explained
+    by Kalshi's settlement feed storing one rounded, whole-degree value
+    per clock hour, while this project's pipeline keeps exact-decimal,
+    5-minute-resolution readings. This bounds the real gap at
+    approximately ≤1°F (one rounding step), not an open-ended or
+    unexplained divergence. **Action for Session 4.2:** treat this
+    project's own forecast/observation numbers as accurate to
+    approximately ±1°F relative to Kalshi's actual settlement value by
+    design, and treat any contract whose threshold sits within that
+    band of this project's estimate as a named, lower-confidence edge
+    case rather than a silent risk. See
+    `docs/nws_settlement_gap_resolution.md` for the full evidence trail,
+    including a second, separate finding (a manual verification script's
+    own timezone-conversion bug, unrelated to and now ruled out as a
+    cause of this gap) resolved in the same investigation.
 
 ---
 *Update this file at the close of each future session, per the project's
