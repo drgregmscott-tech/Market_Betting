@@ -186,6 +186,30 @@ MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
 
+# Session 3.4 (Automation Adaptation) - ROADMAP.md's Session 3.1 action
+# item 18: this script makes one real HTTP request per target series
+# (roughly 540 real requests per run - ~448 Climate/Commodities series
+# plus 93 down-ballot Elections series, per Session 3.1/3.1b). Session
+# 3.1's own real runs relied only on REACTIVE retries (MAX_RETRIES,
+# RETRY_BACKOFF_SECONDS above) if a single request failed - there was no
+# DELIBERATE pause between requests that succeed. That was an acceptable
+# gap for a manually-triggered, watched run, but Session 3.4 turns this
+# into an UNATTENDED job that a GitHub Actions runner fires on a
+# schedule with no person watching it - a real difference in risk, not a
+# cosmetic one. A fixed pause between every request (successful or not)
+# is a deliberate, named choice to stay well clear of Kalshi's real
+# rate limits, rather than only reacting after this project's own
+# requests are already being throttled or blocked. 0.2 seconds adds
+# roughly 108 real seconds total to a ~540-series run (540 x 0.2s) -
+# small next to this workflow's 30-minute timeout, and worth it for an
+# automation that runs unattended and unwatched. Not yet load-tested
+# against Kalshi's actual real rate-limit ceiling (no such ceiling is
+# published, per this file's own earlier ACCESS note) - if real 429/
+# throttling responses are ever observed in the Actions logs, raise
+# this value rather than lowering it, and log that as a real, named
+# change, the same as any other constant in this project.
+KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2
+
 # Real Kalshi category names, confirmed live 2026-09-04 against GET
 # /series (13,816 total series). Matches Session 0.1's Track 3 scope
 # ("Climate/Commodities") directly. Pulled in full - every series in these
@@ -411,6 +435,14 @@ def fetch_markets_for_series(tickers: list[str]) -> list[dict]:
             failed_tickers.append(ticker)
             log.warning("Failed to fetch markets for series %s: %s", ticker, exc)
             continue
+        finally:
+            # Session 3.4 fix (ROADMAP.md action item 18) - a deliberate
+            # pause after EVERY request, whether it succeeded or failed,
+            # so an unattended scheduled run never fires the next of
+            # ~540 real requests back-to-back with no gap at all. See
+            # KALSHI_PER_SERIES_PAUSE_SECONDS above for the full
+            # reasoning and the real request-count/timeout math.
+            time.sleep(KALSHI_PER_SERIES_PAUSE_SECONDS)
 
     if failed_tickers:
         log.warning(

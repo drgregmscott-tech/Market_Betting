@@ -1,0 +1,137 @@
+name: Arbitrage Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions "workflow" -- a set of instructions GitHub itself runs on
+# a schedule, on a temporary computer GitHub provides (a "runner"), separate
+# from your own PC. Every run starts from a completely fresh copy of this
+# repo; nothing written to that temporary computer's disk survives past the
+# end of the run unless this file explicitly saves it back to GitHub first.
+# This is the arbitrage track's twin of pickem_pipeline.yml (Session 2.7) --
+# same structure, a separate schedule and a separate commit step, so the
+# two tracks' automated runs never interfere with each other.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo onto the temporary computer.
+# 2. Installs Python and this project's packages (requirements.txt).
+# 3. Runs scripts/run_arbitrage_pipeline.py, which itself runs Kalshi
+#    ingestion -> Polymarket ingestion -> venue matching -> arbitrage
+#    detection in sequence (Session 3.4).
+# 4. If that script succeeds, commits the new candidate-match file, the new
+#    arbitrage-flags file, and the new digest file back to this repo, using
+#    a token GitHub generates automatically for every workflow run
+#    (GITHUB_TOKEN) -- no separate password or secret needed.
+# 5. If step 3 fails or finds nothing to commit, the workflow stops there --
+#    no commit happens, and the run shows as failed/red on GitHub's Actions
+#    tab so a failure is never silent.
+#
+# WHY THIS DOES NOT COMMIT data/exchange/raw/ OR data/exchange/normalized/
+# --------------------------------------------------------------------------
+# Those two folders hold this run's raw API responses and normalized
+# snapshots -- useful for debugging a single run, but not this project's
+# real historical record the way clv_log.csv is for the pick'em track.
+# Committing every run's full raw/normalized snapshot (roughly 540 Kalshi
+# series plus however many Polymarket events are open at pull time, every
+# 15 minutes) would grow this repo very quickly for little real benefit.
+# The two files that ARE this track's real audit trail -- the candidate
+# matches venue_matcher.py proposed, and the flags detector.py actually
+# produced -- are committed every run, matching the "keep what's actually
+# needed to reconstruct history, not everything" principle clv_log.csv
+# already established for Track 1.
+#
+# POLLING FREQUENCY -- REAL OPEN DECISION, NOT A CONFIDENT CHOICE
+# --------------------------------------------------------------------------
+# ROADMAP.md's Session 3.4 validation checkbox requires the polling
+# frequency to be "justified against how quickly real arbitrage windows
+# are observed to close (not an arbitrary guess)." As of this session,
+# that real evidence does not exist yet -- Session 3.2/3.3 found real
+# markets consistently efficient (14 markets checked, all priced
+# $1.01-$1.04, no genuine arbitrage window to time the closing of), and
+# the one real related data point available (Session 3.3: quoted PRICE
+# unchanged but order-book SIZE moving as much as 67% in 13 real minutes
+# on one market) measures execution risk, not how fast a genuine mispricing
+# itself would close. 15 minutes is used here as a DELIBERATE, NAMED
+# PLACEHOLDER -- frequent enough to start collecting real timing data once
+# a genuine flag does occur, infrequent enough (roughly 540 Kalshi requests
+# per run, each with a real per-series pause -- see
+# KALSHI_PER_SERIES_PAUSE_SECONDS in ingest_kalshi.py -- so a run takes
+# real minutes, not seconds) not to risk overlapping runs or rate limits.
+# This is explicitly flagged, here and in SESSION_LOG.md, as a placeholder
+# to recalibrate in Session 3.6 (Live Validation Window) once real flagged-
+# opportunity timing data exists -- not presented as an evidence-based
+# final answer.
+on:
+  schedule:
+    # Runs every 15 minutes. Not on the exact quarter-hour marks ("*/15")
+    # for the same reason pickem_pipeline.yml avoids the exact top of the
+    # hour -- GitHub's own documentation warns that jobs scheduled for
+    # the busiest, most predictable slots on their infrastructure are the
+    # most likely to be delayed or skipped.
+    - cron: "4,19,34,49 * * * *"
+  workflow_dispatch: {}
+  # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
+  # can be triggered by hand for testing without waiting for the next
+  # scheduled run.
+
+# Prevents two runs from overlapping if one run happens to take longer than
+# 15 minutes -- a second scheduled run will wait for the first to finish
+# rather than starting in parallel and racing to write the same files.
+concurrency:
+  group: arbitrage-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Required so the final step in this workflow is allowed to commit and
+  # push back to this repo using the automatic GITHUB_TOKEN.
+
+jobs:
+  run-arbitrage-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    # Shorter than pickem_pipeline.yml's 30 minutes, deliberately: this
+    # workflow runs every 15 minutes (see the polling-frequency note
+    # above), so a single run must never be allowed to still be going
+    # when the next one is due to start. If a real run ever needs more
+    # than 12 minutes (e.g. Kalshi's per-series pull grows past its
+    # current ~540 series), that is itself a signal to revisit either
+    # this timeout or the 15-minute cadence together, not to raise this
+    # number alone.
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (Kalshi + Polymarket ingestion -> venue matching -> arbitrage detection)
+        run: python scripts/run_arbitrage_pipeline.py
+
+      - name: Commit and push new candidate matches, flags, and digest
+        run: |
+          git config user.name "arbitrage-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/exchange/matched/ data/arbitrage/flags/ output/digest/arbitrage_digest_latest.md output/digest/arbitrage_digest_*.md
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated arbitrage pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arbitrage-pipeline-logs
+          path: |
+            logs/arbitrage_pipeline.log
+            logs/ingestion.log
+            logs/arbitrage.log
+          retention-days: 14
+          if-no-files-found: ignore
