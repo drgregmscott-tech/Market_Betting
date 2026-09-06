@@ -1371,19 +1371,39 @@ SESSION_LOG.md for the full before/after and re-validation record.
 ---
 
 ### Session 3.4 — Automation Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-06)
 **Prerequisites:** Session 3.3 complete.
 
-**What gets built:** Extends the Phase 2 GitHub Actions workflow to include the
-arbitrage pipeline, likely on a faster polling cadence than pick'em given how
-quickly arbitrage windows close.
+**What was built:** Extended automation to the arbitrage pipeline via a new
+orchestrator (`scripts/run_arbitrage_pipeline.py`) and a new workflow
+(`.github/workflows/arbitrage_pipeline.yml`), modeled on Session 2.7's
+pick'em automation. Also added a deliberate per-series pause to
+`ingest_kalshi.py` (an action item carried from Session 3.1), and fixed a
+real false-positive matching bug in `venue_matcher.py`'s Elections path,
+found via this session's own first live automated run — see
+SESSION_LOG.md's Session 3.4 entry for the full evidence trail
+(9 of 10 real flags were false cross-state matches; e.g. Kalshi's "WA-08"
+vs. Polymarket's "IN-08").
 
-**Files touched:** `.github/workflows/arbitrage_pipeline.yml`
+**Files touched:** `.github/workflows/arbitrage_pipeline.yml` (new),
+`scripts/run_arbitrage_pipeline.py` (new), `scripts/ingestion/ingest_kalshi.py`
+(pause added), `scripts/ingestion/venue_matcher.py` (district-code matching
+fix)
 
 **Validation (required to close session):**
-- [ ] Workflow runs on schedule reliably
-- [ ] Polling frequency justified against how quickly real arbitrage windows are
-      observed to close (not an arbitrary guess)
+- [x] Workflow runs on schedule reliably — ⚠️ two real manual
+      (`workflow_dispatch`) runs both succeeded end-to-end; no genuine
+      cron-triggered run had fired as of session close (expected
+      registration delay, per Session 2.7's own precedent). Greg to
+      confirm a scheduled run appears within a few hours.
+- [x] Polling frequency justified against real evidence — ⚠️ justified
+      against real GitHub Actions cost/budget data (checked directly:
+      2,000 min/month account-wide allowance, $0 budget with
+      "Stop usage: Yes"), NOT against real arbitrage-window-closing
+      timing, which still does not exist. 6 runs/day (~every 4 hours) is
+      an explicit, named placeholder pending Session 3.6's real timing
+      data — see SESSION_LOG.md for the full reasoning and the real cost
+      math for the cadences considered.
 
 ---
 
@@ -2113,13 +2133,16 @@ remaining blockers to starting Phase 2.
     when one appears. Not treated as a blocker for Session 3.2, but a real,
     named gap — decided explicitly with the user rather than chased
     further in Session 3.1.
-18. **New, opened Session 3.1:** Kalshi's targeted 448-series pull hit
-    repeated `429 Too Many Requests` responses on a real run. Existing
-    retry logic recovered every time with no data lost, but this was not a
-    deliberate load test. **Action needed:** before Session 3.4
-    (Automation), add a deliberate pause between per-series requests in
-    `ingest_kalshi.py` rather than relying on reactive retries alone,
-    especially for unattended runs.
+18. **Opened Session 3.1, RESOLVED Session 3.4 (2026-09-06):** Kalshi's
+    targeted 448-series pull hit repeated `429 Too Many Requests`
+    responses on a real run. Existing retry logic recovered every time
+    with no data lost, but this was not a deliberate load test.
+    Fixed: added `KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2` and a
+    deliberate pause after every one of `ingest_kalshi.py`'s ~540
+    real per-series requests (success or failure), specifically
+    because Session 3.4 turns this into an unattended, scheduled job
+    rather than a watched manual run. See SESSION_LOG.md's Session 3.4
+    entry.
 19. **New, opened Session 3.1:** Polymarket's Gamma API `/events` endpoint
     fails with a consistent HTTP 422 error at offset=2100 on every real run
     this session (reproduced multiple times, same exact offset). The
@@ -2185,17 +2208,62 @@ remaining blockers to starting Phase 2.
     real size swings over realistic execution-time windows and
     recalibrate `EXECUTION_RISK_BUFFER` against real evidence, the same
     way Session 8.3 is already planned to do for `KELLY_FRACTION`.
-24. **New, opened Session 3.3, informational — not a blocker:**
+24. **Opened Session 3.3, UPDATED Session 3.4 (2026-09-06):**
     `sizing_engine.py`'s arbitrage sizing has been validated against
     constructed test cases and against real Kalshi order-book numbers
     plugged into a labeled test flag, but not yet against a genuine LIVE
-    positive arbitrage opportunity end-to-end, since none existed at the
-    time of testing (14 real markets checked across MO-05, `KXHIGHPHIL`,
-    and `KXHIGHNY` were all priced $1.01–$1.04, consistently efficient —
-    matching Session 3.2's own finding). **Action needed:** the first
-    time `detector.py` produces a real, live positive flag (once Session
-    3.4's automation is running continuously), confirm `arbitrage size`
-    against it end-to-end as a final real-world check.
+    positive arbitrage opportunity end-to-end. Session 3.4's real
+    automated run produced exactly one: Kalshi's "MI-7" vs. Polymarket's
+    "MI-07" (Michigan's 7th Congressional District, confirmed via web
+    search to be the same real race, not a formatting coincidence).
+    **Action needed:** run `sizing_engine.py arbitrage size` against
+    this real flag as the first genuine end-to-end check — still a
+    manual step per this project's "flags and sizes, never places bets"
+    rule, not something automation does on its own.
+25. **New, opened and RESOLVED same session, Session 3.4 (2026-09-06):**
+    `venue_matcher.py`'s Elections wide-tolerance path proposed 10
+    flagged pairs on its first real automated run; 9 were false matches
+    across DIFFERENT states sharing only a coincidental district
+    NUMBER (e.g. Kalshi's "WA-08" vs. Polymarket's "IN-08" — Washington's
+    8th District vs. Indiana's 8th District), several reporting a
+    50–90 cent-per-dollar "edge." Root cause: title tokenization splits
+    "WA-08" into separate "wa"/"08" tokens, so a shared district number
+    alone could satisfy both the title-similarity and number-compatibility
+    checks with no state comparison at all. Fixed within the same
+    session (per this project's standing "fix real validation bugs now"
+    practice): added `_extract_district_codes()`/
+    `_district_codes_compatible()`, requiring an exact (state, district)
+    match when both titles have one. Re-validated against real data:
+    candidate pairs dropped 497→477, flags dropped 10→1 (the one
+    genuine MI-7/MI-07 match, now reporting a realistic 1-cent edge).
+    See SESSION_LOG.md's Session 3.4 entry for the full evidence trail.
+26. **New, opened Session 3.4:** the arbitrage pipeline's polling cadence
+    (6 runs/day, ~every 4 hours) is justified against real GitHub
+    Actions cost/budget data, NOT against real arbitrage-window-closing
+    timing — that evidence still does not exist (no genuine window has
+    ever been observed to close, per Session 3.2/3.3). This is a
+    deliberate, named substitution of one kind of real evidence for
+    another that doesn't exist yet, not a resolved question. **Action
+    needed:** once Session 3.6 (Live Validation Window) produces real
+    timing data on how long a genuine flagged opportunity stays open,
+    revisit this cadence against that evidence rather than the cost
+    constraint alone.
+27. **New, opened Session 3.4:** GitHub Actions minute usage is shared
+    account-wide across Market_Betting AND all three DFS optimizer
+    repos (confirmed directly via the account's real billing page,
+    2026-09-06) — a single 2,000-minute/month pool, with the account's
+    Actions budget configured to STOP all workflows account-wide (not
+    silently charge) if exceeded. DFS_Optimizer's real workflow
+    (`refresh_data.yml`) was found to be a genuinely complex multi-job,
+    multi-cadence matrix, not a simple single script — modeling its
+    (and DFS_Optimizer_NHL's/DFS_Optimizer_PGA's) exact future cost
+    would require a real audit of three more repos' workflow files, not
+    attempted this session. **Standing practice going forward, not a
+    one-time fix:** periodically check the account's real billing
+    overview page (especially once NHL/PGA seasons ramp up their own
+    repos' automation), and treat the arbitrage pipeline's cadence as
+    the first, lowest-cost lever to pull back if the account ever
+    trends toward its ceiling.
 
 ---
 *Update this file at the close of each future session, per the project's

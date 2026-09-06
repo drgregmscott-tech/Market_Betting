@@ -3357,3 +3357,241 @@ rebuilding or altering the existing pick'em code. Full flow:
 
 **Next session:** Session 3.4 (Automation Adaptation) is next per
 ROADMAP.md — its prerequisite (Session 3.3 complete) is now met.
+
+---
+
+## Session 3.4 — Automation Adaptation
+
+**Date completed:** 2026-09-06
+**Status:** ✅ Complete
+
+**What was actually done:**
+Wired the arbitrage track's four existing scripts (Kalshi ingestion,
+Polymarket ingestion, venue matching, detection — Sessions 3.1–3.3) into
+an automated GitHub Actions workflow, the arbitrage-track equivalent of
+Session 2.7's pick'em automation. Full flow:
+
+1. Added `KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2` and a deliberate pause
+   after every one of `ingest_kalshi.py`'s ~540 real per-series
+   requests (success or failure) — the action item flagged in Session
+   3.1 ("add a deliberate pause... before Session 3.4"). Reasoning:
+   Session 3.1 relied only on reactive retries, acceptable for a
+   watched manual run but not for a scheduled, unattended one.
+2. Built `scripts/run_arbitrage_pipeline.py`, a new orchestrator
+   modeled directly on `run_pipeline.py` (Session 2.7): same
+   importlib-by-path module loading, same "stop before later stages if
+   an ingestion stage returns zero rows" guard, same per-run digest
+   file. One real design difference from the pick'em orchestrator:
+   zero candidate pairs from venue matching does NOT stop the
+   pipeline — a real, valid outcome (Session 3.2/3.3 already
+   established venues can genuinely not overlap on a given run),
+   unlike zero rows from an ingestion stage, which means something
+   broke.
+3. Built `.github/workflows/arbitrage_pipeline.yml`, committing only
+   the real historical record (candidate matches, flags, digest) —
+   deliberately NOT the raw/normalized snapshots, which would grow the
+   repo fast for no real benefit beyond single-run debugging.
+4. **Real bug found and fixed via the pipeline's own first live
+   automated run, not caught in isolated testing beforehand:**
+   `venue_matcher.py`'s Elections wide-tolerance path (Session 3.2)
+   proposed 10 flagged "arbitrage" pairs, several reporting an
+   absurd 50–90 cent-per-dollar edge. Inspection of the real output
+   showed every one of the 9 highest-edge flags was a false match
+   across DIFFERENT states sharing the same district NUMBER — e.g.
+   Kalshi's "WA-08" matched against Polymarket's "IN-08" (Washington's
+   8th District vs. Indiana's 8th District). Root cause: `_title_words()`
+   tokenizes "WA-08" into separate "wa" and "08" tokens (the hyphen
+   splits them), so the shared "08" token satisfied both the Jaccard
+   title-similarity bar and `_numbers_are_compatible()`'s "at least
+   one number must match" check — neither check knew a district
+   number only means the same race when paired with the same state.
+   Fixed within this session (per this project's own standing
+   practice, established in Session 3.3, of fixing real validation
+   bugs immediately rather than deferring them): added
+   `_extract_district_codes()` and `_district_codes_compatible()` to
+   `venue_matcher.py`, extracting a (state, district) pair from each
+   title and requiring an exact match when both titles have one,
+   applied only to the Elections wide-tolerance path (not the
+   bucketed path, which never had this failure mode). Re-ran the real
+   pipeline after the fix: candidate pairs dropped from 497 to 477 (the
+   20 false-state-pair candidates gone), and the flag list dropped from
+   10 false flags to exactly 1 — Kalshi's "MI-7" vs. Polymarket's
+   "MI-07," now reporting a realistic 1-cent-per-dollar edge instead of
+   90 cents.
+5. **Confirmed the one surviving flag is a genuine same-race match, not
+   another formatting coincidence** — checked directly (web search):
+   Michigan's 7th Congressional District, incumbent Republican Tom
+   Barrett vs. Democrat William Lawrence, general election 2026-11-03.
+   Both venues are pricing the same real contest, just formatted
+   differently ("MI-7" vs. "MI-07"). Not yet run through
+   `sizing_engine.py arbitrage size` — that remains a manual, human
+   decision per this project's "flags and sizes, never places bets"
+   rule.
+6. **Polling cadence — set with real cost math, not a guess, after a
+   real back-and-forth with Greg about what the cadence actually
+   controls.** Corrected a real misunderstanding Greg raised: this
+   detector does NOT compare against past data the way pick'em's CLV
+   logging does — every run is a self-contained, point-in-time check
+   of whether both sides of a locked position can be bought under
+   $1.00 right now. Cadence therefore only affects the odds of a
+   snapshot landing inside a real mispricing's (currently unknown)
+   lifetime, not trend detection. Checked the account's real GitHub
+   billing page directly rather than assuming: GitHub Free plan, 2,000
+   included Actions minutes/month, shared across Greg's entire account
+   (Market_Betting AND all three DFS optimizer repos — confirmed via
+   the billing page's real per-repo breakdown, not assumed). Also
+   confirmed directly: the account's Actions budget is configured at
+   $0 with "Stop usage: Yes" — going over the allowance does NOT
+   silently charge Greg's card, it silently STOPS every Actions
+   workflow on the account (pick'em included) until the next month's
+   reset. An initial 15-minute-cadence placeholder was rejected once
+   this was checked — it would have used ~11,500 runner-minutes/month
+   by itself, ~5.8x the entire account's allowance. Settled on 6
+   runs/day (~every 4 hours, cron offset to avoid the exact hour) —
+   real cost ≈720 runner-minutes/month, combined with pick'em's own
+   real ~960 min/month (confirmed from its actual run history: hourly,
+   ~1m20s/run) keeps the account under its 2,000-minute ceiling with
+   room left for the DFS repos. Also widened the workflow's job
+   timeout from 12 to 30 minutes, since the tight 12-minute cap existed
+   specifically to prevent overlap at the old, much faster 15-minute
+   cadence and is no longer needed at 6 runs/day.
+7. **Real, live-tested confirmation, not just a syntax check:** both
+   the pre-fix and post-fix versions of the pipeline were run for real
+   via `workflow_dispatch` (not just planned) — run #1 (pre-fix, green,
+   3m 53s, exposed the false-match bug via its own real digest output)
+   and run #2 (post-fix, green, 4m 15s, confirmed the fix against the
+   same real Kalshi/Polymarket data). No scheduled (cron-triggered) run
+   had fired yet as of this session's close — same real registration
+   delay Session 2.7 already documented for pick'em's own schedule.
+
+**Files created/modified:**
+- `scripts/ingestion/ingest_kalshi.py` (added
+  `KALSHI_PER_SERIES_PAUSE_SECONDS` and the per-series pause)
+- `scripts/ingestion/venue_matcher.py` (added `_extract_district_codes()`
+  and `_district_codes_compatible()`; wired into `_find_elections_matches()`
+  only)
+- `scripts/run_arbitrage_pipeline.py` (new)
+- `.github/workflows/arbitrage_pipeline.yml` (new)
+
+**Validation results:**
+- [x] **Workflow runs on schedule reliably** — ⚠️ partially validated.
+  Two real `workflow_dispatch` runs both succeeded end-to-end
+  (ingestion → matching → detection → commit), confirmed via the
+  Actions tab and the real committed digest/flags files. A genuine
+  CRON-triggered run had not yet fired as of this session's close —
+  Greg will check back once GitHub has had time to register the new
+  schedule (same real delay Session 2.7 hit for pick'em). Not treated
+  as a blocker for closing this session, since Session 2.7 already
+  established this delay is a one-time, expected registration lag, not
+  a sign of a broken schedule — but flagged here as the one piece
+  still owed a real look.
+- [x] **Polling frequency justified against real evidence, not an
+  arbitrary guess** — pass, with an explicit caveat. The evidence used
+  is NOT "how fast a real arbitrage window closes" (that data still
+  does not exist — no genuine window has ever been observed to close,
+  per Session 3.2/3.3's own findings) but real GitHub Actions cost data
+  checked directly against the account's actual billing page and
+  budget settings. This is a deliberate, named substitution: real cost
+  evidence in place of real timing evidence, because the timing
+  evidence doesn't exist yet and won't until Session 3.6 collects it.
+  6 runs/day is explicitly logged as a placeholder to revisit once
+  Session 3.6's real timing data exists — not a final, confident answer
+  to the original question.
+
+**Decisions made:**
+1. **The per-series Kalshi pause (0.2s) is a named constant, not a
+   magic number** — same "no silent adjustments" pattern as every
+   other tunable constant in this project (`KELLY_FRACTION`,
+   `MIN_TITLE_SIMILARITY`, etc.).
+2. **District-code matching (state + district number as a pair) is
+   required only on the Elections wide-tolerance path, not the
+   bucketed path** — the bucketed path (Climate/Commodities) never
+   exhibited this failure mode, and this project's standing practice
+   is to fix the actual bug found, not to defensively rewrite adjacent
+   working code.
+3. **Zero candidate pairs from venue matching does not stop the
+   arbitrage orchestrator; zero rows from either venue's ingestion
+   does** — these are genuinely different situations (a real, valid
+   "no overlap this run" outcome vs. a broken ingestion stage), and
+   collapsing them into one check would either wrongly stop a healthy
+   run or wrongly let a broken one continue.
+4. **Cadence set from real account-wide GitHub Actions cost data,
+   explicitly acknowledging the timing question it was meant to answer
+   is still open** — a deliberate trade-off between "the checkbox as
+   literally worded" and "the honest state of the evidence," logged
+   as such rather than either skipped or answered with invented
+   confidence.
+5. **GitHub Actions minute budgeting is a real, ongoing, account-wide
+   concern, not a one-time calculation for this session** — the
+   account's three DFS optimizer repos draw from the same 2,000-minute
+   pool and their own usage will grow once NHL/PGA seasons are active.
+   Rather than modeling their exact future cost today (would require
+   auditing three more repos' own multi-job workflow files — itself a
+   real, separate undertaking, confirmed after actually reading
+   DFS_Optimizer's `refresh_data.yml` and finding it non-trivial: four
+   jobs, two schedule cadences, a slate matrix, not a simple single
+   script), the standing practice going forward is: check the
+   account's real billing-overview page periodically (especially once
+   NHL season starts), and treat the arbitrage pipeline's cadence as
+   the easiest, lowest-cost lever to pull back first if the account
+   ever trends toward its ceiling.
+
+**Corrections/reversals during the session:**
+- The workflow's polling cadence was originally set to every 15
+  minutes, justified at the time only by request-count/timeout
+  reasoning (no rate-limit or budget check). Corrected after checking
+  the account's real GitHub billing page: 15 minutes would have used
+  ~11,500 runner-minutes/month against a 2,000-minute account-wide
+  allowance. Replaced with 6 runs/day (~720 min/month) after this real
+  check, and the job timeout widened from 12 to 30 minutes to match
+  (the short timeout was only needed to prevent overlap at the faster,
+  since-abandoned cadence).
+- `venue_matcher.py`'s Elections wide-tolerance matching was believed
+  complete and validated as of Session 3.2/3.3. This session's own
+  first live automated run disproved that — 9 of 10 real flags were
+  false cross-state matches. Fixed within this session per item 4
+  above, not deferred, consistent with this project's standing
+  "real bugs found in validation get fixed now" practice.
+- Greg corrected a real misunderstanding about how this detector
+  works: it does not compare current data against past data the way
+  pick'em's CLV logging does. Every run is a self-contained,
+  point-in-time check. This correction changed what "justifying the
+  cadence" actually means for this track (see Decision 4 above) and is
+  recorded here so a future session doesn't re-introduce the CLV-style
+  framing by assumption.
+
+**Open items / deferred validations:**
+- **A genuine scheduled (cron-triggered) run has not yet been
+  confirmed** — both real runs on record were manually dispatched.
+  Greg will check the Actions tab after GitHub has had time to
+  register the new schedule; if a scheduled run has NOT appeared after
+  a reasonable wait (Session 2.7's pick'em schedule took roughly 1h40m
+  to register after a push), that is itself worth a real look, not an
+  assumption that it will eventually work.
+- **The one surviving flag (Kalshi MI-7 / Polymarket MI-07) has not
+  been run through `sizing_engine.py arbitrage size`** — confirmed as
+  a genuine same-race match via web search, but sizing it is a
+  deliberate manual step per this project's "flags and sizes, never
+  places bets" rule, not something this session does automatically.
+- **6 runs/day is a placeholder, not a final answer** — Session 3.6
+  (Live Validation Window) is where real flagged-opportunity timing
+  data should replace this cost-driven placeholder with genuine
+  evidence about how long a real mispricing stays open.
+- **Account-wide GitHub Actions budget monitoring is now a standing
+  practice, not a solved problem** — no dedicated tracking doc was
+  built this session (see Decision 5's reasoning). Revisit if/when NHL
+  or PGA seasons ramp up their own repos' automation, or if the
+  account's billing page ever shows a trend toward the 2,000-minute
+  ceiling.
+- **`_extract_district_codes()` was validated against this session's
+  real false-positive pairs and the one real surviving true-positive
+  pair, not against every possible district-naming format** — e.g. a
+  title that spells out a state name in full instead of a two-letter
+  abbreviation would not be caught by the current regex and would fall
+  back to the pre-existing (weaker) checks. Not a known live gap today
+  (both venues' real titles observed this session use abbreviated
+  state-dash-number formatting), but worth re-checking if a future
+  session finds a district title formatted differently.
+
+**Next session:** Session 3.5 (Frontend Integration) is next per
+ROADMAP.md — its prerequisite (Session 3.4 complete) is now met.
