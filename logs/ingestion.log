@@ -1154,3 +1154,18 @@
 2026-09-06 19:09:39,982 UTC | INFO | Processed 20/24 target stations so far.
 2026-09-06 19:09:45,176 UTC | INFO | Processed 24/24 target stations so far.
 2026-09-06 19:09:45,690 UTC | INFO | === NWS ingestion run complete: 24/24 stations OK, 406 forecast rows, 74 observed-day rows (failed stations: none) ===
+2026-09-06 19:12:19,271 UTC | INFO | === Weather market ingestion run starting ===
+2026-09-06 19:12:20,332 UTC | INFO | Series discovery: 13839 total series, 104 match the temperature-threshold structural pattern within Climate and Weather.
+2026-09-06 19:12:25,848 UTC | INFO | Processed 20/104 target series so far.
+2026-09-06 19:12:33,928 UTC | INFO | Processed 40/104 target series so far.
+2026-09-06 19:12:50,591 UTC | INFO | Processed 80/104 target series so far.
+2026-09-06 19:12:58,792 UTC | INFO | Weather markets: 104 temperature series found, 41 international (skipped, out of scope), 1 national-aggregate (skipped, out of scope), 0 unmapped (skipped, named gap), 62 series ingested, 576 market rows kept.
+2026-09-06 19:12:58,839 UTC | INFO | === Weather market ingestion run complete (OK) ===
+2026-09-06 19:15:56,279 UTC | INFO | === Weather market ingestion run starting ===
+2026-09-06 19:15:56,819 UTC | INFO | Series discovery: 13839 total series, 104 match the temperature-threshold structural pattern within Climate and Weather.
+2026-09-06 19:16:04,818 UTC | INFO | Processed 20/104 target series so far.
+2026-09-06 19:16:28,525 UTC | INFO | Processed 80/104 target series so far.
+2026-09-06 19:16:34,202 UTC | INFO | Processed 100/104 target series so far.
+2026-09-06 19:16:35,449 UTC | INFO | Processed 104/104 target series so far.
+2026-09-06 19:16:35,450 UTC | INFO | Weather markets: 104 temperature series found, 41 international (skipped, out of scope), 1 national-aggregate (skipped, out of scope), 0 unmapped (skipped, named gap), 62 series ingested, 576 market rows kept.
+2026-09-06 19:16:35,495 UTC | INFO | === Weather market ingestion run complete (OK) ===
