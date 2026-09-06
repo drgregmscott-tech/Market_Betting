@@ -124,6 +124,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 NORMALIZED_DIR = BASE_DIR / "data" / "exchange" / "normalized"
 MATCHED_DIR = BASE_DIR / "data" / "exchange" / "matched"
 FLAGS_DIR = BASE_DIR / "data" / "arbitrage" / "flags"
+FLAGS_LATEST_PATH = FLAGS_DIR / "arbitrage_flags_latest.csv"
 LOG_PATH = BASE_DIR / "logs" / "arbitrage.log"
 
 KALSHI_LATEST = NORMALIZED_DIR / "kalshi_latest.csv"
@@ -688,6 +689,7 @@ def run() -> dict:
 
     out_path = FLAGS_DIR / f"arbitrage_flags_{flagged_at_compact}.csv"
     write_flags_csv(out_path, all_flags)
+    write_flags_csv(FLAGS_LATEST_PATH, all_flags)
 
     summary = {
         "flagged_at": flagged_at,
