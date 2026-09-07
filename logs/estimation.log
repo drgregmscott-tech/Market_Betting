@@ -138,3 +138,7 @@
 2026-09-07 10:09:40,990 UTC | INFO | Using historical Kalshi snapshot: kalshi_weather_markets_20260906T190840Z.csv
 2026-09-07 10:09:40,990 UTC | INFO | Using historical forecast snapshot: nws_forecast_20260906T190917Z.csv
 2026-09-07 10:10:50,175 UTC | INFO | === Resolved-market sanity check complete: {'resolved_contracts_checked': 0, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\backtest\\resolved_market_check_20260907T101050Z.csv', 'note': "No contracts from the historical snapshot have actually settled yet on Kalshi's side, or none survived the real matching/lead-day checks above - not necessarily an error, but nothing to report yet."} ===
+2026-09-07 10:14:44,814 UTC | INFO | === Resolved-market sanity check starting ===
+2026-09-07 10:14:44,815 UTC | INFO | Using historical Kalshi snapshot: kalshi_weather_markets_20260906T190840Z.csv
+2026-09-07 10:14:44,816 UTC | INFO | Using historical forecast snapshot: nws_forecast_20260906T190917Z.csv
+2026-09-07 10:15:54,152 UTC | INFO | === Resolved-market sanity check complete: {'resolved_contracts_checked': 0, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\backtest\\resolved_market_check_20260907T101554Z.csv', 'note': "No contracts from the historical snapshot have actually settled yet on Kalshi's side, or none survived the real matching/lead-day checks above - not necessarily an error, but nothing to report yet."} ===

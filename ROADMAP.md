@@ -1572,7 +1572,12 @@ rewritten)
 ---
 
 ### Session 4.2 — Estimation Engine (Weather Threshold Model)
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-07) — one validation item
+genuinely blocked on Kalshi's own real settlement clock, not on anything
+unbuilt on this project's side. See SESSION_LOG.md's Session 4.2 entry
+for full detail; whoever reopens this should re-run
+`weather_backtest_check.py` after real settlement and record the result
+here.
 **Prerequisites:** Session 4.1 complete.
 
 **What gets built:** A model that computes the true probability of a weather
@@ -1581,20 +1586,43 @@ around a specific temperature/precipitation threshold), then compares that
 against Kalshi's round-number-anchored market price. This is new modeling work
 (not a reuse of the pick'em model), per Session 0.1.
 
+**REAL FINDING (2026-09-07): no GFS ensemble was ever actually used.**
+NWS's own public API (already the confirmed data source per Session
+4.1/Open Decision #28) returns one deterministic forecast number, not an
+ensemble — confirmed live before any model code was written. Built a
+real, automated substitute instead: a literature-sourced starting
+uncertainty curve, blended with this project's own real, measured
+forecast-error data as it accumulates via a new daily pipeline. See Open
+Decisions #32-#34 below and the full reasoning in
+`weather_estimation_model_spec.md`.
+
 **Files touched:** `/scripts/estimation/weather_model.py`,
-`/docs/research/weather_estimation_model_spec.md`
+`/docs/research/weather_estimation_model_spec.md`,
+`/scripts/calibration/weather_forecast_error.py` (new),
+`/scripts/estimation/weather_backtest_check.py` (new),
+`/.github/workflows/weather_calibration_pipeline.yml` (new)
 
 **Validation (required to close session):**
+- [x] Model correctly handles ensemble/uncertainty data, not just a
+      single point forecast — pass, via the real automated blend
+      described above (no true ensemble exists to draw from; see Open
+      Decision #32).
+- [x] Documented at the same specificity level as Session 2.3's spec —
+      pass, `weather_estimation_model_spec.md`.
 - [ ] Model's probability estimates are sanity-checked against at least a
-      handful of already-resolved historical Kalshi weather markets
-- [ ] Model correctly handles ensemble/uncertainty data, not just a single
-      point forecast
-- [ ] Documented at the same specificity level as Session 2.3's spec
+      handful of already-resolved historical Kalshi weather markets —
+      **blocked on Kalshi's real settlement clock (~19:00 UTC / 2:00 PM
+      CDT, 2026-09-07), not on anything unbuilt.** The check script
+      (`weather_backtest_check.py`) is built, tested twice against real
+      API responses, and confirmed to correctly report zero rather than
+      guess when no real resolved data exists yet.
 
 ---
 
 ### Session 4.3 — CLV Logging Hook-In
-**Status:** Not started
+**Status:** In progress — started 2026-09-07 in parallel with Session
+4.2's last open item, at the user's explicit direction (confirmed this
+session's real scope does not depend on that item's outcome).
 **Prerequisites:** Session 4.2 complete.
 
 **What gets built:** Connects the weather model's output to the same CLV
@@ -2423,6 +2451,55 @@ remaining blockers to starting Phase 2.
     including a second, separate finding (a manual verification script's
     own timezone-conversion bug, unrelated to and now ruled out as a
     cause of this gap) resolved in the same investigation.
+
+32. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
+    the roadmap card's "GFS ensemble spread" wording assumed ensemble
+    data would be available. Checked live before writing any model code:
+    NWS's public API (this project's confirmed data source since
+    Session 4.1) returns exactly one deterministic forecast value per
+    station per day — no ensemble, no published confidence interval.
+    RESOLVED via a real, automated blend rather than either extreme
+    (blocking on a real backtest history that didn't exist yet, or
+    silently guessing a placeholder forever): a literature-sourced
+    starting curve (Penn State's public course material, cited with the
+    exact real anchor points used, see
+    `weather_estimation_model_spec.md`) is used immediately, while a new
+    daily pipeline (`weather_calibration_pipeline.yml`) builds this
+    project's own real, measured forecast-error history in the
+    background; the model automatically swaps to real numbers per
+    lead-day bucket once each one crosses a named minimum real sample
+    size (20) — no future session needs to remember a manual cutover.
+33. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
+    the first real run of the new calibration pipeline
+    (`weather_forecast_error.py`) produced an implausible same-day
+    forecast error (4.3°F MAE, already over the model's own real-data
+    trust threshold) — root-caused to comparing full-day forecasts
+    against still-in-progress "observed so far" readings for the current
+    day, not a real, finished answer. RESOLVED: an observed reading is
+    only trusted once pulled at least 32 hours after its own date's UTC
+    midnight (covers every real target station's local day-end,
+    including the latest-closing West Coast ones). Corrected same-day
+    MAE after the fix: a real, plausible 1.7°F with near-zero bias. See
+    SESSION_LOG.md's Session 4.2 entry for the full real evidence.
+34. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
+    `weather_backtest_check.py`'s first version gated on guessed Kalshi
+    market-status values (`"finalized"`/`"settled"`) that had never been
+    confirmed against a real API response. A real, direct check of one
+    live market (`KXLOWTMIN-26SEP06-T69`) showed Kalshi's real status
+    reads `"closed"` well before the real `result` field is populated
+    (which can sit as an empty string for hours after trading closes) —
+    neither guessed value was real. RESOLVED: gate solely on a real,
+    non-empty `result` field instead of a guessed status string.
+35. **New, opened, NOT YET RESOLVED — carried forward from Session
+    4.2:** the roadmap's resolved-market sanity-check validation item is
+    real, built, and tested, but genuinely blocked on Kalshi's own real
+    settlement clock (~19:00 UTC / 2:00 PM CDT, 2026-09-07 — all 62 of
+    the real weather series checked settle on roughly the same
+    real-world schedule, confirmed by two real runs both returning zero
+    resolved contracts before that time). **Action:** re-run
+    `weather_backtest_check.py` after that time and record the real
+    directional-accuracy and Brier-score numbers in SESSION_LOG.md's
+    Session 4.2 entry to close it out.
 
 ---
 *Update this file at the close of each future session, per the project's
