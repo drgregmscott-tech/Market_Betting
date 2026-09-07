@@ -185,17 +185,17 @@ project.
 
 ```
 /Market_Betting
-  /data          <- raw + processed market/event data
-  /scripts       <- all pipeline scripts (per-track subfolders likely, TBD)
-  /output        <- flagged opportunities, sizing suggestions, digest content
-  /logs          <- session log + automation run logs
-  /docs
-    /research    <- Session 0.1 research artifact archived here
-  /config        <- api_keys.env (gitignored), api_keys.env.example (template), venue configs
-  SESSION_LOG.md
-  ROADMAP.md
-  README.md
-  requirements.txt
+/data <- raw + processed market/event data
+/scripts <- all pipeline scripts (per-track subfolders likely, TBD)
+/output <- flagged opportunities, sizing suggestions, digest content
+/logs <- session log + automation run logs
+/docs
+/research <- Session 0.1 research artifact archived here
+/config <- api_keys.env (gitignored), api_keys.env.example (template), venue configs
+SESSION_LOG.md
+ROADMAP.md
+README.md
+requirements.txt
 ```
 
 ---
@@ -224,17 +224,17 @@ than once (see SESSION_LOG.md Session 0.1 entry for the full decision trail).
 
 **Outputs:**
 - ROADMAP.md — the confirmed scope, ranked Track Reference table, and
-  validation methodology.
+validation methodology.
 - Research artifact: *"Building a +EV Prediction-Market System: Edge-Detection
-  Across Sports, Weather, and Down-Ballot Politics"* — full sourced findings
-  behind the Track Reference table. Archived in `/docs/research/` as of
-  Session 1.1.
+Across Sports, Weather, and Down-Ballot Politics"* — full sourced findings
+behind the Track Reference table. Archived in `/docs/research/` as of
+Session 1.1.
 
 **Validation (required to close session):**
 - [x] A real, evidence-backed mechanism identified for each in-scope track (not
-      just "this seems plausible")
+just "this seems plausible")
 - [x] A defined, pre-outcome validation methodology identified (CLV-equivalent)
-      that doesn't require waiting for slow-resolving events to fully play out
+that doesn't require waiting for slow-resolving events to fully play out
 - [x] Scope explicitly ranked by confidence, not left as an unordered list
 - [x] Out-of-scope categories explicitly named with reasoning, not just omitted
 
@@ -259,21 +259,21 @@ flagged opportunities to allocate across).
 **Files touched:**
 - `/requirements.txt`, `/README.md`, `/.gitignore`
 - `/config/api_keys.env.example` (template; real `config/api_keys.env` is
-  gitignored and not yet created — no venue credentials exist yet)
+gitignored and not yet created — no venue credentials exist yet)
 - Folder structure per Repo Structure above, each empty folder held in place
-  with a `.gitkeep` placeholder file
+with a `.gitkeep` placeholder file
 - `/docs/research/Building_a_+EV_Prediction-Market_System_Edge-Detection_Across_Sports_Weather_and_Down-Ballot_Politics.md`
-  — Session 0.1's research artifact, moved in
+— Session 0.1's research artifact, moved in
 
 **Validation (required to close session):**
 - [x] Fresh clone + `pip install -r requirements.txt` runs without error —
-      confirmed on the user's machine (Windows, Python 3.14): all four
-      packages installed/resolved with no errors or conflicts.
+confirmed on the user's machine (Windows, Python 3.14): all four
+packages installed/resolved with no errors or conflicts.
 - [x] Python version confirmed and logged — **Python 3.14**
-      (`pythoncore-3.14-64`).
+(`pythoncore-3.14-64`).
 - [x] Research artifact from Session 0.1 is present in the repo, not orphaned
-      in chat history — confirmed live at
-      `github.com/drgregmscott-tech/Market_Betting/docs/research/`.
+in chat history — confirmed live at
+`github.com/drgregmscott-tech/Market_Betting/docs/research/`.
 
 **Handoff notes:** Repo is live, private, on `main` branch, single commit
 ("Repo Setup"). GitHub Desktop's first-time publish workflow had a wrinkle —
@@ -296,42 +296,42 @@ entry once this closes).
 
 **Validation (required to close session):**
 - [x] Every one of the six tracks has a complete session breakdown (not just the
-      v1 track) — Phases 2–8, 45 sessions total
+v1 track) — Phases 2–8, 45 sessions total
 - [x] Every session card has a stated goal, prerequisites, files touched, and a
-      validation checklist — not left abstract
+validation checklist — not left abstract
 - [x] User has reviewed and approved the full map, through two full revision
-      passes: (1) confirmed 6-track scope and requested 4 gap-closing additions
-      (sample-size thresholds, manual-execution clarity, endpoint-health
-      monitoring, realized-outcome tracking); (2) requested and received a full
-      audit against Session 0.1's five per-venue evaluation criteria
-      (repricing mechanism, fee/vig cost, account-limiting risk, liquidity,
-      legal footprint), which surfaced and closed real gaps — liquidity and
-      legal-footprint checks were narrative-only for arbitrage/weather/politics/
-      props and are now explicit session-level checks; Phase 7's go/no-go was
-      sharpened to evaluate market structure at the sub-market level rather than
-      as a blanket flagship judgment
+passes: (1) confirmed 6-track scope and requested 4 gap-closing additions
+(sample-size thresholds, manual-execution clarity, endpoint-health
+monitoring, realized-outcome tracking); (2) requested and received a full
+audit against Session 0.1's five per-venue evaluation criteria
+(repricing mechanism, fee/vig cost, account-limiting risk, liquidity,
+legal footprint), which surfaced and closed real gaps — liquidity and
+legal-footprint checks were narrative-only for arbitrage/weather/politics/
+props and are now explicit session-level checks; Phase 7's go/no-go was
+sharpened to evaluate market structure at the sub-market level rather than
+as a blanket flagship judgment
 - [x] Sequencing logic (why this order) is explicit, not just asserted
 
 **Decisions made:**
 1. Full session-level roadmap built for all 6 tracks now, not just the v1 track
-   — user's explicit direction, departing from the DFS repos' pattern of only
-   scoping the next phase in detail. Rationale: this project's edge sources are
-   more heterogeneous across tracks than the DFS repos' sport-to-sport variation,
-   so planning all 6 up front surfaces cross-track gaps (as the two audit passes
-   below demonstrated) that wouldn't be visible scoping one phase at a time.
+— user's explicit direction, departing from the DFS repos' pattern of only
+scoping the next phase in detail. Rationale: this project's edge sources are
+more heterogeneous across tracks than the DFS repos' sport-to-sport variation,
+so planning all 6 up front surfaces cross-track gaps (as the two audit passes
+below demonstrated) that wouldn't be visible scoping one phase at a time.
 2. Research from Open Decisions #3/#4 (endpoint access, account-limiting policy)
-   does not get its own session number — folded into Session 1.1's continuation
-   notes instead, since it was investigation supporting Session 1.1's still-open
-   items, not a new build session. This roadmap-structuring work is Session 1.2.
+does not get its own session number — folded into Session 1.1's continuation
+notes instead, since it was investigation supporting Session 1.1's still-open
+items, not a new build session. This roadmap-structuring work is Session 1.2.
 3. Confirmed scope is 6 build tracks (not "3-4 areas," which was an imprecise
-   restatement, not a scope change) — see Background & Approach above for the
-   permanent record of this.
+restatement, not a scope change) — see Background & Approach above for the
+permanent record of this.
 4. Explicit "flags and sizes, does not place bets" statement added to Background
-   & Approach as a permanent, one-time record — not to be re-derived per session.
+& Approach as a permanent, one-time record — not to be re-derived per session.
 5. The project's "wins over time, not every bet" north star (already established
-   in Session 0.1) was re-raised during this session's review and is now recorded
-   as explicitly settled in Background & Approach, per user direction that this
-   should not need to be re-argued in future sessions.
+in Session 0.1) was re-raised during this session's review and is now recorded
+as explicitly settled in Background & Approach, per user direction that this
+should not need to be re-argued in future sessions.
 
 **Handoff notes:** This roadmap replaces the "Sessions 1.2+" stub that previously
 stood in for all future work. Sessions 2.1 onward are now real, buildable cards —
@@ -381,44 +381,44 @@ schema found per platform, plus the day's monitoring results)
 
 **Validation (required to close session):**
 - [x] Both remaining in-scope endpoints (PrizePicks, Underdog) return live
-      data successfully with no login/key — confirmed both individually and
-      across 21 unattended checks over ~10 hours with zero failures
+data successfully with no login/key — confirmed both individually and
+across 21 unattended checks over ~10 hours with zero failures
 - [x] Schema documented per platform (field names, types, what's missing/
-      inconsistent across platforms) — real field names captured from live
-      responses for both platforms in `endpoint_schemas.md`
+inconsistent across platforms) — real field names captured from live
+responses for both platforms in `endpoint_schemas.md`
 - [x] At least one full day's snapshot captured and saved locally as a sanity
-      check on stability — ~10-hour unattended monitoring window (21 checks,
-      30-minute cadence), agreed with user as sufficient in place of a
-      literal 24-hour window
+check on stability — ~10-hour unattended monitoring window (21 checks,
+30-minute cadence), agreed with user as sufficient in place of a
+literal 24-hour window
 - [x] Explicit note on what breaks the pull — no failures observed in this
-      window for either platform; documented as a real finding, with the
-      caveat that Session 2.2's pipeline still needs real retry/error
-      handling since both are undocumented endpoints that can change without
-      notice at any time
+window for either platform; documented as a real finding, with the
+caveat that Session 2.2's pipeline still needs real retry/error
+handling since both are undocumented endpoints that can change without
+notice at any time
 
 **Decisions made:**
 1. **DK Pick6 dropped from Track 1's scope.** No credible public documentation
-   of a Pick6-specific data endpoint exists (unlike PrizePicks and Underdog,
-   both independently corroborated before this session even started). A
-   best-guess endpoint, built by analogy to DraftKings' other documented
-   APIs, returned a 404. Manually reverse-engineering the real endpoint via
-   browser Developer Tools was possible in principle (documented as a
-   fallback procedure in `prototype_dkpick6.py`'s own docstring) but offered
-   no guarantee of success, and risked requiring a logged-in session — which
-   would break this project's "no login required" design principle for
-   pick'em ingestion (see Session 0.1 Decision #4 and the account-limiting
-   research). User explicitly chose to drop it rather than continue
-   investigating. Track 1 proceeds with two platforms (PrizePicks, Underdog)
-   instead of three.
+of a Pick6-specific data endpoint exists (unlike PrizePicks and Underdog,
+both independently corroborated before this session even started). A
+best-guess endpoint, built by analogy to DraftKings' other documented
+APIs, returned a 404. Manually reverse-engineering the real endpoint via
+browser Developer Tools was possible in principle (documented as a
+fallback procedure in `prototype_dkpick6.py`'s own docstring) but offered
+no guarantee of success, and risked requiring a logged-in session — which
+would break this project's "no login required" design principle for
+pick'em ingestion (see Session 0.1 Decision #4 and the account-limiting
+research). User explicitly chose to drop it rather than continue
+investigating. Track 1 proceeds with two platforms (PrizePicks, Underdog)
+instead of three.
 2. **A ~10-hour unattended monitoring window, not a literal 24-hour window,
-   was treated as satisfying the "full day's snapshot" validation item.**
-   User asked whether a faster option existed; agreed approach was automating
-   the checks (removing manual re-run effort) rather than shrinking real
-   elapsed time, since the validation item's actual purpose — proving data
-   changes over time and surfacing any failure mode — depends on wall-clock
-   spread, not effort. ~10 hours with 21 checks and zero failures was judged
-   sufficient; noted as a deliberate, agreed scope decision, not a silent
-   shortcut.
+was treated as satisfying the "full day's snapshot" validation item.**
+User asked whether a faster option existed; agreed approach was automating
+the checks (removing manual re-run effort) rather than shrinking real
+elapsed time, since the validation item's actual purpose — proving data
+changes over time and surfacing any failure mode — depends on wall-clock
+spread, not effort. ~10 hours with 21 checks and zero failures was judged
+sufficient; noted as a deliberate, agreed scope decision, not a silent
+shortcut.
 
 **Handoff notes:** This session is allowed to be messy/exploratory — it exists to
 de-risk Session 2.2, not to produce production code. Session 2.2 onward should
@@ -450,88 +450,88 @@ Decisions below).
 
 **Validation (required to close session):**
 - [x] Pipeline runs end-to-end and produces a normalized dataset across both
-      platforms — confirmed against real live data: first real run produced
-      19,891 combined rows (19,667 PrizePicks + 224 Underdog), correctly
-      joined (real player names, teams, stat types, and lines confirmed by
-      manual spot-check).
+platforms — confirmed against real live data: first real run produced
+19,891 combined rows (19,667 PrizePicks + 224 Underdog), correctly
+joined (real player names, teams, stat types, and lines confirmed by
+manual spot-check).
 - [x] Handles a simulated failure (bad response, empty response, schema change)
-      without crashing — logs the failure instead. Confirmed via
-      `test_ingest_pickem.py` against synthetic fixtures: empty response,
-      missing top-level schema keys, and a full simulated network failure
-      (both platforms unreachable) were all handled without raising, each
-      logged and each producing a valid (if empty) output file.
+without crashing — logs the failure instead. Confirmed via
+`test_ingest_pickem.py` against synthetic fixtures: empty response,
+missing top-level schema keys, and a full simulated network failure
+(both platforms unreachable) were all handled without raising, each
+logged and each producing a valid (if empty) output file.
 - [x] Confirmed idempotent (running twice in a row doesn't duplicate/corrupt
-      data) — confirmed via `test_ingest_pickem.py`: `latest.csv` is fully
-      overwritten (never appended to) each run, and two runs in a row produce
-      two distinct, correctly separate timestamped snapshot files rather than
-      a duplicated or corrupted single file.
+data) — confirmed via `test_ingest_pickem.py`: `latest.csv` is fully
+overwritten (never appended to) each run, and two runs in a row produce
+two distinct, correctly separate timestamped snapshot files rather than
+a duplicated or corrupted single file.
 - [x] At least 3 consecutive days of real automated pulls captured, reviewed for
-      consistency — **the literal "3 days" framing was replaced, by explicit
-      agreement with the user, with an evidence-based standard matching
-      Session 2.1's own precedent** (see Decisions below): (1) 15+ clean
-      automated pulls with zero failures, (2) at least one observed material
-      swing in record counts proving live, non-cached data, and (3) at least
-      one pull captured near real game-lock times. All three were met: **26
-      consecutive successful hourly pulls** (2026-08-30 10:09 UTC through
-      2026-08-31 11:00 UTC) with zero failures; record counts swung from a
-      peak of 26,538 down to a low of 17,067 (~36% movement); and the
-      steepest, clearest drop (26,495 → 17,468 between 17:00–21:00 UTC on
-      8/30) lines up directly with NFL Sunday afternoon kickoff windows in
-      the user's local time, capturing real props expiring off the board as
-      games locked — direct evidence the pipeline holds up under genuine
-      load, not just quiet-hours traffic.
+consistency — **the literal "3 days" framing was replaced, by explicit
+agreement with the user, with an evidence-based standard matching
+Session 2.1's own precedent** (see Decisions below): (1) 15+ clean
+automated pulls with zero failures, (2) at least one observed material
+swing in record counts proving live, non-cached data, and (3) at least
+one pull captured near real game-lock times. All three were met: **26
+consecutive successful hourly pulls** (2026-08-30 10:09 UTC through
+2026-08-31 11:00 UTC) with zero failures; record counts swung from a
+peak of 26,538 down to a low of 17,067 (~36% movement); and the
+steepest, clearest drop (26,495 → 17,468 between 17:00–21:00 UTC on
+8/30) lines up directly with NFL Sunday afternoon kickoff windows in
+the user's local time, capturing real props expiring off the board as
+games locked — direct evidence the pipeline holds up under genuine
+load, not just quiet-hours traffic.
 
 **Decisions made:**
 1. **The roadmap's literal "3 consecutive days" validation language was
-   replaced with an explicit, evidence-based stopping condition** (15+ clean
-   pulls; a real observed count swing; at least one pull near a real
-   game-lock event), agreed with the user rather than followed as a default.
-   Reasoning, recorded plainly: this session's validation question is
-   pipeline *reliability* (does it break under real repeated use?), not a
-   statistical sample-size question — that distinct question belongs to
-   Session 2.5 (Sample-Size Thresholds), which will use real math once real
-   flag-frequency data exists. Importing that rigor into this session would
-   have been both unnecessary and dishonestly precise. This same
-   "elapsed-time-as-default vs. evidence-based stopping condition" pattern
-   was already set by Session 2.1 (which replaced a literal 24-hour window
-   with ~10 hours plus 21 zero-failure checks); this decision applies the
-   same principle a second time, now stated as a reusable standard rather
-   than re-derived from scratch.
+replaced with an explicit, evidence-based stopping condition** (15+ clean
+pulls; a real observed count swing; at least one pull near a real
+game-lock event), agreed with the user rather than followed as a default.
+Reasoning, recorded plainly: this session's validation question is
+pipeline *reliability* (does it break under real repeated use?), not a
+statistical sample-size question — that distinct question belongs to
+Session 2.5 (Sample-Size Thresholds), which will use real math once real
+flag-frequency data exists. Importing that rigor into this session would
+have been both unnecessary and dishonestly precise. This same
+"elapsed-time-as-default vs. evidence-based stopping condition" pattern
+was already set by Session 2.1 (which replaced a literal 24-hour window
+with ~10 hours plus 21 zero-failure checks); this decision applies the
+same principle a second time, now stated as a reusable standard rather
+than re-derived from scratch.
 2. **A Windows scheduled-task path bug was found and fixed during this
-   session** — worth recording as a real finding, not just a footnote. The
-   first scheduled-task attempt failed silently overnight (`Last Result:
-   -2147024894` — "the system cannot find the file specified") because the
-   task's non-interactive execution context could not resolve the bare
-   `python` command the way an interactive PowerShell session does.
-   Diagnosed by checking `(Get-Command python).Source`, which revealed the
-   interactive shell was resolving to the unreliable Microsoft Store stub
-   at `WindowsApps\python.exe` — not a real interpreter, and known to behave
-   inconsistently outside interactive use. Fixed by pointing the task at the
-   real interpreter (`C:\Users\gmsco\AppData\Local\Python\pythoncore-3.14-64\python.exe`)
-   via a new wrapper file, `run_ingest.bat`, placed at the repo root. The
-   wrapper also explicitly `cd`s into the repo root before running Python,
-   closing a second latent risk: `schtasks` has no dedicated
-   working-directory flag, and the pipeline's own file paths are relative to
-   the repo root, so a scheduled task launched from a different default
-   directory (commonly `C:\Windows\System32`) could otherwise have written
-   output to the wrong place or failed to find its own folders. This is the
-   kind of undocumented-environment failure mode Session 8.4 (Ingestion
-   Health Monitoring) exists to catch more generally later — noted here as a
-   real, concrete precedent for that future session, not just a one-off fix.
+session** — worth recording as a real finding, not just a footnote. The
+first scheduled-task attempt failed silently overnight (`Last Result:
+-2147024894` — "the system cannot find the file specified") because the
+task's non-interactive execution context could not resolve the bare
+`python` command the way an interactive PowerShell session does.
+Diagnosed by checking `(Get-Command python).Source`, which revealed the
+interactive shell was resolving to the unreliable Microsoft Store stub
+at `WindowsApps\python.exe` — not a real interpreter, and known to behave
+inconsistently outside interactive use. Fixed by pointing the task at the
+real interpreter (`C:\Users\gmsco\AppData\Local\Python\pythoncore-3.14-64\python.exe`)
+via a new wrapper file, `run_ingest.bat`, placed at the repo root. The
+wrapper also explicitly `cd`s into the repo root before running Python,
+closing a second latent risk: `schtasks` has no dedicated
+working-directory flag, and the pipeline's own file paths are relative to
+the repo root, so a scheduled task launched from a different default
+directory (commonly `C:\Windows\System32`) could otherwise have written
+output to the wrong place or failed to find its own folders. This is the
+kind of undocumented-environment failure mode Session 8.4 (Ingestion
+Health Monitoring) exists to catch more generally later — noted here as a
+real, concrete precedent for that future session, not just a one-off fix.
 3. `%USERNAME%` does not reliably expand inside `schtasks /ru` — confirmed
-   directly (`ERROR: No mapping between account names and security IDs was
-   done`). Dropping `/ru` entirely and letting the task default to the
-   currently logged-in user resolved this. Worth remembering for any future
-   Windows Task Scheduler use in this project.
+directly (`ERROR: No mapping between account names and security IDs was
+done`). Dropping `/ru` entirely and letting the task default to the
+currently logged-in user resolved this. Worth remembering for any future
+Windows Task Scheduler use in this project.
 
 **Corrections/reversals during the session:**
 1. **First scheduled task, created without a working-directory-safe wrapper
-   and pointed at the bare `python` command, silently failed overnight with
-   zero data collected.** Corrected per Decision #2 above. The original
-   overnight window (5:00 PM–5:00 AM) is not counted toward this session's
-   validation — the clock was explicitly restarted once the fix went in at
-   10:09 UTC on 8/30, and only pulls from that point forward are counted in
-   the 26-pull total above.
+and pointed at the bare `python` command, silently failed overnight with
+zero data collected.** Corrected per Decision #2 above. The original
+overnight window (5:00 PM–5:00 AM) is not counted toward this session's
+validation — the clock was explicitly restarted once the fix went in at
+10:09 UTC on 8/30, and only pulls from that point forward are counted in
+the 26-pull total above.
 
 **Handoff notes:** Track 1's ingestion layer is now production-grade and
 validated under real, repeated, automated use — including one real
@@ -563,92 +563,92 @@ weights, and reasoning, same detail level as the existing DFS projection docs)
 
 **Validation (required to close session):**
 - [x] Model produces a probability estimate for every ingested prop, not just a
-      subset — **met with agreed v1 scope**: every one of 20,861 real ingested
-      props gets a row with an explicit status in the model's output (nothing
-      silently dropped); every NFL prop with a supported stat type gets a real
-      numeric probability estimate. Non-NFL sports (85% of real volume) and 3
-      stat types nflverse has no matching data for at all are the stated v1
-      boundary — confirmed acceptable by the user for v1.
+subset — **met with agreed v1 scope**: every one of 20,861 real ingested
+props gets a row with an explicit status in the model's output (nothing
+silently dropped); every NFL prop with a supported stat type gets a real
+numeric probability estimate. Non-NFL sports (85% of real volume) and 3
+stat types nflverse has no matching data for at all are the stated v1
+boundary — confirmed acceptable by the user for v1.
 - [x] Model's estimate is sanity-checked against a handful of manually-reasoned
-      examples (does the model agree with obvious cases?) — confirmed two ways:
-      (1) against real 2025 QB passing-yards props, modeled probability moved
-      in the correct direction as the platform's line increased, across every
-      tested case; (2) the two computed-formula stat types (Kicking Points,
-      Fantasy Score) were independently hand-recomputed from raw nflverse data
-      outside the model's own code and matched the model's real output exactly
-      for real players (Harrison Butker, Patrick Mahomes).
+examples (does the model agree with obvious cases?) — confirmed two ways:
+(1) against real 2025 QB passing-yards props, modeled probability moved
+in the correct direction as the platform's line increased, across every
+tested case; (2) the two computed-formula stat types (Kicking Points,
+Fantasy Score) were independently hand-recomputed from raw nflverse data
+outside the model's own code and matched the model's real output exactly
+for real players (Harrison Butker, Patrick Mahomes).
 - [x] Model's inputs and weighting logic are documented at the same specificity
-      as the DFS repos' projection engines — no unnamed "black box" factors —
-      confirmed in `pickem_estimation_model_spec.md`, including exact source
-      citations for the two PrizePicks scoring formulas used.
+as the DFS repos' projection engines — no unnamed "black box" factors —
+confirmed in `pickem_estimation_model_spec.md`, including exact source
+citations for the two PrizePicks scoring formulas used.
 - [x] Explicit note on what's NOT yet included (e.g. weather for outdoor sports,
-      Vegas team totals) and why, so it's a stated gap, not a silent one —
-      confirmed: non-NFL sports, unmapped stat types, no opponent/matchup/
-      injury/home-away/pace/weather adjustment, and the PrizePicks
-      implied-probability assumption are all named explicitly in the spec doc,
-      each with the reason it's excluded rather than guessed at.
+Vegas team totals) and why, so it's a stated gap, not a silent one —
+confirmed: non-NFL sports, unmapped stat types, no opponent/matchup/
+injury/home-away/pace/weather adjustment, and the PrizePicks
+implied-probability assumption are all named explicitly in the spec doc,
+each with the reason it's excluded rather than guessed at.
 
 **Decisions made:**
 1. **v1 scoped to NFL only**, using nflverse's public weekly player-stats
-   data (no API key required — same source DFS_Optimizer already uses) as
-   the external performance source. Against a real live run of 20,861
-   ingested props, 85% were non-NFL sports; those get a real, visible
-   `model_status="unsupported_sport"` row rather than being silently
-   skipped or force-fit to a sport with no real data source wired in yet.
-   Confirmed acceptable to the user for v1.
+data (no API key required — same source DFS_Optimizer already uses) as
+the external performance source. Against a real live run of 20,861
+ingested props, 85% were non-NFL sports; those get a real, visible
+`model_status="unsupported_sport"` row rather than being silently
+skipped or force-fit to a sport with no real data source wired in yet.
+Confirmed acceptable to the user for v1.
 2. **Two inputs only: season average and recency-weighted recent form,
-   blended 50/50.** Mirrors DFS_Optimizer's own first-pass projection
-   pattern (`projections_baseline.py`). The 50/50 blend weight is a
-   deliberate, simple starting point, not a tuned number — re-weighting it
-   against real graded results is explicitly deferred to Session 8.3
-   (Ongoing Recalibration Cadence), once Sessions 2.4/2.5 produce real CLV
-   and outcome data to tune against.
+blended 50/50.** Mirrors DFS_Optimizer's own first-pass projection
+pattern (`projections_baseline.py`). The 50/50 blend weight is a
+deliberate, simple starting point, not a tuned number — re-weighting it
+against real graded results is explicitly deferred to Session 8.3
+(Ongoing Recalibration Cadence), once Sessions 2.4/2.5 produce real CLV
+and outcome data to tune against.
 3. **Player-name matching bug found and fixed before handoff.** nflverse's
-   weekly-stats release has two name columns — `player_name` (abbreviated,
-   e.g. "P.Mahomes") and `player_display_name` (full form, e.g. "Patrick
-   Mahomes"). The model was initially built against the wrong one, which
-   would have silently produced a `no_player_match` result for nearly every
-   real row. Checked directly against a live pull before this was handed
-   off, not assumed — caught and fixed, not discovered later as a bug.
+weekly-stats release has two name columns — `player_name` (abbreviated,
+e.g. "P.Mahomes") and `player_display_name` (full form, e.g. "Patrick
+Mahomes"). The model was initially built against the wrong one, which
+would have silently produced a `no_player_match` result for nearly every
+real row. Checked directly against a live pull before this was handed
+off, not assumed — caught and fixed, not discovered later as a bug.
 4. **Stat-type coverage was built entirely from real ingested data, not
-   guessed in advance.** A first real run against 20,861 live props
-   surfaced 1,650 NFL props with an unrecognized `stat_type` string. Each
-   real string was checked individually against nflverse's actual column
-   list before any mapping decision: 10 stat types were mapped from
-   existing simple/composite nflverse columns (1,096 rows); 2 more
-   (`Kicking Points`, `Fantasy Score` — 138 rows) required real scoring
-   *formulas*, confirmed against PrizePicks' own official sources (see
-   Decision #5); 3 (`Longest Rec`, `Longest Completion`, `Longest Rush` —
-   416 rows) were left deliberately unsupported because nflverse has no
-   per-game "longest play" data of any kind to map them to.
+guessed in advance.** A first real run against 20,861 live props
+surfaced 1,650 NFL props with an unrecognized `stat_type` string. Each
+real string was checked individually against nflverse's actual column
+list before any mapping decision: 10 stat types were mapped from
+existing simple/composite nflverse columns (1,096 rows); 2 more
+(`Kicking Points`, `Fantasy Score` — 138 rows) required real scoring
+*formulas*, confirmed against PrizePicks' own official sources (see
+Decision #5); 3 (`Longest Rec`, `Longest Completion`, `Longest Rush` —
+416 rows) were left deliberately unsupported because nflverse has no
+per-game "longest play" data of any kind to map them to.
 5. **Kicking Points and Fantasy Score formulas confirmed against
-   PrizePicks' own official sources, not assumed.** Kicking Points:
-   confirmed via PrizePicks Support's own reply on X
-   (`x.com/PrizeSupport/status/1963792635933434257`) and PrizePicks' own
-   scoring page — field goals are tiered by distance (0–39 yds = 3 pts,
-   40–49 yds = 4 pts, 50+ yds = 5 pts), PAT made = 1 pt, a missed FG or PAT
-   = −1 pt each, and PrizePicks' own page states this is explicitly not the
-   same stat as Fantasy Score. Fantasy Score: confirmed via the same
-   official page — full-PPR-style scoring across passing/rushing/receiving
-   yards, TDs, interceptions, receptions, fumbles lost, and 2-point
-   conversions. The Fantasy Score formula deliberately omits two rare
-   6-point components (Offensive Fumble Recovery TDs, Kick/Punt/FG Return
-   TDs) because nflverse's closest-named column for return TDs
-   (`pt_return_tds`) was checked directly against real 2025 data and found
-   to fire on punters, not the players who actually returned a kick — using
-   it would have produced a wrong number with false confidence. Left out
-   and documented rather than guessed around; both omitted events are rare
-   (well under 1% of player-games per season).
+PrizePicks' own official sources, not assumed.** Kicking Points:
+confirmed via PrizePicks Support's own reply on X
+(`x.com/PrizeSupport/status/1963792635933434257`) and PrizePicks' own
+scoring page — field goals are tiered by distance (0–39 yds = 3 pts,
+40–49 yds = 4 pts, 50+ yds = 5 pts), PAT made = 1 pt, a missed FG or PAT
+= −1 pt each, and PrizePicks' own page states this is explicitly not the
+same stat as Fantasy Score. Fantasy Score: confirmed via the same
+official page — full-PPR-style scoring across passing/rushing/receiving
+yards, TDs, interceptions, receptions, fumbles lost, and 2-point
+conversions. The Fantasy Score formula deliberately omits two rare
+6-point components (Offensive Fumble Recovery TDs, Kick/Punt/FG Return
+TDs) because nflverse's closest-named column for return TDs
+(`pt_return_tds`) was checked directly against real 2025 data and found
+to fire on punters, not the players who actually returned a kick — using
+it would have produced a wrong number with false confidence. Left out
+and documented rather than guessed around; both omitted events are rare
+(well under 1% of player-games per season).
 6. **Real player-match rate of 96.6%** (2,525 estimated out of 2,663 NFL
-   props with a supported stat type) was confirmed against live data and
-   judged sufficient for v1 by the user — no further name-matching work
-   planned before Session 2.4.
+props with a supported stat type) was confirmed against live data and
+judged sufficient for v1 by the user — no further name-matching work
+planned before Session 2.4.
 7. **Model run against `--season 2025` for now, with switching to 2026 data
-   explicitly deferred** (see new Open Decision #9) — nflverse's 2026
-   season release does not exist yet (confirmed directly, returns 404 as of
-   2026-08-31: the 2026 NFL season's first games are 2026-09-07, and
-   nflverse only publishes a season's file once real games from it have
-   been played).
+explicitly deferred** (see new Open Decision #9) — nflverse's 2026
+season release does not exist yet (confirmed directly, returns 404 as of
+2026-08-31: the 2026 NFL season's first games are 2026-09-07, and
+nflverse only publishes a season's file once real games from it have
+been played).
 
 ---
 
@@ -677,65 +677,65 @@ below), `/data/pickem/clv_log.csv`, `/data/pickem/clv_snapshots/`.
 
 **Validation (required to close session):**
 - [x] Every flagged opportunity from Session 2.3's model gets a CLV-equivalent
-      entry logged automatically — confirmed on real live data: 3,205 total
-      flags logged across a ~17-hour real validation window
-      (2026-08-31 17:39 UTC – 2026-09-01 09:42 UTC), zero pipeline failures.
+entry logged automatically — confirmed on real live data: 3,205 total
+flags logged across a ~17-hour real validation window
+(2026-08-31 17:39 UTC – 2026-09-01 09:42 UTC), zero pipeline failures.
 - [x] Logging captures both the flag-time estimate and a real benchmark
-      comparison — confirmed: both cross-platform consensus and own-line
-      movement-to-close are logged on every row, explicitly labeled and never
-      blended.
+comparison — confirmed: both cross-platform consensus and own-line
+movement-to-close are logged on every row, explicitly labeled and never
+blended.
 - [x] At least one real window of logged data collected and reviewed for
-      completeness — the roadmap's original "one real week" framing was
-      replaced with four explicit, evidence-based conditions, agreed directly
-      with the user (same correction pattern as Sessions 2.1/2.2): 15+ new
-      flags (met — 3,205), 3+ closed (met — 272), zero pipeline failures
-      (met), and 1+ closed flag with a real consensus match.
+completeness — the roadmap's original "one real week" framing was
+replaced with four explicit, evidence-based conditions, agreed directly
+with the user (same correction pattern as Sessions 2.1/2.2): 15+ new
+flags (met — 3,205), 3+ closed (met — 272), zero pipeline failures
+(met), and 1+ closed flag with a real consensus match.
 - [ ] 1+ closed flag with a real cross-platform consensus match — **NOT MET,
-      explicitly deferred, not failed.** Root cause confirmed directly against
-      live data: Underdog has posted zero real NFL lines as of 2026-09-01
-      (real NFL season starts 2026-09-07); Track 1's model is NFL-only in v1
-      scope. This is an external, calendar-driven fact, not a code defect —
-      the consensus-matching logic itself is confirmed correct against
-      synthetic data (`test_clv_logger.py`). See Open Decision #10 below for
-      the re-verification trigger.
+explicitly deferred, not failed.** Root cause confirmed directly against
+live data: Underdog has posted zero real NFL lines as of 2026-09-01
+(real NFL season starts 2026-09-07); Track 1's model is NFL-only in v1
+scope. This is an external, calendar-driven fact, not a code defect —
+the consensus-matching logic itself is confirmed correct against
+synthetic data (`test_clv_logger.py`). See Open Decision #10 below for
+the re-verification trigger.
 - [x] Log format is durable/queryable — confirmed: `clv_log.csv` is a single,
-      fully-overwritten CSV per run (never appended-and-duplicated), plus a
-      timestamped snapshot per run in `clv_snapshots/`, matching Session 2.2's
-      own snapshot pattern. A future session can query "all flags from the
-      last N days" directly against the snapshot folder or filter the main
-      log's timestamp columns, with no custom one-off code needed.
+fully-overwritten CSV per run (never appended-and-duplicated), plus a
+timestamped snapshot per run in `clv_snapshots/`, matching Session 2.2's
+own snapshot pattern. A future session can query "all flags from the
+last N days" directly against the snapshot folder or filter the main
+log's timestamp columns, with no custom one-off code needed.
 
 **Decisions made:**
 1. `FLAG_EDGE_THRESHOLD = 0.03` (a model probability at least 3 percentage
-   points from the platform's own implied probability) — a stated,
-   unvalidated placeholder, confirmed with the user before the live
-   validation run rather than tuned blind. Re-deriving this against real
-   graded results remains Session 8.3's job (Ongoing Recalibration Cadence).
+points from the platform's own implied probability) — a stated,
+unvalidated placeholder, confirmed with the user before the live
+validation run rather than tuned blind. Re-deriving this against real
+graded results remains Session 8.3's job (Ongoing Recalibration Cadence).
 2. Two distinct benchmarks logged side by side (cross-platform consensus;
-   own-line movement to close), never blended into one number —
-   deliberately, so Session 2.5 onward can determine which one, if either,
-   actually correlates with real graded outcomes.
+own-line movement to close), never blended into one number —
+deliberately, so Session 2.5 onward can determine which one, if either,
+actually correlates with real graded outcomes.
 3. The roadmap's original "one real week" validation duration was replaced
-   with four explicit, evidence-based conditions and a ~17-hour target
-   checkpoint (matching Session 2.2's own real validation window), agreed
-   directly with the user — the third time this project has applied the
-   "elapsed-time-as-default → evidence-based standard" correction (after
-   Sessions 2.1 and 2.2).
+with four explicit, evidence-based conditions and a ~17-hour target
+checkpoint (matching Session 2.2's own real validation window), agreed
+directly with the user — the third time this project has applied the
+"elapsed-time-as-default → evidence-based standard" correction (after
+Sessions 2.1 and 2.2).
 4. `pickem_model.py` (Session 2.3's file) received one small, additive
-   change: a new `resolved_stat_key` output column, giving `clv_logger.py`
-   a reliable, exact-match way to recognize the same real prop across both
-   platforms (raw `stat_type` wording differs by platform; the canonical
-   resolved stat does not). No existing column, calculation, or behavior
-   changed.
+change: a new `resolved_stat_key` output column, giving `clv_logger.py`
+a reliable, exact-match way to recognize the same real prop across both
+platforms (raw `stat_type` wording differs by platform; the canonical
+resolved stat does not). No existing column, calculation, or behavior
+changed.
 5. Given the confirmed external root cause, Session 2.4 was closed now
-   rather than delayed several more days for Underdog to post real NFL
-   lines. Live confirmation of cross-platform consensus matching on real
-   NFL data is explicitly deferred — see Open Decision #10.
+rather than delayed several more days for Underdog to post real NFL
+lines. Live confirmation of cross-platform consensus matching on real
+NFL data is explicitly deferred — see Open Decision #10.
 6. A real, separate data-quality gap found during this session's
-   investigation (Underdog's appearances→games join only resolved for 41%
-   of real records checked) was deliberately NOT fixed this session, since
-   there is no real NFL data yet to test a fix against, and fixing it blind
-   risks false confidence. See Open Decision #11.
+investigation (Underdog's appearances→games join only resolved for 41%
+of real records checked) was deliberately NOT fixed this session, since
+there is no real NFL data yet to test a fix against, and fixing it blind
+risks false confidence. See Open Decision #11.
 
 **Handoff notes:** The CLV logger itself is fully built and proven reliable on
 real live PrizePicks data. The one piece not yet provable — cross-platform
@@ -755,18 +755,18 @@ soon as real NFL data appears on Underdog (expected on or shortly before
 "go/no-go" checkpoint in this roadmap (Sessions 2.9, 3.6, 4.7, 5.7, 6.7, 7.0):
 
 - **Sample-size thresholds:** a concrete, calculated minimum number of graded
-  flags needed before this track's performance is treated as meaningful, based
-  on this track's real observed flag frequency (now knowable from Sessions
-  2.1–2.4's real data) and standard statistical practice for evaluating a
-  binary-outcome edge (not an arbitrarily chosen calendar length). This becomes
-  the actual number "Phase 3's sample-size thresholds" was pointing to in
-  earlier drafts of this roadmap — defined here, for real, using real data.
+flags needed before this track's performance is treated as meaningful, based
+on this track's real observed flag frequency (now knowable from Sessions
+2.1–2.4's real data) and standard statistical practice for evaluating a
+binary-outcome edge (not an arbitrarily chosen calendar length). This becomes
+the actual number "Phase 3's sample-size thresholds" was pointing to in
+earlier drafts of this roadmap — defined here, for real, using real data.
 - **Realized-outcome tracking:** a distinct log, separate from the CLV log built
-  in Session 2.4, that records the actual resolved result (won/lost, actual
-  payout) of every bet the user reports having placed. CLV is a deliberate
-  pre-outcome proxy signal — this is the real thing it's a proxy for. Without
-  this, the project's own "S&P 500 chart" north star (ROADMAP.md, Background &
-  Approach) has no real trendline to plot, only a proxy for one.
+in Session 2.4, that records the actual resolved result (won/lost, actual
+payout) of every bet the user reports having placed. CLV is a deliberate
+pre-outcome proxy signal — this is the real thing it's a proxy for. Without
+this, the project's own "S&P 500 chart" north star (ROADMAP.md, Background &
+Approach) has no real trendline to plot, only a proxy for one.
 
 **Files touched:** `/docs/sample_size_methodology.md` (new),
 `/scripts/calibration/outcome_tracker.py` (new),
@@ -782,59 +782,59 @@ Decision #3 below — no logic changed),
 
 **Validation (required to close session):**
 - [x] Sample-size threshold calculated and documented with the reasoning
-      shown — real breakeven (≈57.7%, sourced from PrizePicks' own
-      published 2-pick Power Play payout) and real target sample (≈3,725
-      graded legs), full derivation in `sample_size_methodology.md`.
+shown — real breakeven (≈57.7%, sourced from PrizePicks' own
+published 2-pick Power Play payout) and real target sample (≈3,725
+graded legs), full derivation in `sample_size_methodology.md`.
 - [x] Outcome tracker can accept a manually-reported bet result and store
-      it durably, linked to the CLV log — confirmed on real data: recorded
-      real graded outcomes against two actual `flag_id`s from the live
-      `clv_log.csv` (`prizepicks|13961517`, `prizepicks|14252061`), both
-      correctly pulled real context by `flag_id` lookup. `--pending`
-      correctly reported 3,205 of 3,207 real flags still ungraded.
+it durably, linked to the CLV log — confirmed on real data: recorded
+real graded outcomes against two actual `flag_id`s from the live
+`clv_log.csv` (`prizepicks|13961517`, `prizepicks|14252061`), both
+correctly pulled real context by `flag_id` lookup. `--pending`
+correctly reported 3,205 of 3,207 real flags still ungraded.
 - [x] Confirmed the two logs (CLV and outcome) can be joined/compared
-      later — confirmed on real data via `weekly_review.py --report`,
-      which joins `outcome_log.csv` against `clv_log.csv` on `flag_id` and
-      reports win rate alongside the breakeven and full-sample references.
+later — confirmed on real data via `weekly_review.py --report`,
+which joins `outcome_log.csv` against `clv_log.csv` on `flag_id` and
+reports win rate alongside the breakeven and full-sample references.
 
 **Decisions made:**
 1. **Sample size treated as a recurring weekly review, not a one-time gate.**
-   The original card implied validating once the full ≈3,725-leg threshold
-   is reached. User redirected this mid-session: build to "a reasonable
-   working point," then run an indefinite recurring review (weekly, by
-   user's explicit choice) that gets more accurate over time as more real
-   data accumulates, rather than blocking all progress on one large number.
-   `weekly_review.py` implements this: a 30-leg interim floor (mirroring
-   Session 2.4's own "15+ flags" reporting minimum) below which no
-   recalibration recommendation is given; above it, every review reports
-   real numbers next to both fixed reference points (57.7% breakeven,
-   3,725-leg full threshold) so a provisional read is never visually
-   confused with a statistically solid one.
+The original card implied validating once the full ≈3,725-leg threshold
+is reached. User redirected this mid-session: build to "a reasonable
+working point," then run an indefinite recurring review (weekly, by
+user's explicit choice) that gets more accurate over time as more real
+data accumulates, rather than blocking all progress on one large number.
+`weekly_review.py` implements this: a 30-leg interim floor (mirroring
+Session 2.4's own "15+ flags" reporting minimum) below which no
+recalibration recommendation is given; above it, every review reports
+real numbers next to both fixed reference points (57.7% breakeven,
+3,725-leg full threshold) so a provisional read is never visually
+confused with a statistically solid one.
 2. **This pulls part of Session 8.3's job forward.** Session 8.3 ("Ongoing
-   Recalibration Cadence") was scoped to wait for Phase 8 (2+ live tracks)
-   because a *cross-track* cadence needs multiple tracks to be meaningful.
-   A *single-track* weekly review has no such dependency and starts now.
-   Session 8.3's own card should build on this single-track review, not
-   start from a blank design, once Phase 8 begins.
+Recalibration Cadence") was scoped to wait for Phase 8 (2+ live tracks)
+because a *cross-track* cadence needs multiple tracks to be meaningful.
+A *single-track* weekly review has no such dependency and starts now.
+Session 8.3's own card should build on this single-track review, not
+start from a blank design, once Phase 8 begins.
 3. **Real correction found and resolved: the flat 50% "implied probability"
-   used for PrizePicks rows (Session 2.3) was being confused with — and
-   should never be confused with — the real, entry-type-specific breakeven
-   win rate (57.7% for a 2-pick Power Play) this session derived.** These
-   answer two different questions: 50% is a flagging-sensitivity
-   threshold, chosen before any entry type is known; 57.7% is the real
-   breakeven for one specific, named entry type, only meaningful once an
-   entry type is actually chosen (Session 2.6's job). No code changed —
-   `pickem_model.py`'s docstring and `clv_methodology.md` were both
-   updated to state this distinction explicitly, closing a real point of
-   confusion rather than leaving it to cause the same question again in a
-   future session.
+used for PrizePicks rows (Session 2.3) was being confused with — and
+should never be confused with — the real, entry-type-specific breakeven
+win rate (57.7% for a 2-pick Power Play) this session derived.** These
+answer two different questions: 50% is a flagging-sensitivity
+threshold, chosen before any entry type is known; 57.7% is the real
+breakeven for one specific, named entry type, only meaningful once an
+entry type is actually chosen (Session 2.6's job). No code changed —
+`pickem_model.py`'s docstring and `clv_methodology.md` were both
+updated to state this distinction explicitly, closing a real point of
+confusion rather than leaving it to cause the same question again in a
+future session.
 4. **Two placeholder outcome records used during real-data testing must
-   not be treated as real results.** The two `flag_id`s recorded during
-   this session's validation (`prizepicks|13961517`,
-   `prizepicks|14252061`) belong to props whose games have not been played
-   yet (2026-09-09 kickoff) — the win/loss values used were arbitrary,
-   solely to prove the pipeline works end-to-end. These were recorded only
-   in Claude's own sandbox test copy, not pushed to the real repo — the
-   user's real `outcome_log.csv` does not yet exist and starts clean.
+not be treated as real results.** The two `flag_id`s recorded during
+this session's validation (`prizepicks|13961517`,
+`prizepicks|14252061`) belong to props whose games have not been played
+yet (2026-09-09 kickoff) — the win/loss values used were arbitrary,
+solely to prove the pipeline works end-to-end. These were recorded only
+in Claude's own sandbox test copy, not pushed to the real repo — the
+user's real `outcome_log.csv` does not yet exist and starts clean.
 
 **Handoff notes:** This session also formalizes something implicit until
 now: **this system flags and sizes opportunities for the user to act on
@@ -883,97 +883,97 @@ since this sandbox cannot reach the real repo's live `clv_log.csv`),
 
 **Validation (required to close session):**
 - [x] Sizing logic produces a concrete stake suggestion for every
-      CLV-positive flagged opportunity — confirmed against real, live
-      `clv_log.csv` data pulled directly from GitHub: three real flag
-      pairs produced a $25.00 capped stake, a $69.85-uncapped-then-capped
-      stake, and a $3.48 uncapped stake respectively, plus a fourth real
-      pair (below the true combined-probability breakeven) correctly
-      produced `status: no_bet_negative_edge` and a $0 stake — never a
-      negative number.
+CLV-positive flagged opportunity — confirmed against real, live
+`clv_log.csv` data pulled directly from GitHub: three real flag
+pairs produced a $25.00 capped stake, a $69.85-uncapped-then-capped
+stake, and a $3.48 uncapped stake respectively, plus a fourth real
+pair (below the true combined-probability breakeven) correctly
+produced `status: no_bet_negative_edge` and a $0 stake — never a
+negative number.
 - [x] Platform-specific risk adjustment is present and documented — a
-      named `PLATFORM_RISK_MULTIPLIER["prizepicks"] = 0.70` dampener is
-      applied and visible in every real output; Underdog's own multiplier
-      is present in the code for future use but is gated off entirely
-      (rejected with an explicit reason) since no real Underdog payout
-      number has been sourced yet.
+named `PLATFORM_RISK_MULTIPLIER["prizepicks"] = 0.70` dampener is
+applied and visible in every real output; Underdog's own multiplier
+is present in the code for future use but is gated off entirely
+(rejected with an explicit reason) since no real Underdog payout
+number has been sourced yet.
 - [x] Sanity-checked against a few manual examples (does a bigger edge
-      produce a bigger suggested stake, within sane bounds?) — confirmed
-      on real live data: suggested stake rose from $0 (combined
-      probability 0.293, below the true 1/3 breakeven for a 2-pick entry)
-      to $3.48 (combined probability 0.365) to $25.00-capped (combined
-      probability 0.959–0.988), monotonic across every real pair tested.
-      Every Kelly-formula intermediate value was independently hand-
-      verified against the code's own output before being accepted (see
-      Decisions below).
+produce a bigger suggested stake, within sane bounds?) — confirmed
+on real live data: suggested stake rose from $0 (combined
+probability 0.293, below the true 1/3 breakeven for a 2-pick entry)
+to $3.48 (combined probability 0.365) to $25.00-capped (combined
+probability 0.959–0.988), monotonic across every real pair tested.
+Every Kelly-formula intermediate value was independently hand-
+verified against the code's own output before being accepted (see
+Decisions below).
 - [x] Explicit bankroll cap / max-single-position rule stated and enforced
-      in code, not just described in docs — `MAX_SINGLE_POSITION_PCT =
-      0.05` is enforced directly in `size_entry()`, not left as a
-      documentation-only rule; hit twice on real live data (both
-      correctly capped at exactly $25.00 on a $500 bankroll, 5%), never
-      exceeded.
+in code, not just described in docs — `MAX_SINGLE_POSITION_PCT =
+0.05` is enforced directly in `size_entry()`, not left as a
+documentation-only rule; hit twice on real live data (both
+correctly capped at exactly $25.00 on a $500 bankroll, 5%), never
+exceeded.
 
 **Decisions made:**
 1. **v1 scoped to exactly one entry type — a PrizePicks 2-pick Power
-   Play** — reusing Session 2.5's own sourced 3x payout number, rather
-   than guessing at a multiplier for any other entry size or for
-   Underdog. Every other leg-count/platform combination is rejected with
-   an explicit, stated reason. Extending coverage is a named candidate
-   for a future session, not built here.
+Play** — reusing Session 2.5's own sourced 3x payout number, rather
+than guessing at a multiplier for any other entry size or for
+Underdog. Every other leg-count/platform combination is rejected with
+an explicit, stated reason. Extending coverage is a named candidate
+for a future session, not built here.
 2. **Sizing uses fractional Kelly, not full Kelly.**
-   `KELLY_FRACTION = 0.25` (quarter-Kelly) is applied to the raw Kelly
-   fraction before any other adjustment — standard, conservative practice
-   given this project's own model has no opponent/injury/pace adjustment
-   yet (a stated v1 gap since Session 2.3) and Session 2.4's edge
-   threshold is itself an unvalidated placeholder. Discussed directly
-   with the user and confirmed as the right v1 starting point — full
-   Kelly assumes the probability input is exactly correct, which this
-   model does not claim to be.
+`KELLY_FRACTION = 0.25` (quarter-Kelly) is applied to the raw Kelly
+fraction before any other adjustment — standard, conservative practice
+given this project's own model has no opponent/injury/pace adjustment
+yet (a stated v1 gap since Session 2.3) and Session 2.4's edge
+threshold is itself an unvalidated placeholder. Discussed directly
+with the user and confirmed as the right v1 starting point — full
+Kelly assumes the probability input is exactly correct, which this
+model does not claim to be.
 3. **`PLATFORM_RISK_MULTIPLIER["prizepicks"] = 0.70` is a stated,
-   unsourced judgment call, not a derived number**, applied on top of
-   quarter-Kelly to reflect the Session 1.1 continuation research finding
-   that PrizePicks has the most documented first-hand pattern of
-   win-adjacent account closures and withheld withdrawals. No source
-   gives a specific dampening figure, so 0.70 is named explicitly as a
-   placeholder — discussed directly with the user, who agreed to accept
-   it as-is for v1 rather than delay the session chasing a number this
-   project's research cannot currently justify. Revisiting it against
-   real graded results remains Session 8.3's job, same as
-   `FLAG_EDGE_THRESHOLD` and Session 2.5's `p1 = 0.60`.
+unsourced judgment call, not a derived number**, applied on top of
+quarter-Kelly to reflect the Session 1.1 continuation research finding
+that PrizePicks has the most documented first-hand pattern of
+win-adjacent account closures and withheld withdrawals. No source
+gives a specific dampening figure, so 0.70 is named explicitly as a
+placeholder — discussed directly with the user, who agreed to accept
+it as-is for v1 rather than delay the session chasing a number this
+project's research cannot currently justify. Revisiting it against
+real graded results remains Session 8.3's job, same as
+`FLAG_EDGE_THRESHOLD` and Session 2.5's `p1 = 0.60`.
 4. **A same-game caution dampener was added mid-session, at the user's
-   direction, after a discussion of same-game correlation risk.**
-   `SAME_GAME_CAUTION_MULTIPLIER = 0.85` applies whenever both requested
-   legs share the same real `game_id`, and is reported explicitly in the
-   output (`same_game_pair`, `same_game_caution_multiplier_applied`) —
-   never a silent adjustment. This was a deliberate "flag it as riskier,
-   don't pretend to model it precisely" choice: this project has no real
-   data on how strongly, or in which direction, same-game legs actually
-   correlate, and manufacturing a precise correction would mean sizing
-   real money off a guess. Confirmed on real live data — the same real
-   flag pair's uncapped stake moved from $15.15 to $12.88 once the flag
-   applied, and both real capped-example pairs also correctly showed
-   `same_game_pair: True`. Re-deriving this multiplier (or replacing it
-   with real correlation modeling) is a named future candidate, not
-   built here.
+direction, after a discussion of same-game correlation risk.**
+`SAME_GAME_CAUTION_MULTIPLIER = 0.85` applies whenever both requested
+legs share the same real `game_id`, and is reported explicitly in the
+output (`same_game_pair`, `same_game_caution_multiplier_applied`) —
+never a silent adjustment. This was a deliberate "flag it as riskier,
+don't pretend to model it precisely" choice: this project has no real
+data on how strongly, or in which direction, same-game legs actually
+correlate, and manufacturing a precise correction would mean sizing
+real money off a guess. Confirmed on real live data — the same real
+flag pair's uncapped stake moved from $15.15 to $12.88 once the flag
+applied, and both real capped-example pairs also correctly showed
+`same_game_pair: True`. Re-deriving this multiplier (or replacing it
+with real correlation modeling) is a named future candidate, not
+built here.
 5. **The bankroll cap (`MAX_SINGLE_POSITION_PCT = 0.05`) is a hard
-   ceiling applied after every other adjustment**, so a large modeled
-   edge — even a combined probability above 95%, as seen twice on real
-   data this session — cannot produce an unreasonably large single-entry
-   suggestion.
+ceiling applied after every other adjustment**, so a large modeled
+edge — even a combined probability above 95%, as seen twice on real
+data this session — cannot produce an unreasonably large single-entry
+suggestion.
 
 **Corrections/reversals during the session:**
 1. **A predicted "no-bet" test case turned out to be a real, small
-   positive-edge case instead.** While walking through a manual
-   prediction for a real flag pair (Drake Maye's two different Pass+Rush
-   Yards lines), Claude initially predicted the combined probability
-   would fall below the 57.7% per-leg breakeven and produce a $0 stake —
-   an error, since 57.7% is the *per-leg* breakeven, not the *combined*
-   two-leg breakeven (which is 1/3 ≈ 33.3% for a 3x-payout 2-pick entry).
-   The real combined probability (0.365) was actually above 1/3, and the
-   script correctly returned a small positive stake ($3.48), not a $0
-   result. Caught and corrected in the same turn, with the corrected math
-   shown against the real output rather than silently moved past — a
-   genuinely useful real-data test of the small-positive-edge path that
-   the original (mistaken) prediction would not have produced.
+positive-edge case instead.** While walking through a manual
+prediction for a real flag pair (Drake Maye's two different Pass+Rush
+Yards lines), Claude initially predicted the combined probability
+would fall below the 57.7% per-leg breakeven and produce a $0 stake —
+an error, since 57.7% is the *per-leg* breakeven, not the *combined*
+two-leg breakeven (which is 1/3 ≈ 33.3% for a 3x-payout 2-pick entry).
+The real combined probability (0.365) was actually above 1/3, and the
+script correctly returned a small positive stake ($3.48), not a $0
+result. Caught and corrected in the same turn, with the corrected math
+shown against the real output rather than silently moved past — a
+genuinely useful real-data test of the small-positive-edge path that
+the original (mistaken) prediction would not have produced.
 
 **Handoff notes:** The sizing engine is built, tested against 8 synthetic
 scenarios (including the same-game dampener added mid-session), and
@@ -1005,19 +1005,19 @@ this is a real, deliberate deviation from the card's original "ingestion
 
 **Validation (required to close session):**
 - [x] Workflow runs successfully on GitHub Actions' own infrastructure (not just
-      locally) at least 3 times on schedule — 4 confirmed real "Scheduled"-
-      trigger runs (#5–#8), all green, all producing real auto-commits.
+locally) at least 3 times on schedule — 4 confirmed real "Scheduled"-
+trigger runs (#5–#8), all green, all producing real auto-commits.
 - [x] Failure in one step (e.g. ingestion) doesn't silently corrupt downstream
-      steps — pipeline fails loudly and logs why — proven twice for real, not
-      just by design: a `ModuleNotFoundError` (run #1) and a missing-dependency
-      error (run #2) each stopped the pipeline before CLV logging ran, and
-      `clv_log.csv` was correctly left untouched both times.
+steps — pipeline fails loudly and logs why — proven twice for real, not
+just by design: a `ModuleNotFoundError` (run #1) and a missing-dependency
+error (run #2) each stopped the pipeline before CLV logging ran, and
+`clv_log.csv` was correctly left untouched both times.
 - [x] Digest output is complete and matches what a manual run would produce —
-      confirmed against real overnight data: 30,373 real props ingested, 126
-      newly flagged, real September NFL game dates.
+confirmed against real overnight data: 30,373 real props ingested, 126
+newly flagged, real September NFL game dates.
 - [x] Secrets (if any needed) are handled via GitHub Actions secrets, not
-      committed anywhere — no secrets needed at all (PrizePicks/Underdog
-      endpoints are unauthenticated); trivially satisfied.
+committed anywhere — no secrets needed at all (PrizePicks/Underdog
+endpoints are unauthenticated); trivially satisfied.
 
 **Handoff notes:** GitHub's scheduled ("cron") trigger took real, extended
 troubleshooting to get firing at all — see SESSION_LOG.md for the full
@@ -1053,33 +1053,33 @@ project's design supports.
 
 **Validation (required to close session):**
 - [x] Frontend deploys successfully and is reachable at a live URL —
-      `https://market-betting.pages.dev`
+`https://market-betting.pages.dev`
 - [x] Displays current flagged opportunities pulled from real automated output,
-      not mock data — row counts confirmed to exactly match the real
-      `clv_log.csv` (3,856 total rows)
+not mock data — row counts confirmed to exactly match the real
+`clv_log.csv` (3,856 total rows)
 - [x] Displays a CLV-performance trendline view — corrected mid-session from a
-      meaningless raw-sum metric to a running-average metric; see
-      SESSION_LOG.md
+meaningless raw-sum metric to a running-average metric; see
+SESSION_LOG.md
 - [x] Confirmed working on both desktop and mobile view
 
 **Decisions made:**
 1. Sizing is shown via an **interactive client-side calculator**, not
-   automated per-flag output — this mirrors `sizing_engine.py`'s real,
-   deliberate design (manual, per-entry, no persisted bankroll) rather
-   than inventing new automation (a leg-pairing strategy) that doesn't
-   exist anywhere else in the project. Bankroll is never persisted
-   anywhere; it resets when the browser tab closes.
+automated per-flag output — this mirrors `sizing_engine.py`'s real,
+deliberate design (manual, per-entry, no persisted bankroll) rather
+than inventing new automation (a leg-pairing strategy) that doesn't
+exist anywhere else in the project. Bankroll is never persisted
+anywhere; it resets when the browser tab closes.
 2. Cloudflare Pages projects for this repo must be created via the
-   dashboard's **"Continue to Pages" → "Import an existing Git
-   repository"** path, not the newer unified "Create application" flow —
-   the unified flow silently produces a Worker instead of a Pages
-   project for a plain static site. Recorded here as a standing gotcha
-   for any future sibling-project Cloudflare Pages setup.
+dashboard's **"Continue to Pages" → "Import an existing Git
+repository"** path, not the newer unified "Create application" flow —
+the unified flow silently produces a Worker instead of a Pages
+project for a plain static site. Recorded here as a standing gotcha
+for any future sibling-project Cloudflare Pages setup.
 3. The trendline and its headline stat use a **running average** of
-   per-flag CLV edge, not a running sum — a sum grows without bound as
-   more flags close and stops representing anything real; the average is
-   what actually answers "is this system right more often than chance,"
-   which is the roadmap's stated north star.
+per-flag CLV edge, not a running sum — a sum grows without bound as
+more flags close and stops representing anything real; the average is
+what actually answers "is this system right more often than chance,"
+which is the roadmap's stated north star.
 
 **Handoff notes:** See SESSION_LOG.md's Session 2.8 entry for the full build
 trail, including the Cloudflare Worker-vs-Pages mixup and the trendline-metric
@@ -1106,17 +1106,17 @@ and `/data/pickem/outcome_log.csv` together and produces a written assessment.
 
 **Validation (required to close session):**
 - [ ] Sample-size threshold from Session 2.5 reached, for both CLV entries and
-      real reported outcomes
+real reported outcomes
 - [ ] Real graded CLV performance reviewed — does it show the "positive
-      trendline with real drawdowns" pattern the project's north star describes,
-      or not?
+trendline with real drawdowns" pattern the project's north star describes,
+or not?
 - [ ] Real reported outcomes (not just CLV) reviewed against the same standard,
-      and checked for directional agreement with the CLV signal
+and checked for directional agreement with the CLV signal
 - [ ] Explicit go/no-go decision recorded: is Track 1 (pick'em) validated enough
-      to consider real capital, or does it need another iteration on the
-      estimation model first?
+to consider real capital, or does it need another iteration on the
+estimation model first?
 - [ ] If no-go: specific, named reasons documented (not just "didn't work") so
-      the next session knows what to fix
+the next session knows what to fix
 
 **Handoff notes:** This is the checkpoint the whole "no guarantees ≠ lower bar"
 rule exists for. A session that fails this validation is not a failed project —
@@ -1148,13 +1148,13 @@ scoping session, the same spirit as Session 2.3's original model-scoping
 work. For every sport currently live on PrizePicks and Underdog (checked
 live, not from memory or assumption):
 - What real sports are actually listed right now (both platforms, pulled
-  live)
+live)
 - For each: does a real, current public data source exist to grade it
-  against? (`nflverse` only covers NFL — MLB, Tennis, and CFB each need
-  their own answer, not yet researched)
+against? (`nflverse` only covers NFL — MLB, Tennis, and CFB each need
+their own answer, not yet researched)
 - Which are structurally close to workable now (a per-game stat, a public
-  stats API or scrapeable source) vs. genuine build-outs (no public data
-  source, or a fundamentally different market structure)
+stats API or scrapeable source) vs. genuine build-outs (no public data
+source, or a fundamentally different market structure)
 
 **Files touched:** `/docs/research/sport_inventory.md` (new — the actual
 inventory and per-sport findings), possibly `ROADMAP.md` if new sessions need
@@ -1162,19 +1162,19 @@ to be added for whichever sports turn out workable.
 
 **Validation (required to close session):**
 - [x] Every sport currently listed on PrizePicks confirmed live (not assumed
-      from a past session) — 29 leagues confirmed via a live pull
+from a past session) — 29 leagues confirmed via a live pull
 - [ ] Every sport currently listed on Underdog confirmed live (not assumed)
-      — **deferred, with a real automated mechanism now running** (see
-      "Handoff notes" below), not left open-ended
+— **deferred, with a real automated mechanism now running** (see
+"Handoff notes" below), not left open-ended
 - [x] For each sport found: a real, named answer on data-source availability
-      (found and confirmed, or confirmed not to exist — not left unchecked)
-      — includes the long tail, not just the largest sports
+(found and confirmed, or confirmed not to exist — not left unchecked)
+— includes the long tail, not just the largest sports
 - [x] At least MLB explicitly checked, since it's mid-season right now and
-      was missed entirely this session despite being a live, obvious
-      candidate
+was missed entirely this session despite being a live, obvious
+candidate
 - [x] Clear, named list of which sports are candidates for near-term
-      estimation-model support vs. which require real build-out vs. which
-      are ruled out, with reasoning for each
+estimation-model support vs. which require real build-out vs. which
+are ruled out, with reasoning for each
 
 **Handoff notes:** The point of this session is to stop this track's scope
 from silently narrowing to whichever sport is easiest to see at the moment.
@@ -1236,14 +1236,14 @@ new repo-root `.gitignore`.
 
 **Validation (required to close session):**
 - [x] Kalshi and Polymarket API access confirmed and documented (auth method,
-      rate limits, what's free vs. requires an account)
+rate limits, what's free vs. requires an account)
 - [ ] Venue-matching logic correctly identifies the same real-world event/outcome
-      across at least 2 venues in a real test — **partial:** validated
-      against real title text in constructed test cases (including catching
-      and fixing two real false-positive matches); no live simultaneous match
-      observed yet. See Open Decision #17.
+across at least 2 venues in a real test — **partial:** validated
+against real title text in constructed test cases (including catching
+and fixing two real false-positive matches); no live simultaneous match
+observed yet. See Open Decision #17.
 - [x] Normalized schema extended to cover exchange-style pricing (YES/NO
-      contracts), not just sportsbook-style odds
+contracts), not just sportsbook-style odds
 
 ---
 
@@ -1276,20 +1276,20 @@ rebuilt — adds a second target-category set alongside Climate/Commodities)
 
 **Validation (against this card's original checklist):**
 - [x] A real, checkable definition of "narrow down-ballot" is documented and
-      applied as an actual filter (race type, geographic level, or similar —
-      not a subjective judgment call per race)
+applied as an actual filter (race type, geographic level, or similar —
+not a subjective judgment call per race)
 - [x] Real narrow down-ballot series pulled and confirmed against Session
-      0.1's original scope (not simply all of Politics/Elections) — 93 real
-      series confirmed live (89 House + 4 state legislature)
+0.1's original scope (not simply all of Politics/Elections) — 93 real
+series confirmed live (89 House + 4 state legislature)
 - [ ] Venue-matching re-run against the expanded Kalshi data to check for
-      real overlap with Polymarket's own down-ballot election markets —
-      **partial pass.** A real, live matched pair WAS found (U.S. House tier:
-      5/5 races checked have a matching Polymarket market — the first live
-      cross-venue match this project has found). However, `venue_matcher.py`
-      as currently configured would not catch it: Kalshi's `close_time` for
-      these contracts is the post-election swearing-in date, not the
-      election date, breaking the matcher's close-time-proximity check. See
-      Open Decision #21 — carried forward to Session 3.2, not fixed here.
+real overlap with Polymarket's own down-ballot election markets —
+**partial pass.** A real, live matched pair WAS found (U.S. House tier:
+5/5 races checked have a matching Polymarket market — the first live
+cross-venue match this project has found). However, `venue_matcher.py`
+as currently configured would not catch it: Kalshi's `close_time` for
+these contracts is the post-election swearing-in date, not the
+election date, breaking the matcher's close-time-proximity check. See
+Open Decision #21 — carried forward to Session 3.2, not fixed here.
 
 ---
 
@@ -1324,42 +1324,42 @@ reason)
 
 **Validation (required to close session):**
 - [x] Detection logic correctly flags a known historical or simulated arbitrage
-      case — confirmed both single-venue (same-market YES+NO) and
-      cross-venue (matched-pair) shapes against constructed test cases, then
-      re-run against real live Kalshi/Polymarket prices for the real MO-05
-      down-ballot race (see below) with the correct real-world result: no
-      arbitrage, since real markets are efficient right now.
+case — confirmed both single-venue (same-market YES+NO) and
+cross-venue (matched-pair) shapes against constructed test cases, then
+re-run against real live Kalshi/Polymarket prices for the real MO-05
+down-ballot race (see below) with the correct real-world result: no
+arbitrage, since real markets are efficient right now.
 - [x] Fee-adjusted profit calculation confirmed accurate (manually cross-checked
-      on at least 2 real examples) — hand-computed Kalshi's and Polymarket's
-      own published fee formulas and confirmed exact agreement with each
-      venue's own published fee table (e.g. Polymarket Politics at 30¢ =
-      $0.84/100 shares; Kalshi at 30¢ = $1.47/100 contracts).
+on at least 2 real examples) — hand-computed Kalshi's and Polymarket's
+own published fee formulas and confirmed exact agreement with each
+venue's own published fee table (e.g. Polymarket Politics at 30¢ =
+$0.84/100 shares; Kalshi at 30¢ = $1.47/100 contracts).
 - [x] False-positive check: confirms it does NOT flag price differences that
-      don't actually clear fees — confirmed on a razor-thin constructed case
-      and, more importantly, on real current MO-05 prices (real gross costs
-      of $1.00–$1.05, correctly producing zero flags). Caught and fixed a
-      real floating-point rounding bug along the way where an exact-
-      breakeven case was silently dropped.
+don't actually clear fees — confirmed on a razor-thin constructed case
+and, more importantly, on real current MO-05 prices (real gross costs
+of $1.00–$1.05, correctly producing zero flags). Caught and fixed a
+real floating-point rounding bug along the way where an exact-
+breakeven case was silently dropped.
 - [x] Liquidity check confirmed: a flagged opportunity includes the real
-      available size at that price, not just the headline price — **a real
-      bug was found here against live data and fixed within this session,
-      not deferred.** Kalshi's `liquidity_dollars` field was found to read
-      `"0.0000"` on every real Kalshi market pulled (multiple KXHIGHPHIL
-      weather strikes, both real legs of KXHOUSEMO5), despite real,
-      substantial size resting on the book. Fixed by capturing Kalshi's
-      real `yes_ask_size_fp`/`yes_bid_size_fp` fields (new
-      `schema_exchange.py`/`ingest_kalshi.py` columns) and using those for
-      Kalshi legs specifically, while keeping Polymarket's own `liquidity`
-      field (confirmed real and populated) for Polymarket legs. Re-validated
-      against the real MO-05 data after the fix: correctly reports a real,
-      non-zero fillable size instead of a false $0.00.
+available size at that price, not just the headline price — **a real
+bug was found here against live data and fixed within this session,
+not deferred.** Kalshi's `liquidity_dollars` field was found to read
+`"0.0000"` on every real Kalshi market pulled (multiple KXHIGHPHIL
+weather strikes, both real legs of KXHOUSEMO5), despite real,
+substantial size resting on the book. Fixed by capturing Kalshi's
+real `yes_ask_size_fp`/`yes_bid_size_fp` fields (new
+`schema_exchange.py`/`ingest_kalshi.py` columns) and using those for
+Kalshi legs specifically, while keeping Polymarket's own `liquidity`
+field (confirmed real and populated) for Polymarket legs. Re-validated
+against the real MO-05 data after the fix: correctly reports a real,
+non-zero fillable size instead of a false $0.00.
 - [x] Legal footprint check confirmed: a flagged opportunity is suppressed or
-      clearly labeled if either venue isn't legally available to the user —
-      mechanism confirmed working (Kalshi's real, confirmed Sports-contract
-      state restrictions are modeled and would suppress/label a flag if this
-      project's tracks ever included Kalshi Sports). Honest, named gap: no
-      comparably detailed Polymarket-specific state-restriction list was
-      found this session — see Open Decision #22 below.
+clearly labeled if either venue isn't legally available to the user —
+mechanism confirmed working (Kalshi's real, confirmed Sports-contract
+state restrictions are modeled and would suppress/label a flag if this
+project's tracks ever included Kalshi Sports). Honest, named gap: no
+comparably detailed Polymarket-specific state-restriction list was
+found this session — see Open Decision #22 below.
 
 ---
 
@@ -1375,20 +1375,20 @@ positions, rather than single-position edge sizing).
 
 **Validation (required to close session):**
 - [x] Sizing correctly accounts for capital needing to sit in two venues
-      simultaneously — confirmed via two separate bankroll inputs
-      (`--kalshi-bankroll`, `--polymarket-bankroll`) and a new
-      open-positions ledger (`data/arbitrage/open_positions.csv`) that
-      tracks real committed capital per venue and correctly reduces
-      available capital on subsequent sizing calls; settlement correctly
-      frees it back up.
+simultaneously — confirmed via two separate bankroll inputs
+(`--kalshi-bankroll`, `--polymarket-bankroll`) and a new
+open-positions ledger (`data/arbitrage/open_positions.csv`) that
+tracks real committed capital per venue and correctly reduces
+available capital on subsequent sizing calls; settlement correctly
+frees it back up.
 - [x] Execution-risk buffer included (price can move between detecting and
-      executing both legs) — `EXECUTION_RISK_BUFFER = 0.85` applied to
-      sized contract count. Sanity-checked against real live Kalshi data
-      (see SESSION_LOG.md): real quoted PRICE was stable across the real
-      windows checked, but real order-book SIZE moved up to 67% in 13
-      real minutes on one market — confirming the buffer targets the
-      right kind of risk, though its specific magnitude is only weakly
-      validated by one real data point (see Open Decision #23).
+executing both legs) — `EXECUTION_RISK_BUFFER = 0.85` applied to
+sized contract count. Sanity-checked against real live Kalshi data
+(see SESSION_LOG.md): real quoted PRICE was stable across the real
+windows checked, but real order-book SIZE moved up to 67% in 13
+real minutes on one market — confirming the buffer targets the
+right kind of risk, though its specific magnitude is only weakly
+validated by one real data point (see Open Decision #23).
 
 **Real bug found and fixed within this session, against live data:**
 `detector.py`'s `fillable_size_dollars` field is a real CONTRACT COUNT,
@@ -1425,17 +1425,17 @@ fix)
 
 **Validation (required to close session):**
 - [x] Workflow runs on schedule reliably — ✅ confirmed 2026-09-06: run
-      #4 was triggered via schedule (cron, not manual), succeeded in
-      4m 36s, and reproduced the same one genuine flag as the two prior
-      manual runs.
+#4 was triggered via schedule (cron, not manual), succeeded in
+4m 36s, and reproduced the same one genuine flag as the two prior
+manual runs.
 - [x] Polling frequency justified against real evidence — ⚠️ justified
-      against real GitHub Actions cost/budget data (checked directly:
-      2,000 min/month account-wide allowance, $0 budget with
-      "Stop usage: Yes"), NOT against real arbitrage-window-closing
-      timing, which still does not exist. 6 runs/day (~every 4 hours) is
-      an explicit, named placeholder pending Session 3.6's real timing
-      data — see SESSION_LOG.md for the full reasoning and the real cost
-      math for the cadences considered.
+against real GitHub Actions cost/budget data (checked directly:
+2,000 min/month account-wide allowance, $0 budget with
+"Stop usage: Yes"), NOT against real arbitrage-window-closing
+timing, which still does not exist. 6 runs/day (~every 4 hours) is
+an explicit, named placeholder pending Session 3.6's real timing
+data — see SESSION_LOG.md for the full reasoning and the real cost
+math for the cadences considered.
 
 ---
 
@@ -1450,14 +1450,14 @@ beyond the frontend files themselves, none of which were anticipated at
 session open:
 
 1. `detector.py` now writes a second, stable-named file
-   (`arbitrage_flags_latest.csv`) on every run, alongside its existing
-   timestamped output — the frontend needs one predictable filename to
-   fetch, and the pipeline previously only ever produced timestamped ones.
+(`arbitrage_flags_latest.csv`) on every run, alongside its existing
+timestamped output — the frontend needs one predictable filename to
+fetch, and the pipeline previously only ever produced timestamped ones.
 2. The Cloudflare Pages build command was extended to copy that new file
-   into `frontend/data/` alongside pick'em's existing `clv_log.csv` copy
-   step.
+into `frontend/data/` alongside pick'em's existing `clv_log.csv` copy
+step.
 3. A real bug in `app.js`'s CSV reader (present since Session 2.8, never
-   triggered until now) was found and fixed — see Corrections below.
+triggered until now) was found and fixed — see Corrections below.
 
 **Files touched:** `frontend/index.html`, `frontend/app.js`,
 `frontend/style.css` (all extended, not replaced), `scripts/arbitrage/detector.py`
@@ -1466,12 +1466,12 @@ a repo file).
 
 **Validation (required to close session):**
 - [x] Arbitrage opportunities display correctly alongside pick'em, clearly
-      distinguished as a different track — confirmed on the live production
-      URL (`market-betting.pages.dev`), not just locally: a real screenshot
-      and a direct DOM check both show the one real flagged opportunity
-      (Kalshi MI-7 / Polymarket MI-07, carried over from Session 3.4)
-      rendering under a blue "Track 2" badge, below Track 1's own section,
-      with real stat-row and table values matching the underlying CSV.
+distinguished as a different track — confirmed on the live production
+URL (`market-betting.pages.dev`), not just locally: a real screenshot
+and a direct DOM check both show the one real flagged opportunity
+(Kalshi MI-7 / Polymarket MI-07, carried over from Session 3.4)
+rendering under a blue "Track 2" badge, below Track 1's own section,
+with real stat-row and table values matching the underlying CSV.
 
 ---
 
@@ -1503,12 +1503,12 @@ finding) — see SESSION_LOG.md Decision #3 for the full reasoning.
 
 **Validation (required to close session):**
 - [ ] Minimum sample size of flagged opportunities reached — interim floor
-      status as of 2026-09-06: `elections_wide` met (1 distinct real
-      opportunity); `single_venue` and `bucketed` not met (0 each). Re-check
-      via `arbitrage_flag_tracker.py --scan --report` after more real runs
-      accumulate.
+status as of 2026-09-06: `elections_wide` met (1 distinct real
+opportunity); `single_venue` and `bucketed` not met (0 each). Re-check
+via `arbitrage_flag_tracker.py --scan --report` after more real runs
+accumulate.
 - [ ] Spot-checked sample confirms flagged opportunities were genuinely
-      executable at the prices logged (not stale/unavailable by execution time)
+executable at the prices logged (not stale/unavailable by execution time)
 - [ ] Go/no-go decision recorded
 
 ---
@@ -1550,24 +1550,24 @@ rewritten)
 
 **Validation (required to close session):**
 - [x] Kalshi weather market data and public weather data both ingest
-      successfully and can be joined on the same real-world event — pass,
-      confirmed against real committed data (576 rows, 62 series, 24 US
-      stations); Philadelphia spot-checked directly: same `KPHL` station code
-      in both files, real plausible temperatures, sane market pricing.
+successfully and can be joined on the same real-world event — pass,
+confirmed against real committed data (576 rows, 62 series, 24 US
+stations); Philadelphia spot-checked directly: same `KPHL` station code
+in both files, real plausible temperatures, sane market pricing.
 - [x] Data freshness confirmed adequate for the market's resolution timing (data
-      arrives before markets need to be evaluated) — pass, real evidence in
-      `docs/weather_data_freshness_check.md`: forecast data available
-      31–34 real hours before the earliest market close for that date;
-      observed data for grading arrives within minutes of a local day ending.
+arrives before markets need to be evaluated) — pass, real evidence in
+`docs/weather_data_freshness_check.md`: forecast data available
+31–34 real hours before the earliest market close for that date;
+observed data for grading arrives within minutes of a local day ending.
 - [x] Order-book depth/liquidity captured per market, not just the top price —
-      pass, came through automatically via `yes_ask_size`/`yes_bid_size` on
-      every real row (same fields Session 3.2 already added for arbitrage).
+pass, came through automatically via `yes_ask_size`/`yes_bid_size` on
+every real row (same fields Session 3.2 already added for arbitrage).
 - [x] Legal footprint confirmed and documented for Kalshi in the user's
-      jurisdiction — pass, by reference: `docs/venue_legal_footprint.md`'s
-      existing Session 3.2 finding (Kalshi's only confirmed restriction is
-      Sports-specific) extended with a one-paragraph addendum naming Track 3
-      explicitly, plus a live, direct check this session confirming Kansas
-      specifically (the user's own state) is fully available.
+jurisdiction — pass, by reference: `docs/venue_legal_footprint.md`'s
+existing Session 3.2 finding (Kalshi's only confirmed restriction is
+Sports-specific) extended with a one-paragraph addendum naming Track 3
+explicitly, plus a live, direct check this session confirming Kansas
+specifically (the user's own state) is fully available.
 
 ---
 
@@ -1604,18 +1604,18 @@ Decisions #32-#34 below and the full reasoning in
 
 **Validation (required to close session):**
 - [x] Model correctly handles ensemble/uncertainty data, not just a
-      single point forecast — pass, via the real automated blend
-      described above (no true ensemble exists to draw from; see Open
-      Decision #32).
+single point forecast — pass, via the real automated blend
+described above (no true ensemble exists to draw from; see Open
+Decision #32).
 - [x] Documented at the same specificity level as Session 2.3's spec —
-      pass, `weather_estimation_model_spec.md`.
+pass, `weather_estimation_model_spec.md`.
 - [ ] Model's probability estimates are sanity-checked against at least a
-      handful of already-resolved historical Kalshi weather markets —
-      **blocked on Kalshi's real settlement clock (~19:00 UTC / 2:00 PM
-      CDT, 2026-09-07), not on anything unbuilt.** The check script
-      (`weather_backtest_check.py`) is built, tested twice against real
-      API responses, and confirmed to correctly report zero rather than
-      guess when no real resolved data exists yet.
+handful of already-resolved historical Kalshi weather markets —
+**blocked on Kalshi's real settlement clock (~19:00 UTC / 2:00 PM
+CDT, 2026-09-07), not on anything unbuilt.** The check script
+(`weather_backtest_check.py`) is built, tested twice against real
+API responses, and confirmed to correctly report zero rather than
+guess when no real resolved data exists yet.
 
 ---
 
@@ -1645,7 +1645,7 @@ new track parameter, not duplicated)
 
 **Validation (required to close session):**
 - [ ] Sizing correctly reflects Kalshi's fee structure and this track's typical
-      edge size (likely smaller, more frequent edges than pick'em)
+edge size (likely smaller, more frequent edges than pick'em)
 
 ---
 
@@ -1657,7 +1657,7 @@ new track parameter, not duplicated)
 
 **Validation (required to close session):**
 - [ ] Workflow scheduled appropriately against weather forecast update cadence
-      (e.g. aligned to GFS run times)
+(e.g. aligned to GFS run times)
 
 ---
 
@@ -1677,7 +1677,7 @@ new track parameter, not duplicated)
 **Validation (required to close session):**
 - [ ] Minimum sample size reached
 - [ ] Real graded CLV performance reviewed against the north-star trendline
-      standard
+standard
 - [ ] Go/no-go decision recorded
 
 ---
@@ -1685,7 +1685,7 @@ new track parameter, not duplicated)
 # PHASE 5 — Track 4: Down-Ballot Politics (Kalshi/Polymarket)
 
 ### Session 5.1 — Data Ingestion (Race Lists + Polling Data)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-07) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Phase 2 complete; Kalshi/Polymarket access already resolved
 by this point (Phase 3).
 
@@ -1698,18 +1698,35 @@ isn't actionable) and confirms each venue's **legal footprint** for down-ballot
 political markets specifically, since political-market legality can differ from
 a venue's general legal status.
 
-**Files touched:** `/scripts/ingestion/ingest_politics_markets.py`,
+**Files touched:** `/scripts/ingestion/schema_politics.py` (new),
+`/scripts/ingestion/ingest_politics_markets.py`,
 `/scripts/ingestion/ingest_polling_data.py`
 
 **Validation (required to close session):**
-- [ ] Race markets and polling data both ingest successfully and join correctly
-      on the same race
-- [ ] Explicit filter confirmed working: marquee/high-profile races excluded per
-      scope
-- [ ] Liquidity captured per race market, and thin/illiquid races flagged as
-      such rather than treated the same as deep markets
-- [ ] Legal footprint confirmed specifically for political-market participation,
-      not assumed from the venue's general availability
+- [x] Race markets and polling data both ingest successfully and join correctly
+on the same race — confirmed against real live data pulled back down from
+GitHub after the user's live runs: 433 real races (93 Kalshi down-ballot
+series matched, 80 kept as race rows; 427 Polymarket rows structurally
+matched), 74 present on both venues; all 6 previously-known real races
+(MO-05, MI-07, PA-HD12, CA-SD26, MD-SD2, MO-SD8) present with correct
+data, and MI-07 exactly reproduces Session 3.4's own real arbitrage-check
+finding (Kalshi 0.47 = Polymarket 0.47, correctly no edge).
+- [x] Explicit filter confirmed working: marquee/high-profile races excluded per
+scope — confirmed programmatically against the real 433-race output: zero
+Governor, U.S. Senate, mayoral, or city-council rows found.
+- [x] Liquidity captured per race market, and thin/illiquid races flagged as
+such rather than treated the same as deep markets — confirmed via
+`liquidity_note_kalshi`/`liquidity_note_polymarket` ("ok"/"thin"/"no
+market") on every real output row, against named starting thresholds
+(see Open Decision #38).
+- [x] Legal footprint confirmed specifically for political-market participation,
+not assumed from the venue's general availability — real, dated, sourced
+finding via live web search: Kalshi has an active Washington-state
+restriction on Elections & Politics contracts specifically (separate from
+its existing Sports restriction); no equivalent Polymarket restriction was
+found. Confirmed correctly applied row-by-row in the real output: exactly
+the 2 of 10 WA races with a real Kalshi market are flagged, the other 8
+(Polymarket-only) correctly are not.
 
 ---
 
@@ -1730,9 +1747,9 @@ finding.
 
 **Validation (required to close session):**
 - [ ] Underconfidence finding re-checked against current sources before being
-      built into the model, given the noted contested magnitude
+built into the model, given the noted contested magnitude
 - [ ] Model sanity-checked against historical resolved down-ballot markets where
-      available
+available
 - [ ] Documented at the same specificity level as prior estimation specs
 
 ---
@@ -1744,9 +1761,9 @@ finding.
 **Validation (required to close session):**
 - [ ] Politics track flags log correctly into shared CLV structure
 - [ ] Noted explicitly: this track's markets resolve slowly (election dates),
-      so CLV-equivalent (pre-outcome) signal matters even more here than
-      elsewhere — confirm the logged benchmark is meaningful pre-resolution,
-      not just a placeholder
+so CLV-equivalent (pre-outcome) signal matters even more here than
+elsewhere — confirm the logged benchmark is meaningful pre-resolution,
+not just a placeholder
 
 ---
 
@@ -1756,7 +1773,7 @@ finding.
 
 **Validation (required to close session):**
 - [ ] Sizing reflects the long capital-lockup time for slow-resolving political
-      markets (money tied up for weeks/months, not hours/days)
+markets (money tied up for weeks/months, not hours/days)
 
 ---
 
@@ -1766,7 +1783,7 @@ finding.
 
 **Validation (required to close session):**
 - [ ] Workflow scheduled appropriately (likely daily/weekly, not high-frequency,
-      given slow-moving polling data)
+given slow-moving polling data)
 
 ---
 
@@ -1776,7 +1793,7 @@ finding.
 
 **Validation (required to close session):**
 - [ ] Politics track displays correctly, with resolution-date context shown
-      (since these are long-dated positions)
+(since these are long-dated positions)
 
 ---
 
@@ -1786,7 +1803,7 @@ finding.
 
 **Validation (required to close session):**
 - [ ] Minimum sample size reached — explicitly acknowledged this may take
-      longer to accumulate than faster-resolving tracks
+longer to accumulate than faster-resolving tracks
 - [ ] Go/no-go decision recorded
 
 ---
@@ -1812,9 +1829,9 @@ but restrict or ban certain prop categories).
 **Validation (required to close session):**
 - [ ] Both feeds ingest successfully
 - [ ] Vig/juice correctly extracted and stored (needed to compute true no-vig
-      probability, not just the raw line)
+probability, not just the raw line)
 - [ ] Legal footprint confirmed specifically at the prop-category level, not
-      just "is this sportsbook legal here"
+just "is this sportsbook legal here"
 
 ---
 
@@ -1831,7 +1848,7 @@ with adjustments for sportsbook-specific vig and market depth.
 
 **Validation (required to close session):**
 - [ ] Model correctly separates "true edge" from "vig cost" so sizing later
-      isn't fooled by a line that only looks soft after vig is ignored
+isn't fooled by a line that only looks soft after vig is ignored
 
 ---
 
@@ -1841,8 +1858,8 @@ with adjustments for sportsbook-specific vig and market depth.
 
 **Validation (required to close session):**
 - [ ] Props track flags log correctly into shared CLV structure, with a real
-      sharp-book benchmark (e.g. Pinnacle-style no-vig line) where available —
-      this is the actual CLV metric in its most literal form for this track
+sharp-book benchmark (e.g. Pinnacle-style no-vig line) where available —
+this is the actual CLV metric in its most literal form for this track
 
 ---
 
@@ -1860,7 +1877,7 @@ even to PrizePicks/Underdog).
 
 **Validation (required to close session):**
 - [ ] Sizing logic includes an explicit limiting-risk dampener/cap distinct from
-      the other tracks, not reused blindly from pick'em or arbitrage
+the other tracks, not reused blindly from pick'em or arbitrage
 
 ---
 
@@ -1879,7 +1896,7 @@ even to PrizePicks/Underdog).
 
 **Validation (required to close session):**
 - [ ] Props track displays correctly, with a visible limiting-risk indicator per
-      flagged opportunity
+flagged opportunity
 
 ---
 
@@ -1890,7 +1907,7 @@ even to PrizePicks/Underdog).
 **Validation (required to close session):**
 - [ ] Minimum sample size reached
 - [ ] Go/no-go decision recorded, explicitly factoring in whether real-world
-      account limiting was observed during the window, not just modeled edge
+account limiting was observed during the window, not just modeled edge
 
 ---
 
@@ -1926,13 +1943,13 @@ higher-confidence tracks, even inside an overall-efficient flagship market.
 **Validation (required to close session):**
 - [ ] Explicit decision recorded: build Phase 7 or formally retire this track
 - [ ] Decision is made at the sub-market-type level (which specific bet types,
-      if any, look soft), not as a single up-or-down call on "flagship sports"
-      as an undifferentiated category
+if any, look soft), not as a single up-or-down call on "flagship sports"
+as an undifferentiated category
 - [ ] If building: reasoning stated for why flagship markets are now believed
-      worth pursuing despite the original low-confidence rating
+worth pursuing despite the original low-confidence rating
 - [ ] If retiring: ROADMAP.md updated to move this from "planned" to "explicitly
-      out of scope," matching how Culture/Mentions/Tech was documented in
-      Session 0.1
+out of scope," matching how Culture/Mentions/Tech was documented in
+Session 0.1
 
 ### Sessions 7.1–7.7 — Full Build (only if Session 7.0 is a "go")
 **Status:** Not scoped in detail — deliberately deferred until Session 7.0's
@@ -1958,8 +1975,8 @@ opportunities across every live track, ranked and comparable.
 **Validation (required to close session):**
 - [ ] Displays real data from at least 2 live tracks simultaneously
 - [ ] Correctly ranks/compares opportunities across tracks with different edge
-      sizes and units (a 3% weather edge vs. a 10% pick'em edge needs a common
-      comparison basis)
+sizes and units (a 3% weather edge vs. a 10% pick'em edge needs a common
+comparison basis)
 
 ---
 
@@ -1973,7 +1990,7 @@ and volatility, not just summed naively from independent per-track sizing.
 
 **Validation (required to close session):**
 - [ ] Allocator respects a total-bankroll cap across all tracks combined, not
-      just per-track caps that could sum to over-exposure
+just per-track caps that could sum to over-exposure
 - [ ] Sanity-checked against a manual example spanning 2+ tracks
 
 ---
@@ -1990,9 +2007,9 @@ Phase 2–7 build step.
 
 **Validation (required to close session):**
 - [ ] Recalibration process runs successfully against real accumulated outcome
-      data from at least one track
+data from at least one track
 - [ ] Cadence (how often this runs) is explicitly stated and justified, not left
-      implicit
+implicit
 
 ---
 
@@ -2023,14 +2040,14 @@ pipelines so a broken track can't hide its own monitoring failure),
 
 **Validation (required to close session):**
 - [ ] Health check correctly distinguishes "source is down" (no response) from
-      "source responded but data looks wrong" (schema/freshness failure) —
-      these need different handling
+"source responded but data looks wrong" (schema/freshness failure) —
+these need different handling
 - [ ] Simulated staleness/schema-change test confirms the check actually catches
-      it, not just a clean-failure test
+it, not just a clean-failure test
 - [ ] Alert is visible somewhere the user will actually see it in time to matter
-      for daily use, not buried in a log file
+for daily use, not buried in a log file
 - [ ] Runbook is concrete enough that repairing a broken endpoint doesn't
-      require re-deriving Session 2.1's original investigation from scratch
+require re-deriving Session 2.1's original investigation from scratch
 
 **Handoff notes:** This session directly protects the project's ability to
 "consistently identify +EV bets on a daily basis" — a silently broken pick'em
@@ -2042,98 +2059,98 @@ opportunities with no visible sign anything was off.
 ## Sequencing logic — why this order
 
 1. **Phase 2 before everything else, in full detail**, because it's the only
-   phase that builds each layer of the stack for the first time. Every later
-   phase's session count is smaller specifically *because* Phase 2 pays that cost
-   once.
+phase that builds each layer of the stack for the first time. Every later
+phase's session count is smaller specifically *because* Phase 2 pays that cost
+once.
 2. **Phase 3 (arbitrage) second**, even though it doesn't need Phase 2's
-   estimation layer, because it needs the ingestion pattern and because it's the
-   highest-confidence track — validating it early gives the project a second data
-   point on whether the "S&P 500 trendline" standard is achievable in practice,
-   fast (arbitrage resolves quickly), before committing more sessions to slower
-   tracks.
+estimation layer, because it needs the ingestion pattern and because it's the
+highest-confidence track — validating it early gives the project a second data
+point on whether the "S&P 500 trendline" standard is achievable in practice,
+fast (arbitrage resolves quickly), before committing more sessions to slower
+tracks.
 3. **Phases 4–5 (weather, politics) in Track Reference order**, since both need
-   genuinely new estimation models and neither depends on the other.
+genuinely new estimation models and neither depends on the other.
 4. **Phase 6 (sportsbook props) after weather/politics**, since it's rated
-   "Moderate" and specifically requires the account-limiting-risk handling that's
-   easier to design well once the project has real operating experience with
-   risk-adjusted sizing from earlier tracks.
+"Moderate" and specifically requires the account-limiting-risk handling that's
+easier to design well once the project has real operating experience with
+risk-adjusted sizing from earlier tracks.
 5. **Phase 7 (flagship/main lines) gated behind an explicit go/no-go**, since
-   it's the lowest-confidence track and the project's own standing rule says
-   tracks don't get built on hope — by the time Phase 7 would start, there's
-   real evidence to make that call with instead of guessing now.
+it's the lowest-confidence track and the project's own standing rule says
+tracks don't get built on hope — by the time Phase 7 would start, there's
+real evidence to make that call with instead of guessing now.
 6. **Phase 8 last**, since portfolio-level management is meaningless with only
-   one live track. **Session 8.4 (endpoint health) is deliberately placed here**,
-   not earlier — it needs at least 2 live tracks' real ingestion history to
-   design a meaningful cross-track check against, even though the risk it
-   protects against (silent endpoint breakage) exists from Session 2.1 onward.
-   Each track's own automation session still includes its own basic retry/error
-   handling in the meantime — 8.4 adds the cross-track staleness/schema check on
-   top of that, not a replacement for it.
+one live track. **Session 8.4 (endpoint health) is deliberately placed here**,
+not earlier — it needs at least 2 live tracks' real ingestion history to
+design a meaningful cross-track check against, even though the risk it
+protects against (silent endpoint breakage) exists from Session 2.1 onward.
+Each track's own automation session still includes its own basic retry/error
+handling in the meantime — 8.4 adds the cross-track staleness/schema check on
+top of that, not a replacement for it.
 
 ---
 
 ## Open Decisions
 
 1. ~~Which track becomes the actual v1 build?~~ **Resolved 2026-08-28: Fixed-Line
-   Pick'em Platforms**, chosen on structural grounds (see Phase 2 above for full
-   reasoning) rather than confidence ranking. User had no venue preference and
-   asked for a structural assessment; the DFS projection-engine reuse and
-   full-stack scaffold benefit were the deciding factors.
+Pick'em Platforms**, chosen on structural grounds (see Phase 2 above for full
+reasoning) rather than confidence ranking. User had no venue preference and
+asked for a structural assessment; the DFS projection-engine reuse and
+full-stack scaffold benefit were the deciding factors.
 2. ~~Repo name and visibility.~~ **Resolved 2026-08-28: `Market_Betting`.**
-   Created Session 1.1, private, under `drgregmscott-tech`.
+Created Session 1.1, private, under `drgregmscott-tech`.
 3. ~~Data source access per pick'em platform.~~ **Resolved 2026-08-28** (Session
-   1.1 continuation, ahead of Session 1.2): PrizePicks, Underdog, and DK Pick6
-   each have no official developer API, but all three run undocumented public
-   endpoints reachable without login or an API key (e.g.
-   `partner-api.prizepicks.com/projections`). No public API is stable by design
-   — Session 2.1 (Data Ingestion Prototype) and Session 8.4 (Ingestion Health
-   Monitoring) exist specifically because these endpoints can change without
-   notice. **Kalshi/Polymarket API access and sportsbook odds feed options
-   remain open** — deferred to Session 3.1 (Multi-Venue Data Ingestion) and
-   Session 6.1 (Odds Feed Ingestion) respectively, where they're actually
-   needed.
+1.1 continuation, ahead of Session 1.2): PrizePicks, Underdog, and DK Pick6
+each have no official developer API, but all three run undocumented public
+endpoints reachable without login or an API key (e.g.
+`partner-api.prizepicks.com/projections`). No public API is stable by design
+— Session 2.1 (Data Ingestion Prototype) and Session 8.4 (Ingestion Health
+Monitoring) exist specifically because these endpoints can change without
+notice. **Kalshi/Polymarket API access and sportsbook odds feed options
+remain open** — deferred to Session 3.1 (Multi-Venue Data Ingestion) and
+Session 6.1 (Odds Feed Ingestion) respectively, where they're actually
+needed.
 4. ~~Verify account-limiting policy per pick'em platform.~~ **Resolved
-   2026-08-28** via a full Advanced Research task (Session 1.1 continuation),
-   archived at `/docs/research/Pickem_Platform_Account_Limiting_Policy_Research.md`.
-   Key findings folded into the roadmap: all three platforms' Terms of Service
-   grant broad discretion to limit or close accounts; the widely-cited "~55%
-   win rate over 200+ entries triggers Flex-only demotion" claim could **not**
-   be corroborated beyond a single affiliate source and should be treated as
-   unconfirmed; PrizePicks has the most documented first-hand pattern of
-   win-adjacent account closures and withheld withdrawals (BBB/Trustpilot);
-   Underdog and DK Pick6 are reputationally more winner-tolerant but this is
-   not independently verified. This is reflected in Session 2.6's
-   platform-specific sizing risk adjustment (PrizePicks treated as
-   cash-out-frequently; Underdog/DK Pick6 as more scalable) and in
-   Session 2.1/3.x/4.x/5.x/6.x's legal-footprint checks (state-by-state
-   vs.-the-house bans and peer-to-peer alternatives, also documented in the
-   same research artifact).
+2026-08-28** via a full Advanced Research task (Session 1.1 continuation),
+archived at `/docs/research/Pickem_Platform_Account_Limiting_Policy_Research.md`.
+Key findings folded into the roadmap: all three platforms' Terms of Service
+grant broad discretion to limit or close accounts; the widely-cited "~55%
+win rate over 200+ entries triggers Flex-only demotion" claim could **not**
+be corroborated beyond a single affiliate source and should be treated as
+unconfirmed; PrizePicks has the most documented first-hand pattern of
+win-adjacent account closures and withheld withdrawals (BBB/Trustpilot);
+Underdog and DK Pick6 are reputationally more winner-tolerant but this is
+not independently verified. This is reflected in Session 2.6's
+platform-specific sizing risk adjustment (PrizePicks treated as
+cash-out-frequently; Underdog/DK Pick6 as more scalable) and in
+Session 2.1/3.x/4.x/5.x/6.x's legal-footprint checks (state-by-state
+vs.-the-house bans and peer-to-peer alternatives, also documented in the
+same research artifact).
 5. ~~Scope the first estimation model concretely.~~ **Resolved 2026-08-31
-   (Session 2.3)**, using real ingested data rather than guessed in advance.
-   The model was scoped to NFL only for v1, using nflverse's public weekly
-   player stats as the external data source, with two inputs (season average
-   and recency-weighted recent form, blended 50/50) and a normal-distribution
-   probability estimate against each platform's fixed line. Stat-type
-   coverage — including two real scoring-formula stats (Kicking Points,
-   Fantasy Score) — was built directly from real ingested `stat_type`
-   strings, each checked against nflverse's real column list before being
-   mapped, with the two PrizePicks scoring formulas confirmed against
-   PrizePicks' own official sources rather than assumed. See Session 2.3 in
-   SESSION_LOG.md and `/docs/research/pickem_estimation_model_spec.md` for
-   the full input list, formulas, and verification record.
+(Session 2.3)**, using real ingested data rather than guessed in advance.
+The model was scoped to NFL only for v1, using nflverse's public weekly
+player stats as the external data source, with two inputs (season average
+and recency-weighted recent form, blended 50/50) and a normal-distribution
+probability estimate against each platform's fixed line. Stat-type
+coverage — including two real scoring-formula stats (Kicking Points,
+Fantasy Score) — was built directly from real ingested `stat_type`
+strings, each checked against nflverse's real column list before being
+mapped, with the two PrizePicks scoring formulas confirmed against
+PrizePicks' own official sources rather than assumed. See Session 2.3 in
+SESSION_LOG.md and `/docs/research/pickem_estimation_model_spec.md` for
+the full input list, formulas, and verification record.
 6. **New, opened Session 1.2:** Liquidity and legal-footprint checks were
-   present for the pick'em track (via Decision #4's research) but had only been
-   handled narratively, not as explicit session-level checks, for arbitrage,
-   weather, politics, and sportsbook props. **Resolved during Session 1.2's own
-   review pass** — Sessions 3.2, 4.1, 5.1, and 6.1 now each carry explicit
-   liquidity and/or legal-footprint validation checkboxes.
+present for the pick'em track (via Decision #4's research) but had only been
+handled narratively, not as explicit session-level checks, for arbitrage,
+weather, politics, and sportsbook props. **Resolved during Session 1.2's own
+review pass** — Sessions 3.2, 4.1, 5.1, and 6.1 now each carry explicit
+liquidity and/or legal-footprint validation checkboxes.
 7. **New, opened Session 1.2:** Phase 7's original go/no-go framing treated
-   "flagship markets" as a single up-or-down call. **Resolved** — Session 7.0
-   now evaluates market structure at the sub-market-type level (per the
-   original research finding that market structure, not sport, determines
-   efficiency — e.g. Asian handicap soccer vs. that same game's 1X2 market),
-   so a genuinely soft sub-market inside an overall-efficient flagship track
-   won't be missed by a blanket judgment.
+"flagship markets" as a single up-or-down call. **Resolved** — Session 7.0
+now evaluates market structure at the sub-market-type level (per the
+original research finding that market structure, not sport, determines
+efficiency — e.g. Asian handicap soccer vs. that same game's 1X2 market),
+so a genuinely soft sub-market inside an overall-efficient flagship track
+won't be missed by a blanket judgment.
 
 All five of Phase 1's open decisions are now resolved or deliberately deferred
 to the specific session where they're actually needed — Phase 1 is fully
@@ -2141,365 +2158,391 @@ scoped. Sessions 2.1 onward are real, buildable session cards; there are no
 remaining blockers to starting Phase 2.
 
 8. **New, opened Session 2.1:** Which pick'em platforms actually belong in
-   Track 1's scope, once real endpoint research (not secondhand
-   characterization) was performed. **Resolved 2026-08-29: DK Pick6 dropped.**
-   No credible public documentation of a Pick6-specific data endpoint was
-   found, and a best-guess URL (built by analogy to DraftKings' other
-   documented APIs) returned a 404. PrizePicks and Underdog were both
-   independently confirmed live, no login/key required, with real schemas
-   documented — see Session 2.1 in SESSION_LOG.md and
-   `/docs/research/endpoint_schemas.md` for full detail. Track 1 proceeds as
-   a two-platform track.
+Track 1's scope, once real endpoint research (not secondhand
+characterization) was performed. **Resolved 2026-08-29: DK Pick6 dropped.**
+No credible public documentation of a Pick6-specific data endpoint was
+found, and a best-guess URL (built by analogy to DraftKings' other
+documented APIs) returned a 404. PrizePicks and Underdog were both
+independently confirmed live, no login/key required, with real schemas
+documented — see Session 2.1 in SESSION_LOG.md and
+`/docs/research/endpoint_schemas.md` for full detail. Track 1 proceeds as
+a two-platform track.
 9. **New, opened Session 2.3:** Once 2026 NFL season data becomes available
-   from nflverse (first 2026 games are 2026-09-07; nflverse's
-   `stats_player_week_2026.parquet` release does not exist until real 2026
-   games have been played — confirmed directly, returns 404 as of
-   2026-08-31), the estimation model should begin folding in real 2026 data
-   instead of running entirely on 2025 season data. **Deliberately left
-   open, not decided in advance:** whether to switch cleanly to
-   `--season 2026` once enough 2026 games exist to be meaningful, or blend
-   2025 and early-2026 data during the transition period to avoid the model
-   swinging on a tiny early-2026 sample. No evidence yet exists to make that
-   call correctly — to be resolved in a future session once real 2026 data
-   starts accumulating.
+from nflverse (first 2026 games are 2026-09-07; nflverse's
+`stats_player_week_2026.parquet` release does not exist until real 2026
+games have been played — confirmed directly, returns 404 as of
+2026-08-31), the estimation model should begin folding in real 2026 data
+instead of running entirely on 2025 season data. **Deliberately left
+open, not decided in advance:** whether to switch cleanly to
+`--season 2026` once enough 2026 games exist to be meaningful, or blend
+2025 and early-2026 data during the transition period to avoid the model
+swinging on a tiny early-2026 sample. No evidence yet exists to make that
+call correctly — to be resolved in a future session once real 2026 data
+starts accumulating.
 10. ~~New, opened Session 2.4: Cross-platform CLV consensus matching...~~
-    **Superseded 2026-09-02 (Session 2.9 continuation):** the "Underdog has
-    zero real NFL lines" finding this decision was based on is now stale.
-    Live confirmation: Underdog does post real NFL props ahead of kickoff,
-    tagged `match_type: "Series"` — but these are all season-long totals
-    (Season Rush Yards, Season Pass TDs, etc.), not the weekly per-game props
-    this model estimates, and the `games`/`solo_games` join gap that was
-    suppressing them is fixed (see Open Decision #11 below). Real per-game
-    Underdog NFL lines still do not exist as of this update, since the
-    season hasn't started (2026-09-07). Action still needed once real
-    per-game lines exist: same re-check this decision originally called for.
+**Superseded 2026-09-02 (Session 2.9 continuation):** the "Underdog has
+zero real NFL lines" finding this decision was based on is now stale.
+Live confirmation: Underdog does post real NFL props ahead of kickoff,
+tagged `match_type: "Series"` — but these are all season-long totals
+(Season Rush Yards, Season Pass TDs, etc.), not the weekly per-game props
+this model estimates, and the `games`/`solo_games` join gap that was
+suppressing them is fixed (see Open Decision #11 below). Real per-game
+Underdog NFL lines still do not exist as of this update, since the
+season hasn't started (2026-09-07). Action still needed once real
+per-game lines exist: same re-check this decision originally called for.
 11. ~~New, opened Session 2.4: `ingest_pickem.py`'s `normalize_underdog()`
-    joins each appearances record...~~ **Resolved 2026-09-02 (Session 2.9
-    continuation):** real cause found and fixed. Underdog's feed splits
-    scheduled events across `games` (team sports), `solo_games` (individual
-    sports), and a third, undocumented category tagged `match_type:
-    "Series"` whose match ID exists in neither list. `normalize_underdog()`
-    only ever read `games`. Fixed by adding a `solo_games` lookup, a
-    `games`→`solo_games` fallback join, and a fallback to the player's own
-    `sport_id` field when neither game container exists yet. Verified live,
-    before/after: sport resolution went from 89/217 (41%) to 191/191 (100%)
-    real appearances. A second, related gap was found and fixed the same
-    session: Underdog also never populates a clean stat-name field for these
-    same categories (NFL "Series", CFB, Tennis) — the real stat name only
-    exists as free text on the price option itself (e.g. "Higher 33.5 Games
-    Played"). Fixed via a regex fallback parser; verified against the live
-    feed at 245/263 lines (93%) resolving a real stat name, including real,
-    currently-tradeable Tennis props (Aces, Double Faults, Games Won). 18
-    lines still return no stat name — a real, small, unexplained residual
-    gap, not investigated further.
+joins each appearances record...~~ **Resolved 2026-09-02 (Session 2.9
+continuation):** real cause found and fixed. Underdog's feed splits
+scheduled events across `games` (team sports), `solo_games` (individual
+sports), and a third, undocumented category tagged `match_type:
+"Series"` whose match ID exists in neither list. `normalize_underdog()`
+only ever read `games`. Fixed by adding a `solo_games` lookup, a
+`games`→`solo_games` fallback join, and a fallback to the player's own
+`sport_id` field when neither game container exists yet. Verified live,
+before/after: sport resolution went from 89/217 (41%) to 191/191 (100%)
+real appearances. A second, related gap was found and fixed the same
+session: Underdog also never populates a clean stat-name field for these
+same categories (NFL "Series", CFB, Tennis) — the real stat name only
+exists as free text on the price option itself (e.g. "Higher 33.5 Games
+Played"). Fixed via a regex fallback parser; verified against the live
+feed at 245/263 lines (93%) resolving a real stat name, including real,
+currently-tradeable Tennis props (Aces, Double Faults, Games Won). 18
+lines still return no stat name — a real, small, unexplained residual
+gap, not investigated further.
 12. New, opened Session 2.5: `weekly_review.py`'s real first run has not
-    happened yet — no real bets have been placed or graded as of this
-    session's close. Not treated as a blocker (see Session 2.5's Handoff
-    notes: the weekly review is designed as an indefinite, ongoing
-    practice, not a one-time deferred validation item), but flagged here
-    so a future session picking up this thread knows the review history
-    in `review_log.csv` genuinely starts empty, not just under-sampled.
-    Action needed: once the user places and reports a first real bet,
-    run `weekly_review.py --run` for real and confirm the interim-floor
-    behavior (Section 6 of `sample_size_methodology.md`) holds on a real,
-    small sample the same way it did on synthetic and placeholder data.
+happened yet — no real bets have been placed or graded as of this
+session's close. Not treated as a blocker (see Session 2.5's Handoff
+notes: the weekly review is designed as an indefinite, ongoing
+practice, not a one-time deferred validation item), but flagged here
+so a future session picking up this thread knows the review history
+in `review_log.csv` genuinely starts empty, not just under-sampled.
+Action needed: once the user places and reports a first real bet,
+run `weekly_review.py --run` for real and confirm the interim-floor
+behavior (Section 6 of `sample_size_methodology.md`) holds on a real,
+small sample the same way it did on synthetic and placeholder data.
 13. ~~New, opened Session 2.8: nearly every open flag's `first_flagged_model_prob`
-    observed on the live frontend is extremely close to 100%~~ **Resolved
-    2026-09-02 (Session 2.9 continuation):** checked the real distribution in
-    `clv_log.csv` directly rather than the dashboard view — only 4.9% of
-    3,461 open flags sat at 99–100%, another 6.6% at 95–99%; 74.3% sat in the
-    ordinary 50–85% range. The near-100% impression came from `app.js`
-    sorting the open-flags table by `first_flagged_edge` descending, which
-    surfaces exactly the highest-probability rows first — a display sort
-    artifact, not an estimation-model bug. No code change needed.
+observed on the live frontend is extremely close to 100%~~ **Resolved
+2026-09-02 (Session 2.9 continuation):** checked the real distribution in
+`clv_log.csv` directly rather than the dashboard view — only 4.9% of
+3,461 open flags sat at 99–100%, another 6.6% at 95–99%; 74.3% sat in the
+ordinary 50–85% range. The near-100% impression came from `app.js`
+sorting the open-flags table by `first_flagged_edge` descending, which
+surfaces exactly the highest-probability rows first — a display sort
+artifact, not an estimation-model bug. No code change needed.
 14. ~~New, opened Session 2.9 (continuation): this project's stated scope is
-    +EV bets across all betting markets...~~ **Resolved 2026-09-03
-    (Session 2.10).** Full inventory completed: 29 PrizePicks leagues
-    confirmed live, real data-source answers found for every sport
-    including the long tail (strong candidates: NFL, MLB, NBA, EPL,
-    ESPN-API-covered non-EPL soccer, UFC, F1, golf; genuine gaps: KBO,
-    NPB, handball, badminton, most esports; Tennis has real volume but no
-    adequate free data source). Underdog's full list is the one piece not
-    fully closed — deferred to a bounded, already-running automated
-    follow-up rather than left open (see Session 2.10's card above and
-    SESSION_LOG.md for the verification record).
++EV bets across all betting markets...~~ **Resolved 2026-09-03
+(Session 2.10).** Full inventory completed: 29 PrizePicks leagues
+confirmed live, real data-source answers found for every sport
+including the long tail (strong candidates: NFL, MLB, NBA, EPL,
+ESPN-API-covered non-EPL soccer, UFC, F1, golf; genuine gaps: KBO,
+NPB, handball, badminton, most esports; Tennis has real volume but no
+adequate free data source). Underdog's full list is the one piece not
+fully closed — deferred to a bounded, already-running automated
+follow-up rather than left open (see Session 2.10's card above and
+SESSION_LOG.md for the verification record).
 15. **New, opened Session 2.10:** confirming Underdog's complete current
-    sport list required real time-of-day/day-of-week spread that a single
-    session can't produce (checked directly — no shortcut endpoint exists
-    on Underdog's API). A GitHub Actions workflow now gathers this
-    automatically over a defined 4-day, 12-run window
-    (`.github/workflows/sport_inventory_scan.yml`) rather than leaving it
-    as an indefinite TODO. **Action needed:** once the window ends (early-
-    to-mid September 2026), read the accumulated files in
-    `docs/research/scans/`, finish `/docs/research/sport_inventory.md`'s
-    Underdog tables, and disable the workflow.
+sport list required real time-of-day/day-of-week spread that a single
+session can't produce (checked directly — no shortcut endpoint exists
+on Underdog's API). A GitHub Actions workflow now gathers this
+automatically over a defined 4-day, 12-run window
+(`.github/workflows/sport_inventory_scan.yml`) rather than leaving it
+as an indefinite TODO. **Action needed:** once the window ends (early-
+to-mid September 2026), read the accumulated files in
+`docs/research/scans/`, finish `/docs/research/sport_inventory.md`'s
+Underdog tables, and disable the workflow.
 16. **New, opened Session 2.10:** both PrizePicks and Underdog were found
-    to now offer products beyond fixed-line pick'em — PrizePicks Predict
-    (a direct Kalshi partnership, live in most states) and Underdog
-    Exchange (a separate CFTC-regulated exchange via Aristotle Exchange,
-    not confirmed to be a Kalshi wrapper the same way). Re-applying
-    Session 0.1's own five ranking criteria (repricing mechanism, fee/vig,
-    account-limiting risk, liquidity, legal footprint) against real,
-    newly-gathered evidence (Kalshi's own public API confirmed live and
-    fully open with no key; real sports-market liquidity checked directly
-    and found thin; Kalshi's sports contracts specifically found to be in
-    active, unresolved multi-state legal conflict, including criminal
-    charges filed by Arizona) **did not support expanding Track 3's scope
-    to Kalshi's direct sports markets.** Recommendation: Track 3's
-    original scope (weather/climate, narrow down-ballot politics) and
-    ranking stand as originally set — see SESSION_LOG.md for the full
-    evidence-by-evidence writeup. This is logged as a recommendation for
-    review, not an applied decision, consistent with how every other
-    ranking call in this project has been made.
+to now offer products beyond fixed-line pick'em — PrizePicks Predict
+(a direct Kalshi partnership, live in most states) and Underdog
+Exchange (a separate CFTC-regulated exchange via Aristotle Exchange,
+not confirmed to be a Kalshi wrapper the same way). Re-applying
+Session 0.1's own five ranking criteria (repricing mechanism, fee/vig,
+account-limiting risk, liquidity, legal footprint) against real,
+newly-gathered evidence (Kalshi's own public API confirmed live and
+fully open with no key; real sports-market liquidity checked directly
+and found thin; Kalshi's sports contracts specifically found to be in
+active, unresolved multi-state legal conflict, including criminal
+charges filed by Arizona) **did not support expanding Track 3's scope
+to Kalshi's direct sports markets.** Recommendation: Track 3's
+original scope (weather/climate, narrow down-ballot politics) and
+ranking stand as originally set — see SESSION_LOG.md for the full
+evidence-by-evidence writeup. This is logged as a recommendation for
+review, not an applied decision, consistent with how every other
+ranking call in this project has been made.
 17. **New, opened Session 3.1:** no live, real matched pair has been
-    observed between Kalshi (Climate/Weather + Commodities) and Polymarket
-    as of 2026-09-04. `venue_matcher.py`'s correctness has been validated
-    against real title text assembled into constructed test cases —
-    including catching and fixing two real false-positive matches
-    (mismatched earthquake magnitude thresholds) — but not against a pair
-    that arrived together from a real, live, simultaneous pull. **Action
-    needed:** watch for genuine overlap in future runs (e.g. an active
-    storm or extreme-heat event both venues list) and confirm a real match
-    when one appears. Not treated as a blocker for Session 3.2, but a real,
-    named gap — decided explicitly with the user rather than chased
-    further in Session 3.1.
+observed between Kalshi (Climate/Weather + Commodities) and Polymarket
+as of 2026-09-04. `venue_matcher.py`'s correctness has been validated
+against real title text assembled into constructed test cases —
+including catching and fixing two real false-positive matches
+(mismatched earthquake magnitude thresholds) — but not against a pair
+that arrived together from a real, live, simultaneous pull. **Action
+needed:** watch for genuine overlap in future runs (e.g. an active
+storm or extreme-heat event both venues list) and confirm a real match
+when one appears. Not treated as a blocker for Session 3.2, but a real,
+named gap — decided explicitly with the user rather than chased
+further in Session 3.1.
 18. **Opened Session 3.1, RESOLVED Session 3.4 (2026-09-06):** Kalshi's
-    targeted 448-series pull hit repeated `429 Too Many Requests`
-    responses on a real run. Existing retry logic recovered every time
-    with no data lost, but this was not a deliberate load test.
-    Fixed: added `KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2` and a
-    deliberate pause after every one of `ingest_kalshi.py`'s ~540
-    real per-series requests (success or failure), specifically
-    because Session 3.4 turns this into an unattended, scheduled job
-    rather than a watched manual run. See SESSION_LOG.md's Session 3.4
-    entry.
+targeted 448-series pull hit repeated `429 Too Many Requests`
+responses on a real run. Existing retry logic recovered every time
+with no data lost, but this was not a deliberate load test.
+Fixed: added `KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2` and a
+deliberate pause after every one of `ingest_kalshi.py`'s ~540
+real per-series requests (success or failure), specifically
+because Session 3.4 turns this into an unattended, scheduled job
+rather than a watched manual run. See SESSION_LOG.md's Session 3.4
+entry.
 19. **New, opened Session 3.1:** Polymarket's Gamma API `/events` endpoint
-    fails with a consistent HTTP 422 error at offset=2100 on every real run
-    this session (reproduced multiple times, same exact offset). The
-    current fix in `ingest_polymarket.py` keeps data collected before the
-    failure rather than losing it, but the root cause — a real, undocumented
-    API limit vs. the query running past the true count of currently active
-    events for this filter — is not confirmed. Not a blocker; a real,
-    named gap for whoever next has reason to look at Polymarket ingestion
-    depth.
+fails with a consistent HTTP 422 error at offset=2100 on every real run
+this session (reproduced multiple times, same exact offset). The
+current fix in `ingest_polymarket.py` keeps data collected before the
+failure rather than losing it, but the root cause — a real, undocumented
+API limit vs. the query running past the true count of currently active
+events for this filter — is not confirmed. Not a blocker; a real,
+named gap for whoever next has reason to look at Polymarket ingestion
+depth.
 20. **Opened Session 3.1, RESOLVED Session 3.1b (2026-09-04):** Kalshi's
-    Politics and Elections categories (2,287 + 1,662 = 3,949 series
-    combined, confirmed via `GET /series`) were deliberately not ingested
-    in Session 3.1. Session 3.1b checked both categories directly and
-    found the real, checkable distinction: "Politics" (2,296 series)
-    contains no individual-race series at all (national news and
-    officeholder-status questions); "Elections" (1,704 series) is where
-    real races live, and within it, individual U.S. House district races
-    (89 series, structural ticker pattern) and individual state-
-    legislature district races (4 series, structural title pattern) pass
-    a real per-seat forecast-data-availability test, while city/county
-    races (14 series) do not — see SESSION_LOG.md's Session 3.1b entry for
-    the full evidence trail. 93 real down-ballot series are now ingested.
+Politics and Elections categories (2,287 + 1,662 = 3,949 series
+combined, confirmed via `GET /series`) were deliberately not ingested
+in Session 3.1. Session 3.1b checked both categories directly and
+found the real, checkable distinction: "Politics" (2,296 series)
+contains no individual-race series at all (national news and
+officeholder-status questions); "Elections" (1,704 series) is where
+real races live, and within it, individual U.S. House district races
+(89 series, structural ticker pattern) and individual state-
+legislature district races (4 series, structural title pattern) pass
+a real per-seat forecast-data-availability test, while city/county
+races (14 series) do not — see SESSION_LOG.md's Session 3.1b entry for
+the full evidence trail. 93 real down-ballot series are now ingested.
 21. ~~New, opened Session 3.1b: `venue_matcher.py`'s close-time-proximity
-    check does not account for Kalshi's down-ballot political contracts
-    setting `close_time` to the post-election swearing-in date...~~
-    **Resolved 2026-09-05 (Session 3.2), confirmed against real live data.**
-    Kalshi rows tagged with an Elections category now match against
-    Polymarket using a separate, 400-day close-time tolerance (vs. the
-    default 6 hours) plus a raised title-similarity bar (0.5 vs. 0.35) to
-    compensate for the looser time check — see `venue_matcher.py`'s own
-    "SESSION 3.2 FIX" docstring section for the full rationale. Verified
-    live: pulled the real `KXHOUSEMO5-26-R`/`-D` markets (real close_time
-    `2027-11-03T15:00:00Z`) and the real Polymarket "MO-05 House Election
-    Winner" markets (real endDate `2026-11-04T00:00:00Z`, an 8,751-hour
-    gap) and confirmed the matcher now correctly proposes both legs as
-    candidate matches (title similarity 0.625, well above the 0.5 bar).
-22. **New, opened Session 3.2:** no comparably detailed Polymarket-specific
-    state-by-state legal-restriction list was found this session, unlike
-    Kalshi's confirmed Sports-contract restriction list (AZ, MA, MD, MI,
-    MT, NV, OH). `detector.py`'s `fully_available_states()` currently
-    returns `both_available_nationally = True` for every flagged pair as a
-    result, since none of this project's current tracks intersect Kalshi's
-    one confirmed restriction and no comparable Polymarket restriction was
-    found — a named, honest gap (see `/docs/venue_legal_footprint.md`),
-    not a verified clean bill of health. **Action needed:** research
-    Polymarket US's (QCX LLC) real state-by-state availability with the
-    same depth Kalshi Sports already has, before this project's scope
-    reaches a track where a Polymarket-side restriction could actually
-    matter (most relevant once Track 6 — flagship sports/exchange markets
-    — is built, per Session 3.2's own legal-footprint doc).
+check does not account for Kalshi's down-ballot political contracts
+setting `close_time` to the post-election swearing-in date...~~
+**Resolved 2026-09-05 (Session 3.2), confirmed against real live data.**
+Kalshi rows tagged with an Elections category now match against
+Polymarket using a separate, 400-day close-time tolerance (vs. the
+default 6 hours) plus a raised title-similarity bar (0.5 vs. 0.35) to
+compensate for the looser time check — see `venue_matcher.py`'s own
+"SESSION 3.2 FIX" docstring section for the full rationale. Verified
+live: pulled the real `KXHOUSEMO5-26-R`/`-D` markets (real close_time
+`2027-11-03T15:00:00Z`) and the real Polymarket "MO-05 House Election
+Winner" markets (real endDate `2026-11-04T00:00:00Z`, an 8,751-hour
+gap) and confirmed the matcher now correctly proposes both legs as
+candidate matches (title similarity 0.625, well above the 0.5 bar).
+22. ~~New, opened Session 3.2: no comparably detailed Polymarket-specific
+state-by-state legal-restriction list was found this session...~~
+**Resolved 2026-09-07 (Session 5.1), checked live specifically for
+political/election contracts (not sports, which remains the separate,
+already-tracked restriction).** Kalshi: a real, current, dated
+restriction found — a King County Superior Court order (effective
+2026-08-19/20) requires Kalshi to geofence Washington users out of
+Elections & Politics contracts specifically, separate from its existing
+Sports restriction. Polymarket: no politics-specific state restriction
+was found, distinct from its general availability picture. Named,
+honest caveat carried forward: this is a fast-moving legal landscape
+(Washington's own order was under a week old at the time of this
+check) and should be re-verified, not assumed still accurate, before a
+future session leans on it for real sizing/suppression logic. See
+`ingest_politics_markets.py`'s module docstring and SESSION_LOG.md's
+Session 5.1 entry for the full evidence trail.
 23. **New, opened Session 3.3:** `EXECUTION_RISK_BUFFER = 0.85` in
-    `sizing_engine.py` is a named placeholder, sanity-checked but not
-    fully validated against real data this session. Real live Kalshi
-    quotes (MO-05, `KXHIGHPHIL`) were pulled twice, roughly 13–30 real
-    minutes apart: quoted PRICE was completely unchanged both times, but
-    real order-book SIZE at the best price moved as much as 67% in 13
-    real minutes on one market. This confirms the buffer targets the
-    right kind of risk (size, not price), but a single real before/after
-    pair is too thin a sample to confirm 0.85 is the right magnitude —
-    the one real data point observed (67% swing) exceeds the 15% haircut
-    currently applied. **Action needed:** once Session 3.4's automation
-    is producing repeated, regular snapshots, pull a proper sample of
-    real size swings over realistic execution-time windows and
-    recalibrate `EXECUTION_RISK_BUFFER` against real evidence, the same
-    way Session 8.3 is already planned to do for `KELLY_FRACTION`.
+`sizing_engine.py` is a named placeholder, sanity-checked but not
+fully validated against real data this session. Real live Kalshi
+quotes (MO-05, `KXHIGHPHIL`) were pulled twice, roughly 13–30 real
+minutes apart: quoted PRICE was completely unchanged both times, but
+real order-book SIZE at the best price moved as much as 67% in 13
+real minutes on one market. This confirms the buffer targets the
+right kind of risk (size, not price), but a single real before/after
+pair is too thin a sample to confirm 0.85 is the right magnitude —
+the one real data point observed (67% swing) exceeds the 15% haircut
+currently applied. **Action needed:** once Session 3.4's automation
+is producing repeated, regular snapshots, pull a proper sample of
+real size swings over realistic execution-time windows and
+recalibrate `EXECUTION_RISK_BUFFER` against real evidence, the same
+way Session 8.3 is already planned to do for `KELLY_FRACTION`.
 24. **Opened Session 3.3, UPDATED Session 3.4 (2026-09-06):**
-    `sizing_engine.py`'s arbitrage sizing has been validated against
-    constructed test cases and against real Kalshi order-book numbers
-    plugged into a labeled test flag, but not yet against a genuine LIVE
-    positive arbitrage opportunity end-to-end. Session 3.4's real
-    automated run produced exactly one: Kalshi's "MI-7" vs. Polymarket's
-    "MI-07" (Michigan's 7th Congressional District, confirmed via web
-    search to be the same real race, not a formatting coincidence).
-    **Action needed:** run `sizing_engine.py arbitrage size` against
-    this real flag as the first genuine end-to-end check — still a
-    manual step per this project's "flags and sizes, never places bets"
-    rule, not something automation does on its own.
+`sizing_engine.py`'s arbitrage sizing has been validated against
+constructed test cases and against real Kalshi order-book numbers
+plugged into a labeled test flag, but not yet against a genuine LIVE
+positive arbitrage opportunity end-to-end. Session 3.4's real
+automated run produced exactly one: Kalshi's "MI-7" vs. Polymarket's
+"MI-07" (Michigan's 7th Congressional District, confirmed via web
+search to be the same real race, not a formatting coincidence).
+**Action needed:** run `sizing_engine.py arbitrage size` against
+this real flag as the first genuine end-to-end check — still a
+manual step per this project's "flags and sizes, never places bets"
+rule, not something automation does on its own.
 25. **New, opened and RESOLVED same session, Session 3.4 (2026-09-06):**
-    `venue_matcher.py`'s Elections wide-tolerance path proposed 10
-    flagged pairs on its first real automated run; 9 were false matches
-    across DIFFERENT states sharing only a coincidental district
-    NUMBER (e.g. Kalshi's "WA-08" vs. Polymarket's "IN-08" — Washington's
-    8th District vs. Indiana's 8th District), several reporting a
-    50–90 cent-per-dollar "edge." Root cause: title tokenization splits
-    "WA-08" into separate "wa"/"08" tokens, so a shared district number
-    alone could satisfy both the title-similarity and number-compatibility
-    checks with no state comparison at all. Fixed within the same
-    session (per this project's standing "fix real validation bugs now"
-    practice): added `_extract_district_codes()`/
-    `_district_codes_compatible()`, requiring an exact (state, district)
-    match when both titles have one. Re-validated against real data:
-    candidate pairs dropped 497→477, flags dropped 10→1 (the one
-    genuine MI-7/MI-07 match, now reporting a realistic 1-cent edge).
-    See SESSION_LOG.md's Session 3.4 entry for the full evidence trail.
+`venue_matcher.py`'s Elections wide-tolerance path proposed 10
+flagged pairs on its first real automated run; 9 were false matches
+across DIFFERENT states sharing only a coincidental district
+NUMBER (e.g. Kalshi's "WA-08" vs. Polymarket's "IN-08" — Washington's
+8th District vs. Indiana's 8th District), several reporting a
+50–90 cent-per-dollar "edge." Root cause: title tokenization splits
+"WA-08" into separate "wa"/"08" tokens, so a shared district number
+alone could satisfy both the title-similarity and number-compatibility
+checks with no state comparison at all. Fixed within the same
+session (per this project's standing "fix real validation bugs now"
+practice): added `_extract_district_codes()`/
+`_district_codes_compatible()`, requiring an exact (state, district)
+match when both titles have one. Re-validated against real data:
+candidate pairs dropped 497→477, flags dropped 10→1 (the one
+genuine MI-7/MI-07 match, now reporting a realistic 1-cent edge).
+See SESSION_LOG.md's Session 3.4 entry for the full evidence trail.
 26. **New, opened Session 3.4:** the arbitrage pipeline's polling cadence
-    (6 runs/day, ~every 4 hours) is justified against real GitHub
-    Actions cost/budget data, NOT against real arbitrage-window-closing
-    timing — that evidence still does not exist (no genuine window has
-    ever been observed to close, per Session 3.2/3.3). This is a
-    deliberate, named substitution of one kind of real evidence for
-    another that doesn't exist yet, not a resolved question. **Action
-    needed:** once Session 3.6 (Live Validation Window) produces real
-    timing data on how long a genuine flagged opportunity stays open,
-    revisit this cadence against that evidence rather than the cost
-    constraint alone.
+(6 runs/day, ~every 4 hours) is justified against real GitHub
+Actions cost/budget data, NOT against real arbitrage-window-closing
+timing — that evidence still does not exist (no genuine window has
+ever been observed to close, per Session 3.2/3.3). This is a
+deliberate, named substitution of one kind of real evidence for
+another that doesn't exist yet, not a resolved question. **Action
+needed:** once Session 3.6 (Live Validation Window) produces real
+timing data on how long a genuine flagged opportunity stays open,
+revisit this cadence against that evidence rather than the cost
+constraint alone.
 27. **New, opened Session 3.4:** GitHub Actions minute usage is shared
-    account-wide across Market_Betting AND all three DFS optimizer
-    repos (confirmed directly via the account's real billing page,
-    2026-09-06) — a single 2,000-minute/month pool, with the account's
-    Actions budget configured to STOP all workflows account-wide (not
-    silently charge) if exceeded. DFS_Optimizer's real workflow
-    (`refresh_data.yml`) was found to be a genuinely complex multi-job,
-    multi-cadence matrix, not a simple single script — modeling its
-    (and DFS_Optimizer_NHL's/DFS_Optimizer_PGA's) exact future cost
-    would require a real audit of three more repos' workflow files, not
-    attempted this session. **Standing practice going forward, not a
-    one-time fix:** periodically check the account's real billing
-    overview page (especially once NHL/PGA seasons ramp up their own
-    repos' automation), and treat the arbitrage pipeline's cadence as
-    the first, lowest-cost lever to pull back if the account ever
-    trends toward its ceiling.
+account-wide across Market_Betting AND all three DFS optimizer
+repos (confirmed directly via the account's real billing page,
+2026-09-06) — a single 2,000-minute/month pool, with the account's
+Actions budget configured to STOP all workflows account-wide (not
+silently charge) if exceeded. DFS_Optimizer's real workflow
+(`refresh_data.yml`) was found to be a genuinely complex multi-job,
+multi-cadence matrix, not a simple single script — modeling its
+(and DFS_Optimizer_NHL's/DFS_Optimizer_PGA's) exact future cost
+would require a real audit of three more repos' workflow files, not
+attempted this session. **Standing practice going forward, not a
+one-time fix:** periodically check the account's real billing
+overview page (especially once NHL/PGA seasons ramp up their own
+repos' automation), and treat the arbitrage pipeline's cadence as
+the first, lowest-cost lever to pull back if the account ever
+trends toward its ceiling.
 28. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
-    the roadmap card's "NWS, GFS, METAR" wording implied three separate
-    public data feeds. Checked live: NWS's own public API
-    (`api.weather.gov`) already returns both an official gridded
-    forecast (built from blended model guidance, GFS included) and
-    METAR-sourced station observations, in structured JSON, for free,
-    with no key. Pulling raw GFS grib2 files or raw METAR text
-    separately would re-derive what this one API already computes, for
-    no additional real information. Session 4.1 built on this one API
-    rather than three feeds — see `ingest_nws_weather_data.py`'s module
-    docstring for the full reasoning, and SESSION_LOG.md's Session 4.1
-    entry for the live evidence.
+the roadmap card's "NWS, GFS, METAR" wording implied three separate
+public data feeds. Checked live: NWS's own public API
+(`api.weather.gov`) already returns both an official gridded
+forecast (built from blended model guidance, GFS included) and
+METAR-sourced station observations, in structured JSON, for free,
+with no key. Pulling raw GFS grib2 files or raw METAR text
+separately would re-derive what this one API already computes, for
+no additional real information. Session 4.1 built on this one API
+rather than three feeds — see `ingest_nws_weather_data.py`'s module
+docstring for the full reasoning, and SESSION_LOG.md's Session 4.1
+entry for the live evidence.
 29. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
-    Kalshi's weather series settlement sources are NOT uniform. A live
-    check of six real series found five settle against "The Weather
-    Company" (a 2026-09-02 contract migration, confirmed via Kalshi's
-    own contract-terms metadata) and one legacy series (Houston) still
-    settles directly against an NWS Climatological Report. Checked
-    further and RESOLVED: `weather.com/kalshi`'s own reference page
-    states its data is "METAR airport observations relayed via The
-    Weather Company" for a fixed, named list of 37 government-station
-    codes — the same underlying government data this project's own NWS
-    pipeline already pulls for those same station codes. This is a real,
-    confirmed naming difference in Kalshi's settlement-source field, not
-    a private/proprietary data source this project can't independently
-    replicate. See SESSION_LOG.md's Session 4.1 entry for the full
-    evidence trail.
+Kalshi's weather series settlement sources are NOT uniform. A live
+check of six real series found five settle against "The Weather
+Company" (a 2026-09-02 contract migration, confirmed via Kalshi's
+own contract-terms metadata) and one legacy series (Houston) still
+settles directly against an NWS Climatological Report. Checked
+further and RESOLVED: `weather.com/kalshi`'s own reference page
+states its data is "METAR airport observations relayed via The
+Weather Company" for a fixed, named list of 37 government-station
+codes — the same underlying government data this project's own NWS
+pipeline already pulls for those same station codes. This is a real,
+confirmed naming difference in Kalshi's settlement-source field, not
+a private/proprietary data source this project can't independently
+replicate. See SESSION_LOG.md's Session 4.1 entry for the full
+evidence trail.
 30. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
-    two of Kalshi's weather cities (Houston, Chicago) each have two real
-    candidate airports, and this project's ticker alone could not say
-    which one Kalshi settles against. RESOLVED via two independent real
-    sources: a Houston Chronicle article about an actual executed Kalshi
-    weather trade naming "William P. Hobby Airport" explicitly, and a
-    third-party Kalshi weather-data vendor's own published station
-    mapping, which separately confirmed Houston=Hobby (KHOU) AND
-    Chicago=Midway (KMDW) — the latter corrected this project's own
-    original placeholder guess (O'Hare), caught before it reached any
-    real sizing decision. See `station_map.py`'s module docstring.
+two of Kalshi's weather cities (Houston, Chicago) each have two real
+candidate airports, and this project's ticker alone could not say
+which one Kalshi settles against. RESOLVED via two independent real
+sources: a Houston Chronicle article about an actual executed Kalshi
+weather trade naming "William P. Hobby Airport" explicitly, and a
+third-party Kalshi weather-data vendor's own published station
+mapping, which separately confirmed Houston=Hobby (KHOU) AND
+Chicago=Midway (KMDW) — the latter corrected this project's own
+original placeholder guess (O'Hare), caught before it reached any
+real sizing decision. See `station_map.py`'s module docstring.
 31. **New, opened and RESOLVED same session, Session 4.1 (2026-09-06):**
-    a real, live comparison of this project's own NWS-based daily
-    high/low against Kalshi's actual settlement record (Philadelphia,
-    2026-09-05) found a small gap (0.2–0.9°F). Investigated directly
-    against real 5-minute-resolution station data: the gap is explained
-    by Kalshi's settlement feed storing one rounded, whole-degree value
-    per clock hour, while this project's pipeline keeps exact-decimal,
-    5-minute-resolution readings. This bounds the real gap at
-    approximately ≤1°F (one rounding step), not an open-ended or
-    unexplained divergence. **Action for Session 4.2:** treat this
-    project's own forecast/observation numbers as accurate to
-    approximately ±1°F relative to Kalshi's actual settlement value by
-    design, and treat any contract whose threshold sits within that
-    band of this project's estimate as a named, lower-confidence edge
-    case rather than a silent risk. See
-    `docs/nws_settlement_gap_resolution.md` for the full evidence trail,
-    including a second, separate finding (a manual verification script's
-    own timezone-conversion bug, unrelated to and now ruled out as a
-    cause of this gap) resolved in the same investigation.
+a real, live comparison of this project's own NWS-based daily
+high/low against Kalshi's actual settlement record (Philadelphia,
+2026-09-05) found a small gap (0.2–0.9°F). Investigated directly
+against real 5-minute-resolution station data: the gap is explained
+by Kalshi's settlement feed storing one rounded, whole-degree value
+per clock hour, while this project's pipeline keeps exact-decimal,
+5-minute-resolution readings. This bounds the real gap at
+approximately ≤1°F (one rounding step), not an open-ended or
+unexplained divergence. **Action for Session 4.2:** treat this
+project's own forecast/observation numbers as accurate to
+approximately ±1°F relative to Kalshi's actual settlement value by
+design, and treat any contract whose threshold sits within that
+band of this project's estimate as a named, lower-confidence edge
+case rather than a silent risk. See
+`docs/nws_settlement_gap_resolution.md` for the full evidence trail,
+including a second, separate finding (a manual verification script's
+own timezone-conversion bug, unrelated to and now ruled out as a
+cause of this gap) resolved in the same investigation.
 
 32. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
-    the roadmap card's "GFS ensemble spread" wording assumed ensemble
-    data would be available. Checked live before writing any model code:
-    NWS's public API (this project's confirmed data source since
-    Session 4.1) returns exactly one deterministic forecast value per
-    station per day — no ensemble, no published confidence interval.
-    RESOLVED via a real, automated blend rather than either extreme
-    (blocking on a real backtest history that didn't exist yet, or
-    silently guessing a placeholder forever): a literature-sourced
-    starting curve (Penn State's public course material, cited with the
-    exact real anchor points used, see
-    `weather_estimation_model_spec.md`) is used immediately, while a new
-    daily pipeline (`weather_calibration_pipeline.yml`) builds this
-    project's own real, measured forecast-error history in the
-    background; the model automatically swaps to real numbers per
-    lead-day bucket once each one crosses a named minimum real sample
-    size (20) — no future session needs to remember a manual cutover.
+the roadmap card's "GFS ensemble spread" wording assumed ensemble
+data would be available. Checked live before writing any model code:
+NWS's public API (this project's confirmed data source since
+Session 4.1) returns exactly one deterministic forecast value per
+station per day — no ensemble, no published confidence interval.
+RESOLVED via a real, automated blend rather than either extreme
+(blocking on a real backtest history that didn't exist yet, or
+silently guessing a placeholder forever): a literature-sourced
+starting curve (Penn State's public course material, cited with the
+exact real anchor points used, see
+`weather_estimation_model_spec.md`) is used immediately, while a new
+daily pipeline (`weather_calibration_pipeline.yml`) builds this
+project's own real, measured forecast-error history in the
+background; the model automatically swaps to real numbers per
+lead-day bucket once each one crosses a named minimum real sample
+size (20) — no future session needs to remember a manual cutover.
 33. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
-    the first real run of the new calibration pipeline
-    (`weather_forecast_error.py`) produced an implausible same-day
-    forecast error (4.3°F MAE, already over the model's own real-data
-    trust threshold) — root-caused to comparing full-day forecasts
-    against still-in-progress "observed so far" readings for the current
-    day, not a real, finished answer. RESOLVED: an observed reading is
-    only trusted once pulled at least 32 hours after its own date's UTC
-    midnight (covers every real target station's local day-end,
-    including the latest-closing West Coast ones). Corrected same-day
-    MAE after the fix: a real, plausible 1.7°F with near-zero bias. See
-    SESSION_LOG.md's Session 4.2 entry for the full real evidence.
+the first real run of the new calibration pipeline
+(`weather_forecast_error.py`) produced an implausible same-day
+forecast error (4.3°F MAE, already over the model's own real-data
+trust threshold) — root-caused to comparing full-day forecasts
+against still-in-progress "observed so far" readings for the current
+day, not a real, finished answer. RESOLVED: an observed reading is
+only trusted once pulled at least 32 hours after its own date's UTC
+midnight (covers every real target station's local day-end,
+including the latest-closing West Coast ones). Corrected same-day
+MAE after the fix: a real, plausible 1.7°F with near-zero bias. See
+SESSION_LOG.md's Session 4.2 entry for the full real evidence.
 34. **New, opened and RESOLVED same session, Session 4.2 (2026-09-07):**
-    `weather_backtest_check.py`'s first version gated on guessed Kalshi
-    market-status values (`"finalized"`/`"settled"`) that had never been
-    confirmed against a real API response. A real, direct check of one
-    live market (`KXLOWTMIN-26SEP06-T69`) showed Kalshi's real status
-    reads `"closed"` well before the real `result` field is populated
-    (which can sit as an empty string for hours after trading closes) —
-    neither guessed value was real. RESOLVED: gate solely on a real,
-    non-empty `result` field instead of a guessed status string.
+`weather_backtest_check.py`'s first version gated on guessed Kalshi
+market-status values (`"finalized"`/`"settled"`) that had never been
+confirmed against a real API response. A real, direct check of one
+live market (`KXLOWTMIN-26SEP06-T69`) showed Kalshi's real status
+reads `"closed"` well before the real `result` field is populated
+(which can sit as an empty string for hours after trading closes) —
+neither guessed value was real. RESOLVED: gate solely on a real,
+non-empty `result` field instead of a guessed status string.
 35. **New, opened, NOT YET RESOLVED — carried forward from Session
-    4.2:** the roadmap's resolved-market sanity-check validation item is
-    real, built, and tested, but genuinely blocked on Kalshi's own real
-    settlement clock (~19:00 UTC / 2:00 PM CDT, 2026-09-07 — all 62 of
-    the real weather series checked settle on roughly the same
-    real-world schedule, confirmed by two real runs both returning zero
-    resolved contracts before that time). **Action:** re-run
-    `weather_backtest_check.py` after that time and record the real
-    directional-accuracy and Brier-score numbers in SESSION_LOG.md's
-    Session 4.2 entry to close it out.
+4.2:** the roadmap's resolved-market sanity-check validation item is
+real, built, and tested, but genuinely blocked on Kalshi's own real
+settlement clock (~19:00 UTC / 2:00 PM CDT, 2026-09-07 — all 62 of
+the real weather series checked settle on roughly the same
+real-world schedule, confirmed by two real runs both returning zero
+resolved contracts before that time). **Action:** re-run
+`weather_backtest_check.py` after that time and record the real
+directional-accuracy and Brier-score numbers in SESSION_LOG.md's
+Session 4.2 entry to close it out.
+36. **New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07):** Polymarket's
+title format for state-legislature races is unconfirmed — 0 of 4 known
+real Kalshi state-legislature down-ballot races found a Polymarket
+counterpart in this session's live run. Unknown whether Polymarket
+doesn't list these races, or whether `ingest_politics_markets.py`'s
+structural title-guess for that tier needs adjustment. **Action:**
+manually check a known state-legislature race on Polymarket.com directly
+before trusting this path's absence of matches as meaningful.
+37. **New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07):** when more
+than one Polymarket market matches the same down-ballot race_id (real,
+common — many Kalshi/Polymarket down-ballot races hit this in the live
+run), `ingest_politics_markets.py` currently keeps whichever row appears
+first in `polymarket_latest.csv`, which is arbitrary. One sampled case
+(CA-22) resolved to a sensible, liquid market, but this hasn't been
+checked broadly. **Action:** define a real tie-break (highest liquidity,
+most recent, or title-pattern-matched to "general election winner"
+specifically) before Session 5.2 leans on a specific Polymarket price for
+estimation.
+38. **New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07):**
+`MIN_LIQUID_KALSHI_CONTRACTS` (10.0) and `MIN_LIQUID_POLYMARKET_DOLLARS`
+(100.0) in `ingest_politics_markets.py` are named starting values, not
+yet calibrated against real down-ballot order-book behavior. **Action:**
+revisit once enough real down-ballot order-book history exists to check
+them against, same pattern as Session 3.2's sizing-constant validation.
 
 ---
 *Update this file at the close of each future session, per the project's
