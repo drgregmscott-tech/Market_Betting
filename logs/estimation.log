@@ -131,3 +131,6 @@
 2026-09-07 09:50:21,371 UTC | INFO | === Weather estimation run starting ===
 2026-09-07 09:50:21,396 UTC | INFO | No real calibration file yet at C:\Users\gmsco\Desktop\Market_Betting\data\weather\calibration\forecast_error_by_leadtime.csv - using the literature placeholder curve for every lead day until enough real data accumulates. This is expected, not an error, in the weeks right after Session 4.2.
 2026-09-07 09:50:21,418 UTC | INFO | === Weather estimation run complete: 288 input rows, 288 estimated, 0 no_forecast_kind, 0 no_forecast_data, 0 target_date_passed, 0 unsupported_lead_day, 0 missing_strike_fields ===
+2026-09-07 10:00:51,014 UTC | INFO | === Forecast-error calibration run starting ===
+2026-09-07 10:00:51,047 UTC | INFO | Observed-day loading: 166 qualifying (closed-day) rows seen, reduced to 75 unique station/date pairs, 72 rows skipped as still-in-progress when pulled.
+2026-09-07 10:00:51,059 UTC | INFO | === Forecast-error calibration run complete: 46 real forecast/observation pairs found across 1 lead-day buckets: {0: 46} ===
