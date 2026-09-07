@@ -199,9 +199,20 @@ def run() -> dict:
         time.sleep(PER_MARKET_PAUSE_SECONDS)
         if real_market is None:
             continue
-        status = real_market.get("status")
-        result = real_market.get("result")  # expected: "yes" or "no" once settled
-        if status not in ("finalized", "settled") or result not in ("yes", "no"):
+        # CORRECTION, found from this project's own first real run
+        # (2026-09-07): the real Kalshi payload uses status "closed"
+        # (trading has stopped) well BEFORE the real result field is
+        # populated - a market's real 'result' can sit as an empty
+        # string "" for hours after status flips to "closed", per a
+        # real checked example (KXLOWTMIN-26SEP06-T69: status="closed",
+        # result="", expected_expiration_time several hours in the
+        # future at check time). Gating on a guessed status string
+        # ("finalized"/"settled" - neither ever confirmed against a
+        # real response) was wrong and is removed. The only real,
+        # confirmed signal that a contract has a known answer is a
+        # non-empty result field itself.
+        result = real_market.get("result")
+        if result not in ("yes", "no"):
             continue  # not actually resolved yet - skip, don't guess
 
         actual_outcome = 1.0 if result == "yes" else 0.0

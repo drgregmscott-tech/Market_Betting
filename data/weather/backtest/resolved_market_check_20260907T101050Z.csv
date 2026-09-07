@@ -1,0 +1,1 @@
+market_ticker,city_label,target_date,strike_type,floor_strike,cap_strike,forecast_value_f,lead_days,model_prob_yes,sigma_source,real_result,directionally_correct,brier_component

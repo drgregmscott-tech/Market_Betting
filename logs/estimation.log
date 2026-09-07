@@ -134,3 +134,7 @@
 2026-09-07 10:00:51,014 UTC | INFO | === Forecast-error calibration run starting ===
 2026-09-07 10:00:51,047 UTC | INFO | Observed-day loading: 166 qualifying (closed-day) rows seen, reduced to 75 unique station/date pairs, 72 rows skipped as still-in-progress when pulled.
 2026-09-07 10:00:51,059 UTC | INFO | === Forecast-error calibration run complete: 46 real forecast/observation pairs found across 1 lead-day buckets: {0: 46} ===
+2026-09-07 10:09:40,989 UTC | INFO | === Resolved-market sanity check starting ===
+2026-09-07 10:09:40,990 UTC | INFO | Using historical Kalshi snapshot: kalshi_weather_markets_20260906T190840Z.csv
+2026-09-07 10:09:40,990 UTC | INFO | Using historical forecast snapshot: nws_forecast_20260906T190917Z.csv
+2026-09-07 10:10:50,175 UTC | INFO | === Resolved-market sanity check complete: {'resolved_contracts_checked': 0, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\backtest\\resolved_market_check_20260907T101050Z.csv', 'note': "No contracts from the historical snapshot have actually settled yet on Kalshi's side, or none survived the real matching/lead-day checks above - not necessarily an error, but nothing to report yet."} ===
