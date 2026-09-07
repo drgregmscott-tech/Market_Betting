@@ -39,12 +39,34 @@ HOW A "REAL PAIR" IS FOUND
    (data/weather/normalized/nws_observed_daily_<timestamp>.csv)
    contributes real observed rows: (station_id, observed_date,
    observed_max_f, observed_min_f, sample_count, pulled_at).
-4. For a given (station_id, target_date, forecast_kind), the real
-   observed value used is taken from the observed snapshot with the
-   HIGHEST sample_count for that (station_id, observed_date==target_date)
-   pair - more real samples in a day means a more complete real read on
-   that day's true max/min, not a partial day still in progress.
-5. error = forecast_value_f - observed_value (signed; positive =
+4. **CORRECTION, found from this project's own first real run
+   (2026-09-07), not assumed in advance:** an observed_daily row for a
+   given day is only a real, FINAL answer once that day is actually
+   over. Early in a day, "observed_max_f so far" is a real but
+   incomplete number - comparing a full-day forecast against a
+   still-in-progress day's partial reading produced spurious, inflated
+   "errors" the first time this script ran (day-0 MAE of 4.3 F, day-1
+   MAE of 7.4 F - both far too large to be real forecast skill, and
+   both large enough to have crossed weather_model.py's own
+   MIN_REAL_SAMPLES_PER_LEAD_DAY threshold, which would have silently
+   fed bad real numbers into every near-term estimate on the very next
+   run). Root cause: this project's daily pipeline runs once a day at a
+   fixed real time (~11:23 UTC); a same-day pull for a station's own
+   "today" is always still mid-day. Fixed by only accepting an observed
+   snapshot for a given (station_id, observed_date) once that snapshot
+   was pulled at least OBSERVED_DAY_CLOSED_BUFFER_HOURS (32) after that
+   date's own UTC midnight - long enough that even this project's
+   latest-closing real stations (West Coast, UTC-7/-8, whose local day
+   ends around 07:00-08:00 UTC the next day) have definitely finished
+   that calendar day by the time the snapshot counts. 32 hours, not a
+   tighter number, is deliberately generous across this project's whole
+   real station list rather than tuned per time zone.
+5. For a given (station_id, target_date, forecast_kind), the real
+   observed value used is taken from the QUALIFYING (see #4) observed
+   snapshot with the HIGHEST sample_count for that (station_id,
+   observed_date==target_date) pair - more real samples in a now-closed
+   day means a more complete real read on that day's true max/min.
+6. error = forecast_value_f - observed_value (signed; positive =
    forecast too high). abs_error = abs(error).
 
 WHAT THIS SCRIPT WRITES
@@ -71,7 +93,7 @@ import csv
 import logging
 import time
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -79,6 +101,11 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 NORMALIZED_DIR = BASE_DIR / "data" / "weather" / "normalized"
 CALIBRATION_DIR = BASE_DIR / "data" / "weather" / "calibration"
 LOG_PATH = BASE_DIR / "logs" / "estimation.log"
+
+# See "CORRECTION" note in the module docstring above - found from this
+# project's own real first run, not assumed in advance. Covers every
+# real target station's local day-end, in UTC terms, with margin.
+OBSERVED_DAY_CLOSED_BUFFER_HOURS = 32
 
 
 def setup_logging() -> logging.Logger:
@@ -127,17 +154,42 @@ def load_all_forecast_rows() -> list[dict]:
     return rows
 
 
+def _day_is_closed(observed_date_str: str, pulled_at_dt: Optional[datetime]) -> bool:
+    """True only if this snapshot was pulled long enough after
+    observed_date's own UTC midnight that the day is a real, final
+    answer for every one of this project's stations - see the
+    "CORRECTION" note in the module docstring."""
+    observed_date = _parse_date(observed_date_str)
+    if observed_date is None or pulled_at_dt is None:
+        return False
+    day_start_utc = datetime(observed_date.year, observed_date.month, observed_date.day, tzinfo=timezone.utc)
+    return pulled_at_dt >= day_start_utc + timedelta(hours=OBSERVED_DAY_CLOSED_BUFFER_HOURS)
+
+
 def load_best_observed_by_station_date() -> dict[tuple[str, str], dict]:
     """Reads every real, timestamped observed-daily snapshot file and
     keeps, per (station_id, observed_date), the row with the highest
-    real sample_count seen across all snapshots - the most complete real
-    read on that day."""
+    real sample_count seen across all QUALIFYING snapshots (see
+    _day_is_closed) - the most complete real read on that day, once
+    that day has actually finished. Snapshots pulled while a day is
+    still in progress are skipped entirely, not averaged in."""
     best: dict[tuple[str, str], dict] = {}
+    skipped_incomplete = 0
+    qualifying_rows_seen = 0
     for path in sorted(NORMALIZED_DIR.glob("nws_observed_daily_*.csv")):
         if path.name == "nws_observed_daily_latest.csv":
             continue
         with path.open("r", newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
+                pulled_at_dt = None
+                try:
+                    pulled_at_dt = datetime.fromisoformat(row["pulled_at"].replace("Z", "+00:00"))
+                except (KeyError, ValueError, AttributeError):
+                    pass
+                if not _day_is_closed(row.get("observed_date", ""), pulled_at_dt):
+                    skipped_incomplete += 1
+                    continue
+                qualifying_rows_seen += 1
                 key = (row["station_id"], row["observed_date"])
                 try:
                     sample_count = int(row["sample_count"])
@@ -146,6 +198,12 @@ def load_best_observed_by_station_date() -> dict[tuple[str, str], dict]:
                 existing = best.get(key)
                 if existing is None or sample_count > int(existing["sample_count"]):
                     best[key] = row
+    log.info(
+        "Observed-day loading: %d qualifying (closed-day) rows seen, "
+        "reduced to %d unique station/date pairs, %d rows skipped as "
+        "still-in-progress when pulled.",
+        qualifying_rows_seen, len(best), skipped_incomplete,
+    )
     return best
 
 

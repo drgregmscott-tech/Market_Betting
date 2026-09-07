@@ -128,3 +128,6 @@
 2026-09-01 15:38:11,591 UTC | INFO | Loaded 18540 nflverse weekly-stat rows for season 2025
 2026-09-01 15:38:26,364 UTC | INFO | Model status breakdown: {'unsupported_sport': 26834, 'estimated': 3207, 'unsupported_stat_type': 630, 'no_player_match': 214, 'no_line_value': 53, 'insufficient_history': 2}
 2026-09-01 15:38:26,753 UTC | INFO | Wrote 30940 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260901T153826Z.csv
+2026-09-07 09:50:21,371 UTC | INFO | === Weather estimation run starting ===
+2026-09-07 09:50:21,396 UTC | INFO | No real calibration file yet at C:\Users\gmsco\Desktop\Market_Betting\data\weather\calibration\forecast_error_by_leadtime.csv - using the literature placeholder curve for every lead day until enough real data accumulates. This is expected, not an error, in the weeks right after Session 4.2.
+2026-09-07 09:50:21,418 UTC | INFO | === Weather estimation run complete: 288 input rows, 288 estimated, 0 no_forecast_kind, 0 no_forecast_data, 0 target_date_passed, 0 unsupported_lead_day, 0 missing_strike_fields ===
