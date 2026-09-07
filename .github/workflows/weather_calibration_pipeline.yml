@@ -1,0 +1,115 @@
+name: Weather Calibration Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions workflow - the same kind of scheduled, automated job as
+# arbitrage_pipeline.yml (Track 2) and pickem_pipeline.yml (Track 1), just
+# for a different real need: this one exists to build up this project's
+# OWN real, measured forecast-accuracy history in the background, so
+# Session 4.2's weather_model.py can automatically switch from a
+# literature-sourced placeholder to this project's own real numbers over
+# time - see weather_model.py's own module docstring for the full
+# reasoning.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo.
+# 2. Installs Python and this project's packages.
+# 3. Runs ingest_nws_weather_data.py (Session 4.1's existing script,
+#    unmodified) - pulls a fresh real forecast and real observed reading
+#    for every mapped station.
+# 4. Runs weather_forecast_error.py (new this session) - reads every real
+#    snapshot committed so far (not just today's) and recomputes this
+#    project's own real forecast-error-by-lead-day file.
+# 5. Commits the new timestamped snapshot files AND the recomputed
+#    calibration files back to this repo.
+#
+# WHY THIS COMMITS THE RAW/NORMALIZED SNAPSHOTS - UNLIKE
+# arbitrage_pipeline.yml, WHICH DELIBERATELY DOES NOT
+# --------------------------------------------------------------------------
+# arbitrage_pipeline.yml's own docstring explains it skips committing
+# every run's raw/normalized snapshot because that data is disposable -
+# useful for one run's debugging, not this project's real historical
+# record. This pipeline is the opposite case: the whole real, named
+# purpose of this workflow (see above) is to build a real historical
+# record of forecasts vs. real outcomes over time. Not committing these
+# snapshots would defeat the reason this workflow exists.
+#
+# POLLING FREQUENCY - REAL, NAMED REASONING (not the same tradeoff as
+# arbitrage's)
+# --------------------------------------------------------------------------
+# Once a day, not several times a day, for two real reasons:
+# 1. What this pipeline is measuring (how far a DAILY high/low forecast
+#    ends up from the DAILY high/low that actually happens) does not
+#    change meaningfully by pulling more than once a day - a station's
+#    forecast for "Friday's high" does not need to be re-checked every 4
+#    hours to build a real day-level error history.
+# 2. GitHub Actions minutes are a shared, account-wide budget (Open
+#    Decision #27) - a new daily workflow is a small, deliberate addition
+#    to that budget, not a second high-frequency pipeline stacked on top
+#    of the existing two.
+#
+# WHY IT RUNS AT THIS SPECIFIC TIME (11:20 UTC)
+# --------------------------------------------------------------------------
+# Late enough in the UTC day that the prior real calendar day has fully
+# ended for every one of this project's target stations (all in U.S. time
+# zones, several hours behind UTC), so observed_daily's real max/min for
+# "yesterday" is a complete, settled real reading by the time this run
+# pulls it - not a partial day still accumulating observations.
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch: {}
+  # Manual "Run workflow" button on GitHub's Actions tab, for testing
+  # without waiting for the next scheduled run.
+
+concurrency:
+  group: weather-calibration-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run-weather-calibration-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Pull today's real NWS forecast and observed data
+        run: python scripts/ingestion/ingest_nws_weather_data.py
+
+      - name: Recompute real forecast-error-by-lead-day from all accumulated snapshots
+        run: python scripts/calibration/weather_forecast_error.py
+
+      - name: Commit and push new snapshots and calibration files
+        run: |
+          git config user.name "weather-calibration-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/weather/raw/ data/weather/normalized/ data/weather/calibration/
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated weather calibration run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-calibration-logs
+          path: |
+            logs/ingestion.log
+            logs/estimation.log
+          retention-days: 14
+          if-no-files-found: ignore
