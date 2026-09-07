@@ -344,16 +344,34 @@ def run() -> dict:
         races_summary_raw = _fetch_csv_with_retries(ELECTINDEX_RACES_SUMMARY_URL)
         leg_races_raw = _fetch_csv_with_retries(ELECTINDEX_LEG_RACES_URL)
 
+        # REAL BUG FOUND AND FIXED (first live run on Windows, 2026-09-07):
+        # Path.write_text() with no explicit encoding uses the OS's
+        # default locale encoding - cp1252 ("charmap") on Windows, not
+        # UTF-8. ElectIndex's real candidate-name data contains non-cp1252
+        # characters (a combining acute accent, U+0301, from a real
+        # candidate name) that raised UnicodeEncodeError and failed the
+        # whole run before a single row was normalized. Every other
+        # ingestion script in this project (ingest_kalshi.py,
+        # ingest_polymarket.py, ingest_weather_markets.py) writes its raw
+        # JSON snapshot with json.dumps() into write_text(), which hits
+        # the same default-encoding gap - it simply hadn't surfaced yet
+        # because none of that raw data happened to contain a
+        # non-cp1252 character. Fixed here by passing encoding="utf-8"
+        # explicitly, matching this file's own already-UTF-8 CSV reads
+        # (io.StringIO(r.text) preserves whatever requests decoded the
+        # response as, which is UTF-8 for this real endpoint).
         RAW_DIR.mkdir(parents=True, exist_ok=True)
         (RAW_DIR / f"electindex_{pulled_at_compact}_races_summary.csv").write_text(
             "\n".join([",".join(races_summary_raw[0].keys())] +
                       [",".join(str(v) for v in row.values()) for row in races_summary_raw])
-            if races_summary_raw else ""
+            if races_summary_raw else "",
+            encoding="utf-8",
         )
         (RAW_DIR / f"electindex_{pulled_at_compact}_leg_races.csv").write_text(
             "\n".join([",".join(leg_races_raw[0].keys())] +
                       [",".join(str(v) for v in row.values()) for row in leg_races_raw])
-            if leg_races_raw else ""
+            if leg_races_raw else "",
+            encoding="utf-8",
         )
 
         house_rows = normalize_house_rows(races_summary_raw, pulled_at)

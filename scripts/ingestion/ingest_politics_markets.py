@@ -469,7 +469,15 @@ def build_kalshi_rows(series_list: list[dict], tier_by_ticker: dict[str, str]) -
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    (RAW_DIR / f"kalshi_politics_{ts}.json").write_text(json.dumps(all_raw, indent=2))
+    # Explicit encoding="utf-8" - see ingest_polling_data.py's real,
+    # live-caught bug note (Session 5.1, first Windows run, 2026-09-07):
+    # write_text() with no encoding argument defaults to the OS locale
+    # encoding (cp1252 on Windows), which fails on real non-ASCII
+    # characters in race/candidate titles. Fixed here proactively, same
+    # fix applied there.
+    (RAW_DIR / f"kalshi_politics_{ts}.json").write_text(
+        json.dumps(all_raw, indent=2), encoding="utf-8"
+    )
 
     return rows
 
