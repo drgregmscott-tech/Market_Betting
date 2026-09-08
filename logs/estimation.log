@@ -149,3 +149,6 @@
 2026-09-08 12:46:45,134 UTC | INFO | === Politics estimation run starting (Session 5.2, underconfidence-correction model) ===
 2026-09-08 12:46:45,181 UTC | INFO | Estimation status counts across all (venue, party) cells: {'estimated': 151, 'no_market_price': 1581}
 2026-09-08 12:46:45,196 UTC | INFO | === Politics estimation run complete: 433 race rows read, 866 (race, party) rows written (OK) ===
+2026-09-08 12:52:35,024 UTC | INFO | === Politics estimation run starting (Session 5.2, underconfidence-correction model) ===
+2026-09-08 12:52:35,071 UTC | INFO | Estimation status counts across all (venue, party) cells: {'estimated': 151, 'no_market_price': 1581}
+2026-09-08 12:52:35,085 UTC | INFO | === Politics estimation run complete: 433 race rows read, 866 (race, party) rows written (OK) ===
