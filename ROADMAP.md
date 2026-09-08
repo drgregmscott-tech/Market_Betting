@@ -1664,11 +1664,63 @@ edge size (likely smaller, more frequent edges than pick'em)
 ---
 
 ### Session 4.6 — Frontend Integration
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-08) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 4.5 complete.
 
+**What was actually done:** Added a third, independently-loading track
+section (Track 3 — weather/climate markets) to the existing static
+Cloudflare Pages frontend (`frontend/index.html`, `app.js`,
+`style.css`), same pattern Session 3.5 (arbitrage) and Session 5.6
+(politics) already established. This session was picked up out of
+roadmap order — Session 5.6 (politics frontend) had already been built
+and closed first, leaving weather as the one remaining track with no
+frontend section — done now at the user's explicit request rather than
+left open indefinitely.
+
+**Files touched:** `frontend/app.js`, `frontend/index.html`,
+`frontend/style.css`.
+
 **Validation (required to close session):**
-- [ ] Weather track displays correctly in the existing frontend
+- [x] Weather track displays correctly in the existing frontend —
+confirmed against a synthetic local fixture (real
+`data/weather/clv_log.csv` schema, per `clv_logger.py`'s
+`CLV_LOG_COLUMNS_WEATHER`), served over a local static HTTP server:
+stats row, open-flags table (city, target date, forecast value, strike
+threshold, side, market price, model edge, lead time), and closed-flags
+table all rendered correctly with no console errors. This track's real
+schema difference from the other three — `consensus_available` is
+always `false` here, since Kalshi is the only venue this track ingests
+— required no special-casing in the frontend beyond reusing the same
+null-safe rendering already used elsewhere; it just never shows a
+consensus figure, which is correct.
+
+**Decisions made:**
+1. **A fourth distinct accent hue (amber, `--accent-weather`) was
+added**, continuing the "different hue per track" pattern from Sessions
+3.5 and 5.6 — green (pick'em), blue (arbitrage), amber (weather),
+purple (politics).
+2. **No sizing calculator was added for this track**, matching Session
+5.6's own reasoning for politics: this track's roadmap card required
+correct display only, not an in-browser sizing flow.
+3. **Weather-specific fields (city, target date, forecast, strike) are
+shown directly in the table** rather than reusing pick'em's
+player/team columns or politics' candidate/race columns — each
+track's table matches what a flagged row actually represents, per
+this project's existing per-track pattern rather than forcing one
+generic table shape across tracks with genuinely different data
+shapes.
+
+**Handoff notes:** The Cloudflare Pages build command (dashboard
+setting, not a repo file) needs one more copy step added, alongside the
+politics one still pending from Session 5.6:
+
+```
+mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv && (cp data/arbitrage/flags/arbitrage_flags_latest.csv frontend/data/arbitrage_flags_latest.csv || true) && (cp data/weather/clv_log.csv frontend/data/weather_clv_log.csv || true) && (cp data/politics/clv_log.csv frontend/data/politics_clv_log.csv || true)
+```
+
+All four tracks now have a frontend section. Phase 4/5's remaining open
+sessions (4.7, 5.7 — Live Validation Windows) are unaffected by this
+work and remain separately scoped.
 
 ---
 
