@@ -18,6 +18,14 @@
   --accent-arb: #5b9df0;
   --panel-arb-border: #1e2a3a;
   --panel-arb-bg: #101722;
+
+  /* Track 4 (politics) accent — a third distinct hue, same reasoning as
+     Track 2's blue above. Track 3 (weather) has no frontend section yet
+     (Session 4.6 still "Not started"), so only three hues are needed so
+     far. */
+  --accent-politics: #c98fe0;
+  --panel-politics-border: #2a1e33;
+  --panel-politics-bg: #180f1e;
 }
 
 * { box-sizing: border-box; }
@@ -189,12 +197,31 @@ main {
   background: var(--accent-arb);
 }
 
+.track-tag-politics {
+  color: var(--bg);
+  background: var(--accent-politics);
+}
+
 /* Track 2 panels reuse .panel's layout but carry the blue accent border
    and a slightly different background tint so scrolling past the
    divider still reads as "a different track," not just a new table. */
 .panel-arb {
   border-color: var(--panel-arb-border);
   background: var(--panel-arb-bg);
+}
+
+/* Track 4 panels — same pattern as Track 2's, with the purple accent. */
+.panel-politics {
+  border-color: var(--panel-politics-border);
+  background: var(--panel-politics-bg);
+}
+
+/* Highlights a long wait-to-resolution cell in the politics open table
+   (Session 5.6) — the whole point of this track's frontend card is
+   making capital-lockup time visible at a glance. */
+td.wait-long {
+  color: var(--accent-politics);
+  font-weight: 600;
 }
 
 /* ---------- summary stats ---------- */

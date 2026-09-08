@@ -5391,3 +5391,112 @@ infrastructure.
 politics track to the existing frontend, with resolution-date context
 shown since these are long-dated positions, per that session's card in
 ROADMAP.md).
+
+---
+
+## Session 5.6 — Frontend Integration
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+Added a fourth track section (Track 4 — down-ballot politics) to the
+existing static Cloudflare Pages frontend, following the exact pattern
+Session 3.5 established for Track 2 (arbitrage) rather than inventing a
+new one.
+
+1. Read `scripts/calibration/clv_logger.py`'s real politics CLV log schema
+(`CLV_CORE_COLUMNS` + `POLITICS_EXTRA_COLUMNS`, `CLV_LOG_PATH_POLITICS =
+data/politics/clv_log.csv`) before writing any frontend code, so field
+names in `app.js` match what the pipeline actually writes — not guessed
+by analogy to pick'em's differently-shaped file.
+2. `frontend/app.js`: added `POLITICS_DATA_URL = "data/politics_clv_log.csv"`,
+a `fmtHoursToResolution()` helper (converts raw `hours_to_resolution` into
+an h/d/mo string), and `renderPoliticsStats()` /
+`renderPoliticsOpenTable()` / `renderPoliticsClosedTable()` /
+`initPolitics()`, wired into the existing `Promise.allSettled([...])` in
+`init()` alongside pick'em and arbitrage — a failure loading any one
+track's data file must never hide another track's real data, same
+guarantee Session 3.5 already established for two tracks, now extended
+to three.
+3. `frontend/index.html`: new Track 4 section (stats row, open-flags
+table, closed-flags table) matching the existing section structure, with
+a dedicated **Time to resolution** column in the open table — the
+specific thing this session's roadmap card required, since these are
+long-dated positions unlike pick'em/arbitrage's same-day flags.
+4. `frontend/style.css`: new `--accent-politics` (purple), a third
+distinct hue from pick'em's green and arbitrage's blue, plus
+`.panel-politics` and a `.wait-long` cell highlight for open positions
+waiting more than 60 days to resolve.
+5. **Tested in a real browser**, not just read for correctness. `file://`
+fetch() is blocked by the browser's own CORS policy, so a local static
+HTTP server (`python -m http.server`) was used to serve `frontend/`
+directly, with synthetic fixture CSVs matching each track's real schema
+(politics fixture built from `clv_logger.py`'s real column list, including
+a 1560.5-hour-out open race and a closed race). Confirmed via
+`get_page_text` and a screenshot: all three tracks render correctly and
+independently; the politics open table correctly showed "2.1mo" for the
+1560.5-hour test race, visually highlighted in the track's purple accent
+per the `.wait-long` rule.
+6. Deleted the synthetic fixture files from `frontend/data/` after
+confirming the browser test — that directory does not belong in the
+repo; it is populated only by the Cloudflare Pages build command at
+deploy time (Session 2.8/3.5 precedent), never checked in.
+
+**Files created/modified:**
+- `frontend/app.js` — Track 4 section added (see item 2 above); header
+comment updated to describe three data files instead of two.
+- `frontend/index.html` — Track 4 markup added; footer text updated from
+"both tracks'" to "every track's" pipeline commits.
+- `frontend/style.css` — Track 4 accent variables, `.track-tag-politics`,
+`.panel-politics`, `.wait-long` added.
+- `ROADMAP.md` — Session 5.6 card closed out (see that entry).
+
+**Validation results:**
+- [x] Politics track displays correctly, with resolution-date context
+shown — **pass**, confirmed via real browser rendering (item 5 above),
+not just a code read-through. The dedicated "Time to resolution" column
+is the concrete answer to this session's one roadmap validation line.
+
+**Decisions made:**
+(See the matching Decisions list in ROADMAP.md's Session 5.6 card — full
+reasoning recorded there to avoid duplicating it in two places. Summary:
+(1) a third distinct accent hue, matching Session 3.5's own "different
+hue per track" precedent; (2) no in-browser sizing calculator for this
+track, since politics sizing depends on live portfolio-ledger state
+(`committed_capital_politics()`) the static frontend has no way to read
+— a stated boundary, not a silent gap; (3) validated against a synthetic
+fixture, not this sandbox's real politics CLV log, matching this
+project's own established precedent when the sandbox cannot reach a real
+file that only exists on the user's live deploy.)
+
+**Corrections/reversals during the session:**
+- First attempt at browser-testing used the file preview tool directly
+against `frontend/index.html` outside the project folder, which renders
+as a static snapshot and never actually executes the page's own
+`fetch()` calls — confirmed no data loaded and no console errors either,
+a silent false-pass that would have been easy to miss. Caught by
+recognizing the console was suspiciously empty for a page that should
+have logged fetch activity, corrected by serving the same files over a
+real local HTTP server instead, which did produce real, checkable
+network behavior.
+
+**Open items / deferred validations:**
+- **The Cloudflare Pages build command still needs one more copy step
+added** (dashboard setting, not a repo file) before politics data will
+actually appear on the live deployed site — the exact command is in
+ROADMAP.md's Session 5.6 handoff notes. Not blocking this session's
+close, matching Session 3.5's own precedent (that session's arbitrage
+build-command edit was also handed off as a required manual dashboard
+step, not done by Claude directly, since Cloudflare Pages dashboard
+settings are outside this project's git-tracked files).
+- Track 3 (weather) still has no frontend section — Session 4.6 remains
+"Not started" in ROADMAP.md, a pre-existing gap this session did not
+touch or fold in. Worth flagging directly to the user: two of four live
+tracks (weather, and now politics pending the build-command update) are
+not yet both fully visible on the deployed dashboard at the same time.
+
+**Handoff notes:** Next session is 5.7 — Live Validation Window, per
+ROADMAP.md. Whoever picks up Session 4.6 (weather frontend) separately
+should follow this same three-tracks-already-established pattern rather
+than starting from scratch.

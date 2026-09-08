@@ -217,10 +217,100 @@ fresh Cloudflare Pages deploy is needed after any arbitrage pipeline run for thi
 Session 3.5's notes if this file has never existed in a deploy yet.
 </p>
 
+<!-- ================================================================ -->
+<!-- TRACK 4 — DOWN-BALLOT POLITICS                                    -->
+<!-- ================================================================ -->
+<div class="track-heading track-heading-politics">
+<span class="track-tag track-tag-politics">Track 4</span>
+<h2>Down-ballot politics (Kalshi + Polymarket)</h2>
+</div>
+
+<section class="panel panel-politics" id="politics-summary-panel">
+<div class="stat-row" id="politicsStatRow">
+<div class="stat">
+<span class="stat-value" id="politicsStatOpen">—</span>
+<span class="stat-label">Open flags</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="politicsStatClosed">—</span>
+<span class="stat-label">Closed &amp; graded</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="politicsStatCumEdge">—</span>
+<span class="stat-label">Average CLV edge</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="politicsStatAvgWait">—</span>
+<span class="stat-label">Avg. time to resolution</span>
+</div>
+</div>
+</section>
+
+<section class="panel panel-politics" id="politics-open-panel">
+<div class="panel-head">
+<h2>Currently flagged races</h2>
+<p class="panel-note">
+Open positions from the daily politics pipeline, sorted by model edge. These are long-dated
+positions &mdash; a race can sit open for weeks or months before it resolves, unlike pick&rsquo;em or
+arbitrage flags, which close same-day. The <strong>Time to resolution</strong> column is the whole
+point of this track&rsquo;s frontend card: it tells you, at a glance, how long your capital would stay
+tied up if you took this position. Rows waiting longer than 60 days are highlighted.
+</p>
+</div>
+<div class="table-wrap">
+<table id="politicsOpenTable">
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Party</th>
+<th>State</th>
+<th>Race</th>
+<th>Venue</th>
+<th>Market price</th>
+<th>Model edge</th>
+<th>Time to resolution</th>
+</tr>
+</thead>
+<tbody id="politicsOpenTableBody"></tbody>
+</table>
+</div>
+<p id="politicsOpenEmpty" class="empty-note" hidden>No open flags right now.</p>
+</section>
+
+<section class="panel panel-politics" id="politics-closed-panel">
+<div class="panel-head">
+<h2>Recently closed flags</h2>
+<p class="panel-note">The last 25 races to resolve or drop off the board, most recent first.</p>
+</div>
+<div class="table-wrap">
+<table id="politicsClosedTable">
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Party</th>
+<th>State</th>
+<th>Venue</th>
+<th>Closing price</th>
+<th>CLV edge at close</th>
+<th>Closed</th>
+</tr>
+</thead>
+<tbody id="politicsClosedTableBody"></tbody>
+</table>
+</div>
+<p id="politicsClosedEmpty" class="empty-note" hidden>No closed flags yet.</p>
+</section>
+
+<p id="politicsLoadError" class="load-error" hidden>
+Could not load <code>data/politics_clv_log.csv</code>. This page reads that file from its own build, so a
+fresh Cloudflare Pages deploy is needed after any politics pipeline run for this section to update. See
+this session's handoff notes if this file has never existed in a deploy yet.
+</p>
+
 </main>
 
 <footer class="site-footer">
-<p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including both tracks&rsquo; own pipeline commits.</p>
+<p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including every track&rsquo;s own pipeline commits.</p>
 </footer>
 
 <script src="app.js"></script>

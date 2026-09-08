@@ -1,22 +1,24 @@
-// Market_Betting frontend — Session 3.5
+// Market_Betting frontend — Session 5.6
 //
-// This page now reads TWO independent data files:
+// This page now reads THREE independent data files:
 //   1. data/clv_log.csv               — Track 1 (pick'em), unchanged since
 //      Session 2.8. A copy of data/pickem/clv_log.csv placed here by the
 //      Cloudflare Pages build step.
-//   2. data/arbitrage_flags_latest.csv — Track 2 (arbitrage), new this
-//      session. A copy of data/arbitrage/flags/arbitrage_flags_latest.csv,
-//      itself a new file this session's detector.py change writes on every
-//      run (a stable, always-overwritten name) alongside the existing
-//      timestamped arbitrage_flags_<timestamp>.csv files, so this page has
-//      one predictable filename to fetch instead of guessing the latest
-//      timestamp. The Cloudflare Pages build command must copy this second
-//      file too — see Session 3.5's notes if this section shows a load
-//      error in every deploy.
+//   2. data/arbitrage_flags_latest.csv — Track 2 (arbitrage), Session 3.5.
+//      A copy of data/arbitrage/flags/arbitrage_flags_latest.csv.
+//   3. data/politics_clv_log.csv       — Track 4 (down-ballot politics),
+//      new this session. A copy of data/politics/clv_log.csv. Track 3
+//      (weather) has no frontend section yet — its own Session 4.6 is
+//      still "Not started" per ROADMAP.md, a separately tracked gap, not
+//      something this session silently skipped.
 //
-// The two tracks are loaded and rendered independently: if one file fails
-// to load, the other track's section still renders normally. Neither
-// track's failure should ever hide the other track's real data.
+//      The Cloudflare Pages build command must be updated to copy this
+//      third file too, same one-time dashboard edit Session 3.5 needed for
+//      arbitrage — see this session's handoff notes for the exact command.
+//
+// All tracks are loaded and rendered independently: if one file fails to
+// load, the other tracks' sections still render normally. No track's
+// failure should ever hide another track's real data.
 //
 // No framework, no build tool, no external libraries — matches the DFS
 // sibling repos' static-file pattern. The chart is hand-drawn SVG.
@@ -26,6 +28,7 @@
 
 const DATA_URL = "data/clv_log.csv";
 const ARB_DATA_URL = "data/arbitrage_flags_latest.csv";
+const POLITICS_DATA_URL = "data/politics_clv_log.csv";
 
 // ---------------------------------------------------------------------
 // Sizing constants -- ported exactly from scripts/sizing/sizing_engine.py.
@@ -599,11 +602,146 @@ async function initArbitrage() {
   }
 }
 
+// =======================================================================
+// TRACK 4 — Down-ballot politics (new this session)
+//
+// politics_clv_log.csv shares the same open/closed lifecycle shape as
+// pick'em's clv_log.csv (Session 4.3/5.3 built the politics track on the
+// same shared CLV structure, per clv_logger.py). The one real difference
+// this track's own roadmap card calls out explicitly: these are
+// long-dated positions — races can sit open for weeks or months — so
+// every flagged row here shows real resolution-date context
+// (hours_to_resolution, converted to a human "time to resolution" string)
+// rather than a game-time column the way pick'em/arbitrage do.
+// =======================================================================
+
+function fmtHoursToResolution(h) {
+  const n = toNum(h);
+  if (n === null) return "—";
+  if (n < 0) return "past due";
+  if (n < 24) return Math.round(n) + "h";
+  const days = n / 24;
+  if (days < 60) return Math.round(days) + "d";
+  const months = days / 30.44;
+  return months.toFixed(1) + "mo";
+}
+
+function renderPoliticsStats(rows) {
+  const open = rows.filter((r) => r.status === "open");
+  const closed = rows.filter((r) => r.status === "closed" && toNum(r.clv_edge_at_close) !== null);
+
+  const avgEdge = closed.length
+    ? closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0) / closed.length
+    : null;
+  const avgHours = open.length
+    ? open.reduce((sum, r) => sum + (toNum(r.hours_to_resolution) || 0), 0) / open.length
+    : null;
+
+  setText("politicsStatOpen", String(open.length));
+  setText("politicsStatClosed", String(closed.length));
+
+  const cumEl = document.getElementById("politicsStatCumEdge");
+  if (cumEl) {
+    cumEl.textContent = avgEdge === null ? "—" : fmtEdge(avgEdge);
+    cumEl.className = "stat-value " + (avgEdge === null ? "" : edgeClass(avgEdge).replace("edge-", ""));
+  }
+
+  setText("politicsStatAvgWait", avgHours === null ? "—" : fmtHoursToResolution(avgHours) + " avg");
+
+  return { open, closed };
+}
+
+function renderPoliticsOpenTable(open) {
+  const tbody = document.getElementById("politicsOpenTableBody");
+  const emptyNote = document.getElementById("politicsOpenEmpty");
+  if (!tbody || !emptyNote) return;
+
+  const sorted = open
+    .slice()
+    .sort((a, b) => (toNum(b.first_flagged_edge) || -1) - (toNum(a.first_flagged_edge) || -1));
+
+  if (!sorted.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = sorted
+    .map((r) => {
+      const edge = toNum(r.first_flagged_edge);
+      const hours = toNum(r.hours_to_resolution);
+      const waitClass = hours !== null && hours > 24 * 60 ? "wait-long" : "";
+      return `
+        <tr>
+          <td class="name-cell" title="${escapeAttr(r.candidate_name)}">${escapeHtml(r.candidate_name) || "—"}</td>
+          <td>${escapeHtml(r.party) || "—"}</td>
+          <td>${escapeHtml(r.state) || "—"}</td>
+          <td>${escapeHtml(r.chamber) || "—"}${r.district ? " " + escapeHtml(r.district) : ""}</td>
+          <td>${escapeHtml(r.venue) || "—"}</td>
+          <td>${escapeHtml(r.first_flagged_market_price) || "—"}</td>
+          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
+          <td class="${waitClass}">${fmtHoursToResolution(hours)}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+function renderPoliticsClosedTable(closed) {
+  const tbody = document.getElementById("politicsClosedTableBody");
+  const emptyNote = document.getElementById("politicsClosedEmpty");
+  if (!tbody || !emptyNote) return;
+
+  const sorted = closed
+    .slice()
+    .sort((a, b) => new Date(b.closing_pulled_at || 0) - new Date(a.closing_pulled_at || 0))
+    .slice(0, 25);
+
+  if (!sorted.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = sorted
+    .map((r) => {
+      const edge = toNum(r.clv_edge_at_close);
+      return `
+        <tr>
+          <td class="name-cell">${escapeHtml(r.candidate_name) || "—"}</td>
+          <td>${escapeHtml(r.party) || "—"}</td>
+          <td>${escapeHtml(r.state) || "—"}</td>
+          <td>${escapeHtml(r.venue) || "—"}</td>
+          <td>${escapeHtml(r.closing_market_price) || "—"}</td>
+          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
+          <td>${fmtDate(r.closing_pulled_at)}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+async function initPolitics() {
+  try {
+    const res = await fetch(POLITICS_DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    const { open, closed } = renderPoliticsStats(rows);
+    renderPoliticsOpenTable(open);
+    renderPoliticsClosedTable(closed);
+  } catch (err) {
+    const el = document.getElementById("politicsLoadError");
+    if (el) el.hidden = false;
+    console.error("Market_Betting frontend: failed to load politics data.", err);
+  }
+}
+
 async function init() {
-  // Both tracks load independently and in parallel: a failure or an
-  // empty result in one must never block or hide the other track's
-  // real data on the page.
-  await Promise.allSettled([initPickem(), initArbitrage()]);
+  // All tracks load independently and in parallel: a failure or an empty
+  // result in one must never block or hide another track's real data.
+  await Promise.allSettled([initPickem(), initArbitrage(), initPolitics()]);
 
   setText("asOf", new Date().toLocaleString(undefined, {
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit"

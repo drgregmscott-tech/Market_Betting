@@ -2001,12 +2001,72 @@ manual "Run workflow" click) fires for real.
 ---
 
 ### Session 5.6 — Frontend Integration
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-08) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 5.5 complete.
 
+**What was actually done:** Added a fourth, independently-loading track
+section (Track 4 — down-ballot politics) to the existing static
+Cloudflare Pages frontend (`frontend/index.html`, `app.js`,
+`style.css`), following the same pattern Session 3.5 established for
+Track 2 (arbitrage): its own data file, its own accent color, its own
+`init*()` function, loaded via `Promise.allSettled` alongside the other
+tracks so a load failure in one track never hides another's real data.
+Track 3 (weather) still has no frontend section — its own Session 4.6
+remains "Not started," a pre-existing, separately-tracked gap this
+session did not silently fold in or close.
+
+**Files touched:** `frontend/app.js`, `frontend/index.html`,
+`frontend/style.css`.
+
 **Validation (required to close session):**
-- [ ] Politics track displays correctly, with resolution-date context shown
-(since these are long-dated positions)
+- [x] Politics track displays correctly, with resolution-date context
+shown (since these are long-dated positions) — confirmed against a
+synthetic local fixture (real `data/politics/clv_log.csv` schema,
+served over a local static HTTP server, not the `file://` protocol,
+since fetch() against `file://` is blocked): stats row, open-flags
+table, and closed-flags table all rendered correctly. The open table's
+dedicated "Time to resolution" column (converts `hours_to_resolution`
+into a human h/d/mo string) correctly showed "2.1mo" for a
+1560.5-hour-out test race, with rows past 60 days visually highlighted
+in the track's accent color — the specific requirement this session's
+roadmap card called out by name.
+
+**Decisions made:**
+1. **A third distinct accent hue (purple, `--accent-politics`) was added**,
+matching Track 2's own "different hue per track" precedent from Session
+3.5, rather than reusing pick'em's green or arbitrage's blue.
+2. **No sizing calculator was added for this track.** Unlike pick'em
+(Session 2.8), politics sizing is single-contract Kelly with a
+portfolio-level exposure ledger (Session 5.4), not a
+select-two-legs-and-combine flow — porting Session 2.8's
+in-browser sizing calculator would mean re-implementing
+`committed_capital_politics()`'s live ledger state in the browser,
+which the static frontend has no way to read. This session's roadmap
+card did not require a sizing calculator, only correct display with
+resolution-date context — deferring the sizing UI is a stated
+boundary, not a silent gap.
+3. **Tested against a synthetic fixture, not the sandbox's real
+`data/politics/clv_log.csv`**, because Session 5.5 already established
+this sandbox has no real politics CLV log to test against (deleted
+after that session's live validation run). Matches this project's own
+established precedent (Sessions 2.6/3.3/5.4) of validating against
+synthetic data first when the sandbox cannot reach the user's real
+file, with real validation deferred to the user's live deploy.
+
+**Handoff notes:** The Cloudflare Pages build command (a dashboard
+setting, not a repo file — see Session 2.8/3.5's precedent) needs one
+more copy step added, the same one-time dashboard edit Session 3.5
+required when arbitrage was added:
+
+```
+mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv && (cp data/arbitrage/flags/arbitrage_flags_latest.csv frontend/data/arbitrage_flags_latest.csv || true) && (cp data/politics/clv_log.csv frontend/data/politics_clv_log.csv || true)
+```
+
+The `|| true` fallback matches Session 3.5's own reasoning: politics'
+first-ever CLV log write already happened for real in Session 5.3's
+validation run, but a fresh deploy shouldn't hard-fail if this file is
+ever briefly absent between pipeline runs. Next session is 5.7 — Live
+Validation Window.
 
 ---
 
