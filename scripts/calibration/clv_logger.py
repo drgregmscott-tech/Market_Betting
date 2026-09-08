@@ -1,117 +1,138 @@
 """
-Session 2.4 -- CLV-Equivalent Calibration Logging
+Session 2.4 (pick'em) / Session 4.3 (weather) / Session 5.3 (politics)
+-- CLV-Equivalent Calibration Logging, Generalized Across Tracks
 
-WHAT THIS SCRIPT IS
---------------------
-Reads Session 2.3's estimation output (output/estimation/pickem_estimates_*.csv
--- one file per run of pickem_model.py) and, for every prop where the model's
-estimate disagrees enough with the platform's own implied probability to
-count as "flagged" (see FLAG_EDGE_THRESHOLD below), writes or updates one row
-in a durable log (data/pickem/clv_log.csv) tracking that flag against two
-pre-outcome benchmarks. This is the project's core design principle from
-Session 0.1: a model is not "validated" until it is logging a real
-price-vs-benchmark comparison on every flagged opportunity, before any bet
-resolves (see ROADMAP.md, "Rule for every session").
+WHAT CHANGED THIS SESSION (5.3) AND WHY
+-----------------------------------------------------------------------
+This script started (Session 2.4) as a pick'em-only tool. ROADMAP.md's
+Session 4.3 card ("CLV Logging Hook-In" for the weather track) was
+opened in parallel with Session 4.2 but never actually built -- the
+version of this file on GitHub going into Session 5.3 was still exactly
+the Session 2.4 pick'em-only version, with no track parameter at all.
+That gap was found and flagged at the start of this session, and the
+user chose to close both Session 4.3 and Session 5.3 together rather
+than build a second politics-only patch on top of a file that still
+didn't generalize.
 
-This script is meant to be run AFTER each pickem_model.py run, against that
-run's freshly written estimates file. It is not yet wired into any scheduled
-automation -- that is Session 2.7's job. For now it is invoked manually,
-matching the current state of the rest of Track 1's pipeline.
+This version adds a --track {pickem, weather, politics} argument. The
+pick'em code path (functions with a _pickem suffix, plus
+CLV_LOG_COLUMNS_PICKEM) is UNCHANGED from the Session 2.4 version --
+same file (data/pickem/clv_log.csv), same columns, same logic, same
+snapshot behavior. This is a deliberate, non-negotiable choice: Track
+1's GitHub Actions automation (Session 2.7) and Cloudflare Pages
+frontend (Session 2.8) already read that file's existing schema in
+production. Nothing about this session's work touches that path.
 
-WHY THIS DOESN'T LOOK LIKE TRADITIONAL SPORTSBOOK CLV
--------------------------------------------------------
-Classic Closing Line Value compares the price a bettor got at bet time
-against that SAME market's price right before it closes -- a market moving
-toward your side after you bet it is evidence you were early and right.
-Session 0.1 confirmed PrizePicks and Underdog are structurally different:
-"static, non-repricing lines" (ROADMAP.md Track Reference table) -- a
-platform sets a line once and does not continuously reprice it against
-betting volume the way a sportsbook does. That means the pure "did this
-platform's own price move toward my side" signal cannot be assumed to behave
-like real sportsbook CLV, and this script does not treat it as if it does.
+Weather and politics get their own new code paths and their own log
+files (data/weather/clv_log.csv, data/politics/clv_log.csv), sharing a
+common CORE column set (flag_id, track, flagged_side, first/last-seen
+values, status, closing values -- see CLV_CORE_COLUMNS) plus a
+track-specific set of identity/context columns appended after it (see
+WEATHER_EXTRA_COLUMNS / POLITICS_EXTRA_COLUMNS). This is what "shared
+CLV structure" means in this script: one shared lifecycle engine
+(generic_process_run, below) and one shared set of core columns that
+every track's log carries -- not one single physical file mixing three
+structurally different market types together, and not three fully
+independent copies of the open/refresh/close bookkeeping logic either.
 
-Two distinct, explicitly labeled benchmarks are logged instead, per the
-Session 2.4 roadmap card's own suggestion ("consensus across both platforms,
-or a sharp-book proxy where available"):
+WHY WEATHER AND POLITICS DON'T REUSE PICK'EM'S OWN FUNCTIONS DIRECTLY
+-----------------------------------------------------------------------
+Pick'em's consensus benchmark requires a real search across OTHER rows
+in the same file (the same prop, on the other platform, may be a
+different row). Politics does not need that search -- Session 5.2's
+politics_estimates_latest.csv is already wide-format, with both venues'
+prices for the same race/party sitting in the SAME row -- so its
+consensus benchmark is a same-row lookup, not a cross-row search.
+Weather has no second venue at all (Kalshi only), so it has no
+consensus benchmark. Forcing all three into pick'em's exact
+cross-row-search shape would have meant writing fake search logic for
+tracks that don't need it. Instead, each track gets its own
+`build_<track>_candidates()` / `build_<track>_present_and_prices()` pair
+that turns that track's real file into a common, generic shape
+(flag_id, side, model_prob, market_price, edge, consensus fields, extra
+identity fields) -- and one shared engine (generic_process_run) does
+the actual open/refresh/close bookkeeping identically for both.
 
-1. CROSS-PLATFORM CONSENSUS (primary benchmark) -- at the moment a prop is
-   flagged, this script checks whether the SAME real-world prop (same
-   player, same resolved stat -- see pickem_model.py's Session 2.4 addition
-   of `resolved_stat_key` -- and same game) is also priced on the OTHER
-   platform at that same moment. If it is, that platform's own implied
-   probability is logged as a second, independent read on the same
-   real-world question. Two platforms independently setting their own lines
-   is the closest available proxy this project has to a second opinion, in
-   the absence of any real sharp-book feed for pick'em platforms.
-2. OWN-LINE MOVEMENT TO CLOSE (secondary benchmark) -- because Session 2.2's
-   ingestion pipeline is designed to run hourly, this script also re-checks,
-   on every later run, whether a previously-flagged prop is still present
-   under its original platform + source_line_id. Once it stops appearing in
-   a fresh run (the platform took it off the board -- game locked, or the
-   line was pulled), the last line/implied-probability values seen before it
-   disappeared are frozen as this prop's "closing" values -- the direct
-   pick'em analog of a real closing line, even though Session 0.1's own
-   research says this platform type reprices rarely, not never.
+WEATHER: WHAT COUNTS AS A "FLAG," AND WHAT THE BENCHMARK MEANS
+-----------------------------------------------------------------------
+Every weather contract is a single yes/no question (Session 4.2's
+strike_type/floor_strike/cap_strike). The market's own implied "yes"
+probability is the bid/ask midpoint. A flag fires on whichever side
+(yes or no) the model's probability clears WEATHER_FLAG_EDGE_THRESHOLD
+away from that implied probability -- mirroring pick'em's over/under
+mutual-exclusivity (a contract can only be flagged on one side, never
+both, since a yes-side edge and a no-side edge are mirror images of the
+same gap). There is no cross-venue consensus (Kalshi is the only venue
+Session 4.1 ingests), so consensus_available is always False here --
+this is a real, stated limitation of the weather track today, not a
+bug in this script. The benchmark that DOES apply is the same
+own-line-movement-to-close signal pick'em uses: this track's daily
+calibration pipeline (Session 4.2) re-pulls Kalshi's weather markets on
+a schedule, so a contract that stops appearing in a fresh pull has
+settled or been delisted, and its last-seen price is frozen as its
+closing value. Per this session's ROADMAP validation item, this
+benchmark is meaningful here specifically because weather contracts
+resolve in days, not months -- unlike politics below, most weather
+flags should reach a real "closed" state within a single validation
+window.
 
-Both benchmarks are logged side by side, explicitly labeled, so a future
-session (2.5 onward, once real graded outcomes exist) can judge which one --
-if either -- actually correlates with the model being right. Neither is
-presented here as a proven proxy, only as a real, named, pre-outcome signal.
+POLITICS: WHAT COUNTS AS A "FLAG," AND WHY THIS BENCHMARK IS DIFFERENT
+-----------------------------------------------------------------------
+Each (race, party, venue) cell is its own independent buy-side
+question -- unlike pick'em/weather's single mirrored contract, a race's
+Dem and Rep cells are two separate markets that need not sum to 1, so
+each is evaluated for its own edge independently, using the edge
+Session 5.2's politics_model.py already computed
+(`{venue}_edge_vs_raw_{party}`). flag_id is `venue|race_id|party` --
+stable for the life of the race, not tied to a specific market ticker,
+since Session 5.2's own output does not carry per-venue ticker IDs
+forward (see Open Decision logged at the end of this docstring).
+Consensus here is the OTHER venue's own raw price on the SAME race and
+party, read directly from the same row -- the closest real two-venue
+read this project has, same idea as pick'em's cross-platform check, but
+a same-row lookup instead of a cross-row search.
 
-WHAT COUNTS AS "FLAGGED" -- A STATED, UNVALIDATED THRESHOLD
------------------------------------------------------------
-FLAG_EDGE_THRESHOLD is set at 0.03 -- the model's probability must be at
-least 3 percentage points away from the platform's own implied probability,
-on whichever side (over/under) has the edge, before this script logs it as a
-flagged opportunity. This number is NOT derived from any real graded data --
-no such data exists yet; producing it is what this whole calibration loop is
-for. It is a placeholder, chosen loosely enough to generate a meaningful
-number of real flags to validate this session's own logging mechanics
-against, without flagging nearly every row the model can estimate at all
-(which a threshold of 0 would do, and would not test anything). Revisiting
-this threshold against real graded results belongs to Session 8.3 (Ongoing
-Recalibration Cadence), not this session.
+ROADMAP.md's own validation item for this session asks explicitly
+whether the logged benchmark is "meaningful pre-resolution, not just a
+placeholder" for this specific track, because down-ballot races resolve
+on a single date (2026-11-03) two months out, not hours or days away.
+Two real, distinct answers apply here, not one:
+1. The CONSENSUS benchmark (other venue's price on the same race) is
+real and meaningful from day one -- it does not depend on time to
+resolution at all, and both stated re-verification and Session 5.2's
+own methodology treat it as informative immediately.
+2. The CLOSING benchmark (own-line movement to close, via
+disappearance from the latest file) will mostly sit "open" for
+weeks, since these races will not disappear from the feed until
+Election Day or a race being called early. That is expected, not a
+bug -- it is the same real, stated shape Session 5.4 (Sizing
+Adaptation) is built to handle (capital tied up for weeks/months,
+not hours/days), not something this session should try to solve.
 
-MATCHING KEYS -- HOW A "FLAG" IS TRACKED ACROSS MULTIPLE RUNS
------------------------------------------------------------------
-- flag_id = platform + "|" + source_line_id. This is the platform's own,
-  stable ID for a specific line -- used to recognize "is this the same
-  prop I already logged" across runs of THIS script.
-- consensus_match_key = normalized player name + "|" + resolved_stat_key +
-  "|" + game_id. Used ONLY at flag time, to look for the same real-world
-  prop on the OTHER platform within the same estimates file. Deliberately
-  not used as the durable flag_id, since a platform's own source_line_id
-  is the more stable identity for tracking one specific line over its own
-  lifetime.
-
-WHAT THIS SCRIPT DOES NOT DO YET (stated gap, not a silent one)
------------------------------------------------------------------
-- Does not yet know the real outcome of any prop -- that is realized-outcome
-  tracking, explicitly Session 2.5's job, using a separate log
-  (outcome_log.csv) the user reports into manually. This script's job ends
-  at logging pre-outcome signal.
-- Consensus matching requires an exact resolved_stat_key match. A prop whose
-  stat only resolved on one platform (e.g. a stat_type string not yet in
-  pickem_model.py's maps on one platform but present on the other) will not
-  find a consensus partner even if the same real prop exists on both
-  platforms under a differently-worded, unmapped stat_type. This is a real,
-  named limitation of relying on resolved_stat_key rather than fuzzy text
-  matching, accepted here because a wrong consensus match (silently
-  comparing two different real stats) would be worse than a missed one.
-- Game-lock detection is inferred (a source_line_id simply stops appearing
-  in the latest run), not confirmed against the platform's own `status`
-  field, since Session 2.1/2.2's research did not enumerate every real
-  status value either platform can return. A prop that disappears for a
-  reason OTHER than game lock (e.g. the platform pulled it for an unrelated
-  reason) would be treated the same way -- stated here as a real, not
-  silent, limitation.
+A REAL, NAMED GOTCHA THIS SCRIPT DOES NOT SILENTLY WORK AROUND:
+PRICE SCALE
+-----------------------------------------------------------------------
+Kalshi's raw API typically returns bid/ask prices as whole cents (0 to
+100), not as a 0-to-1 probability. Neither weather_model.py nor
+politics_model.py documents scaling its own bid/ask inputs before
+using them as a probability. This script defends against that
+ambiguity with `_normalize_price()`: any value greater than 1 is
+treated as a 0-100 scale and divided by 100; anything already in [0, 1]
+is passed through unchanged. This is a real, stated assumption, not a
+verified fact -- flagged here as Open Decision #42 (see SESSION_LOG.md)
+for confirmation against real live data, the same way every other
+placeholder constant in this project is confirmed against real data
+before being trusted.
 
 USAGE
 -----
 pip install pandas numpy --break-system-packages
-python clv_logger.py --estimates path/to/pickem_estimates_TIMESTAMP.csv
-If --estimates is omitted, the most recently written file in
-output/estimation/ is used automatically.
+python clv_logger.py --track pickem --estimates path/to/pickem_estimates_TIMESTAMP.csv
+python clv_logger.py --track weather
+python clv_logger.py --track politics
+If --estimates is omitted, the most recently written *_latest.csv (or,
+for pick'em, the most recent timestamped file) for that track is used
+automatically.
 """
 
 from __future__ import annotations
@@ -129,50 +150,80 @@ import pandas as pd
 # Paths
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parents[2]
+
 ESTIMATION_DIR = BASE_DIR / "output" / "estimation"
-CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
-CLV_SNAPSHOT_DIR = BASE_DIR / "data" / "pickem" / "clv_snapshots"
+CLV_LOG_PATH_PICKEM = BASE_DIR / "data" / "pickem" / "clv_log.csv"
+CLV_SNAPSHOT_DIR_PICKEM = BASE_DIR / "data" / "pickem" / "clv_snapshots"
+
+WEATHER_ESTIMATES_LATEST = BASE_DIR / "data" / "weather" / "estimates" / "weather_estimates_latest.csv"
+CLV_LOG_PATH_WEATHER = BASE_DIR / "data" / "weather" / "clv_log.csv"
+CLV_SNAPSHOT_DIR_WEATHER = BASE_DIR / "data" / "weather" / "clv_snapshots"
+
+POLITICS_ESTIMATES_LATEST = BASE_DIR / "data" / "politics" / "estimates" / "politics_estimates_latest.csv"
+CLV_LOG_PATH_POLITICS = BASE_DIR / "data" / "politics" / "clv_log.csv"
+CLV_SNAPSHOT_DIR_POLITICS = BASE_DIR / "data" / "politics" / "clv_snapshots"
+
 LOG_PATH = BASE_DIR / "logs" / "clv_logging.log"
 
 # ---------------------------------------------------------------------------
 # Constants -- named explicitly, per this project's "no unnamed black-box
 # factors" documentation standard. See module docstring for full reasoning.
 # ---------------------------------------------------------------------------
-FLAG_EDGE_THRESHOLD = 0.03  # stated, unvalidated placeholder -- see docstring
+FLAG_EDGE_THRESHOLD_PICKEM = 0.03   # unchanged from Session 2.4 -- stated, unvalidated placeholder
+WEATHER_FLAG_EDGE_THRESHOLD = 0.03  # same placeholder logic, applied to this track -- unvalidated
+POLITICS_FLAG_EDGE_THRESHOLD = 0.03  # same placeholder logic, applied to this track -- unvalidated
 
-CLV_LOG_COLUMNS = [
+# ---------------------------------------------------------------------------
+# Shared (core) CLV log columns -- every track's log carries these.
+# ---------------------------------------------------------------------------
+CLV_CORE_COLUMNS = [
     "flag_id",
-    "platform",
-    "source_line_id",
-    "player_name",
-    "team",
-    "sport",
-    "stat_type",
-    "resolved_stat_key",
-    "game_id",
-    "game_start_time",
+    "track",
     "flagged_side",
     "first_flagged_at",
-    "first_flagged_line",
     "first_flagged_model_prob",
-    "first_flagged_implied_prob",
+    "first_flagged_market_price",
     "first_flagged_edge",
     "consensus_available",
-    "consensus_platform",
-    "consensus_source_line_id",
-    "consensus_line",
-    "consensus_implied_prob_same_side",
+    "consensus_label",
+    "consensus_price",
     "consensus_edge",
     "last_seen_at",
-    "last_seen_line",
-    "last_seen_implied_prob",
+    "last_seen_market_price",
     "status",
-    "closing_line",
-    "closing_implied_prob",
+    "closing_market_price",
     "closing_pulled_at",
-    "line_moved",
+    "price_moved",
     "clv_edge_at_close",
 ]
+
+# Pick'em keeps its exact, unchanged Session 2.4 schema (own file, own
+# columns) -- listed here only so load/save helpers can validate against it.
+CLV_LOG_COLUMNS_PICKEM = [
+    "flag_id", "platform", "source_line_id", "player_name", "team", "sport",
+    "stat_type", "resolved_stat_key", "game_id", "game_start_time",
+    "flagged_side", "first_flagged_at", "first_flagged_line",
+    "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
+    "consensus_available", "consensus_platform", "consensus_source_line_id",
+    "consensus_line", "consensus_implied_prob_same_side", "consensus_edge",
+    "last_seen_at", "last_seen_line", "last_seen_implied_prob", "status",
+    "closing_line", "closing_implied_prob", "closing_pulled_at", "line_moved",
+    "clv_edge_at_close",
+]
+
+WEATHER_EXTRA_COLUMNS = [
+    "series_ticker", "city_label", "station_id", "target_date", "strike_type",
+    "floor_strike", "cap_strike", "forecast_kind", "forecast_value_f",
+    "lead_days", "model_sigma_f", "sigma_source",
+]
+CLV_LOG_COLUMNS_WEATHER = CLV_CORE_COLUMNS + WEATHER_EXTRA_COLUMNS
+
+POLITICS_EXTRA_COLUMNS = [
+    "venue", "race_id", "party", "tier", "state", "chamber", "district",
+    "candidate_name", "hours_to_resolution", "electindex_prob",
+    "edge_vs_electindex",
+]
+CLV_LOG_COLUMNS_POLITICS = CLV_CORE_COLUMNS + POLITICS_EXTRA_COLUMNS
 
 
 def setup_logging() -> logging.Logger:
@@ -196,10 +247,34 @@ def setup_logging() -> logging.Logger:
 log = setup_logging()
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-def find_latest_estimates_file() -> Path:
+def _normalize_price(value) -> Optional[float]:
+    """Defends against the real, unconfirmed price-scale ambiguity
+    described in the module docstring: treats any value > 1 as a 0-100
+    scale (Kalshi's typical raw cents format) and divides by 100;
+    passes values already in [0, 1] through unchanged. Returns None for
+    missing/unparseable values -- never guesses a number."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        f = float(value)
+    except (TypeError, ValueError):
+        return None
+    if f > 1.0:
+        return f / 100.0
+    return f
+
+
+def _mid(a: Optional[float], b: Optional[float]) -> Optional[float]:
+    if a is not None and b is not None:
+        return (a + b) / 2.0
+    return a if a is not None else b
+
+
+# ===========================================================================
+# PICK'EM TRACK -- Session 2.4 code, UNCHANGED. Own file, own schema.
+# ===========================================================================
+
+def find_latest_estimates_file_pickem() -> Path:
     files = sorted(ESTIMATION_DIR.glob("pickem_estimates_*.csv"))
     if not files:
         raise FileNotFoundError(
@@ -209,44 +284,29 @@ def find_latest_estimates_file() -> Path:
     return files[-1]
 
 
-def load_clv_log() -> pd.DataFrame:
-    if CLV_LOG_PATH.exists():
-        df = pd.read_csv(CLV_LOG_PATH)
-        # Ensure every expected column exists even if an older log version
-        # is being read (durable/queryable format should tolerate additive
-        # schema growth, not break on it).
-        for col in CLV_LOG_COLUMNS:
+def load_clv_log_pickem() -> pd.DataFrame:
+    if CLV_LOG_PATH_PICKEM.exists():
+        df = pd.read_csv(CLV_LOG_PATH_PICKEM)
+        for col in CLV_LOG_COLUMNS_PICKEM:
             if col not in df.columns:
                 df[col] = None
-        return df[CLV_LOG_COLUMNS]
-    return pd.DataFrame(columns=CLV_LOG_COLUMNS)
+        return df[CLV_LOG_COLUMNS_PICKEM]
+    return pd.DataFrame(columns=CLV_LOG_COLUMNS_PICKEM)
 
 
-def determine_flagged_side(row: pd.Series) -> Optional[str]:
-    """Returns 'over', 'under', or None. A row can only be flagged on the
-    side where the model's edge (model probability minus implied
-    probability) meets FLAG_EDGE_THRESHOLD. Since implied_prob_over +
-    implied_prob_under == 1 by construction (see pickem_model.py), a
-    genuine edge on one side is the mirror-negative edge on the other, so
-    at most one side is ever flagged per row -- this function never returns
-    both."""
+def determine_flagged_side_pickem(row: pd.Series) -> Optional[str]:
     if row.get("model_status") != "estimated":
         return None
     edge_over = row.get("edge_over")
     edge_under = row.get("edge_under")
-    if pd.notna(edge_over) and edge_over >= FLAG_EDGE_THRESHOLD:
+    if pd.notna(edge_over) and edge_over >= FLAG_EDGE_THRESHOLD_PICKEM:
         return "over"
-    if pd.notna(edge_under) and edge_under >= FLAG_EDGE_THRESHOLD:
+    if pd.notna(edge_under) and edge_under >= FLAG_EDGE_THRESHOLD_PICKEM:
         return "under"
     return None
 
 
-def consensus_match_key(row: pd.Series) -> Optional[str]:
-    """Builds the lookup key used to find the SAME real-world prop on the
-    other platform within the same estimates file. Returns None if any
-    required piece is missing (in which case no consensus lookup is
-    attempted for this row -- consensus_available will be recorded False,
-    not guessed)."""
+def consensus_match_key_pickem(row: pd.Series) -> Optional[str]:
     name = row.get("player_name")
     stat_key = row.get("resolved_stat_key")
     game_id = row.get("game_id")
@@ -260,23 +320,16 @@ def consensus_match_key(row: pd.Series) -> Optional[str]:
     return f"{norm_name}|{stat_key}|{game_id}"
 
 
-def implied_prob_same_side(row: pd.Series, side: str) -> Optional[float]:
+def implied_prob_same_side_pickem(row: pd.Series, side: str) -> Optional[float]:
     if side == "over":
         return row.get("implied_prob_over")
     return row.get("implied_prob_under")
 
 
-def line_value_same_side_source(row: pd.Series) -> Optional[float]:
-    return row.get("line")
-
-
-def build_consensus_index(estimates_df: pd.DataFrame) -> dict[tuple[str, str], list[int]]:
-    """Maps (platform, consensus_match_key) -> list of row indices, so a
-    flagged row on one platform can look up whether the SAME real-world
-    prop exists on the platform's counterpart within this same file."""
+def build_consensus_index_pickem(estimates_df: pd.DataFrame) -> dict[tuple[str, str], list[int]]:
     index: dict[tuple[str, str], list[int]] = {}
     for idx, row in estimates_df.iterrows():
-        key = consensus_match_key(row)
+        key = consensus_match_key_pickem(row)
         if key is None:
             continue
         platform = row.get("platform")
@@ -286,7 +339,7 @@ def build_consensus_index(estimates_df: pd.DataFrame) -> dict[tuple[str, str], l
     return index
 
 
-def find_consensus_row(
+def find_consensus_row_pickem(
     estimates_df: pd.DataFrame,
     index: dict[tuple[str, str], list[int]],
     own_platform: str,
@@ -296,10 +349,6 @@ def find_consensus_row(
     candidates = index.get((other_platform, match_key))
     if not candidates:
         return None
-    # If more than one candidate matches (shouldn't normally happen -- a
-    # given player/stat/game should have one active line per platform --
-    # but real undocumented-endpoint data can surprise), take the first and
-    # log a warning rather than silently averaging or guessing.
     if len(candidates) > 1:
         log.warning(
             "Multiple consensus candidates found for platform=%s key=%s "
@@ -309,21 +358,12 @@ def find_consensus_row(
     return estimates_df.loc[candidates[0]]
 
 
-# ---------------------------------------------------------------------------
-# Core logic
-# ---------------------------------------------------------------------------
-def process_run(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
-    """Given one run's estimates and the current CLV log, returns the
-    updated CLV log: new flags appended, still-open flags refreshed, and
-    flags that dropped out of this run's data transitioned to closed with
-    their closing values frozen."""
+def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
     log_df = existing_log.copy()
     log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
 
-    consensus_index = build_consensus_index(estimates_df)
+    consensus_index = build_consensus_index_pickem(estimates_df)
 
-    # Build a lookup of every (platform, source_line_id) present in THIS run,
-    # used both to detect newly flagged rows and to refresh/close existing ones.
     estimates_df = estimates_df.copy()
     estimates_df["_flag_id"] = estimates_df["platform"].astype(str) + "|" + estimates_df["source_line_id"].astype(str)
     present_flag_ids = set(estimates_df["_flag_id"])
@@ -332,33 +372,30 @@ def process_run(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pull
     existing_flag_ids = set(log_df["flag_id"]) if not log_df.empty else set()
 
     for _, row in estimates_df.iterrows():
-        side = determine_flagged_side(row)
+        side = determine_flagged_side_pickem(row)
         flag_id = row["_flag_id"]
 
         if flag_id in existing_flag_ids:
-            # Already logged from a prior run -- refresh last_seen fields
-            # only (first_flagged_* values never change once set).
             log_df.loc[flag_id, "last_seen_at"] = run_pulled_at
             log_df.loc[flag_id, "last_seen_line"] = row.get("line")
             side_for_update = log_df.loc[flag_id, "flagged_side"]
-            log_df.loc[flag_id, "last_seen_implied_prob"] = implied_prob_same_side(row, side_for_update)
+            log_df.loc[flag_id, "last_seen_implied_prob"] = implied_prob_same_side_pickem(row, side_for_update)
             log_df.loc[flag_id, "status"] = "open"
             continue
 
         if side is None:
-            continue  # not flagged this run, and not previously logged -- nothing to do
+            continue
 
-        # New flag.
-        match_key = consensus_match_key(row)
+        match_key = consensus_match_key_pickem(row)
         consensus_row = None
         if match_key is not None:
-            consensus_row = find_consensus_row(estimates_df, consensus_index, row.get("platform"), match_key)
+            consensus_row = find_consensus_row_pickem(estimates_df, consensus_index, row.get("platform"), match_key)
 
         consensus_available = consensus_row is not None
         consensus_platform = consensus_row.get("platform") if consensus_available else None
         consensus_source_line_id = consensus_row.get("source_line_id") if consensus_available else None
         consensus_line = consensus_row.get("line") if consensus_available else None
-        consensus_implied = implied_prob_same_side(consensus_row, side) if consensus_available else None
+        consensus_implied = implied_prob_same_side_pickem(consensus_row, side) if consensus_available else None
         model_prob = row.get("prob_over") if side == "over" else row.get("prob_under")
         consensus_edge = (
             (model_prob - consensus_implied)
@@ -366,7 +403,7 @@ def process_run(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pull
             else None
         )
 
-        own_implied = implied_prob_same_side(row, side)
+        own_implied = implied_prob_same_side_pickem(row, side)
         own_edge = row.get("edge_over") if side == "over" else row.get("edge_under")
 
         new_rows.append({
@@ -407,7 +444,6 @@ def process_run(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pull
         new_df = pd.DataFrame(new_rows).set_index("flag_id", drop=False)
         log_df = pd.concat([log_df, new_df]) if not log_df.empty else new_df
 
-    # Close out any previously-open flag that no longer appears in this run.
     if not log_df.empty:
         open_mask = log_df["status"] == "open"
         dropped_mask = open_mask & (~log_df["flag_id"].isin(present_flag_ids))
@@ -429,24 +465,19 @@ def process_run(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pull
                 else None
             )
 
-    return log_df.reset_index(drop=True)[CLV_LOG_COLUMNS]
+    return log_df.reset_index(drop=True)[CLV_LOG_COLUMNS_PICKEM]
 
 
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
-def run(estimates_path: Optional[Path]) -> dict:
-    log.info("=== CLV logging run starting ===")
-
-    path = estimates_path or find_latest_estimates_file()
+def run_pickem(estimates_path: Optional[Path]) -> dict:
+    path = estimates_path or find_latest_estimates_file_pickem()
     estimates_df = pd.read_csv(path)
-    log.info("Loaded %d estimate rows from %s", len(estimates_df), path)
+    log.info("[pickem] Loaded %d estimate rows from %s", len(estimates_df), path)
 
     run_pulled_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    existing_log = load_clv_log()
-    log.info("Existing CLV log has %d rows before this run", len(existing_log))
+    existing_log = load_clv_log_pickem()
+    log.info("[pickem] Existing CLV log has %d rows before this run", len(existing_log))
 
-    updated_log = process_run(estimates_df, existing_log, run_pulled_at)
+    updated_log = process_run_pickem(estimates_df, existing_log, run_pulled_at)
 
     newly_opened = int((updated_log["first_flagged_at"] == run_pulled_at).sum())
     newly_closed = int(
@@ -454,37 +485,423 @@ def run(estimates_path: Optional[Path]) -> dict:
     )
     still_open = int((updated_log["status"] == "open").sum())
 
-    CLV_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    updated_log.to_csv(CLV_LOG_PATH, index=False)
-    log.info("Wrote %d total rows to %s", len(updated_log), CLV_LOG_PATH)
+    CLV_LOG_PATH_PICKEM.parent.mkdir(parents=True, exist_ok=True)
+    updated_log.to_csv(CLV_LOG_PATH_PICKEM, index=False)
+    log.info("[pickem] Wrote %d total rows to %s", len(updated_log), CLV_LOG_PATH_PICKEM)
 
-    CLV_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
-    snapshot_path = CLV_SNAPSHOT_DIR / f"clv_log_{run_pulled_at.replace(':', '').replace('-', '')}.csv"
+    CLV_SNAPSHOT_DIR_PICKEM.mkdir(parents=True, exist_ok=True)
+    snapshot_path = CLV_SNAPSHOT_DIR_PICKEM / f"clv_log_{run_pulled_at.replace(':', '').replace('-', '')}.csv"
     updated_log.to_csv(snapshot_path, index=False)
 
-    summary = {
-        "estimates_file": str(path),
-        "rows_in_estimates": len(estimates_df),
-        "newly_flagged": newly_opened,
-        "newly_closed": newly_closed,
-        "still_open": still_open,
-        "total_logged": len(updated_log),
-        "log_path": str(CLV_LOG_PATH),
+    return {
+        "track": "pickem", "estimates_file": str(path), "rows_in_estimates": len(estimates_df),
+        "newly_flagged": newly_opened, "newly_closed": newly_closed, "still_open": still_open,
+        "total_logged": len(updated_log), "log_path": str(CLV_LOG_PATH_PICKEM),
     }
-    log.info("Run summary: %s", summary)
-    return summary
 
 
+# ===========================================================================
+# SHARED (GENERIC) ENGINE -- used by weather and politics.
+# ===========================================================================
+
+def load_clv_log_generic(path: Path, columns: list[str]) -> pd.DataFrame:
+    """Loads an existing track log, or an empty one with the right
+    columns if none exists yet. Every column is forced to object dtype
+    -- a REAL bug found and fixed during this session's own smoke
+    testing: a column that is still entirely blank after its first run
+    (e.g. closing_pulled_at, before anything has closed) gets inferred
+    by pandas as float64, and a later run's attempt to write a real
+    string timestamp into that column then raises a hard TypeError.
+    Forcing object dtype on load avoids that entirely, for every
+    column, not just the ones this session happened to trip over."""
+    if path.exists():
+        df = pd.read_csv(path)
+        for col in columns:
+            if col not in df.columns:
+                df[col] = None
+        return df[columns].astype(object).where(pd.notna(df[columns]), None)
+    return pd.DataFrame(columns=columns, dtype=object)
+
+
+def generic_process_run(
+    track: str,
+    candidates: list[dict],
+    present_ids: set[str],
+    price_for_side_fn,
+    existing_log: pd.DataFrame,
+    run_pulled_at: str,
+    columns: list[str],
+    extra_columns: list[str],
+) -> pd.DataFrame:
+    """Generic open/refresh/close lifecycle, shared by weather and
+    politics. `candidates` is the list of newly-flagged rows this run
+    (already filtered to those clearing that track's edge threshold, one
+    dict per flag, using the canonical core keys plus that track's own
+    extra_columns keys). `present_ids` is every flag_id seen in this
+    run's raw file, flagged or not -- used to detect a flag that has
+    dropped out of the feed entirely (settled/delisted/race called), the
+    same 'disappearance = closed' signal pick'em's own engine uses.
+    `price_for_side_fn(flag_id, flagged_side) -> Optional[float]` gives
+    this run's own current market price for an ALREADY-OPEN flag, on the
+    side it was originally flagged on -- used to refresh
+    last_seen_market_price even when a flag isn't newly created this
+    run. It is a function, not a flat dict, because a raw row's own
+    'yes' price (weather) needs converting to a 'no' price when that is
+    the side the flag was originally logged on -- see the per-track
+    build_*_present_and_prices() helpers below."""
+    log_df = existing_log.copy()
+    log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
+    existing_flag_ids_before_this_run = set(log_df["flag_id"]) if not log_df.empty else set()
+
+    new_rows = []
+    for cand in candidates:
+        flag_id = cand["flag_id"]
+        if flag_id in existing_flag_ids_before_this_run:
+            continue  # already logged from a prior run -- refreshed below, not re-created
+        row = {col: None for col in columns}
+        row.update({
+            "flag_id": flag_id,
+            "track": track,
+            "flagged_side": cand.get("flagged_side"),
+            "first_flagged_at": run_pulled_at,
+            "first_flagged_model_prob": cand.get("model_prob"),
+            "first_flagged_market_price": cand.get("market_price"),
+            "first_flagged_edge": cand.get("edge"),
+            "consensus_available": cand.get("consensus_available", False),
+            "consensus_label": cand.get("consensus_label"),
+            "consensus_price": cand.get("consensus_price"),
+            "consensus_edge": cand.get("consensus_edge"),
+            "last_seen_at": run_pulled_at,
+            "last_seen_market_price": cand.get("market_price"),
+            "status": "open",
+            "closing_market_price": None,
+            "closing_pulled_at": None,
+            "price_moved": None,
+            "clv_edge_at_close": None,
+        })
+        for col in extra_columns:
+            if col in cand:
+                row[col] = cand[col]
+        new_rows.append(row)
+
+    if new_rows:
+        new_df = pd.DataFrame(new_rows).set_index("flag_id", drop=False)
+        log_df = pd.concat([log_df, new_df]) if not log_df.empty else new_df
+
+    if not log_df.empty:
+        # Refresh: any OPEN flag that existed BEFORE this run (not one
+        # just created above) and is still present in this run's raw
+        # file gets its last_seen values updated, matching pick'em's own
+        # "already logged -- refresh only" branch. Newly-created rows
+        # above already carry this run's correct values and are left
+        # alone here.
+        open_mask = log_df["status"] == "open"
+        refresh_mask = open_mask & log_df["flag_id"].isin(existing_flag_ids_before_this_run)
+        for flag_id in log_df.loc[refresh_mask, "flag_id"]:
+            if flag_id in present_ids:
+                log_df.loc[flag_id, "last_seen_at"] = run_pulled_at
+                side = log_df.loc[flag_id, "flagged_side"]
+                price = price_for_side_fn(flag_id, side)
+                if price is not None:
+                    log_df.loc[flag_id, "last_seen_market_price"] = price
+
+        # Close: any OPEN flag no longer present in this run's raw file
+        # at all -- settled, delisted, or (politics) the race dropped
+        # from the feed.
+        dropped_mask = open_mask & (~log_df["flag_id"].isin(present_ids))
+        for flag_id in log_df.loc[dropped_mask, "flag_id"]:
+            closing_price = log_df.loc[flag_id, "last_seen_market_price"]
+            first_price = log_df.loc[flag_id, "first_flagged_market_price"]
+            first_model_prob = log_df.loc[flag_id, "first_flagged_model_prob"]
+            log_df.loc[flag_id, "status"] = "closed"
+            log_df.loc[flag_id, "closing_market_price"] = closing_price
+            log_df.loc[flag_id, "closing_pulled_at"] = log_df.loc[flag_id, "last_seen_at"]
+            log_df.loc[flag_id, "price_moved"] = (
+                bool(pd.notna(closing_price) and pd.notna(first_price) and closing_price != first_price)
+            )
+            log_df.loc[flag_id, "clv_edge_at_close"] = (
+                (first_model_prob - closing_price)
+                if (pd.notna(first_model_prob) and pd.notna(closing_price))
+                else None
+            )
+
+    return log_df.reset_index(drop=True)[columns]
+
+
+# ===========================================================================
+# WEATHER TRACK (Session 4.3)
+# ===========================================================================
+
+def build_weather_candidates(df: pd.DataFrame) -> list[dict]:
+    candidates = []
+    for _, row in df.iterrows():
+        if row.get("model_status") != "estimated":
+            continue
+        model_prob_yes = row.get("model_prob_yes")
+        implied_yes = _normalize_price(_mid(row.get("yes_bid"), row.get("yes_ask")))
+        if pd.isna(model_prob_yes) or implied_yes is None:
+            continue
+        model_prob_yes = float(model_prob_yes)
+        edge_yes = model_prob_yes - implied_yes
+        if edge_yes >= WEATHER_FLAG_EDGE_THRESHOLD:
+            side, model_prob, market_price, edge = "yes", model_prob_yes, implied_yes, edge_yes
+        elif -edge_yes >= WEATHER_FLAG_EDGE_THRESHOLD:
+            side, model_prob, market_price, edge = "no", 1.0 - model_prob_yes, 1.0 - implied_yes, -edge_yes
+        else:
+            continue
+
+        candidates.append({
+            "flag_id": row.get("market_ticker"),
+            "flagged_side": side,
+            "model_prob": round(model_prob, 4),
+            "market_price": round(market_price, 4),
+            "edge": round(edge, 4),
+            "consensus_available": False,  # real, stated limitation -- Kalshi is the only venue ingested
+            "consensus_label": None,
+            "consensus_price": None,
+            "consensus_edge": None,
+            "series_ticker": row.get("series_ticker"),
+            "city_label": row.get("city_label"),
+            "station_id": row.get("station_id"),
+            "target_date": row.get("target_date"),
+            "strike_type": row.get("strike_type"),
+            "floor_strike": row.get("floor_strike"),
+            "cap_strike": row.get("cap_strike"),
+            "forecast_kind": row.get("forecast_kind"),
+            "forecast_value_f": row.get("forecast_value_f"),
+            "lead_days": row.get("lead_days"),
+            "model_sigma_f": row.get("model_sigma_f"),
+            "sigma_source": row.get("sigma_source"),
+        })
+    return candidates
+
+
+def build_weather_present_and_prices(df: pd.DataFrame) -> tuple[set[str], dict]:
+    """Returns (present_ids, yes_price_by_ticker). yes_price_by_ticker
+    holds the raw 'yes' side implied price -- callers wanting the 'no'
+    side price must convert it (1 - yes_price), since a flag logged on
+    the 'no' side needs its own-side price refreshed, not the 'yes'
+    side's. See price_for_side_weather() below."""
+    present_ids = set()
+    yes_prices: dict[str, Optional[float]] = {}
+    for _, row in df.iterrows():
+        ticker = row.get("market_ticker")
+        if not ticker or (isinstance(ticker, float) and pd.isna(ticker)):
+            continue
+        present_ids.add(ticker)
+        yes_prices[ticker] = _normalize_price(_mid(row.get("yes_bid"), row.get("yes_ask")))
+    return present_ids, yes_prices
+
+
+def price_for_side_weather(yes_prices: dict) -> "callable":
+    def _fn(flag_id: str, side: str) -> Optional[float]:
+        yes_price = yes_prices.get(flag_id)
+        if yes_price is None:
+            return None
+        return yes_price if side == "yes" else (1.0 - yes_price)
+    return _fn
+
+
+def find_latest_estimates_file_weather() -> Path:
+    if WEATHER_ESTIMATES_LATEST.exists():
+        return WEATHER_ESTIMATES_LATEST
+    raise FileNotFoundError(
+        f"{WEATHER_ESTIMATES_LATEST} does not exist -- run "
+        f"scripts/estimation/weather_model.py first (Session 4.2)."
+    )
+
+
+def run_weather(estimates_path: Optional[Path]) -> dict:
+    path = estimates_path or find_latest_estimates_file_weather()
+    estimates_df = pd.read_csv(path)
+    log.info("[weather] Loaded %d estimate rows from %s", len(estimates_df), path)
+
+    run_pulled_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    existing_log = load_clv_log_generic(CLV_LOG_PATH_WEATHER, CLV_LOG_COLUMNS_WEATHER)
+    log.info("[weather] Existing CLV log has %d rows before this run", len(existing_log))
+
+    candidates = build_weather_candidates(estimates_df)
+    present_ids, yes_prices = build_weather_present_and_prices(estimates_df)
+
+    updated_log = generic_process_run(
+        "weather", candidates, present_ids, price_for_side_weather(yes_prices), existing_log, run_pulled_at,
+        CLV_LOG_COLUMNS_WEATHER, WEATHER_EXTRA_COLUMNS,
+    )
+
+    newly_opened = int((updated_log["first_flagged_at"] == run_pulled_at).sum())
+    newly_closed = int(
+        ((updated_log["status"] == "closed") & (updated_log["closing_pulled_at"] == run_pulled_at)).sum()
+    )
+    still_open = int((updated_log["status"] == "open").sum())
+
+    CLV_LOG_PATH_WEATHER.parent.mkdir(parents=True, exist_ok=True)
+    updated_log.to_csv(CLV_LOG_PATH_WEATHER, index=False)
+    log.info("[weather] Wrote %d total rows to %s", len(updated_log), CLV_LOG_PATH_WEATHER)
+
+    CLV_SNAPSHOT_DIR_WEATHER.mkdir(parents=True, exist_ok=True)
+    snapshot_path = CLV_SNAPSHOT_DIR_WEATHER / f"clv_log_{run_pulled_at.replace(':', '').replace('-', '')}.csv"
+    updated_log.to_csv(snapshot_path, index=False)
+
+    return {
+        "track": "weather", "estimates_file": str(path), "rows_in_estimates": len(estimates_df),
+        "newly_flagged": newly_opened, "newly_closed": newly_closed, "still_open": still_open,
+        "total_logged": len(updated_log), "log_path": str(CLV_LOG_PATH_WEATHER),
+    }
+
+
+# ===========================================================================
+# POLITICS TRACK (Session 5.3)
+# ===========================================================================
+
+def build_politics_candidates(df: pd.DataFrame) -> list[dict]:
+    candidates = []
+    for _, row in df.iterrows():
+        race_id = row.get("race_id")
+        party = row.get("party")
+        if not race_id or not party:
+            continue
+        for venue, other_venue in (("kalshi", "polymarket"), ("polymarket", "kalshi")):
+            status_col = f"{venue}_model_status_{str(party).lower()}"
+            if row.get(status_col) != "estimated":
+                continue
+            model_prob = row.get(f"{venue}_corrected_prob_{str(party).lower()}")
+            market_price = row.get(f"{venue}_raw_price_{str(party).lower()}")
+            edge = row.get(f"{venue}_edge_vs_raw_{str(party).lower()}")
+            if pd.isna(model_prob) or pd.isna(market_price) or pd.isna(edge):
+                continue
+            if edge < POLITICS_FLAG_EDGE_THRESHOLD:
+                continue  # only a real, positive mispricing counts as a flag -- no short/fade flags yet
+
+            other_status_col = f"{other_venue}_model_status_{str(party).lower()}"
+            consensus_available = row.get(other_status_col) == "estimated"
+            consensus_price = row.get(f"{other_venue}_raw_price_{str(party).lower()}") if consensus_available else None
+            consensus_edge = (
+                round(float(model_prob) - float(consensus_price), 4)
+                if consensus_available and pd.notna(consensus_price) else None
+            )
+
+            candidates.append({
+                "flag_id": f"{venue}|{race_id}|{party}",
+                "flagged_side": str(party).lower(),
+                "model_prob": round(float(model_prob), 4),
+                "market_price": round(float(market_price), 4),
+                "edge": round(float(edge), 4),
+                "consensus_available": bool(consensus_available),
+                "consensus_label": other_venue if consensus_available else None,
+                "consensus_price": round(float(consensus_price), 4) if consensus_available and pd.notna(consensus_price) else None,
+                "consensus_edge": consensus_edge,
+                "venue": venue,
+                "race_id": race_id,
+                "party": party,
+                "tier": row.get("tier"),
+                "state": row.get("state"),
+                "chamber": row.get("chamber"),
+                "district": row.get("district"),
+                "candidate_name": row.get("candidate_name"),
+                "hours_to_resolution": row.get("hours_to_resolution"),
+                "electindex_prob": row.get("electindex_prob"),
+                "edge_vs_electindex": row.get(f"{venue}_edge_vs_electindex_{str(party).lower()}"),
+            })
+    return candidates
+
+
+def build_politics_present_and_prices(df: pd.DataFrame) -> tuple[set[str], dict[str, Optional[float]]]:
+    """Returns (present_ids, price_by_flag_id). Unlike weather, a
+    politics flag_id already encodes its own side (the party), so the
+    price lookup needs no side conversion -- price_for_side_politics()
+    below just ignores the side argument and reads this dict directly."""
+    present_ids = set()
+    prices: dict[str, Optional[float]] = {}
+    for _, row in df.iterrows():
+        race_id = row.get("race_id")
+        party = row.get("party")
+        if not race_id or not party:
+            continue
+        for venue in ("kalshi", "polymarket"):
+            price = row.get(f"{venue}_raw_price_{str(party).lower()}")
+            if pd.isna(price):
+                continue
+            flag_id = f"{venue}|{race_id}|{party}"
+            present_ids.add(flag_id)
+            prices[flag_id] = float(price)
+    return present_ids, prices
+
+
+def price_for_side_politics(prices: dict) -> "callable":
+    def _fn(flag_id: str, side: str) -> Optional[float]:  # side unused -- see docstring above
+        return prices.get(flag_id)
+    return _fn
+
+
+def find_latest_estimates_file_politics() -> Path:
+    if POLITICS_ESTIMATES_LATEST.exists():
+        return POLITICS_ESTIMATES_LATEST
+    raise FileNotFoundError(
+        f"{POLITICS_ESTIMATES_LATEST} does not exist -- run "
+        f"scripts/estimation/politics_model.py first (Session 5.2)."
+    )
+
+
+def run_politics(estimates_path: Optional[Path]) -> dict:
+    path = estimates_path or find_latest_estimates_file_politics()
+    estimates_df = pd.read_csv(path)
+    log.info("[politics] Loaded %d estimate rows from %s", len(estimates_df), path)
+
+    run_pulled_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    existing_log = load_clv_log_generic(CLV_LOG_PATH_POLITICS, CLV_LOG_COLUMNS_POLITICS)
+    log.info("[politics] Existing CLV log has %d rows before this run", len(existing_log))
+
+    candidates = build_politics_candidates(estimates_df)
+    present_ids, prices = build_politics_present_and_prices(estimates_df)
+
+    updated_log = generic_process_run(
+        "politics", candidates, present_ids, price_for_side_politics(prices), existing_log, run_pulled_at,
+        CLV_LOG_COLUMNS_POLITICS, POLITICS_EXTRA_COLUMNS,
+    )
+
+    newly_opened = int((updated_log["first_flagged_at"] == run_pulled_at).sum())
+    newly_closed = int(
+        ((updated_log["status"] == "closed") & (updated_log["closing_pulled_at"] == run_pulled_at)).sum()
+    )
+    still_open = int((updated_log["status"] == "open").sum())
+
+    CLV_LOG_PATH_POLITICS.parent.mkdir(parents=True, exist_ok=True)
+    updated_log.to_csv(CLV_LOG_PATH_POLITICS, index=False)
+    log.info("[politics] Wrote %d total rows to %s", len(updated_log), CLV_LOG_PATH_POLITICS)
+
+    CLV_SNAPSHOT_DIR_POLITICS.mkdir(parents=True, exist_ok=True)
+    snapshot_path = CLV_SNAPSHOT_DIR_POLITICS / f"clv_log_{run_pulled_at.replace(':', '').replace('-', '')}.csv"
+    updated_log.to_csv(snapshot_path, index=False)
+
+    return {
+        "track": "politics", "estimates_file": str(path), "rows_in_estimates": len(estimates_df),
+        "newly_flagged": newly_opened, "newly_closed": newly_closed, "still_open": still_open,
+        "total_logged": len(updated_log), "log_path": str(CLV_LOG_PATH_POLITICS),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--estimates",
-        type=str,
-        default=None,
-        help="Path to a specific pickem_estimates_*.csv file. Defaults to "
-             "the most recently written file in output/estimation/.",
+        "--track", type=str, default="pickem", choices=["pickem", "weather", "politics"],
+        help="Which track's CLV log to update. Defaults to pickem (Session 2.4 behavior, unchanged).",
+    )
+    parser.add_argument(
+        "--estimates", type=str, default=None,
+        help="Path to a specific estimates CSV file. Defaults to that track's own latest file.",
     )
     args = parser.parse_args()
     estimates_arg = Path(args.estimates) if args.estimates else None
-    result = run(estimates_arg)
+
+    log.info("=== CLV logging run starting (track=%s) ===", args.track)
+    if args.track == "pickem":
+        result = run_pickem(estimates_arg)
+    elif args.track == "weather":
+        result = run_weather(estimates_arg)
+    else:
+        result = run_politics(estimates_arg)
+    log.info("Run summary: %s", result)
     print(result)

@@ -1617,20 +1617,25 @@ baseline).** See SESSION_LOG.md's Session 4.2 (continuation) entry.
 ---
 
 ### Session 4.3 — CLV Logging Hook-In
-**Status:** In progress — started 2026-09-07 in parallel with Session
-4.2's last open item, at the user's explicit direction (confirmed this
-session's real scope does not depend on that item's outcome).
+**Status:** ⚠️ Complete with caveats (2026-09-08) — see SESSION_LOG.md for
+full detail. Real work finally done this session (started 2026-09-07,
+left as a placeholder, then closed alongside Session 5.3).
 **Prerequisites:** Session 4.2 complete.
 
 **What gets built:** Connects the weather model's output to the same CLV
 logging infrastructure built in Session 2.4 (reused, not rebuilt).
 
 **Files touched:** `/scripts/calibration/clv_logger.py` (extended to accept a
-new track parameter, not duplicated)
+new track parameter, not duplicated — pick'em's own Session 2.4 code path
+left fully unchanged)
 
 **Validation (required to close session):**
-- [ ] Weather track flags log correctly into the same CLV structure
-- [ ] At least one real week of logged weather flags reviewed for completeness
+- [x] Weather track flags log correctly into the same CLV structure — pass,
+confirmed against real live data (288 real contracts, 203 flagged, 0
+errors). See SESSION_LOG.md.
+- [ ] At least one real week of logged weather flags reviewed for
+completeness — **NOT MET, explicitly deferred by user direction**, not
+silently dropped. See Open Decision #42.
 
 ---
 
@@ -1815,15 +1820,25 @@ rows (MD Senate 2 Dem and Rep, CA Senate 26 Dem) — recomputing
 ---
 
 ### Session 5.3 — CLV Logging Hook-In
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-08) — see SESSION_LOG.md for full detail.
+Built and closed together with Session 4.3 above (both share the same
+generalized `clv_logger.py`).
 **Prerequisites:** Session 5.2 complete.
 
+**Files touched:** `/scripts/calibration/clv_logger.py` (same file as
+Session 4.3 — shared engineering work)
+
 **Validation (required to close session):**
-- [ ] Politics track flags log correctly into shared CLV structure
-- [ ] Noted explicitly: this track's markets resolve slowly (election dates),
+- [x] Politics track flags log correctly into shared CLV structure — pass,
+confirmed against real live data (866 real rows, 415 flagged, 0
+errors). See SESSION_LOG.md.
+- [x] Noted explicitly: this track's markets resolve slowly (election dates),
 so CLV-equivalent (pre-outcome) signal matters even more here than
 elsewhere — confirm the logged benchmark is meaningful pre-resolution,
-not just a placeholder
+not just a placeholder — pass: the cross-venue consensus benchmark is
+real and time-independent (already firing on 129 of 415 real flags);
+the closing benchmark's expected long-open shape for this track is
+named explicitly and feeds directly into Session 5.4's sizing design.
 
 ---
 
@@ -2629,6 +2644,31 @@ matching bug, a real limit of ElectIndex's two-party framing in
 nonpartisan-primary states. **Action:** no fix planned; revisit only if
 this project's scope ever needs correct handling of same-party general
 elections specifically.
+42. **New, opened, NOT YET RESOLVED — Session 4.3 (2026-09-08):** the
+roadmap's "at least one real week of logged weather flags reviewed for
+completeness" validation item could not be met — weather's CLV log did
+not exist before this session, so no real elapsed time across repeated
+runs exists yet to review. Following this project's own established
+pattern (Sessions 2.1/2.2/2.4), a real-week-equivalent evidence-based
+condition was considered but not substituted, since no repeated runs
+exist yet to derive one from. **Action:** revisit once weather's
+`clv_logger.py` has run automatically over real elapsed time — tied
+practically to Session 4.5 (Automation Adaptation), or several manual
+runs spread over real days in the meantime.
+43. **New, opened, NOT YET RESOLVED — Session 4.3 (2026-09-08):** a real
+dtype-coercion bug was found and fixed in the new weather/politics CLV
+code (`load_clv_log_generic()`) — a column still entirely blank after
+its first run gets inferred as `float64` by pandas, and writing a real
+string timestamp into it on a later run raises a hard `TypeError`. The
+same load-then-string-assign pattern exists in pick'em's own untouched
+Session 2.4 code (`load_clv_log_pickem()`), which was deliberately left
+unchanged this session. Not yet confirmed to actually fail on real
+pick'em data (it may simply not have been hit yet), but it is a real,
+live risk to Track 1's production pipeline. **Action:** check whether
+`data/pickem/clv_log.csv` has any column that has stayed entirely blank
+since Session 2.4, and patch `load_clv_log_pickem()` the same way if so
+— a small, separate follow-up, not required to close any currently open
+session.
 
 ---
 *Update this file at the close of each future session, per the project's

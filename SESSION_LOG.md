@@ -4844,3 +4844,280 @@ third is deferred for a real, evidence-based reason (no resolved contracts
 exist yet to check against) rather than left silently incomplete. Next
 session is Session 5.3 — CLV Logging Hook-In.
 
+
+## Session 4.3 — CLV Logging Hook-In (Weather)
+
+**Date completed:** 2026-09-08
+**Status:** ⚠️ Complete with caveats — see Open items below.
+
+**What was actually done:**
+1. Session 4.3 was marked "In progress" in ROADMAP.md (opened in parallel
+with Session 4.2 on 2026-09-07), but real work on it never happened —
+the file on GitHub going into this session was still exactly the
+Session 2.4 pick'em-only version of `clv_logger.py`, with no track
+parameter at all. This was found and flagged to the user before any new
+code was written, rather than silently building a politics-only patch
+(Session 5.3) on top of a file that still didn't generalize. User chose
+to close both Session 4.3 and Session 5.3 together in the same session
+(see Session 5.3's own entry below for the politics-specific half of
+this work).
+2. Rebuilt `clv_logger.py` to accept a `--track {pickem, weather,
+politics}` argument. Pick'em's exact Session 2.4 code path, file, and
+column schema were left completely unchanged — a deliberate,
+non-negotiable choice, since Track 1's live GitHub Actions automation
+(Session 2.7) and Cloudflare Pages frontend (Session 2.8) already read
+that file's existing schema in production. A new, shared "core" column
+set plus a generic open/refresh/close lifecycle engine
+(`generic_process_run`) was built for weather and politics to use
+instead of duplicating pick'em's bespoke logic, since neither needs
+pick'em's cross-row consensus search (see Session 5.3's entry for why
+politics differs; weather has no consensus at all — Kalshi is the only
+venue Session 4.1 ingests).
+3. Weather-specific design: each contract is a single yes/no question
+(mirroring pick'em's over/under mutual exclusivity), so a flag can only
+fire on one side. `flag_id` is the contract's own `market_ticker`. No
+cross-venue consensus exists for this track (a real, stated limitation,
+not a bug) — the benchmark that does apply is the same own-line-
+movement-to-close signal pick'em uses (a contract that stops appearing
+in a fresh pull has settled or been delisted; its last-seen price is
+frozen as closing).
+4. Built synthetic fixtures matching weather's real output schema and ran
+the new track through multiple rounds (new flag, price refresh,
+close-on-disappearance) before touching any real data. This caught two
+real bugs:
+- A "no"-side flag's refreshed price was being read from the raw
+"yes"-side mid price instead of being converted for the side it was
+actually flagged on. Fixed with a side-aware `price_for_side_weather()`
+function.
+- Writing a real timestamp into a column pandas had inferred as
+`float64` (because it was still entirely blank after the first run)
+raised a hard `TypeError` on the second run. Fixed by forcing object
+dtype when a track's log is loaded from CSV
+(`load_clv_log_generic()`). This same load-then-string-assign pattern
+exists in pick'em's own untouched Session 2.4 code — flagged as a real,
+not-yet-fixed risk to Track 1's live pipeline (Open Decision #43).
+5. Ran the fixed script against real, live data: pulled the real, current
+`data/weather/estimates/weather_estimates_latest.csv` (288 real
+contracts) directly from GitHub (browser-captured token + `curl`, the
+project's existing private-repo download pattern) and ran
+`clv_logger.py --track weather` against it. Result: 203 of 288 real
+contracts flagged, zero errors, zero nulls in any required field, edges
+ranging 0.031–0.994.
+6. One real flagged row (`KXHIGHNY-26SEP07-T77`, "yes" side, model 0.91 vs.
+market 0.015 — a ~90-point apparent edge) was reviewed by hand rather
+than accepted at face value. Likely explanation: it's a same-day
+contract (`lead_days: 0`); Kalshi's market price may reflect the real
+observed temperature trend that morning, while the weather model
+(Session 4.2) is still anchored to that morning's NWS forecast with no
+way to know if the real temperature already ran hotter than forecast by
+the time of a same-day quote. This is a real, plausible gap in the
+weather model's own inputs (Session 4.2's territory), not a bug in this
+session's logging — and it is exactly the kind of case CLV logging
+exists to catch: the flag is now open, and its eventual closing price
+will show whether the model was right or stale.
+7. The roadmap's second validation item for this session — "at least one
+real week of logged weather flags reviewed for completeness" — could not
+be met with a single snapshot run; it requires real elapsed time across
+repeated runs, which doesn't exist yet since weather's CLV log didn't
+exist before this session. Following this project's own established
+pattern (Sessions 2.1/2.2/2.4 all replaced a literal calendar duration
+with an evidence-based condition, always by explicit agreement with the
+user, never silently), this was raised directly with the user rather
+than assumed away. **User's explicit choice: leave this one item open
+and deferred, to be revisited once weather's `clv_logger.py` has run
+automatically over real elapsed time** — practically, once Session 4.5
+(Automation Adaptation) wires it into a schedule, or the user runs it
+manually several times over real days in the meantime.
+
+**Files created/modified:**
+- `/scripts/calibration/clv_logger.py` (extended in place — pick'em's
+Session 2.4 code path unchanged; weather and politics paths added; see
+Session 5.3's entry for the politics-specific half)
+
+**Validation results:**
+- [x] Weather track flags log correctly into the same CLV structure —
+pass, confirmed against real live data (288 real contracts read, 203
+flagged, 0 errors, 0 nulls in required fields, edges 0.031–0.994).
+Confirmed correct behavior in all three lifecycle states (new flag,
+price-refresh on an open flag, close-with-frozen-price on
+disappearance) via synthetic fixtures before touching real data.
+- [ ] At least one real week of logged weather flags reviewed for
+completeness — **NOT MET, explicitly deferred per user direction** (see
+item 7 above and Open Decision #42). Not a code defect — the mechanism
+itself is proven correct; only real elapsed time across repeated runs
+is missing, and that time doesn't exist yet for this newly-built track.
+
+**Decisions made:**
+1. Generalized `clv_logger.py` with a `--track` parameter rather than
+building a politics-only patch on top of the still pick'em-only file
+found on GitHub — closing the real Session 4.3 gap and Session 5.3
+together, per explicit user direction, rather than deferring the weather
+gap further.
+2. Pick'em's exact schema, file, and logic are left fully untouched — a
+non-negotiable choice given Track 1's live production dependencies.
+Weather and politics share a new, generic lifecycle engine instead of
+each reinventing pick'em's bespoke cross-row consensus search, which
+neither track's own data shape actually needs.
+3. Weather has no cross-venue consensus (Kalshi is the only venue
+ingested) — `consensus_available` is always `False` for this track. A
+real, stated limitation of the current data source, not something this
+session invented or should silently work around.
+4. The "one real week" validation item was not silently marked complete
+or silently left blank — raised directly with the user, who chose to
+leave Session 4.3 explicitly open rather than substitute a different
+evidence-based condition right now. See Open Decision #42.
+
+**Corrections/reversals during the session:**
+1. **A "no"-side weather flag's refresh logic initially read the wrong
+side's price.** `market_price_lookup` originally stored only the raw
+"yes"-side mid price; a flag logged on the "no" side was being
+refreshed with that same yes-side number instead of its own converted
+value. Found via synthetic smoke testing, before any real data was
+touched. Fixed with a side-aware `price_for_side_weather()` function
+(and the equivalent no-op version for politics, `price_for_side_politics()`,
+since a politics flag_id already encodes its own side).
+2. **A dtype-coercion crash on the second run.** `load_clv_log_generic()`
+originally loaded a track's log straight from `pandas.read_csv()` with
+no dtype handling; a column that was still entirely blank after its
+first run (e.g. `closing_pulled_at`, before anything had closed) got
+inferred as `float64`, and writing a real string timestamp into it on a
+later run raised `TypeError: Invalid value ... for dtype 'float64'`.
+Found via synthetic smoke testing (a second run simulating a closed
+flag), before any real data was touched. Fixed by forcing object dtype
+on load. This same pattern exists in pick'em's own untouched
+`load_clv_log_pickem()` — not fixed this session (pick'em was out of
+scope), logged as Open Decision #43 for a future look.
+
+**Open items / deferred validations:**
+- "At least one real week of logged weather flags reviewed for
+completeness" — explicitly deferred by user direction to whenever
+weather's `clv_logger.py` has run automatically over real elapsed time
+(tied practically to Session 4.5, Automation Adaptation). See Open
+Decision #42.
+- The same load-then-string-assign dtype pattern that was found and fixed
+in the new weather/politics code likely also exists in pick'em's
+original, untouched Session 2.4 code (`load_clv_log_pickem()`) — not
+yet confirmed or fixed, since pick'em was explicitly out of scope this
+session. A real, live risk to Track 1's production pipeline. See Open
+Decision #43.
+- `KXHIGHNY-26SEP07-T77`'s ~90-point apparent edge (see item 6 above) is
+not fixed or explained away this session — it's now a real, open,
+logged flag; its eventual closing price is what will actually answer
+whether it was real edge or a model staleness gap. No action needed
+until then.
+
+**Status at close of session:** Left explicitly open (⚠️ Complete with
+caveats), by mutual agreement with the user. The CLV logging mechanism
+itself is fully built and proven correct against real, live weather data
+— closing the real gap that had sat open since Session 4.3 was first
+started on 2026-09-07. The one remaining item (a real week of accumulated
+logged data) genuinely cannot be met yet and does not block Phase 5 or
+any other downstream session; revisit once weather's pipeline has run
+repeatedly over real time.
+
+---
+
+## Session 5.3 — CLV Logging Hook-In (Politics)
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+This session's engineering work was done together with Session 4.3 above,
+in the same generalization of `clv_logger.py` — see that entry for the
+full account of what changed in the shared code (the `--track` parameter,
+the generic lifecycle engine, the two real bugs found and fixed via
+synthetic smoke testing, and why pick'em's own code path was left
+untouched). This entry covers what's specific to the politics track.
+
+1. Politics-specific design: unlike pick'em/weather's single mirrored
+contract, each (race, party, venue) cell is its own independent buy-side
+question — a race's Dem and Rep cells are two separate markets that
+need not sum to 1 — so each cell is evaluated for its own edge
+independently, using the edge Session 5.2's `politics_model.py` already
+computes (`{venue}_edge_vs_raw_{party}`). `flag_id` is
+`venue|race_id|party`, not a market ticker — Session 5.2's own output
+does not carry per-venue ticker IDs forward, and this identity is stable
+for the life of the race regardless.
+2. Politics' consensus benchmark is a same-row lookup, not pick'em's
+cross-row search: Session 5.2's estimates file is already wide-format,
+with both venues' prices for the same race/party sitting in the same
+row, so the other venue's own raw price is read directly rather than
+searched for.
+3. Ran the fixed script against real, live data: pulled the real, current
+`data/politics/estimates/politics_estimates_latest.csv` (866 real
+race/party rows) directly from GitHub (same browser-captured-token +
+`curl` pattern used for weather) and ran `clv_logger.py --track
+politics` against it. Result: 415 of 866 real cells flagged, zero
+errors, zero nulls in required fields, edges ranging 0.030–0.090 (all
+above the 0.03 threshold as designed), 129 of the 415 flags with a real,
+live cross-venue consensus price already available.
+4. Reviewed the real flag rate (48% of estimated cells) directly rather
+than accepting it uncritically: this is not a defect in this session's
+logging — it's a real, structural property of Session 5.2's own
+correction model (a calibration slope > 1 systematically pushes
+whichever side is already favored in the raw price further up), so a
+large share of favored-side cells flag by construction. Not fixed or
+adjusted this session (out of scope — Session 5.2's own model territory),
+but named explicitly since it means Session 5.4 (Sizing Adaptation) will
+need to handle a real volume of open positions.
+5. Addressed the roadmap's own explicit question for this session — is the
+logged benchmark meaningful pre-resolution, given these races resolve
+in roughly two months, not hours or days — with two distinct real
+answers rather than one blended one: the consensus benchmark (other
+venue's own price on the same race) does not depend on time to
+resolution at all and is already firing on real data today (129 of 415
+flags); the closing benchmark (own-line movement, via disappearance from
+the feed) will mostly stay open for weeks, since these races won't drop
+out of the feed until Election Day or a race being called early — a
+real, expected shape tied directly to Session 5.4's own sizing concern
+(capital tied up for weeks/months), not a defect to fix here.
+
+**Files created/modified:**
+- `/scripts/calibration/clv_logger.py` (same file as Session 4.3's entry —
+shared engineering work, both tracks' paths added together)
+
+**Validation results:**
+- [x] Politics track flags log correctly into shared CLV structure —
+pass, confirmed against real live data (866 real rows read, 415
+flagged, 0 errors, 0 nulls in required fields, edges 0.030–0.090).
+Confirmed correct behavior in all three lifecycle states (new flag,
+price-refresh, close-on-race-disappearance) via synthetic fixtures
+before touching real data.
+- [x] Confirmed the logged benchmark is meaningful pre-resolution, not
+just a placeholder — pass, per item 5 above: the consensus benchmark is
+real and time-independent, confirmed firing on 129 of 415 real flags
+in this run alone; the closing benchmark's expected long-open shape for
+this track is named explicitly, not silently treated as a gap.
+
+**Decisions made:**
+1. `flag_id = venue|race_id|party`, not a market ticker — a deliberate
+choice given Session 5.2's output doesn't carry per-venue ticker IDs
+forward, and this identity is genuinely more stable for this track's
+life-of-the-race markets than a ticker would be anyway.
+2. Consensus is a same-row lookup, not a cross-row search — a real
+structural difference from pick'em's data shape, not an inconsistency
+in how the two tracks were built.
+3. Only positive-edge (buy-side) cells are flagged, matching pick'em and
+weather's own precedent — no short/fade-side flagging logic exists yet
+in any track.
+4. The real, high flag rate (48%) was named and explained rather than
+silently accepted or silently "fixed" by tightening the threshold —
+Session 5.2's own correction-model design is the actual cause, and
+adjusting it is that session's territory, not this one's.
+
+**Corrections/reversals during the session:**
+- None beyond the two engineering bugs already logged under Session 4.3's
+entry above (shared codebase — both fixes apply to this track too, and
+were confirmed against politics' own synthetic fixtures as well as
+weather's).
+
+**Open items / deferred validations:**
+- None blocking — both of this session's own roadmap validation items are
+met on real, live data.
+- The real 48% flag rate is a heads-up for Session 5.4 (Sizing Adaptation),
+not an open item of this session's own — see Decision #4 above.
+
+**Status at close of session:** Fully closed out, by explicit agreement
+with the user. Both roadmap validation items pass directly against real,
+live politics data.
