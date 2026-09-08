@@ -94,11 +94,23 @@ this session - the same "State House/Senate/Assembly District N"
 structural pattern is applied to Polymarket titles too, as a reasonable
 structural guess pending a real match, and every match this path
 produces is logged by ticker/title so a human can spot-check it.
-SESSION 5.1c PATCH: Polymarket candidate-name matching (title-substring
-against dem_name/rep_name, see match_polymarket_candidate() below) is
-similarly unvalidated against a real multi-candidate Polymarket title
-this session - the real per-run unmatched-candidate count is the honest
-signal of whether it's working, logged every run, not assumed correct.
+
+SESSION 5.1c PATCH, REAL FIX AFTER THE FIRST LIVE RUN: Polymarket
+candidate-name matching was originally written as a last-name substring
+check (mirroring Kalshi's approach) - the first real live run of this
+script (2026-09-08) matched 0 of 3,416 real open Polymarket candidate
+markets, checked directly against the real output. Inspecting the real
+unmatched titles showed why: Polymarket's actual down-ballot format
+states the PARTY directly ("Will the Republican Party win the AL-01
+House seat?" / "Will the Democratic Party win the AL-01 House seat?"),
+confirmed as the real, dominant pattern across all 427 races with a
+Polymarket market this run. match_polymarket_candidate() (below) now
+checks for that direct party word first, falling back to the original
+name-substring check only if neither party word is present. A real
+minor-candidate tier also exists (lettered placeholders - "Will A win
+the AL-01 House seat?", etc. - plus a catch-all "Will another party
+win...?") with no name or party to match against; these are correctly
+left unmatched, not a matching failure.
 
 LEGAL FOOTPRINT - REAL, DATED, SOURCED FINDINGS (closes Open Decision #22,
 UNCHANGED FROM SESSION 5.1)
@@ -327,17 +339,51 @@ def match_kalshi_candidate(candidate_name: Optional[str], dem_name: str, rep_nam
     return None
 
 
+_POLYMARKET_PARTY_WORD_PATTERN = {
+    "rep": re.compile(r"\brepublican\b", re.IGNORECASE),
+    "dem": re.compile(r"\bdemocrat(ic)?\b", re.IGNORECASE),
+}
+
+
 def match_polymarket_candidate(title: Optional[str], dem_name: str, rep_name: str) -> Optional[str]:
-    """Polymarket's real market objects do not carry a structured
-    per-candidate name field the way Kalshi's yes_sub_title does (not
-    confirmed live this session - see module docstring). This matches by
-    checking whether the candidate's last name appears as a substring of
-    the market title instead. If both parties' last names appear (or
-    neither does), the match is genuinely ambiguous and returns None -
-    logged as unmatched rather than guessed either way."""
+    """SESSION 5.1c PATCH, REAL FIX FOUND AND APPLIED AFTER THE FIRST LIVE
+    RUN (2026-09-08): the original version of this function only checked
+    for a candidate's LAST NAME in the title, on the assumption that
+    Polymarket names a specific candidate the way Kalshi's yes_sub_title
+    does. The first real live run of this script matched 0 of 3,416 real
+    open Polymarket candidate markets - checked directly against the real
+    output, every one of them fell through to
+    polymarket_unmatched_candidates. Inspecting the real unmatched titles
+    (2026-09-08) showed why: Polymarket's actual down-ballot title format
+    states the PARTY directly, in plain text - "Will the Republican Party
+    win the AL-01 House seat?" / "Will the Democratic Party win the AL-01
+    House seat?" - not a candidate's name at all. 427 of 427 races with a
+    Polymarket market had exactly this pair, confirmed live. A separate,
+    real minor-candidate tier also exists on Polymarket, structured as
+    lettered placeholders ("Will A win the AL-01 House seat?", "Will B
+    win...", etc.) plus a catch-all "Will another party win...?" - these
+    are real markets with no name or party to match against, correctly
+    left unmatched, not a matching failure.
+
+    This function now checks for the direct party word FIRST (the
+    real, dominant, confirmed-live pattern), and falls back to the
+    original last-name substring check only if neither party word is
+    present - so a Polymarket title that names a specific candidate
+    directly (if one is ever found) is still matched, not missed."""
     t = _normalize_name(title)
     if not t:
         return None
+
+    rep_word = bool(_POLYMARKET_PARTY_WORD_PATTERN["rep"].search(t))
+    dem_word = bool(_POLYMARKET_PARTY_WORD_PATTERN["dem"].search(t))
+    if rep_word and not dem_word:
+        return "rep"
+    if dem_word and not rep_word:
+        return "dem"
+    # Neither or both party words present (e.g. "another party", a
+    # lettered placeholder, or a genuinely ambiguous title) - fall back
+    # to the original candidate-name substring check before giving up.
+
     dem_last = _last_name(dem_name)
     rep_last = _last_name(rep_name)
     dem_hit = bool(dem_last) and dem_last in t
