@@ -146,3 +146,6 @@
 2026-09-07 20:02:52,521 UTC | INFO | Using historical Kalshi snapshot: kalshi_weather_markets_20260906T190840Z.csv
 2026-09-07 20:02:52,522 UTC | INFO | Using historical forecast snapshot: nws_forecast_20260906T190917Z.csv
 2026-09-07 20:04:05,031 UTC | INFO | === Resolved-market sanity check complete: {'resolved_contracts_checked': 228, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\backtest\\resolved_market_check_20260907T200405Z.csv', 'directional_accuracy': 0.8158, 'brier_score': 0.1342, 'brier_score_vs_coin_flip_baseline_0_25': 0.1158} ===
+2026-09-08 12:46:45,134 UTC | INFO | === Politics estimation run starting (Session 5.2, underconfidence-correction model) ===
+2026-09-08 12:46:45,181 UTC | INFO | Estimation status counts across all (venue, party) cells: {'estimated': 151, 'no_market_price': 1581}
+2026-09-08 12:46:45,196 UTC | INFO | === Politics estimation run complete: 433 race rows read, 866 (race, party) rows written (OK) ===
