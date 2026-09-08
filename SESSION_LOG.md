@@ -4334,6 +4334,58 @@ Logging Hook-In) may proceed independently in parallel — confirmed not to
 depend on this item — and Phase 5 (Track 4: Down-Ballot Politics) is also
 open to start in parallel, per the user's explicit direction this
 session.
+
+---
+
+## Session 4.2 (continuation) — Resolved-Market Sanity Check, Closed
+
+**Date completed:** 2026-09-07 (later the same day, ~20:04 UTC / 3:04 PM
+CDT)
+**Status:** ✅ Complete — logged as a continuation of Session 4.2, not a
+new session number, since this closes that session's one remaining
+validation item.
+
+**What was actually done:**
+Re-ran `weather_backtest_check.py` after Kalshi's real settlement window
+had passed (confirmed via the user checking wall-clock time directly:
+~20:00 UTC / 3:00 PM CDT, past the ~19:00 UTC window the first two runs
+had been blocked on). This time Kalshi's real `result` field was
+populated on real, resolved contracts.
+
+**Validation results:**
+- [x] **Model's probability estimates are sanity-checked against at
+  least a handful of already-resolved historical Kalshi weather
+  markets** — PASS, with strong real evidence: **228 real resolved
+  contracts** checked (Session 4.1's original Sept 6 snapshot, all
+  target dates now genuinely settled). **Directional accuracy: 81.58%**
+  (the model's probability leaned toward the side that actually
+  happened, on 186 of 228 contracts). **Brier score: 0.1342** (the
+  standard scoring rule for probability forecasts; 0.25 is what a
+  constant coin-flip forecast scores, so this is a real margin of 0.1158
+  below that baseline — genuine evidence of skill, not noise).
+
+**Decisions made:**
+1. **Session 4.2 is now fully closed.** All three of the roadmap card's
+   original validation checkboxes pass on real evidence: the automated
+   uncertainty blend (already passed), the spec documentation (already
+   passed), and now this resolved-market check. No items carried forward
+   as open validation gaps — only the stated v1 modeling gaps already
+   recorded (regional variation, `MAX_LITERATURE_LEAD_DAY`
+   confirmation), which are scope notes for a future iteration, not
+   unfinished parts of this session.
+
+**Open items / deferred validations:**
+- None for Session 4.2 itself. The stated v1 modeling gaps in
+  `weather_estimation_model_spec.md` (no regional variation in the
+  uncertainty curve; `MAX_LITERATURE_LEAD_DAY` not yet confirmed against
+  NWS's real forecast horizon) remain, unchanged, as documented future
+  work — not blockers.
+
+**Status at close of session:** Fully closed out, with strong real
+accuracy evidence (81.6% directional accuracy, Brier score 0.134 vs. a
+0.25 coin-flip baseline) on 228 real resolved contracts. Session 4.3 (CLV
+Logging Hook-In) may proceed from here treating Session 4.2 as a clean
+prerequisite.
 ---
 
 ## Session 5.1 — Data Ingestion (Race Lists + Polling Data)

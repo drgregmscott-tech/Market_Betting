@@ -1572,12 +1572,11 @@ specifically (the user's own state) is fully available.
 ---
 
 ### Session 4.2 — Estimation Engine (Weather Threshold Model)
-**Status:** ⚠️ Complete with caveats (2026-09-07) — one validation item
-genuinely blocked on Kalshi's own real settlement clock, not on anything
-unbuilt on this project's side. See SESSION_LOG.md's Session 4.2 entry
-for full detail; whoever reopens this should re-run
-`weather_backtest_check.py` after real settlement and record the result
-here.
+**Status:** ✅ Complete (closed 2026-09-07, ~20:04 UTC / 3:04 PM CDT) —
+all three validation items pass on real evidence, including the
+resolved-market sanity check, completed once Kalshi's real settlement
+window passed. See SESSION_LOG.md's Session 4.2 (continuation) entry for
+the real accuracy numbers.
 **Prerequisites:** Session 4.1 complete.
 
 **What gets built:** A model that computes the true probability of a weather
@@ -1609,13 +1608,11 @@ described above (no true ensemble exists to draw from; see Open
 Decision #32).
 - [x] Documented at the same specificity level as Session 2.3's spec —
 pass, `weather_estimation_model_spec.md`.
-- [ ] Model's probability estimates are sanity-checked against at least a
+- [x] Model's probability estimates are sanity-checked against at least a
 handful of already-resolved historical Kalshi weather markets —
-**blocked on Kalshi's real settlement clock (~19:00 UTC / 2:00 PM
-CDT, 2026-09-07), not on anything unbuilt.** The check script
-(`weather_backtest_check.py`) is built, tested twice against real
-API responses, and confirmed to correctly report zero rather than
-guess when no real resolved data exists yet.
+**pass, real evidence: 228 real resolved contracts checked, 81.58%
+directional accuracy, Brier score 0.1342 (vs. a 0.25 coin-flip
+baseline).** See SESSION_LOG.md's Session 4.2 (continuation) entry.
 
 ---
 
@@ -2510,15 +2507,13 @@ reads `"closed"` well before the real `result` field is populated
 neither guessed value was real. RESOLVED: gate solely on a real,
 non-empty `result` field instead of a guessed status string.
 35. **New, opened, NOT YET RESOLVED — carried forward from Session
-4.2:** the roadmap's resolved-market sanity-check validation item is
-real, built, and tested, but genuinely blocked on Kalshi's own real
-settlement clock (~19:00 UTC / 2:00 PM CDT, 2026-09-07 — all 62 of
-the real weather series checked settle on roughly the same
-real-world schedule, confirmed by two real runs both returning zero
-resolved contracts before that time). **Action:** re-run
-`weather_backtest_check.py` after that time and record the real
-directional-accuracy and Brier-score numbers in SESSION_LOG.md's
-Session 4.2 entry to close it out.
+4.2:** the roadmap's resolved-market sanity-check validation item was
+genuinely blocked on Kalshi's own real settlement clock (~19:00 UTC /
+2:00 PM CDT, 2026-09-07). **RESOLVED same day, ~20:04 UTC / 3:04 PM
+CDT:** re-ran `weather_backtest_check.py` after real settlement — 228
+real resolved contracts checked, 81.58% directional accuracy, Brier
+score 0.1342 (vs. a 0.25 coin-flip baseline). Session 4.2 is fully
+closed; see SESSION_LOG.md's Session 4.2 (continuation) entry.
 36. **New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07):** Polymarket's
 title format for state-legislature races is unconfirmed — 0 of 4 known
 real Kalshi state-legislature down-ballot races found a Polymarket

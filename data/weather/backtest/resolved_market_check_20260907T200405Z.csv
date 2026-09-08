@@ -1,0 +1,229 @@
+market_ticker,city_label,target_date,strike_type,floor_strike,cap_strike,forecast_value_f,lead_days,model_prob_yes,sigma_source,real_result,directionally_correct,brier_component
+KXLOWTSDF-26SEP06-T72,Lowest Temperature SDX,2026-09-06,greater,72.0,,73.0,0,0.7245,real_measured,no,False,0.5249
+KXLOWTSDF-26SEP06-T65,Lowest Temperature SDX,2026-09-06,less,,65.0,73.0,0,0.0,real_measured,no,True,0.0
+KXLOWTSDF-26SEP06-B71.5,Lowest Temperature SDX,2026-09-06,between,71.0,72.0,73.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTSDF-26SEP06-B69.5,Lowest Temperature SDX,2026-09-06,between,69.0,70.0,73.0,0,0.0283,real_measured,yes,False,0.9443
+KXLOWTSDF-26SEP06-B67.5,Lowest Temperature SDX,2026-09-06,between,67.0,68.0,73.0,0,0.0013,real_measured,no,True,0.0
+KXLOWTSDF-26SEP06-B65.5,Lowest Temperature SDX,2026-09-06,between,65.0,66.0,73.0,0,0.0,real_measured,no,True,0.0
+KXHIGHCHI-26SEP06-T82,Highest temperature in Chicago,2026-09-06,greater,82.0,,79.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHCHI-26SEP06-T75,Highest temperature in Chicago,2026-09-06,less,,75.0,79.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHCHI-26SEP06-B81.5,Highest temperature in Chicago,2026-09-06,between,81.0,82.0,79.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHCHI-26SEP06-B79.5,Highest temperature in Chicago,2026-09-06,between,79.0,80.0,79.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHCHI-26SEP06-B77.5,Highest temperature in Chicago,2026-09-06,between,77.0,78.0,79.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHCHI-26SEP06-B75.5,Highest temperature in Chicago,2026-09-06,between,75.0,76.0,79.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTSEA-26SEP06-T54,Low Temperature Seattle,2026-09-06,greater,54.0,,52.0,0,0.1165,real_measured,no,True,0.0136
+KXLOWTSEA-26SEP06-T47,Low Temperature Seattle,2026-09-06,less,,47.0,52.0,0,0.0014,real_measured,no,True,0.0
+KXLOWTSEA-26SEP06-B53.5,Low Temperature Seattle,2026-09-06,between,53.0,54.0,52.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTSEA-26SEP06-B51.5,Low Temperature Seattle,2026-09-06,between,51.0,52.0,52.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTSEA-26SEP06-B49.5,Low Temperature Seattle,2026-09-06,between,49.0,50.0,52.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTSEA-26SEP06-B47.5,Low Temperature Seattle,2026-09-06,between,47.0,48.0,52.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHLAX-26SEP06-T83,Highest temperature in Los Angeles,2026-09-06,greater,83.0,,78.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHLAX-26SEP06-T76,Highest temperature in Los Angeles,2026-09-06,less,,76.0,78.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHLAX-26SEP06-B82.5,Highest temperature in Los Angeles,2026-09-06,between,82.0,83.0,78.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHLAX-26SEP06-B80.5,Highest temperature in Los Angeles,2026-09-06,between,80.0,81.0,78.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHLAX-26SEP06-B78.5,Highest temperature in Los Angeles,2026-09-06,between,78.0,79.0,78.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHLAX-26SEP06-B76.5,Highest temperature in Los Angeles,2026-09-06,between,76.0,77.0,78.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTDAL-26SEP06-T81,Lowest temperature Dallas,2026-09-06,greater,81.0,,79.0,0,0.1165,real_measured,no,True,0.0136
+KXLOWTDAL-26SEP06-T74,Lowest temperature Dallas,2026-09-06,less,,74.0,79.0,0,0.0014,real_measured,no,True,0.0
+KXLOWTDAL-26SEP06-B80.5,Lowest temperature Dallas,2026-09-06,between,80.0,81.0,79.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTDAL-26SEP06-B78.5,Lowest temperature Dallas,2026-09-06,between,78.0,79.0,79.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTDAL-26SEP06-B76.5,Lowest temperature Dallas,2026-09-06,between,76.0,77.0,79.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTDAL-26SEP06-B74.5,Lowest temperature Dallas,2026-09-06,between,74.0,75.0,79.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHTSFO-26SEP06-T72,San Francisco High Temperature Daily,2026-09-06,greater,72.0,,69.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHTSFO-26SEP06-T65,San Francisco High Temperature Daily,2026-09-06,less,,65.0,69.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHTSFO-26SEP06-B71.5,San Francisco High Temperature Daily,2026-09-06,between,71.0,72.0,69.0,0,0.0797,real_measured,yes,False,0.847
+KXHIGHTSFO-26SEP06-B69.5,San Francisco High Temperature Daily,2026-09-06,between,69.0,70.0,69.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTSFO-26SEP06-B67.5,San Francisco High Temperature Daily,2026-09-06,between,67.0,68.0,69.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTSFO-26SEP06-B65.5,San Francisco High Temperature Daily,2026-09-06,between,65.0,66.0,69.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTATL-26SEP06-T77,Low Temperature Atlanta,2026-09-06,greater,77.0,,75.0,0,0.1165,real_measured,no,True,0.0136
+KXLOWTATL-26SEP06-T70,Low Temperature Atlanta,2026-09-06,less,,70.0,75.0,0,0.0014,real_measured,no,True,0.0
+KXLOWTATL-26SEP06-B76.5,Low Temperature Atlanta,2026-09-06,between,76.0,77.0,75.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTATL-26SEP06-B74.5,Low Temperature Atlanta,2026-09-06,between,74.0,75.0,75.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTATL-26SEP06-B72.5,Low Temperature Atlanta,2026-09-06,between,72.0,73.0,75.0,0,0.0797,real_measured,yes,False,0.847
+KXLOWTATL-26SEP06-B70.5,Low Temperature Atlanta,2026-09-06,between,70.0,71.0,75.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHDEN-26SEP06-T96,Highest temperature in Denver,2026-09-06,greater,96.0,,92.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHDEN-26SEP06-T89,Highest temperature in Denver,2026-09-06,less,,89.0,92.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHDEN-26SEP06-B95.5,Highest temperature in Denver,2026-09-06,between,95.0,96.0,92.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHDEN-26SEP06-B93.5,Highest temperature in Denver,2026-09-06,between,93.0,94.0,92.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHDEN-26SEP06-B91.5,Highest temperature in Denver,2026-09-06,between,91.0,92.0,92.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHDEN-26SEP06-B89.5,Highest temperature in Denver,2026-09-06,between,89.0,90.0,92.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTBOS-26SEP06-T62,Low Temperature Boston,2026-09-06,greater,62.0,,59.0,0,0.0368,real_measured,no,True,0.0014
+KXLOWTBOS-26SEP06-T55,Low Temperature Boston,2026-09-06,less,,55.0,59.0,0,0.0085,real_measured,no,True,0.0001
+KXLOWTBOS-26SEP06-B61.5,Low Temperature Boston,2026-09-06,between,61.0,62.0,59.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTBOS-26SEP06-B59.5,Low Temperature Boston,2026-09-06,between,59.0,60.0,59.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTBOS-26SEP06-B57.5,Low Temperature Boston,2026-09-06,between,57.0,58.0,59.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTBOS-26SEP06-B55.5,Low Temperature Boston,2026-09-06,between,55.0,56.0,59.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTPHX-26SEP06-T109,Phoenix High Temperature Daily,2026-09-06,greater,109.0,,106.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHTPHX-26SEP06-T102,Phoenix High Temperature Daily,2026-09-06,less,,102.0,106.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHTPHX-26SEP06-B108.5,Phoenix High Temperature Daily,2026-09-06,between,108.0,109.0,106.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTPHX-26SEP06-B106.5,Phoenix High Temperature Daily,2026-09-06,between,106.0,107.0,106.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHTPHX-26SEP06-B104.5,Phoenix High Temperature Daily,2026-09-06,between,104.0,105.0,106.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTPHX-26SEP06-B102.5,Phoenix High Temperature Daily,2026-09-06,between,102.0,103.0,106.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTSATX-26SEP06-T94,San Antonio Daily Maximum Temperature,2026-09-06,less,,94.0,96.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHTSATX-26SEP06-T101,San Antonio Daily Maximum Temperature,2026-09-06,greater,101.0,,96.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHTSATX-26SEP06-B98.5,San Antonio Daily Maximum Temperature,2026-09-06,between,98.0,99.0,96.0,0,0.0797,real_measured,yes,False,0.847
+KXHIGHTSATX-26SEP06-B96.5,San Antonio Daily Maximum Temperature,2026-09-06,between,96.0,97.0,96.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTSATX-26SEP06-B94.5,San Antonio Daily Maximum Temperature,2026-09-06,between,94.0,95.0,96.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTSATX-26SEP06-B100.5,San Antonio Daily Maximum Temperature,2026-09-06,between,100.0,101.0,96.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHTEWR-26SEP06-T82,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,greater,82.0,,76.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHTEWR-26SEP06-T75,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,less,,75.0,76.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHTEWR-26SEP06-B81.5,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,between,81.0,82.0,76.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTEWR-26SEP06-B79.5,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,between,79.0,80.0,76.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTEWR-26SEP06-B77.5,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,between,77.0,78.0,76.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHTEWR-26SEP06-B75.5,"Newark, NJ (EWR) Daily Max Temp",2026-09-06,between,75.0,76.0,76.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTDC-26SEP06-T69,Lowest Temperature DC ,2026-09-06,greater,69.0,,68.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTDC-26SEP06-T62,Lowest Temperature DC ,2026-09-06,less,,62.0,68.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTDC-26SEP06-B68.5,Lowest Temperature DC ,2026-09-06,between,68.0,69.0,68.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTDC-26SEP06-B66.5,Lowest Temperature DC ,2026-09-06,between,66.0,67.0,68.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTDC-26SEP06-B64.5,Lowest Temperature DC ,2026-09-06,between,64.0,65.0,68.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTDC-26SEP06-B62.5,Lowest Temperature DC ,2026-09-06,between,62.0,63.0,68.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTSEA-26SEP06-T75,Seattle Maximum Temperature Daily,2026-09-06,greater,75.0,,73.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHTSEA-26SEP06-T68,Seattle Maximum Temperature Daily,2026-09-06,less,,68.0,73.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHTSEA-26SEP06-B74.5,Seattle Maximum Temperature Daily,2026-09-06,between,74.0,75.0,73.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHTSEA-26SEP06-B72.5,Seattle Maximum Temperature Daily,2026-09-06,between,72.0,73.0,73.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTSEA-26SEP06-B70.5,Seattle Maximum Temperature Daily,2026-09-06,between,70.0,71.0,73.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTSEA-26SEP06-B68.5,Seattle Maximum Temperature Daily,2026-09-06,between,68.0,69.0,73.0,0,0.0071,real_measured,no,True,0.0001
+KXLOWTSAN-26SEP06-T73,Low Temperature San Diego,2026-09-06,greater,73.0,,72.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTSAN-26SEP06-T66,Low Temperature San Diego,2026-09-06,less,,66.0,72.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTSAN-26SEP06-B72.5,Low Temperature San Diego,2026-09-06,between,72.0,73.0,72.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTSAN-26SEP06-B70.5,Low Temperature San Diego,2026-09-06,between,70.0,71.0,72.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTSAN-26SEP06-B68.5,Low Temperature San Diego,2026-09-06,between,68.0,69.0,72.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTSAN-26SEP06-B66.5,Low Temperature San Diego,2026-09-06,between,66.0,67.0,72.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTSAN-26SEP06-T89,High Temperature San Diego,2026-09-06,greater,89.0,,83.0,0,0.0002,real_measured,yes,False,0.9997
+KXHIGHTSAN-26SEP06-T82,High Temperature San Diego,2026-09-06,less,,82.0,83.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHTSAN-26SEP06-B88.5,High Temperature San Diego,2026-09-06,between,88.0,89.0,83.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTSAN-26SEP06-B86.5,High Temperature San Diego,2026-09-06,between,86.0,87.0,83.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTSAN-26SEP06-B84.5,High Temperature San Diego,2026-09-06,between,84.0,85.0,83.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTSAN-26SEP06-B82.5,High Temperature San Diego,2026-09-06,between,82.0,83.0,83.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTLV-26SEP06-T87,Las Vegas Max Daily Temperature,2026-09-06,greater,87.0,,85.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHTLV-26SEP06-T80,Las Vegas Max Daily Temperature,2026-09-06,less,,80.0,85.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHTLV-26SEP06-B86.5,Las Vegas Max Daily Temperature,2026-09-06,between,86.0,87.0,85.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTLV-26SEP06-B84.5,Las Vegas Max Daily Temperature,2026-09-06,between,84.0,85.0,85.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHTLV-26SEP06-B82.5,Las Vegas Max Daily Temperature,2026-09-06,between,82.0,83.0,85.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTLV-26SEP06-B80.5,Las Vegas Max Daily Temperature,2026-09-06,between,80.0,81.0,85.0,0,0.0071,real_measured,no,True,0.0001
+KXLOWTMIN-26SEP06-T69,Low  temperature Minnesota,2026-09-06,greater,69.0,,68.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTMIN-26SEP06-T62,Low  temperature Minnesota,2026-09-06,less,,62.0,68.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTMIN-26SEP06-B68.5,Low  temperature Minnesota,2026-09-06,between,68.0,69.0,68.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTMIN-26SEP06-B66.5,Low  temperature Minnesota,2026-09-06,between,66.0,67.0,68.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTMIN-26SEP06-B64.5,Low  temperature Minnesota,2026-09-06,between,64.0,65.0,68.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTMIN-26SEP06-B62.5,Low  temperature Minnesota,2026-09-06,between,62.0,63.0,68.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTMIN-26SEP06-T86,Minneapolis Daily High Temperature,2026-09-06,greater,86.0,,84.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHTMIN-26SEP06-T79,Minneapolis Daily High Temperature,2026-09-06,less,,79.0,84.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHTMIN-26SEP06-B85.5,Minneapolis Daily High Temperature,2026-09-06,between,85.0,86.0,84.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTMIN-26SEP06-B83.5,Minneapolis Daily High Temperature,2026-09-06,between,83.0,84.0,84.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTMIN-26SEP06-B81.5,Minneapolis Daily High Temperature,2026-09-06,between,81.0,82.0,84.0,0,0.0797,real_measured,yes,False,0.847
+KXHIGHTMIN-26SEP06-B79.5,Minneapolis Daily High Temperature,2026-09-06,between,79.0,80.0,84.0,0,0.0071,real_measured,no,True,0.0001
+KXLOWTNOLA-26SEP06-T77,NOLA Low Temperature,2026-09-06,greater,77.0,,76.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTNOLA-26SEP06-T70,NOLA Low Temperature,2026-09-06,less,,70.0,76.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTNOLA-26SEP06-B76.5,NOLA Low Temperature,2026-09-06,between,76.0,77.0,76.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTNOLA-26SEP06-B74.5,NOLA Low Temperature,2026-09-06,between,74.0,75.0,76.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTNOLA-26SEP06-B72.5,NOLA Low Temperature,2026-09-06,between,72.0,73.0,76.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTNOLA-26SEP06-B70.5,NOLA Low Temperature,2026-09-06,between,70.0,71.0,76.0,0,0.0013,real_measured,no,True,0.0
+KXLOWTSATX-26SEP06-T78,Lowest Temperature SATX,2026-09-06,greater,78.0,,78.0,0,0.5,real_measured,no,False,0.25
+KXLOWTSATX-26SEP06-T71,Lowest Temperature SATX,2026-09-06,less,,71.0,78.0,0,0.0,real_measured,no,True,0.0
+KXLOWTSATX-26SEP06-B77.5,Lowest Temperature SATX,2026-09-06,between,77.0,78.0,78.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTSATX-26SEP06-B75.5,Lowest Temperature SATX,2026-09-06,between,75.0,76.0,78.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTSATX-26SEP06-B73.5,Lowest Temperature SATX,2026-09-06,between,73.0,74.0,78.0,0,0.0071,real_measured,no,True,0.0001
+KXLOWTSATX-26SEP06-B71.5,Lowest Temperature SATX,2026-09-06,between,71.0,72.0,78.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTPHIL-26SEP06-T65,Lowest temperature in Philadelphia,2026-09-06,greater,65.0,,64.0,0,0.2755,real_measured,yes,False,0.5249
+KXLOWTPHIL-26SEP06-T58,Lowest temperature in Philadelphia,2026-09-06,less,,58.0,64.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTPHIL-26SEP06-B64.5,Lowest temperature in Philadelphia,2026-09-06,between,64.0,65.0,64.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTPHIL-26SEP06-B62.5,Lowest temperature in Philadelphia,2026-09-06,between,62.0,63.0,64.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTPHIL-26SEP06-B60.5,Lowest temperature in Philadelphia,2026-09-06,between,60.0,61.0,64.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTPHIL-26SEP06-B58.5,Lowest temperature in Philadelphia,2026-09-06,between,58.0,59.0,64.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTDAL-26SEP06-T99,Dallas Maximum Temperature,2026-09-06,less,,99.0,100.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHTDAL-26SEP06-T106,Dallas Maximum Temperature,2026-09-06,greater,106.0,,100.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHTDAL-26SEP06-B99.5,Dallas Maximum Temperature,2026-09-06,between,99.0,100.0,100.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHTDAL-26SEP06-B105.5,Dallas Maximum Temperature,2026-09-06,between,105.0,106.0,100.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTDAL-26SEP06-B103.5,Dallas Maximum Temperature,2026-09-06,between,103.0,104.0,100.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTDAL-26SEP06-B101.5,Dallas Maximum Temperature,2026-09-06,between,101.0,102.0,100.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHAUS-26SEP06-T94,Highest temperature in Austin,2026-09-06,less,,94.0,95.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHAUS-26SEP06-T101,Highest temperature in Austin,2026-09-06,greater,101.0,,95.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHAUS-26SEP06-B98.5,Highest temperature in Austin,2026-09-06,between,98.0,99.0,95.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHAUS-26SEP06-B96.5,Highest temperature in Austin,2026-09-06,between,96.0,97.0,95.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHAUS-26SEP06-B94.5,Highest temperature in Austin,2026-09-06,between,94.0,95.0,95.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHAUS-26SEP06-B100.5,Highest temperature in Austin,2026-09-06,between,100.0,101.0,95.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTBOS-26SEP06-T74,Boston Maximum Daily Temperature,2026-09-06,greater,74.0,,68.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHTBOS-26SEP06-T67,Boston Maximum Daily Temperature,2026-09-06,less,,67.0,68.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHTBOS-26SEP06-B73.5,Boston Maximum Daily Temperature,2026-09-06,between,73.0,74.0,68.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHTBOS-26SEP06-B71.5,Boston Maximum Daily Temperature,2026-09-06,between,71.0,72.0,68.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTBOS-26SEP06-B69.5,Boston Maximum Daily Temperature,2026-09-06,between,69.0,70.0,68.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTBOS-26SEP06-B67.5,Boston Maximum Daily Temperature,2026-09-06,between,67.0,68.0,68.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTLV-26SEP06-T76,Las Vegas Daily Low Temperature,2026-09-06,greater,76.0,,77.0,0,0.7245,real_measured,no,False,0.5249
+KXLOWTLV-26SEP06-T69,Las Vegas Daily Low Temperature,2026-09-06,less,,69.0,77.0,0,0.0,real_measured,no,True,0.0
+KXLOWTLV-26SEP06-B75.5,Las Vegas Daily Low Temperature,2026-09-06,between,75.0,76.0,77.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTLV-26SEP06-B73.5,Las Vegas Daily Low Temperature,2026-09-06,between,73.0,74.0,77.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTLV-26SEP06-B71.5,Las Vegas Daily Low Temperature,2026-09-06,between,71.0,72.0,77.0,0,0.0013,real_measured,no,True,0.0
+KXLOWTLV-26SEP06-B69.5,Las Vegas Daily Low Temperature,2026-09-06,between,69.0,70.0,77.0,0,0.0,real_measured,no,True,0.0
+KXHIGHTDC-26SEP06-T85,Washington DC Daily Max Temp,2026-09-06,greater,85.0,,85.0,0,0.5,real_measured,no,False,0.25
+KXHIGHTDC-26SEP06-T78,Washington DC Daily Max Temp,2026-09-06,less,,78.0,85.0,0,0.0,real_measured,no,True,0.0
+KXHIGHTDC-26SEP06-B84.5,Washington DC Daily Max Temp,2026-09-06,between,84.0,85.0,85.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHTDC-26SEP06-B82.5,Washington DC Daily Max Temp,2026-09-06,between,82.0,83.0,85.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTDC-26SEP06-B80.5,Washington DC Daily Max Temp,2026-09-06,between,80.0,81.0,85.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHTDC-26SEP06-B78.5,Washington DC Daily Max Temp,2026-09-06,between,78.0,79.0,85.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTOKC-26SEP06-T76,Low Temperature Oklahoma City,2026-09-06,greater,76.0,,75.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTOKC-26SEP06-T69,Low Temperature Oklahoma City,2026-09-06,less,,69.0,75.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTOKC-26SEP06-B75.5,Low Temperature Oklahoma City,2026-09-06,between,75.0,76.0,75.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTOKC-26SEP06-B73.5,Low Temperature Oklahoma City,2026-09-06,between,73.0,74.0,75.0,0,0.159,real_measured,yes,False,0.7073
+KXLOWTOKC-26SEP06-B71.5,Low Temperature Oklahoma City,2026-09-06,between,71.0,72.0,75.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTOKC-26SEP06-B69.5,Low Temperature Oklahoma City,2026-09-06,between,69.0,70.0,75.0,0,0.0013,real_measured,no,True,0.0
+KXLOWTSFO-26SEP06-T58,Lowest Temperature San Francisco,2026-09-06,greater,58.0,,57.0,0,0.2755,real_measured,yes,False,0.5249
+KXLOWTSFO-26SEP06-T51,Lowest Temperature San Francisco,2026-09-06,less,,51.0,57.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTSFO-26SEP06-B57.5,Lowest Temperature San Francisco,2026-09-06,between,57.0,58.0,57.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTSFO-26SEP06-B55.5,Lowest Temperature San Francisco,2026-09-06,between,55.0,56.0,57.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTSFO-26SEP06-B53.5,Lowest Temperature San Francisco,2026-09-06,between,53.0,54.0,57.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTSFO-26SEP06-B51.5,Lowest Temperature San Francisco,2026-09-06,between,51.0,52.0,57.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHNY-26SEP06-T80,Highest temperature in NYC,2026-09-06,greater,80.0,,74.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHNY-26SEP06-T73,Highest temperature in NYC,2026-09-06,less,,73.0,74.0,0,0.2755,real_measured,no,True,0.0759
+KXHIGHNY-26SEP06-B79.5,Highest temperature in NYC,2026-09-06,between,79.0,80.0,74.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHNY-26SEP06-B77.5,Highest temperature in NYC,2026-09-06,between,77.0,78.0,74.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHNY-26SEP06-B75.5,Highest temperature in NYC,2026-09-06,between,75.0,76.0,74.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHNY-26SEP06-B73.5,Highest temperature in NYC,2026-09-06,between,73.0,74.0,74.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTNOLA-26SEP06-T95,New Orleans Max temp Daily,2026-09-06,greater,95.0,,93.0,0,0.1165,real_measured,no,True,0.0136
+KXHIGHTNOLA-26SEP06-T88,New Orleans Max temp Daily,2026-09-06,less,,88.0,93.0,0,0.0014,real_measured,no,True,0.0
+KXHIGHTNOLA-26SEP06-B94.5,New Orleans Max temp Daily,2026-09-06,between,94.0,95.0,93.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTNOLA-26SEP06-B92.5,New Orleans Max temp Daily,2026-09-06,between,92.0,93.0,93.0,0,0.2245,real_measured,yes,False,0.6014
+KXHIGHTNOLA-26SEP06-B90.5,New Orleans Max temp Daily,2026-09-06,between,90.0,91.0,93.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTNOLA-26SEP06-B88.5,New Orleans Max temp Daily,2026-09-06,between,88.0,89.0,93.0,0,0.0071,real_measured,no,True,0.0001
+KXHIGHTTTN-26SEP06-T81,"Trenton, NJ Daily Max Temp",2026-09-06,greater,81.0,,77.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHTTTN-26SEP06-T74,"Trenton, NJ Daily Max Temp",2026-09-06,less,,74.0,77.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHTTTN-26SEP06-B80.5,"Trenton, NJ Daily Max Temp",2026-09-06,between,80.0,81.0,77.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTTTN-26SEP06-B78.5,"Trenton, NJ Daily Max Temp",2026-09-06,between,78.0,79.0,77.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHTTTN-26SEP06-B76.5,"Trenton, NJ Daily Max Temp",2026-09-06,between,76.0,77.0,77.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTTTN-26SEP06-B74.5,"Trenton, NJ Daily Max Temp",2026-09-06,between,74.0,75.0,77.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTPHX-26SEP06-T85,Low Temperature Phoenix,2026-09-06,greater,85.0,,85.0,0,0.5,real_measured,yes,False,0.25
+KXLOWTPHX-26SEP06-T78,Low Temperature Phoenix,2026-09-06,less,,78.0,85.0,0,0.0,real_measured,no,True,0.0
+KXLOWTPHX-26SEP06-B84.5,Low Temperature Phoenix,2026-09-06,between,84.0,85.0,85.0,0,0.2245,real_measured,no,True,0.0504
+KXLOWTPHX-26SEP06-B82.5,Low Temperature Phoenix,2026-09-06,between,82.0,83.0,85.0,0,0.0797,real_measured,no,True,0.0064
+KXLOWTPHX-26SEP06-B80.5,Low Temperature Phoenix,2026-09-06,between,80.0,81.0,85.0,0,0.0071,real_measured,no,True,0.0001
+KXLOWTPHX-26SEP06-B78.5,Low Temperature Phoenix,2026-09-06,between,78.0,79.0,85.0,0,0.0002,real_measured,no,True,0.0
+KXHIGHMIA-26SEP06-T93,Highest temperature in Miami,2026-09-06,greater,93.0,,90.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHMIA-26SEP06-T86,Highest temperature in Miami,2026-09-06,less,,86.0,90.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHMIA-26SEP06-B92.5,Highest temperature in Miami,2026-09-06,between,92.0,93.0,90.0,0,0.0797,real_measured,yes,False,0.847
+KXHIGHMIA-26SEP06-B90.5,Highest temperature in Miami,2026-09-06,between,90.0,91.0,90.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHMIA-26SEP06-B88.5,Highest temperature in Miami,2026-09-06,between,88.0,89.0,90.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHMIA-26SEP06-B86.5,Highest temperature in Miami,2026-09-06,between,86.0,87.0,90.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTOKC-26SEP06-T97,Oklahoma City Maximum High Temperature,2026-09-06,less,,97.0,100.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHTOKC-26SEP06-T104,Oklahoma City Maximum High Temperature,2026-09-06,greater,104.0,,100.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHTOKC-26SEP06-B99.5,Oklahoma City Maximum High Temperature,2026-09-06,between,99.0,100.0,100.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTOKC-26SEP06-B97.5,Oklahoma City Maximum High Temperature,2026-09-06,between,97.0,98.0,100.0,0,0.0797,real_measured,no,True,0.0064
+KXHIGHTOKC-26SEP06-B103.5,Oklahoma City Maximum High Temperature,2026-09-06,between,103.0,104.0,100.0,0,0.0283,real_measured,no,True,0.0008
+KXHIGHTOKC-26SEP06-B101.5,Oklahoma City Maximum High Temperature,2026-09-06,between,101.0,102.0,100.0,0,0.159,real_measured,yes,False,0.7073
+KXHIGHTATL-26SEP06-T94,Atlanta Max Temperature,2026-09-06,less,,94.0,97.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHTATL-26SEP06-T101,Atlanta Max Temperature,2026-09-06,greater,101.0,,97.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHTATL-26SEP06-B98.5,Atlanta Max Temperature,2026-09-06,between,98.0,99.0,97.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHTATL-26SEP06-B96.5,Atlanta Max Temperature,2026-09-06,between,96.0,97.0,97.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHTATL-26SEP06-B94.5,Atlanta Max Temperature,2026-09-06,between,94.0,95.0,97.0,0,0.0797,real_measured,yes,False,0.847
+KXHIGHTATL-26SEP06-B100.5,Atlanta Max Temperature,2026-09-06,between,100.0,101.0,97.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTTTN-26SEP06-T62,Trenton Daily low temp ,2026-09-06,greater,62.0,,61.0,0,0.2755,real_measured,no,True,0.0759
+KXLOWTTTN-26SEP06-T55,Trenton Daily low temp ,2026-09-06,less,,55.0,61.0,0,0.0002,real_measured,no,True,0.0
+KXLOWTTTN-26SEP06-B61.5,Trenton Daily low temp ,2026-09-06,between,61.0,62.0,61.0,0,0.2245,real_measured,yes,False,0.6014
+KXLOWTTTN-26SEP06-B59.5,Trenton Daily low temp ,2026-09-06,between,59.0,60.0,61.0,0,0.159,real_measured,no,True,0.0253
+KXLOWTTTN-26SEP06-B57.5,Trenton Daily low temp ,2026-09-06,between,57.0,58.0,61.0,0,0.0283,real_measured,no,True,0.0008
+KXLOWTTTN-26SEP06-B55.5,Trenton Daily low temp ,2026-09-06,between,55.0,56.0,61.0,0,0.0013,real_measured,no,True,0.0
+KXHIGHPHIL-26SEP06-T84,Highest temperature in Philadelphia,2026-09-06,greater,84.0,,80.0,0,0.0085,real_measured,no,True,0.0001
+KXHIGHPHIL-26SEP06-T77,Highest temperature in Philadelphia,2026-09-06,less,,77.0,80.0,0,0.0368,real_measured,no,True,0.0014
+KXHIGHPHIL-26SEP06-B83.5,Highest temperature in Philadelphia,2026-09-06,between,83.0,84.0,80.0,0,0.0283,real_measured,yes,False,0.9443
+KXHIGHPHIL-26SEP06-B81.5,Highest temperature in Philadelphia,2026-09-06,between,81.0,82.0,80.0,0,0.159,real_measured,no,True,0.0253
+KXHIGHPHIL-26SEP06-B79.5,Highest temperature in Philadelphia,2026-09-06,between,79.0,80.0,80.0,0,0.2245,real_measured,no,True,0.0504
+KXHIGHPHIL-26SEP06-B77.5,Highest temperature in Philadelphia,2026-09-06,between,77.0,78.0,80.0,0,0.0797,real_measured,no,True,0.0064
