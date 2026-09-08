@@ -4566,3 +4566,281 @@ pull-down check of the real output CSVs, with three real bugs found and
 fixed along the way rather than assumed correct from code review alone.
 Next session is Session 5.2 — Estimation Engine (Underconfidence-Correction
 Model).
+
+---
+
+## Session 5.1c — Candidate Identity Patch (found and fixed during Session 5.2 prep)
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+Not a planned session — a real, load-bearing problem was found in Session
+5.1's own output while preparing Session 5.2's estimation model, and was
+fixed at the root before any model code was written, per explicit user
+direction ("fix this right and completely... don't scale back, scale up to
+make it correct").
+
+1. While reading Session 5.1's real live output file to plan the estimation
+model, found that Kalshi's down-ballot race series each carry ONE OPEN
+MARKET PER CANDIDATE, not one Democrat-vs-Republican market per race.
+Confirmed live against the real `KXCASEN26` series (California State
+Senate District 26): 8 open candidate markets (Wendy Carrillo, Sarah
+Rascon, Sang Masog, Sara Hernandez, Paul A. Bowers, and 3 more), each
+with its own ticker, price, and — critically — its own `yes_sub_title`
+field carrying the real candidate name (confirmed live; the series-level
+title is generic and names no candidate at all).
+2. Session 5.1's original ingestion code kept only the first market Kalshi's
+API returned per series, with no record of which candidate or party it
+belonged to — flagged in that session's own log as "13 series had more
+than one open market" but not acted on. Since ElectIndex (the polling
+source) always reports a separate Democrat- and Republican-win-
+probability for the same race, there was no reliable way to know which
+party the kept price actually represented.
+3. Confirmed ElectIndex's own two real source tables (`races_summary.csv`,
+`leg_races.csv`) already publish real candidate names (`dem_name`,
+`rep_name`) alongside their probabilities — checked live by inspecting
+both files' real headers and rows.
+4. Fixed at the ingestion layer, ahead of any model code:
+- `ingest_polling_data.py` now carries `dem_name`/`rep_name` through into
+its own output (`polling_estimates_latest.csv`), reusing the existing
+"reuse the pull, don't re-fetch" pattern.
+- `schema_politics.py` was restructured from one set of
+Kalshi/Polymarket price fields per race to a per-party structure
+(`kalshi_dem_*`, `kalshi_rep_*`, `polymarket_dem_*`, `polymarket_rep_*`),
+plus `*_unmatched_candidates` and `*_total_open_candidates` fields so
+every open market is visible, not just the ones that matched.
+- `ingest_politics_markets.py` now fetches EVERY open market per series
+(not just the first) and matches each one's candidate name against
+ElectIndex's real `dem_name`/`rep_name` by last name, accent- and
+case-insensitive (`Rascón` matches `Rascon`). A market matching neither
+name is kept in `*_unmatched_candidates`, never dropped and never
+guessed into a slot it didn't match.
+5. First live run of the patch (user-run, real data): Kalshi side worked
+well — 76 of 80 races with a market matched a Dem candidate, 75 of 80
+matched a Rep candidate, only 16 of 167 open candidate markets left
+unmatched (real minor candidates). Polymarket side matched **0 of 3,416**
+open candidate markets — a real, complete miss, not a partial one.
+6. Diagnosed directly against the real unmatched-candidate output: the
+Polymarket candidate-matching function was written to look for a
+candidate's last name inside the market title (mirroring Kalshi's
+approach), but Polymarket's real down-ballot titles do not name a
+candidate at all — they state the party directly in plain text ("Will
+the Republican Party win the AL-01 House seat?" / "Will the Democratic
+Party win the AL-01 House seat?"), confirmed as the dominant real pattern
+across all 427 races with a Polymarket market. A separate real
+minor-candidate tier also exists as lettered placeholders ("Will A win
+the AL-01 House seat?", etc.) plus a catch-all "Will another party
+win...?" — correctly left unmatched, not a matching failure.
+7. Fixed `match_polymarket_candidate()` to check for the direct party word
+first, falling back to the original name-substring check only if neither
+party word is present. Tested against the exact real titles from the
+failed run before redelivering; ran the fixed logic against the full real
+output file to project the expected match count (427/427 both parties)
+before the user re-ran it live.
+8. Second live run (user-run, real data) confirmed the projection exactly:
+427 of 427 races matched both a Dem and a Rep Polymarket market; 2,562 of
+3,416 open Polymarket markets correctly left unmatched (lettered
+placeholders/write-ins).
+
+**Files created/modified:**
+- `/scripts/ingestion/schema_politics.py` (restructured to per-party fields)
+- `/scripts/ingestion/ingest_politics_markets.py` (fetches every open market
+per series, not just the first; matches to Dem/Rep by real candidate
+name/party; Polymarket matching fixed mid-session after the first live run
+exposed a real 0-match bug)
+- `/scripts/ingestion/ingest_polling_data.py` (now carries `dem_name`/
+`rep_name` through to its own output)
+
+**Validation results:**
+- PASS — Every open candidate market per race captured: 167 real Kalshi +
+3,416 real Polymarket candidate markets across 433 races, confirmed via
+direct pull-down of the real output file, up from one arbitrary market
+per race previously.
+- PASS — Kalshi-side matching: 76/80 races matched a Dem candidate, 75/80
+matched a Rep candidate, 16/167 open markets correctly unmatched (real
+minor candidates, not a miss).
+- PASS (after one real, found-and-fixed bug) — Polymarket-side matching:
+first live run matched 0/3,416 (real bug — title format assumption was
+wrong); second live run, after the fix, matched 427/427 races on both
+parties, with 2,562/3,416 open markets correctly unmatched (lettered
+placeholder/write-in markets).
+
+**Decisions made:**
+1. Fix the candidate-identity gap completely, at the ingestion root, rather
+than scoping the estimation model down to avoid it — explicit user
+direction: "just need to fix this right and completely... its ok if its
+rework."
+2. Match by last name only (Kalshi) / party word first, name second
+(Polymarket) rather than requiring a full-name match — down-ballot
+candidate name rendering is inconsistent enough across sources that a
+stricter match would produce more false non-matches than the chosen
+approach produces false positives.
+3. A market matching neither party is logged in `*_unmatched_candidates`
+and counted in `*_total_open_candidates`, never dropped silently and
+never guessed into a Dem/Rep slot — same "nothing silently skipped"
+standard every other estimation/ingestion script in this project already
+sets.
+
+**Corrections/reversals during the session:**
+1. **Polymarket candidate matching assumed name-based (mirroring Kalshi) →
+corrected to party-word-based after a real 0/3,416 match failure on the
+first live run.** Caught by inspecting the real unmatched-candidate
+output directly, not assumed working from code review. Fixed, tested
+against the real failing titles, and the fix's expected outcome was
+computed against the full real dataset before the user re-ran it live —
+the second live run matched the projection exactly (427/427).
+
+**Open items / deferred validations:**
+- Polymarket's candidate-matching fallback path (name-substring, used when
+neither party word is present) remains unvalidated against a real example
+— every real Polymarket title observed this session used the direct
+party-word pattern, so the fallback path has not yet been exercised
+against real data.
+- A real, structural limit was surfaced, not fixed: California's top-two/
+nonpartisan-blanket-primary system can put two same-party candidates on
+the general-election ballot, but ElectIndex only tracks one name per
+party per race — a second real Democrat in `STATE-LEG-CA-SENATE-26`
+(Wendy Carrillo) correctly could not be matched to either ElectIndex slot
+and is logged as unmatched. Not a bug in this session's matching logic;
+logged as Open Decision #41, no fix planned unless scope requires it.
+
+**Status at close of session:** Fully closed out. Both real ingestion bugs
+found this session (the original one-market-per-race gap, and the
+Polymarket party-word matching miss found on the first live run of the fix)
+are fixed and confirmed against real, live data pulled back down from
+GitHub — not assumed correct from code alone. Session 5.2 (Estimation
+Engine) proceeded on top of this corrected data in the same working
+session.
+
+---
+
+## Session 5.2 — Estimation Engine (Underconfidence-Correction Model)
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Per ROADMAP.md's required gate, re-verified the underconfidence finding
+against current, independent sources before building it into the model.
+The key source paper (Le, 2026, "Decomposing Crowd Wisdom: Domain-Specific
+Calibration Dynamics in Prediction Markets," arXiv:2602.19520) is now at
+v2 (August 2026) and shows evidence of a formal peer-review round (a new
+Bayesian measurement-error section added specifically in response to a
+named reviewer comment). That model treats every first-stage calibration
+slope as uncertain rather than exact. Result: the Politics-domain
+underconfidence finding survives (95% credible interval entirely above
+zero: [0.062, 0.152]; replicates independently on Polymarket, mean slope
+1.45), but its magnitude shrinks under the stricter check (posterior mean
+0.107 vs. the raw descriptive estimate 0.156 — roughly a 31% reduction).
+2. While reading Session 5.1's real output to design the model, found the
+real candidate-identity gap described in Session 5.1c above — fixed that
+first, as a prerequisite, before writing any estimation code, per
+explicit user direction.
+3. Designed the estimation approach as a correction model, not a
+from-scratch forecast (unlike weather/pick'em): ElectIndex already
+publishes an independent, real, per-race probability, so this model's job
+is narrower — apply the published, domain-specific calibration correction
+directly to each venue's own raw price, using ElectIndex's number as a
+logged sanity check on the result rather than as the estimate itself.
+4. Built `politics_model.py`: logistic recalibration
+(`p* = sigmoid(a + b·logit(p))`) using Le (2026) Table 4's Politics-domain
+slopes, bucketed by real time-to-resolution (nine buckets, 0-1h through
+1mo+), with the intercept fixed at 0 (Le 2026's own Politics mean
+intercept is -0.006, close enough to treat as zero). Applied the
+re-verification finding directly as a named, sourced dampening factor
+(`POSTERIOR_SHRINKAGE_FACTOR = 0.107/0.156 ≈ 0.686`) scaling each slope's
+deviation from 1.0, rather than using the raw table at full strength —
+the cautious choice, consistent with the weather model's own precedent.
+5. Found and fixed a separate real gotcha before computing horizons:
+Kalshi's own `close_time` field for political contracts reflects the
+swearing-in date (~2027), not the election date (already documented in
+this project's own tooling notes from Session 3.x). Sidestepped entirely
+by using a single named constant, `GENERAL_ELECTION_DATE = 2026-11-03`,
+applied identically to every race on both venues.
+6. Ran the model against the real, corrected Session 5.1c output (user-run,
+live). Real status counts: Kalshi 76 Dem + 75 Rep cells estimated
+(matching the ingestion match counts exactly); Polymarket 427 Dem + 427
+Rep cells estimated, 6 races with no Polymarket market at all.
+7. Spot-checked the model's own math by hand against three real output
+rows, not just trusted the code: recomputing `sigmoid(slope × logit(raw
+price))` by hand for MD Senate 2 (Dem: 0.06 → 0.0158; Rep: 0.935 → 0.982)
+and CA Senate 26 (Dem: 0.84 → 0.9233) reproduced the file's own
+`kalshi_corrected_prob` values exactly in all three cases.
+8. Documented the full model — every input, the correction formula, the
+sourced dampening factor, and named stated gaps — in
+`politics_estimation_model_spec.md`, at the same specificity level as
+`weather_estimation_model_spec.md` and `pickem_estimation_model_spec.md`.
+
+**Files created/modified:**
+- `/scripts/estimation/politics_model.py` (new)
+- `/docs/politics_estimation_model_spec.md` (new — landed outside
+`/docs/research/` where the other specs live; logged as Open Decision #39,
+not yet corrected)
+
+**Validation results:**
+- PASS — Underconfidence finding re-checked against current sources before
+being built into the model: confirmed real and statistically robust under
+a stricter, revised check; built in at a deliberately damped strength
+given the paper's own downward magnitude revision, not at raw strength.
+- DEFERRED, evidence-based, not a gap — model sanity-checked against
+historical resolved down-ballot markets where available: no real resolved
+down-ballot contracts exist yet this cycle (the 2026 general election is
+roughly two months out from this session). Same real constraint Track 4
+(weather) hit and deferred for the same reason (Session 4.2's own
+resolved-contract check was blocked on the Kalshi settlement clock).
+Revisit once real resolved contracts exist post-election.
+- PASS — Documented at the same specificity level as prior estimation
+specs: every input, the exact correction formula, every named constant
+with its sourced evidence basis, and named stated gaps are present in
+`politics_estimation_model_spec.md`.
+
+**Decisions made:**
+1. Build a correction model on top of ElectIndex's own independent
+forecast, not a second from-scratch election model — this project has no
+comparative advantage at election forecasting itself; its real,
+addressable question is whether a venue's own price is mispriced relative
+to known, published market-calibration research, which has a real,
+sourced answer.
+2. Apply the paper's own posterior-vs-raw-descriptive shrinkage ratio
+(0.107/0.156) as a named dampening factor on the correction, rather than
+the raw Table 4 slopes at full strength — the cautious choice, given the
+re-verification step's own finding that the raw magnitude is somewhat
+overstated.
+3. Use a single fixed election-date constant for every race's
+time-to-resolution calculation, on both venues, rather than trusting
+either venue's own `close_time` field — Kalshi's is already a known,
+documented gotcha for political contracts specifically.
+4. Treat the Politics-domain intercept as exactly zero (Le 2026's own
+reported mean is -0.006) — a named, sourced simplification, not an
+omission.
+
+**Corrections/reversals during the session:**
+- None beyond the Session 5.1c fixes logged separately above (this
+session's own model code and math were correct on the first pass, per
+the hand-verified spot-checks).
+
+**Open items / deferred validations:**
+- Model sanity-check against historical resolved down-ballot markets —
+deferred to a future session, once real resolved contracts exist
+post-election (see Validation results above; logged as Open Decision #40).
+- Spec doc file path (`/docs/` instead of `/docs/research/`) — real
+inconsistency, not urgent, logged as Open Decision #39.
+- The model does not yet capture per-contract trade-size data, so it
+applies Le (2026)'s domain-by-horizon slope only, not the fuller
+domain-by-horizon-by-trade-size correction the paper's own strongest
+political effect is actually built on. Revisit if trade-size ingestion is
+ever added.
+- Third-party/independent candidates are not estimated (ElectIndex itself
+only forecasts Dem/Rep) — their markets are captured and visible
+(`*_unmatched_candidates`) but not modeled.
+- A real structural limit (same-party general elections in top-two-primary
+states, e.g. `STATE-LEG-CA-SENATE-26`) is named but not fixed — logged as
+Open Decision #41.
+
+**Status at close of session:** Fully closed out, by explicit agreement
+with the user. Two of three roadmap validation items pass directly; the
+third is deferred for a real, evidence-based reason (no resolved contracts
+exist yet to check against) rather than left silently incomplete. Next
+session is Session 5.3 — CLV Logging Hook-In.
+
