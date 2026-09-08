@@ -1,5 +1,9 @@
 """
 Session 5.1 - Down-Ballot Politics Market Ingestion (Race Lists)
+Session 5.1c PATCH (this session) - now captures every open candidate
+market per race and matches each to a party by real candidate name,
+instead of keeping one arbitrary market per race with no party recorded.
+See "SESSION 5.1c PATCH" section below for the real problem this fixes.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -9,40 +13,71 @@ races, marquee races like Governor/Senate explicitly excluded) - but
 where ingest_kalshi.py writes those rows into schema_exchange.py's
 generic per-venue-contract shape (for arbitrage matching), this script
 writes ONE ROW PER REAL RACE into schema_politics.py's shape, with both
-venues' pricing joined onto it by a shared, project-owned race_id. This
-is the ingestion layer Session 5.2's estimation model and
-ingest_polling_data.py's polling join both need.
+venues' Democratic- and Republican-candidate pricing joined onto it by a
+shared, project-owned race_id. This is the ingestion layer Session 5.2's
+estimation model and ingest_polling_data.py's polling join both need.
 
-REUSE, NOT RE-DERIVATION
---------------------------
-The down-ballot scope filter (which Kalshi series count as "narrow
-down-ballot") is Session 3.1b's classify_down_ballot() function,
-imported directly from ingest_kalshi.py below - NOT reimplemented here.
-Re-deriving that filter a second time would risk the two copies quietly
-drifting apart the next time either one is corrected. Only the OUTPUT
-SHAPE differs from ingest_kalshi.py: this script pulls fresh from
-Kalshi's live markets endpoint per matched series (same reasoning
-ingest_weather_markets.py used for its own richer, track-specific pull)
-rather than re-reading ingest_kalshi.py's already-normalized
-schema_exchange.py rows, which don't carry state/district as structured
-fields.
+SESSION 5.1c PATCH - CANDIDATE IDENTITY WAS MISSING, NOW REQUIRED
+-----------------------------------------------------------------------
+Found live, this session (2026-09-08), while preparing Session 5.2's
+estimation model: Kalshi does not run one YES/NO contract per race. Each
+race is a SERIES with one open MARKET PER CANDIDATE. Confirmed directly
+against the real KXCASEN26 series (California State Senate District 26):
+8 open candidate markets - Wendy Carrillo, Sarah Rascon, Sang Masog, Sara
+Hernandez, Paul A. Bowers, and 3 more. The real candidate name for each
+market lives on that market's own `yes_sub_title` field (confirmed live
+this session), NOT on the series-level title, which is generic ("Who
+will win the 2026 California State Senate District 26 election?") and
+names no candidate.
 
-PREREQUISITE - RUN ingest_polymarket.py FIRST
------------------------------------------------
+The original version of this script kept only the FIRST market Kalshi's
+API returned per series, with no record of which candidate or party it
+belonged to (the "13 series had more than one open market" note in
+Session 5.1's own SESSION_LOG.md entry was this exact problem, observed
+but not yet acted on). Since ElectIndex always reports a
+Democrat-win-probability and a Republican-win-probability for the same
+race (see ingest_polling_data.py), Session 5.2's model had no reliable
+way to know which party the kept price actually belonged to.
+
+THE FIX: this script now pulls EVERY open market for every matched
+series (not just the first), and matches each one's candidate name
+against ElectIndex's own real dem_name/rep_name for that race (read from
+polling_estimates_latest.csv - ingest_polling_data.py's Session 5.1c
+patch now carries those two fields through, reusing the existing
+"reuse the pull, don't re-fetch" pattern this project already applies to
+Polymarket). A market that matches neither name is a real, named
+third-party or minor candidate - kept and logged in
+schema_politics.py's `kalshi_unmatched_candidates` /
+`polymarket_unmatched_candidates` fields, never silently dropped and
+never guessed into a Dem/Rep slot on a name that didn't actually match.
+
+PREREQUISITE - RUN ingest_polling_data.py BEFORE THIS SCRIPT (NEW,
+THIS PATCH)
+-----------------------------------------------------------------------
+This script now reads polling_estimates_latest.csv for real dem_name/
+rep_name candidate names, in addition to its existing Polymarket
+prerequisite below. If that file is missing or stale, this script logs a
+clear warning and proceeds with every open market marked unmatched
+(never guessed) rather than failing outright - the same defensive
+posture the existing Polymarket-missing case already uses.
+
+PREREQUISITE - RUN ingest_polymarket.py FIRST (UNCHANGED FROM SESSION 5.1)
+-----------------------------------------------------------------------
 This script does NOT re-pull Polymarket. ingest_polymarket.py (Session
 3.1) already pulls Polymarket's full active-event catalog, unfiltered by
 category, into /data/exchange/normalized/polymarket_latest.csv - the
 down-ballot races are already sitting in that file, same as every other
 Polymarket category. This script reads that file and filters it down to
-down-ballot rows structurally (see classify_polymarket_race() below),
-the same "reuse the venue pull, don't re-fetch it" pattern
-venue_matcher.py already established for its own Kalshi/Polymarket
-comparison. If polymarket_latest.csv doesn't exist or is stale, run
-ingest_polymarket.py first - this script logs a clear warning and
-proceeds with Kalshi-only rows rather than failing outright.
+down-ballot rows structurally (see classify_polymarket_race() below).
+SESSION 5.1c PATCH: previously, more than one Polymarket row matching
+the same race_id had all but the first DISCARDED with a warning. Now
+every structurally-matched row is kept and run through the same
+candidate-name matching Kalshi's side uses, since a real race can
+legitimately have more than one Polymarket market too (same underlying
+multi-candidate reality this patch fixes on the Kalshi side).
 
 STRUCTURAL RACE-ID MATCHING - NOT YET VALIDATED AGAINST A LIVE POLYMARKET
-DOWN-BALLOT TITLE THIS SESSION
+DOWN-BALLOT TITLE THIS SESSION (UNCHANGED FROM SESSION 5.1)
 -----------------------------------------------------------------------------
 Kalshi's own down-ballot structure is fully validated (Session 3.1b/3.2/
 3.4). Polymarket's down-ballot title FORMAT is only confirmed for one
@@ -55,63 +90,34 @@ extraction (_extract_district_codes, imported directly - not
 re-implemented) for the House tier, plus a requirement that the word
 "house" appear in the title, matching the one real confirmed example.
 State-legislature titles on Polymarket have NOT yet been confirmed live
-this session (Session 3.1b only checked Kalshi's own title text for that
-tier) - the same "State House/Senate/Assembly District N" structural
-pattern is applied to Polymarket titles too, as a reasonable structural
-guess pending a real match, and every match this path produces is logged
-by ticker/title so a human can spot-check it, same conservative posture
-venue_matcher.py already uses for every candidate pair it proposes.
+this session - the same "State House/Senate/Assembly District N"
+structural pattern is applied to Polymarket titles too, as a reasonable
+structural guess pending a real match, and every match this path
+produces is logged by ticker/title so a human can spot-check it.
+SESSION 5.1c PATCH: Polymarket candidate-name matching (title-substring
+against dem_name/rep_name, see match_polymarket_candidate() below) is
+similarly unvalidated against a real multi-candidate Polymarket title
+this session - the real per-run unmatched-candidate count is the honest
+signal of whether it's working, logged every run, not assumed correct.
 
-LEGAL FOOTPRINT - REAL, DATED, SOURCED FINDINGS (closes Open Decision #22)
+LEGAL FOOTPRINT - REAL, DATED, SOURCED FINDINGS (closes Open Decision #22,
+UNCHANGED FROM SESSION 5.1)
 -----------------------------------------------------------------------------
-Session 3.2 confirmed Kalshi's real state-level SPORTS-contract
-restrictions were already modeled (via schema_exchange.py's downstream
-consumers) but found no comparable Polymarket-specific list - logged as
-Open Decision #22, not assumed either way. Checked live via web search
-2026-09-07, specifically for POLITICS/ELECTIONS contracts (not sports,
-which is a separate real fight at both venues and already out of this
-track's scope):
-
-KALSHI - a real, current, politics-specific restriction exists that is
-NOT covered by the existing Sports-only restriction modeling:
-  - Washington state: a King County Superior Court order (signed by
-    Judge John F. McHale) took effect 2026-08-19/20 requiring Kalshi to
-    geofence Washington users out of "Elections & Politics" contracts
-    specifically, alongside Sports, Culture, Tech & Science, and
-    Mentions. Commodities, Climate, Economics, and Finance are
-    EXPRESSLY EXCLUDED from this order. Sources: Gambling Insider
-    (gamblinginsider.com/news/193762), The Spokesman-Review
-    (spokesman.com, 2026-08-13), Sports Betting Dime (2026-08-21).
-  - Arizona: the state filed criminal election-wagering charges against
-    Kalshi (including 2026 state races) in March 2026, but a federal
-    court has since BLOCKED Arizona from enforcing its gambling law
-    against Kalshi while litigation proceeds - i.e. not a current,
-    enforced restriction on real access, unlike Washington's. Source:
-    CBS Sports (cbssports.com/prediction/news/prediction-market-legal-states),
-    checked 2026-09-07 (article dated as of "3 days ago").
-  - Minnesota: a state law banning prediction markets (incl. political
-    ones) took effect 2026-08-01, but a federal judge granted the CFTC
-    preliminary relief blocking its enforcement - same "passed but not
-    currently enforced" status as Arizona, not coded as a live
-    restriction below.
-  Named, honest gap: this is a live legal landscape (Washington's own
-  order was under a week old as of this session's check) - the dict
-  below should be re-verified, not assumed still accurate, before any
-  future session leans on it for real sizing/suppression decisions.
-
-POLYMARKET - checked the same way, same date: no politics-contract-
-SPECIFIC state restriction was found, distinct from Polymarket's general
-availability picture. The real, active state disputes found (Nevada,
-Massachusetts, Michigan, Connecticut) are each specifically about SPORTS
-event contracts, not political ones - confirmed explicitly by Gambling
-Insider's own note that Massachusetts's Kalshi sports ruling "while
-still not affecting Polymarket directly, sets an important precedent"
-and The Lines' explicit statement that Nevada/New Jersey's Kalshi
-disputes "involve sports, not elections." This is a real "not found,"
-not an assumption of parity with Kalshi's Washington restriction -
-logged as such, and this project's Open Decision #22 is considered
-CLOSED as of this session on that basis (re-open if new evidence
-surfaces).
+KALSHI - a real, current, politics-specific restriction exists:
+- Washington state: a King County Superior Court order (signed by
+  Judge John F. McHale) took effect 2026-08-19/20 requiring Kalshi to
+  geofence Washington users out of "Elections & Politics" contracts
+  specifically. Sources: Gambling Insider (gamblinginsider.com/news/193762),
+  The Spokesman-Review (spokesman.com, 2026-08-13), Sports Betting Dime
+  (2026-08-21).
+- Arizona / Minnesota: real restrictions exist on paper but are
+  currently blocked from enforcement by federal court action - not
+  coded as live restrictions below (see original Session 5.1 module
+  docstring for the full evidence trail).
+POLYMARKET - no politics-contract-specific state restriction was found,
+distinct from Polymarket's general availability picture. Open Decision
+#22 is considered CLOSED as of Session 5.1's live research (re-open if
+new evidence surfaces). This is venue-level, unaffected by this patch.
 
 WHERE OUTPUT GOES
 ------------------
@@ -122,8 +128,9 @@ WHERE OUTPUT GOES
 USAGE
 -----
 pip install requests --break-system-packages
+python ingest_polling_data.py   (run first - this script reads its output)
+python ingest_polymarket.py     (run first if polymarket_latest.csv is missing/stale)
 python ingest_politics_markets.py
-(run ingest_polymarket.py first if polymarket_latest.csv is missing/stale)
 """
 
 from __future__ import annotations
@@ -132,8 +139,9 @@ import csv
 import json
 import logging
 import re
-import sys
 import time
+import unicodedata
+from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -144,7 +152,7 @@ from schema_politics import NORMALIZED_POLITICS_COLUMNS, NormalizedRaceMarket
 
 # ingest_kalshi.py and venue_matcher.py live in this same directory
 # (scripts/ingestion) - imported directly rather than re-implemented, per
-# this file's own "REUSE, NOT RE-DERIVATION" module-docstring section.
+# this file's own "REUSE, NOT RE-DERIVATION" reasoning (Session 5.1).
 from ingest_kalshi import (
     classify_down_ballot,
     DOWN_BALLOT_CATEGORY,
@@ -159,6 +167,8 @@ NORMALIZED_DIR = BASE_DIR / "data" / "politics" / "normalized"
 LOG_PATH = BASE_DIR / "logs" / "ingestion.log"
 
 POLYMARKET_LATEST = BASE_DIR / "data" / "exchange" / "normalized" / "polymarket_latest.csv"
+# SESSION 5.1c PATCH - new prerequisite, see module docstring.
+POLLING_ESTIMATES_LATEST = BASE_DIR / "data" / "politics" / "normalized" / "polling_estimates_latest.csv"
 
 KALSHI_SERIES_ENDPOINT = f"{KALSHI_BASE_URL}/series"
 KALSHI_MARKETS_ENDPOINT = f"{KALSHI_BASE_URL}/markets"
@@ -169,28 +179,21 @@ REQUEST_TIMEOUT_SECONDS = 15
 
 # Same reasoning as ingest_kalshi.py's KALSHI_PER_SERIES_PAUSE_SECONDS -
 # this script pulls a small, fixed number of series (93 confirmed live in
-# Session 3.1b: 89 House + 4 state legislature), so this is a light run,
-# but the pause is kept for consistency with every other unattended-safe
-# ingestion script in this project.
+# Session 3.1b), so this is a light run, but the pause is kept for
+# consistency with every other unattended-safe ingestion script.
 KALSHI_PER_SERIES_PAUSE_SECONDS = 0.2
 
 # --------------------------------------------------------------------------
-# Liquidity thresholds - STARTING VALUES, named and flagged as such, not
-# yet validated against a real down-ballot order book this session (no
-# comparable evidence exists yet to Session 3.2's real MO-05 order-book
-# check for arbitrage sizing). Same "no unnamed constants" pattern as
-# sizing_engine.py's KELLY_FRACTION - recalibrate here, in one place, once
-# this pipeline's first real run produces real numbers to check them
-# against, and log that as a named change same as any other constant in
-# this project.
+# Liquidity thresholds - STARTING VALUES, named and flagged as such
+# (Session 5.1). Unchanged by this patch.
 # --------------------------------------------------------------------------
 MIN_LIQUID_KALSHI_CONTRACTS = 10.0
 MIN_LIQUID_POLYMARKET_DOLLARS = 100.0
 
 # --------------------------------------------------------------------------
-# Legal footprint - see module docstring's "LEGAL FOOTPRINT" section for
-# the full, dated, sourced evidence trail behind these two dicts. Checked
-# live via web search 2026-09-07 - re-verify before trusting as current.
+# Legal footprint - see module docstring's "LEGAL FOOTPRINT" section.
+# Unchanged by this patch. Checked live via web search 2026-09-07 -
+# re-verify before trusting as current.
 # --------------------------------------------------------------------------
 KALSHI_POLITICS_STATE_RESTRICTIONS: dict[str, str] = {
     "WA": (
@@ -201,12 +204,6 @@ KALSHI_POLITICS_STATE_RESTRICTIONS: dict[str, str] = {
         "Sports Betting Dime). Re-verify before relying on this as current."
     ),
 }
-
-# Confirmed live 2026-09-07: no Polymarket-specific state restriction on
-# POLITICAL contracts was found (distinct from Polymarket's general
-# availability picture) - see module docstring. Left as an explicit,
-# named empty dict (not simply omitted) so a future reader knows this
-# was checked and came back empty, not never checked.
 POLYMARKET_POLITICS_STATE_RESTRICTIONS: dict[str, str] = {}
 
 
@@ -229,10 +226,8 @@ def setup_logging() -> logging.Logger:
 log = setup_logging()
 
 # --------------------------------------------------------------------------
-# Race-ID construction - the shared join key this project owns (see
-# schema_politics.py's module docstring for the exact format). One
-# function per tier, reused by ingest_polling_data.py so both scripts
-# build the identical string from equivalent inputs.
+# Race-ID construction - unchanged from Session 5.1 (the shared join key
+# this project owns - see schema_politics.py's module docstring).
 # --------------------------------------------------------------------------
 
 _STATE_LEG_TITLE_PATTERN = re.compile(
@@ -240,11 +235,6 @@ _STATE_LEG_TITLE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# Standard USPS state name -> abbreviation map (50 states + DC). Needed
-# because Kalshi/Polymarket state-legislature titles spell the state name
-# out in full (e.g. "Pennsylvania"), while ElectIndex's leg_races.csv
-# (ingest_polling_data.py) and this project's own race_id use the
-# 2-letter code throughout.
 _STATE_NAME_TO_ABBR = {
     "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
     "california": "CA", "colorado": "CO", "connecticut": "CT",
@@ -274,10 +264,6 @@ def race_key_for_state_leg(state: str, chamber: str, district: str) -> str:
 
 
 def parse_state_leg_title(title: Optional[str]):
-    """Returns (state_abbr, chamber, district_number_str) or None. Applied
-    identically to Kalshi and Polymarket titles - see module docstring's
-    note on this being unvalidated against a real Polymarket
-    state-legislature title this session."""
     if not title:
         return None
     match = _STATE_LEG_TITLE_PATTERN.search(title)
@@ -296,8 +282,104 @@ def parse_state_leg_title(title: Optional[str]):
 
 
 # --------------------------------------------------------------------------
-# Kalshi fetch - down-ballot only (does NOT re-pull Climate/Weather or
-# Commodities; ingest_kalshi.py already owns that pull for Track 2).
+# SESSION 5.1c PATCH - candidate name -> party matching.
+# --------------------------------------------------------------------------
+
+def _normalize_name(name: Optional[str]) -> str:
+    """Lowercases and strips accents (e.g. 'Rascón' -> 'rascon') so a
+    real accented name from one source matches a plain-ASCII rendering
+    from another - a real, observed risk given ElectIndex's and Kalshi's
+    data come from independent pipelines. Not a guess: this is the
+    standard NFKD-decompose-and-drop-combining-marks technique, applied
+    identically to both sides of every comparison below."""
+    if not name:
+        return ""
+    decomposed = unicodedata.normalize("NFKD", name)
+    stripped = "".join(c for c in decomposed if not unicodedata.combining(c))
+    return stripped.strip().lower()
+
+
+def _last_name(full_name: Optional[str]) -> str:
+    norm = _normalize_name(full_name)
+    parts = norm.split()
+    return parts[-1] if parts else ""
+
+
+def match_kalshi_candidate(candidate_name: Optional[str], dem_name: str, rep_name: str) -> Optional[str]:
+    """Returns 'dem', 'rep', or None (unmatched - real minor/third-party
+    candidate, or a genuine name-matching miss to be spot-checked from
+    the logged unmatched-candidates field). Matches on last name only,
+    case- and accent-insensitive - first names/middle initials on down-
+    ballot candidate lists are inconsistent enough across sources (e.g.
+    'Paul A. Bowers' on Kalshi vs however ElectIndex renders the same
+    candidate) that requiring a full-name match would produce more false
+    non-matches than a last-name match produces false positives, given
+    real down-ballot races rarely have two candidates sharing a surname."""
+    cand_last = _last_name(candidate_name)
+    if not cand_last:
+        return None
+    dem_last = _last_name(dem_name)
+    rep_last = _last_name(rep_name)
+    if dem_last and cand_last == dem_last:
+        return "dem"
+    if rep_last and cand_last == rep_last:
+        return "rep"
+    return None
+
+
+def match_polymarket_candidate(title: Optional[str], dem_name: str, rep_name: str) -> Optional[str]:
+    """Polymarket's real market objects do not carry a structured
+    per-candidate name field the way Kalshi's yes_sub_title does (not
+    confirmed live this session - see module docstring). This matches by
+    checking whether the candidate's last name appears as a substring of
+    the market title instead. If both parties' last names appear (or
+    neither does), the match is genuinely ambiguous and returns None -
+    logged as unmatched rather than guessed either way."""
+    t = _normalize_name(title)
+    if not t:
+        return None
+    dem_last = _last_name(dem_name)
+    rep_last = _last_name(rep_name)
+    dem_hit = bool(dem_last) and dem_last in t
+    rep_hit = bool(rep_last) and rep_last in t
+    if dem_hit and not rep_hit:
+        return "dem"
+    if rep_hit and not dem_hit:
+        return "rep"
+    return None
+
+
+def load_electindex_names() -> dict[str, tuple[str, str]]:
+    """Returns race_id -> (dem_name, rep_name), read from
+    polling_estimates_latest.csv (ingest_polling_data.py's Session 5.1c
+    patch output). Missing/stale file is a real, logged gap - every
+    candidate in this run is then marked unmatched rather than guessed,
+    same defensive posture as the existing missing-Polymarket-file case
+    below."""
+    if not POLLING_ESTIMATES_LATEST.exists():
+        log.warning(
+            "%s does not exist - run ingest_polling_data.py first. "
+            "Proceeding with NO candidate-name matching this run (every "
+            "open market will be logged as unmatched, not guessed).",
+            POLLING_ESTIMATES_LATEST,
+        )
+        return {}
+    out: dict[str, tuple[str, str]] = {}
+    with POLLING_ESTIMATES_LATEST.open(newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            race_id = row.get("race_id")
+            if not race_id:
+                continue
+            out[race_id] = (
+                (row.get("dem_name") or "").strip(),
+                (row.get("rep_name") or "").strip(),
+            )
+    log.info("Loaded ElectIndex candidate names for %d races from %s.", len(out), POLLING_ESTIMATES_LATEST.name)
+    return out
+
+
+# --------------------------------------------------------------------------
+# Kalshi fetch - down-ballot only.
 # --------------------------------------------------------------------------
 
 def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
@@ -325,9 +407,6 @@ def _to_float(value) -> Optional[float]:
 
 
 def fetch_down_ballot_series() -> tuple[list[dict], dict[str, str]]:
-    """Pulls Kalshi's full series list once and keeps only the Elections
-    series classify_down_ballot() (Session 3.1b, imported above)
-    confirms are real, individual down-ballot races."""
     payload = _fetch_with_retries(KALSHI_SERIES_ENDPOINT)
     all_series = payload.get("series", payload if isinstance(payload, list) else [])
 
@@ -358,9 +437,6 @@ _KALSHI_HOUSE_TICKER_STATE_DISTRICT = re.compile(
 
 
 def kalshi_race_id_for_series(ticker: str, title: Optional[str], tier: str):
-    """Derives this project's own race_id from a Kalshi series already
-    confirmed down-ballot by classify_down_ballot(). Returns None (and
-    logs a warning) if the structural parse fails - never guesses."""
     if tier == "Elections - US House District":
         match = _KALSHI_HOUSE_TICKER_STATE_DISTRICT.match(ticker)
         if not match:
@@ -371,15 +447,6 @@ def kalshi_race_id_for_series(ticker: str, title: Optional[str], tier: str):
             )
             return None
         state, district_raw, _special = match.groups()
-        # REAL BUG FOUND AND FIXED (checked directly against ElectIndex's
-        # real races_summary.csv before this script ever ran live, 2026-09-07):
-        # at-large House seats (AK, ND, and other single-district states)
-        # are numbered "01" in ElectIndex's real data, not "00" - confirmed
-        # against the real AK-01 and ND-01 rows. Kalshi's own ticker uses
-        # the literal string "AL" for at-large (e.g. HOUSEAKAL, per
-        # ingest_kalshi.py's module docstring) - mapped to district 1 here,
-        # not 0, so this project's race_id actually joins to ElectIndex's
-        # real row instead of silently matching nothing.
         district = 1 if district_raw == "AL" else int(district_raw)
         return race_key_for_house_district(state, district), state, None, str(district)
 
@@ -399,6 +466,9 @@ def kalshi_race_id_for_series(ticker: str, title: Optional[str], tier: str):
 
 
 def fetch_markets_for_series(ticker: str) -> list[dict]:
+    """SESSION 5.1c PATCH: returns EVERY open market for this series, not
+    just the first. status='open' already excludes closed/settled
+    markets - no further filtering applied here."""
     try:
         payload = _fetch_with_retries(
             KALSHI_MARKETS_ENDPOINT, params={"series_ticker": ticker, "status": "open"}
@@ -409,13 +479,17 @@ def fetch_markets_for_series(ticker: str) -> list[dict]:
         return []
 
 
-def build_kalshi_rows(series_list: list[dict], tier_by_ticker: dict[str, str]) -> dict[str, dict]:
+def build_kalshi_rows(
+    series_list: list[dict], tier_by_ticker: dict[str, str], electindex_names: dict[str, tuple[str, str]]
+) -> dict[str, dict]:
     """Returns race_id -> a dict of Kalshi-side fields ready to feed into
-    NormalizedRaceMarket. One race is assumed to have at most one open
-    Kalshi market at a time for this tier (confirmed live 2026-09-04/05,
-    Session 3.1b) - if a series ever has more than one open market, the
-    first is kept and a warning is logged, rather than silently
-    overwriting with no record of it."""
+    NormalizedRaceMarket. SESSION 5.1c PATCH: every open market for a
+    series is now fetched and matched to dem/rep by real candidate name
+    (see match_kalshi_candidate() above) via each market's own
+    `yes_sub_title` field (confirmed live 2026-09-08 as the real field
+    carrying the candidate name - the series-level title does not name
+    one). A market that matches neither party's name is kept in
+    kalshi_unmatched_candidates, never dropped and never guessed."""
     rows: dict[str, dict] = {}
     all_raw: dict[str, list[dict]] = {}
 
@@ -434,47 +508,84 @@ def build_kalshi_rows(series_list: list[dict], tier_by_ticker: dict[str, str]) -
 
         if not markets:
             continue
-        if len(markets) > 1:
-            log.warning(
-                "Series %s has %d open markets - expected at most one "
-                "for a single down-ballot race. Keeping the first, "
-                "flagged here rather than silently dropped.",
-                ticker, len(markets),
-            )
-        m = markets[0]
+
+        dem_name, rep_name = electindex_names.get(race_id, ("", ""))
+
+        dem_market = None
+        rep_market = None
+        unmatched_names: list[str] = []
+
+        for m in markets:
+            # yes_sub_title is the real, live-confirmed field carrying
+            # the candidate's name (see module docstring). Falls back to
+            # the market's own title (not the series title) if
+            # yes_sub_title is ever absent, rather than leaving the
+            # candidate name blank outright.
+            candidate_name = m.get("yes_sub_title") or m.get("title") or ""
+            party = match_kalshi_candidate(candidate_name, dem_name, rep_name)
+            if party == "dem" and dem_market is None:
+                dem_market = (candidate_name, m)
+            elif party == "rep" and rep_market is None:
+                rep_market = (candidate_name, m)
+            elif party is None:
+                unmatched_names.append(candidate_name)
+            else:
+                # A second market matched the same party as one already
+                # kept (e.g. a data anomaly) - logged, not silently
+                # overwritten.
+                log.warning(
+                    "Series %s: candidate %r matched '%s' but that party "
+                    "already has a matched market for race %s - kept as "
+                    "unmatched instead of overwriting.",
+                    ticker, candidate_name, party, race_id,
+                )
+                unmatched_names.append(candidate_name)
 
         state_restriction = KALSHI_POLITICS_STATE_RESTRICTIONS.get(state, "")
 
-        rows[race_id] = {
+        row = {
             "race_id": race_id,
             "tier": tier,
             "state": state,
             "chamber": chamber,
             "district": district,
-            "kalshi_ticker": m.get("ticker"),
-            "kalshi_title": s.get("title"),
-            "kalshi_yes_bid": _to_float(m.get("yes_bid_dollars")),
-            "kalshi_yes_ask": _to_float(m.get("yes_ask_dollars")),
-            "kalshi_no_bid": _to_float(m.get("no_bid_dollars")),
-            "kalshi_no_ask": _to_float(m.get("no_ask_dollars")),
-            "kalshi_yes_ask_size": _to_float(m.get("yes_ask_size_fp")),
-            "kalshi_yes_bid_size": _to_float(m.get("yes_bid_size_fp")),
-            "kalshi_close_time": m.get("close_time"),
-            "kalshi_status": m.get("status"),
+            "kalshi_unmatched_candidates": "; ".join(unmatched_names),
+            "kalshi_total_open_candidates": len(markets),
             "legal_footprint_kalshi": state_restriction,
         }
+
+        if dem_market:
+            name, m = dem_market
+            row.update({
+                "kalshi_dem_candidate_name": name,
+                "kalshi_dem_ticker": m.get("ticker"),
+                "kalshi_dem_yes_bid": _to_float(m.get("yes_bid_dollars")),
+                "kalshi_dem_yes_ask": _to_float(m.get("yes_ask_dollars")),
+                "kalshi_dem_yes_ask_size": _to_float(m.get("yes_ask_size_fp")),
+                "kalshi_dem_yes_bid_size": _to_float(m.get("yes_bid_size_fp")),
+                "kalshi_dem_close_time": m.get("close_time"),
+                "kalshi_dem_status": m.get("status"),
+            })
+        if rep_market:
+            name, m = rep_market
+            row.update({
+                "kalshi_rep_candidate_name": name,
+                "kalshi_rep_ticker": m.get("ticker"),
+                "kalshi_rep_yes_bid": _to_float(m.get("yes_bid_dollars")),
+                "kalshi_rep_yes_ask": _to_float(m.get("yes_ask_dollars")),
+                "kalshi_rep_yes_ask_size": _to_float(m.get("yes_ask_size_fp")),
+                "kalshi_rep_yes_bid_size": _to_float(m.get("yes_bid_size_fp")),
+                "kalshi_rep_close_time": m.get("close_time"),
+                "kalshi_rep_status": m.get("status"),
+            })
+
+        rows[race_id] = row
 
         if i % 20 == 0 or i == len(series_list):
             log.info("Kalshi: processed %d/%d down-ballot series so far.", i, len(series_list))
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    # Explicit encoding="utf-8" - see ingest_polling_data.py's real,
-    # live-caught bug note (Session 5.1, first Windows run, 2026-09-07):
-    # write_text() with no encoding argument defaults to the OS locale
-    # encoding (cp1252 on Windows), which fails on real non-ASCII
-    # characters in race/candidate titles. Fixed here proactively, same
-    # fix applied there.
     (RAW_DIR / f"kalshi_politics_{ts}.json").write_text(
         json.dumps(all_raw, indent=2), encoding="utf-8"
     )
@@ -483,26 +594,16 @@ def build_kalshi_rows(series_list: list[dict], tier_by_ticker: dict[str, str]) -
 
 
 # --------------------------------------------------------------------------
-# Polymarket - reads the already-pulled polymarket_latest.csv (see module
-# docstring's "PREREQUISITE" section) and filters structurally.
+# Polymarket - reads the already-pulled polymarket_latest.csv.
 # --------------------------------------------------------------------------
 
 _HOUSE_KEYWORD_PATTERN = re.compile(r"\bhouse\b", re.IGNORECASE)
 
 
 def classify_polymarket_race(title: Optional[str]):
-    """Returns (race_id, state, chamber, district) for a Polymarket row
-    structurally identified as a down-ballot race, or None. See module
-    docstring's own section on why this is a reasonable-but-unvalidated
-    structural guess for the state-legislature path specifically."""
     if not title:
         return None
 
-    # US House path - reuses venue_matcher.py's own already-validated
-    # (state, district) extraction (imported above), plus requiring the
-    # word "house" appear, matching the one real confirmed Polymarket
-    # down-ballot title found in Session 3.1b ("MO-05 House Election
-    # Winner").
     codes = _extract_district_codes(title)
     if codes and _HOUSE_KEYWORD_PATTERN.search(title):
         state, district = next(iter(codes))
@@ -511,9 +612,6 @@ def classify_polymarket_race(title: Optional[str]):
             state.upper(), None, str(district),
         )
 
-    # State-legislature path - same structural title pattern used for
-    # Kalshi, applied here too (see module docstring: not yet confirmed
-    # live against a real Polymarket state-leg title this session).
     parsed = parse_state_leg_title(title)
     if parsed:
         state, chamber, district = parsed
@@ -522,7 +620,11 @@ def classify_polymarket_race(title: Optional[str]):
     return None
 
 
-def build_polymarket_rows() -> dict[str, dict]:
+def build_polymarket_rows(electindex_names: dict[str, tuple[str, str]]) -> dict[str, dict]:
+    """SESSION 5.1c PATCH: every structurally-matched Polymarket row for
+    a race_id is now collected (not just the first), then matched to
+    dem/rep by candidate-name substring (see match_polymarket_candidate()
+    above)."""
     if not POLYMARKET_LATEST.exists():
         log.warning(
             "%s does not exist - run ingest_polymarket.py first. "
@@ -534,7 +636,7 @@ def build_polymarket_rows() -> dict[str, dict]:
     with POLYMARKET_LATEST.open(newline="", encoding="utf-8") as f:
         all_rows = list(csv.DictReader(f))
 
-    rows: dict[str, dict] = {}
+    by_race: dict[str, list[dict]] = defaultdict(list)
     matched_count = 0
     for r in all_rows:
         parsed = classify_polymarket_race(r.get("title"))
@@ -542,79 +644,112 @@ def build_polymarket_rows() -> dict[str, dict]:
             continue
         race_id, state, chamber, district = parsed
         matched_count += 1
+        by_race[race_id].append({**r, "_state": state, "_chamber": chamber, "_district": district})
 
-        state_restriction = POLYMARKET_POLITICS_STATE_RESTRICTIONS.get(state, "")
+    rows: dict[str, dict] = {}
+    for race_id, candidates in by_race.items():
+        dem_name, rep_name = electindex_names.get(race_id, ("", ""))
+        first = candidates[0]
 
-        if race_id in rows:
-            log.warning(
-                "More than one Polymarket row matched race_id %s - "
-                "keeping the first, flagged here rather than silently "
-                "overwritten (source_market_id=%s).",
-                race_id, r.get("source_market_id"),
-            )
-            continue
+        dem_row = None
+        rep_row = None
+        unmatched_titles: list[str] = []
 
-        rows[race_id] = {
+        for r in candidates:
+            party = match_polymarket_candidate(r.get("title"), dem_name, rep_name)
+            if party == "dem" and dem_row is None:
+                dem_row = r
+            elif party == "rep" and rep_row is None:
+                rep_row = r
+            elif party is None:
+                unmatched_titles.append(r.get("title") or "")
+            else:
+                unmatched_titles.append(r.get("title") or "")
+
+        state_restriction = POLYMARKET_POLITICS_STATE_RESTRICTIONS.get(first["_state"], "")
+
+        row = {
             "race_id": race_id,
             "tier": (
-                "Elections - US House District" if chamber is None
+                "Elections - US House District" if first["_chamber"] is None
                 else "Elections - State Legislature District"
             ),
-            "state": state,
-            "chamber": chamber,
-            "district": district,
-            "polymarket_market_id": r.get("source_market_id"),
-            "polymarket_title": r.get("title"),
-            "polymarket_yes_bid": _to_float(r.get("yes_bid")),
-            "polymarket_yes_ask": _to_float(r.get("yes_ask")),
-            "polymarket_no_bid": _to_float(r.get("no_bid")),
-            "polymarket_no_ask": _to_float(r.get("no_ask")),
-            "polymarket_liquidity": _to_float(r.get("liquidity")),
-            "polymarket_close_time": r.get("close_time"),
-            "polymarket_status": r.get("status"),
+            "state": first["_state"],
+            "chamber": first["_chamber"],
+            "district": first["_district"],
+            "polymarket_unmatched_candidates": "; ".join(t for t in unmatched_titles if t),
+            "polymarket_total_open_candidates": len(candidates),
             "legal_footprint_polymarket": state_restriction,
         }
 
+        if dem_row:
+            row.update({
+                "polymarket_dem_candidate_name": dem_row.get("title"),
+                "polymarket_dem_market_id": dem_row.get("source_market_id"),
+                "polymarket_dem_yes_bid": _to_float(dem_row.get("yes_bid")),
+                "polymarket_dem_yes_ask": _to_float(dem_row.get("yes_ask")),
+                "polymarket_dem_liquidity": _to_float(dem_row.get("liquidity")),
+                "polymarket_dem_close_time": dem_row.get("close_time"),
+                "polymarket_dem_status": dem_row.get("status"),
+            })
+        if rep_row:
+            row.update({
+                "polymarket_rep_candidate_name": rep_row.get("title"),
+                "polymarket_rep_market_id": rep_row.get("source_market_id"),
+                "polymarket_rep_yes_bid": _to_float(rep_row.get("yes_bid")),
+                "polymarket_rep_yes_ask": _to_float(rep_row.get("yes_ask")),
+                "polymarket_rep_liquidity": _to_float(rep_row.get("liquidity")),
+                "polymarket_rep_close_time": rep_row.get("close_time"),
+                "polymarket_rep_status": rep_row.get("status"),
+            })
+
+        rows[race_id] = row
+
     log.info(
         "Polymarket: %d of %d rows in %s structurally matched a "
-        "down-ballot race.",
-        matched_count, len(all_rows), POLYMARKET_LATEST.name,
+        "down-ballot race, across %d distinct races.",
+        matched_count, len(all_rows), POLYMARKET_LATEST.name, len(rows),
     )
     return rows
 
 
 # --------------------------------------------------------------------------
-# Liquidity labeling - against the named MIN_LIQUID_* constants above.
+# Liquidity labeling - now per matched candidate market, not per race.
 # --------------------------------------------------------------------------
 
-def liquidity_note_kalshi(row: dict) -> Optional[str]:
-    if row.get("kalshi_yes_ask_size") is None and row.get("kalshi_yes_bid_size") is None:
-        return "no market" if row.get("kalshi_ticker") else None
-    best_side = max(
-        row.get("kalshi_yes_ask_size") or 0.0, row.get("kalshi_yes_bid_size") or 0.0
-    )
+def liquidity_note_kalshi(row: dict, side: str) -> Optional[str]:
+    ask_size = row.get(f"kalshi_{side}_yes_ask_size")
+    bid_size = row.get(f"kalshi_{side}_yes_bid_size")
+    ticker = row.get(f"kalshi_{side}_ticker")
+    if ask_size is None and bid_size is None:
+        return "no market" if ticker else None
+    best_side = max(ask_size or 0.0, bid_size or 0.0)
     return "ok" if best_side >= MIN_LIQUID_KALSHI_CONTRACTS else "thin"
 
 
-def liquidity_note_polymarket(row: dict) -> Optional[str]:
-    if row.get("polymarket_liquidity") is None:
-        return "no market" if row.get("polymarket_market_id") else None
-    return (
-        "ok" if row["polymarket_liquidity"] >= MIN_LIQUID_POLYMARKET_DOLLARS else "thin"
-    )
+def liquidity_note_polymarket(row: dict, side: str) -> Optional[str]:
+    liquidity = row.get(f"polymarket_{side}_liquidity")
+    market_id = row.get(f"polymarket_{side}_market_id")
+    if liquidity is None:
+        return "no market" if market_id else None
+    return "ok" if liquidity >= MIN_LIQUID_POLYMARKET_DOLLARS else "thin"
 
 
 # --------------------------------------------------------------------------
 # Join + output
 # --------------------------------------------------------------------------
 
-def join_rows(kalshi_rows: dict[str, dict], polymarket_rows: dict[str, dict], pulled_at: str) -> list[NormalizedRaceMarket]:
+def join_rows(
+    kalshi_rows: dict[str, dict], polymarket_rows: dict[str, dict],
+    electindex_names: dict[str, tuple[str, str]], pulled_at: str,
+) -> list[NormalizedRaceMarket]:
     all_race_ids = set(kalshi_rows) | set(polymarket_rows)
     out: list[NormalizedRaceMarket] = []
 
     for race_id in sorted(all_race_ids):
         k = kalshi_rows.get(race_id, {})
         p = polymarket_rows.get(race_id, {})
+        dem_name, rep_name = electindex_names.get(race_id, ("", ""))
 
         tier = k.get("tier") or p.get("tier")
         state = k.get("state") or p.get("state")
@@ -627,11 +762,19 @@ def join_rows(kalshi_rows: dict[str, dict], polymarket_rows: dict[str, dict], pu
         merged["state"] = state
         merged["chamber"] = chamber
         merged["district"] = district
+        merged["electindex_dem_name"] = dem_name
+        merged["electindex_rep_name"] = rep_name
 
-        merged["liquidity_note_kalshi"] = liquidity_note_kalshi(merged)
-        merged["liquidity_note_polymarket"] = liquidity_note_polymarket(merged)
+        merged["liquidity_note_kalshi_dem"] = liquidity_note_kalshi(merged, "dem")
+        merged["liquidity_note_kalshi_rep"] = liquidity_note_kalshi(merged, "rep")
+        merged["liquidity_note_polymarket_dem"] = liquidity_note_polymarket(merged, "dem")
+        merged["liquidity_note_polymarket_rep"] = liquidity_note_polymarket(merged, "rep")
         merged["legal_footprint_kalshi"] = merged.get("legal_footprint_kalshi", "")
         merged["legal_footprint_polymarket"] = merged.get("legal_footprint_polymarket", "")
+        merged["kalshi_unmatched_candidates"] = merged.get("kalshi_unmatched_candidates", "")
+        merged["kalshi_total_open_candidates"] = merged.get("kalshi_total_open_candidates", 0)
+        merged["polymarket_unmatched_candidates"] = merged.get("polymarket_unmatched_candidates", "")
+        merged["polymarket_total_open_candidates"] = merged.get("polymarket_total_open_candidates", 0)
         merged["pulled_at"] = pulled_at
 
         fields = {f: merged.get(f) for f in NormalizedRaceMarket.__dataclass_fields__}
@@ -660,36 +803,52 @@ def run() -> dict:
         "polymarket_race_rows": 0,
         "races_total": 0,
         "races_both_venues": 0,
+        "races_dem_matched": 0,
+        "races_rep_matched": 0,
+        "total_unmatched_candidates": 0,
         "ok": False,
     }
 
-    log.info("=== Down-ballot politics market ingestion run starting ===")
+    log.info("=== Down-ballot politics market ingestion run starting (Session 5.1c: per-candidate matching) ===")
 
     try:
+        electindex_names = load_electindex_names()
+
         series_list, tier_by_ticker = fetch_down_ballot_series()
         summary["kalshi_series_matched"] = len(series_list)
 
-        kalshi_rows = build_kalshi_rows(series_list, tier_by_ticker)
-        polymarket_rows = build_polymarket_rows()
+        kalshi_rows = build_kalshi_rows(series_list, tier_by_ticker, electindex_names)
+        polymarket_rows = build_polymarket_rows(electindex_names)
 
         summary["kalshi_race_rows"] = len(kalshi_rows)
         summary["polymarket_race_rows"] = len(polymarket_rows)
         summary["races_both_venues"] = len(set(kalshi_rows) & set(polymarket_rows))
 
-        rows = join_rows(kalshi_rows, polymarket_rows, pulled_at)
+        rows = join_rows(kalshi_rows, polymarket_rows, electindex_names, pulled_at)
         summary["races_total"] = len(rows)
+        summary["races_dem_matched"] = sum(
+            1 for r in rows if r.kalshi_dem_candidate_name or r.polymarket_dem_candidate_name
+        )
+        summary["races_rep_matched"] = sum(
+            1 for r in rows if r.kalshi_rep_candidate_name or r.polymarket_rep_candidate_name
+        )
+        summary["total_unmatched_candidates"] = sum(
+            len([x for x in r.kalshi_unmatched_candidates.split("; ") if x])
+            + len([x for x in r.polymarket_unmatched_candidates.split("; ") if x])
+            for r in rows
+        )
         summary["ok"] = True
 
         log.info(
-            "Down-ballot politics: %d Kalshi series matched, %d Kalshi "
-            "race rows, %d Polymarket race rows, %d races total (%d on "
-            "both venues).",
-            summary["kalshi_series_matched"], summary["kalshi_race_rows"],
-            summary["polymarket_race_rows"], summary["races_total"],
-            summary["races_both_venues"],
+            "Down-ballot politics: %d races total (%d on both venues), "
+            "%d with a matched Dem candidate, %d with a matched Rep "
+            "candidate, %d total unmatched candidate markets logged for "
+            "review.",
+            summary["races_total"], summary["races_both_venues"],
+            summary["races_dem_matched"], summary["races_rep_matched"],
+            summary["total_unmatched_candidates"],
         )
-    except Exception as exc:  # noqa: BLE001 - an outage must not crash
-        # the whole pipeline; write whatever we have.
+    except Exception as exc:  # noqa: BLE001
         log.error("Down-ballot politics ingestion failed for this run: %s", exc)
         rows = []
 

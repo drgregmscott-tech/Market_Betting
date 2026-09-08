@@ -1,5 +1,8 @@
 """
 Session 5.1 - Down-Ballot Polling / Forecast Data Ingestion
+Session 5.1c PATCH (this session) - now also carries ElectIndex's real
+candidate NAMES through, not just win probabilities. See "SESSION 5.1c
+PATCH" section below for why.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -11,6 +14,32 @@ docstring for the exact format) so a downstream script can join a
 market's price directly against an independent public probability
 estimate for the same race.
 
+SESSION 5.1c PATCH - dem_name / rep_name NOW CARRIED THROUGH
+-----------------------------------------------------------------------
+Found live, this session, while preparing Session 5.2's estimation model:
+Kalshi's down-ballot races are NOT one Democrat-vs-Republican contract
+each - they are a SEPARATE OPEN MARKET PER CANDIDATE (confirmed live,
+real KXCASEN26 series, 2026-09-08: 8 open candidate markets for one
+race). Without a real candidate name to match against, there was no way
+for ingest_politics_markets.py to know which of several open Kalshi/
+Polymarket markets for a race was the Democrat's, which was the
+Republican's, and which belonged to a minor candidate this project has
+no independent forecast for. ElectIndex's own two real source tables
+(races_summary.csv, leg_races.csv) already publish exactly this - real
+`dem_name`/`rep_name` columns, confirmed live 2026-09-08 by direct
+inspection of both files' real headers and rows. This patch adds those
+two columns to this script's own output so ingest_politics_markets.py
+can read them from polling_estimates_latest.csv (the existing "reuse the
+pull, don't re-fetch" pattern this project already uses for Polymarket)
+rather than re-pulling ElectIndex's raw files a second time.
+
+A real name can be BLANK in ElectIndex's own data - confirmed live in
+leg_races.csv's real AK-HD-1 row (Republican incumbent Jeremy Bynum
+running unopposed by a Democrat; dem_name is empty, dem_prob is a real
+non-zero residual value). This is ElectIndex's own real data, not a gap
+this project introduced - carried through as an empty string, not
+guessed at or dropped.
+
 ACCESS - CONFIRMED LIVE 2026-09-07, VIA BROWSER
 -----------------------------------------------------------------------
 ElectIndex (electindex.com) is NOT scraped here. Its own "Data &
@@ -19,19 +48,20 @@ real, PUBLIC GitHub repository - github.com/ElectIndex/26_us_forecast_data
 - and states explicitly: "The whole pipeline is open source... download
 the key tables directly." This script pulls two of those tables straight
 from raw.githubusercontent.com, no API key, no scraping, no auth:
-  - races_summary.csv: one row per federal race (governor/senate/house).
-    This script keeps only race_type == "house" (435 rows confirmed live)
-    - governor and senate are marquee/out-of-scope, same Session 0.1/3.1b
-    boundary ingest_kalshi.py's classify_down_ballot() already enforces.
-  - leg_races.csv: one row per state-legislature district race (5,867
-    rows confirmed live 2026-09-07 - every chamber up in 2026, not just a
-    88-chamber summary).
+- races_summary.csv: one row per federal race (governor/senate/house).
+This script keeps only race_type == "house" (435 rows confirmed live)
+- governor and senate are marquee/out-of-scope, same Session 0.1/3.1b
+boundary ingest_kalshi.py's classify_down_ballot() already enforces.
+- leg_races.csv: one row per state-legislature district race (5,867
+rows confirmed live 2026-09-07 - every chamber up in 2026, not just a
+88-chamber summary).
 Both files' real column headers were fetched and inspected directly this
 session before this script was written (races_summary.csv: state/
 district are separate columns, e.g. state="MI", district="07" for a
-House race; leg_races.csv: state="MO", chamber="Senate",
-district="SD-10") - the parsing below matches the REAL structure found,
-not an assumed one.
+House race, plus real dem_name/rep_name columns confirmed live
+2026-09-08; leg_races.csv: state="MO", chamber="Senate",
+district="SD-10", plus the same real dem_name/rep_name columns) - the
+parsing below matches the REAL structure found, not an assumed one.
 
 WHY NOT MULTISTATE.US THIS SESSION - NAMED GAP
 -----------------------------------------------------------------------
@@ -121,6 +151,8 @@ NORMALIZED_POLLING_COLUMNS = [
     "chamber",
     "district",
     "estimate_source",
+    "dem_name",
+    "rep_name",
     "dem_win_prob",
     "rep_win_prob",
     "margin_dem_minus_rep",
@@ -187,10 +219,11 @@ def _scale_prob(value: Optional[float]) -> Optional[float]:
 # --------------------------------------------------------------------------
 
 def normalize_house_rows(rows: list[dict], pulled_at: str) -> list[dict]:
-    """races_summary.csv real columns (confirmed live 2026-09-07):
-    race_type, state (2-letter), district (zero-padded, e.g. '07'),
-    dem_prob, rep_prob, margin, rating - among many others this script
-    does not need.
+    """races_summary.csv real columns (confirmed live 2026-09-07, header
+    re-confirmed 2026-09-08 for this patch): race_type, state (2-letter),
+    district (zero-padded, e.g. '07'), dem_name, rep_name, dem_prob,
+    rep_prob, margin, rating - among many others this script does not
+    need.
 
     REAL BUG FOUND AND FIXED (first live run, 2026-09-07): races_summary.csv's
     dem_prob/rep_prob are on a 0-100 SCALE (e.g. 58.3), confirmed directly
@@ -202,7 +235,12 @@ def normalize_house_rows(rows: list[dict], pulled_at: str) -> list[dict]:
     this fix, not assumed. Divided by 100 here so this script's own
     output (dem_win_prob/rep_win_prob) is uniformly a 0-1 probability
     across both tiers - a downstream reader should never have to know
-    which raw ElectIndex table a row originally came from."""
+    which raw ElectIndex table a row originally came from.
+
+    SESSION 5.1c PATCH: dem_name/rep_name are now carried through
+    unmodified (no scaling/parsing needed - they are plain candidate-name
+    strings). A blank value is real ElectIndex data (an uncontested race
+    for that party), carried through as an empty string, not guessed."""
     out = []
     skipped = 0
     for r in rows:
@@ -226,6 +264,8 @@ def normalize_house_rows(rows: list[dict], pulled_at: str) -> list[dict]:
             "chamber": None,
             "district": str(district),
             "estimate_source": "ElectIndex model",
+            "dem_name": (r.get("dem_name") or "").strip(),
+            "rep_name": (r.get("rep_name") or "").strip(),
             # Divided by 100 - see this function's own docstring "REAL
             # BUG FOUND AND FIXED" note. races_summary.csv's dem_prob/
             # rep_prob are 0-100 scale; this script's output is always
@@ -246,16 +286,22 @@ def normalize_house_rows(rows: list[dict], pulled_at: str) -> list[dict]:
 # --------------------------------------------------------------------------
 
 def normalize_state_leg_rows(rows: list[dict], pulled_at: str) -> list[dict]:
-    """leg_races.csv real columns (confirmed live 2026-09-07): state
-    (2-letter), chamber ('House'/'Senate'/'Assembly'/'Legislature'/
-    'House of Delegates'), district (e.g. 'SD-10', 'HD-1'), dem_prob,
+    """leg_races.csv real columns (confirmed live 2026-09-07, header
+    re-confirmed 2026-09-08 for this patch): state (2-letter), chamber
+    ('House'/'Senate'/'Assembly'/'Legislature'/'House of Delegates'),
+    district (e.g. 'SD-10', 'HD-1'), dem_name, rep_name, dem_prob,
     rep_prob, margin, rating. Only House/Senate/Assembly chambers are
     kept here, matching Session 3.1b's own Kalshi tier structure
     (classify_down_ballot() only recognizes those three chamber words) -
     'Legislature' (unicameral Nebraska) and 'House of Delegates'
     (VA/WV naming) rows are real but fall outside this project's current
     down-ballot tier definition, so they're skipped and counted, not
-    silently dropped with no record."""
+    silently dropped with no record.
+
+    SESSION 5.1c PATCH: dem_name/rep_name now carried through - see
+    normalize_house_rows()'s docstring for the same note on blank real
+    values (confirmed live in the real AK-HD-1 row: Republican incumbent
+    Jeremy Bynum unopposed, dem_name empty)."""
     out = []
     skipped_chamber_counts: dict[str, int] = {}
     skipped_shape = 0
@@ -296,6 +342,8 @@ def normalize_state_leg_rows(rows: list[dict], pulled_at: str) -> list[dict]:
             "chamber": chamber_raw,
             "district": str(int(district_num)),
             "estimate_source": "ElectIndex model",
+            "dem_name": (r.get("dem_name") or "").strip(),
+            "rep_name": (r.get("rep_name") or "").strip(),
             "dem_win_prob": _to_float(r.get("dem_prob")),
             "rep_win_prob": _to_float(r.get("rep_prob")),
             "margin_dem_minus_rep": _to_float(r.get("margin")),
@@ -350,16 +398,11 @@ def run() -> dict:
         # UTF-8. ElectIndex's real candidate-name data contains non-cp1252
         # characters (a combining acute accent, U+0301, from a real
         # candidate name) that raised UnicodeEncodeError and failed the
-        # whole run before a single row was normalized. Every other
-        # ingestion script in this project (ingest_kalshi.py,
-        # ingest_polymarket.py, ingest_weather_markets.py) writes its raw
-        # JSON snapshot with json.dumps() into write_text(), which hits
-        # the same default-encoding gap - it simply hadn't surfaced yet
-        # because none of that raw data happened to contain a
-        # non-cp1252 character. Fixed here by passing encoding="utf-8"
-        # explicitly, matching this file's own already-UTF-8 CSV reads
-        # (io.StringIO(r.text) preserves whatever requests decoded the
-        # response as, which is UTF-8 for this real endpoint).
+        # whole run before a single row was normalized. Fixed here by
+        # passing encoding="utf-8" explicitly, matching this file's own
+        # already-UTF-8 CSV reads (io.StringIO(r.text) preserves whatever
+        # requests decoded the response as, which is UTF-8 for this real
+        # endpoint).
         RAW_DIR.mkdir(parents=True, exist_ok=True)
         (RAW_DIR / f"electindex_{pulled_at_compact}_races_summary.csv").write_text(
             "\n".join([",".join(races_summary_raw[0].keys())] +
