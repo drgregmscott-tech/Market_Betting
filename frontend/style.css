@@ -19,13 +19,10 @@
   --panel-arb-border: #1e2a3a;
   --panel-arb-bg: #101722;
 
-  /* Track 3 (weather) accent — a third distinct hue, same reasoning as
-     Track 2's blue above. */
-  --accent-weather: #ecb44f;
-  --panel-weather-border: #332a1a;
-  --panel-weather-bg: #1c150c;
-
-  /* Track 4 (politics) accent — a fourth distinct hue, same reasoning. */
+  /* Track 4 (politics) accent — a third distinct hue, same reasoning as
+     Track 2's blue above. Track 3 (weather) has no frontend section yet
+     (Session 4.6 still "Not started"), so only three hues are needed so
+     far. */
   --accent-politics: #c98fe0;
   --panel-politics-border: #2a1e33;
   --panel-politics-bg: #180f1e;
@@ -200,11 +197,6 @@ main {
   background: var(--accent-arb);
 }
 
-.track-tag-weather {
-  color: var(--bg);
-  background: var(--accent-weather);
-}
-
 .track-tag-politics {
   color: var(--bg);
   background: var(--accent-politics);
@@ -216,12 +208,6 @@ main {
 .panel-arb {
   border-color: var(--panel-arb-border);
   background: var(--panel-arb-bg);
-}
-
-/* Track 3 panels — same pattern as Track 2's, with the amber accent. */
-.panel-weather {
-  border-color: var(--panel-weather-border);
-  background: var(--panel-weather-bg);
 }
 
 /* Track 4 panels — same pattern as Track 2's, with the purple accent. */

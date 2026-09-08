@@ -1,20 +1,20 @@
-// Market_Betting frontend — Session 4.6
+// Market_Betting frontend — Session 5.6
 //
-// This page now reads FOUR independent data files:
+// This page now reads THREE independent data files:
 //   1. data/clv_log.csv               — Track 1 (pick'em), unchanged since
 //      Session 2.8. A copy of data/pickem/clv_log.csv placed here by the
 //      Cloudflare Pages build step.
 //   2. data/arbitrage_flags_latest.csv — Track 2 (arbitrage), Session 3.5.
 //      A copy of data/arbitrage/flags/arbitrage_flags_latest.csv.
-//   3. data/weather_clv_log.csv        — Track 3 (weather), new this
-//      session. A copy of data/weather/clv_log.csv.
-//   4. data/politics_clv_log.csv       — Track 4 (down-ballot politics),
-//      Session 5.6. A copy of data/politics/clv_log.csv.
+//   3. data/politics_clv_log.csv       — Track 4 (down-ballot politics),
+//      new this session. A copy of data/politics/clv_log.csv. Track 3
+//      (weather) has no frontend section yet — its own Session 4.6 is
+//      still "Not started" per ROADMAP.md, a separately tracked gap, not
+//      something this session silently skipped.
 //
 //      The Cloudflare Pages build command must be updated to copy this
-//      third file too, same one-time dashboard edit Sessions 3.5/5.6
-//      needed for their own tracks — see this session's handoff notes for
-//      the exact command.
+//      third file too, same one-time dashboard edit Session 3.5 needed for
+//      arbitrage — see this session's handoff notes for the exact command.
 //
 // All tracks are loaded and rendered independently: if one file fails to
 // load, the other tracks' sections still render normally. No track's
@@ -28,7 +28,6 @@
 
 const DATA_URL = "data/clv_log.csv";
 const ARB_DATA_URL = "data/arbitrage_flags_latest.csv";
-const WEATHER_DATA_URL = "data/weather_clv_log.csv";
 const POLITICS_DATA_URL = "data/politics_clv_log.csv";
 
 // ---------------------------------------------------------------------
@@ -604,140 +603,7 @@ async function initArbitrage() {
 }
 
 // =======================================================================
-// TRACK 3 — Weather/climate markets (new this session)
-//
-// weather_clv_log.csv shares the same open/closed lifecycle shape as
-// pick'em's clv_log.csv (Session 4.3 built this track on the same shared
-// CLV structure, per clv_logger.py). Two real differences from the other
-// tracks, both handled explicitly rather than by reusing another track's
-// code unchanged: (1) consensus_available is always false here — Kalshi
-// is the only venue this track ingests (Session 4.1), so there is no
-// cross-venue benchmark to show, unlike pick'em/politics; (2) each row
-// carries real forecast context (city, target date, strike threshold,
-// forecast value) instead of a player/team or a candidate/race — shown
-// directly in the open/closed tables so a flagged contract reads as a
-// real weather bet, not an anonymous ticker.
-// =======================================================================
-
-function fmtStrike(r) {
-  const kind = escapeHtml(r.strike_type) || "";
-  const floor = r.floor_strike, cap = r.cap_strike;
-  if (floor && cap) return `${escapeHtml(floor)}–${escapeHtml(cap)}°F`;
-  if (floor) return `≥${escapeHtml(floor)}°F`;
-  if (cap) return `≤${escapeHtml(cap)}°F`;
-  return kind || "—";
-}
-
-function renderWeatherStats(rows) {
-  const open = rows.filter((r) => r.status === "open");
-  const closed = rows.filter((r) => r.status === "closed" && toNum(r.clv_edge_at_close) !== null);
-
-  const avgEdge = closed.length
-    ? closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0) / closed.length
-    : null;
-  const positive = closed.filter((r) => toNum(r.clv_edge_at_close) > 0).length;
-  const hitRate = closed.length ? (positive / closed.length) * 100 : null;
-
-  setText("weatherStatOpen", String(open.length));
-  setText("weatherStatClosed", String(closed.length));
-
-  const cumEl = document.getElementById("weatherStatCumEdge");
-  if (cumEl) {
-    cumEl.textContent = avgEdge === null ? "—" : fmtEdge(avgEdge);
-    cumEl.className = "stat-value " + (avgEdge === null ? "" : edgeClass(avgEdge).replace("edge-", ""));
-  }
-
-  setText("weatherStatHitRate", hitRate === null ? "—" : hitRate.toFixed(0) + "%");
-
-  return { open, closed };
-}
-
-function renderWeatherOpenTable(open) {
-  const tbody = document.getElementById("weatherOpenTableBody");
-  const emptyNote = document.getElementById("weatherOpenEmpty");
-  if (!tbody || !emptyNote) return;
-
-  const sorted = open
-    .slice()
-    .sort((a, b) => (toNum(b.first_flagged_edge) || -1) - (toNum(a.first_flagged_edge) || -1));
-
-  if (!sorted.length) {
-    emptyNote.hidden = false;
-    tbody.innerHTML = "";
-    return;
-  }
-  emptyNote.hidden = true;
-
-  tbody.innerHTML = sorted
-    .map((r) => {
-      const edge = toNum(r.first_flagged_edge);
-      return `
-        <tr>
-          <td class="name-cell">${escapeHtml(r.city_label) || "—"}</td>
-          <td>${fmtDate(r.target_date)}</td>
-          <td>${escapeHtml(r.forecast_kind) || "—"}${r.forecast_value_f ? " " + escapeHtml(r.forecast_value_f) + "°F" : ""}</td>
-          <td>${fmtStrike(r)}</td>
-          <td>${escapeHtml(r.flagged_side) || "—"}</td>
-          <td>${escapeHtml(r.first_flagged_market_price) || "—"}</td>
-          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
-          <td>${escapeHtml(r.lead_days) || "—"}d</td>
-        </tr>`;
-    })
-    .join("");
-}
-
-function renderWeatherClosedTable(closed) {
-  const tbody = document.getElementById("weatherClosedTableBody");
-  const emptyNote = document.getElementById("weatherClosedEmpty");
-  if (!tbody || !emptyNote) return;
-
-  const sorted = closed
-    .slice()
-    .sort((a, b) => new Date(b.closing_pulled_at || 0) - new Date(a.closing_pulled_at || 0))
-    .slice(0, 25);
-
-  if (!sorted.length) {
-    emptyNote.hidden = false;
-    tbody.innerHTML = "";
-    return;
-  }
-  emptyNote.hidden = true;
-
-  tbody.innerHTML = sorted
-    .map((r) => {
-      const edge = toNum(r.clv_edge_at_close);
-      return `
-        <tr>
-          <td class="name-cell">${escapeHtml(r.city_label) || "—"}</td>
-          <td>${fmtDate(r.target_date)}</td>
-          <td>${escapeHtml(r.flagged_side) || "—"}</td>
-          <td>${escapeHtml(r.closing_market_price) || "—"}</td>
-          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
-          <td>${fmtDate(r.closing_pulled_at)}</td>
-        </tr>`;
-    })
-    .join("");
-}
-
-async function initWeather() {
-  try {
-    const res = await fetch(WEATHER_DATA_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const text = await res.text();
-    const rows = parseCSV(text);
-
-    const { open, closed } = renderWeatherStats(rows);
-    renderWeatherOpenTable(open);
-    renderWeatherClosedTable(closed);
-  } catch (err) {
-    const el = document.getElementById("weatherLoadError");
-    if (el) el.hidden = false;
-    console.error("Market_Betting frontend: failed to load weather data.", err);
-  }
-}
-
-// =======================================================================
-// TRACK 4 — Down-ballot politics (Session 5.6)
+// TRACK 4 — Down-ballot politics (new this session)
 //
 // politics_clv_log.csv shares the same open/closed lifecycle shape as
 // pick'em's clv_log.csv (Session 4.3/5.3 built the politics track on the
@@ -875,7 +741,7 @@ async function initPolitics() {
 async function init() {
   // All tracks load independently and in parallel: a failure or an empty
   // result in one must never block or hide another track's real data.
-  await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics()]);
+  await Promise.allSettled([initPickem(), initArbitrage(), initPolitics()]);
 
   setText("asOf", new Date().toLocaleString(undefined, {
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit"
