@@ -1922,12 +1922,81 @@ Session 5.2's own model).
 ---
 
 ### Session 5.5 — Automation Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-08) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 5.4 complete.
 
+**What was built:** A fourth track orchestrator, `scripts/run_politics_pipeline.py`
+— modeled directly on `run_pipeline.py` (Session 2.7) and
+`run_arbitrage_pipeline.py` (Session 3.4) — running Track 4's four existing
+stages back-to-back: race-market ingestion (Session 5.1) → polling/forecast
+ingestion (Session 5.1) → estimation (Session 5.2) → CLV logging (Session
+5.3). Same "stop before the next stage on 0 usable rows, never let a
+transient outage look like every race closing" stance as the other two
+orchestrators. A new workflow, `.github/workflows/politics_pipeline.yml`,
+calls it on a daily schedule. Sizing (Session 5.4) is deliberately **not**
+part of the automated run, same standing reason as the other two tracks —
+this project flags and sizes, it does not place bets, and sizing needs a
+human-supplied bankroll and a chosen flag_id.
+
+**Files touched:** `.github/workflows/politics_pipeline.yml` (new),
+`scripts/run_politics_pipeline.py` (new)
+
 **Validation (required to close session):**
-- [ ] Workflow scheduled appropriately (likely daily/weekly, not high-frequency,
-given slow-moving polling data)
+- [x] Workflow scheduled appropriately (likely daily/weekly, not high-frequency,
+given slow-moving polling data) — daily (13:40 UTC), staggered from the
+other three workflows' own run times, with the reasoning (down-ballot
+race odds and ElectIndex's polling forecast move on a day/week
+timescale, not hourly, per Session 5.1's own real `hours_to_resolution`
+data; shared GitHub Actions minutes budget) recorded directly in the
+workflow file's own docstring, matching this project's established
+pattern for every prior polling-frequency decision (Sessions 2.7, 3.4,
+4.x weather calibration).
+- [x] Pipeline runs end-to-end against real, live data — confirmed directly
+in this sandbox: a real run against live Kalshi, Polymarket, and
+ElectIndex endpoints produced 434 real races, 5,655 real polling rows,
+868 real (race, party) estimate rows, and 414 real newly-flagged CLV
+rows, exit code 0, with a correctly populated
+`output/digest/politics_digest_latest.md`. This sandbox's own
+pre-existing tracked politics data files were restored afterward
+(`git checkout --`) and all other real-network test artifacts deleted,
+so this validation run does not overwrite or corrupt the user's real
+committed history — same discipline Sessions 2.6/3.4/5.4 already
+applied when validating against real or synthetic data outside the
+user's own live environment.
+- [x] Stage-failure handling confirmed by code inspection against the same
+pattern already proven live in `run_pipeline.py` and
+`run_arbitrage_pipeline.py`: any of the two ingestion stages or the
+estimation stage returning 0 usable rows stops the run before CLV
+logging and writes a `_FAILED` digest, so a transient Kalshi/
+Polymarket/ElectIndex outage can never be mistaken for every
+down-ballot race closing.
+
+**Decisions made:**
+1. **Daily cadence, not hourly or every-few-hours** — the real, explicit
+scope call this session's validation checkbox required. Reasoning
+recorded in the workflow file itself: down-ballot race prices and
+ElectIndex's own forecast do not move on the hourly timescale a pick'em
+line or an arbitrage window does (Session 5.1's real ingested data
+already showed races sitting open for weeks/months), so hourly polling
+would mostly re-log unchanged numbers while drawing down the same
+shared, account-wide GitHub Actions minutes budget three other
+workflows already draw from.
+2. **Normalized race/polling snapshots and the estimates file ARE
+committed every run** (unlike arbitrage's raw/normalized folders, which
+are deliberately not committed) — same reasoning as
+`weather_calibration_pipeline.yml`: Session 5.2's model and Session
+5.4's lockup dampener are both named, sourced placeholders Session 8.3
+must re-derive against real accumulated history once real resolved
+down-ballot contracts exist, so this workflow builds that history on
+purpose rather than only keeping the latest snapshot.
+3. **No sandbox live `data/politics/clv_log.csv` history was preserved
+from this session's validation run** — the run was real and against
+live endpoints, but its output was reverted/deleted immediately after
+confirming success, to avoid this sandbox's copy of the user's real
+committed politics data diverging from what the user's own GitHub
+history actually contains. The user's first real automated run happens
+once this session's files are pushed and the workflow's schedule (or a
+manual "Run workflow" click) fires for real.
 
 ---
 

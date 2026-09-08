@@ -5270,3 +5270,124 @@ real data after handoff, when the sandbox cannot reach the live file).
 **Handoff notes:** Next session is 5.5 — Automation Adaptation (scheduling
 the politics pipeline appropriately for slow-moving polling data, per
 that session's card in ROADMAP.md).
+
+---
+
+## Session 5.5 — Automation Adaptation
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+Built the fourth track orchestrator and its scheduled workflow, following
+the same pattern already established by `run_pipeline.py`/
+`pickem_pipeline.yml` (Session 2.7) and `run_arbitrage_pipeline.py`/
+`arbitrage_pipeline.yml` (Session 3.4), rather than inventing a third
+orchestration style.
+
+1. Read the real return-value shape of each of Track 4's four existing
+stage functions before writing anything — `ingest_politics_markets.run()`
+(`ok`, `races_total`, `races_both_venues`, `kalshi_series_matched`),
+`ingest_polling_data.run()` (`ok`, `total_rows`, `house_rows`,
+`state_leg_rows`), `politics_model.run()` (`ok`, `rows_written`,
+`races_read`, `snapshot_path`), and `clv_logger.run_politics()`
+(`newly_flagged`, `newly_closed`, `still_open`, `total_logged`) — so the
+orchestrator's failure checks and digest fields are built against what
+each function actually returns, not guessed by analogy.
+2. Wrote `scripts/run_politics_pipeline.py`: race-market ingestion →
+polling ingestion → estimation → CLV logging, in that order, with the
+same "stop before the next stage, write a `_FAILED` digest, touch nothing
+in `clv_log.csv`" behavior on any stage returning 0 usable rows that the
+other two orchestrators already use — for the same reason: `clv_logger.py`
+treats "this flag_id disappeared from the latest data" as "the market
+closed," which is correct for a real resolution but wrong for a transient
+Kalshi/Polymarket/ElectIndex outage.
+3. Wrote `.github/workflows/politics_pipeline.yml` on a **daily** schedule
+(13:40 UTC, deliberately staggered from the other three workflows' own
+run times), with the cadence reasoning recorded directly in the file's own
+docstring per this project's established pattern (Sessions 2.7, 3.4): down-
+ballot race prices and ElectIndex's forecast move on a day/week timescale,
+not hourly (Session 5.1's own real data already showed races sitting open
+for weeks/months), and a fourth workflow needs to stay a small, deliberate
+addition to the same shared, account-wide GitHub Actions minutes budget
+the other three already draw from.
+4. Decided to commit the normalized race/polling snapshots and the
+estimates file every run (not just the CLV log), mirroring
+`weather_calibration_pipeline.yml` rather than `arbitrage_pipeline.yml` —
+Session 5.2's model and Session 5.4's lockup dampener are both named,
+sourced placeholders Session 8.3 is supposed to re-derive against real
+accumulated history later, so this workflow deliberately builds that
+history rather than only keeping the latest snapshot.
+5. **Ran the real orchestrator end-to-end in this sandbox against live
+Kalshi, Polymarket, and ElectIndex endpoints** to prove it actually works,
+not just that it imports cleanly: real output was 434 races (74 on both
+venues, 94 Kalshi series matched), 5,655 real polling rows, 868 real
+(race, party) estimate rows, and 414 real newly-flagged CLV rows, exit
+code 0, with a correctly populated `output/digest/politics_digest_latest.md`
+(real flag rows, real edge values, real `hours_to_resolution` in the
+thousands, consistent with Session 5.1's own findings for this track).
+6. **Immediately reverted the sandbox's copy of the pre-existing, already-
+committed `data/politics/normalized/politics_races_latest.csv`,
+`polling_estimates_latest.csv`, `politics_estimates_latest.csv`, and the
+three `logs/*.log` files** (`git checkout --`) and deleted every other
+real-network artifact the validation run produced (`clv_log.csv`,
+`clv_snapshots/`, the new timestamped raw/normalized/estimates files, the
+new digest files, `logs/politics_pipeline.log`) once the run's success was
+confirmed — a real, deliberate step this session took that the prior three
+orchestrator sessions' write-ups did not need to spell out as explicitly,
+since this is the first orchestrator session run in a sandbox that already
+had real, previously-committed politics data files present and trackable
+by git (Sessions 2.6/3.3/5.4's sizing validations ran against files that
+either didn't exist in the sandbox at all, or were purely synthetic). `git
+status --porcelain` confirmed clean afterward except for the two real new
+deliverable files.
+
+**Files created/modified:**
+- `scripts/run_politics_pipeline.py` — new orchestrator (~300 lines):
+`run_races_ingestion()`, `run_polling_ingestion()`, `run_estimation()`,
+`run_clv_logging()`, `build_digest()`, `build_failure_digest()`, `main()`.
+- `.github/workflows/politics_pipeline.yml` — new, daily-scheduled workflow.
+- `ROADMAP.md` — Session 5.5 card closed out (see that entry).
+
+**Validation results:**
+- [x] Workflow scheduled appropriately (likely daily/weekly, not high-
+frequency, given slow-moving polling data) — **pass**, daily cadence with
+reasoning documented in the workflow file itself, per this project's
+established "no guessed cadence without a stated reason" pattern.
+- [x] Pipeline runs end-to-end against real, live data — **pass**, see
+item 5 above. This is real evidence beyond what the roadmap's own
+validation checkbox required, added because a "does it schedule
+correctly" checkbox alone would not have caught a real bug in how this
+orchestrator reads each stage's actual return-value shape.
+- [x] No corruption of this sandbox's real tracked politics data from the
+validation run — **pass**, confirmed via `git status --porcelain` showing
+only the two new files after cleanup (item 6 above).
+
+**Decisions made:**
+(See the matching Decisions list in ROADMAP.md's Session 5.5 card — full
+reasoning recorded there to avoid duplicating it in two places. Summary:
+(1) daily cadence, not hourly/every-few-hours; (2) normalized/estimates
+files ARE committed every run, matching the weather-calibration pattern,
+not the arbitrage pattern; (3) this session's live validation run's own
+output was not preserved in the sandbox, to avoid diverging from the
+user's real GitHub history.)
+
+**Corrections/reversals during the session:**
+- None — the orchestrator ran successfully on its first real attempt
+against live data. The one deliberate extra step taken (reverting/
+deleting the validation run's real-network output, item 6 above) was a
+planned safeguard, not a correction of a mistake.
+
+**Open items / deferred validations:**
+- None blocking this session's close. The user's first REAL automated run
+happens once these two files are pushed and either the daily schedule
+fires or the user clicks "Run workflow" manually on GitHub's Actions tab —
+worth a quick manual check the first time, same as every prior workflow
+session (2.7, 3.4) needed at least one real triggered run to confirm the
+schedule itself (not just the underlying script) works on GitHub's actual
+infrastructure.
+
+**Handoff notes:** Next session is 5.6 — Frontend Integration (adding the
+politics track to the existing frontend, with resolution-date context
+shown since these are long-dated positions, per that session's card in
+ROADMAP.md).

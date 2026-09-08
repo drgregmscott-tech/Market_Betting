@@ -1,0 +1,153 @@
+name: Politics Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions "workflow" -- a set of instructions GitHub itself runs on
+# a schedule, on a temporary computer GitHub provides (a "runner"), separate
+# from your own PC. Every run starts from a completely fresh copy of this
+# repo; nothing written to that temporary computer's disk survives past the
+# end of the run unless this file explicitly saves it back to GitHub first.
+# This is Track 4 (down-ballot politics)'s twin of pickem_pipeline.yml
+# (Session 2.7) and arbitrage_pipeline.yml (Session 3.4) -- same structure,
+# a separate schedule and a separate commit step, so all three tracks'
+# automated runs never interfere with each other.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo onto the temporary computer.
+# 2. Installs Python and this project's packages (requirements.txt).
+# 3. Runs scripts/run_politics_pipeline.py, which itself runs Kalshi +
+#    Polymarket race-market ingestion -> ElectIndex polling/forecast
+#    ingestion -> underconfidence-correction estimation -> CLV logging in
+#    sequence (Session 5.1 - 5.3).
+# 4. If that script succeeds, commits the updated normalized race/polling
+#    snapshots, the estimation stage's output, the updated
+#    data/politics/clv_log.csv and its snapshot, and the new digest file
+#    back to this repo, using a token GitHub generates automatically for
+#    every workflow run (GITHUB_TOKEN) -- no separate password or secret
+#    needed.
+# 5. If step 3 fails or finds nothing to commit, the workflow stops there --
+#    no commit happens, and the run shows as failed/red on GitHub's Actions
+#    tab so a failure is never silent.
+#
+# WHY THIS COMMITS THE NORMALIZED RACE/POLLING SNAPSHOTS AND ESTIMATES --
+# UNLIKE arbitrage_pipeline.yml, WHICH DELIBERATELY DOES NOT COMMIT ITS OWN
+# RAW/NORMALIZED FOLDERS
+# --------------------------------------------------------------------------
+# arbitrage_pipeline.yml skips committing its raw/normalized snapshots
+# because that data is disposable -- useful for one run's debugging, not a
+# real historical record (its real audit trail is the candidate-matches and
+# flags files it DOES commit). This track is the opposite case, same as
+# weather_calibration_pipeline.yml: Session 5.2's estimation model and
+# Session 5.4's sizing dampener are both explicitly named, sourced
+# placeholders that ROADMAP.md's Session 8.3 is supposed to re-derive
+# against real data once real resolved down-ballot contracts exist (after
+# the 2026 general election). That re-derivation needs a real accumulated
+# history of what this project's own polling ingestion and estimation
+# actually produced over time, not just the latest snapshot -- so this
+# workflow keeps every run's normalized race/polling files and estimates
+# file, the same "build a real historical record on purpose" reasoning
+# weather_calibration_pipeline.yml already uses.
+#
+# POLLING FREQUENCY -- REAL, NAMED REASONING (matches ROADMAP.md's Session
+# 5.5 requirement: "scheduled appropriately, likely daily/weekly, not
+# high-frequency, given slow-moving polling data")
+# --------------------------------------------------------------------------
+# Once a day, not several times a day, for two real reasons:
+# 1. What this pipeline tracks -- down-ballot race odds and ElectIndex's
+#    own polling-based forecast -- does not move on an hourly timescale the
+#    way a pick'em prop's line does. Session 5.1's own real ingested data
+#    showed races sitting open for weeks or months before resolution
+#    (hours_to_resolution in the thousands); checking every hour would
+#    mostly re-log the same unchanged prices and unchanged ElectIndex
+#    numbers, producing no new real signal.
+# 2. GitHub Actions minutes are a shared, account-wide budget (same real
+#    constraint arbitrage_pipeline.yml's own docstring names, 2,000
+#    min/month on the Free plan). Adding a fourth daily/hourly pipeline on
+#    top of pickem_pipeline.yml (~960 min/month, hourly),
+#    arbitrage_pipeline.yml (~720 min/month, 6x/day), and
+#    weather_calibration_pipeline.yml (~60 min/month, daily) needs to stay
+#    a small, deliberate addition, not a second high-frequency pipeline
+#    stacked on top of the existing three. A single daily run of this
+#    pipeline (four real stages, each doing meaningfully more HTTP calls
+#    than the weather calibration pipeline's one-station-per-request
+#    pattern) is a conservative, checked addition to that shared budget --
+#    to be revisited, same as every other cadence in this project, once
+#    real run-duration history exists on GitHub's own Actions tab.
+#
+# WHY THIS RUNS AT THIS SPECIFIC TIME (13:40 UTC)
+# --------------------------------------------------------------------------
+# Deliberately NOT the exact top of the hour, and deliberately offset from
+# weather_calibration_pipeline.yml's own 11:23 UTC run and
+# pickem_pipeline.yml's hourly :07 offset, so this project's four scheduled
+# workflows are staggered rather than clustered at the same few minutes of
+# the day -- reduces the odds of two unrelated pipelines both landing on a
+# delayed/skipped slot on GitHub's shared infrastructure at once (GitHub's
+# own documentation warns busy, predictable slots are the most likely to be
+# delayed or skipped). Early afternoon UTC is also after every U.S. time
+# zone's overnight ElectIndex/Kalshi/Polymarket data has had a chance to
+# settle for the day, matching the same "let the day's real data settle
+# before pulling it" reasoning weather_calibration_pipeline.yml already
+# uses for its own 11:20 UTC run time.
+on:
+  schedule:
+    - cron: "40 13 * * *"
+  workflow_dispatch: {}
+  # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
+  # be triggered by hand for testing without waiting for the next scheduled
+  # run.
+
+# Prevents two runs from overlapping if one run happens to take longer than
+# expected -- a second scheduled run will wait for the first to finish
+# rather than starting in parallel and racing to write the same files.
+concurrency:
+  group: politics-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Required so the final step in this workflow is allowed to commit and
+  # push back to this repo using the automatic GITHUB_TOKEN.
+
+jobs:
+  run-politics-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (race + polling ingestion -> estimation -> CLV logging)
+        run: python scripts/run_politics_pipeline.py
+
+      - name: Commit and push updated data, estimates, CLV log, and digest
+        run: |
+          git config user.name "politics-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/politics/normalized/ data/politics/estimates/ data/politics/clv_log.csv data/politics/clv_snapshots/ output/digest/politics_digest_latest.md output/digest/politics_digest_*.md
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated politics pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: politics-pipeline-logs
+          path: |
+            logs/politics_pipeline.log
+            logs/ingestion.log
+            logs/estimation.log
+            logs/clv_logging.log
+          retention-days: 14
+          if-no-files-found: ignore
