@@ -247,6 +247,105 @@ USAGE (arbitrage sizing)
 python sizing_engine.py arbitrage size --market-a KXHOUSEMO5-26-R --market-b 0x1234abcd --kalshi-bankroll 1000 --polymarket-bankroll 1000
 python sizing_engine.py arbitrage record-open --market-a KXHOUSEMO5-26-R --market-b 0x1234abcd --kalshi-bankroll 1000 --polymarket-bankroll 1000
 python sizing_engine.py arbitrage settle --position-id <id> --note "both legs settled, profit collected"
+
+===============================================================================
+SESSION 5.4 ADDENDUM -- POLITICS (DOWN-BALLOT) SIZING
+===============================================================================
+
+WHY THIS IS A THIRD, DIFFERENT SIZING SHAPE -- NOT PICK'EM AGAIN, NOT ARBITRAGE
+--------------------------------------------------------------------------------
+Session 5.2's politics_model.py and Session 5.3's clv_logger.py --track
+politics produce single-contract flags on Kalshi or Polymarket -- "buy YES
+on this candidate at this price." That is closer to arbitrage's single-leg
+mechanics than to pick'em's multi-leg parlay, but it is not a locked,
+guaranteed-profit position like arbitrage -- it is a genuine probabilistic
+bet, so Kelly applies here, unlike arbitrage. And unlike pick'em (resolves
+in hours, one game at a time) or arbitrage (both legs typically settle once
+the underlying event resolves, day-to-weeks per Session 3.3's own stated
+gap), a down-ballot political contract can sit open for WEEKS OR MONTHS --
+Session 5.1's real ingested race data runs up to the 2026 general election,
+still roughly two months out as of this session (see politics_estimation_
+model_spec.md's GENERAL_ELECTION_DATE). Session 5.3's own CLV log carries
+`hours_to_resolution` on every row specifically because this gap was
+already flagged as this session's concern (see that session's SESSION_LOG
+entry: "a heads-up for Session 5.4").
+
+Two real consequences follow directly from that long lockup, neither of
+which pick'em's or arbitrage's sizing code accounts for:
+
+1. OPPORTUNITY COST OF LONG-LOCKED CAPITAL. A dollar staked on a race that
+   resolves in 2 days can be restaked on a new opportunity almost
+   immediately if it loses (or is realized if it wins); a dollar staked on
+   a race that resolves in 4 months cannot. The same modeled edge is worth
+   less per year of capital tied up the longer it sits locked -- standard
+   position-sizing logic, but nothing upstream of this session's code
+   currently reflects it.
+2. MANY SIMULTANEOUS LONG-DATED POSITIONS CAN OVERLAP. Because down-ballot
+   positions resolve slowly, a real user placing several flagged politics
+   bets over a few weeks will likely have MANY of them open AT THE SAME
+   TIME (unlike pick'em, where an entry is settled same-day before the
+   next is placed, or arbitrage, where Session 3.3's own open-positions
+   ledger already tracks this per-venue). A single-position bankroll cap
+   alone (this project's existing MAX_SINGLE_POSITION_PCT pattern) does
+   not prevent ten simultaneously-open long-dated positions from
+   collectively locking up far more of a bankroll than any one position
+   looks risky on its own.
+
+CAPITAL-LOCKUP DAMPENER -- NAMED, STEP-FUNCTION, NOT A DERIVED NUMBER
+-----------------------------------------------------------------------
+Same posture as SAME_GAME_CAUTION_MULTIPLIER (Session 2.6) and
+EXECUTION_RISK_BUFFER (Session 3.3): this project has no real source or
+graded data yet describing exactly how much a political-market edge should
+be discounted for a given number of months of capital lockup. Rather than
+invent a precise number, `POLITICS_LOCKUP_DAMPENER_TABLE` applies a
+conservative, monotonically-decreasing step function keyed off
+`hours_to_resolution` (already logged by Session 5.3) -- less than 30 days
+gets no extra dampening beyond the shared quarter-Kelly step; each
+additional resolution-time band applies a larger, explicitly stated
+haircut. This is a real, stated judgment call, not sourced to a specific
+figure -- flagged here exactly like every other placeholder in this
+project, and a named candidate for Session 8.3's recalibration work once
+enough real graded political positions exist (a track that, per Session
+5.2, cannot be sanity-checked against resolved contracts until after the
+2026 general election).
+
+PORTFOLIO-LEVEL EXPOSURE LEDGER -- WHY THIS TRACK NEEDS A SECOND CAP
+------------------------------------------------------------------------
+`data/politics/open_positions.csv` is a new, small ledger, same append/
+settle pattern as Session 3.3's arbitrage ledger. Every time a real
+politics position is recorded, `record_open_politics_position()` appends a
+row; `settle_politics_position()` marks it closed once the real race
+resolves and frees that capital back up. Unlike arbitrage's ledger (which
+exists to prevent double-committing capital already locked in one still-
+open trade), this ledger's main job is enforcing
+`POLITICS_MAX_TOTAL_EXPOSURE_PCT` -- a hard ceiling on the TOTAL capital
+locked across every simultaneously-open politics position, on top of
+(never instead of) the existing single-position cap
+(`POLITICS_MAX_SINGLE_POSITION_PCT`). This directly addresses the "many
+simultaneous long-dated positions" consequence named above -- a single
+well-sized position and an already-overexposed portfolio look identical to
+a per-position cap alone.
+
+WHAT THIS ADDITION DOES NOT DO YET (stated gap, not a silent one)
+-----------------------------------------------------------------------
+- Does not model real opportunity-cost dollar figures (e.g. an actual
+  annualized-return comparison against alternative uses of the same
+  capital) -- POLITICS_LOCKUP_DAMPENER_TABLE is a stated, conservative
+  step function, not a derived rate.
+- Does not net or partially release capital for a position whose resolution
+  date moves closer over time -- each open position's committed capital is
+  treated as fully locked at its originally recorded amount until settled,
+  same simplification Session 3.3's arbitrage ledger already makes.
+- Does not re-derive KELLY_FRACTION, the lockup dampener table, or the two
+  cap percentages from real graded results -- Session 8.3's job, once real
+  resolved down-ballot contracts exist (post-2026-general-election, per
+  Session 5.2's own stated constraint).
+
+USAGE (politics sizing)
+--------------------------
+python sizing_engine.py politics size --flag-id "kalshi|MO-05|R" --venue-bankroll 500
+python sizing_engine.py politics record-open --flag-id "kalshi|MO-05|R" --venue-bankroll 500
+python sizing_engine.py politics settle --position-id <id> --note "race called, contract resolved"
 """
 
 from __future__ import annotations
@@ -274,6 +373,12 @@ LOG_PATH = BASE_DIR / "logs" / "sizing.log"
 # addendum above for why this ledger exists).
 ARBITRAGE_FLAGS_DIR = BASE_DIR / "data" / "arbitrage" / "flags"
 ARBITRAGE_OPEN_POSITIONS_PATH = BASE_DIR / "data" / "arbitrage" / "open_positions.csv"
+
+# Session 5.4 additions -- politics sizing reads Session 5.3's clv_log.csv
+# and maintains its own portfolio-level open-positions ledger (see
+# "SESSION 5.4 ADDENDUM" in the docstring above for why this ledger exists).
+POLITICS_CLV_LOG_PATH = BASE_DIR / "data" / "politics" / "clv_log.csv"
+POLITICS_OPEN_POSITIONS_PATH = BASE_DIR / "data" / "politics" / "open_positions.csv"
 
 # ---------------------------------------------------------------------------
 # Constants -- named explicitly, per this project's "no unnamed black-box
@@ -308,6 +413,43 @@ ARBITRAGE_SUPPORTED_PLATFORMS = {"kalshi", "polymarket"}
 EXECUTION_RISK_BUFFER = 0.85  # stated placeholder -- legging-risk haircut, see docstring
 MAX_ARBITRAGE_POSITION_PCT = 0.05  # hard cap vs. TOTAL combined bankroll -- see docstring
 MIN_ARBITRAGE_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
+
+# ---------------------------------------------------------------------------
+# Session 5.4 additions -- politics-specific constants. Same "named, not
+# guessed" standard as every other constant in this file -- see the
+# "SESSION 5.4 ADDENDUM" docstring section above for the reasoning behind
+# each one.
+# ---------------------------------------------------------------------------
+POLITICS_SUPPORTED_VENUES = {"kalshi", "polymarket"}
+POLITICS_MAX_SINGLE_POSITION_PCT = 0.05  # same single-position ceiling posture as pick'em/arbitrage
+POLITICS_MAX_TOTAL_EXPOSURE_PCT = 0.25  # NEW: portfolio-level cap -- see docstring "why a second cap"
+MIN_POLITICS_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
+
+# Stated, conservative step function -- NOT a derived/sourced number (see
+# docstring). Keyed on hours_to_resolution; each tuple is
+# (max_hours_for_this_band, dampener_multiplier). The last band (no upper
+# bound) is represented with float("inf").
+POLITICS_LOCKUP_DAMPENER_TABLE = [
+    (24 * 30, 1.00),    # < 30 days -- no extra lockup dampening
+    (24 * 90, 0.85),    # 30-90 days
+    (24 * 180, 0.70),   # 90-180 days
+    (float("inf"), 0.55),  # 180+ days
+]
+
+POLITICS_LEDGER_FIELDS = [
+    "position_id",
+    "opened_at",
+    "venue",
+    "race_id",
+    "party",
+    "flag_id",
+    "candidate_name",
+    "hours_to_resolution_at_open",
+    "capital_committed",
+    "status",
+    "settled_at",
+    "settlement_note",
+]
 
 ARBITRAGE_LEDGER_FIELDS = [
     "position_id",
