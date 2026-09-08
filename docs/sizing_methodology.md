@@ -197,3 +197,117 @@ sandbox cannot reach the real `clv_log.csv`.
   enough real outcome data exists (Session 2.5's `outcome_tracker.py` /
   `weekly_review.py`) to check same-game vs. cross-game entries against
   their real win rates specifically.
+
+---
+
+# Addendum — Track 4 (Down-Ballot Politics) Sizing
+
+**Session:** 5.4 — Sizing Adaptation
+**Prerequisite:** Session 5.3 (`clv_logger.py --track politics`) — this
+addendum sizes flags directly out of `data/politics/clv_log.csv`.
+
+## 8. Why politics needs a third sizing shape
+
+Sections 1–7 above size a **multi-leg pick'em parlay** (Session 2.6) and
+the arbitrage addendum sizes a **locked, guaranteed-profit pair** (Session
+3.3). A flagged politics position is neither: it is a single, genuinely
+probabilistic contract (buy YES on one candidate at one venue) — closer to
+arbitrage's single-leg mechanics than to a parlay, but a real bet with a
+win/loss outcome like pick'em, so Kelly applies directly, unlike
+arbitrage.
+
+`size_politics_position()` uses the standard binary-contract Kelly
+formula, expressed directly in terms of the contract's own price:
+
+```
+b = (1 - price) / price
+f* = (p × (b + 1) − 1) / b
+```
+
+where `price` is the flagged side's market price (0–1) and `p` is the
+model's own probability for that side (`first_flagged_model_prob`, logged
+by Session 5.3). The same `KELLY_FRACTION = 0.25` used everywhere else in
+this project is applied on top — no new fraction was invented for this
+track.
+
+## 9. Capital-lockup dampener — why this track needs one and pick'em/arbitrage don't
+
+A down-ballot political contract can sit open for **weeks or months**
+(Session 5.1's real ingested race data runs to the 2026 general election —
+still roughly two months out as of this session), unlike a pick'em entry
+(resolves same day) or a typical arbitrage position. A dollar tied up for
+months carries more opportunity cost, and more can go wrong before
+resolution, than a dollar tied up for hours — nothing upstream of this
+session accounted for that.
+
+`POLITICS_LOCKUP_DAMPENER_TABLE`, keyed on Session 5.3's own
+`hours_to_resolution` field, applies a stated, conservative step function:
+
+| Time to resolution | Dampener |
+|---|---|
+| < 30 days | 1.00 (no extra dampening) |
+| 30–90 days | 0.85 |
+| 90–180 days | 0.70 |
+| 180+ days | 0.55 |
+
+**This is a named judgment call, not a sourced or derived number** — same
+posture as `SAME_GAME_CAUTION_MULTIPLIER` (Section 4.5 above) and
+`EXECUTION_RISK_BUFFER` (arbitrage addendum). No source gives a precise
+dollar figure for how much a specific number of months of lockup should
+discount a position; a conservative, monotonically-decreasing step
+function is used instead of inventing one. Re-deriving it against real
+graded political positions is Session 8.3's job, and per Session 5.2's own
+stated constraint, cannot happen until real down-ballot contracts start
+resolving after the 2026 general election.
+
+## 10. A second cap — portfolio-level exposure, not just single-position
+
+Because positions resolve slowly, a real user placing several flagged
+politics bets over a few weeks will likely have **many open at the same
+time** — unlike pick'em (one entry settles before the next is placed) or
+arbitrage (Session 3.3's own per-venue ledger already guards this). A
+single-position cap alone cannot see that ten simultaneously-open
+long-dated positions collectively lock up far more of a bankroll than any
+one position looks risky on its own.
+
+`data/politics/open_positions.csv` is a new ledger (same append/settle
+pattern as Session 3.3's arbitrage ledger) that `size_politics_position()`
+checks on every run:
+
+- `POLITICS_MAX_SINGLE_POSITION_PCT = 5%` — same per-position ceiling
+  posture as every other track, checked against the venue's own bankroll.
+- `POLITICS_MAX_TOTAL_EXPOSURE_PCT = 25%` — **new**, checked against the
+  user's total combined bankroll and the sum of every currently-open
+  politics position across every venue, regardless of which venue each one
+  sits at (see the code's `committed_capital_politics(venue=None)`). Both
+  caps are stated placeholders, not derived numbers.
+
+## 11. Worked example (synthetic — no real politics CLV log exists in this
+sandbox; see `test_sizing_engine.py` for the full, automated versions of
+these)
+
+| Scenario | hours_to_resolution | Dampener | Suggested stake ($1,000 venue bankroll) |
+|---|---|---|---|
+| p=0.57, price=0.50, 10 days out | 240 | 1.00 | $35.00 |
+| Same edge, 200 days out | 4,800 | 0.55 | $19.25 |
+| p=0.40, price=0.50 (below breakeven) | any | n/a | **$0 — `no_bet_negative_edge`** |
+| p=0.97, price=0.30 (extreme edge) | 120 | 1.00 | **$50.00 — capped** (5% single-position ceiling) |
+| Portfolio already at $245 of $250 total-exposure room | 120 | 1.00 | **$5.00 — capped** (portfolio exposure ceiling, not the single-position one) |
+
+Longer lockup → smaller stake for the identical edge; a combined
+probability at or below breakeven never produces a positive stake; either
+cap can bind, and the output's `binding_constraint` field always says
+which one, never leaving it ambiguous.
+
+## 12. What this addendum does NOT do yet (stated gap, not silent)
+
+- Does not model real opportunity-cost dollar figures (e.g. an actual
+  annualized-return comparison) — the dampener table is a conservative
+  step function, not a derived rate.
+- Does not release capital gradually as a position's resolution date gets
+  closer over time — each open position's committed capital is treated as
+  fully locked at its originally recorded amount until settled (same
+  simplification the arbitrage ledger already makes).
+- Does not re-derive the dampener table or either cap percentage from real
+  graded results — Session 8.3's job, blocked on real resolved down-ballot
+  contracts existing (post-2026-general-election, per Session 5.2).

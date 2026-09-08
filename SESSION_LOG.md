@@ -5121,3 +5121,152 @@ not an open item of this session's own — see Decision #4 above.
 **Status at close of session:** Fully closed out, by explicit agreement
 with the user. Both roadmap validation items pass directly against real,
 live politics data.
+
+---
+
+## Session 5.4 — Sizing Adaptation
+
+**Date completed:** 2026-09-08
+**Status:** ✅ Complete
+
+**What was actually done:**
+Extended `scripts/sizing/sizing_engine.py` with a third, distinct sizing
+shape for the politics track — this project's first single-contract
+binary-Kelly sizer, and the first to account for long capital-lockup time.
+
+1. Confirmed directly against `scripts/calibration/clv_logger.py` (Session
+5.3) and `scripts/estimation/politics_model.py` (Session 5.2) that a
+politics flag is a single Kalshi/Polymarket contract (`flag_id` =
+`venue|race_id|party`), carrying `first_flagged_model_prob`,
+`first_flagged_market_price`, and — critically for this session —
+`hours_to_resolution`, already logged by Session 5.3 specifically as a
+heads-up for this session (see Session 5.3's own handoff note and
+Session 4.3/5.3's "48% flag rate... heads-up for Session 5.4" line).
+2. Established this is a genuinely different sizing shape from both
+existing ones: not pick'em's multi-leg parlay (no combining of legs —
+one contract, one price, one probability), and not arbitrage's locked,
+guaranteed-profit position (a real win/loss outcome exists, so Kelly
+applies directly, unlike arbitrage). Implemented
+`raw_kelly_fraction_binary_contract(p, price)`, algebraically the same
+`f* = (p×(b+1)-1)/b` formula used elsewhere in the file with
+`b = (1-price)/price` derived directly from the contract's own price —
+verified by hand against the existing `raw_kelly_fraction()` helper
+(`test_8_politics_binary_kelly_matches_hand_formula`).
+3. Built `POLITICS_LOCKUP_DAMPENER_TABLE`, a stated, conservative
+4-band step function keyed on `hours_to_resolution` (< 30 days: 1.00;
+30–90 days: 0.85; 90–180 days: 0.70; 180+ days: 0.55), applied on top of
+the same project-wide `KELLY_FRACTION = 0.25` quarter-Kelly step. Proven
+monotonically non-increasing and correct at each band boundary
+(`test_13`), and proven to actually shrink a real suggested stake for an
+identical edge at longer lockup ($35.00 at 10 days vs. $19.25 at 200
+days, same $1,000 bankroll, same p/price — `test_9`).
+4. Recognized, while designing this, that a single-position cap alone
+(this project's existing `MAX_SINGLE_POSITION_PCT` pattern) does not
+protect against many long-dated politics positions overlapping at once —
+a real consequence of slow resolution that neither pick'em (settles
+same-day) nor arbitrage (Session 3.3's ledger already tracks per-venue
+capital) needs to worry about. Built a new portfolio-level ledger,
+`data/politics/open_positions.csv`, and a new
+`POLITICS_MAX_TOTAL_EXPOSURE_PCT = 25%` cap checked against the sum of
+every currently-open politics position across every venue
+(`committed_capital_politics(venue=None)`), on top of (never instead of)
+`POLITICS_MAX_SINGLE_POSITION_PCT = 5%` for the single position itself.
+Proven to actually bind when portfolio room is thin, independent of the
+single-position cap (`test_12`, via a manual, restored monkeypatch of
+`committed_capital_politics` — no pytest fixture required, matching this
+file's plain-script execution style).
+5. Added `record_open_politics_position()` / `settle_politics_position()`,
+same append/settle ledger pattern as Session 3.3's arbitrage ledger, and
+three new CLI subcommands (`politics size`, `politics record-open`,
+`politics settle`) under `sizing_engine.py`'s existing argparse structure.
+6. Wrote `docs/sizing_methodology.md`'s Sections 8–12 addendum, matching
+the existing document's per-track addendum pattern (the arbitrage
+addendum already lives in the module docstring; this one also documents
+in the markdown file directly, since sizing_methodology.md's structure
+is section-numbered and additive).
+
+**Files created/modified:**
+- `scripts/sizing/sizing_engine.py` — new politics section (~370 lines):
+constants (`POLITICS_SUPPORTED_VENUES`, `POLITICS_MAX_SINGLE_POSITION_PCT`,
+`POLITICS_MAX_TOTAL_EXPOSURE_PCT`, `POLITICS_LOCKUP_DAMPENER_TABLE`,
+`POLITICS_LEDGER_FIELDS`), `load_politics_clv_log()`,
+`fetch_politics_flag()`, `politics_lockup_dampener()`,
+`raw_kelly_fraction_binary_contract()`, `load_open_politics_positions()`,
+`committed_capital_politics()`, `size_politics_position()`,
+`record_open_politics_position()`, `settle_politics_position()`,
+`run_politics_sizing()`, plus a new `politics` CLI subcommand
+(`size` / `record-open` / `settle`) and a new "SESSION 5.4 ADDENDUM"
+section in the module docstring.
+- `scripts/sizing/test_sizing_engine.py` — 6 new synthetic tests
+(`test_8` through `test_13`, 13 total in the file), a `make_politics_flag()`
+fixture helper, and new imports from `sizing_engine`.
+- `docs/sizing_methodology.md` — new Sections 8–12 addendum.
+- `ROADMAP.md` — Session 5.4 card closed out (see that entry).
+
+**Validation results:**
+- [x] Sizing reflects the long capital-lockup time for slow-resolving
+political markets — **pass**. `test_9` proves a real, strictly smaller
+suggested stake for an identical edge at 200 days out ($19.25) vs. 10
+days out ($35.00) on the same $1,000 bankroll. `test_13` proves the
+dampener table itself is monotonically non-increasing and correct at
+every stated band boundary. `test_12` proves the new portfolio-level
+exposure cap — the mechanism that specifically addresses "money tied up
+for weeks/months" meaning many positions can be open simultaneously, not
+just one at a time — actually binds independently of the single-position
+cap when portfolio room is thin. All 13/13 tests in
+`test_sizing_engine.py` pass (`python test_sizing_engine.py`, plain-script
+execution, no real network/data access required).
+- No real `data/politics/clv_log.csv` exists in this sandbox to validate
+against directly (confirmed: `ls data/politics/clv_log.csv` → not found;
+only the user's live GitHub copy has Session 5.3's real 866-row output).
+`sizing_engine.py politics size --flag-id "kalshi|MO-05|R" --venue-bankroll
+500 --total-bankroll 500` was run directly against this sandbox's real
+(missing) file and correctly failed loud with a clear, actionable
+`FileNotFoundError`-derived rejection message, rather than silently
+returning a fabricated result — same "fail loud" posture confirmed on
+Sessions 2.6/3.3's own sizing code under the same real constraint.
+
+**Decisions made:**
+(See the matching Decisions list in ROADMAP.md's Session 5.4 card — full
+reasoning recorded there to avoid duplicating it in two places. Summary:
+(1) single-contract binary Kelly reusing the project-wide `KELLY_FRACTION`,
+not a new fraction; (2) the lockup dampener is a stated, conservative step
+function, not a derived rate, explicitly deferred to Session 8.3 and
+blocked on real post-election resolved contracts; (3) the portfolio-level
+exposure cap, backed by a new ledger, is the real structural answer to
+this session's roadmap validation item; (4) validated entirely against
+synthetic fixtures, same constraint Sessions 2.6/3.3 already worked
+under.)
+
+**Corrections/reversals during the session:**
+- First draft of `test_9` used a larger edge (p=0.70 vs. price=0.50) for
+both the short- and long-dated scenarios; both hit
+`POLITICS_MAX_SINGLE_POSITION_PCT`'s $50 cap regardless of the lockup
+dampener, which would have made the test pass without actually proving
+the dampener does anything. Caught by inspecting the failing assertion
+output directly (both stakes reported as exactly $50.0), not assumed —
+corrected by lowering the edge (p=0.57) so the cap no longer binds and
+the dampener's own effect on the stake becomes the actual thing under
+test.
+
+**Open items / deferred validations:**
+- None blocking this session's close. Re-deriving
+`POLITICS_LOCKUP_DAMPENER_TABLE`, `POLITICS_MAX_SINGLE_POSITION_PCT`, and
+`POLITICS_MAX_TOTAL_EXPOSURE_PCT` against real graded political positions
+is Session 8.3's job, explicitly blocked on real resolved down-ballot
+contracts existing — which, per Session 5.2's own stated constraint,
+cannot happen before the 2026 general election (roughly two months out
+as of this session).
+- Live validation against the user's real `data/politics/clv_log.csv` (866
+real rows per Session 5.3) has not yet been run — the user should run
+`python scripts/sizing/sizing_engine.py politics size --flag-id
+"<real flag_id>" --venue-bankroll <amount> --total-bankroll <amount>`
+against a real open flag from their own live log as a real-data sanity
+check, same pattern used to validate Sessions 2.6/3.3's own sizing code
+after handoff. Not blocking this session's close (matches this project's
+own precedent of validating sizing math against synthetic fixtures first,
+real data after handoff, when the sandbox cannot reach the live file).
+
+**Handoff notes:** Next session is 5.5 — Automation Adaptation (scheduling
+the politics pipeline appropriately for slow-moving polling data, per
+that session's card in ROADMAP.md).

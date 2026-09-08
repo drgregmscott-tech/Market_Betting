@@ -970,6 +970,290 @@ def run_arbitrage_sizing(
     return result
 
 
+# ===========================================================================
+# SESSION 5.4 -- POLITICS (DOWN-BALLOT) SIZING
+# See the "SESSION 5.4 ADDENDUM" section of the module docstring above for
+# why this is a third, distinct sizing shape (single-leg Kelly, like
+# arbitrage's per-leg mechanics, but a genuine probabilistic bet, like
+# pick'em -- combined with a long-capital-lockup adjustment neither of
+# those tracks needs).
+# ===========================================================================
+
+def load_politics_clv_log() -> pd.DataFrame:
+    if not POLITICS_CLV_LOG_PATH.exists():
+        raise FileNotFoundError(
+            f"{POLITICS_CLV_LOG_PATH} not found. Run clv_logger.py --track politics "
+            f"first (Session 5.3) so there are flagged opportunities to size."
+        )
+    return pd.read_csv(POLITICS_CLV_LOG_PATH)
+
+
+def fetch_politics_flag(flag_id: str) -> tuple[Optional[dict], list[str]]:
+    """Looks up one flag_id (venue|race_id|party, per Session 5.3's own
+    scheme) in the live politics CLV log. Returns (flag_row_or_None,
+    problems), same "always say exactly why" posture as fetch_legs()
+    above."""
+    try:
+        clv_df = load_politics_clv_log()
+    except FileNotFoundError as exc:
+        return None, [str(exc)]
+
+    matches = clv_df.loc[clv_df["flag_id"] == flag_id]
+    if len(matches) == 0:
+        return None, [f"flag_id '{flag_id}' not found in {POLITICS_CLV_LOG_PATH}"]
+
+    row = matches.iloc[0].to_dict()
+    if row.get("status") != "open":
+        return None, [
+            f"flag_id '{flag_id}' has status='{row.get('status')}', not 'open' "
+            f"-- this position is no longer available (race likely settled/delisted)."
+        ]
+
+    for required in ("first_flagged_model_prob", "first_flagged_market_price", "hours_to_resolution"):
+        if row.get(required) is None or pd.isna(row.get(required)):
+            return None, [f"flag_id '{flag_id}' has no {required} logged."]
+
+    return row, []
+
+
+def politics_lockup_dampener(hours_to_resolution: float) -> float:
+    """Looks up the stated, conservative step-function dampener for a
+    given hours_to_resolution -- see POLITICS_LOCKUP_DAMPENER_TABLE and
+    the docstring's "CAPITAL-LOCKUP DAMPENER" section for why this is a
+    named judgment call, not a derived rate."""
+    for max_hours, multiplier in POLITICS_LOCKUP_DAMPENER_TABLE:
+        if hours_to_resolution <= max_hours:
+            return multiplier
+    return POLITICS_LOCKUP_DAMPENER_TABLE[-1][1]  # unreachable given the inf band, kept defensive
+
+
+def raw_kelly_fraction_binary_contract(p: float, price: float) -> float:
+    """Kelly for a single binary contract bought at `price` (0 < price < 1),
+    paying $1 if the flagged side resolves YES. Net odds
+    b = (1 - price) / price (profit per $1 staked on a win); this is
+    algebraically the same f* = (p*(b+1) - 1) / b formula used elsewhere in
+    this file, just expressed directly in terms of price so callers never
+    need to separately compute b themselves. Can be negative (no real
+    edge) -- callers must floor at 0, never bet a negative fraction."""
+    if not (0.0 < price < 1.0):
+        raise ValueError(f"price must be strictly between 0 and 1, got {price}")
+    b = (1.0 - price) / price
+    return raw_kelly_fraction(p, b)
+
+
+def load_open_politics_positions() -> list[dict]:
+    """Reads the portfolio-level open-positions ledger. Returns an empty
+    list, not an error, if the ledger doesn't exist yet -- same posture as
+    load_open_arbitrage_positions()."""
+    if not POLITICS_OPEN_POSITIONS_PATH.exists():
+        return []
+    with POLITICS_OPEN_POSITIONS_PATH.open(newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def committed_capital_politics(open_positions: list[dict], venue: Optional[str] = None) -> float:
+    """Sums capital currently locked across every still-open politics
+    position. If `venue` is given, sums only that venue's positions
+    (matching the single-venue bankroll figure a user actually has sitting
+    at that venue); with venue=None, sums ALL open positions across every
+    venue -- this is the number POLITICS_MAX_TOTAL_EXPOSURE_PCT is checked
+    against, since that cap is deliberately venue-agnostic (see docstring:
+    it exists to catch many simultaneous long-dated positions overlapping,
+    regardless of which venue each one sits at)."""
+    total = 0.0
+    for pos in open_positions:
+        if pos.get("status") != "open":
+            continue
+        if venue is not None and pos.get("venue") != venue:
+            continue
+        total += float(pos.get("capital_committed") or 0.0)
+    return total
+
+
+def size_politics_position(flag_row: dict, venue_bankroll: float, total_bankroll: float) -> dict:
+    """Runs the full single-contract Kelly sizing pipeline for one flagged
+    politics position and returns a fully-explained result dict, same
+    "every intermediate number included" standard as size_entry() and
+    size_arbitrage_position() above.
+
+    venue_bankroll: real dollars currently sitting at the flag's own venue
+    (Kalshi or Polymarket) -- checked against the single-position cap.
+    total_bankroll: the user's combined bankroll across all venues/tracks
+    -- checked against POLITICS_MAX_TOTAL_EXPOSURE_PCT together with every
+    other currently-open politics position (see docstring)."""
+    venue = flag_row.get("venue")
+    if venue not in POLITICS_SUPPORTED_VENUES:
+        return _rejected(
+            f"Unrecognized venue '{venue}' in flag row -- supported: "
+            f"{sorted(POLITICS_SUPPORTED_VENUES)}."
+        )
+
+    if venue_bankroll < MIN_POLITICS_BANKROLL or total_bankroll < MIN_POLITICS_BANKROLL:
+        return _rejected(
+            f"--venue-bankroll and --total-bankroll must both be at least "
+            f"{MIN_POLITICS_BANKROLL}, got venue_bankroll={venue_bankroll}, "
+            f"total_bankroll={total_bankroll}."
+        )
+
+    p = float(flag_row["first_flagged_model_prob"])
+    price = float(flag_row["first_flagged_market_price"])
+    hours_to_resolution = float(flag_row["hours_to_resolution"])
+
+    try:
+        f_raw = raw_kelly_fraction_binary_contract(p, price)
+    except ValueError as exc:
+        return _rejected(str(exc))
+
+    f_quarter = max(f_raw, 0.0) * KELLY_FRACTION  # reuses the project-wide quarter-Kelly constant
+
+    dampener = politics_lockup_dampener(hours_to_resolution)
+    f_dampened = f_quarter * dampener
+
+    open_positions = load_open_politics_positions()
+    committed_at_venue = committed_capital_politics(open_positions, venue=venue)
+    committed_total = committed_capital_politics(open_positions, venue=None)
+
+    available_at_venue = venue_bankroll - committed_at_venue
+    single_position_cap = venue_bankroll * POLITICS_MAX_SINGLE_POSITION_PCT
+    total_exposure_cap = total_bankroll * POLITICS_MAX_TOTAL_EXPOSURE_PCT
+    remaining_exposure_room = total_exposure_cap - committed_total
+
+    uncapped_stake = venue_bankroll * f_dampened
+    binding_candidates = {
+        "uncapped_kelly_stake": uncapped_stake,
+        "single_position_cap": single_position_cap,
+        "available_capital_at_venue": max(available_at_venue, 0.0),
+        "remaining_total_exposure_room": max(remaining_exposure_room, 0.0),
+    }
+    binding_constraint = min(binding_candidates, key=binding_candidates.get)
+    final_stake = round(max(binding_candidates[binding_constraint], 0.0), 2)
+
+    if f_raw <= 0:
+        status = "no_bet_negative_edge"
+        final_stake = 0.0
+        binding_constraint = "negative_edge"
+    elif binding_constraint != "uncapped_kelly_stake":
+        status = "sized_capped"
+    else:
+        status = "sized"
+
+    return {
+        "status": status,
+        "flag_id": flag_row.get("flag_id"),
+        "venue": venue,
+        "race_id": flag_row.get("race_id"),
+        "party": flag_row.get("party"),
+        "candidate_name": flag_row.get("candidate_name"),
+        "model_prob": round(p, 4),
+        "market_price": round(price, 4),
+        "hours_to_resolution": hours_to_resolution,
+        "raw_kelly_fraction": round(f_raw, 4),
+        "quarter_kelly_fraction": round(f_quarter, 4),
+        "lockup_dampener_applied": dampener,
+        "dampened_kelly_fraction": round(f_dampened, 4),
+        "venue_bankroll": venue_bankroll,
+        "total_bankroll": total_bankroll,
+        "committed_capital_at_venue": round(committed_at_venue, 2),
+        "committed_capital_total_all_venues": round(committed_total, 2),
+        "single_position_cap": round(single_position_cap, 2),
+        "total_exposure_cap": round(total_exposure_cap, 2),
+        "binding_constraint": binding_constraint,
+        "uncapped_suggested_stake": round(uncapped_stake, 2),
+        "suggested_stake": final_stake,
+        "suggested_stake_pct_of_venue_bankroll": round(100 * final_stake / venue_bankroll, 2) if venue_bankroll else None,
+    }
+
+
+def _append_politics_ledger_row(row: dict) -> None:
+    POLITICS_OPEN_POSITIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = POLITICS_OPEN_POSITIONS_PATH.exists()
+    with POLITICS_OPEN_POSITIONS_PATH.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=POLITICS_LEDGER_FIELDS, extrasaction="ignore")
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
+
+
+def record_open_politics_position(sized_result: dict) -> dict:
+    """Appends a real, placed politics position to the portfolio-level
+    open-positions ledger. Call this only after the human has actually
+    placed the real trade -- this project sizes and flags, it does not
+    place bets (ROADMAP.md's standing principle), so this function records
+    a decision the human already made, it does not make one."""
+    if sized_result.get("status") not in ("sized", "sized_capped"):
+        return _rejected(
+            f"Refusing to record an open position from a sizing result "
+            f"with status='{sized_result.get('status')}' -- only a "
+            f"successfully sized result should be recorded as a real, "
+            f"placed trade."
+        )
+
+    position_id = datetime.now(timezone.utc).strftime("pol_%Y%m%dT%H%M%SZ")
+    row = {
+        "position_id": position_id,
+        "opened_at": datetime.now(timezone.utc).isoformat(),
+        "venue": sized_result["venue"],
+        "race_id": sized_result["race_id"],
+        "party": sized_result["party"],
+        "flag_id": sized_result["flag_id"],
+        "candidate_name": sized_result.get("candidate_name"),
+        "hours_to_resolution_at_open": sized_result["hours_to_resolution"],
+        "capital_committed": sized_result["suggested_stake"],
+        "status": "open",
+        "settled_at": "",
+        "settlement_note": "",
+    }
+    _append_politics_ledger_row(row)
+    log.info("Recorded open politics position %s: %s", position_id, row)
+    return {"status": "recorded", "position_id": position_id, "ledger_row": row}
+
+
+def settle_politics_position(position_id: str, note: str = "") -> dict:
+    """Marks a ledger row as settled, freeing its committed capital back
+    up -- same rewrite-whole-file pattern as settle_arbitrage_position()."""
+    positions = load_open_politics_positions()
+    found = False
+    for pos in positions:
+        if pos.get("position_id") == position_id and pos.get("status") == "open":
+            pos["status"] = "settled"
+            pos["settled_at"] = datetime.now(timezone.utc).isoformat()
+            pos["settlement_note"] = note
+            found = True
+            break
+
+    if not found:
+        return _rejected(
+            f"No OPEN position with position_id='{position_id}' found in "
+            f"{POLITICS_OPEN_POSITIONS_PATH} -- check the id, or it may "
+            f"already be settled."
+        )
+
+    with POLITICS_OPEN_POSITIONS_PATH.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=POLITICS_LEDGER_FIELDS, extrasaction="ignore")
+        writer.writeheader()
+        for pos in positions:
+            writer.writerow(pos)
+
+    log.info("Settled politics position %s (note=%r)", position_id, note)
+    return {"status": "settled", "position_id": position_id}
+
+
+def run_politics_sizing(flag_id: str, venue_bankroll: float, total_bankroll: float) -> dict:
+    log.info(
+        "=== Politics sizing run starting: flag_id=%s, venue_bankroll=%s, total_bankroll=%s ===",
+        flag_id, venue_bankroll, total_bankroll,
+    )
+    flag_row, problems = fetch_politics_flag(flag_id)
+    if problems:
+        result = _rejected("; ".join(problems))
+        log.warning("Politics sizing request rejected: %s", result["reason"])
+        return result
+
+    result = size_politics_position(flag_row, venue_bankroll, total_bankroll)
+    log.info("Politics sizing result: %s", result)
+    return result
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -1045,6 +1329,41 @@ if __name__ == "__main__":
     arb_settle.add_argument("--position-id", type=str, required=True)
     arb_settle.add_argument("--note", type=str, default="", help="Optional free-text settlement note.")
 
+    # -- politics (Session 5.4, new) --
+    politics_parser = subparsers.add_parser(
+        "politics", help="Size, record, or settle a down-ballot politics position from clv_logger.py's flags."
+    )
+    politics_subparsers = politics_parser.add_subparsers(dest="action", required=True)
+
+    politics_size = politics_subparsers.add_parser(
+        "size", help="Compute a suggested position size for one flagged politics position."
+    )
+    politics_size.add_argument(
+        "--flag-id", type=str, required=True,
+        help='flag_id from data/politics/clv_log.csv (venue|race_id|party, e.g. "kalshi|MO-05|R").',
+    )
+    politics_size.add_argument(
+        "--venue-bankroll", type=float, required=True, help="Real dollars currently in that flag's own venue account."
+    )
+    politics_size.add_argument(
+        "--total-bankroll", type=float, required=True,
+        help="Real combined bankroll across all venues/tracks -- checked against the portfolio-level exposure cap.",
+    )
+
+    politics_record = politics_subparsers.add_parser(
+        "record-open",
+        help="Size a flagged position AND record it as a real, placed open position in the ledger.",
+    )
+    politics_record.add_argument("--flag-id", type=str, required=True)
+    politics_record.add_argument("--venue-bankroll", type=float, required=True)
+    politics_record.add_argument("--total-bankroll", type=float, required=True)
+
+    politics_settle = politics_subparsers.add_parser(
+        "settle", help="Mark an open politics position as settled, freeing its committed capital."
+    )
+    politics_settle.add_argument("--position-id", type=str, required=True)
+    politics_settle.add_argument("--note", type=str, default="", help="Optional free-text settlement note.")
+
     args = parser.parse_args()
 
     if args.mode == "pickem":
@@ -1063,4 +1382,16 @@ if __name__ == "__main__":
 
         elif args.action == "settle":
             result = settle_arbitrage_position(args.position_id, args.note)
+            print(json.dumps(result, indent=2, default=str))
+
+    elif args.mode == "politics":
+        if args.action in ("size", "record-open"):
+            result = run_politics_sizing(args.flag_id, args.venue_bankroll, args.total_bankroll)
+            if args.action == "record-open" and result.get("status") in ("sized", "sized_capped"):
+                record_result = record_open_politics_position(result)
+                result["ledger_record"] = record_result
+            print(json.dumps(result, indent=2, default=str))
+
+        elif args.action == "settle":
+            result = settle_politics_position(args.position_id, args.note)
             print(json.dumps(result, indent=2, default=str))

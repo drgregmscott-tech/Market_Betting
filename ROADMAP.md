@@ -1843,12 +1843,81 @@ named explicitly and feeds directly into Session 5.4's sizing design.
 ---
 
 ### Session 5.4 — Sizing Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-08) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 5.3 complete.
 
+**What gets built:** Extends `sizing_engine.py` with a third, distinct
+sizing shape — `size_politics_position()` — for single-contract Kalshi/
+Polymarket flags out of `data/politics/clv_log.csv`. Unlike pick'em's
+multi-leg parlay or arbitrage's locked two-venue pair, this is a single
+genuinely probabilistic bet (standard binary-contract Kelly applies), with
+two new adjustments neither other track needs: a stated, conservative
+`POLITICS_LOCKUP_DAMPENER_TABLE` step function (keyed on Session 5.3's own
+`hours_to_resolution` field) that shrinks the suggested stake as time to
+resolution grows, and a new portfolio-level `POLITICS_MAX_TOTAL_EXPOSURE_PCT`
+cap (backed by a new `data/politics/open_positions.csv` ledger) that limits
+total capital locked across every simultaneously-open politics position,
+not just any single one — since down-ballot positions can sit open for
+weeks or months and realistically overlap, unlike pick'em or arbitrage.
+
+**Files touched:** `/scripts/sizing/sizing_engine.py` (extended — new
+politics section, constants, CLI subcommands),
+`/scripts/sizing/test_sizing_engine.py` (6 new synthetic tests, 13 total),
+`/docs/sizing_methodology.md` (new addendum, Sections 8–12)
+
 **Validation (required to close session):**
-- [ ] Sizing reflects the long capital-lockup time for slow-resolving political
-markets (money tied up for weeks/months, not hours/days)
+- [x] Sizing reflects the long capital-lockup time for slow-resolving political
+markets (money tied up for weeks/months, not hours/days) — confirmed via
+`POLITICS_LOCKUP_DAMPENER_TABLE` (identical edge, identical bankroll:
+10 days out → $35.00 suggested stake; 200 days out → $19.25, a real,
+strictly smaller stake for the same edge) and the new portfolio-level
+exposure ledger, both proven against synthetic fixtures in
+`test_sizing_engine.py` (13/13 tests pass; no real
+`data/politics/clv_log.csv` exists in this sandbox — same constraint
+Sessions 2.6/3.3 already worked under).
+
+**Decisions made:**
+1. **Single-contract binary Kelly, not a parlay or an arbitrage-style
+locked position.** A politics flag is one contract on one venue with a
+real win/loss outcome — closer to arbitrage's single-leg mechanics than
+to pick'em's multi-leg combination, but a genuine probabilistic bet
+(Kelly applies), unlike arbitrage (no win/loss probability exists for a
+locked position). The same project-wide `KELLY_FRACTION = 0.25` is
+reused, not re-invented, for consistency with every other track.
+2. **`POLITICS_LOCKUP_DAMPENER_TABLE` is a stated, conservative step
+function, not a derived rate** — same posture as `SAME_GAME_CAUTION_
+MULTIPLIER` (Session 2.6) and `EXECUTION_RISK_BUFFER` (Session 3.3). No
+source gives a precise opportunity-cost figure for a specific number of
+months of capital lockup, so a monotonically-decreasing 4-band step
+function (< 30 days: 1.00; 30–90: 0.85; 90–180: 0.70; 180+: 0.55) is
+used instead of inventing one. Re-deriving it is named as Session 8.3's
+job, explicitly blocked on real resolved down-ballot contracts, which
+per Session 5.2's own stated constraint cannot exist before the 2026
+general election.
+3. **A second, portfolio-level cap (`POLITICS_MAX_TOTAL_EXPOSURE_PCT =
+25%`) was added on top of the existing single-position cap
+(`POLITICS_MAX_SINGLE_POSITION_PCT = 5%`), backed by a new
+`data/politics/open_positions.csv` ledger** — the real, structural
+reason this track needs sizing adaptation at all. A single-position cap
+alone cannot see that several long-dated positions, each individually
+well-sized, can collectively lock up far more of a bankroll once they
+realistically overlap for weeks or months at once (unlike pick'em,
+which settles same-day, or arbitrage, whose existing per-venue ledger
+already guards this from Session 3.3). Both cap percentages are stated
+placeholders, same posture as every other cap in this project.
+4. **No real `data/politics/clv_log.csv` exists in this sandbox** (the
+user's live copy has real flagged rows, per Session 5.3's 866-row real
+validation run, but is not reachable here) — validated entirely against
+synthetic fixtures in `test_sizing_engine.py`, same constraint and same
+resolution Sessions 2.6 and 3.3 already worked under for their own
+sizing code.
+
+**Open items / deferred validations:**
+- None blocking. Re-deriving `POLITICS_LOCKUP_DAMPENER_TABLE` and both
+cap percentages against real graded political positions remains
+Session 8.3's job, tied to real resolved down-ballot contracts existing
+after the 2026 general election (same constraint already logged against
+Session 5.2's own model).
 
 ---
 
