@@ -8686,3 +8686,17 @@
 2026-09-08 12:52:31,481 UTC | INFO | Polymarket: 3416 of 20668 rows in polymarket_latest.csv structurally matched a down-ballot race, across 427 distinct races.
 2026-09-08 12:52:31,498 UTC | INFO | Down-ballot politics: 433 races total (74 on both venues), 76 with a matched Dem candidate, 75 with a matched Rep candidate, 3432 total unmatched candidate markets logged for review.
 2026-09-08 12:52:31,528 UTC | INFO | === Down-ballot politics ingestion run complete: 433 race rows (OK) ===
+2026-09-08 12:57:57,321 UTC | INFO | === Down-ballot politics market ingestion run starting (Session 5.1c: per-candidate matching) ===
+2026-09-08 12:57:57,343 UTC | INFO | Loaded ElectIndex candidate names for 5286 races from polling_estimates_latest.csv.
+2026-09-08 12:57:57,777 UTC | INFO | Series discovery: 1680 Elections-category series, 93 confirmed narrow down-ballot (House: 89, state legislature: 4).
+2026-09-08 12:58:07,880 UTC | INFO | Kalshi: processed 20/93 down-ballot series so far.
+2026-09-08 12:58:08,357 UTC | WARNING | Series HOUSEAZ7S confirmed as US House District tier but ticker didn't match the expected state/district structure - skipped.
+2026-09-08 12:58:08,558 UTC | WARNING | Series HOUSEVA11S confirmed as US House District tier but ticker didn't match the expected state/district structure - skipped.
+2026-09-08 12:58:20,385 UTC | WARNING | Series HOUSETX18S confirmed as US House District tier but ticker didn't match the expected state/district structure - skipped.
+2026-09-08 12:58:26,964 UTC | INFO | Kalshi: processed 60/93 down-ballot series so far.
+2026-09-08 12:58:30,452 UTC | WARNING | Series HOUSETN7S confirmed as US House District tier but ticker didn't match the expected state/district structure - skipped.
+2026-09-08 12:58:36,628 UTC | INFO | Kalshi: processed 80/93 down-ballot series so far.
+2026-09-08 12:58:43,065 UTC | INFO | Kalshi: processed 93/93 down-ballot series so far.
+2026-09-08 12:58:43,756 UTC | INFO | Polymarket: 3416 of 20668 rows in polymarket_latest.csv structurally matched a down-ballot race, across 427 distinct races.
+2026-09-08 12:58:43,774 UTC | INFO | Down-ballot politics: 433 races total (74 on both venues), 432 with a matched Dem candidate, 431 with a matched Rep candidate, 2578 total unmatched candidate markets logged for review.
+2026-09-08 12:58:43,810 UTC | INFO | === Down-ballot politics ingestion run complete: 433 race rows (OK) ===
