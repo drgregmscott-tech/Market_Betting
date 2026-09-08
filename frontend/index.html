@@ -218,6 +218,94 @@ Session 3.5's notes if this file has never existed in a deploy yet.
 </p>
 
 <!-- ================================================================ -->
+<!-- TRACK 3 — WEATHER/CLIMATE MARKETS                                  -->
+<!-- ================================================================ -->
+<div class="track-heading track-heading-weather">
+<span class="track-tag track-tag-weather">Track 3</span>
+<h2>Weather / climate markets (Kalshi)</h2>
+</div>
+
+<section class="panel panel-weather" id="weather-summary-panel">
+<div class="stat-row" id="weatherStatRow">
+<div class="stat">
+<span class="stat-value" id="weatherStatOpen">—</span>
+<span class="stat-label">Open flags</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="weatherStatClosed">—</span>
+<span class="stat-label">Closed &amp; graded</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="weatherStatCumEdge">—</span>
+<span class="stat-label">Average CLV edge</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="weatherStatHitRate">—</span>
+<span class="stat-label">Positive-edge rate</span>
+</div>
+</div>
+</section>
+
+<section class="panel panel-weather" id="weather-open-panel">
+<div class="panel-head">
+<h2>Currently flagged contracts</h2>
+<p class="panel-note">
+Open lines from the daily weather calibration pipeline, sorted by model edge. Kalshi is the only venue
+this track ingests, so there is no cross-venue consensus benchmark here &mdash; the closing-price
+benchmark (a contract disappearing from a fresh pull) is what grades these flags instead, and it works
+well for this track specifically because weather contracts resolve in days, not weeks or months.
+</p>
+</div>
+<div class="table-wrap">
+<table id="weatherOpenTable">
+<thead>
+<tr>
+<th>City</th>
+<th>Target date</th>
+<th>Forecast</th>
+<th>Strike</th>
+<th>Side</th>
+<th>Market price</th>
+<th>Model edge</th>
+<th>Lead time</th>
+</tr>
+</thead>
+<tbody id="weatherOpenTableBody"></tbody>
+</table>
+</div>
+<p id="weatherOpenEmpty" class="empty-note" hidden>No open flags right now.</p>
+</section>
+
+<section class="panel panel-weather" id="weather-closed-panel">
+<div class="panel-head">
+<h2>Recently closed flags</h2>
+<p class="panel-note">The last 25 contracts to resolve or drop off the board, most recent first.</p>
+</div>
+<div class="table-wrap">
+<table id="weatherClosedTable">
+<thead>
+<tr>
+<th>City</th>
+<th>Target date</th>
+<th>Side</th>
+<th>Closing price</th>
+<th>CLV edge at close</th>
+<th>Closed</th>
+</tr>
+</thead>
+<tbody id="weatherClosedTableBody"></tbody>
+</table>
+</div>
+<p id="weatherClosedEmpty" class="empty-note" hidden>No closed flags yet.</p>
+</section>
+
+<p id="weatherLoadError" class="load-error" hidden>
+Could not load <code>data/weather_clv_log.csv</code>. This page reads that file from its own build, so a
+fresh Cloudflare Pages deploy is needed after any weather pipeline run for this section to update. See
+this session's handoff notes if this file has never existed in a deploy yet.
+</p>
+
+<!-- ================================================================ -->
 <!-- TRACK 4 — DOWN-BALLOT POLITICS                                    -->
 <!-- ================================================================ -->
 <div class="track-heading track-heading-politics">
@@ -310,7 +398,7 @@ this session's handoff notes if this file has never existed in a deploy yet.
 </main>
 
 <footer class="site-footer">
-<p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including every track&rsquo;s own pipeline commits.</p>
+<p>Static page, no framework. Rebuilt automatically on every push to <code>main</code>, including every one of the four tracks&rsquo; own pipeline commits.</p>
 </footer>
 
 <script src="app.js"></script>
