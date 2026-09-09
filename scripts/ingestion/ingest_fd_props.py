@@ -59,6 +59,7 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -97,6 +98,65 @@ PLAYER_PROP_CATEGORY_HINTS = {
     "touchdown": "player_touchdown",
     "td scorer": "player_touchdown",
 }
+
+# FIX (2026-09-09, real live-data finding): the real response's per-runner
+# "handicap" field is 0 for these season-long prop markets — the ACTUAL
+# line only appears as free text in runnerName (e.g. "Aaron Rodgers Over
+# 3050.5"), confirmed against a real live pull. Relying on "handicap" alone
+# (the original v1 assumption, unverified before this) silently produced
+# line=0.0 for every real row. This regex extracts the real numeric line
+# from that text instead; "handicap" is kept only as a fallback for a
+# market type where it might genuinely carry the value.
+_FD_RUNNER_LINE_PATTERN = re.compile(r"(?:Over|Under)\s+([\d.]+)", re.IGNORECASE)
+
+# FIX (2026-09-09, real live-data finding): "player_name" was being read
+# from market.get("marketType") (e.g. "REGULAR_SEASON_PROPS_-_QUARTERBACKS"
+# — a category code, not a player), confirmed wrong against real data. The
+# real player (or team, for a team-level market like "Regular Season Wins")
+# is embedded in "marketName" text instead. These two patterns split it
+# back out. Team-level markets (e.g. "Arizona Cardinals - Regular Season
+# Wins 2026-27") are recognized separately so they are NOT miscounted as a
+# player prop.
+_FD_PLAYER_MARKET_PATTERN = re.compile(
+    r"^(?P<player>.+?)\s+Regular Season\s+(?P<stat>.+?)\s+\d{4}-\d{2}$"
+)
+_FD_TEAM_MARKET_PATTERN = re.compile(
+    r"^(?P<team>.+?)\s+-\s+Regular Season\s+(?P<stat>.+?)\s+\d{4}-\d{2}$"
+)
+
+
+def _parse_market_name(market_name: str) -> tuple[Optional[str], Optional[str], str]:
+    """Returns (player_name, team, clean_stat_type) parsed from FanDuel's
+    real marketName text. Falls back to (None, None, market_name) for any
+    shape this session hasn't seen yet, so an unrecognized format is a
+    visible None rather than a silently wrong guess."""
+    team_match = _FD_TEAM_MARKET_PATTERN.match(market_name)
+    if team_match:
+        return None, team_match.group("team"), team_match.group("stat")
+
+    player_match = _FD_PLAYER_MARKET_PATTERN.match(market_name)
+    if player_match:
+        player = player_match.group("player")
+        # FIX (2026-09-09, real live-data finding): a league-wide market
+        # like "Worst Regular Season Record 2026-27" also matches this
+        # pattern (player="Worst", stat="Record") since it has no team-
+        # style " - " separator either. A real player's full name always
+        # has an internal space (first + last); a single bare word here is
+        # a real signal this isn't actually a player market. Confirmed
+        # against real data: this is the only real false-positive case
+        # found in a live pull.
+        if " " in player:
+            return player, None, player_match.group("stat")
+
+    return None, None, market_name
+
+
+def _extract_line_from_runners(runners: list) -> Optional[float]:
+    for runner in runners:
+        match = _FD_RUNNER_LINE_PATTERN.search(str(runner.get("runnerName", "")))
+        if match:
+            return _to_float(match.group(1))
+    return None
 
 
 def setup_logging() -> logging.Logger:
@@ -185,16 +245,37 @@ def normalize_fd(payload: dict, pulled_at: str) -> list[NormalizedSportsbookProp
             event = events.get(event_id, {}) if isinstance(events, dict) else {}
 
             runners = market.get("runners") or []
+            player_name, team_name, clean_stat_type = _parse_market_name(market_name)
+
+            # FIX (2026-09-09, real live-data finding): the "nfl" custom
+            # page returns team/game markets alongside real player props —
+            # Moneyline, Spread, Total Points, Super Bowl Winner,
+            # playoff-qualification markets, and team-level season-win
+            # totals (e.g. "Arizona Cardinals - Regular Season Wins"),
+            # none of which are a "player prop" by this track's own
+            # definition (ROADMAP.md, Phase 6 header — DK/FD PLAYER props).
+            # Only rows where a real player name was parsed are kept; every
+            # team-level or unmatched market is skipped here rather than
+            # stored as a misleading row.
+            if player_name is None:
+                log.info("Skipped non-player-prop market: %s", market_name)
+                continue
+
             over_odds = None
             under_odds = None
-            line_value = None
-            player_name = market.get("marketType") or None
+            # Real line lives in runnerName text, not the "handicap" field
+            # (see _FD_RUNNER_LINE_PATTERN fix note above) — try that first,
+            # fall back to a nonzero handicap if the text parse fails.
+            line_value = _extract_line_from_runners(runners)
+            if line_value is None:
+                for runner in runners:
+                    handicap = runner.get("handicap")
+                    if handicap:
+                        line_value = _to_float(handicap)
+                        break
 
             for runner in runners:
                 result_type = str(runner.get("result", {}).get("type", "")).lower()
-                handicap = runner.get("handicap")
-                if line_value is None and handicap is not None:
-                    line_value = _to_float(handicap)
 
                 odds_obj = runner.get("winRunnerOdds", {}) or {}
                 american = odds_obj.get("americanDisplayOdds", {}).get("americanOdds")
@@ -218,9 +299,9 @@ def normalize_fd(payload: dict, pulled_at: str) -> list[NormalizedSportsbookProp
                         runners[0].get("selectionId") if runners else ""
                     ),
                     player_name=player_name,
-                    team=None,
+                    team=team_name,
                     sport="NFL",  # v1 scope, see module docstring
-                    stat_type=market_name or None,
+                    stat_type=clean_stat_type or None,
                     prop_category=_prop_category(market_name),
                     line=line_value,
                     over_american_odds=over_odds,

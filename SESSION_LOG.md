@@ -5936,3 +5936,103 @@ any session entries added in the meantime.
 real local run. Session 6.2 (Estimation Engine Adaptation) should not
 start until this session's real ingestion is confirmed working, per its
 own stated prerequisite.
+
+---
+
+### Session 6.1 continuation — Real result: FD works, DK blocked (2026-09-09)
+
+**What happened:** The user ran both scripts locally, per the immediate
+next action above, and reported the real result.
+
+**FanDuel: real success, with two real bugs found and fixed from the
+result itself.**
+- Raw pull: 275 markets, HTTP 200, no retry needed — `FD_REGION="va"` and
+  the guessed `FD_AK` value both worked on the first real attempt.
+- **Bug 1 (found from real data): `player_name` was reading
+  `market.get("marketType")`**, a category code (e.g.
+  `"REGULAR_SEASON_PROPS_-_QUARTERBACKS"`), not a player — confirmed by
+  inspecting the real raw JSON directly. The real player name is embedded
+  in free text in `marketName` (e.g. `"Aaron Rodgers Regular Season
+  Passing Yards 2026-27"`). Fixed with `_parse_market_name()`, a new
+  function that splits a market name into (player, team, clean stat)
+  using two regexes — one for player-level markets, one for team-level
+  markets (e.g. `"Arizona Cardinals - Regular Season Wins 2026-27"`).
+- **Bug 2 (found from real data): `line` was reading `runner.get
+  ("handicap")`, which is `0` on every real row** for this market type —
+  confirmed directly against a real Aaron Rodgers passing-yards market
+  (`handicap: 0` on both runners, real line `3050.5` only present as free
+  text in `runnerName`, e.g. `"Aaron Rodgers Over 3050.5"`). Fixed with
+  `_extract_line_from_runners()`, which regex-parses the real numeric line
+  out of that text, falling back to a nonzero `handicap` only if the text
+  parse fails.
+- **Real, separate finding, not a bug: the "nfl" custom page returns
+  season-long futures markets (Regular Season Passing Yards, etc.), not
+  single-game weekly props**, alongside genuinely non-player markets
+  (Moneyline, Spread, Total Points, Super Bowl Winner, playoff
+  qualification, team season-win totals). None of the latter are a
+  "player prop" by this track's own definition (ROADMAP.md's Phase 6
+  header) — added a filter (`if player_name is None: continue`) so these
+  are explicitly skipped and logged, not stored as misleading blank-player
+  rows. One real false-positive was caught this way too: `"Worst Regular
+  Season Record 2026-27"` matched the player-name regex as
+  `player="Worst"` before a `" " in player` guard was added (a real
+  player's full name always has an internal space; this was the only real
+  case where that mattered).
+- **Real, final normalized count: 141 genuine player-prop rows** (out of
+  275 raw markets), zero missing player names, zero missing lines, after
+  both fixes and the filter.
+- `test_ingest_props.py`'s FanDuel fixture was rebuilt to match this real
+  confirmed shape (handicap=0, real line in runnerName text, plus the two
+  real filtered-out market types) rather than the original, unconfirmed
+  guessed shape — rerun: still 7/7 pass.
+
+**DraftKings: real failure — `403 Client Error: Forbidden`, 3/3 attempts.**
+This is a materially different signal than DK Pick6's `404` in Session
+2.1: a 404 means "this specific resource doesn't exist" (wrong ID/path); a
+403 here means the request reached a real endpoint but was rejected by a
+bot-protection layer — i.e., `DK_EVENT_GROUP_ID="88808"` and the URL shape
+are not yet disproven, only the request's own identity (headers) is a
+confirmed problem. Added `Accept-Language`, `Referer`, and `Origin`
+headers as the standard next thing to try against this class of block —
+**explicitly stated in the code as unconfirmed**, since FanDuel's own real
+success came from its original two headers alone, so there's no proof yet
+that these three are sufficient for DK specifically. If a rerun still
+403s, that's real evidence the block is stronger than a missing-header
+check (e.g. TLS/JA3 fingerprinting, which the `requests` library cannot
+replicate) — the honest next step at that point is the Developer-Tools
+fallback already documented in `ingest_dk_props.py`'s own module
+docstring, not another header guess.
+
+**Files modified this continuation:**
+- `scripts/ingestion/ingest_fd_props.py` — both real bugs above fixed;
+  non-player markets now filtered with a logged reason.
+- `scripts/ingestion/ingest_dk_props.py` — three headers added to the
+  outbound request, explicitly labeled unconfirmed.
+- `scripts/ingestion/test_ingest_props.py` — FanDuel fixture rebuilt to
+  match the real confirmed response shape; still 7/7 pass.
+
+**Decisions made:**
+1. **FanDuel's real output is scoped to season-long player futures for
+   v1, not weekly single-game props**, because that's what the "nfl"
+   custom page actually returns — a real, discovered constraint, not a
+   choice. Reaching weekly single-game props (if FanDuel exposes them
+   through a different page/endpoint) is a named open item, not assumed
+   solved by this session.
+2. **A 403 is treated as a real, different problem from a 404**, and the
+   header fix above is offered as a genuine next attempt, not declared a
+   fix before being proven — consistent with this file's standing
+   practice of not declaring success before real confirmation.
+
+**Open items / deferred validations:**
+- **This session remains open.** FanDuel's real ingestion is now
+  confirmed working end-to-end (141 real rows); DraftKings is not.
+- **Immediate next action:** re-run `python scripts/ingestion/
+  ingest_dk_props.py` with the three new headers and report the real
+  result. If still 403, do not attempt a fourth header guess — move
+  directly to the Developer-Tools fallback documented in that script's
+  own module docstring (open sportsbook.draftkings.com in a real browser,
+  Network tab, filter XHR/fetch, find the real request DK's own site
+  makes) and report back the real URL and headers found that way.
+- Per ROADMAP.md's standing rule, before this session is ever closed,
+  pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
+  any session entries added in the meantime.

@@ -92,6 +92,23 @@ HEADERS = {
         "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     ),
     "Accept": "application/json",
+    # FIX (2026-09-09, real result): a real local run returned "403 Client
+    # Error: Forbidden" on every attempt with only the two headers above —
+    # a bot-protection block (WAF/edge rule), NOT a 404, which is the
+    # signal that DK_EVENT_GROUP_ID/the URL shape are plausibly still
+    # correct and the block is about request identity, not a wrong
+    # resource. FanDuel's own real feed (ingest_fd_props.py) responded
+    # with only its two original headers, so the working baseline for a
+    # comparison is real, not guessed. Referer/Origin/Accept-Language are
+    # added here as the standard next thing to try against this class of
+    # block — UNCONFIRMED whether this specific set is sufficient; if a
+    # rerun still 403s, this is real evidence the block is stronger than a
+    # missing-header check (e.g. TLS/JA3 fingerprinting `requests` cannot
+    # replicate), and the Developer-Tools fallback in this file's module
+    # docstring is the real next step, not another header guess.
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://sportsbook.draftkings.com/",
+    "Origin": "https://sportsbook.draftkings.com",
 }
 
 MAX_RETRIES = 2

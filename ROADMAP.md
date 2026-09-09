@@ -2187,11 +2187,11 @@ across other work" and pull the live files from GitHub first.
 
 ### Session 6.1 — Odds Feed Ingestion
 **Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
-items in SESSION_LOG.md). Scripts are built and unit-tested against
-synthetic fixtures; the real endpoints have NOT yet been confirmed
-reachable, since Claude's own browser tool is blocked by policy from
-reaching either sportsbook.draftkings.com or sportsbook.fanduel.com (same
-block Session 2.1 hit on prizepicks.com/pick6.draftkings.com).
+items in SESSION_LOG.md). **Real result, confirmed 2026-09-09: FanDuel
+ingestion works end-to-end (141 real player-prop rows, two real bugs found
+from live data and fixed). DraftKings still fails — real `403 Forbidden`
+(bot-protection block, not a wrong endpoint), header fix attempted but not
+yet re-confirmed.**
 **Prerequisites:** Phase 2 complete.
 
 **What gets built:** Ingests DK/FD player prop odds. Since DK/FD don't offer
@@ -2212,17 +2212,19 @@ same precedent as Sessions 2.2/2.4/2.5/2.6's own test files),
 `/docs/venue_legal_footprint.md` (Session 6.1 addendum section added)
 
 **Validation (required to close session):**
-- [ ] Both feeds ingest successfully — **NOT YET CONFIRMED against real
-data.** Both normalizers pass their synthetic-fixture tests (7/7,
-`test_ingest_props.py`), proving the parsing logic is correct against a
-known-shape input, but the actual endpoint URLs/IDs in both scripts are
-best-guess patterns from independent, non-official sportsbook-scraping
-sources — the same weaker-evidence situation Session 2.1 hit with DK
-Pick6 (which turned out wrong). Claude's browser tool is blocked by
-policy from reaching either real site, so this could not be live-tested
-before handoff. **Real next action: user runs both scripts locally and
-reports the real result** (success, or the specific HTTP error) — see
-Open items in SESSION_LOG.md.
+- [x] FanDuel ingests successfully — **CONFIRMED against real data,
+2026-09-09**: 141 real player-prop rows, zero missing player names, zero
+missing lines, after two real bugs (wrong player-name field; line
+embedded in free text, not the `handicap` field) were found from the
+actual live response and fixed. Non-player markets (Moneyline, Spread,
+team win totals, etc.) correctly filtered out and logged, not stored as
+misleading rows.
+- [ ] DraftKings ingests successfully — **NOT MET.** Real result: `403
+Client Error: Forbidden`, 3/3 attempts — a bot-protection block, not a
+wrong event-group ID (that would be a 404, DK Pick6's actual failure mode
+in Session 2.1). Three additional headers (`Accept-Language`, `Referer`,
+`Origin`) were added as the standard next attempt but are **not yet
+re-confirmed against a real rerun** — see Open items in SESSION_LOG.md.
 - [x] Vig/juice correctly extracted and stored — `schema_props.py` stores
 both sides' raw American odds (not a pre-blended number), and
 `american_odds_to_implied_probability()` plus its no-vig-normalization

@@ -93,6 +93,9 @@ DK_FIXTURE_MALFORMED_RECORD = {
 DK_FIXTURE_MISSING_TOP_LEVEL = {"somethingElse": True}
 
 FD_FIXTURE_OK = {
+    # Shape confirmed against a real live pull, 2026-09-09 (275 raw markets,
+    # 141 real player-prop rows after filtering — see SESSION_LOG.md).
+    # handicap is 0 on real rows; the real line lives in runnerName text.
     "attachments": {
         "events": {
             "40001": {"openDate": "2026-09-14T17:00:00Z", "inPlayStatus": "PREPLAY"}
@@ -100,29 +103,48 @@ FD_FIXTURE_OK = {
         "markets": {
             "mkt-1": {
                 "eventId": "40001",
-                "marketName": "Patrick Mahomes Passing Yards",
-                "marketType": "Patrick Mahomes",
+                "marketName": "Patrick Mahomes Regular Season Passing Yards 2026-27",
+                "marketType": "REGULAR_SEASON_PROPS_-_QUARTERBACKS",
                 "runners": [
                     {
-                        "runnerName": "Over 275.5",
-                        "handicap": 275.5,
+                        "runnerName": "Patrick Mahomes Over 275.5",
+                        "handicap": 0,
                         "selectionId": "sel-1",
-                        "result": {"type": "OVER"},
+                        "result": {},
                         "winRunnerOdds": {
                             "americanDisplayOdds": {"americanOdds": "-115"}
                         },
                     },
                     {
-                        "runnerName": "Under 275.5",
-                        "handicap": 275.5,
+                        "runnerName": "Patrick Mahomes Under 275.5",
+                        "handicap": 0,
                         "selectionId": "sel-2",
-                        "result": {"type": "UNDER"},
+                        "result": {},
                         "winRunnerOdds": {
                             "americanDisplayOdds": {"americanOdds": "-105"}
                         },
                     },
                 ],
-            }
+            },
+            # Real, confirmed false-positive case (Worst Regular Season
+            # Record) and a real non-player market (team season wins) —
+            # both must be filtered out, not returned as a blank-player row.
+            "mkt-2": {
+                "eventId": "40001",
+                "marketName": "Worst Regular Season Record 2026-27",
+                "runners": [
+                    {"runnerName": "AFC", "handicap": 0, "selectionId": "sel-3",
+                     "result": {}, "winRunnerOdds": {"americanDisplayOdds": {"americanOdds": "+200"}}},
+                ],
+            },
+            "mkt-3": {
+                "eventId": "40001",
+                "marketName": "Kansas City Chiefs - Regular Season Wins 2026-27",
+                "runners": [
+                    {"runnerName": "Over 10.5", "handicap": 0, "selectionId": "sel-4",
+                     "result": {}, "winRunnerOdds": {"americanDisplayOdds": {"americanOdds": "-120"}}},
+                ],
+            },
         },
     }
 }
@@ -157,9 +179,13 @@ def test_dk_normalizer_handles_missing_top_level_key():
 
 def test_fd_normalizer_happy_path():
     rows = normalize_fd(FD_FIXTURE_OK, FAKE_PULLED_AT)
+    # mkt-2 (league-wide, no real player) and mkt-3 (team-level, not a
+    # player prop) must both be filtered out — only mkt-1 survives.
     assert len(rows) == 1, f"expected 1 row, got {len(rows)}"
     row = rows[0]
     assert row.platform == "fanduel"
+    assert row.player_name == "Patrick Mahomes"
+    assert row.stat_type == "Passing Yards"
     assert row.line == 275.5
     assert row.over_american_odds == -115
     assert row.under_american_odds == -105
