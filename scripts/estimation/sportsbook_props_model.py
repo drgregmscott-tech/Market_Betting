@@ -66,10 +66,12 @@ full_season_projection = stat_accrued_so_far + games_remaining * recent_form
 TD-SCORER PROPS (DraftKings player_touchdown rows)
 -----------------------------------------------------------------------
 "Anytime TD Scorer" and "2+ TDs" are modeled as a Poisson count of the
-player's total touchdowns (passing + rushing + receiving) per game, using
-the SAME recency-weighted blend of season_avg/recent_form pickem_model.py
-already computes for the composite ["passing_tds","rushing_tds",
-"receiving_tds"] stat (imported, not recomputed):
+player's total touchdowns SCORED BY THE PLAYER THEMSELVES (rushing +
+receiving only -- passing_tds is deliberately excluded, since a QB
+throwing a TD pass is not the QB scoring) per game, using the SAME
+recency-weighted blend of season_avg/recent_form pickem_model.py already
+computes for the composite ["rushing_tds", "receiving_tds"] stat
+(imported, not recomputed):
   lambda = model_mean_tds_per_game (floored at a small positive epsilon,
            since a Poisson rate of exactly 0 makes every probability
            degenerate)
@@ -128,6 +130,18 @@ WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
   =True` (see above).
 - No opponent/matchup, injury/role, home/away, or pace/usage adjustment --
   same stated gap as pickem_model.py.
+- Season-TOTAL projections (FanDuel futures) are reported as
+  model_status="stale_season_stats" -- not silently estimated -- whenever
+  the weekly-stats season this run fetched (--season) is already behind
+  the real current NFL season (see stats_season_is_stale() / Session 6.6).
+  This is a real, calendar-driven gap: nflverse only publishes a season's
+  weekly file once real games from it exist, so there is a window each
+  September where a current-season futures line has no choice but to be
+  compared against a prior, already-finished season's stats, which would
+  otherwise look like a false near-100% edge. Per-game props (TD-scorer
+  rows) are NOT affected by this guard -- they already fall back to the
+  best available prior-season rate on purpose, the same way any
+  pre-season model must.
 
 USAGE
 -----
@@ -186,7 +200,14 @@ LOG_PATH = BASE_DIR / "logs" / "estimation.log"
 # imported, not redefined, so the two models can never silently drift.
 # ---------------------------------------------------------------------------
 ASSUMED_SEASON_LENGTH_GAMES = 17  # stated v1 simplification -- see docstring
-TD_COMPOSITE_COLUMNS = ["passing_tds", "rushing_tds", "receiving_tds"]
+# "Anytime TD Scorer" / "2+ TDs" pay out only when the player PERSONALLY
+# scores the touchdown (by rushing or receiving it) -- a QB throwing a TD
+# pass does not count as that QB scoring. passing_tds must NOT be in this
+# composite: including it inflated every starting QB's lambda by their full
+# passing-TD rate (1.5-2.5/game) on top of their real, near-zero
+# rushing-TD rate, which is why QBs previously dominated the top-edge list
+# on props whose real edge should come only from rushing/receiving scores.
+TD_COMPOSITE_COLUMNS = ["rushing_tds", "receiving_tds"]
 POISSON_LAMBDA_FLOOR = 1e-6  # avoids a degenerate P(0 TDs)=1.0 for a
 # player with a real observed rate of exactly zero so far
 
@@ -216,6 +237,42 @@ def setup_logging() -> logging.Logger:
 
 
 log = setup_logging()
+
+
+# ---------------------------------------------------------------------------
+# Stale-season-stats guard (Session 6.6 fix)
+# ---------------------------------------------------------------------------
+# WHY THIS EXISTS: confirmed directly against real data on 2026-09-09 --
+# FanDuel's season-total futures lines (e.g. "Aaron Rodgers Regular Season
+# Passing Yards 2026-27") are real, freshly-pulled 2026 season lines, but
+# nflverse had not yet published a 2026 weekly-stats file (real games only
+# started 2026-09-07; nflverse only publishes a season's file once real
+# games from it exist -- see ROADMAP.md Open Decision #9), so this model
+# was forced to run against the fully-COMPLETED 2025 season's stats
+# instead. project_season_total() then read that completed season's ~16
+# games as "already accrued THIS season" and treated a brand-new 2026
+# futures line as nearly guaranteed to hit -- a real, mechanical season
+# mismatch (comparing a current-season line against a prior, finished
+# season's totals), not a modeling improvement to chase. This guard
+# detects that mismatch and reports the row honestly instead of a false
+# near-100% probability.
+def current_nfl_season_year(today: Optional[datetime] = None) -> int:
+    """The NFL season year in progress or about to start as of `today`
+    (defaults to real UTC now). A season labeled year Y runs roughly
+    September of Y through February of Y+1, so January/February still
+    belong to the PRIOR season year (its playoffs), and March onward
+    already belongs to the upcoming/current season year Y."""
+    now = today or datetime.now(timezone.utc)
+    return now.year - 1 if now.month <= 2 else now.year
+
+
+def stats_season_is_stale(stats_season: int) -> bool:
+    """True when the weekly-stats season this run fetched is already
+    behind the real current NFL season -- meaning any season-TOTAL
+    projection built from it would be comparing a stale, already-finished
+    season's accrued stats against a current-season futures line, not
+    genuinely modeling this season's remaining games."""
+    return stats_season < current_nfl_season_year()
 
 
 # ---------------------------------------------------------------------------
@@ -360,9 +417,19 @@ def _blank_model_fields() -> dict:
     }
 
 
-def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFrame:
+def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season: int) -> pd.DataFrame:
     name_lookup = build_name_lookup(weekly_df)
     field_vig_index = build_field_vig_index(props_df)
+    season_stale = stats_season_is_stale(stats_season)
+    if season_stale:
+        log.warning(
+            "Weekly stats are for season=%d, but the current NFL season is "
+            "%d -- every season-TOTAL projection this run would compare a "
+            "current-season futures line against a stale, already-finished "
+            "season's accrued stats. Flagging those rows as "
+            "'stale_season_stats' instead of computing a false edge.",
+            stats_season, current_nfl_season_year(),
+        )
 
     out_rows = []
     for row_idx, prop in props_df.iterrows():
@@ -460,6 +527,13 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
         # -----------------------------------------------------------
         # Season-total player_performance props (two-sided, numeric line)
         # -----------------------------------------------------------
+        if season_stale:
+            row["model_status"] = "stale_season_stats"
+            row["resolved_stat_key"] = None
+            row.update(_blank_model_fields())
+            out_rows.append(row)
+            continue
+
         kind, value, reason = resolve_stat_spec(raw_stat_type)
         if kind is None:
             row["model_status"] = reason
@@ -547,7 +621,7 @@ def run(season: int) -> dict:
     weekly_df = fetch_nfl_weekly_stats(season)
     log.info("Loaded %d nflverse weekly-stat rows for season %d", len(weekly_df), season)
 
-    result_df = process_props(props_df, weekly_df)
+    result_df = process_props(props_df, weekly_df, season)
 
     status_counts = result_df["model_status"].value_counts(dropna=False).to_dict()
     log.info("Model status breakdown: %s", status_counts)

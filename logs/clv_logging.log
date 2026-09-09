@@ -149,3 +149,12 @@
 2026-09-09 19:49:34,088 UTC | INFO | [weather] Loaded 576 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\data\weather\estimates\weather_estimates_20260909T194934Z.csv
 2026-09-09 19:49:34,104 UTC | INFO | [weather] Existing CLV log has 203 rows before this run
 2026-09-09 19:49:34,344 UTC | INFO | [weather] Wrote 602 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\weather\clv_log.csv
+2026-09-09 22:49:32,885 UTC | INFO | [props] Loaded 824 estimate rows from output/estimation/sportsbook_props_latest.csv
+2026-09-09 22:49:32,901 UTC | INFO | [props] Existing CLV log has 230 rows before this run
+2026-09-09 22:49:33,072 UTC | INFO | [props] Wrote 230 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv
+2026-09-09 22:51:56,195 UTC | INFO | [props] Loaded 824 estimate rows from output/estimation/sportsbook_props_latest.csv
+2026-09-09 22:51:56,223 UTC | INFO | [props] Existing CLV log has 70 rows before this run
+2026-09-09 22:51:56,357 UTC | INFO | [props] Wrote 210 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv
+2026-09-09 22:56:58,253 UTC | INFO | [props] Loaded 824 estimate rows from output/estimation/sportsbook_props_latest.csv
+2026-09-09 22:56:58,275 UTC | INFO | [props] Existing CLV log has 140 rows before this run
+2026-09-09 22:56:58,419 UTC | INFO | [props] Wrote 140 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv
