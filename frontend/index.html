@@ -395,6 +395,101 @@ fresh Cloudflare Pages deploy is needed after any politics pipeline run for this
 this session's handoff notes if this file has never existed in a deploy yet.
 </p>
 
+<!-- ================================================================ -->
+<!-- TRACK 5 — SPORTSBOOK PLAYER PROPS                                 -->
+<!-- ================================================================ -->
+<div class="track-heading track-heading-props">
+<span class="track-tag track-tag-props">Track 5</span>
+<h2>Sportsbook player props (DraftKings + FanDuel)</h2>
+</div>
+
+<section class="panel panel-props" id="props-summary-panel">
+<div class="stat-row" id="propsStatRow">
+<div class="stat">
+<span class="stat-value" id="propsStatOpen">—</span>
+<span class="stat-label">Open flags</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="propsStatClosed">—</span>
+<span class="stat-label">Closed &amp; graded</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="propsStatCumEdge">—</span>
+<span class="stat-label">Average CLV edge</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="propsStatHitRate">—</span>
+<span class="stat-label">Positive-edge rate</span>
+</div>
+</div>
+</section>
+
+<section class="panel panel-props" id="props-open-panel">
+<div class="panel-head">
+<h2>Currently flagged props</h2>
+<p class="panel-note">
+Open lines from the 3-hourly DraftKings/FanDuel pipeline, sorted by model edge. The
+<strong>Risk</strong> column is this track's own account-limiting-risk indicator: every row carries an
+<span class="risk-badge">Acct. limit risk</span> badge, because sportsbooks limiting or banning
+consistently-winning bettors is this project's own best-corroborated risk for this venue type
+(<code>PROPS_PLATFORM_RISK_MULTIPLIER</code>, applied equally to DraftKings and FanDuel &mdash; no
+source in this project distinguishes the two). A second
+<span class="risk-badge">Field vig</span> badge appears only on rows whose own price still includes
+DraftKings' one-sided field vig (<code>implied_prob_includes_field_vig</code>) &mdash; a real per-row
+signal, unlike the platform-level badge, which is the same on every row today.
+</p>
+</div>
+<div class="table-wrap">
+<table id="propsOpenTable">
+<thead>
+<tr>
+<th>Player</th>
+<th>Team</th>
+<th>Stat</th>
+<th>Side</th>
+<th>Platform</th>
+<th>Line</th>
+<th>Model edge</th>
+<th>Game time</th>
+<th>Risk</th>
+</tr>
+</thead>
+<tbody id="propsOpenTableBody"></tbody>
+</table>
+</div>
+<p id="propsOpenEmpty" class="empty-note" hidden>No open flags right now.</p>
+</section>
+
+<section class="panel panel-props" id="props-closed-panel">
+<div class="panel-head">
+<h2>Recently closed flags</h2>
+<p class="panel-note">The last 25 props to resolve or drop off the board, most recent first.</p>
+</div>
+<div class="table-wrap">
+<table id="propsClosedTable">
+<thead>
+<tr>
+<th>Player</th>
+<th>Stat</th>
+<th>Side</th>
+<th>Platform</th>
+<th>Closing price</th>
+<th>CLV edge at close</th>
+<th>Closed</th>
+</tr>
+</thead>
+<tbody id="propsClosedTableBody"></tbody>
+</table>
+</div>
+<p id="propsClosedEmpty" class="empty-note" hidden>No closed flags yet.</p>
+</section>
+
+<p id="propsLoadError" class="load-error" hidden>
+Could not load <code>data/props_clv_log.csv</code>. This page reads that file from its own build, so a
+fresh Cloudflare Pages deploy is needed after any props pipeline run for this section to update. See
+this session's handoff notes if this file has never existed in a deploy yet.
+</p>
+
 </main>
 
 <footer class="site-footer">

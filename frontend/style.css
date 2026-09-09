@@ -29,6 +29,17 @@
   --accent-politics: #c98fe0;
   --panel-politics-border: #2a1e33;
   --panel-politics-bg: #180f1e;
+
+  /* Track 5 (sportsbook player props) accent — a fifth distinct hue,
+     same reasoning. Also carries a dedicated "limiting risk" badge color
+     (a muted red-orange), separate from the track's own teal accent, so
+     the account-limiting-risk indicator (Session 6.6's own validation
+     requirement) reads as a warning, not just another data column. */
+  --accent-props: #3ebfae;
+  --panel-props-border: #16302c;
+  --panel-props-bg: #0c1c1a;
+  --risk-badge: #d98a4f;
+  --risk-badge-bg: rgba(217, 138, 79, 0.14);
 }
 
 * { box-sizing: border-box; }
@@ -210,6 +221,11 @@ main {
   background: var(--accent-politics);
 }
 
+.track-tag-props {
+  color: var(--bg);
+  background: var(--accent-props);
+}
+
 /* Track 2 panels reuse .panel's layout but carry the blue accent border
    and a slightly different background tint so scrolling past the
    divider still reads as "a different track," not just a new table. */
@@ -230,12 +246,43 @@ main {
   background: var(--panel-politics-bg);
 }
 
+/* Track 5 panels — same pattern as Track 2's, with the teal accent. */
+.panel-props {
+  border-color: var(--panel-props-border);
+  background: var(--panel-props-bg);
+}
+
 /* Highlights a long wait-to-resolution cell in the politics open table
    (Session 5.6) — the whole point of this track's frontend card is
    making capital-lockup time visible at a glance. */
 td.wait-long {
   color: var(--accent-politics);
   font-weight: 600;
+}
+
+/* Account-limiting-risk indicator (Session 6.6) — every DK/FD flagged
+   opportunity carries the same PROPS_PLATFORM_RISK_MULTIPLIER (0.50,
+   sizing_engine.py) since no source in this project distinguishes DK's
+   limiting practice from FD's, so this badge shows on every row, plus a
+   second, distinct badge when the row's own price still includes DK's
+   field-side vig (implied_prob_includes_field_vig) — that part DOES vary
+   row to row, unlike the platform-level dampener. */
+.risk-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--risk-badge);
+  background: var(--risk-badge-bg);
+  border: 1px solid rgba(217, 138, 79, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.risk-badge + .risk-badge {
+  margin-left: 4px;
 }
 
 /* ---------- summary stats ---------- */

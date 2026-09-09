@@ -2471,12 +2471,75 @@ project flags and sizes, it does not place bets.
 ---
 
 ### Session 6.6 — Frontend Integration
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 6.5 complete.
 
+**What was actually done:** Added a fifth, independently-loading track
+section (Track 5 — sportsbook player props, DraftKings + FanDuel) to the
+existing static Cloudflare Pages frontend (`frontend/index.html`,
+`app.js`, `style.css`), following the same established pattern as every
+prior track's frontend session (3.5, 4.6, 5.6): its own data file
+(`data/props_clv_log.csv`, a copy of `data/sportsbook_props/clv_log.csv`
+per Session 6.3's `CLV_LOG_COLUMNS_PROPS`), its own accent color, its own
+`initProps()` function, loaded via `Promise.allSettled` alongside the
+other four tracks so a load failure in one track never hides another's
+real data.
+
+**Files touched:** `frontend/app.js`, `frontend/index.html`,
+`frontend/style.css`.
+
 **Validation (required to close session):**
-- [ ] Props track displays correctly, with a visible limiting-risk indicator per
-flagged opportunity
+- [x] Props track displays correctly, with a visible limiting-risk indicator
+per flagged opportunity — confirmed against a synthetic local fixture
+(real `CLV_LOG_COLUMNS_PROPS` schema, served over a local static HTTP
+server, not `file://`): stats row, open-flags table, and closed-flags
+table all rendered correctly with no console errors. Every open row
+shows an "Acct. limit risk" badge — this track's real, best-corroborated
+risk (`PROPS_PLATFORM_RISK_MULTIPLIER = 0.50`, applied equally to
+DraftKings and FanDuel, per `sizing_engine.py`'s Session 6.4 addendum) —
+plus a second "Field vig" badge on the one synthetic DraftKings row
+flagged `implied_prob_includes_field_vig=True`, correctly absent from the
+FanDuel row where that column was `False`.
+
+**Decisions made:**
+1. **A fifth distinct accent hue (teal, `--accent-props`) was added**,
+continuing the "different hue per track" pattern from Sessions 3.5, 4.6,
+and 5.6 — green (pick'em), blue (arbitrage), amber (weather), purple
+(politics), teal (props).
+2. **The limiting-risk indicator is shown as two separate badges, not one
+blended label** — a static, always-present "Acct. limit risk" badge
+(since `PROPS_PLATFORM_RISK_MULTIPLIER` is identical for DraftKings and
+FanDuel, per Session 6.4's own stated reasoning that no source in this
+project distinguishes the two) and a conditional "Field vig" badge that
+only appears when `implied_prob_includes_field_vig` is true — the one
+piece of real per-row risk variation this track's own data actually
+carries. Blending these into one badge would have hidden the real,
+row-level signal behind a label that's identical on every row.
+3. **No sizing calculator was added for this track**, matching Session
+5.6/4.6's own reasoning: this session's roadmap card required correct
+display with the limiting-risk indicator only, not an in-browser sizing
+flow — porting `sizing_engine.py`'s props-specific dampener chain
+(`PROPS_PLATFORM_RISK_MULTIPLIER` and
+`PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` stacked with quarter-Kelly) into
+the browser is a named future candidate, not built here.
+4. **Tested against a synthetic fixture, not the sandbox's real
+`data/sportsbook_props/clv_log.csv`**, matching this project's own
+established precedent (Sessions 2.6/3.3/5.4/5.6/4.6) of validating
+against synthetic data first when the sandbox cannot reach the user's
+real file, with real validation deferred to the user's live deploy.
+
+**Handoff notes:** The Cloudflare Pages build command (a dashboard
+setting, not a repo file) needs one more copy step added, alongside the
+weather/politics ones from Sessions 4.6/5.6:
+
+```
+mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv && (cp data/arbitrage/flags/arbitrage_flags_latest.csv frontend/data/arbitrage_flags_latest.csv || true) && (cp data/weather/clv_log.csv frontend/data/weather_clv_log.csv || true) && (cp data/politics/clv_log.csv frontend/data/politics_clv_log.csv || true) && (cp data/sportsbook_props/clv_log.csv frontend/data/props_clv_log.csv || true)
+```
+
+The `|| true` fallback matches Sessions 3.5/4.6/5.6's own reasoning: a
+fresh deploy shouldn't hard-fail if this file is ever briefly absent
+between pipeline runs. All five tracks now have a frontend section. Next
+session is 6.7 — Live Validation Window.
 
 ---
 

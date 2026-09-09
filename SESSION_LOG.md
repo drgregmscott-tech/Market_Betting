@@ -6918,3 +6918,131 @@ CLV logging added 1 new flag (230 total open, 0 failures). This was the
 one thing local validation could not prove; it is now proven.
 
 Next session is 6.6 — Frontend Integration.
+
+---
+
+## Session 6.6 — Frontend Integration
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**What was actually done:**
+Added Track 5 (sportsbook player props, DraftKings + FanDuel) as a fifth,
+independently-loading section on the existing static Cloudflare Pages
+frontend, following the exact pattern Sessions 3.5, 4.6, and 5.6 already
+established for arbitrage, weather, and politics respectively.
+
+1. **`frontend/style.css`.** Added a fifth distinct accent hue
+   (`--accent-props`, teal), `--panel-props-border`/`--panel-props-bg`
+   panel tint, `.track-tag-props`, and `.panel-props` — same mechanical
+   pattern as every prior track's own accent block. Also added a
+   dedicated `.risk-badge` style (muted red-orange, `--risk-badge` /
+   `--risk-badge-bg`) — new this session, since no prior track needed a
+   per-row risk indicator badge.
+2. **`frontend/index.html`.** New Track 5 section: a stat-row summary
+   panel (open/closed/avg CLV edge/hit rate, same shape as pick'em's own
+   Track 1 panel), an open-flags table (player, team, stat, side,
+   platform, line, model edge, game time, and a new **Risk** column), and
+   a closed-flags table (last 25, most recent first) — matching every
+   prior track's table structure.
+3. **`frontend/app.js`.** New `PROPS_DATA_URL` constant
+   (`data/props_clv_log.csv`), `renderRiskBadges()` (new function — the
+   actual point of this session, see Decisions below),
+   `renderPropsStats()`, `renderPropsOpenTable()`,
+   `renderPropsClosedTable()`, and `initProps()`, all built directly
+   against `clv_logger.py`'s real `CLV_LOG_COLUMNS_PROPS` schema
+   (Session 6.3) — `player_name`, `team`, `stat_type`, `flagged_side`,
+   `platform`, `line`, `first_flagged_edge`, `game_start_time`,
+   `implied_prob_includes_field_vig`, `clv_edge_at_close`,
+   `closing_market_price`, `closing_pulled_at`, `status`. `initProps()`
+   was added to the existing `Promise.allSettled([...])` call in `init()`
+   so a props load failure can never hide the other four tracks' data,
+   and vice versa.
+
+**Files created/modified:**
+- `/frontend/app.js`
+- `/frontend/index.html`
+- `/frontend/style.css`
+
+**Validation results:**
+- Built a synthetic local fixture matching `CLV_LOG_COLUMNS_PROPS`
+  exactly (two rows: one open DraftKings flag with
+  `implied_prob_includes_field_vig=True`, one closed FanDuel flag with
+  it `False`), served over a local static HTTP server (`python -m
+  http.server`, not the `file://` protocol, since `fetch()` is blocked
+  against `file://` — same testing method every prior frontend session
+  used). Loaded the page in the Browser pane and read both the
+  accessibility tree and `get_page_text`:
+  - Stats row showed real computed values: 1 open, 1 closed, `+13.0%`
+    average CLV edge, `100%` positive-edge rate — all correctly derived
+    from the two-row fixture.
+  - Open-flags table showed the DraftKings row (Patrick Mahomes, KC,
+    Passing Yards, over, 275.5, `+11.0%`, game time correctly formatted)
+    with **both** risk badges present: "Acct. limit risk" (shown on
+    every row, unconditionally) and "Field vig" (shown only because this
+    row's `implied_prob_includes_field_vig` was `True`).
+  - Closed-flags table showed the FanDuel row (Justin Jefferson,
+    Receiving Yards, under, `0.45` closing price, `+13.0%` CLV edge at
+    close) correctly — no "Field vig" badge anywhere in the closed table,
+    which is correct since that table doesn't render risk badges at all
+    (they're an open-flags-only concept, since a closed flag is no
+    longer something a real bet could be sized against).
+  - Console errors were checked directly: the only errors present were
+    expected 404s for the other four tracks' data files (not created for
+    this test, since this session's own validation only requires the
+    props track) — `initProps()` itself produced zero console errors,
+    and, critically, the other four tracks' 404 failures did not stop
+    Track 5 from rendering, confirming the `Promise.allSettled` isolation
+    still holds with a fifth track added.
+- The synthetic fixture (`frontend/data/props_clv_log.csv`) and the local
+  test server were both cleaned up after validation — not committed to
+  the repo.
+
+**Decisions made:**
+1. **The limiting-risk indicator (this session's actual named validation
+   requirement) is two separate badges, not one blended label.** An
+   "Acct. limit risk" badge appears on every single open row,
+   unconditionally, because `PROPS_PLATFORM_RISK_MULTIPLIER` (0.50, both
+   `sizing_engine.py`) is identical for DraftKings and FanDuel — Session
+   6.4's own docstring states plainly that no source in this project
+   distinguishes the two platforms' real limiting practice, so showing a
+   different value per platform would have been exactly the kind of
+   invented precision this project's standing rule forbids. A second,
+   conditional "Field vig" badge appears only when a row's own
+   `implied_prob_includes_field_vig` is `True` — the one place this
+   track's real data actually does vary row to row, and the reason
+   `sizing_engine.py` applies a second, distinct
+   `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener on top of the
+   platform-level one. Keeping these as two badges, rather than folding
+   the field-vig case into a single "elevated risk" label, keeps the
+   real per-row signal visible instead of averaging it away.
+2. **A fifth distinct accent hue (teal) was added**, continuing the
+   established "different hue per track" pattern — green (pick'em), blue
+   (arbitrage), amber (weather), purple (politics), teal (props). The
+   risk badge itself uses a separate, deliberately different
+   red-orange color (`--risk-badge`) so it reads as a warning indicator
+   rather than blending into the track's own teal accent color.
+3. **No sizing calculator was added for this track**, matching Sessions
+   4.6/5.6's own precedent — this session's roadmap card required
+   correct display with the limiting-risk indicator only. Porting
+   `sizing_engine.py`'s props-specific dampener chain (platform risk ×
+   field-vig-unresolved × quarter-Kelly) into an in-browser calculator,
+   the way Session 2.8 did for pick'em, is a named future candidate, not
+   built here.
+4. **Tested against a synthetic fixture, not the sandbox's real
+   `data/sportsbook_props/clv_log.csv`**, matching this project's own
+   established precedent (Sessions 2.6/3.3/5.4/4.6/5.6) — this sandbox
+   has no real props CLV log to test against. Real validation is
+   deferred to the user's live Cloudflare Pages deploy, once the build
+   command's copy step (see handoff notes below) is updated.
+
+**Corrections/reversals during the session:** None.
+
+**Handoff notes:** The Cloudflare Pages build command (a dashboard
+setting, not a repo file) needs one more copy step added, alongside the
+weather/politics ones from Sessions 4.6/5.6 — see ROADMAP.md's Session
+6.6 card for the exact updated command. All five built tracks (pick'em,
+arbitrage, weather, politics, props) now have a frontend section; only
+Phase 7's Track 6 (sportsbook main lines) remains gated behind its own
+Session 7.0 go/no-go checkpoint. Next session is 6.7 — Live Validation
+Window.

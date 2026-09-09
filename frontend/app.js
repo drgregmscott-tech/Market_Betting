@@ -30,6 +30,7 @@ const DATA_URL = "data/clv_log.csv";
 const ARB_DATA_URL = "data/arbitrage_flags_latest.csv";
 const WEATHER_DATA_URL = "data/weather_clv_log.csv";
 const POLITICS_DATA_URL = "data/politics_clv_log.csv";
+const PROPS_DATA_URL = "data/props_clv_log.csv";
 
 // ---------------------------------------------------------------------
 // Sizing constants -- ported exactly from scripts/sizing/sizing_engine.py.
@@ -872,10 +873,146 @@ async function initPolitics() {
   }
 }
 
+// =======================================================================
+// TRACK 5 — Sportsbook player props, DraftKings + FanDuel (Session 6.6)
+//
+// props_clv_log.csv shares the same open/closed lifecycle shape as
+// pick'em's clv_log.csv (Session 6.3 built this track on the same shared
+// CLV structure, per clv_logger.py's CLV_LOG_COLUMNS_PROPS). This
+// session's own validation requirement is the account-limiting-risk
+// indicator, shown per row via renderRiskBadges() below — the real point
+// of this track's frontend card, per ROADMAP.md's Session 6.6 entry.
+// =======================================================================
+
+function renderRiskBadges(r) {
+  // Every DK/FD row carries the same PROPS_PLATFORM_RISK_MULTIPLIER
+  // (0.50, sizing_engine.py) -- this badge is intentionally shown on
+  // every row rather than only on "risky" ones, since sportsbook
+  // account-limiting is this track's own best-corroborated risk for the
+  // whole venue type, not a per-row condition.
+  let badges = `<span class="risk-badge" title="DraftKings/FanDuel positions carry this project's highest account-limiting-risk dampener (PROPS_PLATFORM_RISK_MULTIPLIER = 0.50), applied equally to both platforms.">Acct. limit risk</span>`;
+
+  const fieldVig = String(r.implied_prob_includes_field_vig).trim().toLowerCase() === "true";
+  if (fieldVig) {
+    badges += `<span class="risk-badge" title="This row's own price still includes DraftKings' one-sided field vig (implied_prob_includes_field_vig = True) -- sizing_engine.py applies an extra PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER (0.60) dampener to it.">Field vig</span>`;
+  }
+  return badges;
+}
+
+function renderPropsStats(rows) {
+  const open = rows.filter((r) => r.status === "open");
+  const closed = rows.filter((r) => r.status === "closed" && toNum(r.clv_edge_at_close) !== null);
+
+  const avgEdge = closed.length
+    ? closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0) / closed.length
+    : null;
+  const positive = closed.filter((r) => toNum(r.clv_edge_at_close) > 0).length;
+  const hitRate = closed.length ? (positive / closed.length) * 100 : null;
+
+  setText("propsStatOpen", String(open.length));
+  setText("propsStatClosed", String(closed.length));
+
+  const cumEl = document.getElementById("propsStatCumEdge");
+  if (cumEl) {
+    cumEl.textContent = avgEdge === null ? "—" : fmtEdge(avgEdge);
+    cumEl.className = "stat-value " + (avgEdge === null ? "" : edgeClass(avgEdge).replace("edge-", ""));
+  }
+
+  setText("propsStatHitRate", hitRate === null ? "—" : hitRate.toFixed(0) + "%");
+
+  return { open, closed };
+}
+
+function renderPropsOpenTable(open) {
+  const tbody = document.getElementById("propsOpenTableBody");
+  const emptyNote = document.getElementById("propsOpenEmpty");
+  if (!tbody || !emptyNote) return;
+
+  const sorted = open
+    .slice()
+    .sort((a, b) => (toNum(b.first_flagged_edge) || -1) - (toNum(a.first_flagged_edge) || -1));
+
+  if (!sorted.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = sorted
+    .map((r) => {
+      const edge = toNum(r.first_flagged_edge);
+      return `
+        <tr>
+          <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
+          <td>${escapeHtml(r.team) || "—"}</td>
+          <td>${escapeHtml(r.stat_type) || "—"}</td>
+          <td>${escapeHtml(r.flagged_side) || "—"}</td>
+          <td>${escapeHtml(r.platform) || "—"}</td>
+          <td>${escapeHtml(r.line) || "—"}</td>
+          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
+          <td>${fmtDate(r.game_start_time)}</td>
+          <td>${renderRiskBadges(r)}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+function renderPropsClosedTable(closed) {
+  const tbody = document.getElementById("propsClosedTableBody");
+  const emptyNote = document.getElementById("propsClosedEmpty");
+  if (!tbody || !emptyNote) return;
+
+  const sorted = closed
+    .slice()
+    .sort((a, b) => new Date(b.closing_pulled_at || 0) - new Date(a.closing_pulled_at || 0))
+    .slice(0, 25);
+
+  if (!sorted.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = sorted
+    .map((r) => {
+      const edge = toNum(r.clv_edge_at_close);
+      return `
+        <tr>
+          <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
+          <td>${escapeHtml(r.stat_type) || "—"}</td>
+          <td>${escapeHtml(r.flagged_side) || "—"}</td>
+          <td>${escapeHtml(r.platform) || "—"}</td>
+          <td>${escapeHtml(r.closing_market_price) || "—"}</td>
+          <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
+          <td>${fmtDate(r.closing_pulled_at)}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+async function initProps() {
+  try {
+    const res = await fetch(PROPS_DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    const { open, closed } = renderPropsStats(rows);
+    renderPropsOpenTable(open);
+    renderPropsClosedTable(closed);
+  } catch (err) {
+    const el = document.getElementById("propsLoadError");
+    if (el) el.hidden = false;
+    console.error("Market_Betting frontend: failed to load props data.", err);
+  }
+}
+
 async function init() {
   // All tracks load independently and in parallel: a failure or an empty
   // result in one must never block or hide another track's real data.
-  await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics()]);
+  await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
 
   setText("asOf", new Date().toLocaleString(undefined, {
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit"
