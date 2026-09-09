@@ -211,8 +211,10 @@ NFL_STAT_TYPE_MAP: dict[str, str] = {
     "pass attempts": "attempts",
     "attempts": "attempts",
     "pass tds": "passing_tds",
+    "passing tds": "passing_tds",  # real FanDuel wording, Session 6.2 continuation
     "passing touchdowns": "passing_tds",
     "rush tds": "rushing_tds",
+    "rushing tds": "rushing_tds",  # real FanDuel wording, Session 6.2 continuation
     "rushing touchdowns": "rushing_tds",
     # --- Added Session 2.3, from real ingested-data stat_type strings,
     # each checked directly against nflverse's real column list before

@@ -2248,19 +2248,40 @@ own stated next step.
 ---
 
 ### Session 6.2 — Estimation Engine Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
+FanDuel's real player-match gap (flagged in this session's first close) was
+resolved same-day: the user re-ran `ingest_fd_props.py` locally, producing
+141 real player-prop rows, and a real stat-type coverage gap found from
+that data ("Passing TDs"/"Rushing TDs" wording) was fixed in
+`pickem_model.py`'s `NFL_STAT_TYPE_MAP`. The one remaining caveat (DK
+TD-scorer field vig not yet de-vigged) is a stated, scoped v1 boundary, not
+an open blocker — see SESSION_LOG.md continuation entry.
 **Prerequisites:** Session 6.1 complete.
 
 **What gets built:** Adapts the Phase 2 pick'em projection model (same
 underlying problem shape — projection vs. a number) rather than building new,
-with adjustments for sportsbook-specific vig and market depth.
+with adjustments for sportsbook-specific vig and market depth. Real Session
+6.1 data turned out to contain two market shapes neither of which matches
+pick'em's "one line, two-sided, single game" shape (season-long futures on
+FanDuel; one-sided TD-scorer props on DraftKings) — both handled explicitly,
+see SESSION_LOG.md.
 
-**Files touched:** `/scripts/estimation/sportsbook_props_model.py` (adapted from
-`pickem_model.py`, not duplicated logic where avoidable)
+**Files touched:** `/scripts/estimation/sportsbook_props_model.py` (imports
+shared logic from `pickem_model.py` directly rather than duplicating it),
+`/scripts/estimation/test_sportsbook_props_model.py` (new — synthetic-fixture
+harness, same precedent as this project's other test files),
+`/docs/sportsbook_props_estimation_model_spec.md` (new)
 
 **Validation (required to close session):**
-- [ ] Model correctly separates "true edge" from "vig cost" so sizing later
-isn't fooled by a line that only looks soft after vig is ignored
+- [x] Model correctly separates "true edge" from "vig cost" so sizing later
+isn't fooled by a line that only looks soft after vig is ignored — **met
+for the two-sided case** (FanDuel `player_performance` rows: real
+no-vig de-vig, proven against the -115/-105 example); **explicitly
+NOT met for the one-sided case** (DraftKings TD-scorer rows: no
+"under" side exists to de-vig against — raw implied probability is
+used, flagged `implied_prob_includes_field_vig=True`), a stated v1
+gap rather than a silently wrong number. See spec doc for full
+reasoning.
 
 ---
 

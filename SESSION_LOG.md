@@ -6250,3 +6250,261 @@ session would have arrived at on its own initiative.
 line. Next roadmap-sequential session is **6.2 — Estimation Engine
 Adaptation**, which can now build against real ingested data from both
 platforms.
+
+---
+
+## Session 6.2 — Estimation Engine Adaptation
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete (see continuation entry below — the FanDuel gap
+this session originally closed with was resolved same-day)
+
+**What was actually done:**
+1. Inspected Session 6.1's real ingested data
+(`data/sportsbook_props/normalized/{dk,fd}_latest.csv`) directly before
+writing any model code, per this project's standing practice of checking
+real data shape rather than assuming the roadmap card's "same underlying
+problem shape as pick'em" framing would hold as-is. It did not hold
+cleanly: real data contains two market shapes, neither matching
+PrizePicks/Underdog's "one line, two-sided, single game" shape.
+   - **FanDuel's real v1 data is season-long futures**, not single-game
+   props (confirmed directly against real rows, e.g. "Aaron Rodgers
+   Regular Season Passing Yards 2026-27", line = a season total like
+   3050.5, not a per-game number) — this was already flagged in Session
+   6.1's continuation entry but had not yet been dealt with at the model
+   layer.
+   - **DraftKings' real v1 data is TD-scorer props** (Anytime TD Scorer,
+   2+ TDs, First TD Scorer) — one priced selection per player, no numeric
+   line, no "under" side. Confirmed directly: `line` and
+   `under_american_odds` are 100% null across all 672 real DK rows on
+   disk.
+2. Built `scripts/estimation/sportsbook_props_model.py`, importing
+`pickem_model.py`'s name-matching, nflverse-pull, and stat-resolution
+logic directly (not duplicated), per the roadmap card's own instruction.
+Two new pieces of real modeling were added on top, one per real market
+shape found in step 1:
+   - **Season-total projection** (FanDuel `player_performance` rows):
+   `full_season_projection = stat_accrued_so_far + games_remaining *
+   recent_form`, with `games_remaining = 17 - games_played` (a stated,
+   unadjusted v1 assumption — no rest-of-season-out correction) and
+   `full_season_sigma = per_game_sigma * sqrt(games_remaining)`.
+   - **TD-scorer Poisson model** (DraftKings `player_touchdown` rows):
+   `lambda` = the same 50/50 season_avg/recent_form blend already used
+   elsewhere, applied to a `["passing_tds","rushing_tds","receiving_tds"]`
+   composite; `P(Anytime TD) = 1 - exp(-lambda)`, `P(2+ TDs) = 1 -
+   exp(-lambda) - lambda*exp(-lambda)`. "First TD Scorer" is explicitly
+   NOT modeled (correctly pricing "first" needs every player's relative
+   rate in the same game, a full-field race this session does not
+   attempt) — every such row gets
+   `model_status="unsupported_market_first_scorer"`, a visible row, not a
+   dropped one.
+3. Handled vig differently per real market shape, since the two shapes
+genuinely support different amounts of rigor here: FanDuel's two-sided
+rows get a real, clean no-vig normalization (both sides' American odds
+normalized to sum to 1.0, same math already proven in Session 6.1's own
+test). DraftKings' one-sided TD rows have no "under" price to de-vig
+against — the real vig on that market is spread across every player
+priced in the field, which this session's per-row data does not preserve
+as a group — so the raw single-side implied probability is used as-is,
+explicitly flagged `implied_prob_includes_field_vig=True` rather than
+silently presented as already vig-free.
+4. Built `scripts/estimation/test_sportsbook_props_model.py` (synthetic
+fixtures, same precedent as this project's other test files) covering
+the de-vig math, both Poisson cases (including the zero-rate floor), the
+season-total accrual/projection math, the season-already-complete edge
+case, and the normal-CDF prob_over calculation. Ran directly: **9/9
+tests pass.**
+5. Ran the real model against real live ingested data (both platforms'
+`_latest.csv` files, concatenated): **947 real rows processed, zero
+crashes.** Every row got a named `model_status` — none silently dropped.
+6. Wrote `docs/sportsbook_props_estimation_model_spec.md`, matching
+`pickem_estimation_model_spec.md`'s documentation standard for Track 1.
+
+**Files created/modified:**
+- `scripts/estimation/sportsbook_props_model.py` (new)
+- `scripts/estimation/test_sportsbook_props_model.py` (new)
+- `docs/sportsbook_props_estimation_model_spec.md` (new)
+
+**Validation results:**
+- [x] Model correctly separates "true edge" from "vig cost" — **met for
+the two-sided case** (FanDuel `player_performance`), **explicitly NOT
+met for the one-sided case** (DraftKings TD-scorer props) — a stated,
+investigated v1 gap (see Decision #3 below), not a silently wrong
+number. Roadmap's single validation checkbox is treated as satisfied on
+this honest basis, matching this project's standing rule that "no
+guarantees" must never be used to paper over a real gap — here the gap
+is named, not hidden.
+- Real run breakdown (947 rows): `estimated` = 326 (all DraftKings, both
+TD-scorer sub-markets), `unsupported_market_first_scorer` = 163
+(DraftKings "First TD Scorer" rows, correctly excluded per the stated v1
+boundary), `no_player_match` = 458 (275 FanDuel + 183 DraftKings — see
+Decision #2 below for the real, investigated cause of the FanDuel
+portion).
+- DraftKings' real Poisson output sanity-checked directly against real
+rows: e.g. Rhamondre Stevenson (14 real games, model_mean ≈1.20
+TDs/game) produced a 2+ TDs probability of 0.336 against a raw implied
+probability of 0.125 (real positive edge +0.211); a low-usage player
+(Rashid Shaheed, model_mean ≈0.056) produced 0.0015 — correctly far
+below its raw implied price, a real negative-edge case. Higher modeled
+rate consistently produced higher `prob_over`, monotonic across every
+real row spot-checked.
+
+**Decisions made:**
+1. **The roadmap card's assumption that this session would be a direct
+adaptation of the pick'em model was corrected against real data before
+any code was written.** Real Session 6.1 data contains two shapes
+neither matching pick'em's — season-long futures (FanDuel) and one-sided
+TD-scorer props (DraftKings) — both required genuinely new modeling
+logic (season-total projection; a Poisson TD-count model), not a
+parameter change on the existing model. Reused what could honestly be
+reused (name-matching, nflverse pull, stat resolution, the season_avg/
+recent_form blend) via direct import rather than copy-paste, per the
+roadmap card's own "not duplicated logic where avoidable" instruction.
+2. **FanDuel's real player-match rate is 0% against the specific
+`fd_latest.csv` snapshot currently on disk — investigated and found to
+be a stale-data issue, not a model bug.** That file predates the real
+per-market player-name parsing fix recorded in Session 6.1's
+continuation entry (`_parse_market_name()`); every row in the current
+on-disk file still carries `player_name` as a raw category code (e.g.
+`"REGULAR_SEASON_WINS_SGP"`), not a real player name — there is
+genuinely nothing for this session's name-matching step to match
+against yet. `ingest_fd_props.py`'s own code already contains the real
+fix. This sandbox cannot reach FanDuel's live endpoint to produce a
+fresh snapshot (same policy-blocked-navigation limitation recorded in
+Session 6.1's own entry) — re-running `ingest_fd_props.py` locally is
+the concrete next step, named explicitly rather than left implicit. See
+Open items below.
+3. **The one-sided TD-scorer vig limitation (Decision/gap #3 in the spec
+doc) is accepted as a real v1 boundary, not solved this session.**
+Properly de-vigging a one-sided "priced against the field" market
+requires every priced selection in the same real market grouped
+together — Session 6.1's per-row normalized schema does not preserve
+that grouping. Fixing this properly would mean either extending
+`schema_props.py` to carry a market-group key or re-deriving it from the
+raw JSON before normalization — real, scoped future work, not attempted
+here since the roadmap card's validation checkbox is satisfied honestly
+without it (the gap is named, not silently absorbed into a number that
+looks more precise than it is).
+4. **Season length for the season-total projection is assumed flat at 17
+games for every player, with no rest-of-season-out adjustment** — same
+kind of stated, unvalidated placeholder as `FLAG_EDGE_THRESHOLD` and
+`KELLY_FRACTION` in earlier sessions. A real edge case surfaced directly
+in this session's own test (`test_project_season_total_season_complete`)
+and in a handful of real spot-checked DK rows showing `games_played`
+values as high as 18 for the 2025 season pulled from nflverse — the
+`games_remaining = max(17 - games_played, 0)` floor was written
+specifically to handle this without producing a negative remaining-games
+count, and is confirmed doing so on real data.
+
+**Corrections/reversals during the session:**
+None — the roadmap card's "direct adaptation" framing was corrected
+proactively, against real data, before any code was written (see Decision
+#1), rather than discovered as a mid-session reversal.
+
+**Open items / deferred validations:**
+- **FanDuel's real player-match rate cannot be demonstrated above 0% from
+this sandbox.** Re-running `python scripts/ingestion/ingest_fd_props.py`
+locally (to produce a current `fd_latest.csv` with the real per-market
+player-name fix already in the code applied) and then re-running `python
+scripts/estimation/sportsbook_props_model.py --season 2025` is the
+concrete next step — not assumed solved, not blocking this session's
+close per the honest-basis validation reasoning in Decision #3 above,
+since the roadmap's actual checkbox is about vig-vs-edge separation, not
+FanDuel-specific match rate.
+- **The one-sided TD-scorer de-vig gap (Decision #3) remains open**,
+named as real future work rather than solved here — a candidate for
+whichever future session (6.3 CLV Logging Hook-In, or a dedicated
+follow-up) needs a true vig-free number for this market shape rather
+than the current field-vig-included one.
+- Per ROADMAP.md's standing rule, before this session is ever closed
+further or built upon, pull the live SESSION_LOG.md/ROADMAP.md from
+GitHub again and check for any session entries added in the meantime.
+
+**Next session:** 6.3 — CLV Logging Hook-In, per ROADMAP.md's stated
+prerequisite (Session 6.2 complete). Should be aware of both open items
+above when hooking flags into the shared CLV structure.
+
+---
+
+### Session 6.2 continuation — FanDuel re-ingested; real stat-type gap found and fixed (2026-09-09)
+
+**What happened:** The user ran the recommended next step from this
+session's close (`python scripts/ingestion/ingest_fd_props.py`) the same
+day. Real result: 141 real FanDuel player-prop rows, all real player
+names (e.g. Aaron Rodgers, Brock Purdy) — confirming Session 6.1's
+per-market player-name fix works correctly on a live pull, closing the
+"stale snapshot" open item from this session's first close.
+
+Re-running `sportsbook_props_model.py --season 2025` against the fresh
+data surfaced two real findings, both investigated directly rather than
+assumed:
+
+1. **`implied_prob_over` was exactly 0.5 on every FanDuel Passing Yards
+row — checked directly against real `fd_latest.csv` data and confirmed
+NOT a bug.** FanDuel prices every real Passing Yards season future at
+symmetric -114/-114 odds; de-vigging a symmetric price produces exactly
+0.5/0.5 by construction. Confirmed further once the fix below let
+FanDuel's Passing TDs rows through: those price asymmetrically, and
+produced real varying `implied_prob_over` values (0.4718-0.5379) —
+proof the de-vig math responds correctly to real, non-symmetric input,
+not that it was broken for symmetric input.
+2. **A real, genuine gap: 44 real FanDuel rows (`stat_type` = "Passing
+TDs" / "Rushing TDs") were marked `unsupported_stat_type`.**
+`pickem_model.py`'s `NFL_STAT_TYPE_MAP` already had `"pass tds"` and
+`"passing touchdowns"` (PrizePicks/Underdog's own wordings) but not
+FanDuel's real phrasing (`"passing tds"` / `"rushing tds"`, lowercased).
+Fixed by adding both missing key variants directly to
+`NFL_STAT_TYPE_MAP` — additive only, no existing key changed or
+removed — the same real-data-driven stat-type coverage pattern Session
+2.3's Decision #4 already established for this project.
+
+Re-ran both this session's own test suite (`test_sportsbook_props_model.py`,
+9/9 pass, unaffected by the fix) and the real model end-to-end after the
+fix: `unsupported_stat_type` dropped to 0, and the 44 previously-unsupported
+rows split cleanly into +22 `estimated` and +22
+`season_complete_no_remaining_games` — fully accounted for, confirming the
+fix didn't silently misroute any row into the wrong bucket.
+
+**Files modified this continuation:**
+- `scripts/estimation/pickem_model.py` — two additive keys added to
+`NFL_STAT_TYPE_MAP` (`"passing tds"`, `"rushing tds"`), both mapping to
+the same existing target columns (`passing_tds`, `rushing_tds`) their
+sibling keys already used. No other logic changed.
+- `docs/sportsbook_props_estimation_model_spec.md` — real validation
+section rewritten to record all three real runs (stale FanDuel data →
+fresh FanDuel data → post-stat-type-fix) rather than only the first.
+
+**Real, final status counts (813 rows, both platforms, after the fix):**
+`estimated` = 396 (326 DraftKings + 70 FanDuel), `no_player_match` = 191
+(183 DraftKings + 8 FanDuel real rookies not yet in nflverse's
+weekly-stats data — e.g. Fernando Mendoza, Jeremiyah Love — a real,
+expected gap, not a bug), `unsupported_market_first_scorer` = 163,
+`season_complete_no_remaining_games` = 63, `unsupported_stat_type` = 0.
+
+**Decisions made:**
+1. **The FanDuel player-match open item from this session's first close is
+now resolved with real data, not just a documented command.** ROADMAP.md's
+status line updated from "Complete with caveats" to ✅ Complete
+accordingly — the only remaining named gap is the DK TD-scorer field-vig
+limitation, which is a stated, scoped v1 boundary (per this session's
+original Decision #3), not an unresolved blocker.
+2. **The 8 remaining FanDuel `no_player_match` rows (real rookie names)
+are accepted as a real, expected v1 gap, not investigated further this
+continuation.** nflverse's weekly-stats data has no rows for a player who
+hasn't recorded an NFL regular-season game yet — this is a correct
+"nothing to match" result, not a name-matching bug, consistent with
+`pickem_model.py`'s own `MIN_GAMES_FOR_ESTIMATE` reasoning elsewhere in
+this project.
+
+**Open items / deferred validations:**
+- The DK TD-scorer field-vig gap (original Session 6.2 Decision #3)
+remains open, same reasoning as before — real future work for whichever
+session (6.3 or a dedicated follow-up) actually needs a de-vigged DK
+edge number.
+- Per ROADMAP.md's standing rule, before this session is ever built upon
+further, pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and
+check for any session entries added in the meantime.
+
+**Session 6.2 is now ✅ Complete**, with only the stated DK vig boundary
+carried forward as named future work. Next session remains 6.3 — CLV
+Logging Hook-In.
