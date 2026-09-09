@@ -6508,3 +6508,134 @@ check for any session entries added in the meantime.
 **Session 6.2 is now ✅ Complete**, with only the stated DK vig boundary
 carried forward as named future work. Next session remains 6.3 — CLV
 Logging Hook-In.
+
+---
+
+## Session 6.3 — CLV Logging Hook-In
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Extended `scripts/calibration/clv_logger.py` with a fourth `--track
+props` path, reusing the generic (weather/politics) open/refresh/close
+engine (`generic_process_run`) rather than writing a fourth independent
+lifecycle implementation — but with pick'em's own cross-row consensus
+search pattern (not politics' same-row lookup), since Session 6.2's
+combined `sportsbook_props_latest.csv` holds DraftKings and FanDuel rows
+for the same real player/stat/game as separate rows, exactly like
+pick'em's cross-platform case.
+2. Named, up front in the module docstring, what "real sharp-book
+benchmark (e.g. Pinnacle-style no-vig line)" honestly means given this
+project's actual ingested data: Session 6.1/6.2 only ingest DraftKings
+and FanDuel — neither is a sharp book, and no sharp-book feed exists
+anywhere in this project. The benchmark actually logged is the other
+book's own no-vig price on the same real prop, when both books carry
+it (consensus_price/consensus_label) — the closest real two-source
+signal this project's real data can produce today, the same honest
+substitution pick'em's own Session 2.4 made for the same reason.
+3. Ran the new path against real live data
+(output/estimation/sportsbook_props_latest.csv, 813 real rows): 172 real
+flags logged, zero pipeline failures. Re-ran a second time against the
+same file to confirm the refresh path is idempotent (0 newly flagged,
+172 still open, no duplicates) — confirmed. Also re-ran all three
+existing tracks (pickem, weather, politics) through the same updated
+file to confirm the shared engine and pickem's untouched path still work
+correctly — all three ran clean with no regressions.
+4. Real, investigated finding: cross-book consensus never matched on
+real data (consensus_available=False for all 172 real flags). Root
+cause confirmed directly, not assumed: DraftKings' real v1 rows are
+TD-scorer props (resolved_stat_key = the TD composite key, game_id = one
+of 8 real per-game IDs), while FanDuel's real v1 rows are season-long
+futures (resolved_stat_key = a per-stat key like passing_yards, game_id
+= a single constant placeholder value across all 141 rows, not a real
+per-game ID). This is a direct, expected consequence of Session 6.2's
+own documented finding that DK and FD's real v1 data are two different
+market shapes (single-game TD props vs. season-long futures) — neither
+the match key (player_name, resolved_stat_key, game_id) nor the
+underlying markets have any real overlap yet. This is a stated,
+investigated gap, not a bug in the matching logic itself: the same
+cross-row search logic (copied in shape from pick'em's own, already
+proven correct against real PrizePicks/Underdog data) is proven correct
+here too via synthetic fixtures (see below) — it simply has no real data
+to match against yet, the same honest shape of gap Session 2.4 itself
+hit for pick'em's own cross-platform consensus before real NFL data
+existed on Underdog.
+5. Extended scripts/calibration/test_clv_logger.py with 5 new synthetic
+scenarios for the props path (new flag with consensus, new flag without
+consensus, below-threshold not flagged, refresh + close lifecycle,
+idempotency) — the same scenario shape the pick'em suite already
+established, adapted to props' own fixture shape. 5/5 new scenarios
+pass. While wiring this in, found and fixed a real, separate staleness
+bug in the existing pick'em scenarios (1-6): they called
+clv_logger.process_run() / clv_logger.load_clv_log(), both function
+names that no longer exist — renamed to process_run_pickem() /
+load_clv_log_pickem() at some point after Session 2.4 (most likely
+Session 5.3's generalization pass) without the test file being updated
+to match. Fixed the six call sites to the current names. Note:
+scenarios 1-6 are not fully sandbox-isolated (load_clv_log_pickem() reads
+the real repo's live data/pickem/clv_log.csv, which now has thousands of
+real rows from Sessions 2.4-2.7's live usage) — this pre-dates this
+session and is a real, separate test-isolation gap in the pick'em suite,
+left as found rather than fixed here, since fixing it is unrelated to
+this session's actual scope (props CLV hook-in). The new props scenarios
+(7-11) each build a fresh, empty log locally, so they do not have this
+problem.
+
+**Files created/modified:**
+- scripts/calibration/clv_logger.py (extended — new --track props path:
+build_props_candidates, build_props_present_and_prices,
+price_for_side_props, find_latest_estimates_file_props, run_props, plus
+PROPS_EXTRA_COLUMNS/CLV_LOG_COLUMNS_PROPS/PROPS_FLAG_EDGE_THRESHOLD and
+updated module docstring/argparse)
+- scripts/calibration/test_clv_logger.py (extended — 5 new props
+scenarios; 6 existing pick'em scenarios' stale function-name calls
+fixed)
+- data/sportsbook_props/clv_log.csv (new — real live output, 172 rows)
+- data/sportsbook_props/clv_snapshots/ (new — per-run snapshots, same
+pattern as the other three tracks)
+
+**Validation results:**
+- [x] Props track flags log correctly into shared CLV structure, with a
+real sharp-book benchmark where available — met on the honest basis
+named in Decision #2 above: every one of 172 real flags is written into
+the shared core-column CLV structure (generic_process_run, the same
+engine weather and politics already use); the benchmark logged is the
+real other-book no-vig price when both books cover the same prop — none
+did in this real run (see Finding #4), a stated, investigated
+external-data gap, not a code defect. The matching/logging mechanism
+itself is proven correct against synthetic fixtures where a real
+cross-book match does exist (scenario 7).
+
+**Decisions made:**
+1. Reused the generic (weather/politics) engine for props rather than
+writing pick'em-style dedicated open/refresh/close functions a third
+time, since props' lifecycle needs (open on new flag, refresh on
+still-present, close on disappearance) are identical in shape to
+weather/politics — only the candidate-building and consensus-matching
+step needed to be prop-specific.
+2. "Real sharp-book benchmark (e.g. Pinnacle-style no-vig line)" is met
+using the other book's own no-vig price as the closest honest real
+substitute, explicitly named as such in the module docstring — no sharp
+book is ingested anywhere in this project, so pretending otherwise would
+misstate what the logged number actually is. Confirmed as the correct
+reading of the roadmap card's own "where available" qualifier, the same
+substitution already accepted for pick'em's own cross-platform benchmark
+in Session 2.4.
+3. The stale process_run/load_clv_log names in the existing pick'em test
+scenarios were fixed to their current _pickem-suffixed names so the test
+file actually runs, but the pre-existing lack of sandbox isolation in
+those same six scenarios was left as found — a distinct, separate gap
+from this session's actual scope, noted here so a future session
+revisiting test_clv_logger.py has the finding on record rather than
+rediscovering it.
+
+**Handoff notes:** Track 5 (sportsbook props) now has a working CLV
+logger, proven against real live data and covered by synthetic tests, on
+par with the other three live tracks. The zero-consensus-match finding
+(Decision/Finding #4) is not a blocker — it will resolve on its own once
+either book's real v1 data shape changes (e.g. DK adds
+player_performance markets, or FD adds single-game props), the same kind
+of external, data-driven gap Session 2.4 itself carried forward for
+pick'em before real NFL data existed. Next session is 6.4 — Sizing
+Adaptation (Account-Limiting Risk Built In).

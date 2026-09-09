@@ -1,6 +1,57 @@
 """
-Session 2.4 (pick'em) / Session 4.3 (weather) / Session 5.3 (politics)
+Session 2.4 (pick'em) / Session 4.3 (weather) / Session 5.3 (politics) /
+Session 6.3 (sportsbook props)
 -- CLV-Equivalent Calibration Logging, Generalized Across Tracks
+
+SESSION 6.3 ADDITION -- SPORTSBOOK PLAYER PROPS (DK/FD)
+-----------------------------------------------------------------------
+Adds a --track props path, reusing the generic (weather/politics) engine
+rather than pick'em's own dedicated functions, but with pick'em's
+cross-ROW consensus search (not politics' same-row lookup), since DK and
+FD props for the same real player/stat/game live in different rows of
+Session 6.2's combined `sportsbook_props_latest.csv`, exactly like
+pick'em's cross-platform case. Match key is (normalized player_name,
+resolved_stat_key, game_id) -- the same three-part key pick'em already
+uses, imported by pattern, not by code (props' key uses game_id directly
+from the ingested row, pick'em's uses the same field name).
+
+WHAT COUNTS AS THE "SHARP-BOOK BENCHMARK" HERE (this track's ROADMAP.md
+validation item asks for this explicitly): Session 6.1/6.2 only ingest
+DraftKings and FanDuel -- neither is a sharp book (e.g. Pinnacle), and no
+sharp-book feed exists anywhere in this project yet. So "real sharp-book
+benchmark... where available" is met the same honest way pick'em's own
+Session 2.4 handled the same gap: the OTHER book's own no-vig price on the
+same real prop, when both books carry it, is logged as consensus_price
+(consensus_label names which book: "draftkings" or "fanduel") -- the
+closest real two-source benchmark this project's actual ingested data can
+produce today. This is explicitly NOT a Pinnacle-style sharp line; that
+remains a stated, named gap, not something this script pretends to solve.
+A row whose OWN estimate is already the de-vigged two-sided probability
+(FanDuel player_performance rows) additionally carries a real analogue to
+CLV's classic "closing line" signal via the shared own-price-movement-to-
+close mechanism every track's generic engine already provides -- a prop
+that drops out of a later ingestion run has closed/settled/come off the
+board, and its last-seen price is frozen as closing_market_price, same as
+weather and politics.
+
+WHY THE ONE-SIDED DK TD-SCORER ROWS ARE INCLUDED, NOT EXCLUDED
+-----------------------------------------------------------------------
+Session 6.2 already flags DK's one-sided rows with
+implied_prob_includes_field_vig=True rather than silently treating the raw
+price as vig-free. That flag is carried straight through into this
+track's log as an extra column (see PROPS_EXTRA_COLUMNS) so a later
+session reviewing CLV results can filter it out or weight it differently,
+rather than this script either dropping those rows (losing real flagged
+opportunities) or quietly mixing a vig-inflated edge in with a clean
+de-vigged one.
+
+USAGE (props)
+-------------
+python clv_logger.py --track props
+
+===========================================================================
+ORIGINAL (Session 2.4 / 4.3 / 5.3) MODULE DOCSTRING CONTINUES BELOW
+===========================================================================
 
 WHAT CHANGED THIS SESSION (5.3) AND WHY
 -----------------------------------------------------------------------
@@ -163,6 +214,10 @@ POLITICS_ESTIMATES_LATEST = BASE_DIR / "data" / "politics" / "estimates" / "poli
 CLV_LOG_PATH_POLITICS = BASE_DIR / "data" / "politics" / "clv_log.csv"
 CLV_SNAPSHOT_DIR_POLITICS = BASE_DIR / "data" / "politics" / "clv_snapshots"
 
+PROPS_ESTIMATES_LATEST = BASE_DIR / "output" / "estimation" / "sportsbook_props_latest.csv"
+CLV_LOG_PATH_PROPS = BASE_DIR / "data" / "sportsbook_props" / "clv_log.csv"
+CLV_SNAPSHOT_DIR_PROPS = BASE_DIR / "data" / "sportsbook_props" / "clv_snapshots"
+
 LOG_PATH = BASE_DIR / "logs" / "clv_logging.log"
 
 # ---------------------------------------------------------------------------
@@ -172,6 +227,7 @@ LOG_PATH = BASE_DIR / "logs" / "clv_logging.log"
 FLAG_EDGE_THRESHOLD_PICKEM = 0.03   # unchanged from Session 2.4 -- stated, unvalidated placeholder
 WEATHER_FLAG_EDGE_THRESHOLD = 0.03  # same placeholder logic, applied to this track -- unvalidated
 POLITICS_FLAG_EDGE_THRESHOLD = 0.03  # same placeholder logic, applied to this track -- unvalidated
+PROPS_FLAG_EDGE_THRESHOLD = 0.03    # same placeholder logic, applied to this track -- unvalidated
 
 # ---------------------------------------------------------------------------
 # Shared (core) CLV log columns -- every track's log carries these.
@@ -224,6 +280,14 @@ POLITICS_EXTRA_COLUMNS = [
     "edge_vs_electindex",
 ]
 CLV_LOG_COLUMNS_POLITICS = CLV_CORE_COLUMNS + POLITICS_EXTRA_COLUMNS
+
+PROPS_EXTRA_COLUMNS = [
+    "platform", "source_event_id", "source_market_id", "source_selection_id",
+    "player_name", "team", "sport", "stat_type", "prop_category",
+    "resolved_stat_key", "line", "game_id", "game_start_time",
+    "implied_prob_includes_field_vig",
+]
+CLV_LOG_COLUMNS_PROPS = CLV_CORE_COLUMNS + PROPS_EXTRA_COLUMNS
 
 
 def setup_logging() -> logging.Logger:
@@ -880,13 +944,212 @@ def run_politics(estimates_path: Optional[Path]) -> dict:
     }
 
 
+# ===========================================================================
+# SPORTSBOOK PROPS TRACK (Session 6.3)
+# ===========================================================================
+
+def _props_match_key(row) -> Optional[str]:
+    name = row.get("player_name")
+    stat_key = row.get("resolved_stat_key")
+    game_id = row.get("game_id")
+    if not name or not isinstance(name, str):
+        return None
+    if not stat_key or not isinstance(stat_key, str):
+        return None
+    if not game_id or (isinstance(game_id, float) and pd.isna(game_id)):
+        return None
+    norm_name = " ".join(name.strip().lower().split())
+    return f"{norm_name}|{stat_key}|{game_id}"
+
+
+def _props_other_platform(platform: str) -> str:
+    return "fanduel" if platform == "draftkings" else "draftkings"
+
+
+def _props_implied_for_side(row, side: str) -> Optional[float]:
+    return row.get("implied_prob_over") if side == "over" else row.get("implied_prob_under")
+
+
+def build_props_consensus_index(df: pd.DataFrame) -> dict[tuple[str, str], list[int]]:
+    index: dict[tuple[str, str], list[int]] = {}
+    for idx, row in df.iterrows():
+        key = _props_match_key(row)
+        if key is None:
+            continue
+        platform = row.get("platform")
+        if not platform:
+            continue
+        index.setdefault((platform, key), []).append(idx)
+    return index
+
+
+def find_props_consensus_row(df: pd.DataFrame, index: dict, own_platform: str, match_key: str) -> Optional[pd.Series]:
+    other_platform = _props_other_platform(own_platform)
+    candidates = index.get((other_platform, match_key))
+    if not candidates:
+        return None
+    if len(candidates) > 1:
+        log.warning(
+            "[props] Multiple consensus candidates for platform=%s key=%s (%d matches) -- using the first.",
+            other_platform, match_key, len(candidates),
+        )
+    return df.loc[candidates[0]]
+
+
+def build_props_candidates(df: pd.DataFrame) -> list[dict]:
+    """Mirrors pick'em's determine_flagged_side/consensus-search pattern
+    (cross-row, not same-row -- see module docstring), but emits the
+    generic engine's core+extra dict shape so props can share
+    generic_process_run() with weather/politics rather than duplicating
+    the open/refresh/close lifecycle a third time."""
+    index = build_props_consensus_index(df)
+    candidates = []
+    for _, row in df.iterrows():
+        if row.get("model_status") != "estimated":
+            continue
+        edge_over = row.get("edge_over")
+        edge_under = row.get("edge_under")
+        if pd.notna(edge_over) and edge_over >= PROPS_FLAG_EDGE_THRESHOLD:
+            side, model_prob, market_price, edge = (
+                "over", row.get("prob_over"), row.get("implied_prob_over"), edge_over,
+            )
+        elif pd.notna(edge_under) and edge_under >= PROPS_FLAG_EDGE_THRESHOLD:
+            side, model_prob, market_price, edge = (
+                "under", row.get("prob_under"), row.get("implied_prob_under"), edge_under,
+            )
+        else:
+            continue
+
+        platform = row.get("platform")
+        selection_id = row.get("source_selection_id")
+        if not platform or selection_id is None:
+            continue
+        flag_id = f"{platform}|{selection_id}"
+
+        match_key = _props_match_key(row)
+        consensus_row = find_props_consensus_row(df, index, platform, match_key) if match_key else None
+        consensus_available = consensus_row is not None
+        consensus_price = _props_implied_for_side(consensus_row, side) if consensus_available else None
+        consensus_edge = (
+            round(float(model_prob) - float(consensus_price), 4)
+            if (consensus_available and model_prob is not None and pd.notna(consensus_price))
+            else None
+        )
+
+        candidates.append({
+            "flag_id": flag_id,
+            "flagged_side": side,
+            "model_prob": round(float(model_prob), 4) if model_prob is not None else None,
+            "market_price": round(float(market_price), 4) if market_price is not None else None,
+            "edge": round(float(edge), 4),
+            "consensus_available": bool(consensus_available),
+            "consensus_label": consensus_row.get("platform") if consensus_available else None,
+            "consensus_price": round(float(consensus_price), 4) if consensus_available and pd.notna(consensus_price) else None,
+            "consensus_edge": consensus_edge,
+            "platform": platform,
+            "source_event_id": row.get("source_event_id"),
+            "source_market_id": row.get("source_market_id"),
+            "source_selection_id": selection_id,
+            "player_name": row.get("player_name"),
+            "team": row.get("team"),
+            "sport": row.get("sport"),
+            "stat_type": row.get("stat_type"),
+            "prop_category": row.get("prop_category"),
+            "resolved_stat_key": row.get("resolved_stat_key"),
+            "line": row.get("line"),
+            "game_id": row.get("game_id"),
+            "game_start_time": row.get("game_start_time"),
+            "implied_prob_includes_field_vig": row.get("implied_prob_includes_field_vig"),
+        })
+    return candidates
+
+
+def build_props_present_and_prices(df: pd.DataFrame) -> tuple[set[str], dict[str, dict]]:
+    """Returns (present_ids, row_by_flag_id) -- row_by_flag_id holds each
+    live flag_id's own current over/under implied prices, so
+    price_for_side_props() can refresh an already-open flag on whichever
+    side it was originally flagged on, same pattern as weather's yes/no
+    conversion."""
+    present_ids = set()
+    rows_by_id: dict[str, dict] = {}
+    for _, row in df.iterrows():
+        platform = row.get("platform")
+        selection_id = row.get("source_selection_id")
+        if not platform or selection_id is None:
+            continue
+        flag_id = f"{platform}|{selection_id}"
+        present_ids.add(flag_id)
+        rows_by_id[flag_id] = {
+            "implied_prob_over": row.get("implied_prob_over"),
+            "implied_prob_under": row.get("implied_prob_under"),
+        }
+    return present_ids, rows_by_id
+
+
+def price_for_side_props(rows_by_id: dict) -> "callable":
+    def _fn(flag_id: str, side: str) -> Optional[float]:
+        row = rows_by_id.get(flag_id)
+        if row is None:
+            return None
+        value = row.get("implied_prob_over") if side == "over" else row.get("implied_prob_under")
+        return float(value) if value is not None and value == value else None  # NaN-safe
+    return _fn
+
+
+def find_latest_estimates_file_props() -> Path:
+    if PROPS_ESTIMATES_LATEST.exists():
+        return PROPS_ESTIMATES_LATEST
+    raise FileNotFoundError(
+        f"{PROPS_ESTIMATES_LATEST} does not exist -- run "
+        f"scripts/estimation/sportsbook_props_model.py first (Session 6.2)."
+    )
+
+
+def run_props(estimates_path: Optional[Path]) -> dict:
+    path = estimates_path or find_latest_estimates_file_props()
+    estimates_df = pd.read_csv(path)
+    log.info("[props] Loaded %d estimate rows from %s", len(estimates_df), path)
+
+    run_pulled_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    existing_log = load_clv_log_generic(CLV_LOG_PATH_PROPS, CLV_LOG_COLUMNS_PROPS)
+    log.info("[props] Existing CLV log has %d rows before this run", len(existing_log))
+
+    candidates = build_props_candidates(estimates_df)
+    present_ids, rows_by_id = build_props_present_and_prices(estimates_df)
+
+    updated_log = generic_process_run(
+        "props", candidates, present_ids, price_for_side_props(rows_by_id), existing_log, run_pulled_at,
+        CLV_LOG_COLUMNS_PROPS, PROPS_EXTRA_COLUMNS,
+    )
+
+    newly_opened = int((updated_log["first_flagged_at"] == run_pulled_at).sum())
+    newly_closed = int(
+        ((updated_log["status"] == "closed") & (updated_log["closing_pulled_at"] == run_pulled_at)).sum()
+    )
+    still_open = int((updated_log["status"] == "open").sum())
+
+    CLV_LOG_PATH_PROPS.parent.mkdir(parents=True, exist_ok=True)
+    updated_log.to_csv(CLV_LOG_PATH_PROPS, index=False)
+    log.info("[props] Wrote %d total rows to %s", len(updated_log), CLV_LOG_PATH_PROPS)
+
+    CLV_SNAPSHOT_DIR_PROPS.mkdir(parents=True, exist_ok=True)
+    snapshot_path = CLV_SNAPSHOT_DIR_PROPS / f"clv_log_{run_pulled_at.replace(':', '').replace('-', '')}.csv"
+    updated_log.to_csv(snapshot_path, index=False)
+
+    return {
+        "track": "props", "estimates_file": str(path), "rows_in_estimates": len(estimates_df),
+        "newly_flagged": newly_opened, "newly_closed": newly_closed, "still_open": still_open,
+        "total_logged": len(updated_log), "log_path": str(CLV_LOG_PATH_PROPS),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--track", type=str, default="pickem", choices=["pickem", "weather", "politics"],
+        "--track", type=str, default="pickem", choices=["pickem", "weather", "politics", "props"],
         help="Which track's CLV log to update. Defaults to pickem (Session 2.4 behavior, unchanged).",
     )
     parser.add_argument(
@@ -901,7 +1164,9 @@ if __name__ == "__main__":
         result = run_pickem(estimates_arg)
     elif args.track == "weather":
         result = run_weather(estimates_arg)
-    else:
+    elif args.track == "politics":
         result = run_politics(estimates_arg)
+    else:
+        result = run_props(estimates_arg)
     log.info("Run summary: %s", result)
     print(result)

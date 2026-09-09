@@ -73,7 +73,7 @@ def scenario_1_new_flag_with_consensus():
         edge_under=-0.10,
     )
     estimates_df = pd.DataFrame([pp_row, ud_row])
-    log_df = clv_logger.process_run(estimates_df, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
 
     # Both platforms independently clear the edge threshold here, so both
     # get logged, each pointing at the other as its consensus match.
@@ -91,7 +91,7 @@ def scenario_1_new_flag_with_consensus():
 def scenario_2_new_flag_without_consensus():
     pp_row = _base_row(game_id="game_solo")
     estimates_df = pd.DataFrame([pp_row])
-    log_df = clv_logger.process_run(estimates_df, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
 
     assert len(log_df) == 1
     r = log_df.iloc[0]
@@ -107,7 +107,7 @@ def scenario_3_below_threshold_not_flagged():
         edge_over=0.01, edge_under=-0.01,
     )
     estimates_df = pd.DataFrame([pp_row])
-    log_df = clv_logger.process_run(estimates_df, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
     assert len(log_df) == 0, f"expected 0 flags below threshold, got {len(log_df)}"
     print("PASS: scenario_3_below_threshold_not_flagged")
 
@@ -115,14 +115,14 @@ def scenario_3_below_threshold_not_flagged():
 def scenario_4_refresh_open_flag_line_moves():
     pp_row_run1 = _base_row(source_line_id="pp_refresh", line=275.5)
     estimates_run1 = pd.DataFrame([pp_row_run1])
-    log_after_run1 = clv_logger.process_run(estimates_run1, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
     assert len(log_after_run1) == 1
     assert log_after_run1.iloc[0]["last_seen_line"] == 275.5
 
     # Run 2: same prop still present, but the platform's own line has moved.
     pp_row_run2 = _base_row(source_line_id="pp_refresh", line=278.0)
     estimates_run2 = pd.DataFrame([pp_row_run2])
-    log_after_run2 = clv_logger.process_run(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
+    log_after_run2 = clv_logger.process_run_pickem(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
 
     assert len(log_after_run2) == 1, "refresh must not create a duplicate row"
     r = log_after_run2.iloc[0]
@@ -136,17 +136,17 @@ def scenario_4_refresh_open_flag_line_moves():
 def scenario_5_flag_closes_when_prop_disappears():
     pp_row_run1 = _base_row(source_line_id="pp_close_me", line=275.5, prob_over=0.60)
     estimates_run1 = pd.DataFrame([pp_row_run1])
-    log_after_run1 = clv_logger.process_run(estimates_run1, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
 
     # Run 2: line moves while still open.
     pp_row_run2 = _base_row(source_line_id="pp_close_me", line=277.0, prob_over=0.60)
     estimates_run2 = pd.DataFrame([pp_row_run2])
-    log_after_run2 = clv_logger.process_run(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
+    log_after_run2 = clv_logger.process_run_pickem(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
 
     # Run 3: prop is gone (empty estimates for this flag_id -- game locked).
     other_row = _base_row(source_line_id="pp_unrelated", game_id="game_other")
     estimates_run3 = pd.DataFrame([other_row])
-    log_after_run3 = clv_logger.process_run(estimates_run3, log_after_run2, "2026-09-01T12:00:00Z")
+    log_after_run3 = clv_logger.process_run_pickem(estimates_run3, log_after_run2, "2026-09-01T12:00:00Z")
 
     closed = log_after_run3[log_after_run3["flag_id"] == "prizepicks|pp_close_me"].iloc[0]
     assert closed["status"] == "closed"
@@ -161,14 +161,142 @@ def scenario_5_flag_closes_when_prop_disappears():
 def scenario_6_idempotent_same_file_twice():
     pp_row = _base_row(source_line_id="pp_idempotent")
     estimates_df = pd.DataFrame([pp_row])
-    log_after_first = clv_logger.process_run(estimates_df, clv_logger.load_clv_log(), "2026-09-01T10:00:00Z")
+    log_after_first = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
     assert len(log_after_first) == 1
 
     # Re-run the SAME file against the SAME timestamp -- must not duplicate
     # or double-count the flag.
-    log_after_second = clv_logger.process_run(estimates_df, log_after_first, "2026-09-01T10:00:00Z")
+    log_after_second = clv_logger.process_run_pickem(estimates_df, log_after_first, "2026-09-01T10:00:00Z")
     assert len(log_after_second) == 1, f"expected idempotent single row, got {len(log_after_second)}"
     print("PASS: scenario_6_idempotent_same_file_twice")
+
+
+def _props_base_row(**overrides):
+    row = {
+        "platform": "draftkings",
+        "source_event_id": "evt_1",
+        "source_market_id": "mkt_1",
+        "source_selection_id": "sel_dk_1",
+        "player_name": "Patrick Mahomes",
+        "team": "KC",
+        "sport": "nfl",
+        "stat_type": "Pass Yards",
+        "prop_category": "player_performance",
+        "resolved_stat_key": "passing_yards",
+        "line": 275.5,
+        "game_id": "game_1",
+        "game_start_time": "2026-09-07T17:00:00Z",
+        "model_status": "estimated",
+        "prob_over": 0.60,
+        "prob_under": 0.40,
+        "implied_prob_over": 0.50,
+        "implied_prob_under": 0.50,
+        "implied_prob_includes_field_vig": False,
+        "edge_over": 0.10,
+        "edge_under": -0.10,
+    }
+    row.update(overrides)
+    return row
+
+
+def _run_props(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
+    candidates = clv_logger.build_props_candidates(estimates_df)
+    present_ids, rows_by_id = clv_logger.build_props_present_and_prices(estimates_df)
+    return clv_logger.generic_process_run(
+        "props", candidates, present_ids, clv_logger.price_for_side_props(rows_by_id),
+        existing_log, run_pulled_at, clv_logger.CLV_LOG_COLUMNS_PROPS, clv_logger.PROPS_EXTRA_COLUMNS,
+    )
+
+
+def _empty_props_log() -> pd.DataFrame:
+    return pd.DataFrame(columns=clv_logger.CLV_LOG_COLUMNS_PROPS, dtype=object)
+
+
+def scenario_7_props_new_flag_with_consensus():
+    dk_row = _props_base_row()
+    fd_row = _props_base_row(
+        platform="fanduel",
+        source_event_id="evt_1_fd",
+        source_market_id="mkt_1_fd",
+        source_selection_id="sel_fd_1",
+        implied_prob_over=0.52,
+        implied_prob_under=0.48,
+    )
+    estimates_df = pd.DataFrame([dk_row, fd_row])
+    log_df = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
+
+    assert len(log_df) == 2, f"expected 2 flags (both platforms clear threshold), got {len(log_df)}"
+    r = log_df[log_df["flag_id"] == "draftkings|sel_dk_1"].iloc[0]
+    assert r["flagged_side"] == "over"
+    assert r["consensus_available"] == True  # noqa: E712
+    assert r["consensus_label"] == "fanduel"
+    assert abs(r["consensus_price"] - 0.52) < 1e-9
+    assert abs(r["consensus_edge"] - (0.60 - 0.52)) < 1e-9
+    assert r["status"] == "open"
+    print("PASS: scenario_7_props_new_flag_with_consensus")
+
+
+def scenario_8_props_new_flag_without_consensus():
+    dk_row = _props_base_row(game_id="game_solo")
+    estimates_df = pd.DataFrame([dk_row])
+    log_df = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
+
+    assert len(log_df) == 1
+    r = log_df.iloc[0]
+    assert r["consensus_available"] == False  # noqa: E712
+    assert pd.isna(r["consensus_edge"]) or r["consensus_edge"] is None
+    print("PASS: scenario_8_props_new_flag_without_consensus")
+
+
+def scenario_9_props_below_threshold_not_flagged():
+    dk_row = _props_base_row(
+        source_selection_id="sel_small_edge",
+        prob_over=0.51, prob_under=0.49,
+        edge_over=0.01, edge_under=-0.01,
+    )
+    estimates_df = pd.DataFrame([dk_row])
+    log_df = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
+    assert len(log_df) == 0, f"expected 0 flags below threshold, got {len(log_df)}"
+    print("PASS: scenario_9_props_below_threshold_not_flagged")
+
+
+def scenario_10_props_refresh_and_close():
+    row_run1 = _props_base_row(source_selection_id="sel_lifecycle")
+    log1 = _run_props(pd.DataFrame([row_run1]), _empty_props_log(), "2026-09-01T10:00:00Z")
+    assert len(log1) == 1
+    assert log1.iloc[0]["last_seen_market_price"] == 0.50
+
+    # Run 2: still present, own price moves (line/vig shift).
+    row_run2 = _props_base_row(source_selection_id="sel_lifecycle", implied_prob_over=0.55, implied_prob_under=0.45)
+    log2 = _run_props(pd.DataFrame([row_run2]), log1, "2026-09-01T11:00:00Z")
+    assert len(log2) == 1, "refresh must not create a duplicate row"
+    r = log2.iloc[0]
+    assert r["status"] == "open"
+    assert r["last_seen_market_price"] == 0.55
+    assert r["first_flagged_market_price"] == 0.50, "first_flagged_market_price must never change on refresh"
+
+    # Run 3: prop disappears (game locked / market pulled).
+    other_row = _props_base_row(source_selection_id="sel_unrelated", game_id="game_other")
+    log3 = _run_props(pd.DataFrame([other_row]), log2, "2026-09-01T12:00:00Z")
+    closed = log3[log3["flag_id"] == "draftkings|sel_lifecycle"].iloc[0]
+    assert closed["status"] == "closed"
+    assert closed["closing_market_price"] == 0.55
+    assert closed["closing_pulled_at"] == "2026-09-01T11:00:00Z"
+    assert closed["price_moved"] == True  # noqa: E712
+    expected_clv_edge = 0.60 - closed["closing_market_price"]
+    assert abs(closed["clv_edge_at_close"] - expected_clv_edge) < 1e-9
+    print("PASS: scenario_10_props_refresh_and_close")
+
+
+def scenario_11_props_idempotent_same_file_twice():
+    dk_row = _props_base_row(source_selection_id="sel_idempotent")
+    estimates_df = pd.DataFrame([dk_row])
+    log_after_first = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
+    assert len(log_after_first) == 1
+
+    log_after_second = _run_props(estimates_df, log_after_first, "2026-09-01T10:00:00Z")
+    assert len(log_after_second) == 1, f"expected idempotent single row, got {len(log_after_second)}"
+    print("PASS: scenario_11_props_idempotent_same_file_twice")
 
 
 def run_all():
@@ -184,9 +312,14 @@ def run_all():
     scenario_4_refresh_open_flag_line_moves()
     scenario_5_flag_closes_when_prop_disappears()
     scenario_6_idempotent_same_file_twice()
+    scenario_7_props_new_flag_with_consensus()
+    scenario_8_props_new_flag_without_consensus()
+    scenario_9_props_below_threshold_not_flagged()
+    scenario_10_props_refresh_and_close()
+    scenario_11_props_idempotent_same_file_twice()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 6 scenarios passed.")
+    print("\nAll 11 scenarios passed.")
 
 
 if __name__ == "__main__":

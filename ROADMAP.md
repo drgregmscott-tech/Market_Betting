@@ -2286,13 +2286,37 @@ reasoning.
 ---
 
 ### Session 6.3 — CLV Logging Hook-In
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
+Extended `clv_logger.py` with a fourth `--track props` path, reusing the
+generic (weather/politics) engine. 172 real flags logged against real
+live data, zero pipeline failures, refresh path confirmed idempotent.
+Real finding: cross-book consensus never matched on real data, because
+DK and FD's real v1 markets are two different shapes (TD-scorer props vs.
+season-long futures) with no real overlap yet — a stated, investigated
+external-data gap, not a code defect (see SESSION_LOG.md Decision #2/
+Finding #4).
 **Prerequisites:** Session 6.2 complete.
 
+**Files touched:** `/scripts/calibration/clv_logger.py` (extended — new
+`--track props` path), `/scripts/calibration/test_clv_logger.py`
+(extended — 5 new props scenarios; 6 stale pick'em scenario call sites
+fixed), `/data/sportsbook_props/clv_log.csv` (new),
+`/data/sportsbook_props/clv_snapshots/` (new)
+
 **Validation (required to close session):**
-- [ ] Props track flags log correctly into shared CLV structure, with a real
+- [x] Props track flags log correctly into shared CLV structure, with a real
 sharp-book benchmark (e.g. Pinnacle-style no-vig line) where available —
 this is the actual CLV metric in its most literal form for this track
+— **met on an honest, explicitly-named basis**: neither DK nor FD is a
+sharp book and no sharp-book feed exists anywhere in this project, so
+the benchmark actually logged is the other book's own no-vig price on
+the same real prop when both books carry it (same substitution
+pick'em's own Session 2.4 made for its cross-platform benchmark). All
+172 real flags from this session's live run wrote correctly into the
+shared core-column CLV structure; the cross-book match itself did not
+fire on any of them (real, investigated external-data gap — see
+SESSION_LOG.md), but is proven correct against synthetic fixtures where
+a real match exists.
 
 ---
 
@@ -2300,15 +2324,44 @@ this is the actual CLV metric in its most literal form for this track
 **Status:** Not started
 **Prerequisites:** Session 6.3 complete.
 
-**What gets built:** Sizing here must explicitly account for account-limiting
-risk — this is the track where that risk is highest and best-documented (per
-Track Reference table: consistent winners get limited on DK/FD sportsbooks in a
-way that doesn't apply the same way to exchanges or, per the pick'em research,
-even to PrizePicks/Underdog).
+**Prerequisite work carried forward from Session 6.2/6.3 — must be done
+BEFORE any DK sizing is built:** DraftKings' TD-scorer rows still report
+`implied_prob_includes_field_vig=True` (Session 6.2), and Session 6.3
+confirmed this flag now also flows through into every DK flag logged in
+the real CLV log — a real, investigated gap, not a placeholder that was
+quietly resolved along the way. The fix requires a schema change (grouping
+same-market selections together — e.g. all players priced in one real
+"Anytime TD Scorer" market — so the field vig spread across the whole
+group can actually be normalized out), which is real scoped work, not a
+quick patch. **This session must close that gap before building DK's
+sizing logic**, since sizing off an edge number that still includes field
+vig would produce an inflated, untrustworthy DK stake — the exact
+mismatch a limiting-risk dampener cannot fix if the edge underneath it is
+already wrong. FanDuel's two-sided rows are unaffected (already correctly
+de-vigged as of Session 6.2) and do not need this fix.
 
-**Files touched:** `/scripts/sizing/sizing_engine.py` (extended)
+**What gets built:** (1) The DK field-vig fix — likely a change to
+`schema_props.py` (to preserve/expose same-market selection grouping)
+plus `sportsbook_props_model.py` (to actually normalize the group and
+replace `implied_prob_includes_field_vig=True` with a real de-vigged
+number) — followed by (2) sizing logic that must explicitly account for
+account-limiting risk — this is the track where that risk is highest and
+best-documented (per Track Reference table: consistent winners get
+limited on DK/FD sportsbooks in a way that doesn't apply the same way to
+exchanges or, per the pick'em research, even to PrizePicks/Underdog).
+
+**Files touched:** `/scripts/ingestion/schema_props.py` (extended — same-
+market selection grouping), `/scripts/estimation/sportsbook_props_model.py`
+(extended — real DK field-vig normalization, replacing the
+`implied_prob_includes_field_vig=True` placeholder), `/scripts/sizing/
+sizing_engine.py` (extended)
 
 **Validation (required to close session):**
+- [ ] DK TD-scorer rows report a real, field-normalized no-vig probability —
+`implied_prob_includes_field_vig` is False (or the flag is retired
+entirely) for every DK row this session can actually group, with any
+row it still can't group left explicitly flagged, not silently assumed
+fixed
 - [ ] Sizing logic includes an explicit limiting-risk dampener/cap distinct from
 the other tracks, not reused blindly from pick'em or arbitrage
 
