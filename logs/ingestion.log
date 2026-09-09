@@ -9049,3 +9049,26 @@
 2026-09-09 13:22:21,943 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-09 13:22:21,944 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-09 13:22:21,944 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-09 13:29:51,625 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:29:53,002 UTC | WARNING | Attempt 1/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: Page.evaluate: TypeError: Failed to fetch
+    at eval (eval at evaluate (:311:30), <anonymous>:2:37)
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+2026-09-09 13:29:56,068 UTC | WARNING | Attempt 2/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: Page.evaluate: TypeError: Failed to fetch
+    at eval (eval at evaluate (:311:30), <anonymous>:2:37)
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+2026-09-09 13:29:59,109 UTC | WARNING | Attempt 3/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: Page.evaluate: TypeError: Failed to fetch
+    at eval (eval at evaluate (:311:30), <anonymous>:2:37)
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+2026-09-09 13:29:59,187 UTC | ERROR | DraftKings ingestion failed for this run: All attempts failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: Page.evaluate: TypeError: Failed to fetch
+    at eval (eval at evaluate (:311:30), <anonymous>:2:37)
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+2026-09-09 13:29:59,189 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:30:37,694 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-09 13:30:37,695 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-09 13:30:37,695 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-09 13:30:37,695 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-09 13:30:37,695 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.

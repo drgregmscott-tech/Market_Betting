@@ -197,30 +197,32 @@ def _launch_browser_context(playwright):
 
 
 def _fetch_json_with_retries(page, url: str) -> dict:
-    """FIX (2026-09-09, real live-data finding): the first version of this
-    function used `context.request.get(url)` — confirmed to still 403
-    against DK's real, correct API even after the warmup page load. Root
-    cause: Playwright's `context.request` is a separate, lightweight HTTP
-    client, NOT the browser's actual rendering/network engine — it does
-    not carry the same TLS/JS fingerprint as a real page, which is exactly
-    what Akamai Bot Manager checks (see module docstring). Fixed by running
-    `fetch()` INSIDE the already-warmed-up page's own JavaScript context via
-    `page.evaluate()` — this is Chromium's own real fetch implementation,
-    indistinguishable from what the user's own manual browsing did."""
+    """FIX #2 (2026-09-09, real live-data finding): the first version of
+    this function used `context.request.get(url)` — confirmed to still
+    403 against DK's real, correct API even after the warmup page load
+    (Playwright's `context.request` is a separate, lightweight HTTP
+    client, not the browser's real rendering/network engine, so it didn't
+    carry Akamai's expected fingerprint). Switching to `page.evaluate()`
+    calling in-page `fetch()` fixed the fingerprint problem but hit a
+    real, different failure: `TypeError: Failed to fetch` — a CORS
+    rejection, confirmed by the real captured response headers showing
+    `Access-Control-Allow-Origin: *` (a wildcard), which browsers refuse
+    to honor for a credentialed cross-origin fetch (`credentials:
+    'include'`) per the CORS spec itself, regardless of Akamai. Fixed by
+    using a real top-level page NAVIGATION (`page.goto`) instead of an
+    in-page `fetch()` — a navigation is not subject to CORS the way a
+    fetch call is, carries the browser's real cookies automatically, and
+    is exactly what happens when a person pastes this URL into their own
+    address bar (which is, in effect, how the user captured these URLs
+    in the first place)."""
     last_error = None
     for attempt in range(1, MAX_RETRIES + 2):
         try:
-            result = page.evaluate(
-                """async (url) => {
-                    const r = await fetch(url, { credentials: 'include' });
-                    const body = await r.text();
-                    return { status: r.status, ok: r.ok, body: body };
-                }""",
-                url,
-            )
-            if not result["ok"]:
-                raise RuntimeError(f"{result['status']} for url: {url}")
-            return json.loads(result["body"])
+            response = page.goto(url, timeout=REQUEST_TIMEOUT_MS)
+            if response is None or not response.ok:
+                status = response.status if response else "no response"
+                raise RuntimeError(f"{status} for url: {url}")
+            return json.loads(response.text())
         except Exception as exc:  # noqa: BLE001 — Playwright/JS errors
             # surface as generic exceptions here; treated uniformly with
             # the same retry logic every other ingestion script uses.
