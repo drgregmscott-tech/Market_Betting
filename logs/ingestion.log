@@ -9072,3 +9072,15 @@
 2026-09-09 13:30:37,695 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-09 13:30:37,695 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-09 13:30:37,695 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-09 14:47:32,589 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 14:47:36,687 UTC | WARNING | Attempt 1/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 14:47:39,744 UTC | WARNING | Attempt 2/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 14:47:42,796 UTC | WARNING | Attempt 3/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 14:47:42,885 UTC | ERROR | DraftKings ingestion failed for this run: All attempts failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 14:47:42,888 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 14:55:56,412 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 14:56:18,385 UTC | ERROR | DraftKings ingestion failed for this run: Page.goto: Timeout 20000ms exceeded.
+Call log:
+  - navigating to "https://sportsbook.draftkings.com/leagues/football/nfl", waiting until "networkidle"
+
+2026-09-09 14:56:18,387 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===

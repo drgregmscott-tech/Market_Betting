@@ -182,17 +182,35 @@ log = setup_logging()
 
 
 def _launch_browser_context(playwright):
-    """Launches a real headless Chromium browser and warms it up against a
-    real DraftKings page so Akamai's own JavaScript sets its real
-    bot-manager cookies in this context — see module docstring for why
-    plain `requests` calls (even with correct headers) 403 without this.
+    """Launches a real Chromium browser and warms it up against a real
+    DraftKings page so Akamai's own JavaScript sets its real bot-manager
+    cookies in this context — see module docstring for why plain
+    `requests` calls (even with correct headers) 403 without this.
     Returns the open `page` (not closed) — see `_fetch_json_with_retries`'s
-    docstring for why every API call also goes through this same page,
-    not `context.request`."""
-    browser = playwright.chromium.launch(headless=True)
+    docstring for why every API call also goes through this same page.
+
+    FIX (2026-09-09, real live-data finding): `headless=True` still 403'd
+    even from a real page navigation (ruling out CORS/fetch-vs-goto as the
+    remaining cause) — headless Chromium carries its own separate,
+    well-known fingerprint tells (e.g. `navigator.webdriver = true`,
+    missing browser plugins/fonts) that Akamai Bot Manager checks for
+    independently of "is this a real browser at all." `headless=False`
+    removes those tells. This is a real, new operational requirement: the
+    machine running this script must have a visible display available
+    (this will NOT run inside a typical headless CI/server environment
+    without a virtual display, e.g. `xvfb` on Linux) — a genuine cost of
+    this venue's bot-detection, not a design choice made lightly."""
+    browser = playwright.chromium.launch(headless=False)
     context = browser.new_context(extra_http_headers=REQUEST_HEADERS)
     page = context.new_page()
-    page.goto(DK_WARMUP_URL, wait_until="networkidle", timeout=REQUEST_TIMEOUT_MS)
+    # FIX (2026-09-09, real live-data finding): "networkidle" timed out —
+    # a live odds page never actually goes idle (continuous background
+    # polling for updated lines), so that wait condition could never be
+    # satisfied. "domcontentloaded" plus a fixed pause for Akamai's own
+    # JS to run and set its cookies is the correct condition here, not a
+    # longer timeout on a condition that was never going to be met.
+    page.goto(DK_WARMUP_URL, wait_until="domcontentloaded", timeout=REQUEST_TIMEOUT_MS)
+    page.wait_for_timeout(5000)
     return browser, page
 
 
