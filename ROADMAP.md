@@ -1640,14 +1640,58 @@ silently dropped. See Open Decision #42.
 ---
 
 ### Session 4.4 — Sizing Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 4.3 complete.
 
-**Files touched:** `/scripts/sizing/sizing_engine.py` (extended)
+**What was actually done:** This card sat at "Not started" while Sessions
+5.4 (politics) and 6.4 (props) were both built on top of the same shared
+`sizing_engine.py` infrastructure — the same kind of roadmap-order gap
+Session 4.3 itself was found sitting in before being built. Found and
+closed now. Extended `sizing_engine.py` with a fourth sizing shape:
+single-contract Kelly (reusing `raw_kelly_fraction_binary_contract()`
+directly, same as politics/props) with Kalshi's real, sourced trading fee
+folded into the effective cost per contract, rather than a named flat
+dampener like every other track's adjustment.
+
+**Files touched:** `/scripts/sizing/sizing_engine.py` (extended),
+`/scripts/sizing/test_sizing_engine.py` (extended — 4 new synthetic
+tests), `/docs/research/kalshi_fee_structure.md` (new — sources Kalshi's
+published fee formula against 4 independent 2026 sources).
 
 **Validation (required to close session):**
-- [ ] Sizing correctly reflects Kalshi's fee structure and this track's typical
-edge size (likely smaller, more frequent edges than pick'em)
+- [x] Sizing correctly reflects Kalshi's fee structure and this track's typical
+edge size (likely smaller, more frequent edges than pick'em) — confirmed:
+`KALSHI_FEE_RATE = 0.07` (Kalshi's own published general fee formula,
+sourced not guessed — see `kalshi_fee_structure.md`) is folded directly
+into the Kelly calculation via `kalshi_effective_cost_per_contract()`,
+not applied as a post-hoc multiplier. Confirmed against real, live
+`data/weather/clv_log.csv` (203 real open flags from Session 4.3): an
+extreme-edge real flag (`KXHIGHTATL-26SEP07-B85.5`, model_prob=1.0 vs.
+market_price=0.535) correctly capped at $25.00 (5% of a $500 bankroll);
+a real thin-edge flag (`KXHIGHPHIL-26SEP07-T85`, edge≈0.0315) correctly
+produced a small, proportional $2.73 stake — no portfolio-level exposure
+ledger built (this track's positions resolve in days per `lead_days`,
+not weeks/months, matching Session 6.4's own reasoning for props).
+
+**Decisions made:**
+1. **Kalshi's trading fee is sourced, not a named judgment call** —
+unlike every other per-track dampener in this file (PLATFORM_RISK_
+MULTIPLIER, the lockup table, PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER),
+this is a real published formula (`fee = round_up_to_cent(0.07 *
+contracts * price * (1-price))`), cross-checked against 4 independent
+2026 sources. It is folded into the Kelly calculation itself (via an
+effective per-contract cost), not bolted on afterward.
+2. **No portfolio-level exposure ledger for weather** — same reasoning
+Session 6.4 gave for props: real Session 4.3 data shows most weather
+contracts resolve within days (`lead_days`), not the weeks/months that
+motivated politics' second cap. A single-position cap
+(`WEATHER_MAX_SINGLE_POSITION_PCT = 0.05`) is judged sufficient for v1.
+3. **The per-contract fee rate is a stated simplification of Kalshi's
+real order-level cent-rounding** (the published formula rounds up once
+per whole order, not once per contract) — named explicitly as a real,
+bounded imprecision in the code's own docstring, not treated as exact.
+
+**Handoff notes:** Session 4.5 (Automation Adaptation) is next.
 
 ---
 

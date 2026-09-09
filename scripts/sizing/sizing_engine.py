@@ -431,6 +431,121 @@ WHAT THIS ADDITION DOES NOT DO YET (stated gap, not a silent one)
 USAGE (props sizing)
 -----------------------
 python sizing_engine.py props size --flag-id "draftkings|1234567890" --bankroll 500
+
+===============================================================================
+SESSION 4.4 ADDENDUM -- WEATHER (KALSHI) SIZING
+===============================================================================
+
+WHY THIS WAS BUILT NOW, OUT OF ROADMAP ORDER
+-----------------------------------------------
+ROADMAP.md's Session 4.4 card ("Sizing Adaptation" for the weather track)
+was scoped right after Session 4.3 (CLV Logging Hook-In, weather), but sat
+untouched at "Not started" while Sessions 5.4 (politics) and 6.4 (props)
+were both built on top of the same shared clv_logger.py/sizing_engine.py
+infrastructure -- the same kind of roadmap-order gap Session 4.3 itself
+was found sitting in before it was finally built (see that session's own
+SESSION_LOG.md entry). Found and closed now, following that same
+established pattern: check what real infrastructure already exists
+(Session 4.3's data/weather/clv_log.csv, live and producing real flags)
+before writing anything new, rather than guessing at a schema.
+
+WHY THIS IS CLOSER TO POLITICS/PROPS THAN TO PICK'EM, BUT NOT IDENTICAL
+------------------------------------------------------------------------
+Session 4.3's weather flags carry the exact same single-contract shape
+politics and props already handle: one flagged side ("yes" or "no"), one
+flag-time model probability (`first_flagged_model_prob`), one flag-time
+market price (`first_flagged_market_price`) -- so `raw_kelly_fraction_
+binary_contract()` is reused directly here too, not reimplemented a third
+time. What is genuinely new, and is this session's actual roadmap
+requirement ("Sizing correctly reflects Kalshi's fee structure and this
+track's typical edge size"), is two things neither politics nor props
+needed to model:
+
+1. KALSHI'S REAL, PUBLISHED TRADING FEE. Unlike PrizePicks/Underdog
+   (Session 2.6 -- no stated per-trade fee, only an account-limiting risk)
+   or DK/FD (Session 6.4 -- same), Kalshi charges a real, published,
+   round-trip trading fee on every contract: fee = round_up_to_the_cent
+   (0.07 * contracts * price * (1 - price)) [Kalshi's own published
+   general fee schedule, cross-checked against multiple independent 2026
+   sources -- see docs/research/kalshi_fee_structure.md]. Unlike every
+   other dampener in this file, this is NOT a named judgment call -- it
+   is a real, sourced, formulaic cost that this project's own weather
+   ingestion (Session 4.1) does not carry a fee-tier field for, so it
+   must be computed here at sizing time, using the flag's own
+   `first_flagged_market_price`. A single-contract sizing call cannot
+   know the real total contract count in advance (that depends on the
+   very stake this function is trying to compute), so this function
+   uses the PER-CONTRACT fee rate (0.07 * price * (1-price), i.e. the
+   formula's contract-count term set to 1) as the effective marginal
+   cost per contract -- a stated, deliberate simplification of Kalshi's
+   real order-level cent-rounding (which only matters at very small
+   order sizes; see "WHAT THIS ADDITION DOES NOT DO YET" below), not a
+   guessed number the way PLATFORM_RISK_MULTIPLIER or the lockup table
+   are.
+2. THIS TRACK'S OWN TYPICAL EDGE SIZE. Per Session 4.3's real live run
+   (203 of 288 real contracts flagged, edges ranging 0.031-0.994) and
+   Session 4.2's real backtest (81.58% directional accuracy, 228 real
+   resolved contracts), weather edges are frequent but often small and
+   short-dated (`lead_days` -- most contracts resolve within days, unlike
+   politics' weeks/months). This is the opposite shape from politics'
+   problem (few, large, long-locked positions needing a portfolio-level
+   exposure cap) -- weather is closer to props' shape (frequent,
+   same-day/short-dated, single-position cap judged sufficient, per
+   Session 6.4's own reasoning) than to politics'. No portfolio-level
+   exposure ledger is built for weather, for the same stated reason
+   Session 6.4 gave for props: positions resolve in days, not weeks or
+   months, so many-simultaneous-long-dated-positions is not this
+   track's real risk shape.
+
+WHY THE FEE IS FOLDED INTO THE EFFECTIVE COST, NOT A FLAT DAMPENER
+---------------------------------------------------------------------
+Every other per-track adjustment in this file (PLATFORM_RISK_MULTIPLIER,
+SAME_GAME_CAUTION_MULTIPLIER, the lockup table, PROPS_FIELD_VIG_
+UNRESOLVED_MULTIPLIER) is a flat multiplier applied AFTER Kelly, because
+none of them describe a real, quantifiable dollar cost -- they are all
+named judgment calls standing in for a risk this project has no real data
+to price precisely. Kalshi's trading fee is different: it IS a real,
+known dollar cost, so it belongs INSIDE the Kelly calculation itself, the
+same way a sportsbook's vig is already baked into `price` everywhere else
+in this file (the market price already reflects the book's edge; Kelly
+is computed against that price directly). `kalshi_effective_cost_per_
+contract(price)` returns `price + fee_per_contract(price)` -- the real,
+all-in cost to acquire one contract -- and `raw_kelly_fraction_binary_
+contract()` is called with THAT effective cost in place of the raw
+market price, so the Kelly fraction this session produces already nets
+out the real fee rather than overstating the edge by the fee amount and
+then trying to claw it back with an unrelated flat multiplier.
+
+WHAT THIS ADDITION DOES NOT DO YET (stated gap, not a silent one)
+-----------------------------------------------------------------------
+- Does not model Kalshi's real ORDER-LEVEL cent-rounding (the published
+  formula rounds up once per whole order, not once per contract) -- this
+  function's per-contract fee rate is the formula's own per-dollar rate
+  applied at contract count = 1, a stated simplification that slightly
+  OVER-states the real fee at large contract counts (rounding up on a
+  100-contract order costs less per contract than rounding up 100 times)
+  and slightly UNDER-states it at very small ones (a true 1-contract
+  order rounds up to a full cent regardless of the formula's raw
+  output) -- named here as a real, bounded imprecision, not treated as
+  exact.
+- Does not distinguish Kalshi's general 7% fee rate from any
+  elevated-fee-tier market Kalshi may designate differently -- Session
+  4.1's own weather ingestion carries no fee-tier field to check, so
+  every weather contract is sized assuming the general rate. A stated
+  gap, same posture as every other "our own data doesn't carry this
+  field yet" gap already named elsewhere in this file.
+- Does not track a portfolio-level exposure ledger (see "why this track
+  is closer to props" above) -- a single-position cap
+  (WEATHER_MAX_SINGLE_POSITION_PCT) is judged sufficient for v1, same
+  reasoning Session 6.4 gave for props.
+- Does not re-derive KALSHI_FEE_RATE from real data (it is sourced
+  directly to Kalshi's own published fee schedule, not a placeholder),
+  but does NOT re-derive KELLY_FRACTION for this track specifically --
+  Session 8.3's job, once real graded weather outcomes exist.
+
+USAGE (weather sizing)
+--------------------------
+python sizing_engine.py weather size --flag-id "KXHIGHNY-26SEP07-T77" --bankroll 500
 """
 
 from __future__ import annotations
@@ -469,6 +584,12 @@ POLITICS_OPEN_POSITIONS_PATH = BASE_DIR / "data" / "politics" / "open_positions.
 # No open-positions ledger (see "SESSION 6.4 ADDENDUM" docstring above for
 # why this track doesn't need politics' portfolio-level exposure cap).
 PROPS_CLV_LOG_PATH = BASE_DIR / "data" / "sportsbook_props" / "clv_log.csv"
+
+# Session 4.4 addition -- weather sizing reads Session 4.3's clv_log.csv.
+# No open-positions ledger, same reasoning as props (Session 6.4): this
+# track's positions resolve in days, not weeks/months -- see "SESSION 4.4
+# ADDENDUM" docstring above.
+WEATHER_CLV_LOG_PATH = BASE_DIR / "data" / "weather" / "clv_log.csv"
 
 # ---------------------------------------------------------------------------
 # Constants -- named explicitly, per this project's "no unnamed black-box
@@ -540,6 +661,17 @@ PROPS_PLATFORM_RISK_MULTIPLIER = {
 PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER = 0.60  # stated placeholder -- see docstring
 PROPS_MAX_SINGLE_POSITION_PCT = 0.05  # same single-position ceiling posture as every other track
 MIN_PROPS_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
+
+# ---------------------------------------------------------------------------
+# Session 4.4 additions -- weather (Kalshi)-specific constants. Unlike every
+# other per-track constant above, KALSHI_FEE_RATE is a real, sourced
+# published figure, not a named judgment call -- see "SESSION 4.4 ADDENDUM"
+# docstring above and docs/research/kalshi_fee_structure.md.
+# ---------------------------------------------------------------------------
+KALSHI_FEE_RATE = 0.07  # Kalshi's published general trading fee rate (sourced, see docstring)
+WEATHER_SUPPORTED_SIDES = {"yes", "no"}
+WEATHER_MAX_SINGLE_POSITION_PCT = 0.05  # same single-position ceiling posture as every other track
+MIN_WEATHER_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
 
 POLITICS_LEDGER_FIELDS = [
     "position_id",
@@ -1490,6 +1622,151 @@ def run_props_sizing(flag_id: str, bankroll: float) -> dict:
     return result
 
 
+# ===========================================================================
+# SESSION 4.4 -- WEATHER (KALSHI) SIZING
+# See the "SESSION 4.4 ADDENDUM" section of the module docstring above for
+# why this reuses politics/props' single-contract Kelly math directly but
+# adds Kalshi's real, sourced trading fee into the effective cost per
+# contract, rather than a named flat dampener.
+# ===========================================================================
+
+def kalshi_fee_per_contract(price: float) -> float:
+    """Kalshi's published general fee formula, applied at contract
+    count = 1 -- see docstring for why a single-contract sizing call uses
+    the per-contract rate rather than the real order-level rounded fee
+    (which depends on a total contract count this function is trying to
+    determine). fee = round_up_to_cent(0.07 * price * (1 - price)) for
+    one contract."""
+    import math
+    raw_fee = KALSHI_FEE_RATE * price * (1.0 - price)
+    return math.ceil(raw_fee * 100.0) / 100.0
+
+
+def kalshi_effective_cost_per_contract(price: float) -> float:
+    """Real, all-in cost to acquire one contract at `price`, including
+    Kalshi's own trading fee -- see docstring's "WHY THE FEE IS FOLDED
+    INTO THE EFFECTIVE COST" section for why this is passed into Kelly
+    directly rather than applied as a post-hoc multiplier."""
+    return price + kalshi_fee_per_contract(price)
+
+
+def load_weather_clv_log() -> pd.DataFrame:
+    if not WEATHER_CLV_LOG_PATH.exists():
+        raise FileNotFoundError(
+            f"{WEATHER_CLV_LOG_PATH} not found. Run clv_logger.py --track weather "
+            f"first (Session 4.3) so there are flagged opportunities to size."
+        )
+    return pd.read_csv(WEATHER_CLV_LOG_PATH)
+
+
+def fetch_weather_flag(flag_id: str) -> tuple[Optional[dict], list[str]]:
+    """Looks up one flag_id (the contract's own market_ticker, per
+    Session 4.3's own scheme) in the live weather CLV log. Returns
+    (flag_row_or_None, problems), same "always say exactly why" posture
+    as every other fetch_*_flag() in this file."""
+    try:
+        clv_df = load_weather_clv_log()
+    except FileNotFoundError as exc:
+        return None, [str(exc)]
+
+    matches = clv_df.loc[clv_df["flag_id"] == flag_id]
+    if len(matches) == 0:
+        return None, [f"flag_id '{flag_id}' not found in {WEATHER_CLV_LOG_PATH}"]
+
+    row = matches.iloc[0].to_dict()
+    if row.get("status") != "open":
+        return None, [
+            f"flag_id '{flag_id}' has status='{row.get('status')}', not 'open' "
+            f"-- this contract is no longer available (likely settled/delisted)."
+        ]
+
+    for required in ("first_flagged_model_prob", "first_flagged_market_price", "flagged_side"):
+        if row.get(required) is None or pd.isna(row.get(required)):
+            return None, [f"flag_id '{flag_id}' has no {required} logged."]
+
+    if row.get("flagged_side") not in WEATHER_SUPPORTED_SIDES:
+        return None, [
+            f"flag_id '{flag_id}' has flagged_side='{row.get('flagged_side')}' -- "
+            f"expected one of {sorted(WEATHER_SUPPORTED_SIDES)}."
+        ]
+
+    return row, []
+
+
+def size_weather_position(flag_row: dict, bankroll: float) -> dict:
+    """Runs the full single-contract Kelly sizing pipeline for one
+    flagged Kalshi weather contract, with Kalshi's real trading fee
+    folded into the effective per-contract cost (see docstring) rather
+    than applied as a flat post-hoc dampener. Same "every intermediate
+    number included" standard as every other sizing function in this
+    file."""
+    if bankroll < MIN_WEATHER_BANKROLL:
+        return _rejected(f"--bankroll must be at least {MIN_WEATHER_BANKROLL}, got {bankroll}.")
+
+    p = float(flag_row["first_flagged_model_prob"])
+    price = float(flag_row["first_flagged_market_price"])
+
+    if not (0.0 < price < 1.0):
+        return _rejected(f"first_flagged_market_price must be strictly between 0 and 1, got {price}.")
+
+    fee_per_contract = kalshi_fee_per_contract(price)
+    effective_cost = kalshi_effective_cost_per_contract(price)
+
+    try:
+        f_raw = raw_kelly_fraction_binary_contract(p, effective_cost)
+    except ValueError as exc:
+        return _rejected(str(exc))
+
+    f_quarter = max(f_raw, 0.0) * KELLY_FRACTION  # reuses the project-wide quarter-Kelly constant
+
+    uncapped_stake = bankroll * f_quarter
+    cap_amount = bankroll * WEATHER_MAX_SINGLE_POSITION_PCT
+    capped = uncapped_stake > cap_amount
+    final_stake = min(uncapped_stake, cap_amount)
+
+    if f_raw <= 0:
+        status = "no_bet_negative_edge"
+        final_stake = 0.0
+    elif capped:
+        status = "sized_capped_at_max_position"
+    else:
+        status = "sized"
+
+    return {
+        "status": status,
+        "flag_id": flag_row.get("flag_id"),
+        "flagged_side": flag_row.get("flagged_side"),
+        "city_label": flag_row.get("city_label"),
+        "target_date": flag_row.get("target_date"),
+        "lead_days": flag_row.get("lead_days"),
+        "model_prob": round(p, 4),
+        "market_price": round(price, 4),
+        "kalshi_fee_rate": KALSHI_FEE_RATE,
+        "fee_per_contract": round(fee_per_contract, 4),
+        "effective_cost_per_contract": round(effective_cost, 4),
+        "raw_kelly_fraction": round(f_raw, 4),
+        "quarter_kelly_fraction": round(f_quarter, 4),
+        "bankroll": bankroll,
+        "uncapped_suggested_stake": round(uncapped_stake, 2),
+        "max_single_position_cap": round(cap_amount, 2),
+        "suggested_stake": round(final_stake, 2),
+        "suggested_stake_pct_of_bankroll": round(100 * final_stake / bankroll, 2) if bankroll else None,
+    }
+
+
+def run_weather_sizing(flag_id: str, bankroll: float) -> dict:
+    log.info("=== Weather sizing run starting: flag_id=%s, bankroll=%s ===", flag_id, bankroll)
+    flag_row, problems = fetch_weather_flag(flag_id)
+    if problems:
+        result = _rejected("; ".join(problems))
+        log.warning("Weather sizing request rejected: %s", result["reason"])
+        return result
+
+    result = size_weather_position(flag_row, bankroll)
+    log.info("Weather sizing result: %s", result)
+    return result
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -1617,6 +1894,23 @@ if __name__ == "__main__":
         "--bankroll", type=float, required=True, help="Real dollars currently in that flag's own sportsbook account."
     )
 
+    # -- weather (Session 4.4, new) --
+    weather_parser = subparsers.add_parser(
+        "weather", help="Size a flagged Kalshi weather contract from clv_logger.py's --track weather flags."
+    )
+    weather_subparsers = weather_parser.add_subparsers(dest="action", required=True)
+
+    weather_size = weather_subparsers.add_parser(
+        "size", help="Compute a suggested position size for one flagged weather contract, with Kalshi's real trading fee folded in."
+    )
+    weather_size.add_argument(
+        "--flag-id", type=str, required=True,
+        help='flag_id from data/weather/clv_log.csv (the contract\'s own market_ticker, e.g. "KXHIGHNY-26SEP07-T77").',
+    )
+    weather_size.add_argument(
+        "--bankroll", type=float, required=True, help="Real dollars currently in the Kalshi account."
+    )
+
     args = parser.parse_args()
 
     if args.mode == "pickem":
@@ -1652,4 +1946,9 @@ if __name__ == "__main__":
     elif args.mode == "props":
         if args.action == "size":
             result = run_props_sizing(args.flag_id, args.bankroll)
+            print(json.dumps(result, indent=2, default=str))
+
+    elif args.mode == "weather":
+        if args.action == "size":
+            result = run_weather_sizing(args.flag_id, args.bankroll)
             print(json.dumps(result, indent=2, default=str))

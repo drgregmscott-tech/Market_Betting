@@ -7139,3 +7139,142 @@ commit, `7614186`) — no separate GitHub pull was needed.
 weather's own Live Validation Window) and Session 5.7 (Track 4 politics)
 also remain open, each for its own separate, real reason — not to be
 confused with each other or with this one.
+
+---
+
+## Session 4.4 — Sizing Adaptation (Weather)
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**What was actually done:**
+1. Per ROADMAP.md's own "sessions left open" standing rule (added Session
+3.6, re-applied at Session 4.3's own close), pulled the live ROADMAP.md/
+SESSION_LOG.md state before starting rather than assuming an earlier
+in-chat copy was current. Found Session 4.4 ("Sizing Adaptation" for the
+weather track) still sitting at "Not started" — the same kind of
+roadmap-order gap Session 4.3 itself sat in before Session 5.3 found and
+closed it. Sessions 5.4 (politics) and 6.4 (props) had both already been
+built on top of the same shared `sizing_engine.py` infrastructure, adding
+their own single-contract Kelly sizing shapes, while weather's own card
+sat untouched. Closed now, following the exact same "find the real gap,
+close it against real live data" pattern Session 4.3 used.
+2. Confirmed directly against `scripts/calibration/clv_logger.py`
+(Session 4.3) that a weather flag is a single Kalshi contract (`flag_id`
+= `market_ticker`), carrying `first_flagged_model_prob`,
+`first_flagged_market_price`, and `flagged_side` ("yes"/"no") — the same
+single-contract shape politics (Session 5.4) and props (Session 6.4)
+already handle, so `raw_kelly_fraction_binary_contract()` is reused
+directly here too, not reimplemented a third time.
+3. Sourced Kalshi's real, published trading fee formula before writing
+any sizing code, rather than guessing at a number the way every other
+per-track dampener in this file is a named judgment call: `fee =
+round_up_to_the_cent(0.07 * contracts * price * (1 - price))`. Confirmed
+via a live web search against 4 independent 2026 sources (thelines.com,
+botforkalshi.com, predictionhunt.com, oddsshopper.com), all describing
+the identical formula and the same worked example (100 contracts at
+$0.10 costs $0.63 in fees; 100 contracts at $0.50, the fee-density peak,
+costs the $1.75 maximum). Recorded in a new sourced doc,
+`docs/research/kalshi_fee_structure.md`, rather than left as an
+in-code comment only.
+4. Built `kalshi_fee_per_contract(price)` and `kalshi_effective_cost_per_
+contract(price) = price + fee`, and passed the EFFECTIVE cost into
+`raw_kelly_fraction_binary_contract()` in place of the raw market price
+— a deliberate design choice, distinct from every other dampener in this
+file: because the fee is a real, known dollar cost (not an unquantified
+risk this project has no data to price, like account-limiting risk or
+same-game correlation), it belongs INSIDE the Kelly calculation itself,
+not as a flat post-hoc multiplier.
+5. Recognized this track's real risk shape is closer to props (Session
+6.4) than to politics (Session 5.4): Session 4.3's own real live data
+(203 real open flags, most with `lead_days` in the single digits) shows
+weather contracts resolve in days, not the weeks/months that motivated
+politics' portfolio-level exposure ledger. No new ledger was built for
+weather — a single-position cap (`WEATHER_MAX_SINGLE_POSITION_PCT =
+0.05`) was judged sufficient, matching Session 6.4's own stated
+reasoning for props.
+6. Built 4 new synthetic tests (`test_19`–`test_22`) in
+`test_sizing_engine.py`, same "prove it before touching real data"
+discipline as every prior sizing session: an independent hand-check of
+the fee formula itself against Kalshi's own published example; a check
+that the fee-inclusive Kelly fraction is strictly smaller than a naive
+no-fee Kelly calculation would produce; a below-breakeven no-bet case;
+and a single-position-cap-binds case. All 22/22 tests in
+`test_sizing_engine.py` pass (`python test_sizing_engine.py`).
+7. Ran the finished script against real, live `data/weather/clv_log.csv`
+(pulled directly from this session's own local repo state — Session
+4.3's real 203-row output, all still status="open"): sized a real
+extreme-edge flag (`KXHIGHTATL-26SEP07-B85.5`, model_prob=1.0 vs.
+market_price=0.535) — correctly capped at $25.00 (5% of a $500
+bankroll); and a real thin-edge flag (`KXHIGHPHIL-26SEP07-T85`,
+edge≈0.0315) — correctly produced a small, proportional $2.73 stake,
+never the flat percentage a big-edge case would get. Both real runs
+show the fee correctly reducing the raw Kelly fraction versus what a
+naive (no-fee) calculation on the same inputs would have produced.
+
+**Files created/modified:**
+- `scripts/sizing/sizing_engine.py` — new weather section: constants
+(`KALSHI_FEE_RATE`, `WEATHER_SUPPORTED_SIDES`,
+`WEATHER_MAX_SINGLE_POSITION_PCT`, `WEATHER_CLV_LOG_PATH`),
+`kalshi_fee_per_contract()`, `kalshi_effective_cost_per_contract()`,
+`load_weather_clv_log()`, `fetch_weather_flag()`,
+`size_weather_position()`, `run_weather_sizing()`, plus a new `weather`
+CLI subcommand (`size`) and a new "SESSION 4.4 ADDENDUM" section in the
+module docstring.
+- `scripts/sizing/test_sizing_engine.py` — 4 new synthetic tests
+(`test_19`–`test_22`, 22 total in the file), a `make_weather_flag()`
+fixture helper, and new imports from `sizing_engine`.
+- `docs/research/kalshi_fee_structure.md` (new) — sources Kalshi's fee
+formula against 4 independent 2026 sources and documents exactly how
+`sizing_engine.py` uses it.
+- `ROADMAP.md` — Session 4.4 card closed out (see that entry).
+
+**Validation results:**
+- [x] Sizing correctly reflects Kalshi's fee structure and this track's
+typical edge size — **pass**. The fee is sourced (not guessed) and
+folded directly into the Kelly calculation via an effective per-contract
+cost; confirmed via `test_20` that this strictly shrinks the raw Kelly
+fraction versus a naive no-fee calculation on identical inputs, and
+confirmed against two real, live flags from Session 4.3's own output
+covering both the capped (extreme-edge) and proportional (thin-edge)
+paths.
+
+**Decisions made:**
+1. **Kalshi's trading fee is treated as a real, sourced dollar cost
+folded into Kelly itself — not a named judgment-call multiplier like
+every other per-track dampener in this file.** This is a deliberate,
+stated distinction: PLATFORM_RISK_MULTIPLIER, SAME_GAME_CAUTION_
+MULTIPLIER, the politics lockup table, and PROPS_FIELD_VIG_UNRESOLVED_
+MULTIPLIER all stand in for risks this project has no real data to price
+precisely; Kalshi's fee is a real, published formula with no such
+ambiguity, so it belongs inside the probability math, not bolted onto
+the outside of it.
+2. **The per-contract fee rate is a stated simplification of Kalshi's
+real order-level cent-rounding** (the published formula rounds up once
+per whole order, not once per contract) — a single sizing call cannot
+know its own final contract count in advance, since that depends on the
+very stake the call is computing. Named explicitly in the code's own
+docstring as a real, bounded imprecision (slightly over-states the fee
+at large contract counts, slightly under-states it at very small ones),
+not treated as exact.
+3. **No portfolio-level exposure ledger built for weather** — same
+reasoning Session 6.4 already established for props: this track's real
+data shows short (days-scale) resolution windows, not the weeks/months
+that motivated politics' second cap. A single-position cap is judged
+sufficient for v1, a stated candidate for revisiting once real graded
+weather outcomes exist (Session 8.3's job, same posture as every other
+dampener in this file).
+4. **This session was found and closed out of strict roadmap order**,
+following the exact precedent Session 4.3 itself set — check what real
+infrastructure already exists before writing anything new, and close a
+sitting gap immediately once found rather than leaving it for a later
+session's own start-of-session check to rediscover.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:** None. Both of this session's own
+roadmap validation items are met, confirmed against real, live weather
+CLV data.
+
+**Status at close of session:** Fully closed out. Session 4.5
+(Automation Adaptation) is next for this track.

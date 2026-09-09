@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from sizing_engine import (
     ENTRY_NET_ODDS_B,
+    KALSHI_FEE_RATE,
     KELLY_FRACTION,
     MAX_SINGLE_POSITION_PCT,
     POLITICS_LOCKUP_DAMPENER_TABLE,
@@ -31,14 +32,18 @@ from sizing_engine import (
     PROPS_MAX_SINGLE_POSITION_PCT,
     PROPS_PLATFORM_RISK_MULTIPLIER,
     SAME_GAME_CAUTION_MULTIPLIER,
+    WEATHER_MAX_SINGLE_POSITION_PCT,
     combined_entry_probability,
     committed_capital_politics,
+    kalshi_effective_cost_per_contract,
+    kalshi_fee_per_contract,
     politics_lockup_dampener,
     raw_kelly_fraction,
     raw_kelly_fraction_binary_contract,
     size_entry,
     size_politics_position,
     size_props_position,
+    size_weather_position,
 )
 
 
@@ -375,6 +380,80 @@ def test_18_props_unsupported_platform_rejected():
     print(f"PASS test_18: unsupported platform correctly rejected -- reason: {result['reason']}")
 
 
+def make_weather_flag(
+    flag_id: str, model_prob: float, market_price: float, flagged_side: str = "yes",
+    city_label: str = "New York, NY", lead_days: float = 1,
+) -> dict:
+    return {
+        "flag_id": flag_id,
+        "flagged_side": flagged_side,
+        "city_label": city_label,
+        "target_date": "2026-09-10",
+        "lead_days": lead_days,
+        "first_flagged_model_prob": model_prob,
+        "first_flagged_market_price": market_price,
+    }
+
+
+def test_19_kalshi_fee_formula_matches_hand_computation():
+    """Independent hand-check of Kalshi's own published formula, outside
+    the sizing pipeline -- same verification discipline as
+    test_manual_kelly_math_sanity_check() and test_8 above. Kalshi's own
+    published example: 100 contracts at $0.10 costs $0.63 in fees, i.e.
+    a per-contract rate of round_up_cent(0.07 * 0.10 * 0.90) = $0.01
+    (0.0063 rounds up to a full cent at the single-contract level -- the
+    real order-level total of 100 * $0.0063 = $0.63 is the stated
+    order-vs-per-contract rounding gap named in the docstring)."""
+    fee = kalshi_fee_per_contract(0.10)
+    assert fee == 0.01, fee  # ceil(0.07*0.10*0.90*100)/100 = ceil(0.63)/100 = 0.01
+    # Fee density peaks at price=0.50 (Kalshi's own published $1.75-per-100
+    # example) -- compared against a price far enough from 0.50 that the
+    # two don't collide at cent-rounding granularity (price=0.20 and 0.50
+    # both round up to the same $0.02, a real, expected rounding
+    # coincidence at this precision, not a formula bug).
+    fee_at_50 = kalshi_fee_per_contract(0.50)
+    fee_at_05 = kalshi_fee_per_contract(0.05)
+    assert fee_at_50 > fee_at_05, (fee_at_50, fee_at_05)
+    print(f"PASS test_19: fee(price=0.10)=${fee}, fee(price=0.50)=${fee_at_50} > fee(price=0.05)=${fee_at_05}")
+
+
+def test_20_weather_fee_shrinks_stake_vs_no_fee_kelly():
+    """The fee-inclusive effective cost must produce a strictly smaller
+    (or equal) suggested stake than naive Kelly against the raw market
+    price would, since effective_cost_per_contract > price always
+    (a real fee is never zero or negative for 0 < price < 1)."""
+    flag = make_weather_flag("KXHIGHNY-TEST-1", model_prob=0.70, market_price=0.50)
+    result = size_weather_position(flag, bankroll=1000.0)
+
+    naive_f_raw = raw_kelly_fraction_binary_contract(0.70, 0.50)
+    assert result["raw_kelly_fraction"] < round(naive_f_raw, 4), (
+        result["raw_kelly_fraction"], naive_f_raw,
+    )
+    assert result["effective_cost_per_contract"] > result["market_price"], result
+    print(
+        f"PASS test_20: fee-inclusive raw_kelly={result['raw_kelly_fraction']} < "
+        f"naive (no-fee) raw_kelly={naive_f_raw:.4f}; effective_cost="
+        f"{result['effective_cost_per_contract']} > market_price={result['market_price']}"
+    )
+
+
+def test_21_weather_no_bet_below_breakeven():
+    flag = make_weather_flag("KXHIGHNY-TEST-2", model_prob=0.52, market_price=0.50)
+    result = size_weather_position(flag, bankroll=1000.0)
+    assert result["status"] == "no_bet_negative_edge", result
+    assert result["suggested_stake"] == 0.0, result
+    print(f"PASS test_21: p=0.52 vs price=0.50 (fee erases the thin edge) -> status={result['status']}, stake=$0")
+
+
+def test_22_weather_single_position_cap_binds():
+    flag = make_weather_flag("KXHIGHNY-TEST-3", model_prob=0.97, market_price=0.30)
+    result = size_weather_position(flag, bankroll=1000.0)
+    expected_cap = round(1000.0 * WEATHER_MAX_SINGLE_POSITION_PCT, 2)
+    assert result["status"] == "sized_capped_at_max_position", result
+    assert result["suggested_stake"] == expected_cap, (result["suggested_stake"], expected_cap)
+    print(f"PASS test_22: extreme edge correctly capped at ${expected_cap} ({WEATHER_MAX_SINGLE_POSITION_PCT*100:.0f}% of bankroll)")
+
+
 if __name__ == "__main__":
     test_1_bigger_edge_bigger_stake()
     test_2_no_bet_below_breakeven()
@@ -395,4 +474,8 @@ if __name__ == "__main__":
     test_16_props_no_bet_below_breakeven()
     test_17_props_single_position_cap_binds()
     test_18_props_unsupported_platform_rejected()
+    test_19_kalshi_fee_formula_matches_hand_computation()
+    test_20_weather_fee_shrinks_stake_vs_no_fee_kelly()
+    test_21_weather_no_bet_below_breakeven()
+    test_22_weather_single_position_cap_binds()
     print("\nAll sizing_engine.py synthetic tests passed.")
