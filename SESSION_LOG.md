@@ -6639,3 +6639,168 @@ player_performance markets, or FD adds single-game props), the same kind
 of external, data-driven gap Session 2.4 itself carried forward for
 pick'em before real NFL data existed. Next session is 6.4 — Sizing
 Adaptation (Account-Limiting Risk Built In).
+
+---
+
+## Session 6.4 — Sizing Adaptation (Account-Limiting Risk Built In)
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**What was actually done:**
+Closed the prerequisite gap carried forward from Sessions 6.2/6.3 (DK
+TD-scorer rows still reporting `implied_prob_includes_field_vig=True`),
+then built the props track's own sizing logic on top of the fixed edge
+numbers, with an explicit, distinct account-limiting-risk dampener per
+the roadmap card's own title.
+
+1. **DK field-vig fix — no schema change needed.** The roadmap card
+   anticipated a `schema_props.py` change to preserve same-market
+   selection grouping. Checking `ingest_dk_props.py` directly first
+   found this grouping information already existed: `source_market_id`
+   is DK's own real `marketId`, captured per selection since Session 6.1
+   (`market_id = str(selection.get("marketId"))`), and every player
+   priced in the same real market (e.g. one game's "Anytime TD Scorer")
+   already shares that same id. The actual fix was purely in the
+   estimation layer: two small, reusable functions added to
+   `schema_props.py` (`same_market_group_key`, `normalize_field_vig` —
+   the N-way generalization of the existing two-sided de-vig), and
+   `build_field_vig_index()` added to `sportsbook_props_model.py` to
+   group every row by real market, normalize each group's raw implied
+   probabilities to sum to exactly 1.0, and report a per-row
+   `group_size` so a row that could only be captured alone (nothing to
+   normalize against) stays honestly flagged.
+2. **Sizing logic built for the props track** (`sizing_engine.py`, new
+   `props` subcommand): reuses `raw_kelly_fraction_binary_contract`
+   directly from the politics sizing shape (Session 5.4) — same
+   single-flagged-side, single-probability-vs-price shape, no new Kelly
+   math needed. The new work is two independent, explicitly named
+   dampeners: `PROPS_PLATFORM_RISK_MULTIPLIER` (0.50 for both DK and
+   FD — an account-limiting-risk judgment call, more conservative than
+   pick'em's own 0.70 because sportsbook winner-limiting is the
+   best-corroborated pattern of any venue type this project has
+   researched, per the Track Reference table) and
+   `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` (0.60 — fires only when
+   `implied_prob_includes_field_vig` is still True on the flag being
+   sized, since that row's edge number may still include real,
+   unremoved field vig). Both are reported separately in the output,
+   never blended.
+3. No portfolio-level open-positions ledger was built for this track
+   (unlike politics' Session 5.4 addition) — props resolve same-day/
+   same-week like pick'em, not weeks/months out, so the long-
+   simultaneous-lockup problem that motivated politics' second cap
+   does not apply here. A single-position cap
+   (`PROPS_MAX_SINGLE_POSITION_PCT = 0.05`) was judged sufficient for
+   v1.
+
+**Files created/modified:**
+- `/scripts/ingestion/schema_props.py` (extended — `same_market_group_key`,
+  `normalize_field_vig`)
+- `/scripts/ingestion/test_schema_props.py` (new — synthetic-fixture
+  tests for both new helper functions)
+- `/scripts/estimation/sportsbook_props_model.py` (extended —
+  `build_field_vig_index`, wired into the TD-scorer branch of
+  `process_props`, replacing the raw single-side implied probability
+  with a real field-normalized one wherever a row could be grouped)
+- `/scripts/estimation/test_sportsbook_props_model.py` (extended — 2 new
+  field-vig-grouping tests)
+- `/scripts/sizing/sizing_engine.py` (extended — new `props` sizing mode:
+  `fetch_props_flag`, `size_props_position`, `run_props_sizing`, plus
+  the new CLI subcommand)
+- `/scripts/sizing/test_sizing_engine.py` (extended — 5 new props sizing
+  tests)
+- `/docs/sportsbook_props_estimation_model_spec.md` (updated — Session
+  6.4 fix description and real validation numbers)
+- `/docs/sizing_methodology.md` (new addendum section — Session 6.4
+  props sizing reasoning)
+
+**Validation results:**
+- DK field-vig fix, real live data: re-ran `sportsbook_props_model.py
+  --season 2025` against the same live `dk_latest.csv`/`fd_latest.csv`
+  inputs (813 total rows, same status breakdown as Session 6.2's third
+  run). Of 326 real DraftKings `estimated` rows, 315 now report
+  `implied_prob_includes_field_vig=False` with a real field-normalized
+  probability; 11 remain honestly flagged `True`. Spot-checked one real
+  30-selection "2+ TDs" market (Rhamondre Stevenson's game) directly:
+  the group's normalized probabilities summed to exactly 1.0, including
+  8 real `no_player_match` rows whose raw prices still correctly
+  contributed to the group's real vig total even though they aren't
+  individually modeled.
+- Re-ran `clv_logger.py --track props` against the fixed estimates: 228
+  total open flags (56 newly flagged this run), zero pipeline failures.
+  Of 158 real open DraftKings flags, 56 report
+  `implied_prob_includes_field_vig=False`, 102 report `True` — both
+  real, honest numbers post-fix (a flag crossing the edge threshold is
+  not the same population as "every estimated row," so this ratio
+  differs from the 315/11 estimation-layer number above, as expected).
+- Sizing engine, synthetic (`test_sizing_engine.py`, 18/18 passing
+  including 5 new props tests): platform-risk dampener applied and
+  named exactly; field-vig-unresolved flag produces a strictly smaller
+  stake than an otherwise-identical resolved flag; below-breakeven edge
+  produces `no_bet_negative_edge` and $0; extreme edge correctly capped
+  at 5% of bankroll; an unsupported platform (e.g. `prizepicks`) is
+  rejected with an explicit reason.
+- Sizing engine, real live data: sized two real open DK flags pulled
+  directly from the refreshed `clv_log.csv`. A resolved flag (Jaxon
+  Smith-Njigba, Anytime TD Scorer, model_prob=0.3776 vs.
+  market_price=0.0803) produced `suggested_stake=$20.20` on a $500
+  bankroll with `field_vig_unresolved_multiplier_applied=1.0`. An
+  otherwise-similar still-unresolved flag (Rhamondre Stevenson, 2+ TDs,
+  model_prob=0.3361 vs. market_price=0.125) produced
+  `suggested_stake=$9.05` with `field_vig_unresolved_multiplier_applied
+  =0.6` — correctly smaller purely from the extra dampener, both
+  dampeners visible and separately labeled in the output.
+
+**Decisions made:**
+1. **No `schema_props.py` schema change was needed for the field-vig
+   fix**, contrary to the roadmap card's own anticipation — checking
+   `ingest_dk_props.py` directly first (rather than assuming the
+   roadmap's plan was correct) found the real grouping key
+   (`source_market_id`) already existed per row since Session 6.1. This
+   kept the fix scoped to two small, reusable helper functions plus one
+   estimation-layer index-builder, rather than a real schema migration.
+2. **`PROPS_PLATFORM_RISK_MULTIPLIER = 0.50` for both DK and FD, a
+   stated judgment call, not a derived number** — set more conservative
+   than pick'em's own 0.70 specifically because sportsbook winner-
+   limiting is this project's own best-corroborated limiting pattern of
+   any venue type researched so far (per the Track Reference table),
+   not because a specific DK or FD figure was found. Both platforms get
+   the identical figure because nothing in this project's research
+   distinguishes them from each other. Flagged for Session 8.3's
+   recalibration work once real graded props positions exist.
+3. **A second, independent dampener (`PROPS_FIELD_VIG_UNRESOLVED_
+   MULTIPLIER = 0.60`) was added, distinct from the limiting-risk
+   dampener** — because the DK field-vig fix built this same session
+   only reaches rows with a real, groupable market (group_size >= 2);
+   a row still flagged `True` carries a real, separate kind of
+   uncertainty (its edge number may still include real field vig) that
+   a limiting-risk dampener does not describe. Kept as its own,
+   separately-reported multiplier rather than folded into the platform
+   dampener, so it stays visible which uncertainty caused a given
+   reduction.
+4. **No portfolio-level open-positions ledger was built for props**,
+   unlike politics' Session 5.4 addition — props resolve same-day/
+   same-week (the underlying game), the same fast-resolving shape as
+   pick'em, so the long-simultaneous-lockup problem that motivated
+   politics' second cap does not apply. A single-position cap was
+   judged sufficient for v1; revisiting this if real usage patterns
+   show otherwise is a named future candidate, not built here.
+
+**Corrections/reversals during the session:** None — the field-vig fix
+turned out simpler than the roadmap card anticipated (see Decision #1),
+which is a scope correction in the easier direction, not a reversal of
+completed work.
+
+**Open items / deferred validations:**
+- 11 real DK rows remain flagged `implied_prob_includes_field_vig=True`
+  because their real same-market group only had one selection captured
+  this run — an honest, external-data boundary (this session's real
+  ingestion pull simply didn't capture every player in every market),
+  not a code defect. Re-checking this ratio against a future, fresher
+  DK pull is a natural follow-up, not a blocker.
+- `PROPS_PLATFORM_RISK_MULTIPLIER` and
+  `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` are both stated, unvalidated
+  placeholders, same posture as every other dampener in this project —
+  re-deriving them against real graded props outcomes is Session 8.3's
+  job, once real graded positions exist. Next session is 6.5 —
+  Automation Adaptation.

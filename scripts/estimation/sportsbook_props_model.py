@@ -96,18 +96,20 @@ correctly separates true edge from vig cost")
 - One-sided rows (DraftKings TD-scorer props): there is no "under" price to
   de-vig against -- the market's real vig here is spread across every
   player in the field (all those individual prices sum to well over 100%
-  together), not between two sides of one line. Properly removing THAT vig
-  would require every priced selection in the same real market pulled
-  together, which Session 6.1's per-row normalized output does not
-  preserve as a group. v1 does NOT attempt a fix for this -- it reports the
-  RAW single-side implied probability, explicitly labeled
-  implied_prob_includes_field_vig=True, so a future session (or this one,
-  if the market grouping is added to schema_props.py first) can replace it
-  with a real field-normalized number rather than this script silently
-  pretending the raw price is already vig-free. This is the honest
-  boundary of what "separates true edge from vig cost" means for THIS
-  market shape with THIS input data -- solved cleanly for the two-sided
-  case, explicitly flagged as unsolved for the one-sided case.
+  together), not between two sides of one line. **FIXED in Session 6.4**:
+  `ingest_dk_props.py` already carries the real DK `marketId` per selection
+  as `source_market_id`, so every player priced in the SAME real market
+  (e.g. one game's "Anytime TD Scorer" market) can be grouped together
+  (`schema_props.same_market_group_key`) and their raw implied
+  probabilities normalized against each other so they sum to exactly 1.0
+  (`schema_props.normalize_field_vig`, `build_field_vig_index` below) --
+  the honest N-way generalization of the two-sided de-vig used for
+  FanDuel's rows. `implied_prob_includes_field_vig` is now False for every
+  row this session can actually group (group_size >= 2 real selections);
+  a row this run's real data could only capture alone (group_size == 1, or
+  missing odds) still reports the raw, vig-included price with the flag
+  left True -- an honest per-row boundary, not a blanket claim the fix
+  covers every possible row.
 
 WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------------
@@ -119,8 +121,11 @@ WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
 - "First TD Scorer" markets are not modeled at all (see above).
 - The season-total projection assumes every player plays a full 17-game
   season with no rest-of-season-out adjustment (see above).
-- The one-sided TD-scorer implied probability still includes field vig,
-  not yet de-vigged (see above).
+- The one-sided TD-scorer implied probability is field-normalized as of
+  Session 6.4 ONLY for rows this run could actually group (group_size >= 2
+  real selections in the same real market); a row captured alone still
+  reports the raw, vig-included price with `implied_prob_includes_field_vig
+  =True` (see above).
 - No opponent/matchup, injury/role, home/away, or pace/usage adjustment --
   same stated gap as pickem_model.py.
 
@@ -159,7 +164,11 @@ from pickem_model import (  # noqa: E402  (path insert must happen first)
     sample_sigma,
     season_average,
 )
-from schema_props import american_odds_to_implied_probability  # noqa: E402
+from schema_props import (  # noqa: E402
+    american_odds_to_implied_probability,
+    normalize_field_vig,
+    same_market_group_key,
+)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -272,6 +281,50 @@ def poisson_prob_at_least(lam: float, k: int) -> float:
     raise ValueError(f"poisson_prob_at_least only supports k in {{1, 2}}, got {k}")
 
 
+def build_field_vig_index(props_df: pd.DataFrame) -> dict[int, tuple[float, int]]:
+    """Session 6.4 — the DK field-vig fix. Groups every row by its real
+    same-market key (`same_market_group_key`, keyed on the existing
+    platform/source_event_id/source_market_id columns — no schema change
+    needed, since `ingest_dk_props.py` already carries the real DK
+    `marketId` per selection) and field-normalizes each group's raw
+    American-odds implied probabilities with `normalize_field_vig` so
+    they sum to exactly 1.0, the honest N-way generalization of the
+    two-sided de-vig already proven for FanDuel's rows.
+
+    Returns a dict mapping each row's real DataFrame index to
+    (field_normalized_prob, group_size) — group_size is returned
+    alongside the probability so callers can tell a REAL group
+    normalization (group_size >= 2, multiple real selections priced
+    against each other) apart from a group of one (this run's data only
+    captured a single selection for that real market — nothing to
+    normalize against, so the raw price cannot honestly be called
+    field-normalized). Rows with missing/invalid odds are skipped
+    entirely (excluded from both the group's total and the returned
+    dict) rather than treated as a real $0-vig contribution."""
+    groups: dict[str, list[tuple[int, float]]] = {}
+    for idx, row in props_df.iterrows():
+        platform = row.get("platform")
+        event_id = row.get("source_event_id")
+        market_id = row.get("source_market_id")
+        if pd.isna(platform) or pd.isna(event_id) or pd.isna(market_id) or not platform or not event_id or not market_id:
+            continue
+        raw = american_odds_to_implied_probability(row.get("over_american_odds"))
+        if raw is None:
+            continue
+        key = same_market_group_key(str(platform), str(event_id), str(market_id))
+        groups.setdefault(key, []).append((idx, raw))
+
+    result: dict[int, tuple[float, int]] = {}
+    for members in groups.values():
+        indices = [m[0] for m in members]
+        raw_probs = [m[1] for m in members]
+        normalized = normalize_field_vig(raw_probs)
+        group_size = len(members)
+        for idx, norm_prob in zip(indices, normalized):
+            result[idx] = (norm_prob, group_size)
+    return result
+
+
 def two_sided_devig(over_odds: Optional[int], under_odds: Optional[int]) -> tuple[Optional[float], Optional[float]]:
     """Normalizes both sides' raw American-odds implied probabilities so
     they sum to exactly 1.0 (removes the vig). Returns (implied_prob_over,
@@ -309,9 +362,10 @@ def _blank_model_fields() -> dict:
 
 def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFrame:
     name_lookup = build_name_lookup(weekly_df)
+    field_vig_index = build_field_vig_index(props_df)
 
     out_rows = []
-    for _, prop in props_df.iterrows():
+    for row_idx, prop in props_df.iterrows():
         row = prop.to_dict()
         sport = str(row.get("sport") or "").strip().lower()
         prop_category = str(row.get("prop_category") or "").strip().lower()
@@ -366,7 +420,23 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
                 if market_kind == "anytime"
                 else poisson_prob_at_least(model_mean, 2)
             )
+
+            # Session 6.4 -- real DK field-vig fix. field_vig_index holds
+            # every row's own same-market group's field-normalized
+            # probability (group_size >= 2 selections priced against each
+            # other) precomputed by build_field_vig_index() above. A row
+            # this run's data could only capture alone (group_size == 1,
+            # or the row's own odds were missing so it never entered any
+            # group) falls back to the raw, still-vig-included price --
+            # honestly still flagged True, never silently assumed fixed.
+            field_entry = field_vig_index.get(row_idx)
             raw_implied = american_odds_to_implied_probability(row.get("over_american_odds"))
+            if field_entry is not None and field_entry[1] >= 2:
+                implied_prob = field_entry[0]
+                includes_field_vig = False
+            else:
+                implied_prob = raw_implied
+                includes_field_vig = True
 
             row["model_status"] = "estimated"
             row["season_avg"] = s_avg
@@ -377,11 +447,11 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
             row["model_sigma"] = None
             row["prob_over"] = model_prob
             row["prob_under"] = None
-            row["implied_prob_over"] = raw_implied
+            row["implied_prob_over"] = implied_prob
             row["implied_prob_under"] = None
-            row["implied_prob_includes_field_vig"] = True
+            row["implied_prob_includes_field_vig"] = includes_field_vig
             row["edge_over"] = (
-                (model_prob - raw_implied) if (model_prob is not None and raw_implied is not None) else None
+                (model_prob - implied_prob) if (model_prob is not None and implied_prob is not None) else None
             )
             row["edge_under"] = None
             out_rows.append(row)

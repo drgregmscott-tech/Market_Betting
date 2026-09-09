@@ -18,6 +18,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sportsbook_props_model import (
+    build_field_vig_index,
     poisson_prob_at_least,
     project_season_total,
     prob_over,
@@ -114,6 +115,37 @@ def test_prob_over_none_sigma_returns_none():
     print("PASS: test_prob_over_none_sigma_returns_none")
 
 
+def test_build_field_vig_index_groups_same_market_and_normalizes():
+    # Three DK-shaped rows, same real event+market (three players priced
+    # against each other in one "Anytime TD Scorer" market), plus one
+    # unrelated row in a different real market -- must not be pulled into
+    # the first group's normalization.
+    df = pd.DataFrame([
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": -150},
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": +400},
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": +900},
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M2", "over_american_odds": +250},
+    ])
+    index = build_field_vig_index(df)
+    assert len(index) == 4
+    group1_probs = [index[i][0] for i in (0, 1, 2)]
+    assert abs(sum(group1_probs) - 1.0) < 1e-9
+    assert index[0][1] == 3  # group_size for the 3-player market
+    assert index[3][1] == 1  # the lone row in its own market -- can't group
+    print("PASS: test_build_field_vig_index_groups_same_market_and_normalizes")
+
+
+def test_build_field_vig_index_skips_rows_with_missing_odds_or_ids():
+    df = pd.DataFrame([
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": -150},
+        {"platform": "draftkings", "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": None},
+        {"platform": None, "source_event_id": "E1", "source_market_id": "M1", "over_american_odds": -110},
+    ])
+    index = build_field_vig_index(df)
+    assert set(index.keys()) == {0}
+    print("PASS: test_build_field_vig_index_skips_rows_with_missing_odds_or_ids")
+
+
 if __name__ == "__main__":
     test_two_sided_devig_matches_known_example()
     test_two_sided_devig_missing_side_returns_none()
@@ -124,4 +156,6 @@ if __name__ == "__main__":
     test_project_season_total_season_complete()
     test_prob_over_matches_manual_normal_cdf()
     test_prob_over_none_sigma_returns_none()
+    test_build_field_vig_index_groups_same_market_and_normalizes()
+    test_build_field_vig_index_skips_rows_with_missing_odds_or_ids()
     print("\nAll tests passed.")

@@ -346,6 +346,91 @@ USAGE (politics sizing)
 python sizing_engine.py politics size --flag-id "kalshi|MO-05|R" --venue-bankroll 500
 python sizing_engine.py politics record-open --flag-id "kalshi|MO-05|R" --venue-bankroll 500
 python sizing_engine.py politics settle --position-id <id> --note "race called, contract resolved"
+
+===============================================================================
+SESSION 6.4 ADDENDUM -- SPORTSBOOK PLAYER PROPS (DK/FD) SIZING
+===============================================================================
+
+WHY THIS IS ITS OWN SHAPE, NOT POLITICS SIZING REUSED BLINDLY
+------------------------------------------------------------------
+Session 6.3's clv_logger.py --track props flags carry the exact same shape
+politics' single-contract Kelly math already handles: one flagged side,
+one flag-time model probability, one flag-time market-implied price
+(`first_flagged_model_prob` / `first_flagged_market_price` in the shared
+CLV_CORE_COLUMNS -- see clv_logger.py). So the Kelly math itself
+(`raw_kelly_fraction_binary_contract`) IS reused directly, not
+reimplemented -- there is no new probability math to invent here. What
+IS genuinely different, and is the actual point of this session per
+ROADMAP.md's own card title ("Account-Limiting Risk Built In"): this is
+the one track, of every track built so far, where the Track Reference
+table (ROADMAP.md) names account-limiting risk as this project's OWN
+highest-confidence concern for a venue type -- sportsbooks limiting or
+banning consistently-winning bettors is the single most widely documented
+account-restriction pattern in the entire sports-betting industry, more
+so than either pick'em platform (Session 2.6's own PLATFORM_RISK_MULTIPLIER
+research, `Pickem_Platform_Account_Limiting_Policy_Research.md`, found
+PrizePicks/Underdog's evidence was ToS-power-only plus scattered first-hand
+reports) or an exchange (Kalshi/Polymarket structurally cannot limit a
+winner the way a bookmaker can -- Session 0.1's own founding vig
+comparison). No project research doc specifically quantifies DK/FD's
+real limiting rate or threshold (a stated, open gap -- see
+`docs/research/sport_inventory.md`'s own "Account-limiting risk. Not yet
+researched specifically for [sportsbooks]" note), so, exactly like
+Session 2.6's PrizePicks dampener and Session 5.4's lockup table before
+it, `PROPS_PLATFORM_RISK_MULTIPLIER` below is a NAMED, STATED JUDGMENT
+CALL, not a sourced number -- set more conservative than pick'em's own
+0.70 specifically because this venue type's limiting reputation is the
+best-corroborated of the three, not because any specific DK/FD figure was
+found.
+
+PROPS_PLATFORM_RISK_MULTIPLIER -- NAMED, NOT DERIVED, SAME POSTURE AS
+EVERY OTHER DAMPENER IN THIS FILE
+------------------------------------------------------------------------
+PROPS_PLATFORM_RISK_MULTIPLIER = {"draftkings": 0.50, "fanduel": 0.50} --
+applied on top of quarter-Kelly, same mechanical position in the pipeline
+as PLATFORM_RISK_MULTIPLIER["prizepicks"]. Both platforms get the same
+figure because no source in this project distinguishes DK's limiting
+practice from FD's -- inventing a difference between them would be
+exactly the kind of guessed precision this project's own standing rule
+forbids. Revisiting this against real graded results (were flagged props
+actually followed by a real limiting/restriction event?) is Session 8.3's
+job, same as every other dampener in this file.
+
+FIELD-VIG-UNRESOLVED CAUTION -- A SECOND, DISTINCT DAMPENER FOR DK ROWS
+STILL FLAGGED implied_prob_includes_field_vig=True
+------------------------------------------------------------------------
+Session 6.4 also fixed DK's TD-scorer field-vig problem in
+`sportsbook_props_model.py` (see that file's own docstring) -- but the
+fix only reaches rows this run's real data could actually group with
+other real selections in the same market (`group_size >= 2`). A row this
+run could only capture alone still reports the RAW, vig-included price
+with the flag left True (an honest per-row boundary, not a claim the fix
+covers every row). Sizing that row's edge as if it were already
+field-normalized would risk staking real money against a number that
+may still include real field vig. `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER
+= 0.60` -- another named, stated judgment call (not derived), applied
+ONLY when `implied_prob_includes_field_vig` is True on the flag being
+sized -- flags a real, distinct uncertainty this session's own fix could
+not fully close, rather than silently sizing it the same as a row that
+IS field-normalized.
+
+WHAT THIS ADDITION DOES NOT DO YET (stated gap, not a silent one)
+-----------------------------------------------------------------------
+- Does not distinguish DK's limiting practice from FD's (see above) --
+  both get the same PROPS_PLATFORM_RISK_MULTIPLIER.
+- Does not track a portfolio-level exposure ledger the way Session 5.4's
+  politics track does -- props resolve same-day/same-week (a live game),
+  not weeks/months out, so the long-simultaneous-lockup problem that
+  motivated politics' second cap does not apply the same way here. A
+  single-position cap (PROPS_MAX_SINGLE_POSITION_PCT) is judged
+  sufficient for v1.
+- Does not re-derive PROPS_PLATFORM_RISK_MULTIPLIER or
+  PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER from real graded results --
+  Session 8.3's job, once real graded props positions exist.
+
+USAGE (props sizing)
+-----------------------
+python sizing_engine.py props size --flag-id "draftkings|1234567890" --bankroll 500
 """
 
 from __future__ import annotations
@@ -379,6 +464,11 @@ ARBITRAGE_OPEN_POSITIONS_PATH = BASE_DIR / "data" / "arbitrage" / "open_position
 # "SESSION 5.4 ADDENDUM" in the docstring above for why this ledger exists).
 POLITICS_CLV_LOG_PATH = BASE_DIR / "data" / "politics" / "clv_log.csv"
 POLITICS_OPEN_POSITIONS_PATH = BASE_DIR / "data" / "politics" / "open_positions.csv"
+
+# Session 6.4 addition -- props sizing reads Session 6.3's clv_log.csv.
+# No open-positions ledger (see "SESSION 6.4 ADDENDUM" docstring above for
+# why this track doesn't need politics' portfolio-level exposure cap).
+PROPS_CLV_LOG_PATH = BASE_DIR / "data" / "sportsbook_props" / "clv_log.csv"
 
 # ---------------------------------------------------------------------------
 # Constants -- named explicitly, per this project's "no unnamed black-box
@@ -435,6 +525,21 @@ POLITICS_LOCKUP_DAMPENER_TABLE = [
     (24 * 180, 0.70),   # 90-180 days
     (float("inf"), 0.55),  # 180+ days
 ]
+
+# ---------------------------------------------------------------------------
+# Session 6.4 additions -- sportsbook player props (DK/FD)-specific
+# constants. Same "named, not guessed" standard as every other constant in
+# this file -- see the "SESSION 6.4 ADDENDUM" docstring section above for
+# the reasoning behind each one.
+# ---------------------------------------------------------------------------
+PROPS_SUPPORTED_PLATFORMS = {"draftkings", "fanduel"}
+PROPS_PLATFORM_RISK_MULTIPLIER = {
+    "draftkings": 0.50,  # stated judgment call, see docstring -- account-limiting-risk dampener
+    "fanduel": 0.50,      # same figure -- no source distinguishes DK from FD (see docstring)
+}
+PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER = 0.60  # stated placeholder -- see docstring
+PROPS_MAX_SINGLE_POSITION_PCT = 0.05  # same single-position ceiling posture as every other track
+MIN_PROPS_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
 
 POLITICS_LEDGER_FIELDS = [
     "position_id",
@@ -1254,6 +1359,137 @@ def run_politics_sizing(flag_id: str, venue_bankroll: float, total_bankroll: flo
     return result
 
 
+# ===========================================================================
+# SESSION 6.4 -- SPORTSBOOK PLAYER PROPS (DK/FD) SIZING
+# See the "SESSION 6.4 ADDENDUM" section of the module docstring above for
+# why this reuses politics' single-contract Kelly math directly but adds
+# its own, distinct account-limiting-risk dampener (the actual point of
+# this session, per ROADMAP.md's own card title).
+# ===========================================================================
+
+def load_props_clv_log() -> pd.DataFrame:
+    if not PROPS_CLV_LOG_PATH.exists():
+        raise FileNotFoundError(
+            f"{PROPS_CLV_LOG_PATH} not found. Run clv_logger.py --track props "
+            f"first (Session 6.3) so there are flagged opportunities to size."
+        )
+    return pd.read_csv(PROPS_CLV_LOG_PATH)
+
+
+def fetch_props_flag(flag_id: str) -> tuple[Optional[dict], list[str]]:
+    """Looks up one flag_id (platform|source_selection_id, per Session
+    6.3's own scheme) in the live props CLV log. Returns
+    (flag_row_or_None, problems), same "always say exactly why" posture
+    as fetch_legs()/fetch_politics_flag() above."""
+    try:
+        clv_df = load_props_clv_log()
+    except FileNotFoundError as exc:
+        return None, [str(exc)]
+
+    matches = clv_df.loc[clv_df["flag_id"] == flag_id]
+    if len(matches) == 0:
+        return None, [f"flag_id '{flag_id}' not found in {PROPS_CLV_LOG_PATH}"]
+
+    row = matches.iloc[0].to_dict()
+    if row.get("status") != "open":
+        return None, [
+            f"flag_id '{flag_id}' has status='{row.get('status')}', not 'open' "
+            f"-- this position is no longer available (game likely locked/prop delisted)."
+        ]
+
+    for required in ("first_flagged_model_prob", "first_flagged_market_price", "platform"):
+        if row.get(required) is None or pd.isna(row.get(required)):
+            return None, [f"flag_id '{flag_id}' has no {required} logged."]
+
+    return row, []
+
+
+def size_props_position(flag_row: dict, bankroll: float) -> dict:
+    """Runs the full single-contract Kelly sizing pipeline for one flagged
+    sportsbook prop and returns a fully-explained result dict, same
+    "every intermediate number included" standard as every other sizing
+    function in this file. Reuses `raw_kelly_fraction_binary_contract`
+    directly (same probabilistic-single-contract shape as politics'
+    sizing) -- see docstring for why the actual new work here is the
+    account-limiting-risk dampener, not the Kelly math."""
+    platform = flag_row.get("platform")
+    if platform not in PROPS_SUPPORTED_PLATFORMS:
+        return _rejected(
+            f"Unrecognized platform '{platform}' in flag row -- supported: "
+            f"{sorted(PROPS_SUPPORTED_PLATFORMS)}."
+        )
+
+    if bankroll < MIN_PROPS_BANKROLL:
+        return _rejected(f"--bankroll must be at least {MIN_PROPS_BANKROLL}, got {bankroll}.")
+
+    p = float(flag_row["first_flagged_model_prob"])
+    price = float(flag_row["first_flagged_market_price"])
+
+    try:
+        f_raw = raw_kelly_fraction_binary_contract(p, price)
+    except ValueError as exc:
+        return _rejected(str(exc))
+
+    f_quarter = max(f_raw, 0.0) * KELLY_FRACTION  # reuses the project-wide quarter-Kelly constant
+
+    limiting_dampener = PROPS_PLATFORM_RISK_MULTIPLIER[platform]
+
+    field_vig_unresolved = bool(flag_row.get("implied_prob_includes_field_vig"))
+    field_vig_multiplier = PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER if field_vig_unresolved else 1.0
+
+    f_dampened = f_quarter * limiting_dampener * field_vig_multiplier
+
+    uncapped_stake = bankroll * f_dampened
+    cap_amount = bankroll * PROPS_MAX_SINGLE_POSITION_PCT
+    capped = uncapped_stake > cap_amount
+    final_stake = min(uncapped_stake, cap_amount)
+
+    if f_raw <= 0:
+        status = "no_bet_negative_edge"
+        final_stake = 0.0
+    elif capped:
+        status = "sized_capped_at_max_position"
+    else:
+        status = "sized"
+
+    return {
+        "status": status,
+        "flag_id": flag_row.get("flag_id"),
+        "platform": platform,
+        "player_name": flag_row.get("player_name"),
+        "sport": flag_row.get("sport"),
+        "stat_type": flag_row.get("stat_type"),
+        "prop_category": flag_row.get("prop_category"),
+        "flagged_side": flag_row.get("flagged_side"),
+        "model_prob": round(p, 4),
+        "market_price": round(price, 4),
+        "raw_kelly_fraction": round(f_raw, 4),
+        "quarter_kelly_fraction": round(f_quarter, 4),
+        "platform_limiting_risk_multiplier_applied": limiting_dampener,
+        "field_vig_unresolved": field_vig_unresolved,
+        "field_vig_unresolved_multiplier_applied": field_vig_multiplier,
+        "dampened_kelly_fraction": round(f_dampened, 4),
+        "bankroll": bankroll,
+        "uncapped_suggested_stake": round(uncapped_stake, 2),
+        "max_single_position_cap": round(cap_amount, 2),
+        "suggested_stake": round(final_stake, 2),
+        "suggested_stake_pct_of_bankroll": round(100 * final_stake / bankroll, 2) if bankroll else None,
+    }
+
+
+def run_props_sizing(flag_id: str, bankroll: float) -> dict:
+    log.info("=== Props sizing run starting: flag_id=%s, bankroll=%s ===", flag_id, bankroll)
+    flag_row, problems = fetch_props_flag(flag_id)
+    if problems:
+        result = _rejected("; ".join(problems))
+        log.warning("Props sizing request rejected: %s", result["reason"])
+        return result
+
+    result = size_props_position(flag_row, bankroll)
+    log.info("Props sizing result: %s", result)
+    return result
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -1364,6 +1600,23 @@ if __name__ == "__main__":
     politics_settle.add_argument("--position-id", type=str, required=True)
     politics_settle.add_argument("--note", type=str, default="", help="Optional free-text settlement note.")
 
+    # -- props (Session 6.4, new) --
+    props_parser = subparsers.add_parser(
+        "props", help="Size a flagged DK/FD sportsbook player prop from clv_logger.py's --track props flags."
+    )
+    props_subparsers = props_parser.add_subparsers(dest="action", required=True)
+
+    props_size = props_subparsers.add_parser(
+        "size", help="Compute a suggested position size for one flagged prop, with an account-limiting-risk dampener applied."
+    )
+    props_size.add_argument(
+        "--flag-id", type=str, required=True,
+        help='flag_id from data/sportsbook_props/clv_log.csv (platform|source_selection_id, e.g. "draftkings|1234567890").',
+    )
+    props_size.add_argument(
+        "--bankroll", type=float, required=True, help="Real dollars currently in that flag's own sportsbook account."
+    )
+
     args = parser.parse_args()
 
     if args.mode == "pickem":
@@ -1394,4 +1647,9 @@ if __name__ == "__main__":
 
         elif args.action == "settle":
             result = settle_politics_position(args.position_id, args.note)
+            print(json.dumps(result, indent=2, default=str))
+
+    elif args.mode == "props":
+        if args.action == "size":
+            result = run_props_sizing(args.flag_id, args.bankroll)
             print(json.dumps(result, indent=2, default=str))

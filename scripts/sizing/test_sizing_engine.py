@@ -27,6 +27,9 @@ from sizing_engine import (
     POLITICS_LOCKUP_DAMPENER_TABLE,
     POLITICS_MAX_SINGLE_POSITION_PCT,
     POLITICS_MAX_TOTAL_EXPOSURE_PCT,
+    PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER,
+    PROPS_MAX_SINGLE_POSITION_PCT,
+    PROPS_PLATFORM_RISK_MULTIPLIER,
     SAME_GAME_CAUTION_MULTIPLIER,
     combined_entry_probability,
     committed_capital_politics,
@@ -35,6 +38,7 @@ from sizing_engine import (
     raw_kelly_fraction_binary_contract,
     size_entry,
     size_politics_position,
+    size_props_position,
 )
 
 
@@ -291,6 +295,86 @@ def test_13_lockup_dampener_table_monotonic_and_named_bands():
     print(f"PASS test_13: lockup dampener table is monotonic non-increasing: {multipliers}")
 
 
+def make_props_flag(
+    flag_id: str, platform: str, model_prob: float, market_price: float,
+    field_vig_unresolved: bool = False, player_name: str = "Test Player",
+) -> dict:
+    return {
+        "flag_id": flag_id,
+        "platform": platform,
+        "player_name": player_name,
+        "sport": "NFL",
+        "stat_type": "Anytime TD Scorer",
+        "prop_category": "player_touchdown",
+        "flagged_side": "over",
+        "first_flagged_model_prob": model_prob,
+        "first_flagged_market_price": market_price,
+        "implied_prob_includes_field_vig": field_vig_unresolved,
+    }
+
+
+def test_14_props_platform_risk_dampener_applied_and_named():
+    """A flagged prop's dampened Kelly fraction must reflect the stated
+    PROPS_PLATFORM_RISK_MULTIPLIER exactly -- this is the actual point of
+    Session 6.4 per its own roadmap card title."""
+    flag = make_props_flag("draftkings|1", "draftkings", model_prob=0.30, market_price=0.15)
+    result = size_props_position(flag, bankroll=1000.0)
+    assert result["platform_limiting_risk_multiplier_applied"] == PROPS_PLATFORM_RISK_MULTIPLIER["draftkings"], result
+    expected_f_dampened = result["quarter_kelly_fraction"] * PROPS_PLATFORM_RISK_MULTIPLIER["draftkings"]
+    assert abs(result["dampened_kelly_fraction"] - round(expected_f_dampened, 4)) < 1e-6, result
+    print(
+        f"PASS test_14: DK limiting-risk dampener={result['platform_limiting_risk_multiplier_applied']} "
+        f"correctly applied -- dampened_kelly_fraction={result['dampened_kelly_fraction']}"
+    )
+
+
+def test_15_props_field_vig_unresolved_shrinks_stake():
+    """Two otherwise-identical flags, one with implied_prob_includes_
+    field_vig=True -- the unresolved one must get a strictly smaller
+    stake, and the multiplier applied must match the stated constant."""
+    resolved_flag = make_props_flag("draftkings|2", "draftkings", model_prob=0.30, market_price=0.15, field_vig_unresolved=False)
+    unresolved_flag = make_props_flag("draftkings|3", "draftkings", model_prob=0.30, market_price=0.15, field_vig_unresolved=True)
+
+    resolved_result = size_props_position(resolved_flag, bankroll=1000.0)
+    unresolved_result = size_props_position(unresolved_flag, bankroll=1000.0)
+
+    assert resolved_result["field_vig_unresolved_multiplier_applied"] == 1.0, resolved_result
+    assert unresolved_result["field_vig_unresolved_multiplier_applied"] == PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER, unresolved_result
+    assert unresolved_result["suggested_stake"] < resolved_result["suggested_stake"], (
+        f"Expected field-vig-unresolved flag to get a smaller stake: "
+        f"unresolved={unresolved_result['suggested_stake']}, resolved={resolved_result['suggested_stake']}"
+    )
+    print(
+        f"PASS test_15: field-vig-unresolved flag correctly dampened -- "
+        f"resolved stake=${resolved_result['suggested_stake']}, unresolved stake=${unresolved_result['suggested_stake']}"
+    )
+
+
+def test_16_props_no_bet_below_breakeven():
+    flag = make_props_flag("fanduel|4", "fanduel", model_prob=0.10, market_price=0.15)
+    result = size_props_position(flag, bankroll=1000.0)
+    assert result["status"] == "no_bet_negative_edge", result
+    assert result["suggested_stake"] == 0.0, result
+    print(f"PASS test_16: p=0.10 vs price=0.15 (below breakeven) -> status={result['status']}, stake=$0")
+
+
+def test_17_props_single_position_cap_binds():
+    flag = make_props_flag("draftkings|5", "draftkings", model_prob=0.95, market_price=0.10)
+    result = size_props_position(flag, bankroll=1000.0)
+    expected_cap = round(1000.0 * PROPS_MAX_SINGLE_POSITION_PCT, 2)
+    assert result["status"] == "sized_capped_at_max_position", result
+    assert result["suggested_stake"] == expected_cap, (result["suggested_stake"], expected_cap)
+    print(f"PASS test_17: extreme edge correctly capped at ${expected_cap} ({PROPS_MAX_SINGLE_POSITION_PCT*100:.0f}% of bankroll)")
+
+
+def test_18_props_unsupported_platform_rejected():
+    flag = make_props_flag("prizepicks|6", "prizepicks", model_prob=0.70, market_price=0.50)
+    result = size_props_position(flag, bankroll=1000.0)
+    assert result["status"] == "rejected", result
+    assert "platform" in result["reason"].lower(), result
+    print(f"PASS test_18: unsupported platform correctly rejected -- reason: {result['reason']}")
+
+
 if __name__ == "__main__":
     test_1_bigger_edge_bigger_stake()
     test_2_no_bet_below_breakeven()
@@ -306,4 +390,9 @@ if __name__ == "__main__":
     test_11_single_position_cap_binds()
     test_12_portfolio_exposure_cap_binds_across_open_positions()
     test_13_lockup_dampener_table_monotonic_and_named_bands()
+    test_14_props_platform_risk_dampener_applied_and_named()
+    test_15_props_field_vig_unresolved_shrinks_stake()
+    test_16_props_no_bet_below_breakeven()
+    test_17_props_single_position_cap_binds()
+    test_18_props_unsupported_platform_rejected()
     print("\nAll sizing_engine.py synthetic tests passed.")

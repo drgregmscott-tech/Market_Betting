@@ -138,3 +138,8 @@
 2026-09-09 17:35:02,073 UTC | INFO | [politics] Existing CLV log has 416 rows before this run
 2026-09-09 17:35:02,275 UTC | INFO | [politics] Wrote 416 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\politics\clv_log.csv
 2026-09-09 17:35:02,281 UTC | INFO | Run summary: {'track': 'politics', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\politics\\estimates\\politics_estimates_latest.csv', 'rows_in_estimates': 868, 'newly_flagged': 0, 'newly_closed': 0, 'still_open': 416, 'total_logged': 416, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\politics\\clv_log.csv'}
+2026-09-09 17:54:53,521 UTC | INFO | === CLV logging run starting (track=props) ===
+2026-09-09 17:54:53,535 UTC | INFO | [props] Loaded 813 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_latest.csv
+2026-09-09 17:54:53,551 UTC | INFO | [props] Existing CLV log has 172 rows before this run
+2026-09-09 17:54:53,722 UTC | INFO | [props] Wrote 228 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv
+2026-09-09 17:54:53,727 UTC | INFO | Run summary: {'track': 'props', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_latest.csv', 'rows_in_estimates': 813, 'newly_flagged': 56, 'newly_closed': 0, 'still_open': 228, 'total_logged': 228, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\clv_log.csv'}

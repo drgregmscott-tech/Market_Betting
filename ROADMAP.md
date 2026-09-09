@@ -2321,7 +2321,16 @@ a real match exists.
 ---
 
 ### Session 6.4 — Sizing Adaptation (Account-Limiting Risk Built In)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
+The DK field-vig fix turned out not to need a schema change:
+`source_market_id` already carried DK's own real per-market id per row
+since Session 6.1, so grouping was purely an estimation-layer fix
+(`schema_props.py` gained two small, reusable helper functions instead).
+315 of 326 real DK rows now report a real field-normalized probability;
+11 stayed honestly flagged (their real market only had that one
+selection captured this run). Sizing then added two independent,
+explicitly named account-limiting/uncertainty dampeners — see that
+session's entry for full reasoning and real-data validation numbers.
 **Prerequisites:** Session 6.3 complete.
 
 **Prerequisite work carried forward from Session 6.2/6.3 — must be done
@@ -2357,13 +2366,26 @@ market selection grouping), `/scripts/estimation/sportsbook_props_model.py`
 sizing_engine.py` (extended)
 
 **Validation (required to close session):**
-- [ ] DK TD-scorer rows report a real, field-normalized no-vig probability —
+- [x] DK TD-scorer rows report a real, field-normalized no-vig probability —
 `implied_prob_includes_field_vig` is False (or the flag is retired
 entirely) for every DK row this session can actually group, with any
 row it still can't group left explicitly flagged, not silently assumed
-fixed
-- [ ] Sizing logic includes an explicit limiting-risk dampener/cap distinct from
-the other tracks, not reused blindly from pick'em or arbitrage
+fixed — confirmed on real live data: of 326 real DraftKings `estimated`
+rows, 315 got a real field-normalized probability (group_size >= 2 real
+selections, sum verified to exactly 1.0 on a spot-checked 30-selection
+real market); 11 stayed honestly flagged True (their real group had only
+that one selection captured this run).
+- [x] Sizing logic includes an explicit limiting-risk dampener/cap distinct from
+the other tracks, not reused blindly from pick'em or arbitrage --
+`PROPS_PLATFORM_RISK_MULTIPLIER` (0.50 for both DK/FD, a stated judgment
+call, more conservative than pick'em's 0.70 per this track's own
+best-corroborated industry limiting reputation) plus a second,
+independent `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` (0.60) that fires
+only on a still-unresolved DK row -- confirmed against real live CLV
+flags: a resolved DK flag (Jaxon Smith-Njigba, Anytime TD) sized to
+$20.20 on a $500 bankroll; an otherwise-similar still-unresolved DK flag
+(Rhamondre Stevenson, 2+ TDs) sized to $9.05, correctly smaller from the
+extra dampener.
 
 ---
 

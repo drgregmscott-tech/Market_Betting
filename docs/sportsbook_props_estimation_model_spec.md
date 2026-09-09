@@ -60,14 +60,33 @@ requires the relative TD rates of every player in the game (a full-field
 race), not an independent per-player probability. Every such row gets
 `model_status="unsupported_market_first_scorer"`, a stated gap.
 
-Implied probability for this market: the **raw** single-side American-odds
-implied probability, explicitly flagged
-`implied_prob_includes_field_vig=True`. There is no "under" side to de-vig
-against -- the real vig here is spread across every player priced in the
-same market, which this session's per-row data does not preserve as a
-group. This is an honestly-stated v1 limitation, not a hidden one -- see
-"WHY THE TWO MARKET SHAPES ARE HANDLED DIFFERENTLY" in the script's
-docstring.
+Implied probability for this market: **fixed in Session 6.4.** Every
+selection sharing the same real `source_market_id` (DraftKings' own
+`marketId`, already carried per-row since Session 6.1 -- no schema change
+needed) is grouped and field-normalized (`schema_props.normalize_field_vig`)
+so the whole group's raw implied probabilities sum to exactly 1.0, the
+honest N-way generalization of the two-sided de-vig used for FanDuel's
+rows. `implied_prob_includes_field_vig` is now `False` for every row this
+run's real data could actually group with other real selections
+(`group_size >= 2`); a row this run could only capture alone still reports
+the raw, vig-included price with the flag left `True` -- an honest,
+per-row boundary, not a claim the fix covers every possible row. See
+"WHY THE TWO MARKET SHAPES ARE HANDLED DIFFERENTLY" and
+`build_field_vig_index()` in the script's docstring/code for the full
+mechanism.
+
+## Session 6.4 real validation run (2026-09-09, against live re-pulled data)
+
+Re-running the model against the same live `dk_latest.csv`/`fd_latest.csv`
+inputs: of 326 real DraftKings `estimated` rows, **315 got a real
+field-normalized probability** (`implied_prob_includes_field_vig=False`);
+11 remained flagged `True` (their real same-market group had only that one
+real selection captured this run -- nothing to normalize against). Spot-
+checked directly: the real "2+ TDs" market containing Rhamondre Stevenson
+(30 total real selections in that one market, including 8 real
+`no_player_match` rows whose raw prices still correctly count toward the
+group's real vig total) normalizes to a real, exact sum of 1.0 across the
+full group.
 
 ## Real validation run (2026-09-09, against live ingested data)
 
@@ -138,6 +157,8 @@ the fix did not silently misroute any row.
 - "First TD Scorer" markets are entirely unmodeled.
 - Season-total projection assumes a flat 17-game season for every player,
   with no rest-of-season-out adjustment.
-- The one-sided TD-scorer implied probability still includes field vig,
-  not yet de-vigged against the rest of the market's real prices.
+- The one-sided TD-scorer implied probability is field-normalized (Session
+  6.4) only for rows this run could actually group (`group_size >= 2`); a
+  row captured alone still reports the raw, vig-included price with
+  `implied_prob_includes_field_vig=True`.
 - No opponent/matchup, injury/role, home/away, or pace/usage adjustment.

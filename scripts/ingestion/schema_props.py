@@ -106,3 +106,37 @@ def american_odds_to_implied_probability(odds: Optional[int]) -> Optional[float]
     if odds < 0:
         return -odds / (-odds + 100.0)
     return None  # 0 is not a valid American odds value
+
+
+def same_market_group_key(platform: str, source_event_id: str, source_market_id: str) -> str:
+    """Session 6.4 — the key that groups every selection belonging to the
+    SAME real one-sided market (e.g. every player priced in one real
+    "Anytime TD Scorer" market for one real game) so their raw implied
+    probabilities can be normalized against each other as a group, instead
+    of against a nonexistent "under" side. `source_market_id` already
+    identifies that exact real market on each normalized row (DraftKings'
+    own `marketId`, confirmed in `ingest_dk_props.py`'s captured data) —
+    this function does not add a new field, it just names the existing
+    three fields' combination so the grouping logic in
+    `sportsbook_props_model.py` (and its tests) has one shared, reusable
+    definition rather than three separate ad-hoc groupbys."""
+    return f"{platform}|{source_event_id}|{source_market_id}"
+
+
+def normalize_field_vig(raw_implied_probs: list[float]) -> list[float]:
+    """Session 6.4 — the N-way generalization of `american_odds_to_
+    implied_probability`'s two-sided de-vig above, for a ONE-SIDED market
+    with more than two priced selections (e.g. every player in a real
+    "Anytime TD Scorer" market). Each selection's raw implied probability
+    already includes the book's vig; summed across every selection in the
+    same real market, that field's raw probabilities always add up to
+    something above 1.0 (same vig gap, just spread across many prices
+    instead of two). Dividing each one by the group's real total removes
+    that field vig honestly, without inventing a number for any
+    individual price. Returns an empty list unchanged; returns the input
+    unchanged (never divides by zero) if the real group total is not
+    strictly positive."""
+    total = sum(raw_implied_probs)
+    if total <= 0:
+        return list(raw_implied_probs)
+    return [p / total for p in raw_implied_probs]

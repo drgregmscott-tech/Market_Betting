@@ -311,3 +311,65 @@ which one, never leaving it ambiguous.
 - Does not re-derive the dampener table or either cap percentage from real
   graded results — Session 8.3's job, blocked on real resolved down-ballot
   contracts existing (post-2026-general-election, per Session 5.2).
+
+---
+
+# ADDENDUM — SESSION 6.4: SPORTSBOOK PLAYER PROPS (DK/FD) SIZING
+
+## 13. Why this track's own dampener, not a reused one
+
+Session 6.3's `clv_logger.py --track props` flags a single flagged side
+with a single flag-time model probability and market-implied price — the
+exact same shape politics' single-contract Kelly math (Section 8 above)
+already handles, so `raw_kelly_fraction_binary_contract` is reused
+directly, unchanged. What this session actually adds is a dampener no
+other track has needed: sportsbooks limiting or banning consistently-
+winning bettors is the single most widely documented account-restriction
+pattern in the entire sports-betting industry — more so than either
+pick'em platform (Section 3's `PLATFORM_RISK_MULTIPLIER`, sourced to
+ToS-power-plus-scattered-first-hand-reports research) or an exchange
+(which structurally cannot limit a winner the way a bookmaker can). No
+project research doc quantifies DK/FD's real limiting rate specifically
+(`docs/research/sport_inventory.md` names this as a real, open gap), so
+`PROPS_PLATFORM_RISK_MULTIPLIER = {"draftkings": 0.50, "fanduel": 0.50}`
+is a named, stated judgment call — set more conservative than pick'em's
+0.70 specifically because this venue type's limiting reputation is the
+best-corroborated of the three, not because a specific DK/FD figure was
+found. Both platforms get the same figure because nothing in this
+project's research distinguishes them.
+
+## 14. A second, distinct dampener: field-vig-unresolved caution
+
+Session 6.4 also fixed DK's TD-scorer field-vig problem in
+`sportsbook_props_model.py` (grouping same-market selections by their
+real `source_market_id` and normalizing the whole group's implied
+probabilities to sum to 1.0) — but the fix only reaches a row whose real
+same-market group had 2+ real selections captured this run. A row
+captured alone still reports the raw, vig-included price with
+`implied_prob_includes_field_vig=True`. Sizing that row as if its edge
+were already trustworthy would risk staking real money against a number
+that may still include real field vig, so `size_props_position()` applies
+a second, independent dampener — `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER =
+0.60` — only when that flag is `True`. Both dampeners are always reported
+separately in the output (never blended into one unlabeled number), so
+it's always visible which one, or both, reduced a given suggested stake.
+
+## 15. Why no portfolio-level exposure ledger, unlike politics
+
+Politics needed a second, portfolio-level cap (Section 9 above) because
+down-ballot positions can stay open for weeks or months, so many can
+realistically be open at once. A sportsbook player prop resolves same-day
+or same-week (the underlying game), the same fast-resolving shape as
+pick'em — so v1 judges a single-position cap
+(`PROPS_MAX_SINGLE_POSITION_PCT = 0.05`) sufficient, without building a
+second ledger this track's own resolution speed doesn't need.
+
+## 16. What this addendum does NOT do yet (stated gap, not silent)
+
+- Does not distinguish DraftKings' real limiting practice from FanDuel's
+  — both get the same `PROPS_PLATFORM_RISK_MULTIPLIER`, since no source in
+  this project's research separates them.
+- Does not track a portfolio-level open-positions ledger (see Section 15).
+- Does not re-derive `PROPS_PLATFORM_RISK_MULTIPLIER` or
+  `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` from real graded results —
+  Session 8.3's job, once real graded props positions exist.
