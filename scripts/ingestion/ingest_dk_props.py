@@ -1,55 +1,83 @@
 """
 Session 6.1 — DraftKings Sportsbook Player Props Ingestion
 
-WHAT THIS SCRIPT IS
---------------------
-Pulls live player-prop odds from DraftKings Sportsbook's own internal data
-feed (the same feed the DraftKings Sportsbook website itself calls — there is
-no publicly documented, officially supported API, same undocumented-endpoint
-situation Session 2.2 already handled for PrizePicks/Underdog). Normalizes
-the result into the common schema in schema_props.py.
+REAL API CONFIRMED THIS SESSION (2026-09-09) — REPLACES AN EARLIER, WRONG GUESS
+---------------------------------------------------------------------------------
+The first version of this script guessed `sportsbook.draftkings.com/sites/
+US-SB/api/v5/eventgroups/{id}` — a pattern from independent, non-official
+scraping documentation. That guess returned a real `403 Forbidden` on every
+attempt (confirmed live, 3/3 retries) even after adding browser-identity
+headers (Referer/Origin/Accept-Language) — a stronger signal than a simple
+missing-header problem.
 
-**HONESTY NOTE — READ BEFORE RUNNING (same caveat pattern as Session 2.1's
-DK Pick6 attempt):** Claude's own browser tool is blocked by its safety
-category filter from reaching sportsbook.draftkings.com directly (confirmed
-this session — same block Session 2.1 hit on prizepicks.com and
-pick6.draftkings.com), so this endpoint could NOT be live-tested by Claude
-before being handed to the user, unlike Underdog's endpoint in Session 2.1.
-The URL and event-group ID below come from patterns publicly documented by
-independent sportsbook-odds-scraping projects (not from DraftKings itself),
-which is a materially weaker source than Session 2.1's PrizePicks endpoint
-(independently corroborated across multiple sources) and closer to Session
-2.1's DK Pick6 attempt (a single best-guess pattern that turned out to be
-wrong). **Run this script and report the real result — a 403/404 here would
-not be a surprise and does not mean the script is broken; it means the
-guessed event-group ID or URL shape needs correcting, the same failure mode
-DK Pick6 hit.** If it fails, the fallback is the same one documented in
-Session 2.1's prototype_dkpick6.py: open sportsbook.draftkings.com in a real
-browser, open Developer Tools → Network tab, filter to XHR/fetch requests,
-navigate to an NFL prop page, and read the real request URL directly.
+The user then captured DK's REAL current API directly via Chrome DevTools
+(Network tab, "Copy Response" on the real requests DK's own site makes while
+browsing NFL odds) — the same fallback procedure Session 2.1 documented for
+DK Pick6, now actually exercised and successful. The real API is entirely
+different from the old guess:
 
-EVENT GROUP ID
---------------
-DraftKings organizes markets under a per-league "event group" ID in the
-URL path. NFL's event-group ID has been publicly documented (by independent
-scraping projects, not DraftKings) as 88808 as of this session — but these
-IDs are known to change without notice and are NOT part of any stable,
-versioned API contract. `DK_EVENT_GROUP_ID` below is a single named
-constant specifically so a future session correcting this value only has to
-change it in one place.
+  - Real domain: sportsbook-nash.draftkings.com (NOT sportsbook.draftkings.com)
+  - Real site code: state-specific, e.g. "US-KS-SB" for Kansas (NOT "US-SB")
+  - Real site name: "dkusks" (embedded in the nav URL path)
+  - Real path structure: /api/sportscontent/... (NOT /api/v5/eventgroups/...)
+  - Real NFL league ID: 88808 — this one part of the original guess WAS
+    correct, independently confirmed twice more in captured real traffic
+    (inside a `selectionId` string, and as the `leagueId` field on every
+    real event/market/selection record).
+
+THREE REAL, CONFIRMED ENDPOINTS (response bodies captured directly, not
+guessed):
+  1. Navigation — league's event list:
+     GET /sites/{site}/api/sportscontent/navigation/{siteName}/v2/nav/leagues/{leagueId}
+     Returns: {"events": [{id, name, participants, startEventDate, ...}, ...]}
+  2. Markets for one event + one subcategory:
+     GET /sites/{site}/api/sportscontent/controldata/event/eventSubcategory/v1/markets
+         ?isBatchable=false&templateVars={eventId},{subCategoryId}
+         &marketsQuery=$filter=eventId eq '{eventId}' AND clientMetadata/subCategoryId eq '{subCategoryId}' AND tags/all(t: t ne 'SportcastBetBuilder')
+         &entity=markets
+     Returns: {"markets": [...], "selections": [...]}
+
+A REAL, IMPORTANT SCHEMA MISMATCH FOUND FROM THE CAPTURED DATA
+-----------------------------------------------------------------
+schema_props.py was built assuming every prop is a two-sided Over/Under
+(matching the pick'em platforms' shape) — an unverified assumption. The
+real captured data for subCategoryId 12438 ("Anytime TD Scorer", "First TD
+Scorer", "2+ TDs") is NOT that shape: each market has ONE selection PER
+PLAYER (e.g. "Bhayshul Tuten +650"), not a two-sided Over/Under pair. This
+is a "will this specific player do X" market, priced against the field, not
+a line with an over/under side. Confirmed directly from real captured JSON
+(the `selections` array — no `stat_value`/handicap, no over/under runner
+pairing at all, just one American-odds price per player per market).
+
+**v1 scope, resolved from this real finding:** normalize these as
+`over_american_odds` = the player's real captured price (this player scores
+= "yes"), `under_american_odds` = None (there's no priced "no" side per
+player in this market shape — the true "no" is implicit across the whole
+field). `line` is left None (there is no numeric line in this market type).
+This is a stated, deliberate v1 boundary, not a guess: TD-scorer markets
+are supported as single-sided "yes" prices; a numeric-line market type
+(e.g. Passing Yards Over/Under, visibly present on FanDuel's real data)
+requires DK's own subcategory ID for that stat — NOT YET DISCOVERED, since
+that requires clicking into that specific tab in DK's UI to capture its
+real subCategoryId the same way 12438 was captured for TD scorers. Named
+explicitly as an open item, not silently unsupported.
 
 WHAT THIS SCRIPT DOES NOT DO YET
 ---------------------------------
-- No retry/backoff tuning against real DraftKings rate-limiting behavior —
-  unknown until real traffic is observed (same posture Session 2.2 started
-  from before tuning against real data).
-- No pagination across multiple sports — v1 pulls one sport (NFL) via one
-  event group, matching Session 2.3's own NFL-only v1 scoping decision for
-  the pick'em track's estimation model, so this track's early data lines up
-  with what Session 6.2 can actually model first.
+- Only pulls subCategoryId 12438 (Anytime/First TD Scorer, 2+ TDs) — the
+  one subcategory actually captured from real traffic this session. Other
+  real prop categories (Passing/Rushing/Receiving Yards, etc. — all
+  visibly present on FanDuel's real pull) need their own DK subCategoryId
+  captured the same way before they can be added here.
+- `DK_SITE` ("US-KS-SB") is specific to the real browser session that
+  captured this traffic (Kansas). A different real state may need a
+  different site code — unconfirmed for other states.
+- Pulls only the first N events returned by the navigation call (see
+  `MAX_EVENTS_PER_RUN`) to keep a single run's real request count bounded
+  while this is still a single-subcategory v1.
 
-WHERE OUTPUT GOES (same snapshot pattern as ingest_pickem.py, Session 2.2)
----------------------------------------------------------------------------
+WHERE OUTPUT GOES
+------------------
 /data/sportsbook_props/raw/draftkings_<timestamp>.json
 /data/sportsbook_props/normalized/dk_props_<timestamp>.csv
 /data/sportsbook_props/normalized/dk_latest.csv  (overwritten every run)
@@ -79,11 +107,19 @@ RAW_DIR = BASE_DIR / "data" / "sportsbook_props" / "raw"
 NORMALIZED_DIR = BASE_DIR / "data" / "sportsbook_props" / "normalized"
 LOG_PATH = BASE_DIR / "logs" / "ingestion.log"
 
-# NFL — see "EVENT GROUP ID" note above. Unverified by Claude directly.
-DK_EVENT_GROUP_ID = "88808"
-DK_ENDPOINT = (
-    f"https://sportsbook.draftkings.com/sites/US-SB/api/v5/"
-    f"eventgroups/{DK_EVENT_GROUP_ID}"
+DK_DOMAIN = "sportsbook-nash.draftkings.com"
+DK_SITE = "US-KS-SB"          # see module docstring — state-specific, unconfirmed elsewhere
+DK_SITE_NAME = "dkusks"
+DK_LEAGUE_ID = "88808"        # NFL — confirmed three separate ways this session
+DK_TD_SUBCATEGORY_ID = "12438"  # Anytime/First TD Scorer, 2+ TDs — only subcategory captured so far
+
+NAV_URL = (
+    f"https://{DK_DOMAIN}/sites/{DK_SITE}/api/sportscontent/navigation/"
+    f"{DK_SITE_NAME}/v2/nav/leagues/{DK_LEAGUE_ID}"
+)
+MARKETS_URL = (
+    f"https://{DK_DOMAIN}/sites/{DK_SITE}/api/sportscontent/controldata/"
+    f"event/eventSubcategory/v1/markets"
 )
 
 HEADERS = {
@@ -92,37 +128,13 @@ HEADERS = {
         "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     ),
     "Accept": "application/json",
-    # FIX (2026-09-09, real result): a real local run returned "403 Client
-    # Error: Forbidden" on every attempt with only the two headers above —
-    # a bot-protection block (WAF/edge rule), NOT a 404, which is the
-    # signal that DK_EVENT_GROUP_ID/the URL shape are plausibly still
-    # correct and the block is about request identity, not a wrong
-    # resource. FanDuel's own real feed (ingest_fd_props.py) responded
-    # with only its two original headers, so the working baseline for a
-    # comparison is real, not guessed. Referer/Origin/Accept-Language are
-    # added here as the standard next thing to try against this class of
-    # block — UNCONFIRMED whether this specific set is sufficient; if a
-    # rerun still 403s, this is real evidence the block is stronger than a
-    # missing-header check (e.g. TLS/JA3 fingerprinting `requests` cannot
-    # replicate), and the Developer-Tools fallback in this file's module
-    # docstring is the real next step, not another header guess.
-    "Accept-Language": "en-US,en;q=0.9",
-    "Referer": "https://sportsbook.draftkings.com/",
-    "Origin": "https://sportsbook.draftkings.com",
+    "Referer": f"https://{DK_DOMAIN}/",
 }
 
 MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
 REQUEST_TIMEOUT_SECONDS = 15
-
-# Category tags relevant to Session 6.1's legal-footprint check — see
-# docs/sportsbook_props_legal_footprint.md. Kept as a simple substring match
-# against DK's own market "name" field since DK does not expose a clean
-# category field of its own.
-PLAYER_PROP_CATEGORY_HINTS = {
-    "touchdown": "player_touchdown",
-    "td scorer": "player_touchdown",
-}
+MAX_EVENTS_PER_RUN = 8  # see module docstring — keeps v1 request count bounded
 
 
 def setup_logging() -> logging.Logger:
@@ -169,123 +181,111 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
     raise RuntimeError(f"All attempts failed for {url}: {last_error}")
 
 
-def fetch_dk_props() -> dict:
-    return _fetch_with_retries(DK_ENDPOINT, params={"format": "json"})
+def fetch_dk_events() -> dict:
+    return _fetch_with_retries(NAV_URL)
 
 
-def _prop_category(market_name: str) -> str:
-    lowered = (market_name or "").lower()
-    for hint, category in PLAYER_PROP_CATEGORY_HINTS.items():
-        if hint in lowered:
-            return category
-    return "player_performance"
+def fetch_dk_markets(event_id: str, subcategory_id: str) -> dict:
+    marketsQuery = (
+        f"$filter=eventId eq '{event_id}' AND "
+        f"clientMetadata/subCategoryId eq '{subcategory_id}' AND "
+        f"tags/all(t: t ne 'SportcastBetBuilder')"
+    )
+    params = {
+        "isBatchable": "false",
+        "templateVars": f"{event_id},{subcategory_id}",
+        "marketsQuery": marketsQuery,
+        "entity": "markets",
+    }
+    return _fetch_with_retries(MARKETS_URL, params=params)
 
 
-def normalize_dk(payload: dict, pulled_at: str) -> list[NormalizedSportsbookProp]:
-    """Defensive by design, same posture as ingest_pickem.py's normalizers:
-    a missing/renamed field causes a per-record skip with a logged warning,
-    never a whole-run crash. DK's public eventgroup response (per
-    independently-documented shape) nests events under
-    eventGroup.events, and each event's markets/outcomes under
-    eventGroup.offerCategories -> offerSubcategories -> offers -> outcomes.
-    This structure is UNCONFIRMED against a real live response — the exact
-    key names below are the single most likely point of failure if this
-    script's first real run does not match."""
+def normalize_dk_markets(
+    payload: dict, event: dict, pulled_at: str
+) -> list[NormalizedSportsbookProp]:
+    """Normalizes one event's real captured markets/selections response.
+    Defensive by design, same posture as every other normalizer in this
+    project: a missing/renamed field causes a per-record skip with a
+    logged warning, never a whole-run crash. See module docstring for why
+    under_american_odds is always None for this subcategory (no priced
+    "no" side exists per player in this real market shape)."""
     rows: list[NormalizedSportsbookProp] = []
 
-    event_group = payload.get("eventGroup")
-    if not isinstance(event_group, dict):
+    markets = payload.get("markets")
+    selections = payload.get("selections")
+    if not isinstance(markets, list) or not isinstance(selections, list):
         log.error(
-            "DraftKings response missing expected top-level 'eventGroup' key — "
-            "schema may differ from the documented pattern this script assumed. "
-            "Skipping this platform for this run."
+            "DraftKings markets response missing expected 'markets'/'selections' "
+            "lists — schema may have changed. Skipping this event/subcategory."
         )
         return rows
 
-    events_by_id = {
-        str(e.get("eventId")): e for e in (event_group.get("events") or [])
-    }
+    markets_by_id = {str(m.get("id")): m for m in markets}
+    event_id = str(event.get("id", ""))
+    event_name = event.get("name")
+    event_start = event.get("startEventDate")
 
-    offer_categories = event_group.get("offerCategories") or []
-    for category in offer_categories:
-        for subcategory in category.get("offerSubcategoryDescriptors") or []:
-            subcat = (subcategory.get("offerSubcategory") or {})
-            for offer_group in subcat.get("offers") or []:
-                for offer in offer_group:
-                    try:
-                        event_id = str(offer.get("eventId"))
-                        event = events_by_id.get(event_id, {})
-                        outcomes = offer.get("outcomes") or []
+    for selection in selections:
+        try:
+            market_id = str(selection.get("marketId"))
+            market = markets_by_id.get(market_id, {})
+            market_name = market.get("name") or ""
 
-                        over_odds = None
-                        under_odds = None
-                        line_value = None
-                        player_name = None
-                        market_name = offer.get("label") or ""
+            american_raw = (selection.get("displayOdds") or {}).get("american")
+            over_odds = _american_str_to_int(american_raw)
 
-                        for outcome in outcomes:
-                            label = str(outcome.get("label", "")).lower()
-                            american = outcome.get("oddsAmerican")
-                            try:
-                                american_int = (
-                                    int(american) if american is not None else None
-                                )
-                            except (TypeError, ValueError):
-                                american_int = None
+            player_name = selection.get("label")
+            # DK marks non-player outcomes (e.g. "JAX Jaguars D/ST", "No
+            # Touchdown Scorer") with no "participants" list — real,
+            # confirmed in captured data. Kept (not dropped) since it's a
+            # real priced outcome, just not tied to an individual player.
+            participants = selection.get("participants") or []
+            team = None
+            if not participants and player_name:
+                team = player_name  # team/defense or field outcome
 
-                            if line_value is None and outcome.get("line") is not None:
-                                line_value = _to_float(outcome.get("line"))
-                            if player_name is None:
-                                player_name = outcome.get("participant")
-
-                            if "over" in label:
-                                over_odds = american_int
-                            elif "under" in label:
-                                under_odds = american_int
-
-                        rows.append(
-                            NormalizedSportsbookProp(
-                                platform="draftkings",
-                                source_event_id=event_id,
-                                source_market_id=str(offer.get("providerOfferId") or offer.get("label")),
-                                source_selection_id=str(
-                                    outcomes[0].get("providerOutcomeId")
-                                    if outcomes
-                                    else ""
-                                ),
-                                player_name=player_name,
-                                team=None,  # not reliably present at offer level
-                                sport="NFL",  # v1 scope, see module docstring
-                                stat_type=market_name or None,
-                                prop_category=_prop_category(market_name),
-                                line=line_value,
-                                over_american_odds=over_odds,
-                                under_american_odds=under_odds,
-                                game_id=event_id,
-                                game_start_time=event.get("startDate"),
-                                status=event.get("status"),
-                                pulled_at=pulled_at,
-                            )
-                        )
-                    except Exception as exc:  # noqa: BLE001
-                        log.warning("Skipped one malformed DraftKings record: %s", exc)
-                        continue
+            rows.append(
+                NormalizedSportsbookProp(
+                    platform="draftkings",
+                    source_event_id=event_id,
+                    source_market_id=market_id,
+                    source_selection_id=str(selection.get("id", "")),
+                    player_name=player_name if participants else None,
+                    team=team,
+                    sport="NFL",
+                    stat_type=market_name or None,
+                    prop_category="player_touchdown",
+                    line=None,  # see module docstring — no numeric line in this subcategory
+                    over_american_odds=over_odds,
+                    under_american_odds=None,  # see module docstring
+                    game_id=event_id,
+                    game_start_time=event_start,
+                    status=None,
+                    pulled_at=pulled_at,
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            log.warning("Skipped one malformed DraftKings selection: %s", exc)
+            continue
 
     return rows
 
 
-def _to_float(value) -> Optional[float]:
+def _american_str_to_int(value) -> Optional[int]:
+    """DK's real displayOdds.american field is a string like "+650" or
+    "-114" (confirmed in captured data) — strips the leading '+' (int()
+    doesn't accept it) and converts."""
     if value is None:
         return None
     try:
-        return float(value)
+        return int(str(value).replace("+", ""))
     except (TypeError, ValueError):
         return None
 
 
-def save_raw_snapshot(payload: dict, pulled_at_compact: str) -> Path:
+def save_raw_snapshot(payload: dict, pulled_at_compact: str, suffix: str) -> Path:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = RAW_DIR / f"draftkings_{pulled_at_compact}.json"
+    out_path = RAW_DIR / f"draftkings_{suffix}_{pulled_at_compact}.json"
     out_path.write_text(json.dumps(payload, indent=2))
     return out_path
 
@@ -307,29 +307,62 @@ def run() -> dict:
         "pulled_at": pulled_at,
         "draftkings_rows": 0,
         "draftkings_ok": False,
+        "events_pulled": 0,
     }
 
     log.info("=== DraftKings props ingestion run starting ===")
 
+    all_rows: list[NormalizedSportsbookProp] = []
     try:
-        payload = fetch_dk_props()
-        save_raw_snapshot(payload, pulled_at_compact)
-        rows = normalize_dk(payload, pulled_at)
-        summary["draftkings_rows"] = len(rows)
+        nav_payload = fetch_dk_events()
+        save_raw_snapshot(nav_payload, pulled_at_compact, "nav")
+        events = nav_payload.get("events") or []
+        if not events:
+            log.error(
+                "DraftKings navigation response returned no events — "
+                "schema may have changed."
+            )
+        events = events[:MAX_EVENTS_PER_RUN]
+
+        for event in events:
+            event_id = str(event.get("id", ""))
+            if not event_id:
+                continue
+            try:
+                markets_payload = fetch_dk_markets(event_id, DK_TD_SUBCATEGORY_ID)
+                save_raw_snapshot(
+                    markets_payload, pulled_at_compact, f"markets_{event_id}"
+                )
+                rows = normalize_dk_markets(markets_payload, event, pulled_at)
+                all_rows.extend(rows)
+            except Exception as exc:  # noqa: BLE001 — one event's failure
+                # must not block the rest of the run.
+                log.warning(
+                    "Skipped markets pull for DraftKings event %s: %s",
+                    event_id,
+                    exc,
+                )
+                continue
+
         summary["draftkings_ok"] = True
-        log.info("DraftKings: %d normalized rows", len(rows))
+        summary["events_pulled"] = len(events)
+        summary["draftkings_rows"] = len(all_rows)
+        log.info(
+            "DraftKings: %d normalized rows across %d events",
+            len(all_rows),
+            len(events),
+        )
     except Exception as exc:  # noqa: BLE001
         log.error("DraftKings ingestion failed for this run: %s", exc)
-        rows = []
 
     snapshot_path = NORMALIZED_DIR / f"dk_props_{pulled_at_compact}.csv"
     latest_path = NORMALIZED_DIR / "dk_latest.csv"
-    write_normalized_csv(snapshot_path, rows)
-    write_normalized_csv(latest_path, rows)
+    write_normalized_csv(snapshot_path, all_rows)
+    write_normalized_csv(latest_path, all_rows)
 
     log.info(
         "=== DraftKings props ingestion run complete: %d rows (%s) ===",
-        len(rows),
+        len(all_rows),
         "OK" if summary["draftkings_ok"] else "FAILED",
     )
 

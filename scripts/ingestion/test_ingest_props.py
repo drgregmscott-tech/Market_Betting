@@ -17,80 +17,64 @@ Run: python test_ingest_props.py
 
 from __future__ import annotations
 
-from ingest_dk_props import normalize_dk
+from ingest_dk_props import normalize_dk_markets
 from ingest_fd_props import normalize_fd
 from schema_props import american_odds_to_implied_probability
 
 FAKE_PULLED_AT = "2026-09-09T12:00:00+00:00"
 
-DK_FIXTURE_OK = {
-    "eventGroup": {
-        "events": [
-            {
-                "eventId": "30001",
-                "startDate": "2026-09-14T17:00:00Z",
-                "status": "NotStarted",
-            }
-        ],
-        "offerCategories": [
-            {
-                "offerSubcategoryDescriptors": [
-                    {
-                        "offerSubcategory": {
-                            "offers": [
-                                [
-                                    {
-                                        "eventId": "30001",
-                                        "providerOfferId": "off-1",
-                                        "label": "Patrick Mahomes Passing Yards",
-                                        "outcomes": [
-                                            {
-                                                "label": "Over",
-                                                "line": 275.5,
-                                                "oddsAmerican": "-115",
-                                                "participant": "Patrick Mahomes",
-                                                "providerOutcomeId": "out-1",
-                                            },
-                                            {
-                                                "label": "Under",
-                                                "line": 275.5,
-                                                "oddsAmerican": "-105",
-                                                "participant": "Patrick Mahomes",
-                                                "providerOutcomeId": "out-2",
-                                            },
-                                        ],
-                                    }
-                                ]
-                            ]
-                        }
-                    }
-                ]
-            }
-        ],
-    }
+# Shape confirmed against REAL captured DraftKings traffic, 2026-09-09
+# (sportsbook-nash.draftkings.com, real CLE Browns @ JAX Jaguars event,
+# subCategoryId 12438 — Anytime/First TD Scorer, 2+ TDs). This replaced an
+# earlier, wrong guess (sportsbook.draftkings.com/api/v5/eventgroups) that
+# returned a real 403 — see ingest_dk_props.py's module docstring for the
+# full story. Real, important shape difference from FanDuel/pick'em: this
+# market type has ONE selection per player (a price on "this player scores"
+# vs. the field), not a two-sided Over/Under pair — no numeric line, no
+# priced "no" side. See normalize_dk_markets's docstring.
+DK_EVENT_FIXTURE = {
+    "id": "34118250",
+    "name": "CLE Browns @ JAX Jaguars",
+    "startEventDate": "2026-09-13T17:00:00.0000000Z",
 }
 
-DK_FIXTURE_MALFORMED_RECORD = {
-    "eventGroup": {
-        "events": [],
-        "offerCategories": [
-            {
-                "offerSubcategoryDescriptors": [
-                    {
-                        "offerSubcategory": {
-                            # "garbage" has no .get() method -> AttributeError
-                            # inside the per-offer try/except, proving one bad
-                            # record is skipped rather than crashing the run.
-                            "offers": [["garbage"]]
-                        }
-                    }
-                ]
-            }
-        ],
-    }
+DK_MARKETS_FIXTURE_OK = {
+    "markets": [
+        {
+            "id": "357426984",
+            "eventId": "34118250",
+            "name": "First TD Scorer",
+        }
+    ],
+    "selections": [
+        {
+            "id": "0QA357426984#2253295693_13L88808Q1-1660181573Q20",
+            "marketId": "357426984",
+            "label": "Bhayshul Tuten",
+            "displayOdds": {"american": "+650"},
+            "participants": [{"name": "Bhayshul Tuten", "type": "Player"}],
+        },
+        # Real, confirmed case: a non-player (team defense) outcome, no
+        # "participants" list — must be kept (it's a real priced outcome)
+        # but with player_name=None, not force-fit to a fake player.
+        {
+            "id": "0QA357426984#2253297850_13L88808Q11608123809Q20",
+            "marketId": "357426984",
+            "label": "JAX Jaguars D/ST",
+            "displayOdds": {"american": "+2200"},
+        },
+    ],
 }
 
-DK_FIXTURE_MISSING_TOP_LEVEL = {"somethingElse": True}
+DK_MARKETS_FIXTURE_MALFORMED_RECORD = {
+    "markets": [{"id": "1", "eventId": "34118250", "name": "Test Market"}],
+    # "garbage" has no .get() method -> AttributeError inside the
+    # per-selection try/except, proving one bad record is skipped rather
+    # than crashing the run.
+    "selections": ["garbage"],
+}
+
+DK_MARKETS_FIXTURE_MISSING_TOP_LEVEL = {"somethingElse": True}
 
 FD_FIXTURE_OK = {
     # Shape confirmed against a real live pull, 2026-09-09 (275 raw markets,
@@ -153,27 +137,36 @@ FD_FIXTURE_MISSING_TOP_LEVEL = {"somethingElse": True}
 
 
 def test_dk_normalizer_happy_path():
-    rows = normalize_dk(DK_FIXTURE_OK, FAKE_PULLED_AT)
-    assert len(rows) == 1, f"expected 1 row, got {len(rows)}"
-    row = rows[0]
-    assert row.platform == "draftkings"
-    assert row.player_name == "Patrick Mahomes"
-    assert row.line == 275.5
-    assert row.over_american_odds == -115
-    assert row.under_american_odds == -105
-    assert row.game_start_time == "2026-09-14T17:00:00Z"
+    rows = normalize_dk_markets(DK_MARKETS_FIXTURE_OK, DK_EVENT_FIXTURE, FAKE_PULLED_AT)
+    assert len(rows) == 2, f"expected 2 rows, got {len(rows)}"
+
+    player_row = next(r for r in rows if r.player_name == "Bhayshul Tuten")
+    assert player_row.platform == "draftkings"
+    assert player_row.over_american_odds == 650
+    assert player_row.under_american_odds is None  # see module docstring
+    assert player_row.line is None  # see module docstring
+    assert player_row.stat_type == "First TD Scorer"
+    assert player_row.game_start_time == "2026-09-13T17:00:00.0000000Z"
+
+    team_row = next(r for r in rows if r.player_name is None)
+    assert team_row.team == "JAX Jaguars D/ST"
+    assert team_row.over_american_odds == 2200
     print("PASS: test_dk_normalizer_happy_path")
 
 
 def test_dk_normalizer_skips_malformed_record_without_crashing():
-    rows = normalize_dk(DK_FIXTURE_MALFORMED_RECORD, FAKE_PULLED_AT)
+    rows = normalize_dk_markets(
+        DK_MARKETS_FIXTURE_MALFORMED_RECORD, DK_EVENT_FIXTURE, FAKE_PULLED_AT
+    )
     assert rows == [], "malformed record should be skipped, not raise"
     print("PASS: test_dk_normalizer_skips_malformed_record_without_crashing")
 
 
 def test_dk_normalizer_handles_missing_top_level_key():
-    rows = normalize_dk(DK_FIXTURE_MISSING_TOP_LEVEL, FAKE_PULLED_AT)
-    assert rows == [], "missing eventGroup key should return empty list, not raise"
+    rows = normalize_dk_markets(
+        DK_MARKETS_FIXTURE_MISSING_TOP_LEVEL, DK_EVENT_FIXTURE, FAKE_PULLED_AT
+    )
+    assert rows == [], "missing markets/selections keys should return empty list, not raise"
     print("PASS: test_dk_normalizer_handles_missing_top_level_key")
 
 
