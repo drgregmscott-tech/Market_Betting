@@ -97,6 +97,59 @@ document's existing standing instruction (confirm live eligibility before
 placing a real trade) applies to Track 3 exactly as written above; no new
 instruction was needed.
 
+## Session 6.1 addendum — Track 5 (Sportsbook Player Props, DraftKings/FanDuel)
+
+Track 5 is a genuinely different legal question from every venue covered
+above: DraftKings and FanDuel operate as licensed retail sportsbooks in
+each state where they're legal, so **general sportsbook legality is not
+the open question** — the ROADMAP.md card for this session is explicit
+that prop-bet legality can be restricted **independently of, and more
+narrowly than, a sportsbook's general legal status**, so that's the actual
+thing to check.
+
+**What's confirmed, at a category level, as of this session:**
+
+- **College player props** are the most consistently restricted category
+  found. Several states that otherwise permit DK/FD sportsbook wagering
+  have banned or narrowly restricted **college-specific individual player
+  props** (as opposed to team lines) at various points, driven by
+  athlete-integrity/NCAA-pressure concerns rather than general gambling
+  policy — Ohio, Louisiana, Vermont, Massachusetts, and Maryland have each
+  had this restriction reported at some point. **This project's v1 scope
+  is NFL only (see both ingestion scripts' module docstrings), so this
+  specific restriction does not yet apply to any real flagged output** —
+  recorded here so it is not silently missed if/when a future session
+  expands stat-type or sport coverage to include college football.
+- **Injury-specific or "will X leave the game" style props** have been
+  singled out and restricted in at least one state (Ohio) independent of
+  the college-props rule above, on player-welfare-optics grounds.
+- No comprehensive, current, state-by-state matrix specifically for **NFL
+  player performance props** (the `player_performance` category this
+  session's `prop_category` field tags — passing yards, receptions, etc.)
+  was found. This is recorded as an **open gap**, matching this
+  document's own established pattern above for Polymarket and for
+  Climate/Weather/Elections on Kalshi: absence of a confirmed restriction
+  is treated as "not yet known to be restricted," not as "confirmed legal
+  everywhere."
+
+**What this means for `ingest_dk_props.py` / `ingest_fd_props.py`'s
+current behavior:** both scripts tag every normalized row with a
+`prop_category` field (`player_performance`, `player_touchdown`, or a
+future value) specifically so a later session's flagging/sizing logic can
+apply a category-level legal check the same way `detector.py` applies a
+venue-level one — that hook exists in the schema now, but **no
+state-by-state restriction list has been coded into either script yet**,
+matching this document's own "the code is what's stale" framing above:
+this addendum is the accurate, current statement; a future session should
+build the actual per-state gating logic against it before this track is
+trusted to flag a real bet in a restricted state/category combination.
+
+**Standing instruction addition specific to this track:** the college-
+props and injury-props restrictions above are known to be more volatile
+and more athlete-advocacy-driven than the general sportsbook-legality
+questions this document otherwise tracks — re-verify before any future
+session expands Track 5 past NFL player-performance props.
+
 ## Standing instruction
 
 **Always confirm current availability using each venue's own live

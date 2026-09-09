@@ -5725,3 +5725,214 @@ any session entries added in the meantime.
 weather's own Live Validation Window) also remains "Not started" and is
 unaffected by this session's work — both are separately scoped, real
 open items, not to be confused with each other.
+
+---
+
+### Session 5.7 continuation — Root cause found (2026-09-09)
+
+**What happened:** The user checked GitHub's Actions tab directly for
+`politics_pipeline.yml`, per the immediate next action above, and found
+**zero run history at all** — the daily 13:40 UTC schedule had never
+fired even once since Session 5.5 created the workflow, which is a
+different (and more basic) problem than "ran and failed." The user then
+manually dispatched the workflow ("Run workflow" on GitHub.com); it
+completed with a green checkmark, and the user pulled the result down
+through GitHub Desktop.
+
+**Confirmed against the real, now-current repo:**
+- `data/politics/clv_log.csv` exists for the first time, with **415 real
+flags** — matching this session's own earlier prediction (Section 2 of
+`docs/politics_sample_size_methodology.md` predicted exactly 415 flags
+from the same real underlying data, computed independently before this
+run happened).
+- `python scripts/calibration/politics_sample_report.py --report` run
+against the real file confirms: 415 total logged, **0 closed/graded** —
+expected, since these are real races with `hours_to_resolution` in the
+thousands (~55+ days); no flag from a run this recent could have resolved
+yet.
+- `git log` shows the real commit chain: `Automated politics pipeline run
+2026-09-09T12:06:41Z [skip ci]` (the manual dispatch) merged cleanly with
+this session's own file changes — no divergence, no reconciliation
+needed.
+
+**What this does NOT yet confirm:** whether the daily schedule now fires
+**on its own**, unattended — only a manual dispatch has been proven so
+far. This matters because a workflow that only ever runs when someone
+remembers to click "Run workflow" defeats the point of automation (the
+same reason Session 2.7/3.4/5.5 each treated "did the schedule itself
+fire" as a real, separate check from "does the underlying script work").
+**Next real check: after 2026-09-10 13:40 UTC has passed, look at GitHub's
+Actions tab again — if a second run appears that nobody triggered by
+hand, the schedule is confirmed fixed. If the tab is still empty at that
+point, the schedule itself (not the script) needs troubleshooting as a
+new, separate problem.**
+
+**Session 5.7 remains open.** The root-cause blocker from the original
+entry above is resolved and real data is now flowing, but the actual
+validation checklist (30-flag interim floor, then ≈892 for full
+confidence) still requires real closed/graded flags, which cannot exist
+until real races start resolving — a multi-week-plus wait by nature, not
+something further sandbox work can shortcut. No action needed until either
+(a) the 2026-09-10 schedule check above, or (b) enough real time has
+passed to check `politics_sample_report.py --report` again for the first
+non-zero closed count.
+
+---
+
+## Session 6.1 — Odds Feed Ingestion
+
+**Date opened:** 2026-09-09
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
+items below). Per ROADMAP.md's "Rule for sessions left open across other
+work," the live SESSION_LOG.md/ROADMAP.md were the ones already present in
+this working directory at session start (modified but unpushed changes from
+Session 5.7's continuation entry) — no separate pull was needed since no
+other session has touched these files since.
+
+**What was actually done:**
+1. Built `scripts/ingestion/schema_props.py` — the common normalized schema
+for sportsbook player props, mirroring Session 2.2's `schema.py` pattern.
+The key structural difference from the pick'em schema: both sides' raw
+American odds are stored separately (`over_american_odds`,
+`under_american_odds`), not a single blended number, because Session
+6.2's vig-removal step needs both raw prices to work from.
+2. Built `american_odds_to_implied_probability()` in that same file — the
+one-sided American-odds-to-probability conversion — and confirmed it
+against a standard -115/-105 two-sided example: raw implied
+probabilities sum to 1.0471 (the vig), normalizing both sides by that
+sum produces a no-vig probability pair that sums to exactly 1.0.
+3. Built `ingest_dk_props.py` and `ingest_fd_props.py`, following
+`ingest_pickem.py`'s exact defensive pattern (per-record try/except so
+one bad record can't crash a run, retry-with-backoff on network
+failures, raw-snapshot-plus-latest-CSV output convention, same logging
+setup). Both scripts are scoped to NFL only for v1, matching Session
+2.3's own NFL-only scoping decision for the pick'em model, so this
+track's early data lines up with what Session 6.2 can actually model.
+4. **Attempted to live-test both endpoints directly, the same way Session
+2.1 tested Underdog's endpoint before handing scripts to the user.**
+Confirmed both are blocked: Claude's browser tool refused to navigate to
+either `sportsbook.draftkings.com` or `sbapi.va.sportsbook.fanduel.com`,
+citing policy — the exact same safety-category block Session 2.1
+recorded for `prizepicks.com` and `pick6.draftkings.com`. This means
+neither script's real endpoint URL/shape could be confirmed by Claude
+before handoff, unlike PrizePicks (independently corroborated across
+multiple outside sources) — closer to DK Pick6's situation (a single
+best-guess pattern), which turned out wrong.
+5. Given that, both scripts' URLs and response-shape assumptions come from
+patterns publicly documented by independent sportsbook-odds-scraping
+projects, not from DraftKings or FanDuel directly — stated plainly in
+both scripts' own module docstrings as a "HONESTY NOTE," including the
+specific real risk (wrong event-group ID for DK; a stale/rotated `_ak`
+query parameter for FD) and the same Developer-Tools fallback procedure
+Session 2.1 documented for DK Pick6, in case either guess is wrong.
+6. Built `test_ingest_props.py`, a synthetic-fixture test harness (same
+precedent as Sessions 2.2/2.4/2.5/2.6's own test files, needed because
+this sandbox can't reach live endpoints either). Ran it directly: **7/7
+tests pass**, covering each normalizer's happy path, a malformed-record
+skip (proving one bad record doesn't crash the run), a missing-top-
+level-key case, and the vig-extraction math.
+7. Added a **Session 6.1 addendum** to the existing shared
+`docs/venue_legal_footprint.md` (rather than a new standalone file,
+matching that document's own established per-session-addendum pattern),
+addressing the roadmap card's specific "prop-category level, not just
+sportsbook-legal" requirement: college player props and injury-specific
+props are the two real, narrower-than-general-legality restrictions
+found in multiple states; NFL player-performance props (this track's
+actual v1 output) have no confirmed state-by-state restriction found,
+recorded explicitly as an open gap rather than assumed clean. Both
+scripts tag every row with a new `prop_category` field specifically so
+a future session can gate flagging on this without re-deriving it.
+8. Created `data/sportsbook_props/raw/` and `data/sportsbook_props/
+normalized/` (with `.gitkeep` placeholders), matching the pick'em
+track's own `data/pickem/` folder structure.
+
+**Files created/modified:**
+- `scripts/ingestion/schema_props.py` (new)
+- `scripts/ingestion/ingest_dk_props.py` (new)
+- `scripts/ingestion/ingest_fd_props.py` (new)
+- `scripts/ingestion/test_ingest_props.py` (new)
+- `docs/venue_legal_footprint.md` (Session 6.1 addendum section added)
+- `data/sportsbook_props/raw/.gitkeep`, `data/sportsbook_props/normalized/.gitkeep` (new)
+
+**Validation results:**
+- [ ] **Both feeds ingest successfully — NOT MET against real data, cannot
+yet be assessed from this sandbox.** Synthetic-fixture tests pass 7/7,
+proving the normalizer logic itself is correct; the real endpoint
+reachability is unverified and is this session's actual open item.
+- [x] **Vig/juice correctly extracted and stored — MET.** Confirmed via
+`test_vig_extraction_matches_known_example`: a -115/-105 two-sided
+price's raw implied probabilities sum to 1.0471 (the vig), and
+normalizing by that sum produces a no-vig pair summing to exactly 1.0.
+- [x] **Legal footprint confirmed at the prop-category level — MET, with
+an honestly-stated gap.** College-props and injury-props restrictions
+are real and documented (though out of v1's NFL-only scope regardless);
+NFL player-performance props specifically have no confirmed restriction
+found, named as an open gap rather than a clean bill of health — same
+honesty standard `venue_legal_footprint.md` already applies to
+Polymarket and to Kalshi's non-Sports tracks.
+
+**Decisions made:**
+1. **v1 scoped to NFL only for both DK and FD**, mirroring Session 2.3's
+own NFL-only decision for the pick'em estimation model. Reasoning
+carried over directly: keeps this track's early real data aligned with
+what Session 6.2 can actually build a model against first, rather than
+ingesting sports with no estimation model to compare them to yet.
+2. **Both scripts store raw American odds for both sides, never a
+pre-blended "true probability."** Deliberate: Session 6.2's whole job is
+separating true edge from vig cost (per its own roadmap card), which
+requires the raw two-sided price, not a number that's already had an
+unknown vig-removal method silently applied to it upstream.
+3. **The DK event-group ID and FD `_ak`/region values are named,
+single-place constants (`DK_EVENT_GROUP_ID`, `FD_REGION`, `FD_AK`), not
+inlined into the request logic**, specifically so a future correction
+(expected, given neither is confirmed) only requires changing one line,
+matching the same reasoning already applied to `FLAG_EDGE_THRESHOLD`
+and `KELLY_FRACTION` in earlier sessions.
+4. **This session is being left open, matching Session 3.6/4.7/5.7's own
+precedent for a real external blocker this sandbox cannot resolve.**
+Unlike those three sessions (which are blocked on real elapsed time for
+events to resolve), this session is blocked on a real action only the
+user can take — running two scripts locally against real, possibly
+policy-blocked-for-Claude endpoints — not on time passing.
+
+**Corrections/reversals during the session:**
+- The first version of `test_ingest_props.py`'s malformed-record fixture
+(`{"outcomes": None}`) did not actually exercise the crash-prevention
+path — DK's normalizer already treats `None` outcomes as an empty list
+via `offer.get("outcomes") or []`, so no exception was ever raised, and
+the row was appended with blank odds rather than skipped. Caught by
+actually running the test (it failed on a false assumption about what
+"malformed" would trigger), not assumed to pass. Fixed by replacing the
+fixture with a genuinely malformed offer record (`"garbage"`, a string
+with no `.get()` method) that does trigger the real per-record
+exception path — confirmed by rerunning: 7/7 pass.
+
+**Open items / deferred validations:**
+- **This session remains open.** Do not mark it ✅ Complete until both
+scripts have been run locally by the user against the real live
+endpoints and the real result (success or the specific failure) is
+recorded here.
+- **Immediate next action:** run `python scripts/ingestion/ingest_dk_props.py`
+and `python scripts/ingestion/ingest_fd_props.py` from the repo's
+`scripts/ingestion/` folder (after `pip install requests` if needed) and
+report the real output — including any HTTP status code on failure, since
+that's the concrete signal needed to correct `DK_EVENT_GROUP_ID`,
+`FD_REGION`, or `FD_AK` if any of them are wrong.
+- If either script fails, the documented fallback (in that script's own
+module docstring) is manual Developer-Tools reverse-engineering against
+the real site in a real browser — the same fallback procedure Session
+2.1 wrote for DK Pick6, not a new approach.
+- Once both feeds are confirmed reachable, re-run `test_ingest_props.py`
+is not required again (it tests the normalizer, not the network path),
+but a first real snapshot should be spot-checked manually (real player
+names, real lines, real odds) the same way Session 2.2 spot-checked its
+first real pick'em pull, before Session 6.2 is started against this
+data.
+- Per ROADMAP.md's standing rule, before this session is ever closed,
+pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
+any session entries added in the meantime.
+
+**Next session:** None yet — this session stays open pending the user's
+real local run. Session 6.2 (Estimation Engine Adaptation) should not
+start until this session's real ingestion is confirmed working, per its
+own stated prerequisite.

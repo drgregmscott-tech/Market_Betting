@@ -8700,3 +8700,6 @@
 2026-09-08 12:58:43,756 UTC | INFO | Polymarket: 3416 of 20668 rows in polymarket_latest.csv structurally matched a down-ballot race, across 427 distinct races.
 2026-09-08 12:58:43,774 UTC | INFO | Down-ballot politics: 433 races total (74 on both venues), 432 with a matched Dem candidate, 431 with a matched Rep candidate, 2578 total unmatched candidate markets logged for review.
 2026-09-08 12:58:43,810 UTC | INFO | === Down-ballot politics ingestion run complete: 433 race rows (OK) ===
+2026-09-09 12:21:15,895 UTC | WARNING | Skipped one malformed DraftKings record: 'str' object has no attribute 'get'
+2026-09-09 12:21:15,901 UTC | ERROR | DraftKings response missing expected top-level 'eventGroup' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-09 12:21:15,901 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.

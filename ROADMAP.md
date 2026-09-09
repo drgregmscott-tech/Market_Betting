@@ -2142,25 +2142,37 @@ size question itself.
 
 **Validation (required to close session):**
 - [ ] Minimum sample size reached — explicitly acknowledged this may take
-longer to accumulate than faster-resolving tracks. **NOT MET — cannot yet
-be assessed.** `data/politics/clv_log.csv` does not exist in this repo's
-tracked history, even though `politics_pipeline.yml` has run at least 5
-times against real data since 2026-09-07. Interim floor: 30 closed flags;
-full target: ≈892 (see methodology doc, Section 6).
+longer to accumulate than faster-resolving tracks. **NOT MET.**
+`data/politics/clv_log.csv` now exists and holds 415 real flags (real
+run confirmed 2026-09-09, see "Root cause found" below), but 0 are
+closed/graded yet — races take ~55+ days to resolve, per real
+`hours_to_resolution` data. Interim floor: 30 closed flags; full
+target: ≈892 (see methodology doc, Section 6).
 - [ ] Go/no-go decision recorded — not yet possible; blocked on the item
 above.
 
+**Root cause found (2026-09-09):** GitHub's Actions tab showed **zero run
+history at all** for `politics_pipeline.yml` — the scheduled daily trigger
+had never fired, not "ran and failed silently" as originally suspected. The
+user manually dispatched the workflow directly on GitHub.com; it completed
+with a green checkmark and committed a real `clv_log.csv` (415 flags) to the
+repo. This confirms the pipeline code itself is fine — the gap was the
+schedule never triggering, cause still not confirmed (common causes: a
+scheduled workflow's first cron firing can be delayed after being added to
+the default branch, or GitHub silently disables scheduled workflows on
+repos with 60+ days of no activity — unlikely here given how new the repo
+is, but not ruled out). **Not yet confirmed: whether the daily 13:40 UTC
+schedule now fires on its own**, since only a manual dispatch has been
+proven so far. See Open items.
+
 **Open items / deferred validations:**
-- **Real, unexplained gap:** the politics pipeline's CLV-logging stage was
-proven to work end-to-end in Session 5.5's own sandbox run (414 real
-newly-flagged rows), yet no `clv_log.csv` has ever been committed to the
-real repo by the scheduled/dispatched GitHub Actions runs. Before any
-further work on this session, **check the real run logs on GitHub's
-Actions tab for `politics_pipeline.yml`** — confirm whether the CLV-
-logging stage is reaching completion on GitHub's runner the same way it
-did in the sandbox, and whether the commit step is actually firing.
-- Once `clv_log.csv` exists and is accumulating, re-run
-`python scripts/calibration/politics_sample_report.py --report`
+- **Confirm the daily schedule fires unattended, not just on manual
+dispatch.** Check GitHub's Actions tab for `politics_pipeline.yml` again
+after 2026-09-10 13:40 UTC has passed — if a second real run appears
+without anyone triggering it by hand, the schedule is confirmed working
+and this concern is closed. If not, the schedule itself needs
+troubleshooting (a real, separate problem from the one just fixed).
+- Re-run `python scripts/calibration/politics_sample_report.py --report`
 periodically to track real progress against the interim floor (30) and
 full target (≈892) from `docs/politics_sample_size_methodology.md`.
 - Given real races take ~55+ days to resolve (real `hours_to_resolution`
@@ -2174,7 +2186,12 @@ across other work" and pull the live files from GitHub first.
 # PHASE 6 — Track 5: Sportsbook Player Props (DraftKings, FanDuel)
 
 ### Session 6.1 — Odds Feed Ingestion
-**Status:** Not started
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
+items in SESSION_LOG.md). Scripts are built and unit-tested against
+synthetic fixtures; the real endpoints have NOT yet been confirmed
+reachable, since Claude's own browser tool is blocked by policy from
+reaching either sportsbook.draftkings.com or sportsbook.fanduel.com (same
+block Session 2.1 hit on prizepicks.com/pick6.draftkings.com).
 **Prerequisites:** Phase 2 complete.
 
 **What gets built:** Ingests DK/FD player prop odds. Since DK/FD don't offer
@@ -2186,15 +2203,41 @@ for player-prop markets, since prop-bet legality varies by state independently
 of a sportsbook's general legal status (some states permit sportsbook wagering
 but restrict or ban certain prop categories).
 
-**Files touched:** `/scripts/ingestion/ingest_dk_props.py`,
-`/scripts/ingestion/ingest_fd_props.py`
+**Files touched:** `/scripts/ingestion/schema_props.py` (new — common
+normalized schema, mirrors `schema.py`'s pattern),
+`/scripts/ingestion/ingest_dk_props.py`,
+`/scripts/ingestion/ingest_fd_props.py`,
+`/scripts/ingestion/test_ingest_props.py` (new — synthetic-fixture harness,
+same precedent as Sessions 2.2/2.4/2.5/2.6's own test files),
+`/docs/venue_legal_footprint.md` (Session 6.1 addendum section added)
 
 **Validation (required to close session):**
-- [ ] Both feeds ingest successfully
-- [ ] Vig/juice correctly extracted and stored (needed to compute true no-vig
-probability, not just the raw line)
-- [ ] Legal footprint confirmed specifically at the prop-category level, not
-just "is this sportsbook legal here"
+- [ ] Both feeds ingest successfully — **NOT YET CONFIRMED against real
+data.** Both normalizers pass their synthetic-fixture tests (7/7,
+`test_ingest_props.py`), proving the parsing logic is correct against a
+known-shape input, but the actual endpoint URLs/IDs in both scripts are
+best-guess patterns from independent, non-official sportsbook-scraping
+sources — the same weaker-evidence situation Session 2.1 hit with DK
+Pick6 (which turned out wrong). Claude's browser tool is blocked by
+policy from reaching either real site, so this could not be live-tested
+before handoff. **Real next action: user runs both scripts locally and
+reports the real result** (success, or the specific HTTP error) — see
+Open items in SESSION_LOG.md.
+- [x] Vig/juice correctly extracted and stored — `schema_props.py` stores
+both sides' raw American odds (not a pre-blended number), and
+`american_odds_to_implied_probability()` plus its no-vig-normalization
+test (`test_vig_extraction_matches_known_example`) confirm the
+math is correct against a standard -115/-105 two-sided example.
+- [x] Legal footprint confirmed specifically at the prop-category level —
+`docs/venue_legal_footprint.md`'s Session 6.1 addendum documents
+college-props and injury-props as the real, narrower-than-general-
+sportsbook-legality restrictions found (college props out of v1 scope
+regardless, since v1 is NFL-only); NFL player-performance props
+specifically have no confirmed state-by-state restriction found, an
+explicitly named open gap rather than an assumed clean bill of health.
+Both ingestion scripts tag every row with `prop_category` so a future
+session's flagging logic has the hook to gate on, per this document's
+own stated next step.
 
 ---
 
