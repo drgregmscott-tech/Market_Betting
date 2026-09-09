@@ -24,11 +24,89 @@
 </div>
 </header>
 
+<nav class="tab-nav">
+<div class="tab-nav-inner">
+<button class="tab-btn active" data-tab="overview" type="button">Overview</button>
+<button class="tab-btn" data-tab="pickem" type="button"><span class="tab-dot tab-dot-pickem"></span>Pick&rsquo;em</button>
+<button class="tab-btn" data-tab="arb" type="button"><span class="tab-dot tab-dot-arb"></span>Arbitrage</button>
+<button class="tab-btn" data-tab="weather" type="button"><span class="tab-dot tab-dot-weather"></span>Weather</button>
+<button class="tab-btn" data-tab="politics" type="button"><span class="tab-dot tab-dot-politics"></span>Politics</button>
+<button class="tab-btn" data-tab="props" type="button"><span class="tab-dot tab-dot-props"></span>Props</button>
+</div>
+</nav>
+
 <main>
+
+<!-- ================================================================ -->
+<!-- OVERVIEW — pooled best bets across all five tracks                 -->
+<!-- ================================================================ -->
+<div class="tab-panel" data-tab="overview" id="tabOverview">
+
+<section class="panel" id="overview-summary-panel">
+<div class="panel-head">
+<h2>Cross-track overview</h2>
+<p class="panel-note">Every track&rsquo;s currently open, still-actionable flags (game/event not yet started,
+line still live), pooled into one list and ranked by each flag&rsquo;s own edge value &mdash; a model
+probability edge for pick&rsquo;em/weather/politics/props, or net profit per dollar risked for arbitrage.
+This is a scanning convenience across tracks, not a claim that a same-sized edge means the same real risk
+in every track &mdash; see each track&rsquo;s own tab for the real methodology behind its numbers.</p>
+</div>
+<div class="stat-row" id="overviewStatRow">
+<div class="stat">
+<span class="stat-value" id="overviewStatTotal">—</span>
+<span class="stat-label">Open, actionable flags (all tracks)</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="overviewStatTracksLive">—</span>
+<span class="stat-label">Tracks reporting live data</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="overviewStatTopEdge">—</span>
+<span class="stat-label">Best edge right now</span>
+</div>
+<div class="stat">
+<span class="stat-value" id="overviewStatLongDated">—</span>
+<span class="stat-label">Long-dated politics rows in list below</span>
+</div>
+</div>
+</section>
+
+<section class="panel" id="overview-best-panel">
+<div class="panel-head">
+<h2>Best +EV bets right now</h2>
+<p class="panel-note">Top open, actionable flags across all five tracks, highest edge first. Politics rows
+are marked <span class="long-dated-badge">Long-dated</span> because a real edge on a race that resolves in
+weeks or months is not the same kind of bet as a same-day pick&rsquo;em, weather, or prop flag &mdash; check
+the timing column before treating any two rows here as equivalent.</p>
+</div>
+<div class="table-wrap">
+<table id="overviewTable">
+<thead>
+<tr>
+<th>Track</th>
+<th>Opportunity</th>
+<th>Side</th>
+<th>Venue</th>
+<th>Edge</th>
+<th>Timing</th>
+</tr>
+</thead>
+<tbody id="overviewTableBody"></tbody>
+</table>
+</div>
+<p id="overviewEmpty" class="empty-note" hidden>No open, actionable flags across any track right now.</p>
+</section>
+
+<p id="overviewLoadError" class="load-error" hidden>
+None of the five tracks' data files could be loaded. Check each track's own tab for a more specific error.
+</p>
+
+</div>
 
 <!-- ================================================================ -->
 <!-- TRACK 1 — PICK'EM                                                  -->
 <!-- ================================================================ -->
+<div class="tab-panel" data-tab="pickem" id="tabPickem" hidden>
 <div class="track-heading track-heading-pickem">
 <span class="track-tag track-tag-pickem">Track 1</span>
 <h2>Fixed-line pick&rsquo;em (PrizePicks / Underdog)</h2>
@@ -149,9 +227,12 @@ stake you've already placed, so update the bankroll figure yourself between entr
 Could not load <code>data/clv_log.csv</code>. This page reads that file from its own build, so a fresh Cloudflare Pages deploy is needed after any pipeline run for this page to update.
 </p>
 
+</div>
+
 <!-- ================================================================ -->
 <!-- TRACK 2 — ARBITRAGE                                                -->
 <!-- ================================================================ -->
+<div class="tab-panel" data-tab="arb" id="tabArb" hidden>
 <div class="track-heading track-heading-arb">
 <span class="track-tag track-tag-arb">Track 2</span>
 <h2>Cross-venue arbitrage (Kalshi + Polymarket)</h2>
@@ -217,9 +298,12 @@ fresh Cloudflare Pages deploy is needed after any arbitrage pipeline run for thi
 Session 3.5's notes if this file has never existed in a deploy yet.
 </p>
 
+</div>
+
 <!-- ================================================================ -->
 <!-- TRACK 3 — WEATHER/CLIMATE MARKETS                                  -->
 <!-- ================================================================ -->
+<div class="tab-panel" data-tab="weather" id="tabWeather" hidden>
 <div class="track-heading track-heading-weather">
 <span class="track-tag track-tag-weather">Track 3</span>
 <h2>Weather / climate markets (Kalshi)</h2>
@@ -305,9 +389,12 @@ fresh Cloudflare Pages deploy is needed after any weather pipeline run for this 
 this session's handoff notes if this file has never existed in a deploy yet.
 </p>
 
+</div>
+
 <!-- ================================================================ -->
 <!-- TRACK 4 — DOWN-BALLOT POLITICS                                    -->
 <!-- ================================================================ -->
+<div class="tab-panel" data-tab="politics" id="tabPolitics" hidden>
 <div class="track-heading track-heading-politics">
 <span class="track-tag track-tag-politics">Track 4</span>
 <h2>Down-ballot politics (Kalshi + Polymarket)</h2>
@@ -395,9 +482,12 @@ fresh Cloudflare Pages deploy is needed after any politics pipeline run for this
 this session's handoff notes if this file has never existed in a deploy yet.
 </p>
 
+</div>
+
 <!-- ================================================================ -->
 <!-- TRACK 5 — SPORTSBOOK PLAYER PROPS                                 -->
 <!-- ================================================================ -->
+<div class="tab-panel" data-tab="props" id="tabProps" hidden>
 <div class="track-heading track-heading-props">
 <span class="track-tag track-tag-props">Track 5</span>
 <h2>Sportsbook player props (DraftKings + FanDuel)</h2>
@@ -489,6 +579,8 @@ Could not load <code>data/props_clv_log.csv</code>. This page reads that file fr
 fresh Cloudflare Pages deploy is needed after any props pipeline run for this section to update. See
 this session's handoff notes if this file has never existed in a deploy yet.
 </p>
+
+</div>
 
 </main>
 

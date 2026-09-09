@@ -51,6 +51,21 @@ const SAME_GAME_CAUTION_MULTIPLIER = 0.85;
 // Selected legs for the sizing calculator: Map<flag_id, row>
 const selectedLegs = new Map();
 
+// ---------------------------------------------------------------------
+// Overview tab -- each track's init function stashes its own currently-
+// open, still-actionable rows here so the Overview tab can pool them
+// into one ranked list without re-fetching anything. A track that fails
+// to load simply leaves its array empty; the Overview never blocks on
+// one track's failure, same rule as every other part of this page.
+// ---------------------------------------------------------------------
+const overviewData = {
+  pickem: { loaded: false, rows: [] },
+  arb: { loaded: false, rows: [] },
+  weather: { loaded: false, rows: [] },
+  politics: { loaded: false, rows: [] },
+  props: { loaded: false, rows: [] },
+};
+
 function parseCSV(text) {
   // Minimal CSV parser: handles quoted fields containing commas, but this
   // dataset has none observed — kept defensive rather than assuming.
@@ -131,6 +146,18 @@ function fmtDate(iso) {
 function edgeClass(n) {
   if (n === null) return "";
   return n >= 0 ? "edge-pos" : "edge-neg";
+}
+
+// A row counts as "actionable" for the Overview tab if its own timing
+// field is either unknown (never filter out a row just because we can't
+// parse its timestamp) or genuinely still in the future. Used for
+// game_start_time (pick'em/props) and target_date (weather); politics
+// uses hours_to_resolution directly instead (see initPolitics).
+function isFutureOrUnknown(iso) {
+  if (!iso) return true;
+  const t = new Date(iso).getTime();
+  if (isNaN(t)) return true;
+  return t > Date.now();
 }
 
 function setText(id, value) {
@@ -512,6 +539,9 @@ async function initPickem() {
 
     const bankrollInput = document.getElementById("bankrollInput");
     if (bankrollInput) bankrollInput.addEventListener("input", renderSizingResult);
+
+    overviewData.pickem.loaded = true;
+    overviewData.pickem.rows = open.filter((r) => isFutureOrUnknown(r.game_start_time));
   } catch (err) {
     const el = document.getElementById("loadError");
     if (el) el.hidden = false;
@@ -597,6 +627,11 @@ async function initArbitrage() {
 
     renderArbStats(rows);
     renderArbTable(rows);
+
+    overviewData.arb.loaded = true;
+    overviewData.arb.rows = rows.filter(
+      (r) => String(r.liquidity_sufficient).trim().toLowerCase() === "true"
+    );
   } catch (err) {
     const el = document.getElementById("arbLoadError");
     if (el) el.hidden = false;
@@ -730,6 +765,9 @@ async function initWeather() {
     const { open, closed } = renderWeatherStats(rows);
     renderWeatherOpenTable(open);
     renderWeatherClosedTable(closed);
+
+    overviewData.weather.loaded = true;
+    overviewData.weather.rows = open.filter((r) => isFutureOrUnknown(r.target_date));
   } catch (err) {
     const el = document.getElementById("weatherLoadError");
     if (el) el.hidden = false;
@@ -866,6 +904,12 @@ async function initPolitics() {
     const { open, closed } = renderPoliticsStats(rows);
     renderPoliticsOpenTable(open);
     renderPoliticsClosedTable(closed);
+
+    overviewData.politics.loaded = true;
+    overviewData.politics.rows = open.filter((r) => {
+      const hours = toNum(r.hours_to_resolution);
+      return hours === null || hours > 0;
+    });
   } catch (err) {
     const el = document.getElementById("politicsLoadError");
     if (el) el.hidden = false;
@@ -1002,6 +1046,9 @@ async function initProps() {
     const { open, closed } = renderPropsStats(rows);
     renderPropsOpenTable(open);
     renderPropsClosedTable(closed);
+
+    overviewData.props.loaded = true;
+    overviewData.props.rows = open.filter((r) => isFutureOrUnknown(r.game_start_time));
   } catch (err) {
     const el = document.getElementById("propsLoadError");
     if (el) el.hidden = false;
@@ -1009,10 +1056,183 @@ async function initProps() {
   }
 }
 
+// =======================================================================
+// OVERVIEW — pools each track's currently-open, still-actionable rows
+// (stashed into `overviewData` by each track's own init function above)
+// into one ranked list. Each track's "edge" already lives on its own
+// comparable scale (a model-probability edge as a fraction of $1, or
+// arbitrage's net profit per $1 risked) — pooling and sorting on that
+// raw number is a real, if imperfect, cross-track ranking, not a claim
+// that the tracks carry identical risk per unit of edge. See the
+// Overview tab's own panel note for that caveat, shown to the user
+// directly rather than only in this comment.
+// =======================================================================
+
+const TRACK_META = {
+  pickem: { label: "Pick'em", tagClass: "track-tag-pickem" },
+  arb: { label: "Arbitrage", tagClass: "track-tag-arb" },
+  weather: { label: "Weather", tagClass: "track-tag-weather" },
+  politics: { label: "Politics", tagClass: "track-tag-politics" },
+  props: { label: "Props", tagClass: "track-tag-props" },
+};
+
+function mapPickemForOverview(r) {
+  return {
+    track: "pickem",
+    opportunity: [r.player_name, r.stat_type].filter(Boolean).join(" — ") || "—",
+    side: r.flagged_side || "—",
+    venue: r.platform || "—",
+    edge: toNum(r.first_flagged_edge),
+    edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
+    timing: fmtDate(r.game_start_time),
+    longDated: false,
+  };
+}
+
+function mapArbForOverview(r) {
+  return {
+    track: "arb",
+    opportunity: r.title_a || r.opportunity_type || "—",
+    side: r.opportunity_type || "—",
+    venue: [r.platform_a, r.platform_b].filter(Boolean).join(" / ") || "—",
+    edge: toNum(r.net_profit_per_dollar),
+    edgeDisplay: fmtNetProfit(toNum(r.net_profit_per_dollar)) + "/$1",
+    timing: "Live snapshot",
+    longDated: false,
+  };
+}
+
+function mapWeatherForOverview(r) {
+  return {
+    track: "weather",
+    opportunity: [r.city_label, r.forecast_kind].filter(Boolean).join(" — ") || "—",
+    side: r.flagged_side || "—",
+    venue: "Kalshi",
+    edge: toNum(r.first_flagged_edge),
+    edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
+    timing: r.lead_days ? r.lead_days + "d out" : "—",
+    longDated: false,
+  };
+}
+
+function mapPoliticsForOverview(r) {
+  const hours = toNum(r.hours_to_resolution);
+  return {
+    track: "politics",
+    opportunity: [r.candidate_name, r.chamber].filter(Boolean).join(" — ") || "—",
+    side: r.party || "—",
+    venue: r.venue || "—",
+    edge: toNum(r.first_flagged_edge),
+    edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
+    timing: fmtHoursToResolution(hours),
+    longDated: hours !== null && hours > 24 * 60,
+  };
+}
+
+function mapPropsForOverview(r) {
+  return {
+    track: "props",
+    opportunity: [r.player_name, r.stat_type].filter(Boolean).join(" — ") || "—",
+    side: r.flagged_side || "—",
+    venue: r.platform || "—",
+    edge: toNum(r.first_flagged_edge),
+    edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
+    timing: fmtDate(r.game_start_time),
+    longDated: false,
+  };
+}
+
+const OVERVIEW_MAPPERS = {
+  pickem: mapPickemForOverview,
+  arb: mapArbForOverview,
+  weather: mapWeatherForOverview,
+  politics: mapPoliticsForOverview,
+  props: mapPropsForOverview,
+};
+
+const OVERVIEW_TOP_N = 10;
+
+function renderOverview() {
+  const tbody = document.getElementById("overviewTableBody");
+  const emptyNote = document.getElementById("overviewEmpty");
+  const loadErrorEl = document.getElementById("overviewLoadError");
+  if (!tbody || !emptyNote) return;
+
+  const tracksLoaded = Object.values(overviewData).filter((t) => t.loaded);
+  if (loadErrorEl) loadErrorEl.hidden = tracksLoaded.length > 0;
+
+  let pooled = [];
+  let totalActionable = 0;
+  for (const [track, mapper] of Object.entries(OVERVIEW_MAPPERS)) {
+    const rows = overviewData[track].rows || [];
+    totalActionable += rows.length;
+    pooled = pooled.concat(rows.map(mapper).filter((r) => r.edge !== null));
+  }
+
+  pooled.sort((a, b) => b.edge - a.edge);
+  const top = pooled.slice(0, OVERVIEW_TOP_N);
+
+  setText("overviewStatTotal", String(totalActionable));
+  setText("overviewStatTracksLive", `${tracksLoaded.length}/5`);
+  setText("overviewStatTopEdge", top.length ? top[0].edgeDisplay : "—");
+  setText("overviewStatLongDated", String(top.filter((r) => r.longDated).length));
+
+  if (!top.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = top
+    .map((r) => {
+      const meta = TRACK_META[r.track];
+      return `
+        <tr>
+          <td><span class="track-tag ${meta.tagClass}">${meta.label}</span></td>
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${escapeHtml(r.opportunity)}${
+            r.longDated ? '<span class="long-dated-badge">Long-dated</span>' : ""
+          }</td>
+          <td>${escapeHtml(r.side)}</td>
+          <td>${escapeHtml(r.venue)}</td>
+          <td class="${edgeClass(r.edge)}">${r.edgeDisplay}</td>
+          <td>${escapeHtml(r.timing)}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+// =======================================================================
+// Tab navigation — plain show/hide, single page, no routing. Runs
+// immediately since this script tag sits at the end of <body>, so the
+// nav/tab-panel markup already exists in the DOM by the time this file
+// executes.
+// =======================================================================
+
+function initTabs() {
+  const buttons = document.querySelectorAll(".tab-btn");
+  const panels = document.querySelectorAll(".tab-panel");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-tab");
+
+      buttons.forEach((b) => b.classList.toggle("active", b === btn));
+      panels.forEach((p) => {
+        p.hidden = p.getAttribute("data-tab") !== target;
+      });
+    });
+  });
+}
+
 async function init() {
+  initTabs();
+
   // All tracks load independently and in parallel: a failure or an empty
   // result in one must never block or hide another track's real data.
   await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
+
+  renderOverview();
 
   setText("asOf", new Date().toLocaleString(undefined, {
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit"

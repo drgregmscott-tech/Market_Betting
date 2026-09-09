@@ -7610,3 +7610,102 @@ real outcome data exists yet) rather than any finding against the model or
 CLV signal itself. The path to re-opening this checkpoint is clear and
 already documented (Open Decision #44) — it does not require a new session
 number, just real bet reports once the user is ready.
+
+---
+
+## Frontend — Overview Tab & Tabbed Navigation (cross-cutting, all 5 tracks)
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**Context:** Not a roadmap-numbered session — a frontend UX request made once
+the user confirmed no new build session was ready to start (every track is
+either done or blocked on real elapsed time, see Session 2.9 above). The user
+likes the existing look/colors/fonts (Sessions 2.8, 3.5, 4.6, 5.6, 6.6) but
+asked for real navigation: a cross-track Overview page highlighting the best
+current +EV bets, plus each track keeping its own summary + full list, now
+organized as a tab instead of one long scrolling page.
+
+**What was actually done:**
+1. Asked the user three clarifying questions before touching code: (1) tabs
+vs. separate pages — user chose tabs (single page, JS-toggled, no reload);
+(2) how to rank very different edge types (model-probability edge for
+pick'em/weather/politics/props vs. arbitrage's net-profit-per-$1) into one
+Overview list — user's answer: pool them into one ranked "overall +EV bets"
+list rather than keeping tracks visually separate on the Overview; (3)
+whether the Overview should filter to only still-actionable flags — user
+chose yes (recommended option).
+2. Restructured `frontend/index.html`: added a sticky tab-nav bar (Overview /
+Pick'em / Arbitrage / Weather / Politics / Props) and wrapped each track's
+existing markup (unchanged internally) in its own `.tab-panel` div, plus a
+new Overview panel with a cross-track stat row and a "Best +EV bets right
+now" table.
+3. Extended `frontend/app.js`: each track's existing `init*()` function now
+also stashes its own currently-open rows into a shared `overviewData`
+object, filtered to still-actionable ones (`isFutureOrUnknown()` against
+`game_start_time`/`target_date` for pick'em/props/weather;
+`hours_to_resolution > 0` for politics; `liquidity_sufficient` for
+arbitrage, which has no open/closed lifecycle). A new `renderOverview()`
+maps each track's rows onto one common shape (track, opportunity, side,
+venue, edge, timing), pools all five, sorts by edge descending, and
+renders the top 10 — arbitrage's `net_profit_per_dollar` is pooled and
+sorted on the same raw numeric scale as the other tracks' probability
+edges, with the Overview panel's own copy stating explicitly that this is
+a scanning convenience, not a claim that the tracks carry identical risk
+per unit of edge. Politics rows in the list carry a visible "Long-dated"
+badge (`hours_to_resolution > 24*60`) so a 55+-day position is never
+mistaken for a same-day play. A small `initTabs()` wires the nav buttons
+to show/hide `.tab-panel` elements — no routing, no framework.
+4. Extended `frontend/style.css`: sticky `.tab-nav` bar with per-track colored
+dots (reusing each track's existing accent variable), active-tab underline,
+and a `.long-dated-badge` style that reuses the politics accent so it reads
+as the same real signal as that track's own `wait-long` cell styling.
+5. **Verified locally, not just read over** — started a local
+`python -m http.server` in `frontend/`, temporarily copied each track's
+real, current data file in (`data/pickem/clv_log.csv`,
+`data/weather/clv_log.csv`, `data/politics/clv_log.csv`,
+`data/sportsbook_props/clv_log.csv`,
+`data/arbitrage/flags/arbitrage_flags_latest.csv`) so the page would render
+against real live numbers, then drove the page in the Browser pane:
+confirmed the Overview tab loads with real pooled data (3,861 open
+actionable flags across all 5 tracks, best edge +89.4% on a real DraftKings
+prop), confirmed all 5 track tabs switch correctly and each renders its own
+existing summary/chart/table exactly as before (Pick'em's CLV chart,
+Arbitrage's cross-venue table, Weather's per-city table, Politics' 54-day
+avg. time-to-resolution stat, Props' risk badges), and confirmed tab colors
+match each track's existing accent. The temporary local data copies were
+deleted afterward (`frontend/data/` is untracked; nothing test-only was
+committed).
+
+**Files created/modified:** `frontend/index.html`, `frontend/app.js`,
+`frontend/style.css`. No backend/pipeline files touched — this is presentation
+only, reading the same data files every track's pipeline already produces.
+
+**Decisions made:**
+1. **Tabs, not separate pages** — per the user's explicit choice, keeping this
+a single static HTML file with no routing, consistent with the project's
+"no framework, no build tool" frontend approach since Session 2.8.
+2. **One pooled, ranked list, not five separate top-N mini-cards** — per the
+user's explicit answer ("the summary should be the overall +EV bets"),
+even though this means comparing a probability-edge percentage against
+arbitrage's net-profit-per-$1 on the same numeric scale. This is named
+explicitly, in the UI copy itself, as an imperfect but useful cross-track
+scan rather than a claim of equivalent risk.
+3. **Politics rows are pooled into the same ranked list, not excluded**, but
+carry a visible "Long-dated" badge — reflects the user's ranking answer
+(pool everything) combined with the earlier freshness-filter answer
+(only actionable flags), applied together rather than treating "long-dated"
+as disqualifying.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:** None outstanding for this piece of
+work. Real verification depended on temporary local copies of each track's
+live data (not committed); the next real Cloudflare Pages deploy will render
+against whatever each track's own pipeline has actually produced at deploy
+time, same as every prior frontend session.
+
+**Status at close of session:** Complete. The user should review the new tab
+layout after the next deploy and confirm the Overview's ranking approach
+still feels right once real data (not just this session's live-data spot
+check) has been seen in production over a few days.
