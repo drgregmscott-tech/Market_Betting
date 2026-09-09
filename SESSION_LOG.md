@@ -6036,3 +6036,126 @@ docstring, not another header guess.
 - Per ROADMAP.md's standing rule, before this session is ever closed,
   pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
   any session entries added in the meantime.
+
+---
+
+### Session 6.1 continuation — Real DK API captured via DevTools, then a real Akamai block found (2026-09-09)
+
+**What happened, real DevTools capture:** the header-only fix above did
+not work — re-running `ingest_dk_props.py` with the three added headers
+still returned the same real `403 Client Error: Forbidden`, 3/3 attempts,
+confirming this needed the Developer-Tools fallback, not another header
+guess (per this file's own stated next step above). The user opened
+sportsbook.draftkings.com in a real browser, worked through several rounds
+of real DevTools troubleshooting (clearing filters, enabling the Domain
+column, capturing a fresh page load rather than bet-slip clicks), and
+captured three real, confirmed endpoints via "Copy Response":
+
+1. `GET https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/
+   sportscontent/navigation/dkusks/v2/nav/leagues/88808` — real NFL event
+   list (88808 independently reconfirmed as the correct NFL league ID, a
+   third time this session).
+2. `GET .../api/sportscontent/pagedata/event/v1/events?eventIds={id}` —
+   real single-event detail.
+3. `GET .../api/sportscontent/controldata/event/eventSubcategory/v1/
+   markets?...&marketsQuery=...&entity=markets` — the real odds payload,
+   captured for a real event (CLE Browns @ JAX Jaguars) and subcategory
+   (12438 — Anytime/First TD Scorer, 2+ TDs).
+
+**Real, important finding: none of this matches the old `/api/v5/
+eventgroups/{id}` pattern the original guess used.** DK's real current API
+lives on a different domain (`sportsbook-nash.draftkings.com`, not
+`sportsbook.draftkings.com`), a different site-code shape (`US-KS-SB`,
+state-specific), and a completely different path structure
+(`/api/sportscontent/...`). `ingest_dk_props.py` was rewritten from
+scratch around these three real, captured endpoints.
+
+**A second real, important finding, from the captured `markets` response
+body itself:** this market type (TD scorer props) is NOT a two-sided
+Over/Under like every other schema in this project assumed — it's one
+priced selection PER PLAYER ("this player scores," priced against the
+field), with no numeric line and no priced "no" side. `normalize_dk_markets()`
+was built to match this real shape: `line=None`, `under_american_odds=None`,
+one row per player (or non-player outcome, e.g. team defense, kept with
+`player_name=None`). Synthetic-fixture tests were rebuilt to match this real
+shape too — 7/7 pass.
+
+**Real re-run against the new, correct endpoints: still `403 Forbidden`,
+3/3 attempts — even though the URL now exactly matched what the user's own
+browser had just loaded successfully.** This ruled out a URL/parameter
+problem entirely. Inspecting the response headers already captured earlier
+this session (`ak_bmsc` cookie, `X-Akamai-Transformed` header) identified
+the real cause: DraftKings runs **Akamai Bot Manager**, which fingerprints
+the real TLS handshake and browser JavaScript environment — not something
+any combination of HTTP headers can satisfy, because the check is not
+header-based at all.
+
+**User pushed back on accepting this as a dead end** ("DK is a really
+common sportsbook, I feel like we should be able to get this") rather than
+defaulting to the FanDuel-only fallback first offered. Reassessed: the
+real, durable fix is driving an actual browser engine (Playwright)
+instead of the `requests` library, since Akamai's check is specifically
+about *being a real browser*, and Playwright's Chromium genuinely is one —
+unlike raw HTTP calls dressed up with headers. This is different from
+"give up" (documenting the block) and different from "have Claude click
+around manually" (not automatable) — it's the standard, legitimate tool
+for this exact problem.
+
+**Files modified this continuation:**
+- `requirements.txt` — added `playwright`.
+- `scripts/ingestion/ingest_dk_props.py` — full rewrite of the fetch layer:
+  `requests.get()` calls replaced with a real headless Chromium browser
+  context (`playwright.sync_api`). The script now first loads a real
+  DraftKings page (`DK_WARMUP_URL`) so Akamai's own JavaScript sets its
+  real bot-manager cookies in the browser context, then issues both real
+  API calls (`fetch_dk_events`, `fetch_dk_markets`) through that same
+  authenticated context via `context.request.get(...)`. `normalize_dk_markets()`
+  and all output-writing logic are unchanged — only the fetch layer changed.
+- `scripts/ingestion/test_ingest_props.py` — DK fixtures/tests rebuilt to
+  match the real captured markets/selections shape (per-player pricing,
+  no line, no under-side) instead of the original, wrong Over/Under
+  assumption. Confirmed: still imports and runs correctly with `playwright`
+  installed (import-only check — this sandbox cannot launch a real browser
+  to prove the live pull works, same limitation as every other real-network
+  check in this session).
+
+**Decisions made:**
+1. **DK's fetch layer uses Playwright, not `requests`** — a deliberate,
+   real architectural difference from every other ingestion script in
+   this project (pick'em, FanDuel, Kalshi, Polymarket, NWS). Justified
+   specifically by Akamai Bot Manager's TLS/JS fingerprinting, confirmed
+   live against the real, correct URL — not a default choice, a forced
+   one given what this specific venue's bot-detection actually checks.
+2. **A `DK_WARMUP_URL` page load happens before either real API call**,
+   so Akamai's own JavaScript can set its real cookies in the browser
+   context first — confirmed necessary as the mechanism (a browser
+   context with no prior page load has never demonstrated Akamai cookies
+   present), though the live pull itself is not yet confirmed end-to-end
+   from this sandbox (see Open items).
+3. **This adds a real, new operational requirement**: `playwright install
+   chromium` must be run once (downloads a real browser binary), separate
+   from `pip install playwright` — not yet run in the real environment,
+   named explicitly as the next real step rather than assumed done.
+
+**Open items / deferred validations:**
+- **This session remains open.** The Playwright-based rewrite has NOT yet
+  been proven against DK's real live servers — this sandbox cannot launch
+  a real browser, so only an import-level check was possible here.
+- **Immediate next action:** on the real machine, run:
+  ```
+  pip install playwright
+  playwright install chromium
+  python scripts/ingestion/ingest_dk_props.py
+  ```
+  and report the real result. This is a real, new local dependency
+  (~150-300MB Chromium download via `playwright install`), not just a pip
+  package — flagged explicitly since it's a bigger ask than the
+  `pip install requests` every other script in this project has needed
+  so far.
+- If Playwright's real pull also fails, the honest next diagnostic is
+  whether `DK_WARMUP_URL`'s page load is actually completing successfully
+  (network timeouts, a captcha/challenge page instead of the real NFL
+  page) — not another blind retry.
+- Per ROADMAP.md's standing rule, before this session is ever closed,
+  pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
+  any session entries added in the meantime.

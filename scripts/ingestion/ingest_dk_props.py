@@ -76,6 +76,26 @@ WHAT THIS SCRIPT DOES NOT DO YET
   `MAX_EVENTS_PER_RUN`) to keep a single run's real request count bounded
   while this is still a single-subcategory v1.
 
+A SECOND REAL BLOCKER FOUND, AND WHY THIS FILE NOW USES PLAYWRIGHT NOT REQUESTS
+-----------------------------------------------------------------------------------
+Even the real, correctly-captured URLs above returned a real `403 Forbidden`
+through Python's `requests` library — confirmed live, 3/3 retries, on the
+EXACT url string the user's own browser had just loaded successfully. That
+rules out a wrong-URL or missing-header problem. The real cause, visible in
+the response headers captured earlier this session (`ak_bmsc` cookie,
+`X-Akamai-Transformed` header): DraftKings sits behind **Akamai Bot
+Manager**, which fingerprints the real TLS handshake and browser JavaScript
+environment, not just request headers. `requests` can never pass that check
+— no header combination fixes it, because the check isn't about headers.
+
+The fix: this file now drives a REAL headless Chromium browser via
+Playwright instead of raw HTTP calls. Playwright launches an actual browser
+engine, so its TLS handshake and JS environment are indistinguishable from
+a real user's — the same reason the user's own manual browsing worked. The
+script first loads a real DraftKings page (so Akamai's own JS sets its real
+cookies, e.g. `ak_bmsc`, in the browser context), then issues the two real
+API calls through that same authenticated browser context.
+
 WHERE OUTPUT GOES
 ------------------
 /data/sportsbook_props/raw/draftkings_<timestamp>.json
@@ -84,7 +104,8 @@ WHERE OUTPUT GOES
 
 USAGE
 -----
-pip install requests --break-system-packages
+pip install playwright --break-system-packages
+playwright install chromium
 python ingest_dk_props.py
 """
 
@@ -97,8 +118,9 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+from urllib.parse import quote as requote
 
-import requests
+from playwright.sync_api import sync_playwright
 
 from schema_props import NORMALIZED_COLUMNS, NormalizedSportsbookProp
 
@@ -122,18 +144,19 @@ MARKETS_URL = (
     f"event/eventSubcategory/v1/markets"
 )
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+# A real page to load first so Akamai's own JavaScript runs and sets its
+# real bot-manager cookies in the browser context before any API call is
+# made — confirmed necessary this session (the API 403s without it).
+DK_WARMUP_URL = "https://sportsbook.draftkings.com/leagues/football/nfl"
+
+REQUEST_HEADERS = {
     "Accept": "application/json",
     "Referer": f"https://{DK_DOMAIN}/",
 }
 
 MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 3
-REQUEST_TIMEOUT_SECONDS = 15
+REQUEST_TIMEOUT_MS = 20000
 MAX_EVENTS_PER_RUN = 8  # see module docstring — keeps v1 request count bounded
 
 
@@ -158,16 +181,49 @@ def setup_logging() -> logging.Logger:
 log = setup_logging()
 
 
-def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
+def _launch_browser_context(playwright):
+    """Launches a real headless Chromium browser and warms it up against a
+    real DraftKings page so Akamai's own JavaScript sets its real
+    bot-manager cookies in this context — see module docstring for why
+    plain `requests` calls (even with correct headers) 403 without this.
+    Returns the open `page` (not closed) — see `_fetch_json_with_retries`'s
+    docstring for why every API call also goes through this same page,
+    not `context.request`."""
+    browser = playwright.chromium.launch(headless=True)
+    context = browser.new_context(extra_http_headers=REQUEST_HEADERS)
+    page = context.new_page()
+    page.goto(DK_WARMUP_URL, wait_until="networkidle", timeout=REQUEST_TIMEOUT_MS)
+    return browser, page
+
+
+def _fetch_json_with_retries(page, url: str) -> dict:
+    """FIX (2026-09-09, real live-data finding): the first version of this
+    function used `context.request.get(url)` — confirmed to still 403
+    against DK's real, correct API even after the warmup page load. Root
+    cause: Playwright's `context.request` is a separate, lightweight HTTP
+    client, NOT the browser's actual rendering/network engine — it does
+    not carry the same TLS/JS fingerprint as a real page, which is exactly
+    what Akamai Bot Manager checks (see module docstring). Fixed by running
+    `fetch()` INSIDE the already-warmed-up page's own JavaScript context via
+    `page.evaluate()` — this is Chromium's own real fetch implementation,
+    indistinguishable from what the user's own manual browsing did."""
     last_error = None
     for attempt in range(1, MAX_RETRIES + 2):
         try:
-            response = requests.get(
-                url, headers=HEADERS, params=params, timeout=REQUEST_TIMEOUT_SECONDS
+            result = page.evaluate(
+                """async (url) => {
+                    const r = await fetch(url, { credentials: 'include' });
+                    const body = await r.text();
+                    return { status: r.status, ok: r.ok, body: body };
+                }""",
+                url,
             )
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as exc:
+            if not result["ok"]:
+                raise RuntimeError(f"{result['status']} for url: {url}")
+            return json.loads(result["body"])
+        except Exception as exc:  # noqa: BLE001 — Playwright/JS errors
+            # surface as generic exceptions here; treated uniformly with
+            # the same retry logic every other ingestion script uses.
             last_error = exc
             log.warning(
                 "Attempt %d/%d failed for %s: %s",
@@ -181,11 +237,11 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
     raise RuntimeError(f"All attempts failed for {url}: {last_error}")
 
 
-def fetch_dk_events() -> dict:
-    return _fetch_with_retries(NAV_URL)
+def fetch_dk_events(page) -> dict:
+    return _fetch_json_with_retries(page, NAV_URL)
 
 
-def fetch_dk_markets(event_id: str, subcategory_id: str) -> dict:
+def fetch_dk_markets(page, event_id: str, subcategory_id: str) -> dict:
     marketsQuery = (
         f"$filter=eventId eq '{event_id}' AND "
         f"clientMetadata/subCategoryId eq '{subcategory_id}' AND "
@@ -197,7 +253,11 @@ def fetch_dk_markets(event_id: str, subcategory_id: str) -> dict:
         "marketsQuery": marketsQuery,
         "entity": "markets",
     }
-    return _fetch_with_retries(MARKETS_URL, params=params)
+    query_string = "&".join(
+        f"{key}={requote(str(value))}" for key, value in params.items()
+    )
+    url = f"{MARKETS_URL}?{query_string}"
+    return _fetch_json_with_retries(page, url)
 
 
 def normalize_dk_markets(
@@ -314,44 +374,51 @@ def run() -> dict:
 
     all_rows: list[NormalizedSportsbookProp] = []
     try:
-        nav_payload = fetch_dk_events()
-        save_raw_snapshot(nav_payload, pulled_at_compact, "nav")
-        events = nav_payload.get("events") or []
-        if not events:
-            log.error(
-                "DraftKings navigation response returned no events — "
-                "schema may have changed."
-            )
-        events = events[:MAX_EVENTS_PER_RUN]
-
-        for event in events:
-            event_id = str(event.get("id", ""))
-            if not event_id:
-                continue
+        with sync_playwright() as playwright:
+            browser, page = _launch_browser_context(playwright)
             try:
-                markets_payload = fetch_dk_markets(event_id, DK_TD_SUBCATEGORY_ID)
-                save_raw_snapshot(
-                    markets_payload, pulled_at_compact, f"markets_{event_id}"
-                )
-                rows = normalize_dk_markets(markets_payload, event, pulled_at)
-                all_rows.extend(rows)
-            except Exception as exc:  # noqa: BLE001 — one event's failure
-                # must not block the rest of the run.
-                log.warning(
-                    "Skipped markets pull for DraftKings event %s: %s",
-                    event_id,
-                    exc,
-                )
-                continue
+                nav_payload = fetch_dk_events(page)
+                save_raw_snapshot(nav_payload, pulled_at_compact, "nav")
+                events = nav_payload.get("events") or []
+                if not events:
+                    log.error(
+                        "DraftKings navigation response returned no events — "
+                        "schema may have changed."
+                    )
+                events = events[:MAX_EVENTS_PER_RUN]
 
-        summary["draftkings_ok"] = True
-        summary["events_pulled"] = len(events)
-        summary["draftkings_rows"] = len(all_rows)
-        log.info(
-            "DraftKings: %d normalized rows across %d events",
-            len(all_rows),
-            len(events),
-        )
+                for event in events:
+                    event_id = str(event.get("id", ""))
+                    if not event_id:
+                        continue
+                    try:
+                        markets_payload = fetch_dk_markets(
+                            page, event_id, DK_TD_SUBCATEGORY_ID
+                        )
+                        save_raw_snapshot(
+                            markets_payload, pulled_at_compact, f"markets_{event_id}"
+                        )
+                        rows = normalize_dk_markets(markets_payload, event, pulled_at)
+                        all_rows.extend(rows)
+                    except Exception as exc:  # noqa: BLE001 — one event's
+                        # failure must not block the rest of the run.
+                        log.warning(
+                            "Skipped markets pull for DraftKings event %s: %s",
+                            event_id,
+                            exc,
+                        )
+                        continue
+
+                summary["draftkings_ok"] = True
+                summary["events_pulled"] = len(events)
+                summary["draftkings_rows"] = len(all_rows)
+                log.info(
+                    "DraftKings: %d normalized rows across %d events",
+                    len(all_rows),
+                    len(events),
+                )
+            finally:
+                browser.close()
     except Exception as exc:  # noqa: BLE001
         log.error("DraftKings ingestion failed for this run: %s", exc)
 

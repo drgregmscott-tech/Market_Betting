@@ -8999,3 +8999,53 @@
 2026-09-09 13:09:34,633 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-09 13:09:34,633 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-09 13:09:34,633 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-09 13:11:01,241 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:11:01,414 UTC | WARNING | Attempt 1/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:11:04,543 UTC | WARNING | Attempt 2/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:11:07,688 UTC | WARNING | Attempt 3/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:11:07,688 UTC | ERROR | DraftKings ingestion failed for this run: All attempts failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:11:07,690 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:12:44,948 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:12:45,122 UTC | WARNING | Attempt 1/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:12:48,237 UTC | WARNING | Attempt 2/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:12:51,373 UTC | WARNING | Attempt 3/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:12:51,373 UTC | ERROR | DraftKings ingestion failed for this run: All attempts failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Client Error: Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:12:51,375 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:16:13,775 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-09 13:16:13,776 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-09 13:16:13,776 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-09 13:16:13,776 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-09 13:16:13,776 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-09 13:19:08,787 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:19:09,988 UTC | ERROR | DraftKings ingestion failed for this run: BrowserType.launch: Executable doesn't exist at C:\Users\gmsco\AppData\Local\ms-playwright\chromium_headless_shell-1234\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-09-09 13:19:09,991 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:19:51,804 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:19:52,185 UTC | ERROR | DraftKings ingestion failed for this run: BrowserType.launch: Executable doesn't exist at C:\Users\gmsco\AppData\Local\ms-playwright\chromium_headless_shell-1234\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-09-09 13:19:52,188 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:21:05,904 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 13:21:10,439 UTC | WARNING | Attempt 1/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:21:13,549 UTC | WARNING | Attempt 2/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:21:16,664 UTC | WARNING | Attempt 3/3 failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:21:16,730 UTC | ERROR | DraftKings ingestion failed for this run: All attempts failed for https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808: 403 Forbidden for url: https://sportsbook-nash.draftkings.com/sites/US-KS-SB/api/sportscontent/navigation/dkusks/v2/nav/leagues/88808
+2026-09-09 13:21:16,733 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 13:22:21,943 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-09 13:22:21,943 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-09 13:22:21,943 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-09 13:22:21,944 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-09 13:22:21,944 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.

@@ -2189,9 +2189,13 @@ across other work" and pull the live files from GitHub first.
 **Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
 items in SESSION_LOG.md). **Real result, confirmed 2026-09-09: FanDuel
 ingestion works end-to-end (141 real player-prop rows, two real bugs found
-from live data and fixed). DraftKings still fails — real `403 Forbidden`
-(bot-protection block, not a wrong endpoint), header fix attempted but not
-yet re-confirmed.**
+from live data and fixed). DraftKings: real API endpoints captured directly
+via DevTools (replacing the original wrong guess), but even the correct
+URLs 403 through plain `requests` — DraftKings runs Akamai Bot Manager,
+which fingerprints the real browser TLS/JS environment, not headers.
+Rewrote DK's fetch layer to use Playwright (a real headless Chromium
+browser) instead of `requests`. Not yet confirmed against DK's live
+servers — needs `playwright install chromium` + a real run.**
 **Prerequisites:** Phase 2 complete.
 
 **What gets built:** Ingests DK/FD player prop odds. Since DK/FD don't offer
