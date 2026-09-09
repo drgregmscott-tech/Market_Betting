@@ -1696,14 +1696,54 @@ bounded imprecision in the code's own docstring, not treated as exact.
 ---
 
 ### Session 4.5 — Automation Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 4.4 complete.
 
-**Files touched:** `.github/workflows/weather_pipeline.yml`
+**What gets built:** The scheduled, unattended version of this track's
+pipeline — Kalshi weather-market ingestion → NWS forecast/observed data
+ingestion → threshold-probability estimation → CLV logging, run
+back-to-back on a GitHub Actions schedule, matching the orchestrator
+pattern already built for pick'em (Session 2.7), arbitrage (Session 3.4),
+and politics (Session 5.5). This is distinct from
+`weather_calibration_pipeline.yml` (Session 4.2), which only builds this
+project's own forecast-error history — this pipeline is the one that
+actually produces and logs real flagged opportunities.
+
+**Files touched:** `scripts/run_weather_pipeline.py` (new — orchestrator,
+not in the original card; needed because no prior session had built one
+for this track, matching the other three tracks' own orchestrator
+scripts), `.github/workflows/weather_pipeline.yml` (new)
 
 **Validation (required to close session):**
-- [ ] Workflow scheduled appropriately against weather forecast update cadence
-(e.g. aligned to GFS run times)
+- [x] Workflow scheduled appropriately against weather forecast update
+cadence (e.g. aligned to GFS run times) — 4x/day (05:15, 11:15, 17:15,
+23:15 UTC), each timed ~4-5 hours after a real GFS model cycle
+(00Z/06Z/12Z/18Z) so NWS's own blended forecast has had time to ingest
+that cycle before this pipeline pulls it; full reasoning recorded in the
+workflow file's own header comment. Confirmed end-to-end against real
+live data before scheduling: `run_weather_pipeline.py` run manually
+produced 576 real market rows (62 series), 405 real NWS forecast rows
+(24/24 stations OK), 576 real probability estimates, and 399 real newly
+flagged CLV entries with zero pipeline failures across all four stages.
+
+**Decisions made:**
+1. **A dedicated orchestrator script (`run_weather_pipeline.py`) had to be
+built this session** — unlike Sessions 4.1-4.4, which each extended an
+existing shared file, no prior weather session had written a single
+script that runs all four stages in order. Built to the same pattern as
+`run_politics_pipeline.py` (Session 5.5): importlib-by-path module
+loading, a `PipelineStageFailed` exception so an empty/broken stage never
+silently flows into CLV logging as a false "market closed" signal, and a
+per-run digest file (`output/digest/weather_digest_latest.md`) listing
+every currently open flag.
+2. **This pipeline re-runs NWS ingestion independently of
+`weather_calibration_pipeline.yml`**, rather than trying to share a
+single pull between the two workflows. Both scripts already treat
+`_latest.csv` as fully overwritten and idempotent per run (same pattern
+every ingestion script in this project uses), so a second real pull
+during the same day is harmless — and keeping the two pipelines fully
+independent means a future change to either one's schedule or logic
+can't silently break the other.
 
 ---
 

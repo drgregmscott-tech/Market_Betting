@@ -1,0 +1,11 @@
+2026-09-09 19:48:24,868 UTC | INFO | === Weather pipeline run starting at 2026-09-09T19:48:24Z ===
+2026-09-09 19:48:24,868 UTC | INFO | --- Stage 1/4: Kalshi weather-market ingestion ---
+2026-09-09 19:49:03,071 UTC | INFO | Weather market ingestion summary: {'pulled_at': '2026-09-09T19:48:25.055860+00:00', 'temp_series_found': 104, 'international_series_skipped': 41, 'national_aggregate_series_skipped': 1, 'unmapped_series_skipped': 0, 'series_ingested': 62, 'rows_kept': 576, 'ok': True, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\normalized\\kalshi_weather_markets_20260909T194825Z.csv'}
+2026-09-09 19:49:03,072 UTC | INFO | --- Stage 2/4: NWS forecast + observed data ingestion ---
+2026-09-09 19:49:34,019 UTC | INFO | NWS ingestion summary: {'pulled_at': '2026-09-09T19:49:03.078298+00:00', 'target_station_count': 24, 'stations_ok': 24, 'stations_failed': [], 'forecast_rows': 405, 'observed_day_rows': 68}
+2026-09-09 19:49:34,019 UTC | INFO | --- Stage 3/4: estimation (weather threshold model) ---
+2026-09-09 19:49:34,069 UTC | INFO | Estimation summary: {'pulled_at': '2026-09-09T19:49:34.021638+00:00', 'input_rows': 576, 'estimated': 576, 'no_forecast_kind': 0, 'no_forecast_data': 0, 'target_date_passed': 0, 'unsupported_lead_day': 0, 'missing_strike_fields': 0, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\estimates\\weather_estimates_20260909T194934Z.csv'}
+2026-09-09 19:49:34,069 UTC | INFO | --- Stage 4/4: CLV logging ---
+2026-09-09 19:49:34,354 UTC | INFO | CLV logging summary: {'track': 'weather', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\estimates\\weather_estimates_20260909T194934Z.csv', 'rows_in_estimates': 576, 'newly_flagged': 399, 'newly_closed': 0, 'still_open': 399, 'total_logged': 602, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\weather\\clv_log.csv'}
+2026-09-09 19:49:34,393 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\weather_digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\weather_digest_20260909T194824Z.md
+2026-09-09 19:49:34,394 UTC | INFO | === Weather pipeline run complete ===

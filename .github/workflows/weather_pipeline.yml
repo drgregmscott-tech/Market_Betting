@@ -1,0 +1,166 @@
+name: Weather Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions "workflow" -- a set of instructions GitHub itself runs on
+# a schedule, on a temporary computer GitHub provides (a "runner"), separate
+# from your own PC. Every run starts from a completely fresh copy of this
+# repo; nothing written to that temporary computer's disk survives past the
+# end of the run unless this file explicitly saves it back to GitHub first.
+# This is Track 3 (weather/climate markets)'s twin of pickem_pipeline.yml
+# (Session 2.7), arbitrage_pipeline.yml (Session 3.4), and
+# politics_pipeline.yml (Session 5.5) -- same structure, a separate
+# schedule and a separate commit step, so all four tracks' automated runs
+# never interfere with each other.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo onto the temporary computer.
+# 2. Installs Python and this project's packages (requirements.txt).
+# 3. Runs scripts/run_weather_pipeline.py, which itself runs Kalshi
+#    weather-market ingestion -> NWS forecast/observed data ingestion ->
+#    threshold-probability estimation -> CLV logging in sequence
+#    (Sessions 4.1 - 4.3).
+# 4. If that script succeeds, commits the updated normalized/raw market and
+#    weather snapshots, the estimation stage's output, the updated
+#    data/weather/clv_log.csv and its snapshot, and the new digest file
+#    back to this repo, using a token GitHub generates automatically for
+#    every workflow run (GITHUB_TOKEN) -- no separate password or secret
+#    needed.
+# 5. If step 3 fails or finds nothing to commit, the workflow stops there --
+#    no commit happens, and the run shows as failed/red on GitHub's Actions
+#    tab so a failure is never silent.
+#
+# HOW THIS RELATES TO weather_calibration_pipeline.yml (Session 4.2)
+# --------------------------------------------------------------------------
+# weather_calibration_pipeline.yml already runs once a day to build this
+# project's own real forecast-error-by-lead-day history that
+# weather_model.py's sigma calculation depends on. This workflow is a
+# separate, additional pipeline: the one that actually turns a fresh Kalshi
+# market pull and a fresh NWS forecast into real flagged opportunities and
+# logs them for CLV tracking -- the same "flag it, log it" job every other
+# track's pipeline already does. Both workflows re-pull NWS data
+# independently (harmless and idempotent, same as every other ingestion
+# script in this project) and both write into data/weather/raw/ and
+# data/weather/normalized/; neither one's schedule depends on the other.
+#
+# WHY THIS COMMITS THE NORMALIZED/RAW SNAPSHOTS AND ESTIMATES -- UNLIKE
+# arbitrage_pipeline.yml, WHICH DELIBERATELY DOES NOT COMMIT ITS OWN
+# RAW/NORMALIZED FOLDERS
+# --------------------------------------------------------------------------
+# arbitrage_pipeline.yml skips committing its raw/normalized snapshots
+# because that data is disposable -- useful for one run's debugging, not a
+# real historical record (its real audit trail is the candidate-matches and
+# flags files it DOES commit). This track is the opposite case, same as
+# weather_calibration_pipeline.yml and politics_pipeline.yml: Session 4.2's
+# estimation model and Session 4.4's sizing dampener are both explicitly
+# named, sourced placeholders that ROADMAP.md's Session 8.3 is supposed to
+# re-derive against real data once enough real resolved weather contracts
+# exist. That re-derivation needs a real accumulated history of what this
+# project's own ingestion and estimation actually produced over time, not
+# just the latest snapshot.
+#
+# SCHEDULE FREQUENCY -- REAL, NAMED REASONING (matches ROADMAP.md's
+# Session 4.5 requirement: "scheduled appropriately against weather
+# forecast update cadence, e.g. aligned to GFS run times")
+# --------------------------------------------------------------------------
+# Four times a day, not hourly, for two real reasons:
+# 1. Session 4.2's own real finding (weather_estimation_model_spec.md):
+#    NWS's public gridpoint forecast -- this project's actual, confirmed
+#    data source -- is itself built from the National Blend of Models,
+#    which assimilates GFS's four daily model cycles (00Z, 06Z, 12Z, 18Z).
+#    A forecast issued between two GFS cycles is still built on the prior
+#    cycle's data; checking every hour would mostly re-flag against a
+#    forecast that has not actually changed, matching the same
+#    "high-frequency checks add no new real signal" reasoning
+#    weather_calibration_pipeline.yml's own docstring already uses for
+#    this track's daily forecast-error measurement.
+# 2. GitHub Actions minutes are a shared, account-wide budget (same real
+#    constraint every other pipeline's own docstring names, 2,000
+#    min/month on the Free plan). A 4x/day run of this pipeline (four real
+#    stages, each doing more real HTTP calls per run than
+#    weather_calibration_pipeline.yml's single-ingestion-stage pattern) is
+#    a deliberate, moderate addition to that shared budget -- more frequent
+#    than politics' once-a-day cadence (down-ballot race odds genuinely
+#    move slower than a repricing Kalshi weather contract can), but far
+#    below pickem_pipeline.yml's hourly cadence or arbitrage_pipeline.yml's
+#    6x/day cadence, since a weather contract's true probability only
+#    actually changes when a new GFS-informed forecast cycle lands, not
+#    continuously.
+#
+# WHY THIS RUNS AT THESE SPECIFIC TIMES (05:15, 11:15, 17:15, 23:15 UTC)
+# --------------------------------------------------------------------------
+# Each run is timed roughly 4-5 hours after a real GFS model cycle
+# (00Z/06Z/12Z/18Z), giving NWS's own blended forecast time to actually
+# ingest that cycle's data before this pipeline pulls it -- pulling right
+# at the top of the GFS hour would often catch a forecast that hasn't been
+# updated with the new cycle yet. The ":15" offset (not the exact hour, and
+# deliberately different from pickem_pipeline.yml's ":07" offset,
+# politics_pipeline.yml's ":40" offset, and weather_calibration_pipeline.yml's
+# ":23" offset) keeps this project's five scheduled workflows staggered
+# rather than clustered at the same few minutes of the day -- reduces the
+# odds of two unrelated pipelines both landing on a delayed/skipped slot on
+# GitHub's shared infrastructure at once (GitHub's own documentation warns
+# busy, predictable slots are the most likely to be delayed or skipped).
+on:
+  schedule:
+    - cron: "15 5,11,17,23 * * *"
+  workflow_dispatch: {}
+  # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
+  # be triggered by hand for testing without waiting for the next scheduled
+  # run.
+
+# Prevents two runs from overlapping if one run happens to take longer than
+# expected -- a second scheduled run will wait for the first to finish
+# rather than starting in parallel and racing to write the same files.
+concurrency:
+  group: weather-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Required so the final step in this workflow is allowed to commit and
+  # push back to this repo using the automatic GITHUB_TOKEN.
+
+jobs:
+  run-weather-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (market + NWS ingestion -> estimation -> CLV logging)
+        run: python scripts/run_weather_pipeline.py
+
+      - name: Commit and push updated data, estimates, CLV log, and digest
+        run: |
+          git config user.name "weather-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/weather/raw/ data/weather/normalized/ data/weather/estimates/ data/weather/clv_log.csv data/weather/clv_snapshots/ output/digest/weather_digest_latest.md output/digest/weather_digest_*.md
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated weather pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-pipeline-logs
+          path: |
+            logs/weather_pipeline.log
+            logs/ingestion.log
+            logs/estimation.log
+            logs/clv_logging.log
+          retention-days: 14
+          if-no-files-found: ignore

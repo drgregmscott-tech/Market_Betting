@@ -7278,3 +7278,107 @@ CLV data.
 
 **Status at close of session:** Fully closed out. Session 4.5
 (Automation Adaptation) is next for this track.
+
+---
+
+## Session 4.5 — Automation Adaptation (2026-09-09)
+
+**Goal:** Build the scheduled, unattended pipeline for Track 3
+(weather/climate markets) — Kalshi weather-market ingestion → NWS
+forecast/observed data ingestion → threshold-probability estimation → CLV
+logging, run automatically on a GitHub Actions schedule, matching the
+orchestrator pattern already built for pick'em (Session 2.7), arbitrage
+(Session 3.4), and politics (Session 5.5).
+
+**What was actually done:** No prior weather session had built a single
+script that runs all four of this track's stages back-to-back — Sessions
+4.1–4.4 each extended one shared file (ingestion, estimation, CLV logger,
+sizing engine) but never an orchestrator. Built `scripts/
+run_weather_pipeline.py` from scratch, following the exact structure of
+`run_politics_pipeline.py`: importlib-by-path module loading (so real
+Python exceptions propagate instead of subprocess exit-code guessing), a
+`PipelineStageFailed` exception that stops the run before CLV logging if
+any stage returns 0 usable rows (so a transient Kalshi/NWS outage can
+never be mistaken for every weather market closing), and a per-run digest
+file (`output/digest/weather_digest_latest.md`) listing every currently
+open flag for manual sizing review.
+
+Then built `.github/workflows/weather_pipeline.yml`, scheduled 4x/day
+(05:15, 11:15, 17:15, 23:15 UTC) — each run timed roughly 4-5 hours after
+a real GFS model cycle (00Z/06Z/12Z/18Z) so NWS's own blended forecast
+(the National Blend of Models, which assimilates GFS) has had time to
+actually ingest that cycle's data before this pipeline pulls it. This is
+explicitly a separate, additional pipeline from
+`weather_calibration_pipeline.yml` (Session 4.2), which only builds this
+project's own forecast-error-by-lead-day history — this new pipeline is
+the one that actually produces and logs real flagged opportunities, the
+same "flag it, log it" job every other track's own pipeline does.
+
+**Files created/modified:**
+- `scripts/run_weather_pipeline.py` (new) — four-stage orchestrator,
+`PipelineStageFailed` guard logic, digest builder.
+- `.github/workflows/weather_pipeline.yml` (new) — 4x/day schedule, full
+reasoning recorded in the file's own header comment (cadence, why these
+specific times, why it's separate from the calibration pipeline, why it
+commits raw/normalized snapshots unlike arbitrage's pipeline).
+- `ROADMAP.md` — Session 4.5 card closed out (see that entry).
+
+**Validation results:**
+- [x] Workflow scheduled appropriately against weather forecast update
+cadence — **pass**. Confirmed against real live data before scheduling:
+ran `python scripts/run_weather_pipeline.py` manually end-to-end. Real
+results: 576 real market rows ingested across 62 series (0 unmapped),
+405 real NWS forecast rows across 24/24 stations (zero station
+failures), 576/576 real probability estimates produced (0 fell into
+any no_forecast_data/no_forecast_kind/target_date_passed bucket), and
+399 real newly-flagged CLV entries logged with zero pipeline failures
+across all four stages. Exit code 0. The real digest file
+(`output/digest/weather_digest_latest.md`) correctly lists the top real
+open flags sorted by edge (e.g. `KXLOWTATL-26SEP09-B71.5`, model_prob
+0.9053 vs. market_price 0.04, edge 0.8653).
+
+**Decisions made:**
+1. **A dedicated orchestrator script had to be built this session** —
+a real gap, not an oversight: no prior weather session's card called for
+one, since Sessions 4.1–4.4 each only needed to extend an existing
+shared file. Built to the identical pattern already proven by
+`run_politics_pipeline.py`, rather than inventing a new orchestration
+style for this fourth track.
+2. **This pipeline re-runs NWS ingestion independently of
+`weather_calibration_pipeline.yml`, on its own separate schedule**,
+rather than trying to share one pull between the two workflows. Both
+scripts already treat every `_latest.csv` file as fully overwritten and
+idempotent per run (the same pattern every ingestion script in this
+project already uses), so a second real pull later in the same day is
+harmless — and keeping the two pipelines fully independent means a
+future schedule or logic change to either one can't silently break the
+other.
+3. **4x/day, not hourly** — matches Session 4.2's own real finding that
+NWS's gridpoint forecast is built from the National Blend of Models,
+which itself only ingests a new GFS cycle four times a day; checking
+more often would mostly re-flag against a forecast that has not actually
+changed. Deliberately faster than politics' once-a-day cadence (a
+Kalshi weather contract can reprice faster than a down-ballot race) but
+well below pickem's hourly or arbitrage's 6x/day cadence, reflecting
+this track's real update rhythm rather than either extreme.
+4. **Schedule offset to :15 past the hour**, deliberately different from
+every other pipeline's own offset (pickem :07, politics :40, weather
+calibration :23), continuing this project's existing practice of
+staggering scheduled workflows so they don't cluster on the same
+GitHub-shared-infrastructure minute.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:** None — this session's one
+roadmap validation item is met, confirmed against a real, live,
+zero-failure end-to-end run. This also directly advances Open Decision
+#42 (Session 4.3's deferred "one real week of logged weather flags"
+item, which was explicitly tied to this session's automation landing) —
+real elapsed time across repeated automated runs can now start
+accumulating going forward; Open Decision #42 itself is not yet closed,
+since no real week has elapsed yet, but its prerequisite is now met.
+
+**Status at close of session:** Fully closed out. Session 4.6 (Frontend
+Integration) and 4.7 (Live Validation Window) were already handled
+separately (4.6 closed 2026-09-08, out of roadmap order; 4.7 not yet
+started) — see their own ROADMAP.md entries.

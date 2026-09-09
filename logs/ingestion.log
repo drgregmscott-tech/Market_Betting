@@ -9366,3 +9366,17 @@ Call log:
 2026-09-09 18:54:55,857 UTC | INFO | Skipped non-player-prop market: Most Regular Season Rookie Receiving Yards 2026-27
 2026-09-09 18:54:55,857 UTC | INFO | FanDuel: 141 normalized rows
 2026-09-09 18:54:55,864 UTC | INFO | === FanDuel props ingestion run complete: 141 rows (OK) ===
+2026-09-09 19:48:25,055 UTC | INFO | === Weather market ingestion run starting ===
+2026-09-09 19:48:25,506 UTC | INFO | Series discovery: 13947 total series, 104 match the temperature-threshold structural pattern within Climate and Weather.
+2026-09-09 19:48:33,268 UTC | INFO | Processed 20/104 target series so far.
+2026-09-09 19:48:41,126 UTC | INFO | Processed 40/104 target series so far.
+2026-09-09 19:49:03,018 UTC | INFO | Processed 104/104 target series so far.
+2026-09-09 19:49:03,018 UTC | INFO | Weather markets: 104 temperature series found, 41 international (skipped, out of scope), 1 national-aggregate (skipped, out of scope), 0 unmapped (skipped, named gap), 62 series ingested, 576 market rows kept.
+2026-09-09 19:49:03,069 UTC | INFO | === Weather market ingestion run complete (OK) ===
+2026-09-09 19:49:03,078 UTC | INFO | === NWS weather data ingestion run starting (24 target stations) ===
+2026-09-09 19:49:09,291 UTC | INFO | Processed 5/24 target stations so far.
+2026-09-09 19:49:15,665 UTC | INFO | Processed 10/24 target stations so far.
+2026-09-09 19:49:21,852 UTC | INFO | Processed 15/24 target stations so far.
+2026-09-09 19:49:27,751 UTC | INFO | Processed 20/24 target stations so far.
+2026-09-09 19:49:33,502 UTC | INFO | Processed 24/24 target stations so far.
+2026-09-09 19:49:34,016 UTC | INFO | === NWS ingestion run complete: 24/24 stations OK, 405 forecast rows, 68 observed-day rows (failed stations: none) ===

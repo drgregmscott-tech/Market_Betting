@@ -185,3 +185,5 @@
 2026-09-09 18:54:58,534 UTC | INFO | Model status breakdown: {'estimated': 397, 'no_player_match': 191, 'unsupported_market_first_scorer': 164, 'season_complete_no_remaining_games': 63}
 2026-09-09 18:54:58,555 UTC | INFO | Wrote 815 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_estimates_20260909T185458Z.csv
 2026-09-09 18:54:58,575 UTC | INFO | Wrote 815 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_latest.csv
+2026-09-09 19:49:34,021 UTC | INFO | === Weather estimation run starting ===
+2026-09-09 19:49:34,068 UTC | INFO | === Weather estimation run complete: 576 input rows, 576 estimated, 0 no_forecast_kind, 0 no_forecast_data, 0 target_date_passed, 0 unsupported_lead_day, 0 missing_strike_fields ===
