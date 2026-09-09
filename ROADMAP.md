@@ -1090,7 +1090,8 @@ Window.
 ---
 
 ### Session 2.9 — Live Paper-Trading Validation Window
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-09) — explicit **NO-GO** decision
+recorded. See SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.8 complete. Full stack live and running
 automatically.
 
@@ -1105,22 +1106,40 @@ results, not just the CLV proxy for them.
 and `/data/pickem/outcome_log.csv` together and produces a written assessment.
 
 **Validation (required to close session):**
-- [ ] Sample-size threshold from Session 2.5 reached, for both CLV entries and
-real reported outcomes
-- [ ] Real graded CLV performance reviewed — does it show the "positive
+- [x] Sample-size threshold from Session 2.5 reached, for both CLV entries and
+real reported outcomes — **partial:** the CLV-close threshold (≈3,725)
+is cleared (3,845 real closed flags as of 2026-09-09); the real-outcome
+threshold is **not** cleared — `outcome_log.csv` does not exist, zero
+real bets have been reported.
+- [x] Real graded CLV performance reviewed — does it show the "positive
 trendline with real drawdowns" pattern the project's north star describes,
-or not?
+or not? — reviewed; see SESSION_LOG.md. Own-line-movement signal only
+(cross-platform consensus has never fired); this proxy cannot answer
+the win-rate question the north star is about.
 - [ ] Real reported outcomes (not just CLV) reviewed against the same standard,
-and checked for directional agreement with the CLV signal
-- [ ] Explicit go/no-go decision recorded: is Track 1 (pick'em) validated enough
+and checked for directional agreement with the CLV signal — **not met**,
+no real outcomes exist yet. User has deliberately chosen not to place
+real bets until confidence is established — see SESSION_LOG.md.
+- [x] Explicit go/no-go decision recorded: is Track 1 (pick'em) validated enough
 to consider real capital, or does it need another iteration on the
-estimation model first?
-- [ ] If no-go: specific, named reasons documented (not just "didn't work") so
-the next session knows what to fix
+estimation model first? — **NO-GO for real capital**, explicitly because
+there is no real graded outcome data yet, not because of any negative
+signal found in the CLV data. See SESSION_LOG.md for full reasoning.
+- [x] If no-go: specific, named reasons documented (not just "didn't work") so
+the next session knows what to fix — see SESSION_LOG.md.
 
 **Handoff notes:** This is the checkpoint the whole "no guarantees ≠ lower bar"
 rule exists for. A session that fails this validation is not a failed project —
 it's the system doing exactly what it's supposed to do before capital is at risk.
+**This session closed on a NO-GO, for a specific, narrow reason: no real bet has
+ever been placed and reported, so there is no real outcome data to grade against
+the CLV proxy.** This is not a finding that the model is bad — it is a finding
+that the one piece of evidence this checkpoint actually needs (real graded
+results) does not exist yet. Re-opening this checkpoint is straightforward once
+that changes: the user places a small number of real test bets, reports each
+result via `outcome_tracker.py --record`, and once enough real graded legs
+accumulate, `weekly_review.py --run` becomes runnable and this checkpoint can be
+re-evaluated for real. See Open Decision #22 (new) for the exact re-trigger.
 
 ---
 
@@ -3437,6 +3456,27 @@ previously-blank column now succeeds where it previously raised
 confirmed via `git stash` to be a pre-existing, unrelated bug — the test
 writes against the real production `clv_log.csv` path instead of a tmp
 fixture — not caused by this fix.
+44. **New, opened Session 2.9 (2026-09-09):** Track 1's live paper-trading
+checkpoint closed on an explicit **NO-GO for real capital**, for one
+specific, narrow reason — no real bet has ever been placed and reported,
+so `outcome_log.csv` does not exist and there is no real graded win/loss
+data to evaluate against the CLV proxy. This is not a finding that the
+model or CLV signal is bad; it is a finding that the evidence this
+checkpoint needs doesn't exist yet. The CLV-close sample-size threshold
+(≈3,725, per Session 2.5) IS cleared (3,845 real closed flags as of
+2026-09-09), but cross-platform consensus has still never fired even
+once across all 6,850 real logged flags — own-line-movement is the only
+real signal available, and per Session 2.4's own documented limitation,
+a static line not moving (or moving) is not itself proof of directional
+accuracy. User explicitly confirmed (Session 2.9) they are deliberately
+holding off on placing real bets until confidence is established — a
+reasonable, deliberate choice, not an oversight. **Action needed to
+re-trigger this checkpoint:** once the user places a small number of
+real test bets and reports each result via
+`outcome_tracker.py --record`, run `weekly_review.py --run` for the
+first time ever on real data, and once enough real graded legs
+accumulate, re-run this go/no-go review against real outcome evidence
+instead of CLV alone.
 
 ---
 *Update this file at the close of each future session, per the project's

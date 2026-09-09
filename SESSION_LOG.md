@@ -7475,3 +7475,138 @@ once rather than track-by-track.
 (Track 3 — Weather/Climate Markets) in full: all sessions (4.1–4.4
 estimation/CLV/sizing build-out, 4.5 Automation Adaptation, 4.6 Frontend
 Integration, 4.7 Live Validation Window) are now ✅/⚠️ Complete.
+
+---
+
+## Session 2.9 — Live Paper-Trading Validation Window (Track 1, pick'em)
+
+**Date completed:** 2026-09-09
+**Status:** ⚠️ Complete with caveats — explicit **NO-GO for real capital**
+recorded, for a specific, narrow, named reason (see below). This session was
+left open since the 2.9 continuation on 2026-09-02, blocked on the 2026-09-07
+NFL season start; per the project's own standing rule (ROADMAP.md, "Rule for
+sessions left open across other work"), the live current copies of
+`ROADMAP.md`/`SESSION_LOG.md` were used directly (working tree confirmed
+clean and up to date with `origin/main` before any edit), and both files were
+checked for entries added by other sessions (Phases 3 and 4 both closed in
+the interim) before writing this entry, rather than working from a stale
+snapshot.
+
+**What was actually done:**
+1. Reviewed `data/pickem/clv_log.csv` directly (not the frontend view, per
+this project's own established practice from the 2.9 continuation session):
+6,850 total real flags logged since 2026-08-31, 3,845 closed. That clears
+Session 2.5's ≈3,725-leg CLV sample-size threshold. Cross-platform
+consensus (`consensus_available`) is **still `False` on every single one**
+of the 3,845 closed rows — zero real Underdog/PrizePicks consensus matches
+have ever landed, despite Open Decision #10/#11's fixes (Session 2.9
+continuation) making Underdog NFL data visible again. Own-line-movement is
+the only real signal present: 1,258 of 3,845 closed flags (33%) saw their
+line move before dropping off the board; average `clv_edge_at_close` across
+all 3,845 closed rows is 0.252 (vs. model-vs-0.5-implied-probability, not a
+real market benchmark).
+2. Checked for `data/pickem/outcome_log.csv` directly — **it does not
+exist.** Confirmed by attempting a real run of `weekly_review.py --run`,
+which raised `FileNotFoundError` with its own built-in message: "Run
+outcome_tracker.py --record at least once first... so there is real graded
+data to review." Zero real bets have been placed and reported into the
+system since it went live.
+3. Confirmed the automated pipeline itself is live and current, not stalled
+— most recent `last_seen_at` timestamp in `clv_log.csv` is
+2026-09-09T17:34:51Z (same day as this session), most recent
+`first_flagged_at` is 2026-09-08T14:29:16Z, confirming the GitHub Actions
+workflow is still running on schedule through the real NFL season start.
+4. Asked the user directly whether any real bets had been placed since the
+season started (2026-09-07) that could be reported now, per this
+session's own validation requirement to review real outcomes, not CLV
+alone. **User confirmed: no real bets placed, and none planned until
+system confidence is established** — a deliberate choice, stated
+explicitly, not an oversight or a gap in reporting discipline.
+5. Given that answer, ran this checkpoint on the only real evidence that
+exists (CLV proxy signal) and recorded an explicit **NO-GO for real
+capital**, for the specific, narrow, named reason that no real graded
+outcome data exists yet — not because any negative signal was found in
+the CLV data itself. This matches ROADMAP.md's own standing framing for
+this exact session: "A session that fails this validation is not a
+failed project — it's the system doing exactly what it's supposed to do
+before capital is at risk."
+
+**Files created/modified:** `ROADMAP.md` (Session 2.9 card closed with real
+validation results and an explicit NO-GO; new Open Decision #44 recording
+the exact re-trigger condition), `SESSION_LOG.md` (this entry). No code
+changed — this was a review-only session per its own card ("no new code —
+this is a soak-test session").
+
+**Validation results (against ROADMAP.md's Session 2.9 checklist):**
+- Sample-size threshold reached, for both CLV entries and real reported
+outcomes — **partial.** CLV-close threshold met (3,845 vs. ≈3,725
+target). Real-outcome threshold **not met** (0 real graded legs;
+`outcome_log.csv` doesn't exist).
+- Real graded CLV performance reviewed against the "positive trendline with
+real drawdowns" north star — reviewed, but the only real signal available
+(own-line movement) cannot actually answer that question; it was never
+designed to substitute for real win/loss data (see Session 2.4's own
+documented limitation, restated here since this is exactly the checkpoint
+where that limitation becomes load-bearing rather than academic).
+- Real reported outcomes reviewed against the same standard — **not met**,
+no real outcomes exist.
+- Explicit go/no-go decision recorded — **yes: NO-GO for real capital**,
+narrowly scoped to "no real outcome evidence exists yet," not a finding
+about model quality.
+- If no-go, specific named reasons documented — yes, see above and Open
+Decision #44.
+
+**Decisions made:**
+1. **This checkpoint is scored on the real evidence that exists (CLV proxy)
+rather than left entirely unscored**, since the CLV threshold genuinely
+is met and reviewing it has real value — but the go/no-go conclusion is
+explicitly NOT "the model looks good, therefore go." It is "the one
+piece of evidence this decision actually needs doesn't exist, therefore
+no-go, independent of how good the proxy signal looks." This distinction
+matters because CLV was never meant to stand in permanently for real
+outcomes (Session 2.4's own design) — treating a clean CLV read as
+sufficient here would have been exactly the kind of "no guarantees, so
+skip the real check" shortcut ROADMAP.md's standing rule warns against.
+2. **Session 2.9 is closed now (with caveats) rather than left open
+indefinitely**, since the roadmap's own validation checklist has an
+explicit no-go path with named reasons — leaving it open would just
+delay recording a decision this project's own design already
+anticipates being reachable. Re-opening it is a well-defined, narrow
+action (real bets placed and reported), not a re-scoping.
+3. **Zero cross-platform consensus matches across 6,850 real flags is
+treated as a separate, real, still-open gap** — not folded into this
+session's NO-GO reasoning as if it were the same problem as missing
+outcome data. It means even the CLV proxy itself is running on one leg
+(own-line movement) rather than two, independent of whether real
+outcomes exist. Worth a dedicated look in a future session, since
+Session 2.9 continuation's fixes were expected to make this possible
+and it still hasn't happened.
+
+**Corrections/reversals during the session:** None — this session's
+findings (no outcome log, consensus still at zero) were confirmed directly
+against real files/real script output, not assumed from memory of earlier
+sessions.
+
+**Open items / deferred validations:**
+- **Real outcome data collection has not started.** This is the single
+concrete blocker to re-running this checkpoint for real. No action is
+being forced on the user's timeline — they've explicitly chosen to wait
+for higher confidence before risking real capital, which is a reasonable
+and explicitly permitted stance under this project's own design (flags
+and sizes, never places bets; the human decides when and whether to act).
+- **Cross-platform consensus has never fired, across 6,850 real flags.**
+Not investigated further this session (out of this session's own
+review-only scope) — a real, named gap for a future session, distinct
+from Open Decision #11's already-resolved join-logic fix.
+- Per ROADMAP.md's standing rule for sessions left open across other work:
+this entry was written against the live, current `ROADMAP.md`/
+`SESSION_LOG.md` (confirmed clean working tree, up to date with
+`origin/main`), with Phases 3 and 4's intervening entries checked and
+preserved, not overwritten.
+
+**Status at close of session:** Closed with an explicit, honest NO-GO for
+real capital on Track 1, for a narrow, specific, well-documented reason (no
+real outcome data exists yet) rather than any finding against the model or
+CLV signal itself. The path to re-opening this checkpoint is clear and
+already documented (Open Decision #44) — it does not require a new session
+number, just real bet reports once the user is ready.
