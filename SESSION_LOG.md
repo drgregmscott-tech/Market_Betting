@@ -7046,3 +7046,96 @@ arbitrage, weather, politics, props) now have a frontend section; only
 Phase 7's Track 6 (sportsbook main lines) remains gated behind its own
 Session 7.0 go/no-go checkpoint. Next session is 6.7 — Live Validation
 Window.
+
+---
+
+## Session 6.7 — Live Validation Window
+
+**Date opened:** 2026-09-09
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
+items below). Per ROADMAP.md's "Rule for sessions left open across other
+work," this working directory's SESSION_LOG.md/ROADMAP.md were already the
+live copies (no other session has touched them since Session 6.6's own
+commit, `7614186`) — no separate GitHub pull was needed.
+
+**What was actually done:**
+1. **Confirmed this track's flag mechanism is probability-based (like
+   Tracks 1 and 4), not defect-rate-based (like Track 3)** — read
+   `clv_logger.py`'s props branch (Session 6.3) directly: a player/stat/
+   side combination is flagged when the field-vig-normalized model
+   probability beats the platform's own no-vig implied probability by at
+   least `PROPS_FLAG_EDGE_THRESHOLD = 0.03`. Session 2.5's one-sample
+   proportion-test method applies, same as Track 4.
+2. **Derived a real breakeven win rate (p₀) from real committed data**,
+   since neither Track 1's p₀ (0.5774, PrizePicks' fixed payout
+   multiplier) nor Track 4's p₀ (0.892, Kalshi/Polymarket per-contract
+   pricing) transfer to DK/FD's American-odds-per-side pricing. Read the
+   real, currently-committed `data/sportsbook_props/clv_log.csv` (230 real
+   open flags): `first_flagged_market_price` mean 0.2255, median 0.1182.
+   Full derivation, including why the resulting n (≈1,562) lands between
+   Track 1's (≈3,725) and Track 4's (≈892) and what that says about this
+   track's real flagged-edge sizes, is in the new
+   `docs/props_sample_size_methodology.md`.
+3. **Built `scripts/calibration/props_sample_report.py`** — reads
+   `data/sportsbook_props/clv_log.csv` and reports real progress against
+   the 30-flag interim floor and ≈1,562-flag full target, matching the
+   recurring-review pattern established by `weekly_review.py` (Track 1)
+   and `politics_sample_report.py` (Track 4). Explicitly labels
+   `clv_logger.py`'s existing "disappeared from latest pull == closed"
+   convention as NOT the same thing as a confirmed real prop settlement,
+   same caveat Track 4's report script carries.
+4. **Ran the new report script against this sandbox's real, current
+   state**: `data/sportsbook_props/clv_log.csv` exists (230 real flags,
+   from Sessions 6.5/6.6's real pipeline runs) and all 230 show
+   `status == "open"` — 0 closed. Confirmed this is expected, not a repeat
+   of Session 5.7's schedule-never-fired problem: the real
+   `game_start_time` values on these flags cluster around 2026-09-10 (the
+   current NFL slate), which had not kicked off as of this session, so no
+   flag could plausibly have closed yet. Unlike Track 4's ~55-day race
+   timescale, this track's real resolution timescale is days, not months.
+
+**Files created:**
+- `docs/props_sample_size_methodology.md` (new) — full derivation of the
+  30-flag interim floor and ≈1,562-flag full-confidence target.
+- `scripts/calibration/props_sample_report.py` (new) — recurring
+  progress-check script, `--report` flag.
+
+**Validation results:**
+- [ ] **Minimum sample size reached — NOT MET.** 230 real flags logged, 0
+  closed/graded. Interim floor (30) and full target (≈1,562) both
+  unreached.
+- [ ] **Go/no-go decision recorded — not yet possible.** Blocked on the
+  item above.
+
+**Decisions made:**
+1. **p₀ = 0.2255 (a real mean pulled from current committed data), not a
+   reused or guessed number** — full reasoning in
+   `docs/props_sample_size_methodology.md` Section 2.
+2. **A props-specific realized-outcome tracker is deliberately NOT built
+   this session.** Same reasoning Sessions 3.6 and 5.7 already applied:
+   building one before any real prop has resolved would mean testing it
+   against nothing real. Deferred until at least one real flag closes.
+3. **This session is being left open**, per the same standing rule
+   Sessions 3.6 and 5.7 established — but is expected to close sooner than
+   5.7 (politics), since this track's real resolution timescale is days,
+   not the ~55-day-plus timescale found for down-ballot races.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- **This session remains open.** Do not mark it ✅ Complete until the
+  interim floor (30 closed flags) is reached and reviewed, and a go/no-go
+  decision — explicitly factoring in whether real-world account limiting
+  was observed — is recorded.
+- Re-run `python scripts/calibration/props_sample_report.py --report`
+  after the 2026-09-10 NFL slate locks/resolves (a reasonable next check,
+  given this track's days-scale resolution timescale — no need for the
+  multi-week cadence Track 4's report needs).
+- Per ROADMAP.md's standing rule, before this session is ever closed,
+  pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
+  any session entries added in the meantime.
+
+**Next session:** None yet — this session stays open. Session 4.7 (Track 3
+weather's own Live Validation Window) and Session 5.7 (Track 4 politics)
+also remain open, each for its own separate, real reason — not to be
+confused with each other or with this one.

@@ -2544,13 +2544,59 @@ session is 6.7 — Live Validation Window.
 ---
 
 ### Session 6.7 — Live Validation Window
-**Status:** Not started
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see
+SESSION_LOG.md for full detail and open items). Do not skip ahead to a
+future close-out without first pulling the live SESSION_LOG.md/ROADMAP.md
+from GitHub — see "Rule for sessions left open across other work" above.
 **Prerequisites:** Session 6.6 complete.
 
+**What was actually done:** Derived a real, evidence-based sample-size
+threshold for this track (probability-based flagging, like Tracks 1 and 4 —
+not a defect rate like Track 3), with a breakeven pulled from this track's
+own real DK/FD American-odds-implied data rather than reused from either
+prior track's math. See `docs/props_sample_size_methodology.md` for the full
+derivation and `scripts/calibration/props_sample_report.py` for the
+recurring progress check.
+
 **Validation (required to close session):**
-- [ ] Minimum sample size reached
+- [ ] Minimum sample size reached — **NOT MET.** `data/sportsbook_props/
+clv_log.csv` holds 230 real open flags (confirmed against the real,
+currently-committed file), but 0 are closed/graded yet — these are real
+NFL props tied to the 2026-09-10 game slate, which had not yet kicked off
+as of this session. Interim floor: 30 closed flags; full target: ≈1,562
+(see methodology doc, Section 6).
 - [ ] Go/no-go decision recorded, explicitly factoring in whether real-world
-account limiting was observed during the window, not just modeled edge
+account limiting was observed during the window, not just modeled edge —
+not yet possible; blocked on the item above.
+
+**Decisions made:**
+1. **p₀ = 0.2255 (real mean `first_flagged_market_price` across all 230
+currently-flagged rows), not a reused or guessed number** — full reasoning
+in `docs/props_sample_size_methodology.md` Section 2. Unlike Track 1
+(fixed PrizePicks payout multiplier) or Track 4 (Kalshi/Polymarket
+per-contract pricing), this track's breakeven comes from DK/FD American
+odds converted to no-vig implied probability (Session 6.1/6.2).
+2. **A props-specific realized-outcome tracker is deliberately NOT built
+this session** — same reasoning as Sessions 3.6 and 5.7: building one
+before any real prop has resolved would mean testing it against nothing
+real. Deferred until at least one real flag in `clv_log.csv` closes.
+3. **This session is being left open**, per the same standing rule
+Sessions 3.6 and 5.7 established. Unlike Track 4's ~55-day race timescale,
+this track's real resolution timescale is short (days, not months) — see
+methodology doc Section 5 — so this session is expected to close sooner
+than 5.7, not to stay open indefinitely.
+
+**Open items / deferred validations:**
+- Re-run `python scripts/calibration/props_sample_report.py --report`
+after the 2026-09-10 NFL slate locks/resolves, to check for the first real
+closed flags.
+- Once the interim floor (30 closed) is reached, review real hit rate
+against the 22.55% breakeven and record whether real-world account
+limiting (this track's own best-corroborated risk, per the Track
+Reference table) was observed during the window — not just modeled edge.
+- Per ROADMAP.md's standing rule, before this session is ever closed, pull
+the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for any
+session entries added in the meantime.
 
 ---
 
