@@ -6159,3 +6159,94 @@ for this exact problem.
 - Per ROADMAP.md's standing rule, before this session is ever closed,
   pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
   any session entries added in the meantime.
+
+---
+
+### Session 6.1 continuation — DraftKings confirmed working; session closed (2026-09-09)
+
+**What happened:** three more real, concrete bugs were found and fixed in
+sequence against real live re-runs — each one a genuine diagnosis, not a
+guess-and-retry:
+
+1. **`context.request.get()` still 403'd even against the real, correct
+   URL.** Root cause: Playwright's `context.request` is a separate,
+   lightweight HTTP client, not the browser's actual network engine — it
+   doesn't carry Akamai's expected fingerprint. Fixed by moving the fetch
+   inside the page itself via `page.evaluate()` calling in-page `fetch()`.
+2. **That produced a new, different failure: `TypeError: Failed to
+   fetch`.** Root cause: a real CORS rejection — DK's servers send a
+   wildcard `Access-Control-Allow-Origin: *`, which browsers refuse to
+   honor for a credentialed cross-origin `fetch()` regardless of Akamai.
+   Fixed by using a real top-level page **navigation** (`page.goto`)
+   instead of an in-page `fetch()` call — navigations aren't subject to
+   CORS.
+3. **That produced a real 403 again — this time from a genuine page
+   navigation in headless Chromium.** Diagnosed as headless-mode
+   detection specifically (`navigator.webdriver`, missing plugins/fonts —
+   fingerprint tells independent of "is this a real browser"). Fixed with
+   `headless=False`, a real new operational requirement: the machine
+   running this script needs a visible display (will NOT run inside a
+   typical headless CI/server environment without a virtual display).
+4. **That produced a plain timeout**, `Page.goto: Timeout 20000ms
+   exceeded` waiting for `"networkidle"` — a real, ordinary bug, not
+   another anti-bot layer: a live odds page never actually goes idle
+   (continuous background polling for updated lines), so that Playwright
+   wait condition could never be satisfied. Fixed by waiting for
+   `"domcontentloaded"` plus a fixed 5-second pause instead.
+
+**Real result after all four fixes: `python scripts/ingestion/
+ingest_dk_props.py` succeeded — 672 real normalized rows across 8 real
+NFL events**, confirmed OK in the run summary. Spot-checked directly
+against the real output CSV: real players (Rhamondre Stevenson, Jaxon
+Smith-Njigba, A.J. Brown, George Holani), real matchup (event
+`34118042` = NE Patriots @ SEA Seahawks, matching the real nav data
+captured earlier this session), real game start time
+(`2026-09-10T00:20:00Z`), and real American odds that move in the
+correct direction for a "2+ TDs" market — longer-shot players carry
+longer odds (+700 up through +1400 in the sampled rows), the same
+sanity-check pattern used for every other model/pricing output in this
+project.
+
+**User explicitly pushed back on accepting "DraftKings is blocked" as a
+final answer** rather than the FanDuel-only fallback offered earlier —
+this is the reason DK ended up working at all. Worth recording plainly:
+the difference between stopping at the first (or third) real blocker and
+actually resolving it was direct user insistence, not something this
+session would have arrived at on its own initiative.
+
+**Files modified this continuation:**
+- `scripts/ingestion/ingest_dk_props.py` — three further real fixes to
+  the fetch layer (in-page `fetch()` → real navigation; `networkidle` →
+  `domcontentloaded` + fixed pause; `headless=True` → `headless=False`),
+  each with an inline comment explaining the specific real failure it
+  fixes, per this project's own documentation standard.
+
+**Decisions made:**
+1. **DK's ingestion now requires `headless=False`** — a real, named
+   operational cost specific to this venue's bot-detection, not present
+   anywhere else in this project. This has a real, direct consequence for
+   Session 6.5 (Automation): a standard GitHub Actions runner is headless
+   with no display, so DK's pipeline will need either a virtual display
+   (e.g. `xvfb-run` on a Linux runner) or a different automation
+   environment than the one Sessions 2.7/3.4/5.5 already built for the
+   other tracks — a real, concrete open item for that future session,
+   not yet solved here.
+2. **v1 remains scoped to one DK subcategory (12438 — TD scorer props)**,
+   per the original module docstring — confirmed working now, but
+   Passing/Rushing/Receiving Yards etc. (visible in FanDuel's real data)
+   still need their own DK subCategoryId captured the same DevTools way
+   before they can be added.
+
+**Validation, final for this session:**
+- [x] Both feeds ingest successfully — **MET.** FanDuel: 141 real
+  player-prop rows. DraftKings: 672 real rows across 8 events. Both
+  confirmed against real spot-checked output, not just a summary count.
+- [x] Vig/juice correctly extracted and stored — MET (Session 6.1
+  original entry — unchanged, no vig math needed changing).
+- [x] Legal footprint confirmed at the prop-category level — MET
+  (Session 6.1 original entry — unchanged).
+
+**Session 6.1 is now ✅ Complete.** See ROADMAP.md for the updated status
+line. Next roadmap-sequential session is **6.2 — Estimation Engine
+Adaptation**, which can now build against real ingested data from both
+platforms.

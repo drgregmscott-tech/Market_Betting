@@ -9084,3 +9084,6 @@ Call log:
   - navigating to "https://sportsbook.draftkings.com/leagues/football/nfl", waiting until "networkidle"
 
 2026-09-09 14:56:18,387 UTC | INFO | === DraftKings props ingestion run complete: 0 rows (FAILED) ===
+2026-09-09 14:58:03,081 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-09 14:58:16,922 UTC | INFO | DraftKings: 672 normalized rows across 8 events
+2026-09-09 14:58:17,319 UTC | INFO | === DraftKings props ingestion run complete: 672 rows (OK) ===

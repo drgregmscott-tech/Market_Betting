@@ -2186,16 +2186,13 @@ across other work" and pull the live files from GitHub first.
 # PHASE 6 — Track 5: Sportsbook Player Props (DraftKings, FanDuel)
 
 ### Session 6.1 — Odds Feed Ingestion
-**Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
-items in SESSION_LOG.md). **Real result, confirmed 2026-09-09: FanDuel
-ingestion works end-to-end (141 real player-prop rows, two real bugs found
-from live data and fixed). DraftKings: real API endpoints captured directly
-via DevTools (replacing the original wrong guess), but even the correct
-URLs 403 through plain `requests` — DraftKings runs Akamai Bot Manager,
-which fingerprints the real browser TLS/JS environment, not headers.
-Rewrote DK's fetch layer to use Playwright (a real headless Chromium
-browser) instead of `requests`. Not yet confirmed against DK's live
-servers — needs `playwright install chromium` + a real run.**
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
+Both platforms confirmed working against real live data: FanDuel (141 real
+player-prop rows) and DraftKings (672 real rows across 8 NFL events, via a
+Playwright-driven real browser — DK sits behind Akamai Bot Manager, which
+plain HTTP requests cannot pass). DK's real fix took four rounds of
+real diagnosis (wrong fetch mechanism → CORS → headless detection → a
+plain wait-condition timeout) — each a genuine bug, not a guess.
 **Prerequisites:** Phase 2 complete.
 
 **What gets built:** Ingests DK/FD player prop odds. Since DK/FD don't offer
@@ -2223,12 +2220,15 @@ embedded in free text, not the `handicap` field) were found from the
 actual live response and fixed. Non-player markets (Moneyline, Spread,
 team win totals, etc.) correctly filtered out and logged, not stored as
 misleading rows.
-- [ ] DraftKings ingests successfully — **NOT MET.** Real result: `403
-Client Error: Forbidden`, 3/3 attempts — a bot-protection block, not a
-wrong event-group ID (that would be a 404, DK Pick6's actual failure mode
-in Session 2.1). Three additional headers (`Accept-Language`, `Referer`,
-`Origin`) were added as the standard next attempt but are **not yet
-re-confirmed against a real rerun** — see Open items in SESSION_LOG.md.
+- [x] DraftKings ingests successfully — **CONFIRMED against real data,
+2026-09-09**: 672 real rows across 8 real NFL events, spot-checked
+against real player names, real matchup, and real odds moving in the
+correct direction. Required a real API rediscovery (the original
+`/api/v5/eventgroups` guess was wrong — DK's real current API lives on
+`sportsbook-nash.draftkings.com/api/sportscontent/...`) plus a
+Playwright-driven real browser instead of `requests`, since DraftKings
+runs Akamai Bot Manager (TLS/JS fingerprinting, not header-based). Full
+diagnostic chain in SESSION_LOG.md.
 - [x] Vig/juice correctly extracted and stored — `schema_props.py` stores
 both sides' raw American odds (not a pre-blended number), and
 `american_odds_to_implied_probability()` plus its no-vig-normalization
