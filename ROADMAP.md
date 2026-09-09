@@ -2123,13 +2123,51 @@ Validation Window.
 ---
 
 ### Session 5.7 — Live Validation Window
-**Status:** Not started
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see
+SESSION_LOG.md for full detail and open items). Do not skip ahead to a
+future close-out without first pulling the live SESSION_LOG.md/ROADMAP.md
+from GitHub — see "Rule for sessions left open across other work" above.
 **Prerequisites:** Session 5.6 complete.
+
+**What was actually done:** Derived a real, evidence-based sample-size
+threshold for this track (this track flags on a model-probability edge, like
+Track 1, not a defect rate like Track 3 — so Session 2.5's method applies,
+with a breakeven pulled from this track's own real data rather than reused
+from Track 1's fixed-payout math). See
+`docs/politics_sample_size_methodology.md` for the full derivation and
+`scripts/calibration/politics_sample_report.py` for the recurring progress
+check. Checking real data surfaced a genuine, unresolved gap — see Open
+items below — that blocks this session's close independent of the sample-
+size question itself.
 
 **Validation (required to close session):**
 - [ ] Minimum sample size reached — explicitly acknowledged this may take
-longer to accumulate than faster-resolving tracks
-- [ ] Go/no-go decision recorded
+longer to accumulate than faster-resolving tracks. **NOT MET — cannot yet
+be assessed.** `data/politics/clv_log.csv` does not exist in this repo's
+tracked history, even though `politics_pipeline.yml` has run at least 5
+times against real data since 2026-09-07. Interim floor: 30 closed flags;
+full target: ≈892 (see methodology doc, Section 6).
+- [ ] Go/no-go decision recorded — not yet possible; blocked on the item
+above.
+
+**Open items / deferred validations:**
+- **Real, unexplained gap:** the politics pipeline's CLV-logging stage was
+proven to work end-to-end in Session 5.5's own sandbox run (414 real
+newly-flagged rows), yet no `clv_log.csv` has ever been committed to the
+real repo by the scheduled/dispatched GitHub Actions runs. Before any
+further work on this session, **check the real run logs on GitHub's
+Actions tab for `politics_pipeline.yml`** — confirm whether the CLV-
+logging stage is reaching completion on GitHub's runner the same way it
+did in the sandbox, and whether the commit step is actually firing.
+- Once `clv_log.csv` exists and is accumulating, re-run
+`python scripts/calibration/politics_sample_report.py --report`
+periodically to track real progress against the interim floor (30) and
+full target (≈892) from `docs/politics_sample_size_methodology.md`.
+- Given real races take ~55+ days to resolve (real `hours_to_resolution`
+data, Section 5 of the methodology doc), this session should be expected
+to stay open across multiple future sessions/phases — same posture as
+Session 3.6. Before ever closing it, re-read "Rule for sessions left open
+across other work" and pull the live files from GitHub first.
 
 ---
 

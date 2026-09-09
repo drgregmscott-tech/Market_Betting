@@ -5607,3 +5607,121 @@ about sessions left open while other work proceeds (see ROADMAP.md,
 "Rule for sessions left open across other work"). No other open
 sessions were affected. Next roadmap-sequential session remains
 whichever of 4.7 / 5.7 (Live Validation Windows) the user picks up next.
+
+---
+
+## Session 5.7 — Live Validation Window
+
+**Date opened:** 2026-09-08
+**Status:** ⚠️ In progress — NOT complete, left open intentionally (see Open
+items below). Per ROADMAP.md's "Rule for sessions left open across other
+work," the live SESSION_LOG.md/ROADMAP.md were pulled directly from GitHub
+before this entry was written (`git fetch` + `git status` confirmed the
+local sandbox already matched `origin/main` exactly, no divergence) and
+checked for any entries added since Session 5.6 — none found.
+
+**What was actually done:**
+1. **Confirmed this track's flag mechanism is probability-based (like Track
+1), not defect-rate-based (like Track 3)** — read `clv_logger.py`'s
+`build_politics_candidates()` (Session 5.3) directly: a race/party/venue
+combination is flagged when the model's corrected probability beats the
+venue's raw market price by ≥ `POLITICS_FLAG_EDGE_THRESHOLD = 0.03`. This
+means Session 2.5's one-sample-proportion-test method applies here, not
+Session 3.6's rule-of-three method — confirmed by reading the actual code
+rather than assumed by analogy.
+2. **Derived a real breakeven win rate (p₀) from real committed data**,
+since Track 1's own p₀ (0.5774) is specific to PrizePicks' fixed 3x/2-pick
+payout and does not transfer to Kalshi/Polymarket's per-contract pricing
+(no fixed multiplier — breakeven for a single contract is just its own
+market price). Applied `clv_logger.py`'s exact real filter directly against
+the real, currently-committed `data/politics/estimates/politics_estimates_latest.csv`
+(867 real rows): 415 real rows would be flagged under current data,
+market price mean 0.892 / median 0.935. Full derivation, including why a
+smaller resulting n (≈892) is a correct property of the math and not a
+double standard versus Track 1's ≈3,725, is in the new
+`docs/politics_sample_size_methodology.md`.
+3. **Built `scripts/calibration/politics_sample_report.py`** — reads
+`data/politics/clv_log.csv` and reports real progress against the 30-flag
+interim floor and ≈892-flag full target, matching the recurring-review
+pattern already established for Track 1 (`weekly_review.py`, Session 2.5).
+Explicitly labels `clv_logger.py`'s existing "disappeared from latest pull
+== closed" convention as NOT the same thing as a confirmed real race
+resolution, since this track has no realized-outcome tracker yet (see
+item 4).
+4. **Confirmed `outcome_tracker.py` (Session 2.5) is still pick'em-only** —
+hardcoded to `data/pickem/clv_log.csv` and PrizePicks-specific breakeven
+math, the same finding Session 3.6 made for arbitrage. Not rebuilt this
+session — deliberately deferred until at least one real race has actually
+resolved to test a politics-specific version against (see Decision #2
+below).
+5. **Ran the new report script against this sandbox's real, current state**
+and found a genuine, unexplained gap: `data/politics/clv_log.csv` does not
+exist anywhere in this repo's tracked history, even though
+`politics_pipeline.yml` (Session 5.5) has run at least 5 times against real
+data since 2026-09-07 (per the real timestamped files already committed
+under `data/politics/normalized/` and `data/politics/estimates/`), and
+Session 5.5's own sandbox validation run already proved the CLV-logging
+stage works end-to-end (414 real newly-flagged rows) before being reverted.
+This sandbox has no access to GitHub's own Actions run logs, so the root
+cause (schedule not yet fired past the CLV stage, a real failure specific
+to the Actions runner environment, or a commit-step issue) could not be
+confirmed here — see Open items.
+
+**Files created:**
+- `docs/politics_sample_size_methodology.md` (new) — full derivation of the
+30-flag interim floor and ≈892-flag full-confidence target.
+- `scripts/calibration/politics_sample_report.py` (new) — recurring
+progress-check script, `--report` flag.
+
+**Validation results:**
+- [ ] **Minimum sample size reached — NOT MET, cannot yet be assessed.**
+`clv_log.csv` does not exist in the real repo; item 5 above is the reason,
+and it needs a direct check of GitHub's real Actions logs before this
+checklist item can even be evaluated, independent of whether 30 or 892 is
+eventually reached.
+- [ ] **Go/no-go decision recorded — not yet possible.** Blocked on the
+item above.
+
+**Decisions made:**
+1. **p₀ = 0.892 (a real mean pulled from current committed data), not a
+reused or guessed number** — full reasoning in
+`docs/politics_sample_size_methodology.md` Section 2. This value is
+explicitly named as a snapshot, expected to shift as more races are
+ingested, not a permanently fixed constant.
+2. **A politics-specific realized-outcome tracker is deliberately NOT built
+this session.** Building one before any real race has resolved would mean
+testing it against nothing real — the same false-confidence risk Session
+2.4's Decision #6 already named once for this project. Deferred until at
+least one real race in `clv_log.csv` reaches actual resolution.
+3. **This session is being left open**, per the same standing rule Session
+3.6 established — real accumulation here depends on external event
+timescales (real `hours_to_resolution` data shows ~55+ days per race) that
+cannot be shortened by more work in this session.
+
+**Corrections/reversals during the session:**
+- None.
+
+**Open items / deferred validations:**
+- **This session remains open.** Do not mark it ✅ Complete until (a) the
+real gap in item 5 above is root-caused and `clv_log.csv` is confirmed
+accumulating on the real repo, and (b) the interim floor (30 closed flags)
+is reached and reviewed.
+- **Immediate next action, before any further Session 5.7 work:** check the
+real run history and logs for `politics_pipeline.yml` on GitHub's Actions
+tab (this sandbox has no access to that) — confirm whether recent runs
+reached the CLV-logging stage successfully and whether the commit step
+fired. This is a direct, external fact-check, not something derivable from
+the sandbox's own files.
+- Once `clv_log.csv` exists on the real repo, run
+`python scripts/calibration/politics_sample_report.py --report`
+periodically (a reasonable cadence given the daily pipeline schedule and
+multi-week resolution timescale — no need for more frequent checks than
+that) to track real progress.
+- Per ROADMAP.md's standing rule, before this session is ever closed,
+pull the live SESSION_LOG.md/ROADMAP.md from GitHub again and check for
+any session entries added in the meantime.
+
+**Next session:** None yet — this session stays open. Session 4.7 (Track 3
+weather's own Live Validation Window) also remains "Not started" and is
+unaffected by this session's work — both are separately scoped, real
+open items, not to be confused with each other.
