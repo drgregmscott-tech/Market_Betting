@@ -6901,13 +6901,20 @@ DraftKings' non-headless Chromium browser.
 
 **Corrections/reversals during the session:** None.
 
-**Open items / deferred validations:**
-- The workflow file's real behavior on an actual GitHub Actions runner
-  (Playwright/Chromium install, `xvfb-run`, the scheduled cron itself
-  firing) is unverified until the user pushes this file and either waits
-  for the next scheduled run or uses the manual "Run workflow" button —
-  the same one-time verification step every prior workflow file in this
-  project needed (see Sessions 2.7, 3.4, 5.5's own entries for that same
-  "confirmed once pushed" pattern). Not a blocker to closing this
-  session; a natural follow-up once the file is live.
-  Next session is 6.6 — Frontend Integration.
+**Open item closed same day (2026-09-09):** the workflow file's real
+behavior on an actual GitHub Actions runner was unverified until the user
+pushed it and manually triggered a run via the "Run workflow" button (the
+same one-time verification step every prior workflow file in this project
+needed — Sessions 2.7, 3.4, 5.5). Real result, confirmed directly from the
+automated commit pulled back down via GitHub Desktop
+(`374bbe8`, "Automated props pipeline run 2026-09-09T19:02:28Z"): green
+checkmark, and critically, **DraftKings itself succeeded on the runner**
+(683 real rows across 8 events) — proof that `playwright install
+--with-deps chromium` plus `xvfb-run`'s virtual display correctly let the
+`headless=False` browser past Akamai's bot detection in a real headless CI
+environment, not just on the user's own display-having PC. FanDuel also
+succeeded (141 rows), estimation produced 824 rows (401 `estimated`), and
+CLV logging added 1 new flag (230 total open, 0 failures). This was the
+one thing local validation could not prove; it is now proven.
+
+Next session is 6.6 — Frontend Integration.
