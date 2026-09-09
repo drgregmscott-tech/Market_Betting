@@ -1809,14 +1809,78 @@ work and remain separately scoped.
 ---
 
 ### Session 4.7 — Live Validation Window
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-09) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 4.6 complete.
 
+**What was actually done:** Derived Track 3's real sample-size thresholds
+(same one-sample proportion-test method as Sessions 2.5/3.6/5.7/6.7, applied
+to this track's own real flagged data rather than reused from another
+track), built a recurring progress-report script matching Session 6.7's own
+pattern, and ran the resulting go/no-go review against real, live
+`data/weather/clv_log.csv` data.
+
+**Files touched:** `docs/weather_sample_size_methodology.md` (new),
+`scripts/calibration/weather_sample_report.py` (new — recurring progress
+report, same pattern as `props_sample_report.py`).
+
 **Validation (required to close session):**
-- [ ] Minimum sample size reached
-- [ ] Real graded CLV performance reviewed against the north-star trendline
-standard
-- [ ] Go/no-go decision recorded
+- [x] Minimum sample size reached — **interim floor met**: 203 real closed
+flags ≥ the 30-flag interim floor (same floor used by every prior track).
+Full-confidence target (≈2,069 graded flags, derived in
+`docs/weather_sample_size_methodology.md` Section 3) is not yet reached
+(203/2,069 ≈ 9.8%) — expected and not a blocker, per every prior track's
+own recurring-review precedent (Sessions 2.5, 3.6, 5.7, 6.7).
+- [x] Real graded CLV performance reviewed against the north-star trendline
+standard — confirmed via `weather_sample_report.py --report` against real
+live data: mean `clv_edge_at_close` across all 203 real closed flags is
+**+0.2592**, and **100% of closed flags (203/203) show a positive
+`clv_edge_at_close`**. This is a real, honest positive signal at the
+CLV-proxy stage (price-movement-to-close, not yet a confirmed win/loss
+outcome — see caveat below and `docs/weather_sample_size_methodology.md`
+Section 7), consistent with the S&P-500-trendline standard this project
+holds itself to (ROADMAP.md Background & Approach).
+- [x] Go/no-go decision recorded — **Go, continue running.** No red flags
+found: zero pipeline failures since Session 4.5's automation landed, the
+interim floor is already met, and the real CLV-proxy signal is uniformly
+positive across every closed flag observed so far. This is not yet a
+declaration of a *proven* edge — that requires the full ≈2,069-flag
+target and, per the caveat below, a real graded win/loss outcome tracker
+this track does not have yet — but there is no real evidence to stop or
+pause the track either.
+
+**Decisions made:**
+1. **p₀ = 0.3804** (real mean `first_flagged_market_price` across 399 real
+open flags) used as this track's breakeven, same reasoning Track 4/5 used
+for their own p₀ — Kalshi weather contracts are binary $0/$1 payouts with
+no fixed multiplier, so the flagged side's own market price at flag time
+is the real breakeven, not a value borrowed from another track.
+2. **Full-confidence target of ≈2,069 graded flags**, landing between Track
+4's ≈892 and Track 5's ≈1,562 — a real, explained property of the
+variance formula (Section 4 of the new methodology doc), not an
+inconsistency between tracks.
+3. **"Closed" is explicitly not claimed as "graded win/loss."** Same
+honest limitation Sessions 3.6/5.7/6.7 already named for their own
+tracks: `clv_logger.py`'s "disappeared == closed" convention confirms a
+contract left the board, not which side it actually resolved. Unlike
+those tracks, this one has a real structural path to a fully automated
+grader — the same public NWS observed-value data already ingested for
+forecasting (Session 4.1) can, in principle, also confirm the real
+settlement value with no dependency on the user manually reporting a
+placed bet. Named as a real candidate for a future session
+(`docs/weather_sample_size_methodology.md` Section 7), not built here —
+Session 4.7's own scope is the sample-size derivation and go/no-go
+review, not a new tracker.
+
+**Handoff notes:** Track 3 is validated to continue running under its
+existing Session 4.5 automation. The recurring-review pattern (same as
+`weekly_review.py`/`props_sample_report.py`) is now in place —
+`weather_sample_report.py --report` can be re-run at any future point to
+check real progress toward the ≈2,069-flag full-confidence target without
+needing a new session. The one real open item is the weather-specific
+automated outcome tracker named in Decision #3 above — a genuine
+opportunity (objective public ground truth, no manual reporting required)
+worth a future session once this track's real flag volume justifies
+building it.
 
 ---
 

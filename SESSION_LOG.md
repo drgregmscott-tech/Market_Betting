@@ -7382,3 +7382,96 @@ since no real week has elapsed yet, but its prerequisite is now met.
 Integration) and 4.7 (Live Validation Window) were already handled
 separately (4.6 closed 2026-09-08, out of roadmap order; 4.7 not yet
 started) — see their own ROADMAP.md entries.
+
+---
+
+## Session 4.7 — Live Validation Window (2026-09-09)
+
+**Goal:** Derive Track 3's (weather/climate) real sample-size thresholds
+and run its first go/no-go review, closing Phase 4's final open session —
+same job Session 2.5 did for Track 1, Session 3.6 for Track 2, Session 5.7
+for Track 4, and Session 6.7 for Track 5.
+
+**What was actually done:** Followed the exact method Session 6.7 already
+proved out for Track 5: derive p₀ (this track's real breakeven win rate)
+directly from `data/weather/clv_log.csv`'s own real flagged data, run the
+same one-sample proportion-test formula every prior probability-track
+derivation has used (Sessions 2.5/5.7/6.7), then build a small recurring
+progress-report script so this doesn't need to be a one-time gate (matching
+`props_sample_report.py`'s own pattern). Ran the resulting report against
+real, live data pulled from the repo's current `data/weather/clv_log.csv`
+(602 total real logged flags, 399 open, 203 closed) rather than synthetic
+fixtures.
+
+**Files created/modified:**
+- `docs/weather_sample_size_methodology.md` (new) — full derivation:
+p₀ = 0.3804 (real mean `first_flagged_market_price` across 399 real open
+flags), p₁ = 0.4104 (p₀ + `WEATHER_FLAG_EDGE_THRESHOLD`), full-confidence
+target ≈2,069 graded flags.
+- `scripts/calibration/weather_sample_report.py` (new) — recurring
+progress-report script, same structure as `props_sample_report.py`:
+reports closed-flag count against a 30-flag interim floor and the
+≈2,069-flag full target, plus mean `clv_edge_at_close` and the percentage
+of closed flags with a positive one.
+- `ROADMAP.md` — Session 4.7 card closed out (see that entry).
+
+**Validation results:**
+- [x] Minimum sample size reached — **pass, interim floor**. 203 real
+closed flags ≥ the 30-flag interim floor used by every prior track. Full
+target (≈2,069) is at 9.8% — expected, not a blocker, per this project's
+own established recurring-review precedent.
+- [x] Real graded CLV performance reviewed against the north-star trendline
+standard — **pass**. `weather_sample_report.py --report` against real live
+data: mean `clv_edge_at_close` = +0.2592 across all 203 real closed flags,
+100% (203/203) positive. A real, honest positive signal at the CLV-proxy
+stage.
+- [x] Go/no-go decision recorded — **Go, continue running** under the
+existing Session 4.5 automation. Not yet a claim of a fully proven edge
+(full sample target not reached; no real win/loss-graded outcome tracker
+exists yet for this track — see Decisions below) — but no real evidence
+found to pause or stop the track either.
+
+**Decisions made:**
+1. **p₀ derived the same way Track 4/5 derived their own** — Kalshi
+weather contracts are binary $0/$1 payouts with no fixed multiplier, so
+the real mean market price of this track's own flagged rows
+(0.3804) is the honest breakeven, not a number borrowed from another
+track's different payout structure.
+2. **Full-confidence target (≈2,069) lands between Track 4's (≈892) and
+Track 5's (≈1,562)** — a real, explained consequence of where this
+track's real p₀ sits relative to 0.5 (variance is highest near 0.5 and
+shrinks toward the extremes), not an inconsistency. Full reasoning in the
+new methodology doc, Section 4.
+3. **"Closed" is explicitly labeled a CLV-equivalent proxy signal, not a
+confirmed win/loss outcome** — same honest limitation Sessions 3.6/5.7/6.7
+already recorded for their own tracks (`clv_logger.py`'s "disappeared ==
+closed" convention only confirms a contract left the board). This track
+has a real, structural path other tracks don't: the same public NWS
+observed-value data already ingested for forecasting (Session 4.1) could,
+in principle, also confirm real settlement values automatically, with no
+dependency on the user manually reporting a placed bet the way
+`outcome_tracker.py` (Session 2.5) currently requires. Named as a real
+future-session candidate, not built this session — Session 4.7's own
+scope is the sample-size derivation and review, not a new tracker.
+4. **This session's report is explicitly built as a recurring tool, not a
+one-time answer** — `weather_sample_report.py --report` can be re-run at
+any future point without needing a new session to check real progress
+toward the ≈2,069-flag full-confidence target, matching every other
+track's own established pattern (Sessions 2.5, 3.6, 5.7, 6.7).
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:** The weather-specific automated
+outcome tracker named in Decision #3 remains unbuilt — a real, named
+opportunity (this track has objective public ground truth available, no
+manual reporting required, unlike every other track) rather than a gap
+being carried forward silently. No specific future session number assigned
+yet; worth revisiting once this track's real flag volume further supports
+it, or when the props/politics tracks reach a similar point and a shared
+generalized outcome-tracker redesign becomes worth doing across tracks at
+once rather than track-by-track.
+
+**Status at close of session:** Fully closed out. This closes Phase 4
+(Track 3 — Weather/Climate Markets) in full: all sessions (4.1–4.4
+estimation/CLV/sizing build-out, 4.5 Automation Adaptation, 4.6 Frontend
+Integration, 4.7 Live Validation Window) are now ✅/⚠️ Complete.
