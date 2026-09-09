@@ -7709,3 +7709,23 @@ time, same as every prior frontend session.
 layout after the next deploy and confirm the Overview's ranking approach
 still feels right once real data (not just this session's live-data spot
 check) has been seen in production over a few days.
+
+**Correction, same session:** the user reversed the pooled-ranking decision
+immediately after seeing it live — asked for each track's own top 10, ranked
+separately by track, instead of one cross-track pooled list. Implemented:
+`frontend/index.html`'s single Overview table was replaced with five
+separate per-track panels (each keeping that track's own accent border —
+`.panel-arb`/`.panel-weather`/`.panel-politics`/`.panel-props` — so the
+Overview visually matches each track's own tab), and `app.js`'s
+`renderOverview()` was rewritten so each track is sorted and rendered to its
+own table independently (`renderOverviewTrackTable()`), rather than pooling
+all five into one array before sorting. The cross-track summary stat row
+(total actionable flags, tracks live, best edge across any track, long-dated
+count) was kept, since that's still a useful single-glance number even
+though the lists below it are no longer merged. Re-verified locally the same
+way as the first pass (temporary local data copies, driven in the Browser
+pane): all five tracks now render independent top-10 tables with real data
+(e.g. pick'em's top 10 all show +50.0% real edge on real PrizePicks props;
+arbitrage only has 2 real fillable flags right now, so its table correctly
+shows 2 rows, not a padded or empty 10). Temporary data copies deleted again
+afterward.

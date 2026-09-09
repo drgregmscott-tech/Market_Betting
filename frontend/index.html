@@ -46,10 +46,11 @@
 <div class="panel-head">
 <h2>Cross-track overview</h2>
 <p class="panel-note">Every track&rsquo;s currently open, still-actionable flags (game/event not yet started,
-line still live), pooled into one list and ranked by each flag&rsquo;s own edge value &mdash; a model
-probability edge for pick&rsquo;em/weather/politics/props, or net profit per dollar risked for arbitrage.
-This is a scanning convenience across tracks, not a claim that a same-sized edge means the same real risk
-in every track &mdash; see each track&rsquo;s own tab for the real methodology behind its numbers.</p>
+line still live), with each track&rsquo;s own top 10 shown separately below, ranked by that track&rsquo;s own
+edge value &mdash; a model probability edge for pick&rsquo;em/weather/politics/props, or net profit per
+dollar risked for arbitrage. Tracks are kept separate here deliberately, since a probability edge and an
+arbitrage profit-per-dollar aren&rsquo;t really the same unit &mdash; see each track&rsquo;s own tab for the
+real methodology behind its numbers.</p>
 </div>
 <div class="stat-row" id="overviewStatRow">
 <div class="stat">
@@ -62,39 +63,80 @@ in every track &mdash; see each track&rsquo;s own tab for the real methodology b
 </div>
 <div class="stat">
 <span class="stat-value" id="overviewStatTopEdge">—</span>
-<span class="stat-label">Best edge right now</span>
+<span class="stat-label">Best edge right now (any track)</span>
 </div>
 <div class="stat">
 <span class="stat-value" id="overviewStatLongDated">—</span>
-<span class="stat-label">Long-dated politics rows in list below</span>
+<span class="stat-label">Long-dated politics rows shown below</span>
 </div>
 </div>
 </section>
 
-<section class="panel" id="overview-best-panel">
+<section class="panel panel-arb" id="overview-pickem-panel">
 <div class="panel-head">
-<h2>Best +EV bets right now</h2>
-<p class="panel-note">Top open, actionable flags across all five tracks, highest edge first. Politics rows
-are marked <span class="long-dated-badge">Long-dated</span> because a real edge on a race that resolves in
-weeks or months is not the same kind of bet as a same-day pick&rsquo;em, weather, or prop flag &mdash; check
-the timing column before treating any two rows here as equivalent.</p>
+<h2><span class="track-tag track-tag-pickem">Track 1</span> Pick&rsquo;em &mdash; top 10 by edge</h2>
 </div>
 <div class="table-wrap">
-<table id="overviewTable">
-<thead>
-<tr>
-<th>Track</th>
-<th>Opportunity</th>
-<th>Side</th>
-<th>Venue</th>
-<th>Edge</th>
-<th>Timing</th>
-</tr>
-</thead>
-<tbody id="overviewTableBody"></tbody>
+<table id="overviewPickemTable">
+<thead><tr><th>Opportunity</th><th>Side</th><th>Venue</th><th>Edge</th><th>Timing</th></tr></thead>
+<tbody id="overviewPickemTableBody"></tbody>
 </table>
 </div>
-<p id="overviewEmpty" class="empty-note" hidden>No open, actionable flags across any track right now.</p>
+<p id="overviewPickemEmpty" class="empty-note" hidden>No open, actionable pick&rsquo;em flags right now.</p>
+</section>
+
+<section class="panel panel-arb" id="overview-arb-panel">
+<div class="panel-head">
+<h2><span class="track-tag track-tag-arb">Track 2</span> Arbitrage &mdash; top 10 by net profit/$1</h2>
+</div>
+<div class="table-wrap">
+<table id="overviewArbTable">
+<thead><tr><th>Opportunity</th><th>Type</th><th>Venue</th><th>Edge</th><th>Timing</th></tr></thead>
+<tbody id="overviewArbTableBody"></tbody>
+</table>
+</div>
+<p id="overviewArbEmpty" class="empty-note" hidden>No fillable arbitrage flags on the latest run.</p>
+</section>
+
+<section class="panel panel-weather" id="overview-weather-panel">
+<div class="panel-head">
+<h2><span class="track-tag track-tag-weather">Track 3</span> Weather &mdash; top 10 by edge</h2>
+</div>
+<div class="table-wrap">
+<table id="overviewWeatherTable">
+<thead><tr><th>Opportunity</th><th>Side</th><th>Venue</th><th>Edge</th><th>Timing</th></tr></thead>
+<tbody id="overviewWeatherTableBody"></tbody>
+</table>
+</div>
+<p id="overviewWeatherEmpty" class="empty-note" hidden>No open, actionable weather flags right now.</p>
+</section>
+
+<section class="panel panel-politics" id="overview-politics-panel">
+<div class="panel-head">
+<h2><span class="track-tag track-tag-politics">Track 4</span> Politics &mdash; top 10 by edge</h2>
+<p class="panel-note">Rows marked <span class="long-dated-badge">Long-dated</span> resolve in more than 60
+days &mdash; a real edge here is not the same kind of bet as a same-day flag in another track.</p>
+</div>
+<div class="table-wrap">
+<table id="overviewPoliticsTable">
+<thead><tr><th>Opportunity</th><th>Side</th><th>Venue</th><th>Edge</th><th>Timing</th></tr></thead>
+<tbody id="overviewPoliticsTableBody"></tbody>
+</table>
+</div>
+<p id="overviewPoliticsEmpty" class="empty-note" hidden>No open, actionable politics flags right now.</p>
+</section>
+
+<section class="panel panel-props" id="overview-props-panel">
+<div class="panel-head">
+<h2><span class="track-tag track-tag-props">Track 5</span> Props &mdash; top 10 by edge</h2>
+</div>
+<div class="table-wrap">
+<table id="overviewPropsTable">
+<thead><tr><th>Opportunity</th><th>Side</th><th>Venue</th><th>Edge</th><th>Timing</th></tr></thead>
+<tbody id="overviewPropsTableBody"></tbody>
+</table>
+</div>
+<p id="overviewPropsEmpty" class="empty-note" hidden>No open, actionable props flags right now.</p>
 </section>
 
 <p id="overviewLoadError" class="load-error" hidden>

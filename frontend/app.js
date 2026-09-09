@@ -1152,30 +1152,25 @@ const OVERVIEW_MAPPERS = {
 
 const OVERVIEW_TOP_N = 10;
 
-function renderOverview() {
-  const tbody = document.getElementById("overviewTableBody");
-  const emptyNote = document.getElementById("overviewEmpty");
-  const loadErrorEl = document.getElementById("overviewLoadError");
+// Maps each track to the DOM ids of its own top-10 table on the Overview
+// tab. Each track is ranked and rendered independently -- per the user's
+// explicit correction, this replaced an earlier version that pooled all
+// five tracks into one cross-ranked list.
+const OVERVIEW_TABLES = {
+  pickem: { body: "overviewPickemTableBody", empty: "overviewPickemEmpty" },
+  arb: { body: "overviewArbTableBody", empty: "overviewArbEmpty" },
+  weather: { body: "overviewWeatherTableBody", empty: "overviewWeatherEmpty" },
+  politics: { body: "overviewPoliticsTableBody", empty: "overviewPoliticsEmpty" },
+  props: { body: "overviewPropsTableBody", empty: "overviewPropsEmpty" },
+};
+
+function renderOverviewTrackTable(track, mapped) {
+  const ids = OVERVIEW_TABLES[track];
+  const tbody = document.getElementById(ids.body);
+  const emptyNote = document.getElementById(ids.empty);
   if (!tbody || !emptyNote) return;
 
-  const tracksLoaded = Object.values(overviewData).filter((t) => t.loaded);
-  if (loadErrorEl) loadErrorEl.hidden = tracksLoaded.length > 0;
-
-  let pooled = [];
-  let totalActionable = 0;
-  for (const [track, mapper] of Object.entries(OVERVIEW_MAPPERS)) {
-    const rows = overviewData[track].rows || [];
-    totalActionable += rows.length;
-    pooled = pooled.concat(rows.map(mapper).filter((r) => r.edge !== null));
-  }
-
-  pooled.sort((a, b) => b.edge - a.edge);
-  const top = pooled.slice(0, OVERVIEW_TOP_N);
-
-  setText("overviewStatTotal", String(totalActionable));
-  setText("overviewStatTracksLive", `${tracksLoaded.length}/5`);
-  setText("overviewStatTopEdge", top.length ? top[0].edgeDisplay : "—");
-  setText("overviewStatLongDated", String(top.filter((r) => r.longDated).length));
+  const top = mapped.slice().sort((a, b) => b.edge - a.edge).slice(0, OVERVIEW_TOP_N);
 
   if (!top.length) {
     emptyNote.hidden = false;
@@ -1185,11 +1180,9 @@ function renderOverview() {
   emptyNote.hidden = true;
 
   tbody.innerHTML = top
-    .map((r) => {
-      const meta = TRACK_META[r.track];
-      return `
+    .map(
+      (r) => `
         <tr>
-          <td><span class="track-tag ${meta.tagClass}">${meta.label}</span></td>
           <td class="name-cell" title="${escapeAttr(r.opportunity)}">${escapeHtml(r.opportunity)}${
             r.longDated ? '<span class="long-dated-badge">Long-dated</span>' : ""
           }</td>
@@ -1197,9 +1190,41 @@ function renderOverview() {
           <td>${escapeHtml(r.venue)}</td>
           <td class="${edgeClass(r.edge)}">${r.edgeDisplay}</td>
           <td>${escapeHtml(r.timing)}</td>
-        </tr>`;
-    })
+        </tr>`
+    )
     .join("");
+}
+
+function renderOverview() {
+  const loadErrorEl = document.getElementById("overviewLoadError");
+
+  const tracksLoaded = Object.values(overviewData).filter((t) => t.loaded);
+  if (loadErrorEl) loadErrorEl.hidden = tracksLoaded.length > 0;
+
+  let totalActionable = 0;
+  let bestEdgeOverall = null;
+  let bestEdgeDisplay = "—";
+  let longDatedShown = 0;
+
+  for (const [track, mapper] of Object.entries(OVERVIEW_MAPPERS)) {
+    const rows = overviewData[track].rows || [];
+    totalActionable += rows.length;
+
+    const mapped = rows.map(mapper).filter((r) => r.edge !== null);
+    renderOverviewTrackTable(track, mapped);
+
+    const top = mapped.slice().sort((a, b) => b.edge - a.edge).slice(0, OVERVIEW_TOP_N);
+    if (top.length && (bestEdgeOverall === null || top[0].edge > bestEdgeOverall)) {
+      bestEdgeOverall = top[0].edge;
+      bestEdgeDisplay = top[0].edgeDisplay;
+    }
+    longDatedShown += top.filter((r) => r.longDated).length;
+  }
+
+  setText("overviewStatTotal", String(totalActionable));
+  setText("overviewStatTracksLive", `${tracksLoaded.length}/5`);
+  setText("overviewStatTopEdge", bestEdgeDisplay);
+  setText("overviewStatLongDated", String(longDatedShown));
 }
 
 // =======================================================================
