@@ -349,13 +349,24 @@ def find_latest_estimates_file_pickem() -> Path:
 
 
 def load_clv_log_pickem() -> pd.DataFrame:
+    """Every column is forced to object dtype -- same fix as
+    load_clv_log_generic() below (Session 4.3): a column still entirely
+    blank after its first run (e.g. consensus_platform, before any
+    cross-platform match exists) gets inferred by pandas as float64, and
+    a later run writing a real string into that column then raises a
+    hard TypeError. Confirmed live against data/pickem/clv_log.csv
+    (Open Decision #43): consensus_platform, consensus_source_line_id,
+    consensus_line, consensus_implied_prob_same_side, and consensus_edge
+    were all still float64 after 6,850 real rows."""
     if CLV_LOG_PATH_PICKEM.exists():
         df = pd.read_csv(CLV_LOG_PATH_PICKEM)
         for col in CLV_LOG_COLUMNS_PICKEM:
             if col not in df.columns:
                 df[col] = None
-        return df[CLV_LOG_COLUMNS_PICKEM]
-    return pd.DataFrame(columns=CLV_LOG_COLUMNS_PICKEM)
+        return df[CLV_LOG_COLUMNS_PICKEM].astype(object).where(
+            pd.notna(df[CLV_LOG_COLUMNS_PICKEM]), None
+        )
+    return pd.DataFrame(columns=CLV_LOG_COLUMNS_PICKEM, dtype=object)
 
 
 def determine_flagged_side_pickem(row: pd.Series) -> Optional[str]:

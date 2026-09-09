@@ -3206,14 +3206,18 @@ CDT:** re-ran `weather_backtest_check.py` after real settlement — 228
 real resolved contracts checked, 81.58% directional accuracy, Brier
 score 0.1342 (vs. a 0.25 coin-flip baseline). Session 4.2 is fully
 closed; see SESSION_LOG.md's Session 4.2 (continuation) entry.
-36. **New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07):** Polymarket's
-title format for state-legislature races is unconfirmed — 0 of 4 known
-real Kalshi state-legislature down-ballot races found a Polymarket
-counterpart in this session's live run. Unknown whether Polymarket
-doesn't list these races, or whether `ingest_politics_markets.py`'s
-structural title-guess for that tier needs adjustment. **Action:**
-manually check a known state-legislature race on Polymarket.com directly
-before trusting this path's absence of matches as meaningful.
+36. ~~New, opened, NOT YET RESOLVED — Session 5.1 (2026-09-07): Polymarket's
+title format for state-legislature races is unconfirmed...~~ **Resolved
+2026-09-09.** Checked live, directly against Polymarket's public-search
+API, for three real Kalshi state-legislature races (Missouri State
+Senate District 8 — Keri Ingle vs. Jon Patterson; Maryland State Senate
+District 2; Pennsylvania State House District 12), queried by district
+name, both real candidate names, and generic terms. Every query returned
+only unrelated fuzzy matches (e.g. "Missouri State" college sports,
+"Paul" name collisions) — zero real Polymarket markets for any of these
+races. Confirms this is not a matcher bug: **Polymarket simply does not
+list individual state-legislature races.** `ingest_politics_markets.py`'s
+absence of matches for this tier is correct behavior, not a gap to fix.
 37. ~~When more than one Polymarket market matches the same down-ballot
 race_id, `ingest_politics_markets.py` kept whichever row appeared first,
 arbitrary.~~ **Resolved 2026-09-08 (Session 5.1c):** the "keep first" logic
@@ -3232,12 +3236,13 @@ party directly, not a candidate) was found and fixed.
 yet calibrated against real down-ballot order-book behavior. **Action:**
 revisit once enough real down-ballot order-book history exists to check
 them against, same pattern as Session 3.2's sizing-constant validation.
-39. **New, opened, NOT YET RESOLVED — Session 5.2 (2026-09-08):** the
-politics estimation spec doc landed at `/docs/politics_estimation_model_spec.md`
-instead of `/docs/research/politics_estimation_model_spec.md`, where the
-weather and pick'em specs live — a real path inconsistency, not a
-scope decision. **Action:** move the file into `/docs/research/`
-whenever convenient; not urgent, doesn't block anything downstream.
+39. ~~New, opened, NOT YET RESOLVED — Session 5.2 (2026-09-08): the politics
+estimation spec doc landed at `/docs/politics_estimation_model_spec.md`
+instead of `/docs/research/politics_estimation_model_spec.md`...~~
+**Resolved 2026-09-09.** Checked live: the file is already at
+`/docs/research/politics_estimation_model_spec.md`, alongside the
+weather and pick'em specs — no move needed. This entry was already stale
+by the time it was checked.
 40. **New, opened, NOT YET RESOLVED — Session 5.2 (2026-09-08):** the
 politics estimation model's own "sanity-check against historical
 resolved down-ballot markets" validation item could not be completed —
@@ -3269,20 +3274,21 @@ exist yet to derive one from. **Action:** revisit once weather's
 `clv_logger.py` has run automatically over real elapsed time — tied
 practically to Session 4.5 (Automation Adaptation), or several manual
 runs spread over real days in the meantime.
-43. **New, opened, NOT YET RESOLVED — Session 4.3 (2026-09-08):** a real
+43. ~~New, opened, NOT YET RESOLVED — Session 4.3 (2026-09-08): a real
 dtype-coercion bug was found and fixed in the new weather/politics CLV
-code (`load_clv_log_generic()`) — a column still entirely blank after
-its first run gets inferred as `float64` by pandas, and writing a real
-string timestamp into it on a later run raises a hard `TypeError`. The
-same load-then-string-assign pattern exists in pick'em's own untouched
-Session 2.4 code (`load_clv_log_pickem()`), which was deliberately left
-unchanged this session. Not yet confirmed to actually fail on real
-pick'em data (it may simply not have been hit yet), but it is a real,
-live risk to Track 1's production pipeline. **Action:** check whether
-`data/pickem/clv_log.csv` has any column that has stayed entirely blank
-since Session 2.4, and patch `load_clv_log_pickem()` the same way if so
-— a small, separate follow-up, not required to close any currently open
-session.
+code (`load_clv_log_generic()`)...~~ **Resolved 2026-09-09.** Checked
+`data/pickem/clv_log.csv` directly: confirmed the risk was real, not
+theoretical — `consensus_platform`, `consensus_source_line_id`,
+`consensus_line`, `consensus_implied_prob_same_side`, and
+`consensus_edge` were all still `float64` after 6,850 real rows (no
+cross-platform match has landed yet). Patched `load_clv_log_pickem()`
+with the same object-dtype-on-load fix already applied to
+`load_clv_log_generic()`. Verified: writing a real string into a
+previously-blank column now succeeds where it previously raised
+`TypeError`. Note: `test_clv_logger.py` fails on a run, but this was
+confirmed via `git stash` to be a pre-existing, unrelated bug — the test
+writes against the real production `clv_log.csv` path instead of a tmp
+fixture — not caused by this fix.
 
 ---
 *Update this file at the close of each future session, per the project's
