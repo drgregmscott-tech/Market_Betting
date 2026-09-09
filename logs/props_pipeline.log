@@ -1,0 +1,11 @@
+2026-09-09 18:54:42,936 UTC | INFO | === Props pipeline run starting at 2026-09-09T18:54:42Z (season=2025) ===
+2026-09-09 18:54:42,936 UTC | INFO | --- Stage 1a/3: DraftKings props ingestion ---
+2026-09-09 18:54:55,394 UTC | INFO | DraftKings ingestion summary: {'pulled_at': '2026-09-09T18:54:43.225945+00:00', 'draftkings_rows': 674, 'draftkings_ok': True, 'events_pulled': 8, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\normalized\\dk_props_20260909T185443Z.csv'}
+2026-09-09 18:54:55,394 UTC | INFO | --- Stage 1b/3: FanDuel props ingestion ---
+2026-09-09 18:54:55,865 UTC | INFO | FanDuel ingestion summary: {'pulled_at': '2026-09-09T18:54:55.531409+00:00', 'fanduel_rows': 141, 'fanduel_ok': True, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\normalized\\fd_props_20260909T185455Z.csv'}
+2026-09-09 18:54:55,866 UTC | INFO | --- Stage 2/3: estimation (field-vig-normalized model, season=2025) ---
+2026-09-09 18:54:58,579 UTC | INFO | Estimation summary: {'rows_in': 815, 'rows_out': 815, 'status_counts': {'estimated': 397, 'no_player_match': 191, 'unsupported_market_first_scorer': 164, 'season_complete_no_remaining_games': 63}, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_estimates_20260909T185458Z.csv'}
+2026-09-09 18:54:58,580 UTC | INFO | --- Stage 3/3: CLV logging ---
+2026-09-09 18:54:58,820 UTC | INFO | CLV logging summary: {'track': 'props', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_estimates_20260909T185458Z.csv', 'rows_in_estimates': 815, 'newly_flagged': 1, 'newly_closed': 0, 'still_open': 229, 'total_logged': 229, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\clv_log.csv'}
+2026-09-09 18:54:58,849 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_20260909T185442Z.md
+2026-09-09 18:54:58,849 UTC | INFO | === Props pipeline run complete ===

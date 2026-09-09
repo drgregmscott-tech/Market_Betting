@@ -143,3 +143,6 @@
 2026-09-09 17:54:53,551 UTC | INFO | [props] Existing CLV log has 172 rows before this run
 2026-09-09 17:54:53,722 UTC | INFO | [props] Wrote 228 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv
 2026-09-09 17:54:53,727 UTC | INFO | Run summary: {'track': 'props', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_latest.csv', 'rows_in_estimates': 813, 'newly_flagged': 56, 'newly_closed': 0, 'still_open': 228, 'total_logged': 228, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\clv_log.csv'}
+2026-09-09 18:54:58,604 UTC | INFO | [props] Loaded 815 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_estimates_20260909T185458Z.csv
+2026-09-09 18:54:58,623 UTC | INFO | [props] Existing CLV log has 228 rows before this run
+2026-09-09 18:54:58,814 UTC | INFO | [props] Wrote 229 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\sportsbook_props\clv_log.csv

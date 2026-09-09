@@ -6804,3 +6804,110 @@ completed work.
   re-deriving them against real graded props outcomes is Session 8.3's
   job, once real graded positions exist. Next session is 6.5 —
   Automation Adaptation.
+
+---
+
+## Session 6.5 — Automation Adaptation
+
+**Date completed:** 2026-09-09
+**Status:** ✅ Complete
+
+**What was actually done:**
+Built Track 6's orchestrator and scheduled GitHub Actions workflow,
+following the same structure as every prior track's automation session
+(2.7, 3.4, 5.5), plus the one genuinely new piece of infrastructure this
+track's real Session 6.1 finding required: a virtual display for
+DraftKings' non-headless Chromium browser.
+
+1. **`scripts/run_props_pipeline.py` (new).** Runs DraftKings ingestion →
+   FanDuel ingestion → estimation (`sportsbook_props_model.py`) → CLV
+   logging (`clv_logger.py --track props`) in sequence, using the same
+   importlib-by-path module loading and digest-file pattern as every
+   other orchestrator in this project. One real, deliberate difference
+   from the politics orchestrator (Session 5.5): both DK and FD
+   ingestion are allowed to independently fail (each already catches its
+   own exceptions and returns a 0-row summary rather than raising) —
+   the pipeline only stops before estimation/CLV logging if BOTH feeds
+   return 0 rows, since a single-venue hiccup (DraftKings' Akamai
+   bot-detection layer tightening, in particular) is a real, expected
+   risk for this track specifically, and `sportsbook_props_model.py`'s
+   `load_props()` already runs correctly in single-venue degraded mode
+   (confirmed Session 6.1).
+2. **`.github/workflows/props_pipeline.yml` (new).** Installs Playwright's
+   Chromium (`playwright install --with-deps chromium`) and runs the
+   whole pipeline under `xvfb-run` — a virtual-display utility
+   pre-installed on GitHub's `ubuntu-latest` runners — because
+   `ingest_dk_props.py`'s own `_launch_browser_context()` launches with
+   `headless=False` (Session 6.1's real fix for Akamai's headless-mode
+   fingerprinting) and a standard Actions runner has no display for that
+   browser to render into. This was the exact open item Session 6.1's
+   own docstring named and left for this session to solve — solved by
+   using the fix that same docstring already pointed to (`xvfb`), not
+   re-derived from scratch.
+3. **Cadence: every 3 hours (8x/day)**, not hourly like `pickem_pipeline.yml`.
+   A deliberate, stated judgment call, not the fastest technically
+   possible setting — see Decisions below.
+
+**Files created/modified:**
+- `/scripts/run_props_pipeline.py` (new)
+- `/.github/workflows/props_pipeline.yml` (new)
+
+**Validation results:**
+- Ran `python scripts/run_props_pipeline.py --season 2025` end-to-end
+  against real, live data (not a disposable sandbox — this is the user's
+  actual repo). Real result: DraftKings ingestion succeeded (674 rows
+  across 8 events), FanDuel ingestion succeeded (141 rows), estimation
+  produced 815 output rows with the same status breakdown Session 6.4
+  validated (397 `estimated`, 191 `no_player_match`, 164
+  `unsupported_market_first_scorer`, 63 `season_complete_no_remaining_games`),
+  CLV logging added 1 new real flag on top of Session 6.4's 228 already-open
+  flags (229 total open, 0 pipeline failures), and
+  `output/digest/props_digest_latest.md` was written correctly — a
+  plain-language run summary plus an edge-sorted table of all 229 real
+  open flags, `implied_prob_includes_field_vig` visible per row exactly
+  as intended. Exit code 0.
+- `python -m playwright install --with-deps chromium` and `xvfb-run` were
+  not separately re-tested against a real GitHub Actions runner this
+  session (that requires an actual push + scheduled/dispatched run,
+  which is the user's own step per this project's GitHub Desktop
+  workflow) — the real-data validation above confirms the pipeline logic
+  itself is correct; the workflow file's `xvfb-run` step is the same,
+  standard fix `ingest_dk_props.py`'s own docstring already named as
+  necessary for any headless CI/server environment, not a new guess.
+
+**Decisions made:**
+1. **Either ingestion feed may fail independently without stopping the
+   pipeline**, unlike the politics orchestrator, where both race and
+   polling ingestion must each succeed. See ROADMAP.md's Session 6.5
+   card for the full reasoning — this track's real, best-corroborated
+   risk (account-limiting/bot-detection, per the Track Reference table)
+   makes a single-venue failure a genuinely different kind of event than
+   a politics data source going fully dark.
+2. **3-hour cadence**, weighed as a middle point between two real,
+   opposing pressures: player-prop lines move faster intraday than
+   down-ballot polling or weather thresholds (both daily cadences), but
+   DraftKings' ingestion specifically only works because of real,
+   hard-won Session 6.1 fixes against Akamai Bot Manager, and running
+   that same fragile path hourly was judged to needlessly raise the odds
+   of triggering a tighter response or an IP-level block on GitHub's
+   shared runner ranges — a real risk with no fast recovery path if it
+   happens. Named explicitly in the workflow file as a placeholder to
+   revisit once real run-history exists, matching this project's
+   standing pattern for every other scheduling decision.
+3. **No `schema_props.py` or estimation-layer changes were needed this
+   session** — Session 6.5 is automation-only, wiring up already-built
+   and already-validated (Sessions 6.1-6.4) stages, not changing any of
+   their logic.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- The workflow file's real behavior on an actual GitHub Actions runner
+  (Playwright/Chromium install, `xvfb-run`, the scheduled cron itself
+  firing) is unverified until the user pushes this file and either waits
+  for the next scheduled run or uses the manual "Run workflow" button —
+  the same one-time verification step every prior workflow file in this
+  project needed (see Sessions 2.7, 3.4, 5.5's own entries for that same
+  "confirmed once pushed" pattern). Not a blocker to closing this
+  session; a natural follow-up once the file is live.
+  Next session is 6.6 — Frontend Integration.

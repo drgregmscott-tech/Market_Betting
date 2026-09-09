@@ -1,0 +1,178 @@
+name: Props Pipeline
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions "workflow" -- a set of instructions GitHub itself runs on
+# a schedule, on a temporary computer GitHub provides (a "runner"), separate
+# from your own PC. Every run starts from a completely fresh copy of this
+# repo; nothing written to that temporary computer's disk survives past the
+# end of the run unless this file explicitly saves it back to GitHub first.
+# This is Track 6 (sportsbook player props)'s twin of pickem_pipeline.yml
+# (Session 2.7), arbitrage_pipeline.yml (Session 3.4), and
+# politics_pipeline.yml (Session 5.5) -- same structure, a separate schedule
+# and a separate commit step, so no two tracks' automated runs ever
+# interfere with each other.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out this repo onto the temporary computer.
+# 2. Installs Python, this project's packages (requirements.txt), and a
+#    real Chromium browser via Playwright (needed for DraftKings -- see
+#    below).
+# 3. Runs scripts/run_props_pipeline.py under a REAL virtual display
+#    (`xvfb-run`), which itself runs DraftKings + FanDuel props ingestion
+#    -> estimation -> CLV logging in sequence (Sessions 6.1-6.4).
+# 4. If that script succeeds, commits the updated raw/normalized
+#    ingestion snapshots, the estimation stage's own latest output, the
+#    updated data/sportsbook_props/clv_log.csv and its snapshot, and the
+#    new digest file back to this repo, using a token GitHub generates
+#    automatically for every workflow run (GITHUB_TOKEN) -- no separate
+#    password or secret needed.
+# 5. If step 3 fails or finds nothing to commit, the workflow stops there --
+#    no commit happens, and the run shows as failed/red on GitHub's Actions
+#    tab so a failure is never silent.
+#
+# WHY THIS NEEDS `xvfb-run`, UNLIKE ANY OTHER PIPELINE IN THIS PROJECT
+# -----------------------------------------------------------------------
+# Session 6.1's real, hard-won finding (see SESSION_LOG.md): DraftKings
+# sits behind Akamai Bot Manager, which fingerprints headless Chromium
+# specifically (e.g. `navigator.webdriver = true`, missing plugins/fonts)
+# and returns a real `403 Forbidden` even from a real Playwright-driven
+# browser if that browser is launched with `headless=True`.
+# `ingest_dk_props.py`'s own `_launch_browser_context()` therefore launches
+# with `headless=False` -- which needs a real, visible display to render
+# into. A standard GitHub Actions Linux runner has no display at all. The
+# fix, exactly as `ingest_dk_props.py`'s own docstring names as the open
+# item for this session: `xvfb-run`, a small Linux utility (pre-installed
+# on GitHub's `ubuntu-latest` runners) that creates a real, working virtual
+# display in memory and runs a given command against it -- Chromium then
+# renders normally, `headless=False` is satisfied, and Akamai's own
+# headless-detection checks see a real, rendered browser exactly as they
+# would on the user's own PC.
+#
+# WHY THIS COMMITS THE RAW/NORMALIZED INGESTION SNAPSHOTS AND ESTIMATES --
+# UNLIKE arbitrage_pipeline.yml, WHICH DELIBERATELY DOES NOT
+# --------------------------------------------------------------------------
+# Same reasoning as politics_pipeline.yml and
+# weather_calibration_pipeline.yml: Session 6.2's estimation model and
+# Session 6.4's sizing dampeners (`PROPS_PLATFORM_RISK_MULTIPLIER`,
+# `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER`) are both explicitly named,
+# unvalidated placeholders that ROADMAP.md's Session 8.3 is supposed to
+# re-derive against real data once real graded props positions exist. That
+# re-derivation needs a real accumulated history of what this project's own
+# ingestion/estimation actually produced over time, not just the latest
+# snapshot.
+#
+# SCHEDULING FREQUENCY -- REAL, NAMED REASONING (matches ROADMAP.md's
+# Session 6.5 requirement: "scheduled against DK/FD line-movement cadence")
+# --------------------------------------------------------------------------
+# Every 3 hours (8x/day), not hourly like pickem_pipeline.yml -- a
+# deliberate, stated judgment call, not the fastest technically possible
+# cadence, for two real reasons:
+# 1. Account-limiting/bot-detection risk is this track's own
+#    best-corroborated risk (Session 6.4's `PROPS_PLATFORM_RISK_MULTIPLIER`,
+#    per the Track Reference table) -- and DraftKings' ingestion in
+#    particular required real, hard-won fixes across Session 6.1 just to
+#    stop 403-ing at all (see above). Running that same fragile path every
+#    single hour, every day, indefinitely, maximizes the odds of
+#    triggering a tighter Akamai response or an IP-level block on GitHub's
+#    shared runner ranges -- a real operational risk this project has no
+#    way to recover from quickly if it happens (unlike a pick'em endpoint,
+#    which Session 2.1 confirmed is stable and has no comparable
+#    bot-detection layer). A slower, steadier cadence is the conservative
+#    choice given that real cost.
+# 2. Player-prop lines (unlike a fixed pick'em line) do move faster than
+#    down-ballot polling (politics_pipeline.yml's own daily cadence) or
+#    weather thresholds (weather_calibration_pipeline.yml's own daily
+#    cadence) -- they can react to injury news, lineup changes, and
+#    approaching kickoff within the same day. 3-hour spacing is a real
+#    middle point between those two pressures (move fast enough to catch
+#    real intraday line movement; slow enough not to hammer DraftKings'
+#    bot-detection layer every hour), not a literal measurement of either
+#    track's real movement speed -- explicitly named here as a starting
+#    point to revisit, same posture as every other placeholder cadence in
+#    this project, once real run-history exists on GitHub's own Actions
+#    tab and Session 8.3's recalibration work can check it against real
+#    graded results.
+#
+# WHY THIS RUNS AT THESE SPECIFIC TIMES (:22 past every 3rd hour, UTC)
+# --------------------------------------------------------------------------
+# Deliberately NOT the exact top of the hour, and deliberately offset from
+# every other scheduled workflow in this project (pickem_pipeline.yml's
+# hourly :07, arbitrage_pipeline.yml's own offsets, weather_calibration_
+# pipeline.yml's 11:23 UTC, politics_pipeline.yml's 13:40 UTC), so this
+# project's five scheduled workflows stay staggered rather than clustered
+# at the same few minutes of the day -- reduces the odds of two unrelated
+# pipelines both landing on a delayed/skipped slot on GitHub's shared
+# infrastructure at once (GitHub's own documentation warns busy,
+# predictable slots are the most likely to be delayed or skipped).
+on:
+  schedule:
+    - cron: "22 */3 * * *"
+  workflow_dispatch: {}
+  # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
+  # be triggered by hand for testing without waiting for the next scheduled
+  # run.
+
+# Prevents two runs from overlapping if one run happens to take longer than
+# expected -- a second scheduled run will wait for the first to finish
+# rather than starting in parallel and racing to write the same files.
+concurrency:
+  group: props-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Required so the final step in this workflow is allowed to commit and
+  # push back to this repo using the automatic GITHUB_TOKEN.
+
+jobs:
+  run-props-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright's Chromium browser (needed for DraftKings)
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run pipeline under a virtual display (ingestion -> estimation -> CLV logging)
+        # xvfb-run creates a real, working virtual display in memory so
+        # ingest_dk_props.py's headless=False Chromium launch (Session
+        # 6.1 -- see this file's own header comment above for why that's
+        # required) has something real to render into on a display-less
+        # Linux runner.
+        run: xvfb-run --auto-servernum python scripts/run_props_pipeline.py --season 2025
+
+      - name: Commit and push updated data, estimates, CLV log, and digest
+        run: |
+          git config user.name "props-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/sportsbook_props/raw/ data/sportsbook_props/normalized/ output/estimation/sportsbook_props_latest.csv data/sportsbook_props/clv_log.csv data/sportsbook_props/clv_snapshots/ output/digest/props_digest_latest.md output/digest/props_digest_*.md
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          git commit -m "Automated props pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
+
+      - name: Upload logs as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: props-pipeline-logs
+          path: |
+            logs/props_pipeline.log
+            logs/ingestion.log
+            logs/estimation.log
+            logs/clv_logging.log
+          retention-days: 14
+          if-no-files-found: ignore

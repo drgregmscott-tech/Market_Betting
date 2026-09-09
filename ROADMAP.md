@@ -2390,11 +2390,83 @@ extra dampener.
 ---
 
 ### Session 6.5 — Automation Adaptation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-09) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 6.4 complete.
 
+**What was built:** A sixth track orchestrator, `scripts/run_props_pipeline.py`
+— modeled directly on `run_pipeline.py` (Session 2.7), `run_arbitrage_pipeline.py`
+(Session 3.4), and `run_politics_pipeline.py` (Session 5.5) — running Track 6's
+three existing stages back-to-back: DraftKings + FanDuel props ingestion
+(Session 6.1) → estimation (Session 6.2/6.4, field-vig-normalized model) → CLV
+logging (Session 6.3). One real difference from the other three orchestrators:
+this one tolerates either single ingestion feed failing on its own (proceeding
+in degraded single-venue mode, exactly the fallback Session 6.1 already
+validated) and only stops before estimation/CLV logging if BOTH DK and FD
+return 0 rows — reflecting that DraftKings' Akamai-bot-detection fight
+(Session 6.1) makes a single-venue hiccup a real, expected possibility here in
+a way it isn't for politics' two ingestion sources. A new workflow,
+`.github/workflows/props_pipeline.yml`, calls it on a schedule. Sizing (Session
+6.4) is deliberately **not** part of the automated run, same standing reason as
+every other track.
+
+**The one genuinely new piece of infrastructure this session required:**
+DraftKings' ingestion (Session 6.1) needs a REAL, visible (non-headless)
+Chromium browser — Akamai Bot Manager fingerprints headless Chromium
+specifically and 403s it. A standard GitHub Actions Linux runner has no
+display at all, so `props_pipeline.yml` installs Playwright's Chromium
+(`playwright install --with-deps chromium`) and runs the whole pipeline under
+`xvfb-run`, a virtual-display utility pre-installed on `ubuntu-latest` runners
+— confirmed as the correct fix directly in `ingest_dk_props.py`'s own docstring
+(Session 6.1's real finding), not guessed at fresh this session.
+
+**Files touched:** `.github/workflows/props_pipeline.yml` (new),
+`scripts/run_props_pipeline.py` (new)
+
 **Validation (required to close session):**
-- [ ] Workflow scheduled against DK/FD line-movement cadence
+- [x] Workflow scheduled against DK/FD line-movement cadence — every 3 hours
+(8x/day), a deliberate, stated judgment call recorded directly in the
+workflow file's own docstring: faster than politics' daily cadence (player
+props move faster than down-ballot polling — injury news, lineup changes,
+approaching kickoff can move a line within the same day) but deliberately
+slower than pick'em's hourly cadence, because this track's own
+best-corroborated risk (Session 6.4's `PROPS_PLATFORM_RISK_MULTIPLIER`,
+per the Track Reference table) is account-limiting/bot-detection risk, and
+DraftKings' ingestion in particular only works at all because of real,
+hard-won Session 6.1 fixes against Akamai Bot Manager — hammering that
+same fragile path every hour was judged an unnecessary escalation of a
+real, unrecoverable-if-triggered risk (an IP-level block on GitHub's
+shared runner ranges). Named explicitly as a placeholder cadence to
+revisit once real run-history exists, same posture as every other
+scheduling decision in this project.
+- [x] Pipeline runs end-to-end against real, live data — confirmed directly
+in this real run (not a disposable sandbox): DraftKings returned 674 real
+rows across 8 events, FanDuel returned 141 real rows, estimation produced
+815 real output rows (397 `estimated`, matching Session 6.4's
+field-vig-fixed status breakdown), CLV logging added 1 real newly-flagged
+row on top of the 228 already open from Session 6.4's own validation run
+(229 total open), and `output/digest/props_digest_latest.md` was written
+with a correctly populated, edge-sorted open-flags table. Exit code 0.
+
+**Decisions made:**
+1. **Either ingestion feed is allowed to independently fail without
+stopping the pipeline** — a deliberate departure from politics'
+orchestrator (Session 5.5), where both race and polling ingestion must
+each succeed. Reasoning: `ingest_dk_props.py` and `ingest_fd_props.py`
+already catch their own real exceptions internally and return a 0-row
+summary rather than raising; DraftKings' Akamai bot-detection layer
+tightening on a given run (or a runner-level Chromium/display problem)
+is a real, expected single-venue risk this track must tolerate, and
+`sportsbook_props_model.py`'s `load_props()` already runs correctly
+against a single venue's file (confirmed Session 6.1). The pipeline only
+stops early if BOTH feeds return 0 rows.
+2. **3-hour cadence, not hourly** — see validation item above for the
+full, named reasoning (account-limiting/bot-detection risk on the
+DraftKings side specifically, weighed against player-props' faster real
+movement than politics/weather).
+3. **Automation does not call `sizing_engine.py props size`** — same
+standing reason as every other track's orchestrator (Sessions 2.7, 3.4,
+5.5): sizing needs a human-supplied bankroll and a chosen flag_id; this
+project flags and sizes, it does not place bets.
 
 ---
 
