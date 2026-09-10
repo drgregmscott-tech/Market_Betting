@@ -8324,8 +8324,211 @@ not silently dropped.
 
 **Open items / deferred validations:** Whether to evaluate a licensed
 odds-aggregation API as a new path to BetMGM (and possibly other
-currently-blocked venues) — open, pending the user's direction. The
-GeoComply/ToS no-go for *direct* BetMGM access is not open; it is
-confirmed and stands.
+currently-blocked venues) — closed below (user ruled paid options out).
+The ToS-only-cause claim for *direct* BetMGM access needed a real
+correction (see below) before this could honestly be called closed.
+
+---
+
+### Session 6.9, second correction — the exact BetMGM block mechanism was
+overstated as "GeoComply"; corrected (2026-09-10, same day)
+
+**The user pushed back a second time, correctly**: naming GeoComply as
+the specific cause of BetMGM's "Country code is missing" error was an
+inference from general sportsbook-industry knowledge, not something
+actually traced in BetMGM's own code. Re-investigated directly:
+confirmed GeoComply genuinely exists in BetMGM's real production JS
+bundles (four real chunk files reference it by name), and confirmed the
+real page's odds grid is not pre-rendered (an anonymous visitor's own
+browser must make the same kind of data call this session tested) — but
+a direct code search for where `countryCode` gets set found it wired only
+to payment/shipping forms (Apple Pay, address fields), never to the real
+odds/fixtures call. **Corrected conclusion:** the block is real and
+survived every real variation tried (query params, spoofed geo headers, a
+full real cookie jar from a real US-Kansas IP, realistic browser headers)
+— but the exact mechanism (GeoComply specifically, vs. some other
+edge-only signal a scripted client can't produce) was not proven from the
+code, only inferred. The practical outcome is unchanged (still blocked,
+still no lever left to try), but the earlier session entries' confident
+"this is GeoComply" wording is corrected here to "confirmed blocked by
+something a scripted client can't supply; BetMGM's own code shows
+GeoComply is real and present on the site, but this session did not trace
+it as the specific cause of this specific error."
+
+---
+
+### Session 6.9, third finding — how Rotowire/Action Network actually get
+BetMGM data, and building the real ingestion path (2026-09-10, same day)
+
+**The user's real, well-grounded question:** if BetMGM blocks a script
+this hard, how do sites like Rotowire show BetMGM's odds at all, and how
+do real betting-recommendation/DFS businesses get this kind of data?
+This deserved a real, traced answer, not "they probably pay someone."
+
+**Investigated directly, both an aggregator and a media site:**
+1. **Action Network** (`actionnetwork.com`): traced its real public API,
+`api.actionnetwork.com/web/v2/scoreboard/{league}?bookIds=...` — free, no
+login, no key. Confirmed real BetMGM data returns for `bookIds=75`
+(BetMGM NJ; the real book-ID list is state-specific, same pattern
+BetMGM's own site uses: 75=NJ, 248=WV, 258=CO, 261=IN, 280=PA, 281=TN,
+282=IL, 283=MI, 346=IA). This is real, free, working access to BetMGM
+game-line odds (moneyline/spread/total) with zero technical gate.
+2. **Real limitation found in Action Network's own props tool**: its
+player-props page is a proprietary "best pick" tool, not a per-book
+comparison — one book per prop, chosen by Action Network's own algorithm,
+no book selector. A real live pull (970 player-prop lines) contained
+**zero** BetMGM rows. So while Action Network solves BetMGM game lines
+for free, it does not reliably solve BetMGM **props** — this project's
+actual target (Track 5).
+3. **Rotowire** (`rotowire.com`) checked the same way: real BetMGM data is
+server-rendered directly into `rotowire.com/betting/{sport}/player-props.
+php`'s own page HTML (no separate API call to trace) — confirmed via
+real fields `mgm_passydsOver`, `mgm_firsttd`, etc., with real live prices,
+across essentially every real NFL prop category (passing/rushing/
+receiving yards, receptions, TD-scorer markets, kicking, defense), not
+just one subcategory the way this project's own DK/FD v1 scripts are
+scoped. No login, no key, no geolocation gate.
+4. **The real explanation for why this works when direct BetMGM access
+doesn't**: BetMGM's own site bundles two different things — the real-
+money wagering surface (blocked, confirmed above) and a separate business
+incentive to have its lines shown on free odds-comparison/media sites,
+since that drives signups. Rotowire and Action Network are pulling from
+that second, intentionally-open distribution channel, not defeating the
+first. This does not reverse the direct-BetMGM no-go; it explains it from
+the other side — confirmed, not assumed, by finding zero client-side call
+to any BetMGM domain in Rotowire's own JS.
+5. **ToS checked for both, same standard as BetMGM's own site**:
+Action Network's Terms of Use explicitly prohibit "'deep-link',
+'page-scrape', 'robot', 'spider' or other automatic device... to access,
+acquire, copy or monitor any portion of the Site" (real clause, quoted
+directly from the real page). Rotowire's Terms of Use separately prohibit
+"crawl or spider" (per web search, corroborating the same category of
+restriction). Rotowire's `robots.txt` does **not** disallow `/betting/`
+for a generic user-agent — only the Terms of Use, a contractual document,
+bars it; there is no `robots.txt`-level technical signal against this
+specific path.
+6. **User's decision, given the choice**: rule out any paid option
+entirely (both the earlier licensed-aggregator idea and, implicitly,
+Action Network's paid PRO tier), and build the Rotowire path — accepting
+the ToS situation as the same category of open question this project
+already carries for DK's/FD's own undocumented-endpoint scripts, not a
+new or different kind of risk.
+
+**What was built:**
+- `scripts/ingestion/ingest_rotowire_betmgm_props.py` — new file, same
+structural pattern as `ingest_dk_props.py`/`ingest_fd_props.py`: fetches
+`rotowire.com/betting/nfl/player-props.php`, extracts every real `data:
+[{...}]` JSON array embedded in the page's own inline `<script>` blocks
+(a hand-written bracket-depth scanner that respects quoted strings, since
+these arrays are not wrapped in anything a standard HTML/JSON parser would
+find on its own), and normalizes every `mgm_*` field into the shared
+`schema_props.py` row shape, `platform="betmgm"`.
+- **Real bug found and fixed during this session's own first live run**,
+not assumed correct because it ran without error: the first version
+classified two-sided vs. single-sided markets by whether `<stat>Over`/
+`<stat>Under` KEYS existed on a row. Real captured data showed TD-scorer
+rows (e.g. `anytd`) DO carry those keys, always `null` — the real single
+price lives in the bare `mgm_anytd` field. Key-presence detection silently
+routed 347 real TD-scorer prices into the `line` column instead of
+`over_american_odds`. Fixed to classify by whether Over/Under carry a
+real (non-null) VALUE instead — confirmed correct against the same real
+data (re-run: 347 `anytd` rows now correctly land in `over_american_odds`
+with `line` empty; a real `rushrec` two-sided market with a genuinely
+blank Under side, confirmed directly against the raw page — not a
+parsing bug — correctly keeps `line`/`over_american_odds` populated and
+`under_american_odds` empty).
+- `scripts/ingestion/test_ingest_rotowire_betmgm_props.py` — new synthetic-
+fixture test harness, built directly from the real captured shapes above
+(TD-scorer, two-sided-with-real-blank-Under, and a real no-coverage row),
+specifically to lock in the classification fix so it can't silently
+regress. 4/4 pass.
+- `scripts/estimation/sportsbook_props_model.py` — added `RW_BETMGM_
+LATEST` path constant; `load_props()` now loads DK, FD, AND this new
+BetMGM source (previously hardcoded to exactly two files).
+- `scripts/calibration/clv_logger.py` — `_props_other_platform()` (a
+function that hardcoded "the other platform is whichever of draftkings/
+fanduel you aren't") was real, working code for exactly two platforms and
+silently wrong for three: it would have compared every `betmgm` row
+against `draftkings` only, never `fanduel`, for cross-platform consensus.
+Removed and replaced with `find_props_consensus_row()` checking every
+other real platform actually present in the index, not one hardcoded
+guess — a direct, necessary consequence of adding a real third platform
+to this pipeline, not a speculative cleanup.
+
+**Validation results:**
+- Ran the real script live: 377 real, normalized BetMGM prop rows from a
+real Rotowire pull (2026-09-10), after the classification fix. Category
+breakdown: 347 `player_touchdown` (`anytd`), 28 `rushrec`, 2 `kickpts`,
+all `player_performance` for the two-sided ones. Real coverage gaps
+confirmed normal, not errors (e.g. zero `passyds` rows this run — BetMGM
+had no real passing-yards market priced for any sampled player at pull
+time, confirmed by checking the raw page directly, not assumed).
+- `python -m pytest scripts/ingestion/test_ingest_rotowire_betmgm_props.py
+scripts/ingestion/test_ingest_props.py scripts/ingestion/
+test_schema_props.py scripts/calibration/test_clv_logger.py scripts/
+estimation/test_sportsbook_props_model.py -q` — 26/26 pass (4 new + 22
+pre-existing, confirming the `clv_logger.py` consensus-matching change
+didn't regress DK/FD's own existing behavior).
+- Ran `sportsbook_props_model.py --season 2026` end-to-end with the new
+source wired in: 1,185 total rows loaded (808 DK/FD + 377 BetMGM,
+confirming the new file is actually being picked up), all landed on
+`no_player_match` — the same real, temporary nflverse-2026-data-sparsity
+gap Session 6.8 already documented for FanDuel (67 real nflverse rows,
+too early in the season to cover most players), not a new problem. This
+throwaway `--season 2026` test output was reverted (`git checkout`) before
+closing, same practice Session 6.8 used, so it doesn't enter history as if
+it were a real production run.
+
+**Decisions made:**
+1. **Rotowire chosen over Action Network** for BetMGM props specifically,
+because Action Network's free props tool cannot reliably surface BetMGM
+(0 of 970 real sampled rows) while Rotowire's does, on essentially every
+real stat category, for every player. Action Network remains a real,
+separately-viable free option for BetMGM **game lines** if a future
+session needs those instead of props.
+2. **Paid options ruled out entirely, per explicit user instruction** —
+no licensed odds-aggregation API, no Action Network PRO tier. This
+closes the "open item" left at the end of the first Session 6.9
+correction entry.
+3. **Classification logic fixed to be value-based, not key-based** — see
+"What was built" above. Documented in the script's own module docstring
+so a future session doesn't have to rediscover this by re-finding the
+same bug.
+4. **`clv_logger.py`'s consensus-matching generalized to N platforms**,
+not left as a known-wrong two-platform hardcode now that a real third
+platform exists in the same pipeline — a necessary fix, not scope creep,
+since leaving it would have silently produced wrong (always-draftkings)
+consensus comparisons for every real BetMGM row from here on.
+
+**Files created/modified:**
+- `scripts/ingestion/ingest_rotowire_betmgm_props.py` (new)
+- `scripts/ingestion/test_ingest_rotowire_betmgm_props.py` (new)
+- `scripts/estimation/sportsbook_props_model.py` (modified: `RW_BETMGM_
+LATEST` added, `load_props()` updated)
+- `scripts/calibration/clv_logger.py` (modified: `_props_other_platform`
+replaced by a generalized lookup in `find_props_consensus_row`)
+- `data/sportsbook_props/normalized/rw_betmgm_latest.csv`,
+`rw_betmgm_props_20260910T155235Z.csv` (real ingested output)
+- `data/sportsbook_props/raw/rotowire_betmgm_nfl_20260910T155235Z.html`
+(real raw snapshot)
+
+**Open items / deferred validations:**
+- **No real BetMGM row has reached `estimated` status yet** — same,
+already-documented, temporary nflverse-2026-data-sparsity gap as
+FanDuel's Session 6.8 finding. Re-verify once nflverse's 2026 weekly file
+has meaningfully more than 67 rows (same trigger Session 6.8 already
+named) — at that point both FanDuel's and BetMGM's real flagging should
+be checked together, not separately, since they share the same root
+cause and the same fix (the `--season` default switch, Open Decision #9).
+- **CLV logging hook-in, sizing, automation, and frontend integration for
+this new BetMGM(-via-Rotowire) source were NOT done this session** — this
+session covered ingestion + estimation-pipeline wiring only (the first of
+the project's seven build stages). A future session should treat "wire
+BetMGM(-via-Rotowire) all the way through the remaining stages" as its
+own explicit scope, the same phased structure every other track used,
+rather than assuming it's done because ingestion works.
+- Session 6.10 (Caesars) is unaffected and still needs its own
+independent feasibility check — this session's Rotowire/Action-Network
+finding is not assumed to carry over.
 
 **Next session:** None yet — Session 5.7 remains open, same as before.

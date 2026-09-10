@@ -9380,3 +9380,39 @@ Call log:
 2026-09-09 19:49:27,751 UTC | INFO | Processed 20/24 target stations so far.
 2026-09-09 19:49:33,502 UTC | INFO | Processed 24/24 target stations so far.
 2026-09-09 19:49:34,016 UTC | INFO | === NWS ingestion run complete: 24/24 stations OK, 405 forecast rows, 68 observed-day rows (failed stations: none) ===
+2026-09-10 15:51:59,664 UTC | INFO | === Rotowire BetMGM props ingestion run starting (sport=nfl) ===
+2026-09-10 15:52:01,073 UTC | WARNING | Skipped one unparseable data array at offset 344580: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:01,698 UTC | WARNING | Skipped one unparseable data array at offset 345046: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:01,699 UTC | WARNING | Skipped one unparseable data array at offset 346724: Expecting value: line 1 column 3 (char 2)
+2026-09-10 15:52:02,331 UTC | WARNING | Skipped one unparseable data array at offset 346880: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:02,331 UTC | WARNING | Skipped one unparseable data array at offset 347029: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:02,965 UTC | WARNING | Skipped one unparseable data array at offset 347648: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:03,606 UTC | WARNING | Skipped one unparseable data array at offset 347815: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:04,237 UTC | WARNING | Skipped one unparseable data array at offset 348276: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:04,238 UTC | WARNING | Skipped one unparseable data array at offset 367604: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:04,863 UTC | INFO | Found 22 real data array(s) embedded in the page
+2026-09-10 15:52:04,887 UTC | INFO | BetMGM (via Rotowire): 377 normalized rows
+2026-09-10 15:52:04,899 UTC | INFO | === Rotowire BetMGM props ingestion run complete: 377 rows (OK) ===
+2026-09-10 15:52:35,234 UTC | INFO | === Rotowire BetMGM props ingestion run starting (sport=nfl) ===
+2026-09-10 15:52:36,491 UTC | WARNING | Skipped one unparseable data array at offset 344580: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:37,115 UTC | WARNING | Skipped one unparseable data array at offset 345046: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:37,115 UTC | WARNING | Skipped one unparseable data array at offset 346724: Expecting value: line 1 column 3 (char 2)
+2026-09-10 15:52:37,733 UTC | WARNING | Skipped one unparseable data array at offset 346880: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:37,733 UTC | WARNING | Skipped one unparseable data array at offset 347029: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:38,351 UTC | WARNING | Skipped one unparseable data array at offset 347648: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:38,978 UTC | WARNING | Skipped one unparseable data array at offset 347815: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:39,615 UTC | WARNING | Skipped one unparseable data array at offset 348276: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 15:52:39,615 UTC | WARNING | Skipped one unparseable data array at offset 367604: Expecting value: line 1 column 2 (char 1)
+2026-09-10 15:52:40,258 UTC | INFO | Found 22 real data array(s) embedded in the page
+2026-09-10 15:52:40,284 UTC | INFO | BetMGM (via Rotowire): 377 normalized rows
+2026-09-10 15:52:40,301 UTC | INFO | === Rotowire BetMGM props ingestion run complete: 377 rows (OK) ===
+2026-09-10 15:53:32,790 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-10 15:53:32,792 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-10 15:53:32,793 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-10 15:53:32,793 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-10 15:53:32,794 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-10 15:55:54,024 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-10 15:55:54,025 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-10 15:55:54,026 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-10 15:55:54,027 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-10 15:55:54,028 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.

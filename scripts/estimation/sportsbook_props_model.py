@@ -191,6 +191,10 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 NORMALIZED_DIR = BASE_DIR / "data" / "sportsbook_props" / "normalized"
 DK_LATEST = NORMALIZED_DIR / "dk_latest.csv"
 FD_LATEST = NORMALIZED_DIR / "fd_latest.csv"
+# Session 6.9 -- BetMGM, via Rotowire's real embedded page data (not a
+# direct BetMGM pull -- see ingest_rotowire_betmgm_props.py's module
+# docstring for why BetMGM's own site is a confirmed no-go).
+RW_BETMGM_LATEST = NORMALIZED_DIR / "rw_betmgm_latest.csv"
 OUTPUT_DIR = BASE_DIR / "output" / "estimation"
 LOG_PATH = BASE_DIR / "logs" / "estimation.log"
 
@@ -598,16 +602,16 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
 # ---------------------------------------------------------------------------
 def load_props() -> pd.DataFrame:
     frames = []
-    for path in (DK_LATEST, FD_LATEST):
+    for path in (DK_LATEST, FD_LATEST, RW_BETMGM_LATEST):
         if path.exists():
             frames.append(pd.read_csv(path))
         else:
             log.warning("%s not found -- skipping that platform for this run.", path)
     if not frames:
         raise FileNotFoundError(
-            f"Neither {DK_LATEST} nor {FD_LATEST} found. Run "
-            f"scripts/ingestion/ingest_dk_props.py and/or ingest_fd_props.py first "
-            f"(Session 6.1)."
+            f"None of {DK_LATEST}, {FD_LATEST}, {RW_BETMGM_LATEST} found. Run "
+            f"scripts/ingestion/ingest_dk_props.py, ingest_fd_props.py, and/or "
+            f"ingest_rotowire_betmgm_props.py first (Sessions 6.1, 6.9)."
         )
     return pd.concat(frames, ignore_index=True)
 

@@ -2956,14 +2956,21 @@ part of the same 2026-09-10 venue-link work; confirmed directly in
 ---
 
 ### Session 6.9 — BetMGM Props Ingestion Feasibility & Build
-**Status:** ✅ Complete (no-go for direct access) — 2026-09-10. Direct,
-unauthenticated BetMGM scraping is dropped from scope (GeoComply +
-explicit ToS anti-scraping clause). **New open item, same day:** a
-licensed third-party odds-aggregation API (OddsJam/OpticOdds/SportsDataIO-
-class vendor — confirmed as the real mechanism sites like Rotowire use to
-show BetMGM odds) is a separate, legitimate path not yet evaluated — see
-SESSION_LOG.md's "Session 6.9 correction" entry for the full finding and
-sourcing. Needs a user decision before any follow-up session is scoped.
+**Status:** ✅ Complete — 2026-09-10. Direct, unauthenticated BetMGM
+scraping (BetMGM's own site) is a confirmed no-go (real technical wall
+plus an explicit ToS anti-scraping clause). **Real go found the same
+day via a different, real venue: Rotowire.** Rotowire's own player-props
+pages server-render real BetMGM prop data (no login, no key, no
+geolocation gate of any kind) for the same reason sportsbooks let their
+lines show on free comparison sites — it's a customer-acquisition channel
+for BetMGM, not the same product surface this session's direct attempt
+hit. Built and ran `scripts/ingestion/ingest_rotowire_betmgm_props.py`
+against the real live page; wired its output into `sportsbook_props_
+model.py`'s `load_props()` alongside DK/FD. Real caveat, stated plainly,
+not hidden: Rotowire's own Terms of Use also prohibit automated "crawl or
+spider" access — the same open-ToS-question category this project already
+carries for DK's/FD's own undocumented-endpoint ingestion, not a new or
+different kind of risk. Full build details in SESSION_LOG.md.
 
 **Prerequisites:** Session 6.1's precedent (DraftKings/FanDuel ingestion)
 and this project's standing due-diligence pattern for a brand-new venue —
@@ -3775,19 +3782,35 @@ reproducible endpoint check first — see Session 2.1's DK Pick6 outcome),
 this is scoped as two separate feasibility sessions before any real build
 work. **Action needed:** Sessions 6.9 (BetMGM) and 6.10 (Caesars), both new,
 added this session.
-48. **Resolved (BetMGM half), Session 6.9 (2026-09-10). NO-GO.** A real,
-reachable, unauthenticated BetMGM data API exists (`cf-us4-cds-api.
-itsfogo.com`, discovered via the real `clientconfig` boot call the same
-way Session 6.1 found DraftKings' real API) but every real request is
-gated behind a `"Country code is missing"` error that persisted through a
-real US-Kansas IP and a real browser session/cookie set — this is
-BetMGM's GeoComply device-geolocation layer (GPS/Wi-Fi/plugin-based, not
-simple IP lookup), which a scripted client structurally cannot satisfy.
-BetMGM's Terms of Use also explicitly prohibit "any robot, scraper,
-spider" — an independent second bar. BetMGM is dropped from scope; no
-build session follows. Caesars (Session 6.10) is unaffected — must be
-checked independently, per this card's own note that findings don't carry
-over between platforms.
+48. **Resolved (BetMGM half), Session 6.9 (2026-09-10). Real, unexplained
+technical wall found on BetMGM's own site**, plus an explicit ToS anti-
+scraping clause — see full session entry for the honest account of what
+was and wasn't confirmed about the exact mechanism (later corrected away
+from an unverified "it's GeoComply" claim to "confirmed blocked, exact
+cause not proven from the code"). Direct BetMGM access is a no-go.
+49. **New finding, same day, same session: Rotowire has real, complete
+BetMGM prop data, reachable for free.** Traced how third-party sites
+(Rotowire, Action Network) show BetMGM's lines despite the direct no-go —
+they're not calling BetMGM's own gated surface; BetMGM (and other books)
+choose to distribute their lines to free comparison/media sites as a
+customer-acquisition channel, a structurally different distribution path.
+Confirmed both Rotowire and Action Network work this way and are free;
+Rotowire has fuller BetMGM props coverage (every player row, every stat,
+via `mgm_<stat>`/`mgm_<stat>Over`/`mgm_<stat>Under` fields) vs. Action
+Network's props tool (shows only one "best" book per prop, not
+selectable — BetMGM appeared in 0 of 970 sampled real rows). Both carry
+the same explicit "no bots/scrapers/spiders" ToS language BetMGM's own
+site does. User chose Rotowire, accepting that ToS situation as
+consistent with how this project already treats DK/FD's own undocumented-
+endpoint ingestion. Built `scripts/ingestion/ingest_rotowire_betmgm_props.
+py`, ran it live (377 real BetMGM prop rows, a real classification bug
+found and fixed mid-build — see SESSION_LOG.md), and wired its output into
+`sportsbook_props_model.py`'s `load_props()` and `clv_logger.py`'s
+consensus-matching (which was itself hardcoded to a draftkings<->fanduel
+binary and needed generalizing for a real third platform). Caesars
+(Session 6.10) is unaffected and must still be checked independently —
+this same Rotowire/Action-Network path may or may not apply to it and
+should not be assumed.
 
 ---
 *Update this file at the close of each future session, per the project's

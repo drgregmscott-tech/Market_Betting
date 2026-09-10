@@ -979,10 +979,6 @@ def _props_match_key(row) -> Optional[str]:
     return f"{norm_name}|{stat_key}|{game_id}"
 
 
-def _props_other_platform(platform: str) -> str:
-    return "fanduel" if platform == "draftkings" else "draftkings"
-
-
 def _props_implied_for_side(row, side: str) -> Optional[float]:
     return row.get("implied_prob_over") if side == "over" else row.get("implied_prob_under")
 
@@ -1001,14 +997,26 @@ def build_props_consensus_index(df: pd.DataFrame) -> dict[tuple[str, str], list[
 
 
 def find_props_consensus_row(df: pd.DataFrame, index: dict, own_platform: str, match_key: str) -> Optional[pd.Series]:
-    other_platform = _props_other_platform(own_platform)
-    candidates = index.get((other_platform, match_key))
+    """Session 6.1 originally hardcoded this to a single "the other one of
+    two platforms" lookup (draftkings<->fanduel), which is exactly wrong
+    now that a third platform (Session 6.9's betmgm, via Rotowire) exists
+    in the same pipeline -- that version would never find fanduel<->betmgm
+    or draftkings<->betmgm consensus. Generalized here to check EVERY
+    other real platform present in the index, not one hardcoded guess."""
+    other_platform_keys = {
+        platform for (platform, key) in index.keys()
+        if key == match_key and platform != own_platform
+    }
+    candidates: list[int] = []
+    for other_platform in sorted(other_platform_keys):
+        candidates.extend(index.get((other_platform, match_key), []))
     if not candidates:
         return None
     if len(candidates) > 1:
         log.warning(
-            "[props] Multiple consensus candidates for platform=%s key=%s (%d matches) -- using the first.",
-            other_platform, match_key, len(candidates),
+            "[props] Multiple consensus candidates for own_platform=%s key=%s (%d matches "
+            "across other platform(s)) -- using the first.",
+            own_platform, match_key, len(candidates),
         )
     return df.loc[candidates[0]]
 
