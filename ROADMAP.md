@@ -2443,13 +2443,29 @@ is, but not ruled out). **Not yet confirmed: whether the daily 13:40 UTC
 schedule now fires on its own**, since only a manual dispatch has been
 proven so far. See Open items.
 
+**Update (2026-09-10):** Checked via GitHub's own Actions tab (user
+screenshot). Confirmed: 2 real runs exist, both from 2026-09-09 — run #1
+was the manual dispatch (7:05 AM CDT / 12:06 UTC); **run #2 was a genuine
+`Scheduled` trigger** (12:15 PM CDT / 17:15 UTC), ~3.5 hours late versus
+the configured 13:40 UTC. As of 2026-09-10 15:10 UTC (over an hour past
+that day's 13:40 UTC slot), no third run had appeared — the schedule
+missed its second real opportunity entirely. **Applied a known fix:**
+`.github/workflows/politics_pipeline.yml`'s cron was nudged from `40 13`
+to `43 13` UTC and a dated comment added explaining why — committing any
+change to a workflow file is a documented way to force GitHub to
+re-register a stuck schedule trigger. The minute was deliberately changed
+(not left at :40) so the next real run is independently verifiable as
+this fix working, rather than indistinguishable from a lucky on-time
+firing of the old registration.
+
 **Open items / deferred validations:**
-- **Confirm the daily schedule fires unattended, not just on manual
-dispatch.** Check GitHub's Actions tab for `politics_pipeline.yml` again
-after 2026-09-10 13:40 UTC has passed — if a second real run appears
-without anyone triggering it by hand, the schedule is confirmed working
-and this concern is closed. If not, the schedule itself needs
-troubleshooting (a real, separate problem from the one just fixed).
+- **Confirm the re-registration fix worked.** After this commit is pushed
+and 2026-09-11 13:43 UTC has passed, check for a new `Automated politics
+pipeline run` commit landing close to :43 (not hours late, not missing).
+If it lands on time, the fix worked — close this item. If it's still late
+or missing, this needs a different approach (e.g., deleting and
+re-creating the workflow file from scratch, or asking GitHub Support,
+since two independent real fixes will have been tried without success).
 - Re-run `python scripts/calibration/politics_sample_report.py --report`
 periodically to track real progress against the interim floor (30) and
 full target (≈892) from `docs/politics_sample_size_methodology.md`.

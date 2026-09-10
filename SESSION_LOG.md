@@ -8091,3 +8091,66 @@ cross-platform consensus item). Track 5 needs no further build work from
 this finding — only the calendar to catch up, and the `--season`
 default's already-tracked switch (Open Decision #9) whenever that happens.
 
+
+---
+
+### Session 5.7 continuation — Schedule diagnosis and re-registration fix (2026-09-10)
+
+**What happened:** User checked GitHub's Actions tab for `politics_pipeline.yml`
+directly (screenshot) and found only 2 total runs, both from 2026-09-09:
+- Run #1, 7:05 AM CDT (12:06 UTC) — labeled "Manually run by
+drgregmscott-tech" — the known manual dispatch from the prior continuation
+entry.
+- Run #2, 12:15 PM CDT (17:15 UTC) — labeled **"Scheduled"** — a genuine
+cron firing, but ~3.5 hours late versus the configured `40 13 * * *`
+(13:40 UTC).
+
+As of 2026-09-10 15:10 UTC (confirmed via `date -u`, over an hour past that
+day's 13:40 UTC slot), no third run existed — the schedule's second real
+opportunity was missed entirely, not just delayed. Two real data points
+(one very late, one missing) is a pattern, not noise — ruled out "just a
+slow first fire," which was the working theory in the prior continuation
+entry.
+
+**Fix applied:** `.github/workflows/politics_pipeline.yml`'s schedule was
+changed from `cron: "40 13 * * *"` to `cron: "43 13 * * *"`, with a dated
+comment explaining the real finding and why the minute was deliberately
+moved (not just re-saved at :40) — committing any change to a workflow
+file is a documented, common fix for a schedule trigger that's stuck in a
+bad registration state on GitHub's side. Moving the minute makes the fix
+independently verifiable: if the next real run lands close to :43 UTC, that
+confirms the fix worked, rather than being indistinguishable from a lucky
+on-time firing of the same stuck registration.
+
+**Files created/modified:**
+- `.github/workflows/politics_pipeline.yml` — cron minute changed 40→43,
+diagnostic comment added.
+- `ROADMAP.md` — Session 5.7 card's Open items updated with this finding
+and the fix applied.
+
+**Decisions made:**
+1. **Diagnosed as a stuck schedule registration, not a YAML/script defect** —
+confirmed via GitHub's own run history (one late-but-real scheduled fire
+proves the trigger CAN work; the file's `on:` block is syntactically
+identical in structure to arbitrage's own working schedule). Ruled out
+"GitHub disabled this workflow" specifically — the Actions tab screenshot
+showed no disabled-workflow banner, only the `workflow_dispatch`
+trigger-type note (which is standard console text, not a warning).
+2. **Fix chosen (workflow-file re-commit) over alternatives** — deleting
+and re-creating the workflow file, or contacting GitHub Support, were
+both considered heavier next steps, explicitly held in reserve if this
+fix doesn't work (see ROADMAP.md's updated Open items) rather than tried
+first.
+
+**Open items / deferred validations:**
+- **Confirm the fix worked** — check for a new `Automated politics
+pipeline run` commit after 2026-09-11 13:43 UTC has passed. On time (near
+:43, not hours late, not missing) closes this item; still broken escalates
+to the heavier fixes named in Decision #2.
+- All prior Session 5.7 open items (30-flag interim floor, ≈892 full
+target, multi-week real resolution timescale) remain unchanged and
+unaffected by this fix — this only addresses whether new real data keeps
+arriving reliably, not how much has accumulated yet (415 flags logged,
+0 closed, as of the last check).
+
+**Next session:** None yet — Session 5.7 remains open, same as before.

@@ -89,9 +89,24 @@ name: Politics Pipeline
 # settle for the day, matching the same "let the day's real data settle
 # before pulling it" reasoning weather_calibration_pipeline.yml already
 # uses for its own 11:20 UTC run time.
+# SESSION 5.7 NOTE -- cron re-registration fix (2026-09-10)
+# --------------------------------------------------------------------------
+# The first two real scheduled opportunities after this workflow was created
+# (Session 5.5) did not behave as configured: one fired ~3.5 hours late
+# (2026-09-09, run #2, 17:15 UTC instead of 13:40 UTC), and the next day's
+# 13:40 UTC slot did not fire at all (confirmed via GitHub's own Actions tab
+# run history -- only 2 runs existed as of 2026-09-10 15:10 UTC, both from
+# 2026-09-09). This is a known GitHub Actions behavior: a schedule trigger's
+# registration can get stuck after a workflow file's initial commit, and
+# committing any change to the file (even a trivial one, like the minute
+# nudge below) forces GitHub to re-register it. The minute was moved from
+# :40 to :43 specifically so this fix is verifiable -- if the next real run
+# shows up close to 13:43 UTC (not 13:40, and not hours late), that
+# confirms the fix worked, rather than being indistinguishable from a
+# lucky on-time firing of the old, possibly-stuck registration.
 on:
   schedule:
-    - cron: "40 13 * * *"
+    - cron: "43 13 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
   # be triggered by hand for testing without waiting for the next scheduled
