@@ -1233,6 +1233,7 @@ function mapPickemForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtDate(r.game_start_time),
     longDated: false,
+    signal: readiness("pickem", r).level,
   };
 }
 
@@ -1246,6 +1247,7 @@ function mapArbForOverview(r) {
     edgeDisplay: fmtNetProfit(toNum(r.net_profit_per_dollar)) + "/$1",
     timing: "Live snapshot",
     longDated: false,
+    signal: readiness("arb", r).level,
   };
 }
 
@@ -1259,6 +1261,7 @@ function mapWeatherForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: r.lead_days ? r.lead_days + "d out" : "—",
     longDated: false,
+    signal: readiness("weather", r).level,
   };
 }
 
@@ -1273,6 +1276,7 @@ function mapPoliticsForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtHoursToResolution(hours),
     longDated: hours !== null && hours > 24 * 60,
+    signal: readiness("politics", r).level,
   };
 }
 
@@ -1286,6 +1290,7 @@ function mapPropsForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtDate(r.game_start_time),
     longDated: false,
+    signal: readiness("props", r).level,
   };
 }
 
@@ -1330,7 +1335,7 @@ function renderOverviewTrackTable(track, mapped) {
     .map(
       (r) => `
         <tr>
-          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${escapeHtml(r.opportunity)}${
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}"><span class="signal-dot signal-${r.signal}" style="background:${READINESS_COLOR[r.signal]}"></span> ${escapeHtml(r.opportunity)}${
             r.longDated ? '<span class="long-dated-badge">Long-dated</span>' : ""
           }</td>
           <td>${escapeHtml(r.side)}</td>
@@ -1339,6 +1344,41 @@ function renderOverviewTrackTable(track, mapped) {
           <td>${escapeHtml(r.timing)}</td>
         </tr>`
     )
+    .join("");
+}
+
+const FOCUS_TOP_N = 5;
+
+function renderFocusPicks(allMapped) {
+  const tbody = document.getElementById("focusTableBody");
+  const emptyNote = document.getElementById("focusEmpty");
+  if (!tbody || !emptyNote) return;
+
+  const picks = allMapped
+    .filter((r) => r.signal === "green")
+    .sort((a, b) => b.edge - a.edge)
+    .slice(0, FOCUS_TOP_N);
+
+  if (!picks.length) {
+    emptyNote.hidden = false;
+    tbody.innerHTML = "";
+    return;
+  }
+  emptyNote.hidden = true;
+
+  tbody.innerHTML = picks
+    .map((r) => {
+      const meta = TRACK_META[r.track];
+      return `
+        <tr>
+          <td><span class="track-tag ${meta.tagClass}">${escapeHtml(meta.label)}</span></td>
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${escapeHtml(r.opportunity)}</td>
+          <td>${escapeHtml(r.side)}</td>
+          <td>${escapeHtml(r.venue)}</td>
+          <td class="${edgeClass(r.edge)}">${r.edgeDisplay}</td>
+          <td>${escapeHtml(r.timing)}</td>
+        </tr>`;
+    })
     .join("");
 }
 
@@ -1352,6 +1392,7 @@ function renderOverview() {
   let bestEdgeOverall = null;
   let bestEdgeDisplay = "—";
   let longDatedShown = 0;
+  const allMapped = [];
 
   for (const [track, mapper] of Object.entries(OVERVIEW_MAPPERS)) {
     const rows = overviewData[track].rows || [];
@@ -1359,6 +1400,7 @@ function renderOverview() {
 
     const mapped = rows.map(mapper).filter((r) => r.edge !== null);
     renderOverviewTrackTable(track, mapped);
+    allMapped.push(...mapped);
 
     const top = mapped.slice().sort((a, b) => b.edge - a.edge).slice(0, OVERVIEW_TOP_N);
     if (top.length && (bestEdgeOverall === null || top[0].edge > bestEdgeOverall)) {
@@ -1367,6 +1409,8 @@ function renderOverview() {
     }
     longDatedShown += top.filter((r) => r.longDated).length;
   }
+
+  renderFocusPicks(allMapped);
 
   setText("overviewStatTotal", String(totalActionable));
   setText("overviewStatTracksLive", `${tracksLoaded.length}/5`);
