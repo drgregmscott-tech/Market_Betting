@@ -8695,4 +8695,90 @@ undone, same as stated at the end of the prior entry — this session
 closed out CLV logging specifically (stage 3 of the project's seven-stage
 pattern), not the remaining stages.
 
+---
+
+### Session 6.9, sizing adaptation for BetMGM (2026-09-10, same day)
+
+**What was actually done:** Checked `scripts/sizing/sizing_engine.py`'s
+props sizing path (`size_props_position`) directly rather than assuming
+it needed new math. It didn't — same finding shape as the CLV hook-in:
+the Kelly-sizing pipeline itself is already fully generic. What gated
+BetMGM was one explicit allowlist: `PROPS_SUPPORTED_PLATFORMS =
+{"draftkings", "fanduel"}` — any BetMGM flag_id passed to `size_props_
+position()` would be rejected outright with an "Unrecognized platform"
+error, never reaching the actual sizing math.
+
+**Fixed**: added `"betmgm"` to `PROPS_SUPPORTED_PLATFORMS`, and
+`"betmgm": 0.50` to `PROPS_PLATFORM_RISK_MULTIPLIER` — the same account-
+limiting-risk dampener value DK and FD already carry, with the same
+reasoning already established for those two (BetMGM is one of the
+largest, most established regulated US sportsbooks, subject to the same
+well-documented industry-wide account-limiting pattern; no project source
+distinguishes any of the three specifically, so inventing a different
+number for BetMGM would be exactly the kind of guessed precision this
+file's own standing rule forbids — see `sizing_engine.py`'s own docstring
+on this point). **One real, distinct consideration named but deliberately
+NOT folded into that number**: BetMGM's real price is sourced via
+Rotowire's own copy of BetMGM's line (Session 6.9's ingestion work), not
+a live pull from BetMGM directly — how fresh that copy is at the moment a
+flag gets sized was not measured this session. Documented as a stated,
+open consideration for Session 8.3 (the same real-graded-results revisit
+point named for every other dampener in this file) rather than inventing
+an unmeasured staleness multiplier.
+
+**Real, additional finding while reading the field-vig code (no fix
+needed)**: `build_field_vig_index()` (in `sportsbook_props_model.py`,
+already generic per-platform) groups same-market selections by
+`(platform, source_event_id, source_market_id)`. `ingest_rotowire_betmgm_
+props.py` uses the raw stat key (e.g. `"anytd"`) as `source_market_id`,
+which — confirmed by checking real output — happens to group every
+player priced in the same real BetMGM "Anytime TD Scorer" market for the
+same real game correctly, the same real grouping DK's own per-market IDs
+produce. No change needed; noted here so a future session doesn't
+re-investigate this from scratch.
+
+**Validation, run against real data end-to-end, not just synthetic
+fixtures:**
+- `python scripts/sizing/sizing_engine.py props size --flag-id
+"betmgm|16808" --bankroll 500` against the real, live `clv_log.csv` entry
+from the CLV hook-in session (Jahmyr Gibbs, Anytime TD, edge 0.4573) —
+real result: `status="sized_capped_at_max_position"`,
+`platform_limiting_risk_multiplier_applied=0.5`, `field_vig_unresolved=
+false` (confirming the field-vig grouping note above is correct in
+practice, not just in theory), `suggested_stake=$25.00` (capped at the
+existing 5%-of-bankroll ceiling, same as every other track).
+- `scripts/sizing/test_sizing_engine.py` — added `test_18b_props_betmgm_
+supported_with_same_dampener_as_dk`, confirming BetMGM is accepted (not
+rejected the way `test_18`'s unsupported-platform case is), gets the
+identical dampener DK gets, and produces an identical suggested stake to
+DK on identical inputs. Full suite: 24/24 pass (23 pre-existing + 1 new),
+run directly via the file's own `python test_sizing_engine.py` entry
+point (this file predates pytest-style discovery in this project, same
+pattern as `test_clv_logger.py`).
+
+**Files created/modified:**
+- `scripts/sizing/sizing_engine.py` — `PROPS_SUPPORTED_PLATFORMS` and
+`PROPS_PLATFORM_RISK_MULTIPLIER` extended for `betmgm`.
+- `scripts/sizing/test_sizing_engine.py` — new `test_18b_props_betmgm_
+supported_with_same_dampener_as_dk`, wired into the file's `__main__`
+runner.
+
+**Decisions made:**
+1. **BetMGM gets the same 0.50 risk dampener as DK/FD** — no project
+source distinguishes limiting behavior across any of the three real
+platforms; inventing a difference would be guessed precision, same
+standing rule this file already applies to DK vs. FD.
+2. **Rotowire-sourcing staleness deliberately left unmeasured, not
+folded into a guessed number** — named explicitly as a real, open
+consideration for a bettor to account for manually (re-check BetMGM's
+own live line before placing) and for Session 8.3 to revisit with real
+data, rather than inventing a multiplier with no evidence behind it.
+
+**Open items / deferred validations:**
+- BetMGM line-freshness (via Rotowire) vs. a live BetMGM pull — not
+measured, named as an open Session-8.3-class item above.
+- Automation and frontend integration for BetMGM remain undone — this
+session closed out sizing specifically (stage 4 of the project's
+seven-stage pattern).
+
 **Next session:** None yet — Session 5.7 remains open, same as before.

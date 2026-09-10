@@ -3833,6 +3833,19 @@ Real result: 291 BetMGM rows now reach `estimated` (up from 0), 210
 newly flagged into `clv_log.csv`, 104 with a real cross-platform
 consensus check, 94 with a real non-blank consensus price. Full trail
 in SESSION_LOG.md.
+51. **Sizing adaptation for BetMGM, same day (2026-09-10).**
+`sizing_engine.py`'s props Kelly-sizing math was already generic; BetMGM
+was blocked by one explicit allowlist (`PROPS_SUPPORTED_PLATFORMS`).
+Added `betmgm` to that set and to `PROPS_PLATFORM_RISK_MULTIPLIER` at the
+same 0.50 account-limiting dampener DK/FD already carry (no project
+source distinguishes the three). Named, but deliberately did NOT invent
+a number for, a real distinct consideration: BetMGM's price here comes
+via Rotowire's copy of BetMGM's line, not a live BetMGM pull — freshness
+unmeasured, flagged for Session 8.3. Verified against the real, live CLV
+log end-to-end (`betmgm|16808`, Jahmyr Gibbs, real $25 suggested stake
+on $500 bankroll, capped at the standard 5% ceiling) and with a new test
+(`test_18b`) proving BetMGM sizes identically to DK on identical inputs.
+Full trail in SESSION_LOG.md.
 
 ---
 *Update this file at the close of each future session, per the project's

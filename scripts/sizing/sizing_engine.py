@@ -753,10 +753,30 @@ POLITICS_LOCKUP_DAMPENER_TABLE = [
 # this file -- see the "SESSION 6.4 ADDENDUM" docstring section above for
 # the reasoning behind each one.
 # ---------------------------------------------------------------------------
-PROPS_SUPPORTED_PLATFORMS = {"draftkings", "fanduel"}
+PROPS_SUPPORTED_PLATFORMS = {"draftkings", "fanduel", "betmgm"}
 PROPS_PLATFORM_RISK_MULTIPLIER = {
     "draftkings": 0.50,  # stated judgment call, see docstring -- account-limiting-risk dampener
     "fanduel": 0.50,      # same figure -- no source distinguishes DK from FD (see docstring)
+    # Session 6.9 -- BetMGM is one of the largest, most established
+    # regulated US sportsbooks, subject to the same well-documented
+    # industry-wide account-limiting pattern this whole dampener exists
+    # for (see docstring above) -- no project research distinguishes it
+    # from DK/FD specifically, so it gets the same figure rather than a
+    # guessed difference, same standing rule as DK vs. FD above.
+    # NAMED, DISTINCT, UNRESOLVED CONSIDERATION (not folded into this
+    # number -- inventing a value for it with no real evidence would be
+    # exactly the "guessed precision" this file's own standing rule
+    # forbids): BetMGM's real price here is sourced via Rotowire's own
+    # copy of BetMGM's line (see ingest_rotowire_betmgm_props.py), not a
+    # live pull from BetMGM directly -- how fresh Rotowire's copy is at
+    # the moment a flag is sized has not been measured this session. A
+    # real bettor should treat `first_flagged_market_price` as "BetMGM's
+    # line as of Rotowire's last refresh," and re-check BetMGM's own real
+    # line before actually placing a bet, not assume second-for-second
+    # freshness the way a direct DK/FD pull would imply. Left as a stated
+    # open item for Session 8.3 (same real-graded-results revisit point
+    # as every other dampener here) rather than a guessed multiplier.
+    "betmgm": 0.50,
 }
 PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER = 0.60  # stated placeholder -- see docstring
 PROPS_MAX_SINGLE_POSITION_PCT = 0.05  # same single-position ceiling posture as every other track

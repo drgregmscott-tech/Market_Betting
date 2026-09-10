@@ -430,6 +430,33 @@ def test_18_props_unsupported_platform_rejected():
     print(f"PASS test_18: unsupported platform correctly rejected -- reason: {result['reason']}")
 
 
+def test_18b_props_betmgm_supported_with_same_dampener_as_dk():
+    """Session 6.9 -- BetMGM (sourced via Rotowire, see
+    ingest_rotowire_betmgm_props.py) must be an accepted props platform,
+    not rejected the way test_18 shows an unrecognized platform is, and
+    must get the same named risk dampener as DK/FD (no project source
+    distinguishes any of the three -- see PROPS_PLATFORM_RISK_MULTIPLIER's
+    own docstring)."""
+    dk_flag = make_props_flag("draftkings|7", "draftkings", model_prob=0.30, market_price=0.15)
+    mgm_flag = make_props_flag("betmgm|7", "betmgm", model_prob=0.30, market_price=0.15)
+    dk_result = size_props_position(dk_flag, bankroll=1000.0)
+    mgm_result = size_props_position(mgm_flag, bankroll=1000.0)
+
+    assert mgm_result["status"] != "rejected", mgm_result
+    assert mgm_result["platform_limiting_risk_multiplier_applied"] == PROPS_PLATFORM_RISK_MULTIPLIER["betmgm"], mgm_result
+    assert mgm_result["platform_limiting_risk_multiplier_applied"] == dk_result["platform_limiting_risk_multiplier_applied"], (
+        mgm_result, dk_result,
+    )
+    assert mgm_result["suggested_stake"] == dk_result["suggested_stake"], (
+        f"Identical inputs on DK vs. BetMGM should size identically: "
+        f"dk={dk_result['suggested_stake']}, betmgm={mgm_result['suggested_stake']}"
+    )
+    print(
+        f"PASS test_18b: BetMGM accepted, dampener={mgm_result['platform_limiting_risk_multiplier_applied']} "
+        f"matches DK -- stake=${mgm_result['suggested_stake']}"
+    )
+
+
 def make_weather_flag(
     flag_id: str, model_prob: float, market_price: float, flagged_side: str = "yes",
     city_label: str = "New York, NY", lead_days: float = 1,
@@ -527,6 +554,7 @@ if __name__ == "__main__":
     test_16_props_no_bet_below_breakeven()
     test_17_props_single_position_cap_binds()
     test_18_props_unsupported_platform_rejected()
+    test_18b_props_betmgm_supported_with_same_dampener_as_dk()
     test_19_kalshi_fee_formula_matches_hand_computation()
     test_20_weather_fee_shrinks_stake_vs_no_fee_kelly()
     test_21_weather_no_bet_below_breakeven()
