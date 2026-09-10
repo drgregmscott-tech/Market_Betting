@@ -233,3 +233,10 @@
 2026-09-10 16:37:09,902 UTC | INFO | Model status breakdown: {'estimated': 617, 'no_player_match': 252, 'unsupported_market_first_scorer': 164, 'stale_season_stats': 149, 'insufficient_history': 3}
 2026-09-10 16:37:09,923 UTC | INFO | Wrote 1185 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_estimates_20260910T163709Z.csv
 2026-09-10 16:37:09,942 UTC | INFO | Wrote 1185 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_latest.csv
+2026-09-10 16:46:44,048 UTC | INFO | === Sportsbook props estimation run starting (season=2025) ===
+2026-09-10 16:46:44,094 UTC | INFO | Loaded 1186 ingested sportsbook prop rows
+2026-09-10 16:46:44,423 UTC | INFO | Loaded 18540 nflverse weekly-stat rows for season 2025
+2026-09-10 16:46:44,669 UTC | WARNING | Weekly stats are for season=2025, but the current NFL season is 2026 -- every season-TOTAL projection this run would compare a current-season futures line against a stale, already-finished season's accrued stats. Flagging those rows as 'stale_season_stats' instead of computing a false edge.
+2026-09-10 16:46:46,578 UTC | INFO | Model status breakdown: {'estimated': 617, 'no_player_match': 253, 'unsupported_market_first_scorer': 164, 'stale_season_stats': 149, 'insufficient_history': 3}
+2026-09-10 16:46:46,597 UTC | INFO | Wrote 1186 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_estimates_20260910T164646Z.csv
+2026-09-10 16:46:46,614 UTC | INFO | Wrote 1186 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\sportsbook_props_latest.csv

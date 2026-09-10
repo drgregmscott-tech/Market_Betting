@@ -9426,3 +9426,148 @@ Call log:
 2026-09-10 16:39:42,069 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-10 16:39:42,069 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-10 16:39:42,070 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-10 16:46:25,571 UTC | INFO | === DraftKings props ingestion run starting ===
+2026-09-10 16:46:37,720 UTC | INFO | DraftKings: 680 normalized rows across 8 events
+2026-09-10 16:46:38,249 UTC | INFO | === DraftKings props ingestion run complete: 680 rows (OK) ===
+2026-09-10 16:46:38,393 UTC | INFO | === FanDuel props ingestion run starting ===
+2026-09-10 16:46:38,624 UTC | INFO | Skipped non-player-prop market: Arizona Cardinals - Regular Season Wins 2026-27
+2026-09-10 16:46:38,624 UTC | INFO | Skipped non-player-prop market: Atlanta Falcons - Regular Season Wins 2026-27
+2026-09-10 16:46:38,624 UTC | INFO | Skipped non-player-prop market: Baltimore Ravens - Regular Season Wins 2026-27
+2026-09-10 16:46:38,624 UTC | INFO | Skipped non-player-prop market: Buffalo Bills - Regular Season Wins 2026-27
+2026-09-10 16:46:38,624 UTC | INFO | Skipped non-player-prop market: Carolina Panthers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Chicago Bears - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Cincinnati Bengals - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Cleveland Browns - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Dallas Cowboys - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Denver Broncos - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Detroit Lions - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Green Bay Packers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Houston Texans - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Indianapolis Colts - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Jacksonville Jaguars - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Las Vegas Raiders - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Los Angeles Chargers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Los Angeles Rams - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Miami Dolphins - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: Minnesota Vikings - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: New England Patriots - Regular Season Wins 2026-27
+2026-09-10 16:46:38,625 UTC | INFO | Skipped non-player-prop market: New Orleans Saints - Regular Season Wins 2026-27
+2026-09-10 16:46:38,626 UTC | INFO | Skipped non-player-prop market: New York Giants - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: New York Jets - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Philadelphia Eagles - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Pittsburgh Steelers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: San Francisco 49ers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Seattle Seahawks - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Tampa Bay Buccaneers - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Tennessee Titans - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Washington Commanders - Regular Season Wins 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: To Make the Playoffs AFC 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: To Make the Playoffs NFC 2026-27
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,627 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,628 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,629 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,630 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Total Points
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Spread
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Moneyline
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: Super Bowl LXI Winner
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: To Miss the Playoffs AFC 2026-27
+2026-09-10 16:46:38,631 UTC | INFO | Skipped non-player-prop market: To Miss the Playoffs NFC 2026-27
+2026-09-10 16:46:38,632 UTC | INFO | Skipped non-player-prop market: Most Regular Season Rookie Receiving Yards 2026-27
+2026-09-10 16:46:38,633 UTC | INFO | FanDuel: 129 normalized rows
+2026-09-10 16:46:38,639 UTC | INFO | === FanDuel props ingestion run complete: 129 rows (OK) ===
+2026-09-10 16:46:38,645 UTC | INFO | === Rotowire BetMGM props ingestion run starting (sport=nfl) ===
+2026-09-10 16:46:39,983 UTC | WARNING | Skipped one unparseable data array at offset 344580: Expecting value: line 1 column 2 (char 1)
+2026-09-10 16:46:40,700 UTC | WARNING | Skipped one unparseable data array at offset 345046: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 16:46:40,700 UTC | WARNING | Skipped one unparseable data array at offset 346724: Expecting value: line 1 column 3 (char 2)
+2026-09-10 16:46:41,396 UTC | WARNING | Skipped one unparseable data array at offset 346880: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 16:46:41,396 UTC | WARNING | Skipped one unparseable data array at offset 347029: Expecting value: line 1 column 2 (char 1)
+2026-09-10 16:46:42,062 UTC | WARNING | Skipped one unparseable data array at offset 347648: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 16:46:42,701 UTC | WARNING | Skipped one unparseable data array at offset 347815: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 16:46:43,358 UTC | WARNING | Skipped one unparseable data array at offset 348276: Unbalanced brackets -- Rotowire's page structure may have changed.
+2026-09-10 16:46:43,358 UTC | WARNING | Skipped one unparseable data array at offset 367604: Expecting value: line 1 column 2 (char 1)
+2026-09-10 16:46:44,001 UTC | INFO | Found 22 real data array(s) embedded in the page
+2026-09-10 16:46:44,027 UTC | INFO | BetMGM (via Rotowire): 377 normalized rows
+2026-09-10 16:46:44,039 UTC | INFO | === Rotowire BetMGM props ingestion run complete: 377 rows (OK) ===

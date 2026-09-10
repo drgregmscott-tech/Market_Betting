@@ -1,38 +1,42 @@
 """
 Session 6.5 -- Automation Adaptation (Sportsbook Props Track Orchestrator)
+Session 6.9 -- extended with BetMGM (via Rotowire) as a third ingestion feed
 
 WHAT THIS SCRIPT IS
 --------------------
-Runs Track 6 (sportsbook player props)'s three existing stages back-to-back,
-in the correct order, in one process: DraftKings + FanDuel props ingestion
-(Session 6.1) -> estimation (Session 6.2/6.4, field-vig-normalized model) ->
-CLV logging (Session 6.3, shared clv_logger.py --track props). This is the
-single entry point .github/workflows/props_pipeline.yml (this same session)
-calls on a schedule. It is this track's twin of scripts/run_pipeline.py
-(Session 2.7, pick'em), scripts/run_arbitrage_pipeline.py (Session 3.4), and
+Runs Track 6 (sportsbook player props)'s stages back-to-back, in the
+correct order, in one process: DraftKings + FanDuel + BetMGM(-via-
+Rotowire) props ingestion (Sessions 6.1, 6.9) -> estimation (Session
+6.2/6.4/6.9, field-vig-normalized model) -> CLV logging (Session 6.3,
+shared clv_logger.py --track props). This is the single entry point
+.github/workflows/props_pipeline.yml calls on a schedule. It is this
+track's twin of scripts/run_pipeline.py (Session 2.7, pick'em),
+scripts/run_arbitrage_pipeline.py (Session 3.4), and
 scripts/run_politics_pipeline.py (Session 5.5) -- same importlib-by-path
 module loading, same "never let a stage's failure silently flow into the
 next stage" stance, same digest-file pattern.
 
-WHY BOTH INGESTION STAGES ARE ALLOWED TO INDIVIDUALLY FAIL, UNLIKE
+WHY ALL THREE INGESTION STAGES ARE ALLOWED TO INDIVIDUALLY FAIL, UNLIKE
 POLITICS' TWO INGESTION STAGES (WHICH BOTH MUST SUCCEED)
 ------------------------------------------------------------------
-ingest_dk_props.run() and ingest_fd_props.run() each already catch their
-own real exceptions internally and return a summary with an `_ok` flag and
-a row count of 0 on failure -- they never raise. Session 6.1's real finding
-was that DraftKings sits behind Akamai Bot Manager and requires a real,
+ingest_dk_props.run(), ingest_fd_props.run(), and (Session 6.9)
+ingest_rotowire_betmgm_props.run() each already catch their own real
+exceptions internally and return a summary with an `_ok` flag and a row
+count of 0 on failure -- they never raise. Session 6.1's real finding was
+that DraftKings sits behind Akamai Bot Manager and requires a real,
 visible (non-headless) Chromium browser (see ingest_dk_props.py's own
 docstring) -- a single venue's bot-detection layer tightening on a given
 run is a real, expected possibility this track must tolerate without
 treating it as a whole-pipeline failure, the same way a single sportsbook
 going down does not mean every prop in the world stopped existing. So this
-orchestrator proceeds to estimation as long as AT LEAST ONE of the two
-feeds returned real rows -- it only stops early if BOTH return 0 rows,
-since sportsbook_props_model.py's load_props() itself already raises if
-neither dk_latest.csv nor fd_latest.csv can be found/used, and running
-estimation against a stale or partial single-venue file forward is exactly
-the FanDuel-only degraded mode Session 6.1 already validated works
-correctly.
+orchestrator proceeds to estimation as long as AT LEAST ONE of the three
+feeds returned real rows -- it only stops early if ALL THREE return 0
+rows, since sportsbook_props_model.py's load_props() itself already
+raises if none of dk_latest.csv/fd_latest.csv/rw_betmgm_latest.csv can be
+found/used, and running estimation against a stale or partial subset of
+venues forward is exactly the FanDuel-only degraded mode Session 6.1
+already validated works correctly, now generalized to three venues
+instead of two.
 
 WHY THIS STOPS EARLY IF ESTIMATION PRODUCES 0 ROWS
 ----------------------------------------------------
@@ -92,6 +96,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parents[1]
 INGEST_DK_SCRIPT = BASE_DIR / "scripts" / "ingestion" / "ingest_dk_props.py"
 INGEST_FD_SCRIPT = BASE_DIR / "scripts" / "ingestion" / "ingest_fd_props.py"
+INGEST_RW_SCRIPT = BASE_DIR / "scripts" / "ingestion" / "ingest_rotowire_betmgm_props.py"
 MODEL_SCRIPT = BASE_DIR / "scripts" / "estimation" / "sportsbook_props_model.py"
 CLV_SCRIPT = BASE_DIR / "scripts" / "calibration" / "clv_logger.py"
 CLV_LOG_PATH = BASE_DIR / "data" / "sportsbook_props" / "clv_log.csv"
@@ -176,6 +181,27 @@ def run_fd_ingestion() -> dict:
         return {"fanduel_rows": 0, "fanduel_ok": False, "error": str(exc)}
 
 
+def run_rw_ingestion() -> dict:
+    """Session 6.9 -- BetMGM's real data, sourced via Rotowire's own
+    server-rendered page (see ingest_rotowire_betmgm_props.py's module
+    docstring for why this goes through Rotowire rather than BetMGM
+    directly). Plain `requests`, no browser/display needed -- unlike DK,
+    there is no Akamai-style bot-detection layer this session found on
+    Rotowire's side, so this stage does not need xvfb-run's virtual
+    display the way DK's does (it runs fine under it regardless, since
+    xvfb-run just wraps the whole script's process, not this stage
+    individually)."""
+    log.info("--- Stage 1c/3: BetMGM (via Rotowire) props ingestion ---")
+    try:
+        module = load_module(INGEST_RW_SCRIPT, "ingest_rotowire_betmgm_props")
+        summary = module.run()
+        log.info("BetMGM (via Rotowire) ingestion summary: %s", summary)
+        return summary
+    except Exception as exc:  # noqa: BLE001 -- see run_dk_ingestion()
+        log.error("BetMGM (via Rotowire) ingestion raised an unexpected error: %s", exc)
+        return {"betmgm_rows": 0, "betmgm_ok": False, "error": str(exc)}
+
+
 def run_estimation(season: int) -> tuple[dict, Path]:
     log.info("--- Stage 2/3: estimation (field-vig-normalized model, season=%d) ---", season)
     module = load_module(MODEL_SCRIPT, "sportsbook_props_model")
@@ -207,6 +233,7 @@ def build_digest(
     run_started_at: str,
     dk_summary: dict,
     fd_summary: dict,
+    rw_summary: dict,
     estimation_summary: dict,
     clv_summary: dict,
 ) -> Path:
@@ -231,6 +258,10 @@ def build_digest(
     lines.append(
         f"- FanDuel ingestion: {fd_summary.get('fanduel_rows', 0)} rows "
         f"({'OK' if fd_summary.get('fanduel_ok') else 'FAILED -- see logs/ingestion.log'})"
+    )
+    lines.append(
+        f"- BetMGM ingestion (via Rotowire): {rw_summary.get('betmgm_rows', 0)} rows "
+        f"({'OK' if rw_summary.get('betmgm_ok') else 'FAILED -- see logs/ingestion.log'})"
     )
     lines.append(
         f"- Estimation: {estimation_summary.get('rows_out', 0)} rows written "
@@ -313,13 +344,16 @@ def main(season: int) -> int:
 
     dk_summary = run_dk_ingestion()
     fd_summary = run_fd_ingestion()
+    rw_summary = run_rw_ingestion()
 
     dk_rows = dk_summary.get("draftkings_rows", 0)
     fd_rows = fd_summary.get("fanduel_rows", 0)
-    if not dk_rows and not fd_rows:
+    rw_rows = rw_summary.get("betmgm_rows", 0)
+    if not dk_rows and not fd_rows and not rw_rows:
         reason = (
-            "Both DraftKings and FanDuel ingestion returned 0 usable rows "
-            f"(dk_summary={dk_summary}, fd_summary={fd_summary}). Stopping "
+            "DraftKings, FanDuel, and BetMGM(-via-Rotowire) ingestion all "
+            f"returned 0 usable rows (dk_summary={dk_summary}, "
+            f"fd_summary={fd_summary}, rw_summary={rw_summary}). Stopping "
             "before estimation/CLV logging so a total upstream outage (or "
             "this runner's Chromium/display setup breaking) can never be "
             "mistaken for every props market closing."
@@ -330,13 +364,18 @@ def main(season: int) -> int:
     if not dk_rows:
         log.warning(
             "DraftKings returned 0 rows this run -- proceeding in "
-            "FanDuel-only degraded mode (Session 6.1's already-validated "
+            "degraded mode without it (Session 6.1's already-validated "
             "fallback path)."
         )
     if not fd_rows:
         log.warning(
-            "FanDuel returned 0 rows this run -- proceeding in "
-            "DraftKings-only degraded mode."
+            "FanDuel returned 0 rows this run -- proceeding in degraded "
+            "mode without it."
+        )
+    if not rw_rows:
+        log.warning(
+            "BetMGM (via Rotowire) returned 0 rows this run -- proceeding "
+            "in degraded mode without it."
         )
 
     try:
@@ -354,7 +393,7 @@ def main(season: int) -> int:
         build_failure_digest(run_started_at, f"Unexpected error: {exc}")
         return 1
 
-    build_digest(run_started_at, dk_summary, fd_summary, estimation_summary, clv_summary)
+    build_digest(run_started_at, dk_summary, fd_summary, rw_summary, estimation_summary, clv_summary)
     log.info("=== Props pipeline run complete ===")
     return 0
 

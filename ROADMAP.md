@@ -3846,6 +3846,21 @@ log end-to-end (`betmgm|16808`, Jahmyr Gibbs, real $25 suggested stake
 on $500 bankroll, capped at the standard 5% ceiling) and with a new test
 (`test_18b`) proving BetMGM sizes identically to DK on identical inputs.
 Full trail in SESSION_LOG.md.
+52. **Automation adaptation for BetMGM, same day (2026-09-10).** Extended
+`scripts/run_props_pipeline.py` (the orchestrator `props_pipeline.yml`
+runs on a schedule) from two ingestion feeds to three: added `run_rw_
+ingestion()` calling `ingest_rotowire_betmgm_props.run()`, and widened
+the early-stop guard so it only stops if DK, FD, AND BetMGM all return 0
+rows (was: DK and FD only). No new GitHub Actions step needed — BetMGM's
+ingestion uses plain `requests`, not a browser, so it rides inside the
+existing `xvfb-run`-wrapped call. Ran the full real pipeline end-to-end:
+DK 680 rows/FD 129 rows/BetMGM 377 rows, all three feeding one combined
+estimation+CLV run, real BetMGM flags (e.g. Chase Brown `anytd`, edge
+0.5729) correctly ranked alongside real DraftKings flags in the digest.
+Also restated Rotowire's ToS caveat directly in the workflow file itself
+(not just the ingestion script), since running it on a recurring schedule
+is a real, ongoing instance of that same open question, not a smaller
+one. Full trail in SESSION_LOG.md.
 
 ---
 *Update this file at the close of each future session, per the project's

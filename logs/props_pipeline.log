@@ -9,3 +9,16 @@
 2026-09-09 18:54:58,820 UTC | INFO | CLV logging summary: {'track': 'props', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_estimates_20260909T185458Z.csv', 'rows_in_estimates': 815, 'newly_flagged': 1, 'newly_closed': 0, 'still_open': 229, 'total_logged': 229, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\clv_log.csv'}
 2026-09-09 18:54:58,849 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_20260909T185442Z.md
 2026-09-09 18:54:58,849 UTC | INFO | === Props pipeline run complete ===
+2026-09-10 16:46:25,428 UTC | INFO | === Props pipeline run starting at 2026-09-10T16:46:25Z (season=2025) ===
+2026-09-10 16:46:25,434 UTC | INFO | --- Stage 1a/3: DraftKings props ingestion ---
+2026-09-10 16:46:38,250 UTC | INFO | DraftKings ingestion summary: {'pulled_at': '2026-09-10T16:46:25.571371+00:00', 'draftkings_rows': 680, 'draftkings_ok': True, 'events_pulled': 8, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\normalized\\dk_props_20260910T164625Z.csv'}
+2026-09-10 16:46:38,251 UTC | INFO | --- Stage 1b/3: FanDuel props ingestion ---
+2026-09-10 16:46:38,642 UTC | INFO | FanDuel ingestion summary: {'pulled_at': '2026-09-10T16:46:38.393736+00:00', 'fanduel_rows': 129, 'fanduel_ok': True, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\normalized\\fd_props_20260910T164638Z.csv'}
+2026-09-10 16:46:38,642 UTC | INFO | --- Stage 1c/3: BetMGM (via Rotowire) props ingestion ---
+2026-09-10 16:46:44,044 UTC | INFO | BetMGM (via Rotowire) ingestion summary: {'pulled_at': '2026-09-10T16:46:38.645521+00:00', 'betmgm_rows': 377, 'betmgm_ok': True, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\normalized\\rw_betmgm_props_20260910T164638Z.csv'}
+2026-09-10 16:46:44,044 UTC | INFO | --- Stage 2/3: estimation (field-vig-normalized model, season=2025) ---
+2026-09-10 16:46:46,615 UTC | INFO | Estimation summary: {'rows_in': 1186, 'rows_out': 1186, 'status_counts': {'estimated': 617, 'no_player_match': 253, 'unsupported_market_first_scorer': 164, 'stale_season_stats': 149, 'insufficient_history': 3}, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_estimates_20260910T164646Z.csv'}
+2026-09-10 16:46:46,616 UTC | INFO | --- Stage 3/3: CLV logging ---
+2026-09-10 16:46:46,951 UTC | INFO | CLV logging summary: {'track': 'props', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\sportsbook_props_estimates_20260910T164646Z.csv', 'rows_in_estimates': 1186, 'newly_flagged': 0, 'newly_closed': 0, 'still_open': 348, 'total_logged': 364, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\sportsbook_props\\clv_log.csv'}
+2026-09-10 16:46:46,992 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\props_digest_20260910T164625Z.md
+2026-09-10 16:46:46,992 UTC | INFO | === Props pipeline run complete ===

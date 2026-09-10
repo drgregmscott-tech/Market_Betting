@@ -8781,4 +8781,90 @@ measured, named as an open Session-8.3-class item above.
 session closed out sizing specifically (stage 4 of the project's
 seven-stage pattern).
 
+---
+
+### Session 6.9, automation adaptation for BetMGM (2026-09-10, same day)
+
+**What was actually done:** Extended `scripts/run_props_pipeline.py` (the
+orchestrator `.github/workflows/props_pipeline.yml` calls on a schedule)
+from two ingestion feeds to three. Added `run_rw_ingestion()` (mirrors
+`run_dk_ingestion()`/`run_fd_ingestion()`'s own "catch everything, never
+raise, return a 0-row summary on failure" shape) calling
+`ingest_rotowire_betmgm_props.run()`. Updated the pipeline's early-stop
+guard — previously stopped only if BOTH DK and FD returned 0 rows; now
+requires ALL THREE (DK, FD, BetMGM) to return 0 before stopping, same
+"tolerate one venue's real failure" posture Session 6.1 already
+established, generalized from two venues to three. Updated
+`build_digest()` to report BetMGM's real row count in the run summary
+alongside DK/FD, same table format, no new digest logic needed (the
+"currently open flags" table already reads `platform` generically from
+`clv_log.csv`).
+
+**Updated `.github/workflows/props_pipeline.yml`**: no new steps needed
+— the existing `xvfb-run --auto-servernum python scripts/run_props_
+pipeline.py --season 2025` step already runs the whole orchestrator,
+which now includes BetMGM automatically. Added two documentation blocks
+directly in the file (this project's own established practice — every
+real finding gets named in the file that actually runs it, not just in
+SESSION_LOG.md): (1) BetMGM's ingestion needs no real browser/display,
+unlike DK's — it runs fine under `xvfb-run` regardless since that wraps
+the whole process, not each stage. (2) A restated, explicit caveat that
+Rotowire's Terms of Use prohibit automated "crawl or spider" access, and
+that running this on a recurring *schedule* (not a one-off manual pull)
+is a real, ongoing instance of that same open question — named here, not
+left implicit just because it was already named once in the ingestion
+script's own docstring.
+
+**Validation, run for real, end-to-end, not assumed from reading the
+code:** ran `python scripts/run_props_pipeline.py --season 2025` directly.
+Real result: DraftKings 680 rows/8 events (OK), FanDuel 129 rows (OK),
+BetMGM (via Rotowire) 377 rows (OK), estimation 1,186 rows written
+(617 `estimated`), CLV logging ran clean (0 newly flagged this specific
+run since the CLV log already had this session's earlier real flags open
+from the sizing-adaptation entry above — confirmed idempotent, not a
+failure), and a real digest was written showing real BetMGM flags
+(`betmgm|16934` Chase Brown `anytd`, edge 0.5729, ranked first by edge)
+correctly interleaved with real DraftKings flags in the same "currently
+open flags" table, sorted by edge across all three platforms together —
+confirming the whole three-venue pipeline works as one integrated run,
+not three disconnected pieces that happen to write to the same file.
+
+**Files created/modified:**
+- `scripts/run_props_pipeline.py` — `INGEST_RW_SCRIPT` constant,
+`run_rw_ingestion()`, three-way early-stop guard, `build_digest()`
+extended for the BetMGM row.
+- `.github/workflows/props_pipeline.yml` — two new documentation blocks
+(no schedule/step changes needed).
+- Real run outputs committed as evidence the automation actually works
+end-to-end: `data/sportsbook_props/raw/` (fresh DK/FD/Rotowire snapshots),
+`data/sportsbook_props/normalized/` (fresh `dk_latest.csv`/`fd_latest.
+csv`/`rw_betmgm_latest.csv` plus their timestamped copies),
+`output/estimation/sportsbook_props_latest.csv` plus a timestamped copy,
+`data/sportsbook_props/clv_log.csv` plus a new snapshot,
+`output/digest/props_digest_latest.md` plus a timestamped copy.
+
+**Decisions made:**
+1. **Early-stop guard requires all three feeds to fail, not any one** —
+directly extends Session 6.1's own established reasoning (a single
+venue's bot-detection tightening or a transient site issue must not look
+like every props market in the world closing) from two venues to three,
+rather than inventing a different threshold.
+2. **No new GitHub Actions step or dependency needed for BetMGM** —
+`ingest_rotowire_betmgm_props.py` uses plain `requests` (already in
+`requirements.txt`), not Playwright/Chromium, so it rides inside the
+existing `xvfb-run`-wrapped orchestrator call without any workflow
+surface change.
+3. **Real pipeline run's output committed, not just described** —
+matches this project's own standing practice that a track's automation
+isn't "done" until it's been run for real and produced real data, not
+just read and judged plausible.
+
+**Open items / deferred validations:**
+- The recurring-schedule ToS question named in `props_pipeline.yml`'s new
+comment block is stated, not resolved — same posture as the ingestion
+script's own original docstring; no new decision was made here, only a
+more visible restatement in the file that actually runs it unattended.
+- Frontend integration for BetMGM remains undone — the last of the
+project's seven build stages for this track.
+
 **Next session:** None yet — Session 5.7 remains open, same as before.

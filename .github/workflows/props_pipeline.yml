@@ -20,8 +20,13 @@ name: Props Pipeline
 #    real Chromium browser via Playwright (needed for DraftKings -- see
 #    below).
 # 3. Runs scripts/run_props_pipeline.py under a REAL virtual display
-#    (`xvfb-run`), which itself runs DraftKings + FanDuel props ingestion
-#    -> estimation -> CLV logging in sequence (Sessions 6.1-6.4).
+#    (`xvfb-run`), which itself runs DraftKings + FanDuel + BetMGM(-via-
+#    Rotowire) props ingestion -> estimation -> CLV logging in sequence
+#    (Sessions 6.1-6.4, extended for BetMGM in Session 6.9). BetMGM's own
+#    ingestion (ingest_rotowire_betmgm_props.py) is plain `requests`
+#    against rotowire.com, not a browser -- it doesn't need xvfb-run
+#    itself, but runs fine inside it since xvfb-run just wraps the whole
+#    orchestrator process, not each stage individually.
 # 4. If that script succeeds, commits the updated raw/normalized
 #    ingestion snapshots, the estimation stage's own latest output, the
 #    updated data/sportsbook_props/clv_log.csv and its snapshot, and the
@@ -49,6 +54,19 @@ name: Props Pipeline
 # renders normally, `headless=False` is satisfied, and Akamai's own
 # headless-detection checks see a real, rendered browser exactly as they
 # would on the user's own PC.
+#
+# A NAMED, STATED CAVEAT ON THE BETMGM STAGE -- NOT SILENTLY CARRIED
+# -----------------------------------------------------------------------
+# Session 6.9's own real finding, restated here since this file is what
+# actually runs it on a schedule: BetMGM's real data comes via Rotowire's
+# own page (there is no working direct-to-BetMGM path -- see that
+# session's SESSION_LOG.md entry for the real, confirmed technical wall).
+# Rotowire's Terms of Use prohibit automated "crawl or spider" access --
+# the same open-ToS-question category this project already runs DK's/FD's
+# own undocumented-endpoint ingestion under, not a new or different kind
+# of risk, but running it automatically on a recurring schedule (rather
+# than a one-off manual pull) is a real, ongoing instance of that same
+# question, not a smaller one -- named here rather than left implicit.
 #
 # WHY THIS COMMITS THE RAW/NORMALIZED INGESTION SNAPSHOTS AND ESTIMATES --
 # UNLIKE arbitrage_pipeline.yml, WHICH DELIBERATELY DOES NOT
