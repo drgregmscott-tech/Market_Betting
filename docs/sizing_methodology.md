@@ -13,32 +13,40 @@ step, how `sizing_engine.py` turns two flagged legs into one suggested
 dollar stake — and states plainly which numbers in that chain are sourced
 facts and which are this project's own judgment calls.
 
-## 1. Scope — why only the 2-pick PrizePicks Power Play
+## 1. Scope — why only a 2-pick entry (PrizePicks or Underdog)
 
-A pick'em "entry" is not one leg — it's a group of legs (2 to 6, depending
+A pick'em "entry" is not one leg — it's a group of legs (2 to 8, depending
 on the platform and entry type) that all have to hit together for a
-Power Play, or that pay out on a sliding scale for a Flex Play. Sizing real
-money against an entry requires knowing that entry's real payout
-multiplier. Session 2.5 sourced exactly one such number directly from
+Power Play/Standard entry, or that pay out on a sliding scale for a Flex
+Play. Sizing real money against an entry requires knowing that entry's real
+payout multiplier. Session 2.5 sourced PrizePicks' number directly from
 PrizePicks' own published payout page: a 2-pick Power Play pays **3x** the
-stake if both legs hit. No other entry size, and no Underdog entry type,
-has a confirmed real multiplier anywhere in this project's research yet.
+stake if both legs hit. **Session 2.11** sourced Underdog's own number
+directly from Underdog's own published payout page
+(help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
+confirmed live 2026-09-10): a 2-pick Standard entry pays **3.5x** — a
+different number from PrizePicks', which is exactly why `sizing_engine.py`
+never assumed PrizePicks' 3x applied to Underdog too. No other entry size
+(3-pick, 4-pick, Flex, on either platform) has a confirmed real multiplier
+anywhere in this project's research yet.
 
 Rather than assume a multiplier for an unresearched entry type — which
 would mean sizing real money off an invented number — `sizing_engine.py`
-v1 only accepts exactly two open PrizePicks legs, sized as a 2-pick Power
-Play. Every other combination (wrong leg count, any Underdog leg, a mix of
-platforms) is rejected outright, with the specific reason stated in the
-output. This mirrors Session 2.3's own NFL-only scoping decision: a named,
-stated boundary, not a silent one.
+v1 only accepts exactly two open legs from ONE platform (PrizePicks or
+Underdog), sized against that platform's own real 2-pick payout. Every
+other combination (wrong leg count, an entry mixing legs from two
+different platforms, any platform other than PrizePicks/Underdog) is
+rejected outright, with the specific reason stated in the output. This
+mirrors Session 2.3's own NFL-only scoping decision: a named, stated
+boundary, not a silent one.
 
 **What this means in practice:** if you have three or more real open flags
-you'd like to combine, or want to size an Underdog entry, this version of
-the tool will not do it — not because the underlying math couldn't be
-extended, but because the real payout number it would need doesn't exist
-yet in this project's research. Extending coverage to more entry types is
-a named candidate for a future session, not a gap this session tried to
-paper over.
+you'd like to combine, or want to size a 3+ pick entry on either platform,
+this version of the tool will not do it — not because the underlying math
+couldn't be extended, but because the real payout number it would need
+doesn't exist yet in this project's research. Extending coverage to more
+entry types is a named candidate for a future session, not a gap this
+session tried to paper over.
 
 ## 2. The sizing formula — Kelly criterion
 
@@ -113,9 +121,11 @@ specific number (no source gives one). Continuing the example:
 
 An Underdog multiplier (`0.85`, reflecting the research's finding that
 Underdog is reputationally more winner-tolerant, though not independently
-verified) is present in the code for future use but is not currently
-reachable — v1's entry-type gate (Section 1) rejects any Underdog leg
-before this adjustment would ever apply.
+verified) is present in the code and, as of **Session 2.11**, is reachable:
+Underdog entries are now sized (against Underdog's own 3.5x payout, not
+PrizePicks' 3x — see Section 1), so this dampener applies to them the same
+way `0.70` applies to PrizePicks. The `0.85` figure itself was not
+re-derived this session — only the gate that made it unreachable changed.
 
 ## 4.5. Same-game caution — flagging a modeling gap, not fixing it
 

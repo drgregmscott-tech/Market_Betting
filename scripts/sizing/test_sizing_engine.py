@@ -11,8 +11,10 @@ handoff. Six scenarios:
    'no_bet_negative_edge' and a $0 stake -- never a negative stake.
 3. A very large edge is correctly capped at MAX_SINGLE_POSITION_PCT of
    bankroll, not sized past it.
-4. A non-PrizePicks (Underdog) leg is rejected with an explicit reason,
-   never silently sized off an unsourced payout multiplier.
+4. A 2-pick entry mixing legs from two different platforms is rejected
+   with an explicit reason (test_4) -- and, as of Session 2.11, a real
+   all-Underdog entry IS sized, using Underdog's own sourced 3.5x payout,
+   not PrizePicks' 3x (test_4b).
 5. A wrong leg count (1 or 3) is rejected with an explicit reason.
 6. A leg with status != 'open' (already closed) is rejected with an
    explicit reason.
@@ -99,13 +101,30 @@ def test_3_extreme_edge_is_capped():
     print(f"PASS test_3: extreme edge correctly capped at ${expected_cap} ({MAX_SINGLE_POSITION_PCT*100:.0f}% of bankroll)")
 
 
-def test_4_underdog_rejected():
+def test_4_mixed_platform_rejected():
+    """Session 2.11: Underdog itself is no longer rejected outright (it has
+    its own sourced payout, see test_4b), but a single entry still cannot
+    mix legs from two different platforms -- each platform's payout table
+    only applies to a whole entry, not per-leg."""
     bankroll = 1000.0
     legs = [make_leg("prizepicks|9", "prizepicks", 0.70), make_leg("underdog|10", "underdog", 0.70)]
     result = size_entry(legs, bankroll)
     assert result["status"] == "rejected", result
     assert "platform" in result["reason"].lower(), result
-    print(f"PASS test_4: mixed/Underdog legs correctly rejected -- reason: {result['reason']}")
+    print(f"PASS test_4: mixed-platform legs correctly rejected -- reason: {result['reason']}")
+
+
+def test_4b_underdog_sized_with_own_payout():
+    """Session 2.11: a real, all-Underdog 2-pick entry is sized using
+    Underdog's own sourced 3.5x payout, not PrizePicks' 3x."""
+    bankroll = 1000.0
+    legs = [make_leg("underdog|1", "underdog", 0.65, game_id="g1"), make_leg("underdog|2", "underdog", 0.62, game_id="g2")]
+    result = size_entry(legs, bankroll)
+    assert result["status"] == "sized", result
+    assert result["entry_payout_multiplier"] == 3.5, result
+    assert result["entry_net_odds_b"] == 2.5, result
+    assert result["platform_risk_multiplier_applied"] == 0.85, result
+    print(f"PASS test_4b: Underdog entry sized at its own 3.5x payout -- suggested_stake=${result['suggested_stake']}")
 
 
 def test_5_wrong_leg_count_rejected():
@@ -173,7 +192,7 @@ def test_manual_kelly_math_sanity_check():
     size_entry()'s own code path -- same verification discipline Session
     2.3 used for the Kicking Points / Fantasy Score formulas."""
     p = 0.70 * 0.70  # = 0.49
-    b = ENTRY_NET_ODDS_B  # 2.0
+    b = ENTRY_NET_ODDS_B["prizepicks"]  # 2.0
     f_star_expected = (p * (b + 1) - 1) / b  # hand formula
     f_star_actual = raw_kelly_fraction(p, b)
     assert abs(f_star_expected - f_star_actual) < 1e-9, (f_star_expected, f_star_actual)
@@ -458,7 +477,8 @@ if __name__ == "__main__":
     test_1_bigger_edge_bigger_stake()
     test_2_no_bet_below_breakeven()
     test_3_extreme_edge_is_capped()
-    test_4_underdog_rejected()
+    test_4_mixed_platform_rejected()
+    test_4b_underdog_sized_with_own_payout()
     test_5_wrong_leg_count_rejected()
     test_6_closed_leg_status_check()
     test_7_same_game_pair_gets_extra_dampener()

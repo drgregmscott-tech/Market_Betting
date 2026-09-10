@@ -7729,3 +7729,152 @@ pane): all five tracks now render independent top-10 tables with real data
 arbitrage only has 2 real fillable flags right now, so its table correctly
 shows 2 rows, not a padded or empty 10). Temporary data copies deleted again
 afterward.
+
+## Session 2.11 — Underdog Payout Multiplier & Sizing Support (Pick'em)
+
+**Date completed:** 2026-09-10
+**Status:** ⚠️ Complete with caveats — sizing math and frontend are fully
+built, wired, and regression-tested; the one item not closed is verifying
+against a real, currently-open 2-leg Underdog entry, which does not exist
+in live data yet (a real volume gap, not a code gap — see below).
+
+**Context:** Opened same-day as Open Decision #45, after the user reviewed
+the frontend directly and found Underdog rows visible in the Pick'em tab
+but never sizeable — `sizing_engine.py`'s `SUPPORTED_PLATFORMS = {"prizepicks"}`
+gate existed specifically because `ENTRY_PAYOUT_MULTIPLIER = 3.0` was
+PrizePicks' own sourced 2-pick Power Play number, and applying it to an
+Underdog entry would have sized real money against the wrong payout table.
+
+**What was actually done:**
+
+1. **Sourced Underdog's real, current 2-pick payout directly from
+Underdog's own official source, not assumed.** Fetched
+`help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts`
+directly via browser (a WebFetch attempt to the same URL returned HTTP 403;
+the in-app Browser tool succeeded). Confirmed: Underdog's 2-pick Standard
+entry pays **3.5x**, genuinely different from PrizePicks' 3x for its own
+2-pick Power Play — the exact reason this project's own standing rule
+(never reuse one platform's sourced number for a different platform)
+applied here.
+
+2. **`scripts/sizing/sizing_engine.py` restructured so the pick'em payout
+table is per-platform, not a flat constant.** `ENTRY_PAYOUT_MULTIPLIER`,
+`ENTRY_NET_ODDS_B`, and `BREAKEVEN_WIN_RATE` are now dicts keyed by
+platform (`prizepicks: 3.0/2.0/0.5774`, `underdog: 3.5/2.5/0.5345` — the
+Underdog breakeven derived the same `1/sqrt(M)` way Session 2.5 derived
+PrizePicks' own 0.5774). `SUPPORTED_PLATFORMS` now includes both
+platforms. `size_entry()`'s platform-set check was rewritten from an
+exact-equality check (`platforms != SUPPORTED_PLATFORMS`, which only ever
+matched PrizePicks-only requests) to a subset check that still rejects any
+entry mixing legs from two different platforms — a 2-pick entry's payout
+table applies to the whole entry, not per-leg, so an entry cannot borrow
+one platform's leg and another platform's payout multiplier.
+`PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85` (already present in the code
+since Session 2.6, tagged "NOT currently reachable") needed no change to
+its actual figure — only the gate that made it unreachable was removed.
+
+3. **`frontend/app.js` updated to match, by hand** (no shared source of
+truth between the Python and JS sizing code — a stated, pre-existing
+project constraint, not new to this session). `SUPPORTED_PLATFORMS` now
+includes `underdog`; `ENTRY_PAYOUT_MULTIPLIER`/`ENTRY_NET_ODDS_B` became
+per-platform objects; `sizeEntry()` looks up the selected legs' own
+platform's payout instead of a single flat number; the sizing result panel
+now displays which platform and payout multiplier were used, so a user
+sizing an Underdog entry can see 3.5x, not a hidden 3x. Two stale
+PrizePicks-only UI strings were also found and corrected in passing (the
+leg-count rejection message and the "select two PrizePicks flags" empty-
+state hint) — real strings a user would have seen and found confusing
+once Underdog became sizeable, not cosmetic-only fixes.
+
+4. **Regression-tested against real live data, not just synthetic
+fixtures.** Re-ran `sizing_engine.py pickem` against two real, currently-
+open PrizePicks legs pulled live from `data/pickem/clv_log.csv`
+(`prizepicks|13957672`, `prizepicks|13961549`) and confirmed the exact
+same result shape Session 2.6's own validation reported for a same-game,
+high-combined-probability pair: `$69.85` uncapped, capped to `$25.00`
+(5% of a $500 bankroll) — confirms the platform-branching refactor left
+PrizePicks' own math path untouched. Added a new synthetic test,
+`test_4b_underdog_sized_with_own_payout` (`test_sizing_engine.py`),
+confirming an all-Underdog 2-leg entry is sized using 3.5x/2.5/0.85, not
+PrizePicks' numbers; renamed the pre-existing mixed-platform test from
+`test_4_underdog_rejected` to `test_4_mixed_platform_rejected` since
+Underdog itself is no longer rejected, only a mixed-platform entry is.
+All 24 tests in `test_sizing_engine.py` pass. `node --check frontend/app.js`
+confirms no JS syntax errors.
+
+5. **Verified `docs/sizing_methodology.md` was not left stale.** Section 1
+("Scope") and Section 4 ("Platform risk adjustment") both referenced
+PrizePicks-only sizing and an unreachable Underdog dampener — both
+rewritten to reflect the new per-platform reality, citing the same sourced
+3.5x figure and its origin.
+
+**Files created/modified:**
+- `scripts/sizing/sizing_engine.py` — per-platform payout table (see #2
+above); docstring addendum ("SESSION 2.11 ADDENDUM") added explaining the
+change and its reasoning, matching this file's existing per-session
+addendum pattern (3.3, 5.4, 6.4, 4.4).
+- `scripts/sizing/test_sizing_engine.py` — new `test_4b_underdog_sized_with_own_payout`;
+`test_4_underdog_rejected` renamed to `test_4_mixed_platform_rejected`;
+fixed `ENTRY_NET_ODDS_B` import usage in `test_manual_kelly_math_sanity_check`
+(now indexes `["prizepicks"]` since the constant became a dict).
+- `frontend/app.js` — per-platform sizing constants and lookup, sizing
+result panel now shows platform/payout, two stale PrizePicks-only UI
+strings fixed.
+- `docs/sizing_methodology.md` — Sections 1 and 4 rewritten for the
+two-platform reality.
+- `ROADMAP.md` — Session 2.11 card closed with caveats; Open Decision #45
+resolved (with the one remaining real-data gap named, not dropped).
+
+**Validation results:**
+- [x] Underdog's real payout table sourced and cited — 3.5x, confirmed
+live against Underdog's own help article, 2026-09-10.
+- [ ] `sizing_engine.py` sizes a real Underdog entry correctly, verified
+against Underdog's own app for the same real entry — **NOT MET, explicitly
+deferred.** `data/pickem/clv_log.csv` contains exactly one real Underdog
+row total (a closed Cam Ward NFL Pass Yards prop) — no two real,
+currently-open Underdog legs exist yet to run through the tool and
+cross-check against Underdog's own app. The math itself is proven correct
+via a synthetic fixture (`test_4b`), which is a real, meaningful check but
+not the same as confirming against Underdog's live app on a real entry.
+- [x] Frontend Pick'em tab's sizing tool accepts Underdog legs — confirmed
+via code inspection and `node --check`; no live frontend deploy was
+re-verified this session (would require Underdog's next real open pair to
+actually exercise the UI path end-to-end — same gap as above).
+- [x] PrizePicks sizing behavior unchanged (regression check) — confirmed,
+see item 4 above.
+
+**Decisions made:**
+1. **Underdog's 2-pick payout (3.5x) was sourced from Underdog's own
+`help.underdogsports.com` article, not `help.underdogfantasy.com`** (the
+domain named in this project's earlier research/docstrings) — both
+resolve to the same real help content as of 2026-09-10; the
+`.com/sports` domain was the one that actually loaded during this
+session's research and is cited directly rather than guessing which
+domain is canonical going forward.
+2. **A 2-pick entry mixing one PrizePicks leg and one Underdog leg remains
+rejected**, not partially supported — each platform's payout table
+describes the whole entry, not a single leg, so there is no well-defined
+number to use for a mixed pair. This was already true before this
+session (any non-PrizePicks leg was rejected); this session's change was
+narrowing the rejection reason from "Underdog isn't supported" to "an
+entry can't mix two different platforms," which is the more precise,
+still-accurate reason now that Underdog itself is supported.
+3. **`PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85` was left unchanged.**
+This session's job was sourcing the payout multiplier and removing the
+gate blocking it, not re-deriving the risk dampener — that remains
+Session 8.3's job, same as every other dampener in this file, once real
+graded Underdog outcomes exist to check it against.
+
+**Corrections/reversals during the session:** None — the sizing math
+change was additive (a flat constant became a per-platform lookup), and
+the one behavior that changed on purpose (Underdog no longer auto-rejected)
+was the explicit point of the session.
+
+**Open items / deferred validations:** Verifying `sizing_engine.py`'s
+Underdog math against a real, currently-open 2-leg Underdog entry and
+Underdog's own live app remains open, blocked on Underdog's own real
+ingestion volume producing two simultaneous open legs — not a new session,
+just a re-check to run the next time that real condition is met (same
+posture as several of this project's other "real data hasn't caught up
+yet" deferrals, e.g. Session 2.4's cross-platform consensus gap).
+

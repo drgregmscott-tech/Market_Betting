@@ -1226,9 +1226,12 @@ rather than treating the new data as automatic grounds for rescoping).
 ---
 
 ### Session 2.11 — Underdog Payout Multiplier & Sizing Support (Pick'em)
-**Status:** Not started — added 2026-09-10 at the user's request, after
-reviewing the frontend with them and finding this gap (see SESSION_LOG.md's
-frontend UX entry, same date).
+**Status:** ⚠️ Complete with caveats (2026-09-10) — see SESSION_LOG.md for
+full detail. Underdog's real payout is sourced and wired into both
+`sizing_engine.py` and the frontend; regression-tested against real
+PrizePicks data and a synthetic Underdog fixture. Not verified against a
+real, currently-open Underdog 2-leg entry (see caveat below) — a real data
+gap, not a code gap.
 
 **Prerequisites:** None new — Underdog's data has been fully ingested and
 flowing into `data/pickem/clv_log.csv` since Session 2.1/2.2 (confirmed
@@ -1261,11 +1264,39 @@ noting it is "NOT currently reachable" until this session happens.
    row and confirm the output payout/edge numbers match Underdog's own app.
 
 **Validation (required to close session):**
-- [ ] Underdog's real payout table sourced and cited (not guessed)
+- [x] Underdog's real payout table sourced and cited (not guessed) —
+confirmed live 2026-09-10 directly against Underdog's own help article
+(help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts):
+2-pick Standard entry pays 3.5x (vs. PrizePicks' 3x for its own 2-pick
+Power Play — confirmed genuinely different numbers, not assumed).
 - [ ] `sizing_engine.py` sizes a real Underdog entry correctly, verified
-against Underdog's own app for the same real entry
-- [ ] Frontend Pick'em tab's sizing tool accepts Underdog legs
-- [ ] PrizePicks sizing behavior unchanged (regression check)
+against Underdog's own app for the same real entry — **NOT MET, explicitly
+deferred, not failed.** Root cause confirmed directly against live data:
+`data/pickem/clv_log.csv` contains exactly one real Underdog row total
+(a closed Cam Ward NFL Pass Yards prop), not two real currently-open
+Underdog legs to size and cross-check against Underdog's own app. This is
+the same external, calendar/volume-driven gap Session 2.10 already
+documented for Underdog (its real ingested volume is far lower than
+PrizePicks'). The sizing math itself IS verified: a synthetic
+all-Underdog fixture (`test_4b_underdog_sized_with_own_payout`,
+`test_sizing_engine.py`) confirms the code correctly looks up Underdog's
+3.5x payout and 0.85 dampener rather than PrizePicks' numbers. Re-running
+this specific check against a real live 2-leg Underdog entry, once one
+exists, is the re-verification trigger — see Open Decision #45's
+resolution below.
+- [x] Frontend Pick'em tab's sizing tool accepts Underdog legs — confirmed:
+`SUPPORTED_PLATFORMS` now includes `underdog`, `ENTRY_PAYOUT_MULTIPLIER`/
+`ENTRY_NET_ODDS_B` are per-platform, and the sizing result panel now
+displays which platform/payout was used.
+- [x] PrizePicks sizing behavior unchanged (regression check) — confirmed:
+running `sizing_engine.py pickem` against two real, currently-open
+PrizePicks legs pulled live from `clv_log.csv`
+(`prizepicks|13957672` + `prizepicks|13961549`) reproduces the exact same
+shape of result Session 2.6's own validation reported for a same-game,
+high-combined-probability pair — `$69.85` uncapped, capped to `$25.00`
+(5% of a $500 bankroll) — confirming the PrizePicks math path (payout
+3.0x, dampener 0.70) is byte-for-byte unchanged by the platform-branching
+refactor.
 
 ---
 
@@ -3625,14 +3656,18 @@ real test bets and reports each result via
 first time ever on real data, and once enough real graded legs
 accumulate, re-run this go/no-go review against real outcome evidence
 instead of CLV alone.
-45. **New, opened 2026-09-10, at the user's request while reviewing the
-frontend:** Underdog has real, live data flowing through Track 1's pipeline
-today but cannot be sized or bet through this project yet — blocked
-specifically on `sizing_engine.py`'s `SUPPORTED_PLATFORMS` gate, which
-exists because `ENTRY_PAYOUT_MULTIPLIER = 3.0` is PrizePicks' own payout
-table, not a generic one. **Action needed:** Session 2.11 (new, added this
-session) — source Underdog's real payout table and extend sizing/frontend
-to branch by platform.
+45. **Resolved, Session 2.11 (2026-09-10).** Underdog's real 2-pick
+Standard-entry payout (3.5x, sourced directly from Underdog's own help
+article — see Session 2.11's card and SESSION_LOG.md for the full trail)
+is now wired into `sizing_engine.py` (per-platform `ENTRY_PAYOUT_MULTIPLIER`/
+`ENTRY_NET_ODDS_B`/`BREAKEVEN_WIN_RATE`) and `frontend/app.js`. One piece
+remains open, not closed silently: no real, currently-open 2-leg Underdog
+entry exists in live data to verify the sizing output against Underdog's
+own app directly (only one real Underdog row total exists in
+`clv_log.csv`, and it is closed) — re-verify this specific check once
+Underdog's real ingested volume produces two real simultaneous open legs
+(tracked as the same kind of volume gap Session 2.10 already documented
+for Underdog).
 46. **New, opened 2026-09-10, same request:** FanDuel props ingestion is
 real and working (141 rows, 2026-09-09), and `sizing_engine.py` already
 supports it, but every real row seen in `data/sportsbook_props/clv_log.csv`

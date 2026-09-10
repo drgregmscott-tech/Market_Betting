@@ -18,20 +18,47 @@ sizes, does not place bets" principle, it prints a suggested stake; a human
 decides whether to place it and reports the real outcome back through
 Session 2.5's outcome_tracker.py.
 
-WHY ONLY THE 2-PICK POWER PLAY, IN V1
-----------------------------------------
+WHY ONLY THE 2-PICK ENTRY, IN V1 (both platforms, as of Session 2.11)
+----------------------------------------------------------------------
 PrizePicks and Underdog both require 2+ legs to be combined into one
 all-or-nothing (or Flex) entry before a real payout multiplier applies.
-Session 2.5 only sourced one real, confirmed payout number: PrizePicks'
-standard 2-pick Power Play, 3x payout. No other entry size (3-pick, 4-pick,
-Flex) or Underdog's own payout table has been researched yet -- guessing at
-one here would mean sizing real money against an invented number, which
-this project does not do (see e.g. Session 2.3's refusal to guess at
+Session 2.5 sourced one real, confirmed payout number for PrizePicks: its
+standard 2-pick Power Play, 3x payout. No other PrizePicks entry size
+(3-pick, 4-pick, Flex) has been researched yet -- guessing at one here
+would mean sizing real money against an invented number, which this
+project does not do (see e.g. Session 2.3's refusal to guess at
 PrizePicks' Fantasy Score formula before confirming it against PrizePicks'
-own source). So v1 supports exactly one entry shape: two open legs on
-PrizePicks, sized as a 2-pick Power Play. Every other combination is
-rejected with an explicit, named status -- never silently sized using a
-number that was never confirmed.
+own source). So v1 supports exactly one entry shape per platform: two open
+legs, sized as a 2-pick entry. Every other combination (wrong leg count,
+mixed platforms, or an unsupported platform) is rejected with an explicit,
+named status -- never silently sized using a number that was never
+confirmed.
+
+SESSION 2.11 ADDENDUM -- UNDERDOG'S OWN 2-PICK PAYOUT SOURCED AND WIRED IN
+------------------------------------------------------------------------------
+Underdog was blocked from sizing entirely through Session 2.10 because no
+real Underdog payout multiplier had been sourced -- PrizePicks'
+`ENTRY_PAYOUT_MULTIPLIER = 3.0` is PrizePicks' own number, not a generic
+pick'em constant, and applying it to an Underdog entry would size against
+the wrong payout (Underdog's own Standard-entry table pays differently by
+pick count than PrizePicks' Power Play/Flex structure). This session
+sourced Underdog's real, current 2-pick Standard entry payout directly from
+Underdog's own official help article
+(help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
+"Standard Entries" table, confirmed live 2026-09-10): **3.5x**, not 3x.
+`ENTRY_PAYOUT_MULTIPLIER`, `ENTRY_NET_ODDS_B`, and `BREAKEVEN_WIN_RATE` are
+now per-platform dicts instead of single flat constants, and `size_entry()`
+looks up the requested entry's own platform's real payout rather than
+assuming PrizePicks' number applies everywhere. `PLATFORM_RISK_MULTIPLIER
+["underdog"] = 0.85` (already present in the code since Session 2.6, but
+unreachable until this session removed the `SUPPORTED_PLATFORMS` gate) is
+unchanged -- it was already a stated, sourced-to-research-not-to-a-number
+judgment call, not something that needed re-deriving just because sizing
+became reachable. A 2-pick entry still cannot mix one PrizePicks leg with
+one Underdog leg -- the payout table applies to the whole entry, not
+per-leg, so `size_entry()` rejects any request whose legs span more than
+one platform, same as it always rejected a platform outside
+`SUPPORTED_PLATFORMS`.
 
 THE SIZING METHOD -- FRACTIONAL KELLY, NAMED AND JUSTIFIED
 ---------------------------------------------------------------
@@ -78,12 +105,12 @@ stated judgment call, not sourced to a specific number, since no source
 gives one -- flagged explicitly, same as every other placeholder in this
 project.
 
-Underdog is NOT sized in v1 (see "WHY ONLY THE 2-PICK POWER PLAY" above --
-no real Underdog payout multiplier has been sourced yet), so
-PLATFORM_RISK_MULTIPLIER carries an "underdog" entry for the code's own
-future use, but the entry-type gate below prevents it from ever being
-reached until Underdog's real payout table is researched (a stated, open
-gap -- see sizing_methodology.md).
+As of Session 2.11, Underdog IS sized (see "SESSION 2.11 ADDENDUM" above --
+its own real, sourced 2-pick Standard payout is now wired into
+ENTRY_PAYOUT_MULTIPLIER). PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85
+remains the same stated, unsourced-to-a-specific-number judgment call it
+was when first added in Session 2.6 -- only the payout-table gate that
+kept it unreachable has changed, not the dampener figure itself.
 
 SAME-GAME CAUTION DAMPENER -- FLAGGING, NOT MODELING, A REAL CORRELATION GAP
 ------------------------------------------------------------------------------
@@ -126,8 +153,9 @@ here, not left as a documentation-only rule.
 
 WHAT THIS SCRIPT DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------
-- Does not size any entry type other than a 2-pick Power Play on
-  PrizePicks (see above).
+- Does not size any entry type other than a 2-pick entry on PrizePicks
+  (Power Play) or Underdog (Standard) -- see above. No 3-pick/4-pick/Flex
+  entry size, on either platform, has a sourced payout wired in yet.
 - Does not account for correlation between two legs from the SAME real
   game (e.g. a QB's passing yards and his team's leading WR's receiving
   yards in the same game are not fully independent events) -- the combined
@@ -596,19 +624,37 @@ WEATHER_CLV_LOG_PATH = BASE_DIR / "data" / "weather" / "clv_log.csv"
 # factors" documentation standard. See module docstring for full reasoning
 # on each one.
 # ---------------------------------------------------------------------------
-SUPPORTED_ENTRY_TYPE = "2-pick Power Play"
+SUPPORTED_ENTRY_TYPE = "2-pick Standard/Power Play"
 SUPPORTED_LEG_COUNT = 2
-ENTRY_PAYOUT_MULTIPLIER = 3.0  # PrizePicks' own published 2-pick Power Play payout (sample_size_methodology.md Section 2)
-ENTRY_NET_ODDS_B = ENTRY_PAYOUT_MULTIPLIER - 1.0  # b in the Kelly formula (profit per $1 staked on a win)
-BREAKEVEN_WIN_RATE = 0.5774  # sample_size_methodology.md Section 2 -- sqrt(1/3)
+
+# Session 2.11: two-platform payout table, sourced separately per platform --
+# these are NOT interchangeable (see docstring "SESSION 2.11 ADDENDUM").
+# PrizePicks: own published 2-pick Power Play payout (sample_size_methodology.md
+# Section 2). Underdog: own published 2-pick Standard entry payout, confirmed
+# live 2026-09-10 directly against Underdog's own help article
+# (help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
+# "Standard Entries" table: "2-pick standard entry: 3.5x").
+ENTRY_PAYOUT_MULTIPLIER = {
+    "prizepicks": 3.0,
+    "underdog": 3.5,
+}
+# b in the Kelly formula (profit per $1 staked on a win), per platform.
+ENTRY_NET_ODDS_B = {plat: mult - 1.0 for plat, mult in ENTRY_PAYOUT_MULTIPLIER.items()}
+# Per-leg breakeven win rate for an equal-probability 2-leg entry: 1/sqrt(M).
+# PrizePicks: sample_size_methodology.md Section 2 -- sqrt(1/3) = 0.5774.
+# Underdog: sqrt(1/3.5) = 0.5345, derived the same way from the sourced 3.5x above.
+BREAKEVEN_WIN_RATE = {
+    "prizepicks": 0.5774,
+    "underdog": 0.5345,
+}
 
 KELLY_FRACTION = 0.25  # quarter-Kelly -- stated placeholder, see docstring
 
 PLATFORM_RISK_MULTIPLIER = {
     "prizepicks": 0.70,  # stated judgment call, see docstring -- account-closure risk dampener
-    "underdog": 0.85,    # NOT currently reachable -- see SUPPORTED_PLATFORMS gate below
+    "underdog": 0.85,    # stated judgment call, see docstring -- same posture, less-documented risk
 }
-SUPPORTED_PLATFORMS = {"prizepicks"}  # v1 gate -- Underdog has no sourced payout multiplier yet
+SUPPORTED_PLATFORMS = {"prizepicks", "underdog"}  # v1 gate -- both platforms now have a sourced payout multiplier
 
 MAX_SINGLE_POSITION_PCT = 0.05  # hard bankroll cap, enforced below -- see docstring
 MIN_BANKROLL = 1.0  # guards against a zero/negative bankroll producing a nonsense stake
@@ -813,21 +859,25 @@ def size_entry(legs: list[dict], bankroll: float) -> dict:
             f"({SUPPORTED_ENTRY_TYPE}) -- received {len(legs)}."
         )
 
-    if platforms != SUPPORTED_PLATFORMS:
+    if len(platforms) != 1 or not platforms.issubset(SUPPORTED_PLATFORMS):
         return _rejected(
-            f"sizing_engine v1 only supports platform(s) {sorted(SUPPORTED_PLATFORMS)} "
-            f"-- received leg(s) from {sorted(platforms)}. No sourced payout "
-            f"multiplier exists yet for the platform(s) requested (see docstring)."
+            f"sizing_engine v1 only supports platform(s) {sorted(SUPPORTED_PLATFORMS)}, "
+            f"one platform per entry (a 2-pick entry cannot mix legs from two "
+            f"different platforms) -- received leg(s) from {sorted(platforms)}."
         )
 
     if bankroll < MIN_BANKROLL:
         return _rejected(f"--bankroll must be at least {MIN_BANKROLL}, got {bankroll}.")
 
+    platform = legs[0]["platform"]
+    payout_multiplier = ENTRY_PAYOUT_MULTIPLIER[platform]
+    net_odds_b = ENTRY_NET_ODDS_B[platform]
+    breakeven_win_rate = BREAKEVEN_WIN_RATE[platform]
+
     p_combined = combined_entry_probability(legs)
-    f_raw = raw_kelly_fraction(p_combined, ENTRY_NET_ODDS_B)
+    f_raw = raw_kelly_fraction(p_combined, net_odds_b)
     f_quarter = max(f_raw, 0.0) * KELLY_FRACTION
 
-    platform = legs[0]["platform"]
     dampener = PLATFORM_RISK_MULTIPLIER[platform]
 
     game_ids = {leg.get("game_id") for leg in legs}
@@ -856,8 +906,9 @@ def size_entry(legs: list[dict], bankroll: float) -> dict:
         "leg_flag_ids": [leg["flag_id"] for leg in legs],
         "leg_model_probs": [float(leg["first_flagged_model_prob"]) for leg in legs],
         "combined_entry_probability": round(p_combined, 4),
-        "breakeven_win_rate_reference": BREAKEVEN_WIN_RATE,
-        "entry_net_odds_b": ENTRY_NET_ODDS_B,
+        "entry_payout_multiplier": payout_multiplier,
+        "breakeven_win_rate_reference": breakeven_win_rate,
+        "entry_net_odds_b": net_odds_b,
         "raw_kelly_fraction": round(f_raw, 4),
         "quarter_kelly_fraction": round(f_quarter, 4),
         "platform_risk_multiplier_applied": dampener,
