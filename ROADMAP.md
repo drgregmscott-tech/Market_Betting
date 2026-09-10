@@ -1225,6 +1225,50 @@ rather than treating the new data as automatic grounds for rescoping).
 
 ---
 
+### Session 2.11 — Underdog Payout Multiplier & Sizing Support (Pick'em)
+**Status:** Not started — added 2026-09-10 at the user's request, after
+reviewing the frontend with them and finding this gap (see SESSION_LOG.md's
+frontend UX entry, same date).
+
+**Prerequisites:** None new — Underdog's data has been fully ingested and
+flowing into `data/pickem/clv_log.csv` since Session 2.1/2.2 (confirmed
+live, 2026-09-10: real `underdog` rows exist in the CLV log alongside
+`prizepicks`). This is a sizing/frontend-only gap, not a data-ingestion gap.
+
+**Why Underdog picks don't show up as bettable today:** `sizing_engine.py`'s
+`SUPPORTED_PLATFORMS = {"prizepicks"}` gate (and the frontend's matching
+`SUPPORTED_PLATFORMS` set in `app.js`) block Underdog specifically because
+`ENTRY_PAYOUT_MULTIPLIER = 3.0` is PrizePicks' own published 2-pick Power
+Play payout table (sourced in `sample_size_methodology.md`) — it is not a
+generic pick'em constant, and applying it to an Underdog entry would size
+against the wrong payout. A `PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85`
+entry already exists in the code specifically for this day, with a comment
+noting it is "NOT currently reachable" until this session happens.
+
+**What gets built:**
+1. Source Underdog's real, current published payout multiplier table
+   (their "Higher/Lower" entries pay out differently by pick count than
+   PrizePicks' Power Play/Flex structure — this needs the same kind of
+   direct verification Session 1.1's account-limiting research did, not an
+   assumption).
+2. Extend `sizing_engine.py`'s Kelly-sizing path to branch by platform
+   instead of assuming one payout table — Underdog entries get sized
+   against Underdog's real payout, PrizePicks entries unchanged.
+3. Extend `frontend/app.js`'s `SUPPORTED_PLATFORMS` gate and the sizing-tool
+   UI on the Pick'em tab the same way, so a real Underdog row can be sized
+   in the browser, not just flagged.
+4. Re-validate: run the sizing tool against a real, currently open Underdog
+   row and confirm the output payout/edge numbers match Underdog's own app.
+
+**Validation (required to close session):**
+- [ ] Underdog's real payout table sourced and cited (not guessed)
+- [ ] `sizing_engine.py` sizes a real Underdog entry correctly, verified
+against Underdog's own app for the same real entry
+- [ ] Frontend Pick'em tab's sizing tool accepts Underdog legs
+- [ ] PrizePicks sizing behavior unchanged (regression check)
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
@@ -2767,6 +2811,110 @@ session entries added in the meantime.
 
 ---
 
+### Session 6.8 — FanDuel Independent Flagging Assessment (Props)
+**Status:** Not started — added 2026-09-10 at the user's request, after
+reviewing the frontend with them and finding this gap.
+
+**Prerequisites:** None new — FanDuel ingestion has been live and working
+since Session 6.1 (confirmed live, 2026-09-09 run: 141 real normalized
+rows) and `sizing_engine.py`'s `PROPS_SUPPORTED_PLATFORMS` already includes
+`"fanduel"` alongside `"draftkings"` — props sizing is not the blocker here,
+unlike Session 2.11's Underdog gap.
+
+**Why the frontend/CLV log only ever shows `draftkings` rows today:**
+`clv_logger.py`'s own props docstring uses `consensus_label` to name "which
+book" a flagged row's cross-book price check came from — the real design
+this session needs to confirm (not yet confirmed) is whether the props
+estimation pipeline (`sportsbook_props_model.py`) only ever flags
+DraftKings rows and uses FanDuel purely as the consensus benchmark price,
+or whether FanDuel rows can also be flagged in their own right and simply
+haven't cleared the edge threshold yet on real recent runs. This is a real
+open question, not an assumed bug.
+
+**What gets built:**
+1. Trace `sportsbook_props_model.py` and `run_props_pipeline.py` to confirm,
+   directly against the code (not memory), whether FanDuel rows are ever
+   eligible to be flagged as the primary side, or structurally excluded.
+2. If structurally excluded: assess what's needed to make FanDuel
+   independently flaggable given its real data shape is season-long
+   futures, not per-game props (see `sportsbook_props_model.py`'s own
+   Session 6.2 docstring) — this may need its own probability model path,
+   not just removing a filter.
+3. If not excluded, just untested: confirm with a real run and document why
+   no FanDuel row has cleared the edge threshold yet.
+4. Extend the frontend's Props tab to show a platform column/filter either
+   way, so DraftKings vs. FanDuel rows are visually distinguishable once
+   both can appear (same pattern as the venue-link work done 2026-09-10).
+
+**Validation (required to close session):**
+- [ ] Real, cited answer (from the code, not assumption) to "can FanDuel be
+flagged on its own, today?"
+- [ ] If not: a scoped, honest estimate of what a follow-up session would
+need to build to make it possible
+- [ ] If yes: a real FanDuel-flagged row observed end-to-end at least once
+- [ ] Frontend Props tab shows platform per row
+
+---
+
+### Session 6.9 — BetMGM Props Ingestion Feasibility & Build
+**Status:** Not started — added 2026-09-10 at the user's request.
+
+**Prerequisites:** Session 6.1's precedent (DraftKings/FanDuel ingestion)
+and this project's standing due-diligence pattern for a brand-new venue —
+same shape as Session 1.1's PrizePicks/Underdog endpoint research and
+account-limiting review, and Session 3.1's Kalshi/Polymarket access
+research. BetMGM has never been touched by this project before; treat this
+as onboarding a genuinely new venue, not extending an existing one.
+
+**What gets built (feasibility phase, same standard as prior venues'
+Session 1-equivalent work):**
+1. Confirm whether BetMGM exposes a reachable public or undocumented props
+   endpoint without a login/API key (the same hard requirement this
+   project has held every other pick'em/props venue to) — likely requires
+   live browser Developer Tools reverse-engineering, the same fallback
+   procedure documented in `prototype_dkpick6.py` for the one venue where
+   this project already tried and failed.
+2. If reachable: prototype-pull real data, document the real schema (field
+   names, market shape — single-game props vs. season-long futures vs.
+   TD-scorer-style field props, per Session 6.2's finding that DK and FD
+   already differ from each other in this exact way).
+3. Verify account-limiting/ToS posture specifically for props/sportsbook
+   betting (distinct from BetMGM's other product lines), following the
+   same archived-research pattern as
+   `/docs/research/Pickem_Platform_Account_Limiting_Policy_Research.md`.
+4. **Explicit go/no-go at the end of this session** — if no reachable
+   endpoint exists (the real DK Pick6 outcome), BetMGM is dropped from
+   scope here rather than carried forward as an open item, per this
+   project's own established practice (see Session 2.1 Decision #1).
+
+**If a "go":** a second, separate build session (numbered once this
+session's findings are known) does ingestion + estimation-model adaptation
++ CLV logging + sizing + automation + frontend, the same seven-stage
+pattern every other track has followed — not attempted in this
+feasibility session.
+
+**Validation (required to close this feasibility session):**
+- [ ] Explicit go/no-go, backed by a real, reproducible endpoint check
+(not a guess)
+- [ ] If go: real schema documented, real account-limiting research cited
+- [ ] If no-go: reason stated plainly, same as DK Pick6's Session 2.1
+Decision #1
+
+---
+
+### Session 6.10 — Caesars Props Ingestion Feasibility & Build
+**Status:** Not started — added 2026-09-10 at the user's request. Same
+scope and validation shape as Session 6.9, run independently for Caesars
+(a different real platform with its own endpoint/ToS posture — findings
+for BetMGM must not be assumed to carry over).
+
+**Prerequisites/what gets built/validation:** Identical structure to
+Session 6.9 above, substituting Caesars Sportsbook throughout. Sequenced
+after Session 6.9 so the two feasibility checks don't get conflated, not
+because one technically blocks the other.
+
+---
+
 # PHASE 7 — Track 6: Sportsbook Main Lines / Flagship Exchange Sports Markets
 
 **⚠️ Go/No-Go Checkpoint required before this phase starts building anything.**
@@ -3477,6 +3625,27 @@ real test bets and reports each result via
 first time ever on real data, and once enough real graded legs
 accumulate, re-run this go/no-go review against real outcome evidence
 instead of CLV alone.
+45. **New, opened 2026-09-10, at the user's request while reviewing the
+frontend:** Underdog has real, live data flowing through Track 1's pipeline
+today but cannot be sized or bet through this project yet — blocked
+specifically on `sizing_engine.py`'s `SUPPORTED_PLATFORMS` gate, which
+exists because `ENTRY_PAYOUT_MULTIPLIER = 3.0` is PrizePicks' own payout
+table, not a generic one. **Action needed:** Session 2.11 (new, added this
+session) — source Underdog's real payout table and extend sizing/frontend
+to branch by platform.
+46. **New, opened 2026-09-10, same request:** FanDuel props ingestion is
+real and working (141 rows, 2026-09-09), and `sizing_engine.py` already
+supports it, but every real row seen in `data/sportsbook_props/clv_log.csv`
+so far is `draftkings` — it is not yet confirmed whether FanDuel can be
+independently flagged or is structurally used only as DraftKings' consensus
+benchmark price. **Action needed:** Session 6.8 (new, added this session).
+47. **New, opened 2026-09-10, same request:** BetMGM and Caesars have zero
+ingestion code today — the user asked to reassess adding them. Per this
+project's own standing practice (no venue gets built out without a real,
+reproducible endpoint check first — see Session 2.1's DK Pick6 outcome),
+this is scoped as two separate feasibility sessions before any real build
+work. **Action needed:** Sessions 6.9 (BetMGM) and 6.10 (Caesars), both new,
+added this session.
 
 ---
 *Update this file at the close of each future session, per the project's
