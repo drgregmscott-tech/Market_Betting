@@ -194,6 +194,8 @@ def _props_base_row(**overrides):
         "implied_prob_includes_field_vig": False,
         "edge_over": 0.10,
         "edge_under": -0.10,
+        "over_american_odds": -110,
+        "under_american_odds": -110,
     }
     row.update(overrides)
     return row
@@ -205,6 +207,7 @@ def _run_props(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulle
     return clv_logger.generic_process_run(
         "props", candidates, present_ids, clv_logger.price_for_side_props(rows_by_id),
         existing_log, run_pulled_at, clv_logger.CLV_LOG_COLUMNS_PROPS, clv_logger.PROPS_EXTRA_COLUMNS,
+        odds_for_side_fn=clv_logger.odds_for_side_props(rows_by_id),
     )
 
 
@@ -265,15 +268,31 @@ def scenario_10_props_refresh_and_close():
     log1 = _run_props(pd.DataFrame([row_run1]), _empty_props_log(), "2026-09-01T10:00:00Z")
     assert len(log1) == 1
     assert log1.iloc[0]["last_seen_market_price"] == 0.50
+    assert log1.iloc[0]["over_american_odds"] == -110
 
-    # Run 2: still present, own price moves (line/vig shift).
-    row_run2 = _props_base_row(source_selection_id="sel_lifecycle", implied_prob_over=0.55, implied_prob_under=0.45)
+    # Run 2: still present, own price AND own displayed American odds
+    # move (a real line move, e.g. DK's Anytime TD Scorer price for a
+    # player shortening from a long-shot price to a short one as the game
+    # approaches -- the real, live bug this scenario locks in: the
+    # frontend's Odds column must track the CURRENT line, not the price
+    # at first-flag time).
+    row_run2 = _props_base_row(
+        source_selection_id="sel_lifecycle", implied_prob_over=0.55, implied_prob_under=0.45,
+        over_american_odds=-150,
+    )
     log2 = _run_props(pd.DataFrame([row_run2]), log1, "2026-09-01T11:00:00Z")
     assert len(log2) == 1, "refresh must not create a duplicate row"
     r = log2.iloc[0]
     assert r["status"] == "open"
     assert r["last_seen_market_price"] == 0.55
     assert r["first_flagged_market_price"] == 0.50, "first_flagged_market_price must never change on refresh"
+    assert r["over_american_odds"] == -150, (
+        "over_american_odds must refresh to the current run's live price on an "
+        "already-open flag -- a real bug found 2026-09-10 (Puka Nacua/DK Anytime "
+        "TD Scorer displaying a frozen +970 from first-flag time on the frontend "
+        "while DK's real live price had moved to +115) shipped because this "
+        "column was written once at flag creation and never refreshed."
+    )
 
     # Run 3: prop disappears (game locked / market pulled).
     other_row = _props_base_row(source_selection_id="sel_unrelated", game_id="game_other")

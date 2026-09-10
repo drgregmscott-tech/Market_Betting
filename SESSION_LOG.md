@@ -9137,3 +9137,179 @@ the Game-time/Blocked-badge gap, Session 5.7) are unaffected by this
 session and remain open as previously recorded.
 
 **Next session:** None yet — Session 5.7 remains the longest-open item.
+
+---
+
+## Session 6.10, real bug found and fixed — frontend Odds column frozen at first-flag price for props (2026-09-10, same day)
+
+**Date completed:** 2026-09-10
+**Status:** ✅ Complete
+
+**What was actually done:** The user spotted a real, visible discrepancy
+on the live dashboard — Puka Nacua's "Anytime TD Scorer" prop showed
+DraftKings at **+970** in the "Odds" column, next to BetMGM's **+105**
+for the same market. The user checked DraftKings' real site directly and
+confirmed +970 was not the real current price. This was investigated as
+a real bug, not assumed to be a data-source problem, before touching any
+code.
+
+1. Traced the frontend's data path: `frontend/app.js`'s props table reads
+`data/props_clv_log.csv` (a Cloudflare-Pages-build-time copy of
+`data/sportsbook_props/clv_log.csv`, same pattern as every other track —
+see the file's own header comment). Checked the real, current
+`data/sportsbook_props/clv_log.csv` directly for this exact flag
+(`draftkings|0QA334323199#2150675659_13L88808Q1-1261907500Q20`, Puka
+Nacua, Anytime TD Scorer).
+2. Found the real row's `over_american_odds`/`under_american_odds`
+columns were **both empty**, not `115` (DraftKings' real current price,
+confirmed independently across every real normalized ingestion pull from
+2026-09-09 through 2026-09-10 — DK's real price moved 135 → 125 → 130 →
+115 over that window, never anywhere near 970).
+3. Traced why the frontend showed +970 anyway:
+`frontend/app.js`'s `renderPropsOpenTable()` (line ~1146) falls back to
+`fmtAmericanOddsFromProb(r.first_flagged_market_price)` whenever the raw
+odds columns are empty. `first_flagged_market_price` for this row was
+`0.0935` — and `100 / (100 + 970) = 0.0935` exactly, confirming the
+dashboard was reconstructing an American-odds display from a stale
+implied-probability snapshot captured at `first_flagged_at`
+(`2026-09-09T22:51:56Z`, nearly 18 hours before this session), not from
+DraftKings' current price.
+4. Traced the real root cause in `scripts/calibration/clv_logger.py`:
+`generic_process_run()`'s refresh loop (the code path that runs on every
+CLV-logging run for an already-open flag) only ever updated
+`last_seen_at` and `last_seen_market_price`. `over_american_odds`/
+`under_american_odds` were written **once**, at row-creation time only
+(`build_props_candidates()`), and never touched again for the life of an
+open flag — confirmed by reading the code directly, not inferred. Checked
+whether these two columns feed any real CLV grading math first (they do
+not — `first_flagged_market_price`/`last_seen_market_price`/
+`closing_market_price`, all separately tracked probabilities, are what
+CLV grading actually uses; `over_american_odds`/`under_american_odds` in
+this log are a pure display convenience, read only by
+`frontend/app.js`), so refreshing them could not corrupt any grading
+logic — confirmed before making the change, not assumed safe.
+
+**Real, cited conclusion:** DraftKings' real live price was correct
+(+115) the whole time — the user's own manual check against DK's site was
+right. The dashboard bug was a stale-data display issue: an already-open
+flag's displayed American odds were frozen at whatever DK's price was
+nearly 18 hours earlier, when the flag was first created, while the
+underlying probability-based CLV tracking (which the display odds were
+never meant to substitute for) correctly kept moving. This is a real,
+user-facing display bug, not a data-quality or scraping-accuracy problem
+with the DraftKings ingestion itself.
+
+**What was built:**
+- `scripts/calibration/clv_logger.py`:
+  - `build_props_present_and_prices()` now also carries each flag's
+  current `over_american_odds`/`under_american_odds` through in
+  `rows_by_id` (previously only `implied_prob_over`/`implied_prob_under`).
+  - New `odds_for_side_props(rows_by_id)` — same shape as the existing
+  `price_for_side_props()`, but returns this run's real
+  `(over_american_odds, under_american_odds)` for a flag instead of an
+  implied probability.
+  - `generic_process_run()` gained an optional `odds_for_side_fn`
+  parameter (`None` for pick'em/weather/politics — no behavior change for
+  those three tracks, confirmed by leaving their call sites untouched).
+  When provided, the refresh loop now also updates
+  `over_american_odds`/`under_american_odds` on every already-open flag,
+  the same way `last_seen_market_price` already refreshed — so the
+  frontend's Odds column always reflects the platform's current line.
+  `first_flagged_market_price`/`first_flagged_edge` are untouched by this
+  change and continue to preserve the original CLV entry snapshot exactly
+  as before.
+  - `run_props()` updated to pass `odds_for_side_props(rows_by_id)` in.
+- `scripts/calibration/test_clv_logger.py`:
+  - `_props_base_row()` now includes `over_american_odds`/
+  `under_american_odds` defaults (previously absent from the test
+  fixture entirely — a real gap, not a style choice, since it meant no
+  existing test could have caught this bug even if it had asserted on
+  these columns).
+  - `_run_props()` now passes `odds_for_side_fn=clv_logger.odds_for_side_props(rows_by_id)`,
+  matching `run_props()`'s real call shape.
+  - `scenario_10_props_refresh_and_close()` extended with a real
+  regression assertion: run 2 changes `over_american_odds` from -110 to
+  -150 and asserts the refreshed log row picks up -150, with an inline
+  message naming this exact incident so a future session doesn't have to
+  rediscover it. **Verified this assertion actually catches the bug**: ran
+  it against the pre-fix code via `git stash` — failed with
+  `AttributeError: module 'clv_logger' has no attribute
+  'odds_for_side_props'` (the function didn't exist yet), confirming the
+  test is a real regression guard, not one that would have passed either
+  way.
+
+**Validation results:**
+- All 5 props scenarios in `test_clv_logger.py`
+(`scenario_7`–`scenario_11`) pass when run directly (this file uses a
+custom `run_all()` harness, not pytest discovery — see note below).
+- Ran the real `clv_logger.py --track props` pipeline live against
+`output/estimation/sportsbook_props_latest.csv` (1,186 real rows).
+Confirmed directly in the real, written
+`data/sportsbook_props/clv_log.csv`: Puka Nacua's Anytime TD Scorer
+DraftKings row now shows `over_american_odds=115.0`, matching
+DraftKings' real current live price exactly. The BetMGM row for the same
+player/market was unaffected (it already had this working, since Session
+6.9 originally wrote it at creation time and this specific flag hadn't
+gone stale yet — but it now also benefits from the same ongoing refresh
+going forward).
+- **Real, pre-existing, unrelated test-suite issue found and left alone,
+not silently worked around:** `python -m pytest
+scripts/calibration/test_clv_logger.py` collects zero tests (the file
+uses `def scenario_N_...()` + a manual `run_all()`, not pytest's
+`test_*` naming), and running the file directly
+(`python scripts/calibration/test_clv_logger.py`) fails at
+`scenario_1_new_flag_with_consensus` — pre-existing, and traced to
+`clv_logger.load_clv_log_pickem()` reading the real, now-thousands-of-rows-large
+production pick'em log directly rather than an isolated fixture. Confirmed
+via `git diff --stat` that this session's change touches only
+`clv_logger.py`; the pickem scenario failure is unrelated and predates
+this session. Not fixed here — genuinely out of scope for a props-display
+bug fix — but named explicitly rather than left for a future session to
+rediscover from scratch. Worked around locally this session only by
+importing `test_clv_logger` and calling the five props scenario functions
+directly, bypassing the broken pickem scenarios.
+
+**Decisions made:**
+1. **Fixed by refreshing the display columns, not by removing the
+fallback logic.** The frontend's `fmtAmericanOddsFromProb()` fallback
+(used when `over_american_odds`/`under_american_odds` are genuinely
+absent, e.g. before this fix ever ran once for a given flag) is legitimate
+defensive behavior for a real data gap and was left in place — the real
+fix is upstream, making sure the columns it falls back FROM stay current.
+2. **`first_flagged_market_price`/`first_flagged_edge` deliberately left
+untouched.** These exist specifically to preserve the CLV entry snapshot
+(the whole point of Closing Line Value grading is comparing entry price
+to closing price) — refreshing them would have been a second, different
+bug, not a fix.
+3. **The pre-existing pickem test-harness breakage is named, not fixed,**
+per this session's actual scope (a real, user-reported display bug in
+props). Flagged as a real, separate open item below rather than folded
+into this fix silently.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- **`test_clv_logger.py`'s pickem scenarios cannot currently be run via
+its own `run_all()` or via direct pytest discovery** — a future session
+touching pickem's CLV logging should either isolate
+`load_clv_log_pickem()` behind a fixture (matching how weather/politics/
+props already test in-memory, per this file's own `_run_props()`
+pattern) or otherwise fix test isolation before relying on this file's
+output again.
+- The corrected `over_american_odds`/`under_american_odds` values are in
+the real `data/sportsbook_props/clv_log.csv` as of this session's live
+run (2026-09-10T17:19:10Z) — the deployed Cloudflare Pages dashboard will
+show the fix on its next normal build/deploy, same as any other data
+update in this project's existing workflow; no separate deploy action
+was needed or taken this session.
+
+**Files created/modified:**
+- `scripts/calibration/clv_logger.py` (modified)
+- `scripts/calibration/test_clv_logger.py` (modified)
+- `data/sportsbook_props/clv_log.csv` (real data, regenerated by this
+session's live pipeline run — over_american_odds/under_american_odds now
+current for every open props flag, not just newly-created ones)
+- `data/sportsbook_props/clv_snapshots/clv_log_20260910T171910Z.csv` (new,
+real snapshot from the same live run)
+
+**Next session:** None yet — Session 5.7 remains the longest-open item.

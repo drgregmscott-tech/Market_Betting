@@ -613,6 +613,7 @@ def generic_process_run(
     run_pulled_at: str,
     columns: list[str],
     extra_columns: list[str],
+    odds_for_side_fn=None,
 ) -> pd.DataFrame:
     """Generic open/refresh/close lifecycle, shared by weather and
     politics. `candidates` is the list of newly-flagged rows this run
@@ -629,7 +630,14 @@ def generic_process_run(
     run. It is a function, not a flat dict, because a raw row's own
     'yes' price (weather) needs converting to a 'no' price when that is
     the side the flag was originally logged on -- see the per-track
-    build_*_present_and_prices() helpers below."""
+    build_*_present_and_prices() helpers below. `odds_for_side_fn(flag_id,
+    side) -> (over_odds, under_odds)`, props-only (None for every other
+    track): refreshes the log's own over_american_odds/under_american_odds
+    display columns on each run so the frontend's Odds column always shows
+    the platform's current line, not the price at first-flag time --
+    first_flagged_market_price/first_flagged_edge already preserve that
+    original snapshot for real CLV grading, so this does not touch CLV
+    math, only display."""
     log_df = existing_log.copy()
     log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
     existing_flag_ids_before_this_run = set(log_df["flag_id"]) if not log_df.empty else set()
@@ -685,6 +693,12 @@ def generic_process_run(
                 price = price_for_side_fn(flag_id, side)
                 if price is not None:
                     log_df.loc[flag_id, "last_seen_market_price"] = price
+                if odds_for_side_fn is not None:
+                    over_odds, under_odds = odds_for_side_fn(flag_id, side)
+                    if over_odds is not None:
+                        log_df.loc[flag_id, "over_american_odds"] = over_odds
+                    if under_odds is not None:
+                        log_df.loc[flag_id, "under_american_odds"] = under_odds
 
         # Close: any OPEN flag no longer present in this run's raw file
         # at all -- settled, delisted, or (politics) the race dropped
@@ -1157,6 +1171,8 @@ def build_props_present_and_prices(df: pd.DataFrame) -> tuple[set[str], dict[str
         rows_by_id[flag_id] = {
             "implied_prob_over": row.get("implied_prob_over"),
             "implied_prob_under": row.get("implied_prob_under"),
+            "over_american_odds": row.get("over_american_odds"),
+            "under_american_odds": row.get("under_american_odds"),
         }
     return present_ids, rows_by_id
 
@@ -1168,6 +1184,26 @@ def price_for_side_props(rows_by_id: dict) -> "callable":
             return None
         value = row.get("implied_prob_over") if side == "over" else row.get("implied_prob_under")
         return float(value) if value is not None and value == value else None  # NaN-safe
+    return _fn
+
+
+def odds_for_side_props(rows_by_id: dict) -> "callable":
+    """Same shape as price_for_side_props, but returns this run's raw
+    American odds for a flag's own side instead of an implied
+    probability -- used to refresh over_american_odds/under_american_odds
+    on an already-open flag so the frontend's Odds column reflects the
+    platform's current line, not the price at first-flag time (which
+    first_flagged_market_price/first_flagged_odds already preserve on
+    their own, by design, for CLV purposes)."""
+    def _fn(flag_id: str, side: str) -> tuple[Optional[float], Optional[float]]:
+        row = rows_by_id.get(flag_id)
+        if row is None:
+            return None, None
+        over = row.get("over_american_odds")
+        under = row.get("under_american_odds")
+        over = float(over) if over is not None and over == over else None
+        under = float(under) if under is not None and under == under else None
+        return over, under
     return _fn
 
 
@@ -1195,6 +1231,7 @@ def run_props(estimates_path: Optional[Path]) -> dict:
     updated_log = generic_process_run(
         "props", candidates, present_ids, price_for_side_props(rows_by_id), existing_log, run_pulled_at,
         CLV_LOG_COLUMNS_PROPS, PROPS_EXTRA_COLUMNS,
+        odds_for_side_fn=odds_for_side_props(rows_by_id),
     )
 
     newly_opened = int((updated_log["first_flagged_at"] == run_pulled_at).sum())
