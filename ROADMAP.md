@@ -2956,7 +2956,8 @@ part of the same 2026-09-10 venue-link work; confirmed directly in
 ---
 
 ### Session 6.9 — BetMGM Props Ingestion Feasibility & Build
-**Status:** Not started — added 2026-09-10 at the user's request.
+**Status:** ✅ Complete (no-go) — 2026-09-10. BetMGM dropped from scope;
+see SESSION_LOG.md for the full finding.
 
 **Prerequisites:** Session 6.1's precedent (DraftKings/FanDuel ingestion)
 and this project's standing due-diligence pattern for a brand-new venue —
@@ -2993,11 +2994,24 @@ pattern every other track has followed — not attempted in this
 feasibility session.
 
 **Validation (required to close this feasibility session):**
-- [ ] Explicit go/no-go, backed by a real, reproducible endpoint check
-(not a guess)
-- [ ] If go: real schema documented, real account-limiting research cited
-- [ ] If no-go: reason stated plainly, same as DK Pick6's Session 2.1
-Decision #1
+- [x] Explicit go/no-go, backed by a real, reproducible endpoint check
+(not a guess) — **NO-GO.** See Session 6.9 entry in SESSION_LOG.md.
+- [ ] If go: real schema documented, real account-limiting research cited —
+N/A, no-go.
+- [x] If no-go: reason stated plainly, same as DK Pick6's Session 2.1
+Decision #1 — a real, reachable, unauthenticated data endpoint exists
+(`cf-us4-cds-api.itsfogo.com`, BetMGM's real "CDS" sports-odds API, found
+via the real `clientconfig` boot call, same discovery method Session 6.1
+used for DraftKings), but it hard-gates every real request behind a
+`"Country code is missing"` 400 error that persisted even with a real
+US-Kansas IP and a real browser session/cookie set — confirmed as
+BetMGM's GeoComply device-geolocation layer (GPS/Wi-Fi/plugin-based,
+not simple IP geolocation), which a scripted HTTP client structurally
+cannot satisfy. Separately and independently, BetMGM's Terms of Use
+explicitly prohibit "using any robot, scraper, spider, or any other
+automatic device ... to monitor or copy any content" — a second, named,
+independent bar. **BetMGM is dropped from scope, no follow-up build
+session planned**, per this card's own stated go/no-go rule.
 
 ---
 
@@ -3755,6 +3769,19 @@ reproducible endpoint check first — see Session 2.1's DK Pick6 outcome),
 this is scoped as two separate feasibility sessions before any real build
 work. **Action needed:** Sessions 6.9 (BetMGM) and 6.10 (Caesars), both new,
 added this session.
+48. **Resolved (BetMGM half), Session 6.9 (2026-09-10). NO-GO.** A real,
+reachable, unauthenticated BetMGM data API exists (`cf-us4-cds-api.
+itsfogo.com`, discovered via the real `clientconfig` boot call the same
+way Session 6.1 found DraftKings' real API) but every real request is
+gated behind a `"Country code is missing"` error that persisted through a
+real US-Kansas IP and a real browser session/cookie set — this is
+BetMGM's GeoComply device-geolocation layer (GPS/Wi-Fi/plugin-based, not
+simple IP lookup), which a scripted client structurally cannot satisfy.
+BetMGM's Terms of Use also explicitly prohibit "any robot, scraper,
+spider" — an independent second bar. BetMGM is dropped from scope; no
+build session follows. Caesars (Session 6.10) is unaffected — must be
+checked independently, per this card's own note that findings don't carry
+over between platforms.
 
 ---
 *Update this file at the close of each future session, per the project's
