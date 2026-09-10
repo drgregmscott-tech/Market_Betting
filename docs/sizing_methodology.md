@@ -13,40 +13,55 @@ step, how `sizing_engine.py` turns two flagged legs into one suggested
 dollar stake — and states plainly which numbers in that chain are sourced
 facts and which are this project's own judgment calls.
 
-## 1. Scope — why only a 2-pick entry (PrizePicks or Underdog)
+## 1. Scope — all-or-nothing entries only, at each platform's own sourced leg counts
 
 A pick'em "entry" is not one leg — it's a group of legs (2 to 8, depending
 on the platform and entry type) that all have to hit together for a
 Power Play/Standard entry, or that pay out on a sliding scale for a Flex
 Play. Sizing real money against an entry requires knowing that entry's real
-payout multiplier. Session 2.5 sourced PrizePicks' number directly from
-PrizePicks' own published payout page: a 2-pick Power Play pays **3x** the
-stake if both legs hit. **Session 2.11** sourced Underdog's own number
-directly from Underdog's own published payout page
-(help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
-confirmed live 2026-09-10): a 2-pick Standard entry pays **3.5x** — a
-different number from PrizePicks', which is exactly why `sizing_engine.py`
-never assumed PrizePicks' 3x applied to Underdog too. No other entry size
-(3-pick, 4-pick, Flex, on either platform) has a confirmed real multiplier
-anywhere in this project's research yet.
+payout multiplier. Session 2.5 sourced PrizePicks' 2-pick number directly
+from PrizePicks' own published payout page (`prizepicks.com/ways-to-pick`):
+a 2-pick Power Play pays **3x** the stake if both legs hit. **Session
+2.11** sourced the rest of both platforms' own tables directly from each
+platform's own page (confirmed live 2026-09-10):
+
+| Legs | PrizePicks Power Play | Underdog Standard |
+|---|---|---|
+| 2 | 3.0x | 3.5x |
+| 3 | 6.0x | 6.5x |
+| 4 | 10.0x | 12.0x |
+| 5 | 20.0x | 20.0x |
+| 6 | 37.5x | 35.0x |
+| 7 | *(not published)* | 65.0x |
+| 8 | *(not published)* | 120.0x |
+
+Note the two platforms' numbers are genuinely different at almost every
+leg count (5 picks happens to tie at 20x) — this is exactly why
+`sizing_engine.py` looks up each entry's own (platform, leg count) pair
+rather than ever assuming one platform's number applies to the other.
+PrizePicks does not publish a Power Play multiplier past 6 picks; Underdog
+publishes to 8. Neither platform's **Flex** table (which still pays out
+after one or more misses, at a reduced multiplier) is sized — see Section
+2 for why that's a genuinely different math problem, not just a missing
+number.
 
 Rather than assume a multiplier for an unresearched entry type — which
 would mean sizing real money off an invented number — `sizing_engine.py`
-v1 only accepts exactly two open legs from ONE platform (PrizePicks or
-Underdog), sized against that platform's own real 2-pick payout. Every
-other combination (wrong leg count, an entry mixing legs from two
-different platforms, any platform other than PrizePicks/Underdog) is
-rejected outright, with the specific reason stated in the output. This
-mirrors Session 2.3's own NFL-only scoping decision: a named, stated
-boundary, not a silent one.
+v1 only accepts legs from ONE platform, at a leg count that platform's own
+table above covers, sized against that (platform, leg count) pair's real
+payout. Every other combination (an unsourced leg count, an entry mixing
+legs from two different platforms, any platform other than
+PrizePicks/Underdog, or a Flex-style entry) is rejected outright, with the
+specific reason stated in the output. This mirrors Session 2.3's own
+NFL-only scoping decision: a named, stated boundary, not a silent one.
 
-**What this means in practice:** if you have three or more real open flags
-you'd like to combine, or want to size a 3+ pick entry on either platform,
-this version of the tool will not do it — not because the underlying math
-couldn't be extended, but because the real payout number it would need
-doesn't exist yet in this project's research. Extending coverage to more
-entry types is a named candidate for a future session, not a gap this
-session tried to paper over.
+**What this means in practice:** a 7- or 8-pick entry on PrizePicks, or a
+Flex entry on either platform, still won't size — not because the
+underlying math couldn't be extended, but because the real payout number
+(or, for Flex, the real payout *shape*) it would need doesn't exist yet in
+this project's research/code. Extending coverage further is a named
+candidate for a future session, not a gap this session tried to paper
+over.
 
 ## 2. The sizing formula — Kelly criterion
 
@@ -59,13 +74,26 @@ f* = (p × (b + 1) − 1) / b
 ```
 
 For a 2-pick Power Play, `b = 2` (a $1 stake returns $3 total — $2 of
-profit — on a win). `p` is the entry's **combined** win probability: the
-two legs' individual model probabilities multiplied together, since both
-legs must hit. This treats the two legs as independent events. That's a
-real simplification — two legs from the *same* real game (e.g. a
+profit — on a win); other (platform, leg count) pairs use that pair's own
+`b` from the table above (e.g. a 4-pick PrizePicks entry: `b = 9`). `p` is
+the entry's **combined** win probability: every leg's individual model
+probability multiplied together, since ALL legs must hit for an
+all-or-nothing entry. This treats every leg as an independent event.
+That's a real simplification — two legs from the *same* real game (e.g. a
 quarterback's passing yards and his own team's leading receiver's
 receiving yards) are not fully independent in reality — and is stated here
-as a known limitation, not fixed in v1.
+as a known limitation, not fixed in v1 (see Section 4.5's caution
+dampener, which now checks every pair of legs in the entry, not just a
+single pair, since Session 2.11 allows more than two).
+
+**Note on Flex-style entries:** everything in this document describes an
+all-or-nothing entry, where the outcome is binary (every leg hits, or the
+entry loses everything). A Flex entry pays a *different* amount depending
+on exactly how many of N legs hit — it has more than two possible payout
+outcomes, so the Kelly formula above does not apply to it directly. Sizing
+Flex entries correctly would need a genuinely different, multi-outcome
+expected-value calculation, not just a different payout number — a real,
+named gap, not something this session guessed around.
 
 **Worked example:** two legs, each with a model probability of 0.70.
 Combined `p = 0.70 × 0.70 = 0.49`. With `b = 2`:
@@ -129,24 +157,26 @@ re-derived this session — only the gate that made it unreachable changed.
 
 ## 4.5. Same-game caution — flagging a modeling gap, not fixing it
 
-The Kelly formula above assumes the two legs are independent. When both
+The Kelly formula above assumes every leg is independent. When two or more
 legs come from the **same real game**, that assumption weakens — a
 blowout, an overtime, or an injury can move several players' stats
 together at once. This project has no real data on how strongly, or in
-which direction, same-game pairs actually move together for different
+which direction, same-game legs actually move together for different
 stat combinations, and manufacturing a "corrected" probability without
 that data would mean sizing real money off a guess.
 
-**Decision (discussed directly with the user during this session):**
+**Decision (discussed directly with the user during Session 2.6):**
 rather than leave this silently unaddressed, `sizing_engine.py` treats it
 as something to flag as riskier, not something to precisely model.
-Whenever both requested legs share the same real `game_id`,
-`SAME_GAME_CAUTION_MULTIPLIER = 0.85` is applied on top of every other
-adjustment, and the output reports `same_game_pair: True` so it's always
-visible when it happens — never a silent adjustment. This mirrors the
-Kelly fraction and PrizePicks dampener: a stated, direction-agnostic
-placeholder, not a derived number, and a real candidate for replacement
-once actual same-game correlation data exists to check it against.
+Whenever ANY two legs in the entry share the same real `game_id`
+(Session 2.11 generalized this from "both requested legs," since an entry
+can now have more than two), `SAME_GAME_CAUTION_MULTIPLIER = 0.85` is
+applied on top of every other adjustment, and the output reports
+`same_game_pair: True` so it's always visible when it happens — never a
+silent adjustment. This mirrors the Kelly fraction and PrizePicks
+dampener: a stated, direction-agnostic placeholder, not a derived number,
+and a real candidate for replacement once actual same-game correlation
+data exists to check it against.
 
 **Worked example, using two real flags pulled from the live `clv_log.csv`
 during this session's validation** (Drake Maye Pass+Rush Yards under 374.5,
@@ -193,8 +223,11 @@ sandbox cannot reach the real `clv_log.csv`.
 
 ## 7. What this does NOT do yet (stated gap, not silent)
 
-- No entry type other than the 2-pick PrizePicks Power Play is sized
-  (Section 1).
+- No Flex-style entry, on either platform, is sized (Section 1/2) — a
+  genuinely different, multi-outcome payout math problem, not just a
+  missing number.
+- No PrizePicks entry beyond 6 picks is sized — PrizePicks' own page does
+  not publish a Power Play number past 6 (Section 1).
 - Same-game legs are **flagged and given a caution dampener** (Section
   4.5), not precisely modeled — the true strength and direction of
   same-game correlation, per stat pair, remains unknown and unmodeled.

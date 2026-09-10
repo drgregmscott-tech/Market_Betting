@@ -38,14 +38,20 @@ const PROPS_DATA_URL = "data/props_clv_log.csv";
 // hand; there is no shared source of truth between the two, so this
 // block should be checked against the script whenever either changes.
 // ---------------------------------------------------------------------
-const SUPPORTED_LEG_COUNT = 2;
-// Session 2.11: both platforms now have a sourced 2-pick payout. PrizePicks'
-// 3x (Power Play) and Underdog's 3.5x (Standard entry, sourced live 2026-09-10
-// from help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts)
-// are NOT interchangeable -- see sizing_engine.py's "SESSION 2.11 ADDENDUM" docstring.
+// Session 2.11: both platforms' real, published all-or-nothing payout
+// tables (PrizePicks Power Play, Underdog Standard), keyed by leg count.
+// PrizePicks: prizepicks.com/ways-to-pick (max published: 6 picks).
+// Underdog: help.underdogsports.com/en/articles/13780101-pick-em-standard-
+// flex-entry-payouts (max published: 8 picks). NOT interchangeable between
+// platforms -- see sizing_engine.py's "SESSION 2.11 ADDENDUM" docstring.
+// Flex-style entries (pay out after a miss) are not supported -- see the
+// same docstring for why (not a simple win/lose bet).
 const SUPPORTED_PLATFORMS = new Set(["prizepicks", "underdog"]);
-const ENTRY_PAYOUT_MULTIPLIER = { prizepicks: 3.0, underdog: 3.5 };
-const ENTRY_NET_ODDS_B = { prizepicks: 2.0, underdog: 2.5 };
+const ENTRY_TYPE_NAME = { prizepicks: "Power Play", underdog: "Standard" };
+const PICKEM_ENTRY_PAYOUT = {
+  prizepicks: { 2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5 },
+  underdog: { 2: 3.5, 3: 6.5, 4: 12.0, 5: 20.0, 6: 35.0, 7: 65.0, 8: 120.0 },
+};
 const KELLY_FRACTION = 0.25;
 const PLATFORM_RISK_MULTIPLIER = { prizepicks: 0.70, underdog: 0.85 };
 const MAX_SINGLE_POSITION_PCT = 0.05;
@@ -419,13 +425,22 @@ function renderOpenTable(open) {
   });
 }
 
+// Session 2.11: entries can now go up to whichever platform's table
+// reaches furthest (Underdog: 8) rather than a fixed 2 -- evict the
+// oldest-selected leg only once even the largest supported entry is full,
+// so a user building a bigger entry doesn't get legs silently bumped
+// while still well under the real max.
+const MAX_SUPPORTED_LEG_COUNT = Math.max(
+  ...Object.values(PICKEM_ENTRY_PAYOUT).map((table) => Math.max(...Object.keys(table).map(Number)))
+);
+
 function onLegToggle(e, currentOpenRows) {
   const flagId = e.target.getAttribute("data-flag-id");
   const row = currentOpenRows.find((r) => r.flag_id === flagId);
   if (!row) return;
 
   if (e.target.checked) {
-    if (selectedLegs.size >= SUPPORTED_LEG_COUNT && !selectedLegs.has(flagId)) {
+    if (selectedLegs.size >= MAX_SUPPORTED_LEG_COUNT && !selectedLegs.has(flagId)) {
       const oldestKey = selectedLegs.keys().next().value;
       selectedLegs.delete(oldestKey);
     }
@@ -449,7 +464,7 @@ function renderSelectedLegs() {
   const wrap = document.getElementById("sizingSelectedLegs");
   if (!wrap) return;
   if (!selectedLegs.size) {
-    wrap.innerHTML = `<p class="empty-note">None selected. Check two flags (same platform) in the table above.</p>`;
+    wrap.innerHTML = `<p class="empty-note">None selected. Check 2 or more flags (same platform, at a leg count that platform supports — PrizePicks: 2-6, Underdog: 2-8) in the table above.</p>`;
     return;
   }
   wrap.innerHTML = Array.from(selectedLegs.values())
@@ -480,15 +495,25 @@ function renderSelectedLegs() {
 function sizeEntry(legs, bankroll) {
   const platforms = new Set(legs.map((l) => l.platform));
 
-  if (legs.length !== SUPPORTED_LEG_COUNT) {
-    return { status: "rejected", reason: `Select exactly ${SUPPORTED_LEG_COUNT} legs (a 2-pick entry) — currently ${legs.length} selected.` };
-  }
   if (platforms.size !== 1 || !SUPPORTED_PLATFORMS.has([...platforms][0])) {
     return {
       status: "rejected",
-      reason: `Only platform(s) ${[...SUPPORTED_PLATFORMS].join(", ")} are supported, one platform per entry (a 2-pick entry cannot mix legs from two different platforms) — selected leg(s) are from ${[...platforms].join(", ")}.`,
+      reason: `Only platform(s) ${[...SUPPORTED_PLATFORMS].join(", ")} are supported, one platform per entry (an entry's payout table applies to the whole entry, not per leg, so it cannot mix legs from two different platforms) — selected leg(s) are from ${[...platforms].join(", ")}.`,
     };
   }
+
+  const platform = legs[0].platform;
+  const payoutTable = PICKEM_ENTRY_PAYOUT[platform];
+  const legCount = legs.length;
+
+  if (!(legCount in payoutTable)) {
+    const supported = Object.keys(payoutTable).join(", ");
+    return {
+      status: "rejected",
+      reason: `${platform} only has a sourced payout for ${supported}-leg all-or-nothing (${ENTRY_TYPE_NAME[platform]}) entries — currently ${legCount} selected. Flex-style entries are not sized.`,
+    };
+  }
+
   for (const leg of legs) {
     if (toNum(leg.first_flagged_model_prob) === null) {
       return { status: "rejected", reason: `Flag ${leg.flag_id} has no model probability logged — cannot size it.` };
@@ -501,8 +526,8 @@ function sizeEntry(legs, bankroll) {
     return { status: "rejected", reason: `Bankroll must be at least $${MIN_BANKROLL}.` };
   }
 
-  const platform = legs[0].platform;
-  const netOddsB = ENTRY_NET_ODDS_B[platform];
+  const payoutMultiplier = payoutTable[legCount];
+  const netOddsB = payoutMultiplier - 1.0;
 
   const pCombined = legs.reduce((p, l) => p * toNum(l.first_flagged_model_prob), 1.0);
   const fRaw = (pCombined * (netOddsB + 1.0) - 1.0) / netOddsB;
@@ -510,8 +535,10 @@ function sizeEntry(legs, bankroll) {
 
   const dampener = PLATFORM_RISK_MULTIPLIER[platform];
 
-  const gameIds = new Set(legs.map((l) => l.game_id));
-  const sameGamePair = gameIds.size === 1;
+  // Session 2.11: flag ANY two legs sharing a game_id, not just "the" pair
+  // -- an entry can now have more than two legs.
+  const gameIdCounts = legs.map((l) => l.game_id);
+  const sameGamePair = new Set(gameIdCounts).size < gameIdCounts.length;
   const sameGameMultiplier = sameGamePair ? SAME_GAME_CAUTION_MULTIPLIER : 1.0;
 
   const fDampened = fQuarter * dampener * sameGameMultiplier;
@@ -534,7 +561,9 @@ function sizeEntry(legs, bankroll) {
   return {
     status,
     platform,
-    entryPayoutMultiplier: ENTRY_PAYOUT_MULTIPLIER[platform],
+    legCount,
+    entryType: `${legCount}-pick ${ENTRY_TYPE_NAME[platform]}`,
+    entryPayoutMultiplier: payoutMultiplier,
     combinedEntryProbability: pCombined,
     rawKellyFraction: fRaw,
     quarterKellyFraction: fQuarter,
@@ -593,7 +622,7 @@ function renderSizingResult() {
       <span class="sizing-stake-status">${statusLabel(result.status)}</span>
     </div>
     <div class="sizing-breakdown">
-      <div><span>Platform / payout</span><span>${escapeHtml(result.platform)} · ${result.entryPayoutMultiplier.toFixed(1)}×</span></div>
+      <div><span>Entry</span><span>${escapeHtml(result.entryType)} (${escapeHtml(result.platform)}) · ${result.entryPayoutMultiplier.toFixed(1)}×</span></div>
       <div><span>Combined entry probability</span><span>${(result.combinedEntryProbability * 100).toFixed(1)}%</span></div>
       <div><span>Raw Kelly fraction</span><span>${(result.rawKellyFraction * 100).toFixed(2)}%</span></div>
       <div><span>Quarter-Kelly fraction</span><span>${(result.quarterKellyFraction * 100).toFixed(2)}%</span></div>

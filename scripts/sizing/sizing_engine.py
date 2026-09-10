@@ -3,62 +3,77 @@ Session 2.6 -- Bankroll & Sizing Logic
 
 WHAT THIS SCRIPT IS
 --------------------
-Turns two open, flagged legs from Session 2.4's data/pickem/clv_log.csv into
-a concrete suggested stake for a real PrizePicks 2-pick Power Play entry --
-the one entry type this project has a real, sourced payout number for
-(Session 2.5, sample_size_methodology.md Section 2: 3x payout, 57.7% real
-per-leg breakeven win rate). This is the first place in the project where
-a probability estimate turns into an actual dollar suggestion, so every
-number this script produces is either sourced (the 3x payout) or an
-explicitly named, documented judgment call (the Kelly fraction, the
-platform dampener, the bankroll cap) -- never a guessed one.
+Turns two or more open, flagged legs from Session 2.4's
+data/pickem/clv_log.csv into a concrete suggested stake for a real,
+all-or-nothing pick'em entry (PrizePicks Power Play or Underdog Standard,
+whichever platform the legs are from) at any leg count that platform has a
+real, sourced payout number for -- see PICKEM_ENTRY_PAYOUT below. This is
+the first place in the project where a probability estimate turns into an
+actual dollar suggestion, so every number this script produces is either
+sourced (the payout multiplier) or an explicitly named, documented
+judgment call (the Kelly fraction, the platform dampener, the bankroll
+cap) -- never a guessed one.
 
 This script does NOT place any bet. Per ROADMAP.md's standing "flags and
 sizes, does not place bets" principle, it prints a suggested stake; a human
 decides whether to place it and reports the real outcome back through
 Session 2.5's outcome_tracker.py.
 
-WHY ONLY THE 2-PICK ENTRY, IN V1 (both platforms, as of Session 2.11)
-----------------------------------------------------------------------
+WHY ONLY ALL-OR-NOTHING ENTRIES, AT SOURCED LEG COUNTS ONLY
+----------------------------------------------------------------
 PrizePicks and Underdog both require 2+ legs to be combined into one
-all-or-nothing (or Flex) entry before a real payout multiplier applies.
-Session 2.5 sourced one real, confirmed payout number for PrizePicks: its
-standard 2-pick Power Play, 3x payout. No other PrizePicks entry size
-(3-pick, 4-pick, Flex) has been researched yet -- guessing at one here
-would mean sizing real money against an invented number, which this
-project does not do (see e.g. Session 2.3's refusal to guess at
-PrizePicks' Fantasy Score formula before confirming it against PrizePicks'
-own source). So v1 supports exactly one entry shape per platform: two open
-legs, sized as a 2-pick entry. Every other combination (wrong leg count,
-mixed platforms, or an unsupported platform) is rejected with an explicit,
-named status -- never silently sized using a number that was never
-confirmed.
+all-or-nothing (Power Play / Standard) or Flex entry before a real payout
+multiplier applies. Sizing real money against an entry requires knowing
+that entry's real payout multiplier -- guessing at one would mean sizing
+real money against an invented number, which this project does not do
+(see e.g. Session 2.3's refusal to guess at PrizePicks' Fantasy Score
+formula before confirming it against PrizePicks' own source). So v1
+supports exactly the leg counts named in `PICKEM_ENTRY_PAYOUT` below, per
+platform, and only the all-or-nothing entry type -- never Flex (see
+"WHAT THIS ADDITION DOES NOT DO YET"). Every other combination (an
+unsourced leg count, mixed platforms, or an unsupported platform) is
+rejected with an explicit, named status -- never silently sized using a
+number that was never confirmed.
 
-SESSION 2.11 ADDENDUM -- UNDERDOG'S OWN 2-PICK PAYOUT SOURCED AND WIRED IN
+SESSION 2.11 ADDENDUM -- BOTH PLATFORMS' REAL PAYOUT TABLES SOURCED AND WIRED IN
 ------------------------------------------------------------------------------
-Underdog was blocked from sizing entirely through Session 2.10 because no
-real Underdog payout multiplier had been sourced -- PrizePicks'
-`ENTRY_PAYOUT_MULTIPLIER = 3.0` is PrizePicks' own number, not a generic
-pick'em constant, and applying it to an Underdog entry would size against
-the wrong payout (Underdog's own Standard-entry table pays differently by
-pick count than PrizePicks' Power Play/Flex structure). This session
-sourced Underdog's real, current 2-pick Standard entry payout directly from
+Through Session 2.10, only PrizePicks' 2-pick Power Play (3x, Session 2.5)
+had a sourced payout, and Underdog was blocked from sizing entirely.
+Session 2.11 closed both gaps in one pass, once it became clear the same
+research effort needed to unblock Underdog's 2-pick entry (Underdog's own
+help article) would also answer "what about 3 through 8 picks, and what
+about PrizePicks' own larger entries" -- rather than doing that research
+twice.
+
+Underdog's real 2-pick Standard entry payout was sourced directly from
 Underdog's own official help article
 (help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
-"Standard Entries" table, confirmed live 2026-09-10): **3.5x**, not 3x.
-`ENTRY_PAYOUT_MULTIPLIER`, `ENTRY_NET_ODDS_B`, and `BREAKEVEN_WIN_RATE` are
-now per-platform dicts instead of single flat constants, and `size_entry()`
-looks up the requested entry's own platform's real payout rather than
-assuming PrizePicks' number applies everywhere. `PLATFORM_RISK_MULTIPLIER
+"Standard Entries" table, confirmed live 2026-09-10): **3.5x**, not
+PrizePicks' 3x -- confirming the two platforms' numbers are genuinely
+different and must never be conflated. The same article's table was used
+to source Underdog's 3- through 8-pick Standard payouts too. Separately,
+PrizePicks' own published Power Play table (prizepicks.com/ways-to-pick,
+confirmed live 2026-09-10, page states multipliers are "subject to
+change") sourced PrizePicks' own 3- through 6-pick payouts, which PrizePicks
+does not publish beyond.
+
+`PICKEM_ENTRY_PAYOUT` is now a per-platform dict of {leg_count: multiplier}
+(replacing the old flat `ENTRY_PAYOUT_MULTIPLIER` single-value-per-platform
+constants), and `size_entry()` looks up the requested entry's own
+(platform, leg_count) pair rather than assuming a single fixed leg count.
+`entry_net_odds_b()` and `breakeven_win_rate_per_leg()` compute the Kelly
+`b` and the per-leg breakeven from that same table generally (the per-leg
+breakeven is the Nth root of 1/multiplier -- at N=2 this reduces to exactly
+the 1/sqrt(M) figures already named in sample_size_methodology.md Section 2
+and in this session's own 2-pick sourcing). `PLATFORM_RISK_MULTIPLIER
 ["underdog"] = 0.85` (already present in the code since Session 2.6, but
 unreachable until this session removed the `SUPPORTED_PLATFORMS` gate) is
 unchanged -- it was already a stated, sourced-to-research-not-to-a-number
 judgment call, not something that needed re-deriving just because sizing
-became reachable. A 2-pick entry still cannot mix one PrizePicks leg with
-one Underdog leg -- the payout table applies to the whole entry, not
-per-leg, so `size_entry()` rejects any request whose legs span more than
-one platform, same as it always rejected a platform outside
-`SUPPORTED_PLATFORMS`.
+became reachable. An entry still cannot mix legs from two different
+platforms -- the payout table applies to the whole entry, not per-leg, so
+`size_entry()` rejects any request whose legs span more than one platform,
+same as it always rejected a platform outside `SUPPORTED_PLATFORMS`.
 
 THE SIZING METHOD -- FRACTIONAL KELLY, NAMED AND JUSTIFIED
 ---------------------------------------------------------------
@@ -68,14 +83,16 @@ hits):
 
     f* = (p * (b + 1) - 1) / b
 
-For a 2-pick Power Play, b = 2 (a $1 stake returns $3 total on a win --
-$2 of that is profit). p is the entry's combined win probability: this
-script multiplies the two legs' own model_prob values together
-(first_flagged_model_prob for each leg, from Session 2.3's model),
-treating the two legs as independent events -- a stated simplification
-(two different players/stats are a reasonable independence assumption;
-see sizing_methodology.md for the case where this could fail, e.g. two
-legs from the same game).
+For a 2-pick PrizePicks Power Play, b = 2 (a $1 stake returns $3 total on
+a win -- $2 of that is profit); other (platform, leg_count) pairs use that
+platform's own sourced b from PICKEM_ENTRY_PAYOUT. p is the entry's
+combined win probability: this script multiplies every leg's own
+model_prob value together (first_flagged_model_prob for each leg, from
+Session 2.3's model), treating all legs as independent events -- a stated
+simplification (different players/stats are a reasonable independence
+assumption; see sizing_methodology.md for the case where this could fail,
+e.g. two legs from the same game -- see SAME-GAME CAUTION below, which now
+checks every pair of legs in an entry, not just a single pair).
 
 Full Kelly is never staked directly. This script applies
 KELLY_FRACTION = 0.25 (quarter-Kelly) -- a standard, named, conservative
@@ -106,28 +123,30 @@ gives one -- flagged explicitly, same as every other placeholder in this
 project.
 
 As of Session 2.11, Underdog IS sized (see "SESSION 2.11 ADDENDUM" above --
-its own real, sourced 2-pick Standard payout is now wired into
-ENTRY_PAYOUT_MULTIPLIER). PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85
-remains the same stated, unsourced-to-a-specific-number judgment call it
-was when first added in Session 2.6 -- only the payout-table gate that
-kept it unreachable has changed, not the dampener figure itself.
+its own real, sourced payout table is now wired into PICKEM_ENTRY_PAYOUT).
+PLATFORM_RISK_MULTIPLIER["underdog"] = 0.85 remains the same stated,
+unsourced-to-a-specific-number judgment call it was when first added in
+Session 2.6 -- only the payout-table gate that kept it unreachable has
+changed, not the dampener figure itself.
 
 SAME-GAME CAUTION DAMPENER -- FLAGGING, NOT MODELING, A REAL CORRELATION GAP
 ------------------------------------------------------------------------------
 Kelly's formula (and the combined-probability multiplication above it)
-assumes the two legs are independent events. When both legs come from the
-SAME real game (same game_id), that assumption is weaker: a blowout, an
-overtime, or a key injury can move several players' stats in the same
-direction at once. This project does not have real correlation data to
-model that properly yet, and manufacturing a number to "correct" for it
-would mean sizing real money off a guess -- exactly what this project does
-not do (see Session 2.3's refusal to guess at an unconfirmed scoring
-formula, or the PrizePicks dampener discussion above).
+assumes every leg is an independent event. When two (or more) legs in the
+same entry come from the SAME real game (same game_id), that assumption is
+weaker: a blowout, an overtime, or a key injury can move several players'
+stats in the same direction at once. This project does not have real
+correlation data to model that properly yet, and manufacturing a number to
+"correct" for it would mean sizing real money off a guess -- exactly what
+this project does not do (see Session 2.3's refusal to guess at an
+unconfirmed scoring formula, or the PrizePicks dampener discussion above).
 
 Rather than silently ignore this or invent a precise correction, this
 script applies one more small, explicitly named dampener,
-SAME_GAME_CAUTION_MULTIPLIER = 0.85, whenever both requested legs share a
-game_id -- and reports it plainly in the output (same_game_pair: True,
+SAME_GAME_CAUTION_MULTIPLIER = 0.85, whenever ANY two legs in the entry
+share a game_id (Session 2.11 generalized this check from "the two legs"
+to "any pair of legs," since an entry can now have more than two) -- and
+reports it plainly in the output (same_game_pair: True,
 same_game_caution_applied: True) so it is visible whenever it happens,
 never a hidden adjustment. This is a deliberate, direction-agnostic choice:
 same-game correlation could in reality make the true combined probability
@@ -153,13 +172,25 @@ here, not left as a documentation-only rule.
 
 WHAT THIS SCRIPT DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------
-- Does not size any entry type other than a 2-pick entry on PrizePicks
-  (Power Play) or Underdog (Standard) -- see above. No 3-pick/4-pick/Flex
-  entry size, on either platform, has a sourced payout wired in yet.
-- Does not account for correlation between two legs from the SAME real
-  game (e.g. a QB's passing yards and his team's leading WR's receiving
-  yards in the same game are not fully independent events) -- the combined
-  probability is a straight product, a stated simplification.
+- Does not size Flex-style entries on either platform (entries that still
+  pay out, at a reduced multiplier, after one or more misses). Flex's
+  payout is not a simple two-outcome win/lose bet -- it pays a different
+  amount depending on exactly how many of N legs hit, so the win/lose
+  Kelly formula used throughout this file does not apply to it without a
+  genuinely different (multi-outcome expected-value) formulation. A named
+  candidate for a future session, not guessed at here.
+- Does not size any PrizePicks entry beyond 6 legs, since PrizePicks' own
+  page (prizepicks.com/ways-to-pick) does not publish a Power Play number
+  past 6 picks. Underdog's own table goes to 8 (its own page publishes
+  that far), so PICKEM_ENTRY_PAYOUT's two platforms have genuinely
+  different supported ranges -- not a bug, a reflection of what each
+  platform actually publishes.
+- Does not account for correlation between legs from the SAME real game
+  (e.g. a QB's passing yards and his team's leading WR's receiving yards
+  in the same game are not fully independent events) -- the combined
+  probability is a straight product across all legs, a stated
+  simplification, flagged (not corrected) by SAME_GAME_CAUTION_MULTIPLIER
+  above.
 - Does not track a running bankroll balance across multiple suggested
   entries placed over time -- each run is a single, independent
   suggestion against the bankroll figure supplied on that run. A real
@@ -624,29 +655,52 @@ WEATHER_CLV_LOG_PATH = BASE_DIR / "data" / "weather" / "clv_log.csv"
 # factors" documentation standard. See module docstring for full reasoning
 # on each one.
 # ---------------------------------------------------------------------------
-SUPPORTED_ENTRY_TYPE = "2-pick Standard/Power Play"
-SUPPORTED_LEG_COUNT = 2
+ENTRY_TYPE_NAME = {"prizepicks": "Power Play", "underdog": "Standard"}
 
-# Session 2.11: two-platform payout table, sourced separately per platform --
-# these are NOT interchangeable (see docstring "SESSION 2.11 ADDENDUM").
-# PrizePicks: own published 2-pick Power Play payout (sample_size_methodology.md
-# Section 2). Underdog: own published 2-pick Standard entry payout, confirmed
-# live 2026-09-10 directly against Underdog's own help article
-# (help.underdogsports.com/en/articles/13780101-pick-em-standard-flex-entry-payouts,
-# "Standard Entries" table: "2-pick standard entry: 3.5x").
-ENTRY_PAYOUT_MULTIPLIER = {
-    "prizepicks": 3.0,
-    "underdog": 3.5,
+# Session 2.11 sourced the 2-pick number for each platform; Session 2.11's
+# same-day follow-up extended this to every all-or-nothing leg count each
+# platform has a REAL, PUBLISHED number for. These two tables are NOT
+# interchangeable (see docstring "SESSION 2.11 ADDENDUM") -- each key is a
+# leg count, each value is that platform's own published payout multiplier
+# for an entry of exactly that many legs, ALL of which must hit (Power
+# Play / Standard). Flex-style entries (which still pay out after one or
+# more misses, at a lower multiplier) are a genuinely different payout
+# shape -- not a simple two-outcome win/lose bet, so Kelly as implemented
+# here does not apply to them without real rework -- and are explicitly
+# NOT sized by this script (see "WHAT THIS ADDITION DOES NOT DO YET" in
+# the docstring addendum below).
+#
+# PrizePicks Power Play -- sourced directly from prizepicks.com/ways-to-pick
+# (PrizePicks' own page; the page itself states multipliers are "subject to
+# change"), confirmed 2026-09-10. The 2-pick figure (3.0x) matches Session
+# 2.5's own independently-sourced number (sample_size_methodology.md
+# Section 2).
+PICKEM_ENTRY_PAYOUT = {
+    "prizepicks": {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5},
+    # Underdog Standard entry -- sourced directly from Underdog's own help
+    # article (help.underdogsports.com/en/articles/13780101-pick-em-standard-
+    # flex-entry-payouts, "Standard Entries" table), confirmed live
+    # 2026-09-10.
+    "underdog": {2: 3.5, 3: 6.5, 4: 12.0, 5: 20.0, 6: 35.0, 7: 65.0, 8: 120.0},
 }
-# b in the Kelly formula (profit per $1 staked on a win), per platform.
-ENTRY_NET_ODDS_B = {plat: mult - 1.0 for plat, mult in ENTRY_PAYOUT_MULTIPLIER.items()}
-# Per-leg breakeven win rate for an equal-probability 2-leg entry: 1/sqrt(M).
-# PrizePicks: sample_size_methodology.md Section 2 -- sqrt(1/3) = 0.5774.
-# Underdog: sqrt(1/3.5) = 0.5345, derived the same way from the sourced 3.5x above.
-BREAKEVEN_WIN_RATE = {
-    "prizepicks": 0.5774,
-    "underdog": 0.5345,
-}
+
+
+def entry_net_odds_b(platform: str, leg_count: int) -> float:
+    """b in the Kelly formula (profit per $1 staked on a win) for a given
+    platform's own sourced payout at this leg count."""
+    return PICKEM_ENTRY_PAYOUT[platform][leg_count] - 1.0
+
+
+def breakeven_win_rate_per_leg(platform: str, leg_count: int) -> float:
+    """Per-leg breakeven win rate for an equal-probability N-leg
+    all-or-nothing entry: the Nth root of 1/payout_multiplier. For N=2 this
+    reduces to the same 1/sqrt(M) figure named explicitly in Session 2.5's
+    sample_size_methodology.md (PrizePicks: sqrt(1/3) = 0.5774; Underdog:
+    sqrt(1/3.5) = 0.5345) -- computed generally here so it stays correct at
+    every other sourced leg count too, rather than hand-deriving one figure
+    per (platform, leg_count) pair."""
+    multiplier = PICKEM_ENTRY_PAYOUT[platform][leg_count]
+    return multiplier ** (-1.0 / leg_count)
 
 KELLY_FRACTION = 0.25  # quarter-Kelly -- stated placeholder, see docstring
 
@@ -847,32 +901,41 @@ def raw_kelly_fraction(p: float, b: float) -> float:
 
 
 def size_entry(legs: list[dict], bankroll: float) -> dict:
-    """Runs the full sizing pipeline for one 2-pick Power Play entry and
-    returns a fully-explained result dict -- every intermediate number is
-    included, not just the final stake, so a manual sanity check never
-    requires re-deriving the math by hand."""
+    """Runs the full sizing pipeline for one all-or-nothing pick'em entry
+    (PrizePicks Power Play or Underdog Standard, whichever platform the
+    legs are from, at whatever leg count that platform has a real, sourced
+    payout for -- see PICKEM_ENTRY_PAYOUT) and returns a fully-explained
+    result dict -- every intermediate number is included, not just the
+    final stake, so a manual sanity check never requires re-deriving the
+    math by hand."""
     platforms = {leg.get("platform") for leg in legs}
-
-    if len(legs) != SUPPORTED_LEG_COUNT:
-        return _rejected(
-            f"sizing_engine v1 only supports exactly {SUPPORTED_LEG_COUNT} legs "
-            f"({SUPPORTED_ENTRY_TYPE}) -- received {len(legs)}."
-        )
 
     if len(platforms) != 1 or not platforms.issubset(SUPPORTED_PLATFORMS):
         return _rejected(
             f"sizing_engine v1 only supports platform(s) {sorted(SUPPORTED_PLATFORMS)}, "
-            f"one platform per entry (a 2-pick entry cannot mix legs from two "
+            f"one platform per entry (an entry's payout table applies to the "
+            f"whole entry, not per leg, so it cannot mix legs from two "
             f"different platforms) -- received leg(s) from {sorted(platforms)}."
+        )
+
+    platform = legs[0]["platform"]
+    payout_table = PICKEM_ENTRY_PAYOUT[platform]
+    leg_count = len(legs)
+
+    if leg_count not in payout_table:
+        return _rejected(
+            f"sizing_engine v1 only supports {sorted(payout_table)}-leg all-or-nothing "
+            f"({ENTRY_TYPE_NAME[platform]}) entries on {platform} -- received {leg_count} "
+            f"legs. Flex-style entries (which pay out after a miss) are not sized -- "
+            f"see docstring."
         )
 
     if bankroll < MIN_BANKROLL:
         return _rejected(f"--bankroll must be at least {MIN_BANKROLL}, got {bankroll}.")
 
-    platform = legs[0]["platform"]
-    payout_multiplier = ENTRY_PAYOUT_MULTIPLIER[platform]
-    net_odds_b = ENTRY_NET_ODDS_B[platform]
-    breakeven_win_rate = BREAKEVEN_WIN_RATE[platform]
+    payout_multiplier = payout_table[leg_count]
+    net_odds_b = entry_net_odds_b(platform, leg_count)
+    breakeven_win_rate = breakeven_win_rate_per_leg(platform, leg_count)
 
     p_combined = combined_entry_probability(legs)
     f_raw = raw_kelly_fraction(p_combined, net_odds_b)
@@ -880,8 +943,8 @@ def size_entry(legs: list[dict], bankroll: float) -> dict:
 
     dampener = PLATFORM_RISK_MULTIPLIER[platform]
 
-    game_ids = {leg.get("game_id") for leg in legs}
-    same_game_pair = len(game_ids) == 1
+    game_ids = [leg.get("game_id") for leg in legs]
+    same_game_pair = len(set(game_ids)) < len(game_ids)  # True if ANY two legs share a game_id
     same_game_multiplier = SAME_GAME_CAUTION_MULTIPLIER if same_game_pair else 1.0
 
     f_dampened = f_quarter * dampener * same_game_multiplier
@@ -901,7 +964,8 @@ def size_entry(legs: list[dict], bankroll: float) -> dict:
 
     return {
         "status": status,
-        "entry_type": SUPPORTED_ENTRY_TYPE,
+        "entry_type": f"{leg_count}-pick {ENTRY_TYPE_NAME[platform]}",
+        "leg_count": leg_count,
         "platform": platform,
         "leg_flag_ids": [leg["flag_id"] for leg in legs],
         "leg_model_probs": [float(leg["first_flagged_model_prob"]) for leg in legs],
@@ -1845,15 +1909,19 @@ if __name__ == "__main__":
 
     # -- pickem (Session 2.6, unchanged behavior, now under a subcommand) --
     pickem_parser = subparsers.add_parser(
-        "pickem", help=f"Size a {SUPPORTED_ENTRY_TYPE} entry from data/pickem/clv_log.csv."
+        "pickem",
+        help="Size an all-or-nothing pick'em entry (PrizePicks Power Play or "
+        "Underdog Standard) from data/pickem/clv_log.csv.",
     )
     pickem_parser.add_argument(
         "--flag-ids",
         type=str,
         nargs="+",
         required=True,
-        help=f"Exactly {SUPPORTED_LEG_COUNT} flag_id values from data/pickem/clv_log.csv "
-        f"to combine into one {SUPPORTED_ENTRY_TYPE} (e.g. --flag-ids "
+        help="2 or more flag_id values from data/pickem/clv_log.csv, all from the "
+        "SAME platform, at a leg count that platform has a sourced payout for "
+        f"(PrizePicks: {sorted(PICKEM_ENTRY_PAYOUT['prizepicks'])}; Underdog: "
+        f"{sorted(PICKEM_ENTRY_PAYOUT['underdog'])}) (e.g. --flag-ids "
         f'"prizepicks|123" "prizepicks|456").',
     )
     pickem_parser.add_argument(

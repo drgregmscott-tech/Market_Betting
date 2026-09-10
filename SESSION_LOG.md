@@ -7878,3 +7878,99 @@ just a re-check to run the next time that real condition is met (same
 posture as several of this project's other "real data hasn't caught up
 yet" deferrals, e.g. Session 2.4's cross-platform consensus gap).
 
+**Same-day scope extension (2026-09-10, at the user's request):** the user
+asked, after reviewing the above, whether extending sizing beyond 2 legs
+could be folded into this same session — both PrizePicks and Underdog
+support larger all-or-nothing entries (PrizePicks Power Play up to 6
+picks; Underdog Standard up to 8), and the 2-leg-only scope was a stated
+v1 boundary from Session 2.6, not a hard limit of the underlying Kelly
+math.
+
+1. **Sourced both platforms' complete published payout tables, not just
+2-pick.** PrizePicks' own page (`prizepicks.com/ways-to-pick`, fetched
+directly, page states multipliers are "subject to change"): 3-pick 6.0x,
+4-pick 10.0x, 5-pick 20.0x, 6-pick 37.5x (PrizePicks does not publish
+past 6). Underdog's same help article used earlier in this session
+already covered 3- through 8-pick Standard entries: 3-pick 6.5x, 4-pick
+12.0x, 5-pick 20.0x, 6-pick 35.0x, 7-pick 65.0x, 8-pick 120.0x. Noted
+directly: the two platforms' numbers are genuinely different at almost
+every leg count (5-pick happens to tie at 20.0x) — real confirmation that
+looking up each entry's own (platform, leg count) pair, rather than ever
+assuming one platform's table applies to the other, was the right design
+from the start of this session.
+
+2. **`sizing_engine.py` generalized from flat per-platform constants to a
+per-(platform, leg-count) lookup table**, `PICKEM_ENTRY_PAYOUT`. Added
+`entry_net_odds_b()` and `breakeven_win_rate_per_leg()` as small functions
+(rather than pre-computed dicts) since the per-leg breakeven is genuinely
+a function of leg count (`multiplier ** (-1/n)`), not just of platform —
+at n=2 this reduces to exactly the same 0.5774/0.5345 figures already
+named earlier in this session and in Session 2.5's own
+`sample_size_methodology.md`. `size_entry()`'s leg-count check changed
+from an exact-equality check against a fixed constant to a table-membership
+check (`leg_count not in payout_table`), so any leg count either
+platform's own table doesn't cover (1 leg; 7-8 on PrizePicks) is still
+correctly rejected with a specific reason. The same-game caution check was
+also generalized from "the two legs share a game_id" to "any two legs in
+the entry share a game_id," since an entry can now have more than two.
+
+3. **`frontend/app.js` updated to match** — `PICKEM_ENTRY_PAYOUT` mirrors
+the Python dict by hand (same pre-existing no-shared-source-of-truth
+constraint as this session's first pass), `MAX_SUPPORTED_LEG_COUNT` (8,
+derived from the tables rather than hardcoded) replaces the old fixed
+2-leg eviction cap in `onLegToggle()`, and the sizing result panel now
+shows the real entry type (e.g. "4-pick Power Play") alongside the payout
+multiplier used.
+
+4. **Regression-tested against real live data again**, not just synthetic
+fixtures. Ran `sizing_engine.py pickem` against three real,
+currently-open PrizePicks legs pulled live from `clv_log.csv`
+(`prizepicks|13957672`, `prizepicks|13957680`, `prizepicks|13957679`):
+correctly resolved to `entry_type: "3-pick Power Play"`, used the 3-pick
+table's real 6.0x payout (not 2-pick's 3.0x), and produced a real,
+sensible result (`$39.71` uncapped, capped to `$25.00`). Added two new
+synthetic tests, `test_5b_prizepicks_3_through_6_pick_sized` and
+`test_5c_underdog_7_and_8_pick_sized`, confirming every other newly-
+supported leg count uses its own real payout, not a neighboring leg
+count's. Rewrote `test_5_wrong_leg_count_rejected` (previously "1 or 3
+legs are both rejected," now stale since 3 legs is valid) to instead
+check leg counts genuinely outside every platform's range: 1 leg, and 9
+legs on PrizePicks (above its published 6-pick max). All 27 tests in
+`test_sizing_engine.py` now pass; `node --check frontend/app.js` still
+reports no syntax errors.
+
+5. **`docs/sizing_methodology.md` updated again** — Section 1 now carries
+the full two-platform payout table (not just the 2-pick row), Section 2
+explains the Kelly formula generally (`b` varies by leg count, not just
+platform) and adds an explicit note on why Flex-style entries are NOT
+sized (a genuinely different, multi-outcome payout shape, not solvable
+with the same win/lose Kelly formula), Section 4.5's same-game caution
+description was generalized to "any two legs," and Section 7's stated-gaps
+list was updated to name Flex and PrizePicks' 7+-pick gap specifically
+instead of a blanket "only 2-pick" statement that was no longer true.
+
+**Files touched, this extension:**
+- `scripts/sizing/sizing_engine.py` — `PICKEM_ENTRY_PAYOUT`,
+`entry_net_odds_b()`, `breakeven_win_rate_per_leg()` replace the flat
+per-platform constants; `size_entry()` and the same-game check
+generalized; CLI help text updated; docstring rewritten again.
+- `scripts/sizing/test_sizing_engine.py` — two new tests
+(`test_5b`/`test_5c`); `test_5_wrong_leg_count_rejected` rewritten for the
+new valid range.
+- `frontend/app.js` — `PICKEM_ENTRY_PAYOUT`, `MAX_SUPPORTED_LEG_COUNT`,
+generalized `sizeEntry()` and same-game check, sizing result panel shows
+entry type.
+- `docs/sizing_methodology.md` — Sections 1, 2, 4.5, and 7 updated for the
+full leg-count range.
+- `ROADMAP.md` — Session 2.11 card's "What gets built" and validation
+checklist extended in place (same session, not a new session number).
+
+**What this extension explicitly does NOT do (stated gap, not silent):**
+Flex-style entries remain unsized on both platforms — paying out after a
+miss is a genuinely different (multi-outcome) payout shape than the
+win/lose Kelly formula this file implements, not simply a missing number,
+and would need real additional design work, not a quick table lookup.
+PrizePicks entries beyond 6 picks remain unsized because PrizePicks itself
+does not publish a number past 6. Neither is a silent omission — both are
+named explicitly in the code's docstring and in `sizing_methodology.md`.
+

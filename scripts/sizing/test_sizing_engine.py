@@ -23,7 +23,8 @@ handoff. Six scenarios:
 from __future__ import annotations
 
 from sizing_engine import (
-    ENTRY_NET_ODDS_B,
+    PICKEM_ENTRY_PAYOUT,
+    entry_net_odds_b,
     KALSHI_FEE_RATE,
     KELLY_FRACTION,
     MAX_SINGLE_POSITION_PCT,
@@ -128,18 +129,48 @@ def test_4b_underdog_sized_with_own_payout():
 
 
 def test_5_wrong_leg_count_rejected():
+    """Session 2.11 extended sizing to 3-8 legs (per-platform, see
+    PICKEM_ENTRY_PAYOUT), so this test now checks leg counts OUTSIDE any
+    platform's sourced range: 1 leg (below every platform's minimum) and
+    9 legs on PrizePicks (above its published max of 6)."""
     bankroll = 1000.0
     one_leg = [make_leg("prizepicks|11", "prizepicks", 0.70)]
-    three_legs = [
-        make_leg("prizepicks|12", "prizepicks", 0.70),
-        make_leg("prizepicks|13", "prizepicks", 0.70),
-        make_leg("prizepicks|14", "prizepicks", 0.70),
-    ]
+    nine_legs = [make_leg(f"prizepicks|2{i}", "prizepicks", 0.70) for i in range(9)]
     result_one = size_entry(one_leg, bankroll)
-    result_three = size_entry(three_legs, bankroll)
+    result_nine = size_entry(nine_legs, bankroll)
     assert result_one["status"] == "rejected", result_one
-    assert result_three["status"] == "rejected", result_three
-    print(f"PASS test_5: 1-leg and 3-leg requests both correctly rejected")
+    assert result_nine["status"] == "rejected", result_nine
+    print(f"PASS test_5: 1-leg and 9-leg (PrizePicks) requests both correctly rejected")
+
+
+def test_5b_prizepicks_3_through_6_pick_sized():
+    """Session 2.11: PrizePicks' own published Power Play table (3, 4, 5, 6
+    picks) is sized correctly, using that leg count's own real multiplier."""
+    bankroll = 1000.0
+    for n, expected_multiplier in [(3, 6.0), (4, 10.0), (5, 20.0), (6, 37.5)]:
+        legs = [
+            make_leg(f"prizepicks|p{n}_{i}", "prizepicks", 0.75, game_id=f"g{i}")
+            for i in range(n)
+        ]
+        result = size_entry(legs, bankroll)
+        assert result["status"] in ("sized", "sized_capped_at_max_position"), (n, result)
+        assert result["entry_payout_multiplier"] == expected_multiplier, (n, result)
+    print("PASS test_5b: PrizePicks 3/4/5/6-pick entries each sized at their own real payout")
+
+
+def test_5c_underdog_7_and_8_pick_sized():
+    """Session 2.11: Underdog's own published Standard table extends to 8
+    picks (further than PrizePicks' 6) -- confirm both extra leg counts."""
+    bankroll = 1000.0
+    for n, expected_multiplier in [(7, 65.0), (8, 120.0)]:
+        legs = [
+            make_leg(f"underdog|u{n}_{i}", "underdog", 0.75, game_id=f"g{i}")
+            for i in range(n)
+        ]
+        result = size_entry(legs, bankroll)
+        assert result["status"] in ("sized", "sized_capped_at_max_position"), (n, result)
+        assert result["entry_payout_multiplier"] == expected_multiplier, (n, result)
+    print("PASS test_5c: Underdog 7/8-pick entries each sized at their own real payout")
 
 
 def test_6_closed_leg_status_check():
@@ -192,7 +223,7 @@ def test_manual_kelly_math_sanity_check():
     size_entry()'s own code path -- same verification discipline Session
     2.3 used for the Kicking Points / Fantasy Score formulas."""
     p = 0.70 * 0.70  # = 0.49
-    b = ENTRY_NET_ODDS_B["prizepicks"]  # 2.0
+    b = entry_net_odds_b("prizepicks", 2)  # 2.0
     f_star_expected = (p * (b + 1) - 1) / b  # hand formula
     f_star_actual = raw_kelly_fraction(p, b)
     assert abs(f_star_expected - f_star_actual) < 1e-9, (f_star_expected, f_star_actual)
@@ -480,6 +511,8 @@ if __name__ == "__main__":
     test_4_mixed_platform_rejected()
     test_4b_underdog_sized_with_own_payout()
     test_5_wrong_leg_count_rejected()
+    test_5b_prizepicks_3_through_6_pick_sized()
+    test_5c_underdog_7_and_8_pick_sized()
     test_6_closed_leg_status_check()
     test_7_same_game_pair_gets_extra_dampener()
     test_manual_kelly_math_sanity_check()

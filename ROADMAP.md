@@ -1227,11 +1227,16 @@ rather than treating the new data as automatic grounds for rescoping).
 
 ### Session 2.11 — Underdog Payout Multiplier & Sizing Support (Pick'em)
 **Status:** ⚠️ Complete with caveats (2026-09-10) — see SESSION_LOG.md for
-full detail. Underdog's real payout is sourced and wired into both
+full detail. Underdog's real 2-pick payout is sourced and wired into both
 `sizing_engine.py` and the frontend; regression-tested against real
-PrizePicks data and a synthetic Underdog fixture. Not verified against a
-real, currently-open Underdog 2-leg entry (see caveat below) — a real data
-gap, not a code gap.
+PrizePicks data and a synthetic Underdog fixture. **Same-day scope
+extension, at the user's request:** both platforms' full published
+all-or-nothing payout tables were sourced and wired in too (PrizePicks:
+2-6 picks; Underdog: 2-8 picks) — not just the 2-pick number — since the
+same research effort needed to unblock Underdog's 2-pick entry also
+answered "what about more picks" for both platforms at once. Not verified
+against a real, currently-open Underdog 2-leg entry (see caveat below) —
+a real data gap, not a code gap.
 
 **Prerequisites:** None new — Underdog's data has been fully ingested and
 flowing into `data/pickem/clv_log.csv` since Session 2.1/2.2 (confirmed
@@ -1262,6 +1267,16 @@ noting it is "NOT currently reachable" until this session happens.
    in the browser, not just flagged.
 4. Re-validate: run the sizing tool against a real, currently open Underdog
    row and confirm the output payout/edge numbers match Underdog's own app.
+5. **(Added same-day, at the user's request):** source and wire in each
+   platform's FULL published all-or-nothing table, not just 2-pick —
+   PrizePicks' Power Play (3-6 picks; PrizePicks does not publish past 6)
+   and Underdog's Standard entry (3-8 picks) — generalizing
+   `sizing_engine.py`/`app.js` from a fixed 2-leg assumption to a
+   per-(platform, leg-count) payout lookup. Explicitly does NOT include
+   Flex-style entries on either platform (a genuinely different,
+   multi-outcome payout shape — not sizeable with the same win/lose Kelly
+   formula without real additional work — see `sizing_methodology.md`
+   Section 2).
 
 **Validation (required to close session):**
 - [x] Underdog's real payout table sourced and cited (not guessed) —
@@ -1297,6 +1312,27 @@ high-combined-probability pair — `$69.85` uncapped, capped to `$25.00`
 (5% of a $500 bankroll) — confirming the PrizePicks math path (payout
 3.0x, dampener 0.70) is byte-for-byte unchanged by the platform-branching
 refactor.
+- [x] **(Extension)** Both platforms' full leg-count tables sourced and
+cited from each platform's own page (PrizePicks: `prizepicks.com/ways-to-pick`;
+Underdog: same help article as above), confirmed live 2026-09-10.
+- [x] **(Extension)** `sizing_engine.py` sizes a real, live 3-leg PrizePicks
+entry correctly — confirmed against three real, currently-open PrizePicks
+legs pulled live from `clv_log.csv` (`prizepicks|13957672`,
+`prizepicks|13957680`, `prizepicks|13957679`): correctly used the 3-pick
+6.0x payout (not 2-pick's 3.0x), produced `entry_type: "3-pick Power Play"`
+and a real, positive suggested stake ($25.00, capped).
+- [x] **(Extension)** Synthetic coverage added for every other newly-supported
+leg count (PrizePicks 4/5/6; Underdog 3/7/8) confirming each uses its own
+platform-and-leg-count-specific payout, not a neighboring one
+(`test_5b_prizepicks_3_through_6_pick_sized`,
+`test_5c_underdog_7_and_8_pick_sized`, `test_sizing_engine.py`) — real,
+live multi-leg Underdog data is not available yet, same gap named above.
+- [x] **(Extension)** Same-game caution check generalized correctly —
+confirmed via `test_7` (still 2-leg) plus manual reasoning: the dampener
+now fires whenever ANY two legs in an N-leg entry share a game_id, not
+only when a 2-leg entry's single pair does.
+- [x] **(Extension)** All 27 tests in `test_sizing_engine.py` pass;
+`node --check frontend/app.js` reports no syntax errors.
 
 ---
 
