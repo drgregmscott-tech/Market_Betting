@@ -8257,10 +8257,75 @@ independently** — this finding is BetMGM-specific (its GeoComply
 implementation and its specific ToS language); the roadmap card's own
 existing instruction not to assume it carries over stands.
 
-**Open items / deferred validations:** None. This session closes clean —
-the no-go is the complete, final answer for BetMGM under this project's
-standing practice, not a partial result waiting on external conditions
-(contrast with Session 6.8's FanDuel finding, which is open pending
-nflverse's 2026 data maturing).
+**Open items / deferred validations:** None on the original question (see
+correction below).
+
+---
+
+### Session 6.9 correction — how Rotowire displays BetMGM odds without
+tripping GeoComply (2026-09-10, same day)
+
+**The user correctly pushed back on the "closed clean" claim above**:
+Rotowire (`rotowire.com/betting/mlb/odds`) visibly displays real BetMGM
+odds today, which looks like it contradicts the no-go. This needed a real
+answer, not an assumption, before the session could actually close.
+
+**Investigated directly, real evidence:**
+1. Pulled Rotowire's real odds page and its real linked JS bundles
+(`betting.min.js`, `tables.min.js`) via `curl`. Found no client-side call
+to any BetMGM domain, and no embedded odds JSON in the page's own HTML —
+the odds table Rotowire's browser renders is populated some other way
+than "the visitor's browser calls BetMGM directly," which is the first
+real clue this isn't the same mechanism this session tested.
+2. Web search (cited below) on how sports-media sites obtain multi-
+sportsbook odds confirmed the real, standard mechanism: **licensed B2B
+odds-aggregation vendors** (Sportradar, Genius Sports, OddsJam, OpticOdds,
+OddsMatrix, SportsDataIO — an established, named market tier) maintain
+their own commercial data-feed infrastructure and/or direct licensing
+relationships covering 100+ sportsbooks including BetMGM, and resell that
+combined feed via API to customers like Rotowire.
+
+**Real, corrected explanation:** Rotowire is not making an unauthenticated
+scripted request to BetMGM's own consumer-facing, GeoComply-gated site —
+it is almost certainly buying a licensed data feed from one of these
+aggregation vendors, who have their own commercial arrangement (and, for
+at least some of these vendors, their own large-scale, non-trivial
+infrastructure) for sourcing sportsbook odds at business scale. **This
+does not reverse this session's no-go finding** — it confirms it, from
+the other direction: if a lightweight, unauthenticated, direct-to-BetMGM
+approach worked, an established vendor market for paid aggregation
+wouldn't need to exist. The GeoComply/ToS finding stands as the correct
+answer to "can this project's own script call BetMGM directly the same
+way it calls DraftKings/FanDuel" — the answer is still no.
+
+**What this does change — a new, real, named option this project had not
+previously considered:** a paid, licensed odds-aggregation API (OddsJam,
+OpticOdds, SportsDataIO, or similar) is a legitimate, ToS-compliant third
+path to real BetMGM (and Caesars, and other currently-unreachable venues')
+odds data — distinct from both "scrape the venue directly" (this
+session's no-go) and "don't cover the venue at all." This was not
+evaluated for cost, coverage, or licensing terms this session — flagged
+as a genuinely open decision for the user, not assumed either way.
+
+**Files created/modified:** None (same as the base session — diagnostic
+only, temp `curl` output not committed).
+
+**Decision needed from the user, not made unilaterally this session:**
+does this project want to evaluate a paid odds-aggregation API (for
+BetMGM specifically, or as a general venue-coverage strategy going
+forward) as a new, separate track of work? Left open, named explicitly,
+not silently dropped.
+
+**Sources (from the web search backing this correction):**
+- [Sports Betting Data Feed & Odds API Guide 2026](https://track360.io/blog/sports-betting-data-feed-odds-api-providers-guide-2026)
+- [OpticOdds | Premier Sports Betting Data Provider](https://opticodds.com/)
+- [Sports Betting Odds API Feeds, Real-Time Sportsbook Data | OddsJam](https://oddsjam.com/odds-api)
+- [Odds API | Sports Betting API | SportsDataIO](https://sportsdata.io/live-odds-api)
+
+**Open items / deferred validations:** Whether to evaluate a licensed
+odds-aggregation API as a new path to BetMGM (and possibly other
+currently-blocked venues) — open, pending the user's direction. The
+GeoComply/ToS no-go for *direct* BetMGM access is not open; it is
+confirmed and stands.
 
 **Next session:** None yet — Session 5.7 remains open, same as before.

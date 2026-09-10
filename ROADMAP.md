@@ -2956,8 +2956,14 @@ part of the same 2026-09-10 venue-link work; confirmed directly in
 ---
 
 ### Session 6.9 — BetMGM Props Ingestion Feasibility & Build
-**Status:** ✅ Complete (no-go) — 2026-09-10. BetMGM dropped from scope;
-see SESSION_LOG.md for the full finding.
+**Status:** ✅ Complete (no-go for direct access) — 2026-09-10. Direct,
+unauthenticated BetMGM scraping is dropped from scope (GeoComply +
+explicit ToS anti-scraping clause). **New open item, same day:** a
+licensed third-party odds-aggregation API (OddsJam/OpticOdds/SportsDataIO-
+class vendor — confirmed as the real mechanism sites like Rotowire use to
+show BetMGM odds) is a separate, legitimate path not yet evaluated — see
+SESSION_LOG.md's "Session 6.9 correction" entry for the full finding and
+sourcing. Needs a user decision before any follow-up session is scoped.
 
 **Prerequisites:** Session 6.1's precedent (DraftKings/FanDuel ingestion)
 and this project's standing due-diligence pattern for a brand-new venue —
