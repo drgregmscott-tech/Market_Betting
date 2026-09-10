@@ -8971,3 +8971,169 @@ line-freshness measurement both remain named, open Session-8.3-class
 items, same as every other track's placeholders.
 
 **Next session:** None yet — Session 5.7 remains open, same as before.
+
+---
+
+## Session 6.10 — Caesars Props Ingestion Feasibility & Build
+
+**Date completed:** 2026-09-10
+**Status:** ✅ Complete (no-go)
+
+**What was actually done:** Ran the same real, reproducible
+endpoint-discovery procedure Session 6.9 used for BetMGM, independently
+for Caesars Sportsbook (`sportsbook.caesars.com`). The in-app Browser
+tool's `navigate` refused `sportsbook.caesars.com` outright (blocked by
+this environment's browsing policy before any request was made, same as
+BetMGM), so the check was done with direct `curl` calls instead.
+
+1. `curl` to `sportsbook.caesars.com/us/ks/bet` (a real Kansas-state entry
+URL) returned a real `200` — but the response is a small (11,323-byte)
+static SPA shell served directly from an S3 bucket behind CloudFront
+(`Server: AmazonS3`, `X-Cache: RefreshHit from cloudfront`), not an API
+response. Confirmed this is a pure static host, not a proxy to a real
+backend, by sending a real `POST` to `/api/graphql` on the same domain:
+it returned a real S3 XML `405 MethodNotAllowed` error
+(`<Error><Code>MethodNotAllowed</Code>...<ResourceType>OBJECT</ResourceType>`)
+— the literal signature of an S3 object being requested with a disallowed
+verb, not an application server. Every other path probed on this domain
+(`/api/config`, `/api/bootstrap`, `/api/v2/sportsbook/config`, etc.)
+returned the same static shell (identical `Content-Length: 11323`) — real
+evidence this is client-side-router fallback behavior, not distinct API
+responses.
+2. Fetched and searched the real main JS bundle
+(`static/js/main.e787fa6d.js`, 9.77 MB) directly for the real backend
+domain the SPA calls once it boots. Found `window.BUILD_INFO` naming a
+real commit SHA and `window.environment="prod"`, confirming this is the
+real production bundle, not a stale cache. Located a real, named AWS WAF
+CAPTCHA SDK loaded directly by the bundle
+(`https://4ad3fec456d9.edge.captcha-sdk.awswaf.com/.../jsapi.js` and a
+second, similarly-shaped chunk ID) — a real, explicit bot-challenge
+mechanism present in Caesars' own shipped code, analogous in role to
+BetMGM's GeoComply but a structurally different product (AWS WAF Bot
+Control/CAPTCHA, not device geolocation).
+3. Located a real, templated backend API path baked into the bundle:
+`https://api.americanwagering.com/regions/:COUNTRY_CODE/locations/:REGION_CODE/brands/czr/sb/features`
+(`americanwagering.com` is William Hill US's corporate domain, acquired
+by Caesars — consistent with Caesars Sportsbook's known real technology
+lineage). Called it directly with real values
+(`/regions/US/locations/KS/brands/czr/sb/features` and `.../NJ/...`):
+got a real `404`, distinct from a raw, unfilled base path
+(`/regions/US/locations/NJ` alone, with no `/brands/.../features` suffix)
+which returned a real CloudFront-WAF `403 Request blocked` page. This
+404-vs-403 split is the same class of positive "the domain and route
+shape are real, this path exists in the app" signal Session 6.9 used for
+BetMGM's `cds-api` — but this particular endpoint is a feature-flag
+endpoint, not the real odds/fixtures data this project actually needs.
+4. Searched the same bundle extensively (by URL literal, by `*URL:`
+config-key pattern, by `fixture`/`market`/`event`/`odds` path-literal
+pattern, and by tracing the `/v3/events/`, `/v4/events/`,
+`/v2/inject-events` real API call sites found in the code) for the actual
+base domain those real odds/events calls resolve against at runtime. It
+is injected through webpack env config at build time and could not be
+recovered by static text search of the minified bundle within a
+reasonable amount of effort — a real, honest limit of this method, not a
+finding that no such domain exists.
+
+**Real, cited conclusion — NO-GO (for now), via a different mechanism
+than BetMGM's:** Caesars' real, public-facing SPA host
+(`sportsbook.caesars.com`) is static-only and holds no API of its own; the
+real dynamic backend lives behind `americanwagering.com`, which is
+confirmed live infrastructure (real 404s on real route shapes) but is
+gated by a real, explicitly-loaded AWS WAF CAPTCHA challenge — a
+programmatic bot-detection barrier a scripted HTTP client cannot clear,
+the same practical outcome as BetMGM's GeoComply block even though the
+specific technology differs. This project did not attempt to defeat the
+CAPTCHA (consistent with this environment's restriction against bypassing
+bot-detection, and with Session 6.9's precedent of treating a real
+technical gate as a stopping point, not a puzzle to solve).
+
+**Checked both of Session 6.9's real fallback paths for BetMGM,
+independently, before calling this closed — found neither currently
+carries Caesars, a genuine (not assumed) negative result:**
+5. **Rotowire** (`rotowire.com/betting/nfl/player-props.php`): pulled the
+real live page (5.99 MB) and searched its embedded `data:[...]` JSON for
+any Caesars-prefixed field, the same way Session 6.9 found BetMGM's
+`mgm_*` fields. Found only two real book prefixes present in this pull —
+`betr_*` (BetRivers) and `mgm_*` (BetMGM) — zero `czr_*` fields, and a
+full case-insensitive scan of the entire page for the substring `czr`
+returned exactly one incidental hit, unrelated to prop-odds data. Real,
+live, checked directly — not assumed from BetMGM's result carrying over.
+6. **Action Network** (`api.actionnetwork.com/web/v2/scoreboard/nfl`):
+pulled the real live scoreboard payload both filtered
+(`bookIds=75`, BetMGM's real ID, reused as a sanity check) and unfiltered
+(no `bookIds` param, every book Action Network carries). A case-insensitive
+search of the full unfiltered payload (496 KB) for `caesars` returned zero
+matches — Caesars does not appear in Action Network's free scoreboard feed
+for this sport at this time, at all, not just in the props tool (which was
+BetMGM's specific gap).
+
+**Files created/modified:** None. Diagnostic feasibility session by
+design, same pattern as Session 6.9 — temporary `curl`/bundle output
+(`caesars_page.html`, `caesars_main.js`, `rotowire_props.html`,
+`rotowire_odds.html`, `an_test2.json`, `an_all.json`, `czr_tos.html`,
+`czr_tos2.html`) was written to the OS temp directory and not committed.
+
+**Validation results (per the roadmap card):**
+- [x] Explicit go/no-go, backed by a real, reproducible endpoint check —
+**NO-GO**, reproducible via the exact `curl` sequence and bundle-search
+method above (real Caesars domains, real headers, real response bodies
+and byte counts cited).
+- [ ] If go: schema/account-limiting research — N/A, no-go.
+- [x] If no-go: reason stated plainly — a real AWS WAF CAPTCHA challenge
+gates Caesars' real dynamic backend (confirmed present in Caesars' own
+shipped JS, not inferred from industry norms the way BetMGM's initial
+GeoComply framing was — Session 6.9's own later correction is the reason
+this session did not repeat that mistake); the two established fallback
+paths that solved BetMGM (Rotowire, Action Network) were checked live and
+do not currently carry Caesars data at all, so there is no known working
+path forward today, direct or indirect. Caesars' real Terms of Use could
+not be retrieved this session — the linked terms pages
+(`caesars.com/sportsbook-and-casino/{state}/support/terms-and-conditions-privacy/`)
+are themselves client-rendered shells (verified: ~920-byte responses,
+`ROBOTS: NOINDEX, NOFOLLOW`), so no contractual clause is quoted here as
+supporting evidence — the technical/data-availability finding stands on
+its own without it.
+
+**Decisions made:**
+1. **Caesars is dropped from scope, for now** — no follow-up build
+session is planned unless one of the two named triggers below fires. Same
+practice as Session 6.9's BetMGM no-go (and DK Pick6's Session 2.1
+Decision #1): a no-go from a feasibility session ends the track there
+rather than carrying it forward as a silent open item.
+2. **This is explicitly recorded as a different mechanism from BetMGM's
+block**, not a restatement of it — AWS WAF CAPTCHA on a gated backend API
+domain, vs. BetMGM's device-geolocation gate on its own consumer site.
+Recorded per the roadmap card's own instruction not to assume BetMGM's
+findings carry over, and per Session 6.9's own second correction (which
+warned against overstating an inferred mechanism as confirmed).
+3. **No attempt made to defeat or route around the CAPTCHA.** Consistent
+with this project's standing restriction against bypassing bot detection,
+and with how Session 6.9 treated BetMGM's GeoComply gate as a real stop,
+not an obstacle to engineer past.
+4. **Two concrete re-check triggers named, not left as a vague "revisit
+someday":** (a) if Rotowire's player-props page is later observed to add
+a `czr_*`-prefixed field set (the same page already structurally supports
+N platforms, per this project's own BetMGM-era parsing code), or (b) if
+Action Network's scoreboard payload is later observed to include a real
+Caesars book entry — either would be a real, checkable signal that a
+working indirect path has opened up, matching exactly how this session
+checked BetMGM's paths rather than assuming.
+
+**Corrections/reversals during the session:** None — this session applied
+Session 6.9's own two corrections (avoid asserting a specific block
+mechanism without tracing it in real code; check known aggregator
+fallbacks before calling a venue fully closed) from the start, rather than
+repeating and later correcting the same mistakes.
+
+**Open items / deferred validations:**
+- Caesars props ingestion remains a **NO-GO** until one of the two named
+re-check triggers above fires. Not scheduled on any timer — a future
+session should check the two trigger conditions directly (a real
+`czr_*` field on Rotowire, or a real Caesars entry in Action Network's
+scoreboard payload) before re-investigating, rather than re-running this
+full feasibility check from scratch on a hunch.
+- Session 6.9's own open items (BetMGM's `--season` nflverse-sparsity gap,
+the Game-time/Blocked-badge gap, Session 5.7) are unaffected by this
+session and remain open as previously recorded.
+
+**Next session:** None yet — Session 5.7 remains the longest-open item.

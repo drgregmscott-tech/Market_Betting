@@ -3029,15 +3029,23 @@ session planned**, per this card's own stated go/no-go rule.
 ---
 
 ### Session 6.10 — Caesars Props Ingestion Feasibility & Build
-**Status:** Not started — added 2026-09-10 at the user's request. Same
-scope and validation shape as Session 6.9, run independently for Caesars
-(a different real platform with its own endpoint/ToS posture — findings
-for BetMGM must not be assumed to carry over).
+**Status:** ✅ Complete (no-go) — 2026-09-10. See full SESSION_LOG.md
+entry for the real, reproducible evidence trail.
 
 **Prerequisites/what gets built/validation:** Identical structure to
 Session 6.9 above, substituting Caesars Sportsbook throughout. Sequenced
 after Session 6.9 so the two feasibility checks don't get conflated, not
 because one technically blocks the other.
+
+**Outcome:** NO-GO — Caesars' public SPA host (`sportsbook.caesars.com`)
+is static-only (S3/CloudFront); its real dynamic backend
+(`americanwagering.com`) is confirmed live but gated by a real AWS WAF
+CAPTCHA challenge, a different mechanism from BetMGM's GeoComply block but
+the same practical outcome. Unlike BetMGM, neither established fallback
+(Rotowire, Action Network) currently carries any Caesars data — checked
+live, zero `czr_*` fields on Rotowire's props page, zero Caesars mentions
+in Action Network's scoreboard payload. Caesars is dropped from scope
+until one of two named re-check triggers fires (see SESSION_LOG.md).
 
 ---
 
