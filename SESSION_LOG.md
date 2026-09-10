@@ -7974,3 +7974,120 @@ PrizePicks entries beyond 6 picks remain unsized because PrizePicks itself
 does not publish a number past 6. Neither is a silent omission — both are
 named explicitly in the code's docstring and in `sizing_methodology.md`.
 
+---
+
+## Session 6.8 — FanDuel Independent Flagging Assessment (Props) (2026-09-10)
+
+**Goal:** Answer, from the code and real data rather than assumption,
+whether FanDuel props rows can be independently flagged today, or whether
+they're structurally excluded — closing the gap the user found while
+reviewing the frontend (`clv_log.csv`/the Props tab only ever shows
+`draftkings` rows).
+
+**What was actually done:** Traced the full props pipeline end to end —
+`sportsbook_props_model.py`'s `process_props()` and `clv_logger.py`'s
+`build_props_candidates()` — then ran real data through it to confirm the
+answer directly, rather than stopping at a code-reading conclusion.
+
+**Real, cited answer: FanDuel is NOT structurally excluded.**
+`build_props_candidates()` (`scripts/calibration/clv_logger.py:1016-1082`)
+applies the exact same rule to every row regardless of platform —
+`model_status == "estimated"` and `edge_over`/`edge_under >=
+PROPS_FLAG_EDGE_THRESHOLD` — with no `platform == "draftkings"` filter
+anywhere in the flagging, refresh, or closing logic. `process_props()`
+(`scripts/estimation/sportsbook_props_model.py:420-593`) likewise runs
+every ingested row, DK or FD, through the same per-sport/per-player logic.
+The real reason every logged flag so far is DraftKings is a data-shape and
+calendar problem, not a code exclusion — confirmed two distinct ways
+against real live data:
+
+1. **On the pipeline's real default (`--season 2025`):** re-ran
+   `sportsbook_props_model.py` against the actual live `fd_latest.csv`
+   (129 real rows). Every single one landed on `stale_season_stats` (121)
+   or `no_player_match` (8) — zero reached `estimated`. Root cause: the
+   Session 6.6 stale-season-stats guard is doing exactly its job —
+   FanDuel's real v1 shape is season-TOTAL futures, the real NFL season
+   (2026) has already started, and correctly refuses to compare a live
+   2026 futures line against 2025's fully-completed season totals (which
+   is exactly the false near-100%-edge bug that guard was built to catch,
+   per its own Session 6.6 docstring). This is confirmed as the mechanism
+   by which FanDuel got shut out, not a guess — `data/sportsbook_props/
+   clv_log.csv` was checked directly: 154 real logged flags, 100%
+   `draftkings`, 0 `fanduel`, ever.
+2. **Re-ran with `--season 2026` directly** (nflverse's 2026 weekly file
+   does now exist — confirmed live, 67 real rows) to test whether simply
+   pointing at the current season fixes it. It does not, for a second,
+   separate real reason: nflverse's early-season 2026 file only covers a
+   handful of players from the season's first game so far (`build_name_
+   lookup()` returns 66 names) — real current stars checked directly
+   (Aaron Rodgers, Baker Mayfield, Brock Purdy, Bryce Young, and others)
+   are not in it yet, so every FanDuel row fails `no_player_match` instead.
+   This is a genuinely temporary, calendar-driven gap (nflverse publishes
+   more of the week's games as they're played), not a design flaw.
+3. **Confirmed this is a regression from a real, correct fix, not a bug
+   introduced by this session:** an earlier real run from 2026-09-09
+   (`output/estimation/sportsbook_props_estimates_20260909T175132Z.csv`,
+   before Session 6.6's fix landed that same day) shows 70 FanDuel rows
+   that DID reach `estimated`, with edges up to 0.51 — the exact false
+   near-100%-edge failure mode Session 6.6's own docstring describes,
+   caused by comparing a fresh 2026 futures line against a fully-completed
+   season. Session 6.6 correctly closed that bug; the FanDuel-silent side
+   effect (real edges never actually existed in that run — they were the
+   bug) is the honest, correct current state, not a new problem to reverse.
+
+**Frontend Props tab already shows a platform column/filter per row** —
+confirmed directly in `frontend/app.js` (`renderPropsOpenTable` and
+`renderPropsClosedTable`, both emit `${escapeHtml(r.platform)}`) and
+`frontend/index.html` (`<th>Platform</th>` present in both the open and
+closed props tables). This was already built as part of the same
+2026-09-10 venue-link work the user reviewed when this gap was found — no
+frontend change was needed this session.
+
+**No code changes made this session** — this was a diagnostic session by
+design (per the roadmap card's own framing: confirm the real mechanism
+first). Nothing was found broken; the stale-season guard is working
+exactly as designed, and the only real gap is nflverse's early-season data
+completeness, which resolves on its own as more of Week 1 (and beyond)
+gets played and published.
+
+**Files touched:** None (investigation only; local test runs against
+`--season 2026` were reverted via `git checkout` before closing so no
+throwaway estimate file entered the repo's real history).
+
+**Decisions made:**
+1. **No fix attempted this session.** There is nothing to fix — FanDuel's
+   flagging path is code-correct and will produce real flags again once
+   nflverse's 2026 weekly-stats file covers enough of the season for
+   `build_name_lookup()` to match real players (expected within the first
+   1-2 weeks of the season, not a structural project gap).
+2. **Re-verification trigger, for whichever future session next touches
+   Track 5:** once nflverse's 2026 file has meaningfully more than 67 rows
+   (i.e., most of Week 1+ has been published), re-run
+   `sportsbook_props_model.py --season 2026` and confirm FanDuel rows
+   start reaching `estimated` status with real (not artificially-inflated)
+   edges. `run_props_pipeline.py` and the scheduled GitHub Actions job
+   still default to `--season 2025` (see that script's own CLI help text,
+   pointing at ROADMAP.md Open Decision #9) — that default should switch
+   to 2026 as part of, or before, that re-verification.
+
+**Validation (per the roadmap card):**
+- [x] Real, cited answer (from the code, not assumption) to "can FanDuel
+be flagged on its own, today?" — **yes, structurally; no, in practice
+right now, for two named, real, temporary reasons (stale-season guard
+correctly gating v. real season 2025 data; real 2026 nflverse data too
+sparse so far).**
+- [x] Since not structurally excluded: no follow-up build session is
+needed — the fix is time, not code. Named explicitly above as the
+re-verification trigger.
+- [ ] "Real FanDuel-flagged row observed end-to-end at least once" — not
+met this session, and not expected to be met until nflverse's 2026 data
+matures (see Decision #2) — an honest, stated gap, not a silent one.
+- [x] Frontend Props tab shows platform per row — already true, confirmed
+directly in the code, no change needed.
+
+**Handoff notes:** Session 6.8 is closed with an honest partial on one
+validation item, same pattern this project has already used (Session 2.4's
+cross-platform consensus item). Track 5 needs no further build work from
+this finding — only the calendar to catch up, and the `--season`
+default's already-tracked switch (Open Decision #9) whenever that happens.
+

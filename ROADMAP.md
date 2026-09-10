@@ -2879,8 +2879,8 @@ session entries added in the meantime.
 ---
 
 ### Session 6.8 — FanDuel Independent Flagging Assessment (Props)
-**Status:** Not started — added 2026-09-10 at the user's request, after
-reviewing the frontend with them and finding this gap.
+**Status:** ⚠️ Complete with caveats (2026-09-10) — see SESSION_LOG.md for
+full detail.
 
 **Prerequisites:** None new — FanDuel ingestion has been live and working
 since Session 6.1 (confirmed live, 2026-09-09 run: 141 real normalized
@@ -2914,12 +2914,28 @@ open question, not an assumed bug.
    both can appear (same pattern as the venue-link work done 2026-09-10).
 
 **Validation (required to close session):**
-- [ ] Real, cited answer (from the code, not assumption) to "can FanDuel be
-flagged on its own, today?"
-- [ ] If not: a scoped, honest estimate of what a follow-up session would
-need to build to make it possible
-- [ ] If yes: a real FanDuel-flagged row observed end-to-end at least once
-- [ ] Frontend Props tab shows platform per row
+- [x] Real, cited answer (from the code, not assumption) to "can FanDuel be
+flagged on its own, today?" — **yes, structurally** (`build_props_
+candidates()` in `clv_logger.py` and `process_props()` in
+`sportsbook_props_model.py` apply identical logic to both platforms, no
+`platform == "draftkings"` filter anywhere), **but no, in practice on
+real data right now** — every real FanDuel row hits either the Session
+6.6 stale-season-stats guard (correctly, against the pipeline's real
+`--season 2025` default) or `no_player_match` (nflverse's 2026 file is
+real but still too sparse — 67 rows, ~66 matchable players).
+- [x] Not structurally excluded, so no follow-up build is needed — the gap
+is real 2026 nflverse data maturity plus the `--season` default switch
+already tracked as Open Decision #9, not missing code. Named as a
+re-verification trigger for whichever session next touches Track 5.
+- [ ] A real FanDuel-flagged row observed end-to-end — **not met, stated
+gap, not silent.** An earlier real run (2026-09-09, before Session 6.6's
+fix) did flag 70 FanDuel rows, but with false near-100% edges from
+comparing a fresh 2026 line against a fully-completed 2025 season — the
+exact bug Session 6.6 correctly closed. No real, non-bogus FanDuel flag
+exists yet.
+- [x] Frontend Props tab shows platform per row — already true, built as
+part of the same 2026-09-10 venue-link work; confirmed directly in
+`frontend/app.js` and `frontend/index.html`, no change needed.
 
 ---
 
@@ -3704,12 +3720,18 @@ own app directly (only one real Underdog row total exists in
 Underdog's real ingested volume produces two real simultaneous open legs
 (tracked as the same kind of volume gap Session 2.10 already documented
 for Underdog).
-46. **New, opened 2026-09-10, same request:** FanDuel props ingestion is
-real and working (141 rows, 2026-09-09), and `sizing_engine.py` already
-supports it, but every real row seen in `data/sportsbook_props/clv_log.csv`
-so far is `draftkings` — it is not yet confirmed whether FanDuel can be
-independently flagged or is structurally used only as DraftKings' consensus
-benchmark price. **Action needed:** Session 6.8 (new, added this session).
+46. **Resolved, Session 6.8 (2026-09-10).** FanDuel is not structurally
+excluded from flagging — `clv_logger.py`/`sportsbook_props_model.py`
+apply identical logic to both platforms. Every real row is `draftkings`
+today for two real, temporary reasons instead: the pipeline's
+`--season 2025` default plus Session 6.6's (correct) stale-season-stats
+guard shut out every FanDuel row, and nflverse's real 2026 weekly file is
+still too sparse (67 rows) to name-match most current players even when
+tested directly against `--season 2026`. No code changes needed — the
+gap closes on its own as the season's real data accumulates. One item
+remains open, not closed silently: no real, non-bogus FanDuel-flagged row
+has been observed end-to-end yet — re-verify per Session 6.8's own
+Decision #2 once nflverse's 2026 file has meaningfully more rows.
 47. **New, opened 2026-09-10, same request:** BetMGM and Caesars have zero
 ingestion code today — the user asked to reassess adding them. Per this
 project's own standing practice (no venue gets built out without a real,
