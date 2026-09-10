@@ -74,10 +74,12 @@ real methodology behind its numbers.</p>
 
 <section class="panel" id="focus-panel">
 <div class="panel-head">
-<h2>🎯 Focus &mdash; where to look first</h2>
-<p class="panel-note">The highest-edge rows, across every track, that this project's own checks found no
-reason not to act on right now (green signal &mdash; fillable, corroborated, still live). This is a
-shortlist, not the full picture &mdash; check each track's own tab before acting.</p>
+<h2>🎯 Focus &mdash; highest edge, across every track</h2>
+<p class="panel-note">The largest-edge rows across all five tracks right now, largest first. The only rows
+left out are ones that literally cannot be placed anymore (game already started, contract already
+resolving, not fillable, or a legal restriction) &mdash; marked <span class="blocked-badge">⛔ Blocked</span>
+elsewhere on this page. Everything else here is ranked purely by edge size: if you trust the model, start
+at the top.</p>
 </div>
 <div class="table-wrap">
 <table id="focusTable">
@@ -85,8 +87,8 @@ shortlist, not the full picture &mdash; check each track's own tab before acting
 <tbody id="focusTableBody"></tbody>
 </table>
 </div>
-<p id="focusEmpty" class="empty-note" hidden>No green-signal rows right now &mdash; nothing has cleared every
-check at once. See each track's own tab for the full list (including yellow/red rows).</p>
+<p id="focusEmpty" class="empty-note" hidden>Nothing placeable right now &mdash; every currently open flag is
+blocked. See each track's own tab for detail.</p>
 </section>
 
 <section class="panel panel-arb" id="overview-pickem-panel">
@@ -213,7 +215,7 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <thead>
 <tr>
 <th class="checkbox-col"></th>
-<th title="No known execution/corroboration caveat from this project's own checks — not a claim the pick will win. Hover any dot for detail.">Signal</th>
+<th title="Marked only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Status</th>
 <th>Player</th>
 <th>Team</th>
 <th>Stat</th>
@@ -351,7 +353,7 @@ position is a directional bet, not arbitrage.</li>
 <table id="arbTable">
 <thead>
 <tr>
-<th title="No known execution caveat from this project's own checks — not a claim the trade will profit. Hover any dot for detail.">Signal</th>
+<th title="Marked only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Status</th>
 <th>Type</th>
 <th>Venue A</th>
 <th>Market A</th>
@@ -430,7 +432,7 @@ not that the pipeline is broken.
 <table id="weatherOpenTable">
 <thead>
 <tr>
-<th title="No known execution/reliability caveat from this project's own checks — not a claim the pick will win. Hover any dot for detail.">Signal</th>
+<th title="Marked only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Status</th>
 <th>City</th>
 <th>Target date</th>
 <th>Forecast</th>
@@ -525,7 +527,7 @@ tied up if you took this position. Rows waiting longer than 60 days are highligh
 <table id="politicsOpenTable">
 <thead>
 <tr>
-<th title="No known execution/corroboration caveat from this project's own checks — not a claim the pick will win. Hover any dot for detail.">Signal</th>
+<th title="Marked only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Status</th>
 <th>Candidate</th>
 <th>Party</th>
 <th>State</th>
@@ -624,7 +626,7 @@ signal, unlike the platform-level badge, which is the same on every row today.
 <table id="propsOpenTable">
 <thead>
 <tr>
-<th title="No known execution/corroboration caveat from this project's own checks — not a claim the pick will win. Hover any dot for detail.">Signal</th>
+<th title="Marked only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Status</th>
 <th>Player</th>
 <th>Team</th>
 <th>Stat</th>

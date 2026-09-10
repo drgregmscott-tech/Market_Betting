@@ -108,78 +108,52 @@ function fmtAmericanOddsFromProb(p) {
 }
 
 // ---------------------------------------------------------------------
-// Readiness signal -- answers "is there a known reason NOT to act on this
-// row right now," using only checks this project already computes for
-// itself (fillability, legal footprint, cross-source corroboration,
-// staleness). This is NOT a claim that green means "this will win" --
-// every track's own copy elsewhere on this page already says the model
-// can be wrong. It only means no already-tracked execution/reliability
-// caveat is present. Added 2026-09-10 at the user's request for a
-// clearer at-a-glance read than scanning every column by hand.
+// Blocked check -- per the user's 2026-09-10 correction, this is no
+// longer a 3-color "confidence" signal (green/yellow never correlated
+// with edge, and edge is the number that matters if you trust the
+// model). It now flags ONLY real, hard blockers -- reasons a row
+// literally cannot be acted on regardless of how large its edge is
+// (not fillable, already started/resolved, legal restriction). Ranking
+// should otherwise be pure edge, largest first.
 // ---------------------------------------------------------------------
 function isTrueField(v) {
   return String(v).trim().toLowerCase() === "true";
 }
 
-function readiness(track, r) {
+function blockedCheck(track, r) {
   const reasons = [];
-  let level = "green";
-  const downgrade = (lvl, reason) => {
-    reasons.push(reason);
-    if (lvl === "red" || level !== "red") level = lvl;
-  };
 
   if (track === "arb") {
     if (!isTrueField(r.liquidity_sufficient)) {
-      downgrade("red", "Not fillable at the flagged size on the latest run.");
+      reasons.push("Not fillable at the flagged size on the latest run.");
     }
     if (r.legal_footprint_status && r.legal_footprint_status !== "both_venues_available") {
-      downgrade("red", "Legal footprint restriction flagged for one venue -- check eligibility before trading.");
-    }
-    const sim = toNum(r.title_similarity);
-    if (sim !== null && sim < 0.6) {
-      downgrade("yellow", "Lower title-match confidence between the two legs -- double-check they're really the same event.");
+      reasons.push("Legal footprint restriction flagged for one venue -- check eligibility before trading.");
     }
   } else if (track === "weather") {
     const lead = toNum(r.lead_days);
     if (lead !== null && lead <= 0) {
-      downgrade("red", "Lead time has passed zero days -- this contract may already be resolving.");
-    } else if (lead === null) {
-      downgrade("yellow", "Lead time unknown.");
-    } else if (lead > 7) {
-      downgrade("yellow", "More than a week out -- weather forecast uncertainty grows with lead time.");
+      reasons.push("Lead time has passed zero days -- this contract may already be resolving.");
     }
   } else if (track === "politics") {
-    if (!isTrueField(r.consensus_available)) {
-      downgrade("yellow", "No corroborating Polymarket price for this race -- Kalshi's own line is the only source.");
-    }
     const hours = toNum(r.hours_to_resolution);
-    if (hours !== null && hours > 24 * 60) {
-      downgrade("yellow", "Long-dated position (55+ days to resolution) -- capital is tied up a while.");
-    }
     if (hours !== null && hours <= 0) {
-      downgrade("red", "Resolution window has passed.");
+      reasons.push("Resolution window has passed.");
     }
   } else {
-    // pickem + props: consensus = a second platform pricing the same side
-    if (!isTrueField(r.consensus_available)) {
-      downgrade("yellow", "No second platform corroborates this line -- only one source is pricing it.");
-    }
+    // pickem + props
     if (r.game_start_time && new Date(r.game_start_time).getTime() < Date.now()) {
-      downgrade("red", "Game start time has already passed.");
+      reasons.push("Game start time has already passed.");
     }
   }
 
-  if (!reasons.length) reasons.push("No known execution or corroboration caveat from this project's own checks.");
-  return { level, reasons };
+  return { blocked: reasons.length > 0, reasons };
 }
 
-const READINESS_COLOR = { green: "var(--accent-pos)", yellow: "#ecb44f", red: "var(--accent-neg)" };
-
-function readinessDotHtml(track, r) {
-  const { level, reasons } = readiness(track, r);
-  const title = escapeAttr(reasons.join(" "));
-  return `<span class="signal-dot signal-${level}" title="${title}" style="background:${READINESS_COLOR[level]}"></span>`;
+function blockedBadgeHtml(track, r) {
+  const { blocked, reasons } = blockedCheck(track, r);
+  if (!blocked) return "";
+  return `<span class="blocked-badge" title="${escapeAttr(reasons.join(" "))}">⛔ Blocked</span>`;
 }
 
 // Selected legs for the sizing calculator: Map<flag_id, row>
@@ -423,7 +397,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td>${readinessDotHtml("pickem", r)}</td>
+          <td>${blockedBadgeHtml("pickem", r)}</td>
           <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.team) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
@@ -738,7 +712,7 @@ function renderArbTable(rows) {
       const netProfit = toNum(r.net_profit_per_dollar);
       return `
         <tr>
-          <td>${readinessDotHtml("arb", r)}</td>
+          <td>${blockedBadgeHtml("arb", r)}</td>
           <td>${escapeHtml(r.opportunity_type) || "—"}</td>
           <td>${escapeHtml(r.platform_a) || "—"}</td>
           <td class="name-cell" title="${escapeAttr(r.title_a)}">${venueLinkHtml(r.platform_a, r.market_a, r.title_a, r.title_a)}</td>
@@ -845,7 +819,7 @@ function renderWeatherOpenTable(open) {
       const edge = toNum(r.first_flagged_edge);
       return `
         <tr>
-          <td>${readinessDotHtml("weather", r)}</td>
+          <td>${blockedBadgeHtml("weather", r)}</td>
           <td class="name-cell">${escapeHtml(r.city_label) || "—"}</td>
           <td>${fmtDate(r.target_date)}</td>
           <td>${escapeHtml(r.forecast_kind) || "—"}${r.forecast_value_f ? " " + escapeHtml(r.forecast_value_f) + "°F" : ""}</td>
@@ -986,7 +960,7 @@ function renderPoliticsOpenTable(open) {
       const waitClass = hours !== null && hours > 24 * 60 ? "wait-long" : "";
       return `
         <tr>
-          <td>${readinessDotHtml("politics", r)}</td>
+          <td>${blockedBadgeHtml("politics", r)}</td>
           <td class="name-cell" title="${escapeAttr(r.candidate_name)}">${escapeHtml(r.candidate_name) || "—"}</td>
           <td>${escapeHtml(r.party) || "—"}</td>
           <td>${escapeHtml(r.state) || "—"}</td>
@@ -1133,7 +1107,7 @@ function renderPropsOpenTable(open) {
         : fmtAmericanOddsFromProb(r.first_flagged_market_price);
       return `
         <tr>
-          <td>${readinessDotHtml("props", r)}</td>
+          <td>${blockedBadgeHtml("props", r)}</td>
           <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.team) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
@@ -1233,7 +1207,7 @@ function mapPickemForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtDate(r.game_start_time),
     longDated: false,
-    signal: readiness("pickem", r).level,
+    blocked: blockedCheck("pickem", r).blocked,
   };
 }
 
@@ -1247,7 +1221,7 @@ function mapArbForOverview(r) {
     edgeDisplay: fmtNetProfit(toNum(r.net_profit_per_dollar)) + "/$1",
     timing: "Live snapshot",
     longDated: false,
-    signal: readiness("arb", r).level,
+    blocked: blockedCheck("arb", r).blocked,
   };
 }
 
@@ -1261,7 +1235,7 @@ function mapWeatherForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: r.lead_days ? r.lead_days + "d out" : "—",
     longDated: false,
-    signal: readiness("weather", r).level,
+    blocked: blockedCheck("weather", r).blocked,
   };
 }
 
@@ -1276,7 +1250,7 @@ function mapPoliticsForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtHoursToResolution(hours),
     longDated: hours !== null && hours > 24 * 60,
-    signal: readiness("politics", r).level,
+    blocked: blockedCheck("politics", r).blocked,
   };
 }
 
@@ -1290,7 +1264,7 @@ function mapPropsForOverview(r) {
     edgeDisplay: fmtEdge(toNum(r.first_flagged_edge)),
     timing: fmtDate(r.game_start_time),
     longDated: false,
-    signal: readiness("props", r).level,
+    blocked: blockedCheck("props", r).blocked,
   };
 }
 
@@ -1335,7 +1309,7 @@ function renderOverviewTrackTable(track, mapped) {
     .map(
       (r) => `
         <tr>
-          <td class="name-cell" title="${escapeAttr(r.opportunity)}"><span class="signal-dot signal-${r.signal}" style="background:${READINESS_COLOR[r.signal]}"></span> ${escapeHtml(r.opportunity)}${
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${r.blocked ? '<span class="blocked-badge" title="Cannot be acted on right now.">⛔</span> ' : ""}${escapeHtml(r.opportunity)}${
             r.longDated ? '<span class="long-dated-badge">Long-dated</span>' : ""
           }</td>
           <td>${escapeHtml(r.side)}</td>
@@ -1355,7 +1329,7 @@ function renderFocusPicks(allMapped) {
   if (!tbody || !emptyNote) return;
 
   const picks = allMapped
-    .filter((r) => r.signal === "green")
+    .filter((r) => !r.blocked)
     .sort((a, b) => b.edge - a.edge)
     .slice(0, FOCUS_TOP_N);
 
