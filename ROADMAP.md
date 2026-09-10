@@ -3861,6 +3861,18 @@ Also restated Rotowire's ToS caveat directly in the workflow file itself
 (not just the ingestion script), since running it on a recurring schedule
 is a real, ongoing instance of that same open question, not a smaller
 one. Full trail in SESSION_LOG.md.
+53. **Frontend integration for BetMGM, same day (2026-09-10) — closes
+the seven-stage build for this venue.** The Props tab's table logic
+(Session 6.6) was already platform-generic; the only real gap was
+hardcoded "DraftKings + FanDuel"-only copy in `frontend/index.html`/
+`frontend/app.js`, fixed to name all three platforms. Tested live in a
+real browser (new `.claude/launch.json`, none existed before): real
+BetMGM rows correctly interleave with DraftKings rows sorted by edge,
+carry the same risk badge, and honestly show "—" for `Game time` — a
+real, named, un-fixed gap (Rotowire's player-props page carries no
+kickoff-time field; the Blocked-badge convenience doesn't fire for
+BetMGM rows, though the underlying CLV close-on-disappearance safety
+mechanism is unaffected). Full trail in SESSION_LOG.md.
 
 ---
 *Update this file at the close of each future session, per the project's

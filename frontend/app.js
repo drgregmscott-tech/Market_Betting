@@ -1070,7 +1070,9 @@ async function initPolitics() {
 }
 
 // =======================================================================
-// TRACK 5 — Sportsbook player props, DraftKings + FanDuel (Session 6.6)
+// TRACK 5 — Sportsbook player props, DraftKings + FanDuel + BetMGM
+// (Session 6.6; BetMGM added Session 6.9 -- sourced via Rotowire, not a
+// direct BetMGM pull, see ingest_rotowire_betmgm_props.py's docstring)
 //
 // props_clv_log.csv shares the same open/closed lifecycle shape as
 // pick'em's clv_log.csv (Session 6.3 built this track on the same shared
@@ -1078,19 +1080,22 @@ async function initPolitics() {
 // session's own validation requirement is the account-limiting-risk
 // indicator, shown per row via renderRiskBadges() below — the real point
 // of this track's frontend card, per ROADMAP.md's Session 6.6 entry.
+// Every table below already reads `platform` generically (no DK/FD-only
+// allowlist), so BetMGM rows render with zero table-structure changes —
+// confirmed live, Session 6.9.
 // =======================================================================
 
 function renderRiskBadges(r) {
-  // Every DK/FD row carries the same PROPS_PLATFORM_RISK_MULTIPLIER
+  // Every DK/FD/BetMGM row carries the same PROPS_PLATFORM_RISK_MULTIPLIER
   // (0.50, sizing_engine.py) -- this badge is intentionally shown on
   // every row rather than only on "risky" ones, since sportsbook
   // account-limiting is this track's own best-corroborated risk for the
   // whole venue type, not a per-row condition.
-  let badges = `<span class="risk-badge" title="DraftKings/FanDuel positions carry this project's highest account-limiting-risk dampener (PROPS_PLATFORM_RISK_MULTIPLIER = 0.50), applied equally to both platforms.">Acct. limit risk</span>`;
+  let badges = `<span class="risk-badge" title="DraftKings/FanDuel/BetMGM positions carry this project's highest account-limiting-risk dampener (PROPS_PLATFORM_RISK_MULTIPLIER = 0.50), applied equally across all three platforms.">Acct. limit risk</span>`;
 
   const fieldVig = String(r.implied_prob_includes_field_vig).trim().toLowerCase() === "true";
   if (fieldVig) {
-    badges += `<span class="risk-badge" title="This row's own price still includes DraftKings' one-sided field vig (implied_prob_includes_field_vig = True) -- sizing_engine.py applies an extra PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER (0.60) dampener to it.">Field vig</span>`;
+    badges += `<span class="risk-badge" title="This row's own price still includes this platform's one-sided field vig (implied_prob_includes_field_vig = True) -- sizing_engine.py applies an extra PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER (0.60) dampener to it.">Field vig</span>`;
   }
   return badges;
 }

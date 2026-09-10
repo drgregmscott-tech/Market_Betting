@@ -583,7 +583,7 @@ this session's handoff notes if this file has never existed in a deploy yet.
 <div class="tab-panel" data-tab="props" id="tabProps" hidden>
 <div class="track-heading track-heading-props">
 <span class="track-tag track-tag-props">Track 5</span>
-<h2>Sportsbook player props (DraftKings + FanDuel)</h2>
+<h2>Sportsbook player props (DraftKings + FanDuel + BetMGM)</h2>
 </div>
 
 <section class="panel panel-props" id="props-summary-panel">
@@ -611,15 +611,17 @@ this session's handoff notes if this file has never existed in a deploy yet.
 <div class="panel-head">
 <h2>Currently flagged props</h2>
 <p class="panel-note">
-Open lines from the 3-hourly DraftKings/FanDuel pipeline, sorted by model edge. The
+Open lines from the 3-hourly DraftKings/FanDuel/BetMGM pipeline, sorted by model edge. BetMGM's
+real data is sourced via Rotowire, not a direct BetMGM pull &mdash; see SESSION_LOG.md's Session 6.9
+entry. The
 <strong>Risk</strong> column is this track's own account-limiting-risk indicator: every row carries an
 <span class="risk-badge">Acct. limit risk</span> badge, because sportsbooks limiting or banning
 consistently-winning bettors is this project's own best-corroborated risk for this venue type
-(<code>PROPS_PLATFORM_RISK_MULTIPLIER</code>, applied equally to DraftKings and FanDuel &mdash; no
-source in this project distinguishes the two). A second
+(<code>PROPS_PLATFORM_RISK_MULTIPLIER</code>, applied equally across all three platforms &mdash; no
+source in this project distinguishes any of them). A second
 <span class="risk-badge">Field vig</span> badge appears only on rows whose own price still includes
-DraftKings' one-sided field vig (<code>implied_prob_includes_field_vig</code>) &mdash; a real per-row
-signal, unlike the platform-level badge, which is the same on every row today.
+that platform's one-sided field vig (<code>implied_prob_includes_field_vig</code>) &mdash; a real
+per-row signal, unlike the platform-level badge, which is the same on every row today.
 </p>
 </div>
 <div class="table-wrap">

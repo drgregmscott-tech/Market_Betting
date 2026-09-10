@@ -8867,4 +8867,107 @@ more visible restatement in the file that actually runs it unattended.
 - Frontend integration for BetMGM remains undone — the last of the
 project's seven build stages for this track.
 
+---
+
+### Session 6.9, frontend integration for BetMGM (2026-09-10, same day)
+
+**What was actually done:** Checked `frontend/app.js`'s Props tab code
+directly before assuming a build was needed. Confirmed (already true,
+inherited from Session 6.6's design, not a change made this session) that
+`renderPropsOpenTable()`/`renderPropsClosedTable()`/`renderRiskBadges()`
+all read `platform` generically off each CSV row with no DK/FD-only
+allowlist anywhere in the table logic — same shape Session 6.8 already
+found true for the Props tab's platform column. So real BetMGM rows
+already render correctly in the existing table structure with zero
+table-logic changes. The real, in-scope work was fixing several places
+where hardcoded, now-inaccurate text specifically said "DraftKings +
+FanDuel" or "DraftKings/FanDuel" — copy that would mislead a real reader
+into thinking BetMGM wasn't covered, even though the data underneath it
+already was:
+- `frontend/index.html`'s Track 5 page heading: "Sportsbook player props
+(DraftKings + FanDuel)" → "... (DraftKings + FanDuel + BetMGM)".
+- The panel's explanatory paragraph: added a real, cited note that
+BetMGM's data is sourced via Rotowire, not a direct BetMGM pull (pointing
+a reader at the real Session 6.9 explanation rather than leaving it
+unstated), and generalized "applied equally to DraftKings and FanDuel"
+to "applied equally across all three platforms."
+- `frontend/app.js`'s `renderRiskBadges()` tooltip text (two places): same
+DraftKings/FanDuel-only wording generalized to name BetMGM too.
+
+**Real gap found and deliberately NOT fixed this session, flagged
+instead:** the "currently flagged props" table has a `Game time` column
+driven by `blockedCheck()`'s `game_start_time` check (shows a
+"⛔ Blocked" badge once a game's real kickoff has passed). Rotowire's
+real player-props page — confirmed directly against the real raw HTML
+this session's own ingestion captured — carries no kickoff-time field at
+all for any row. `ingest_rotowire_betmgm_props.py` already stores this
+honestly as `None` (documented in its own module docstring), so every
+BetMGM row's `Game time` column shows "—" and can never trigger the
+Blocked badge, confirmed live in the browser test below. This is a real,
+visible, honest gap, not a silent one: the underlying CLV lifecycle still
+protects against acting on a stale flag (a flag closes for real once its
+prop disappears from a later pipeline run, same mechanism protecting
+every other track), so this is a missing *early-warning convenience*
+specific to BetMGM rows, not a missing safety mechanism. Fixing it would
+require sourcing real kickoff times from a different Rotowire page (the
+game-odds page, not the player-props page, carries a real `gameDateTime`
+field per this session's earlier investigation) and joining it in by
+`gameID` — a real, separate, scoped piece of work, not done here.
+
+**Validation — tested live in a real browser, not just read the code
+and judged it correct:** added a `.claude/launch.json` config (`frontend-
+static`, plain `python -m http.server` serving `frontend/`) since none
+existed for this project yet, temporarily copied the real, live
+`data/sportsbook_props/clv_log.csv` to `frontend/data/props_clv_log.csv`
+(the exact relative path `PROPS_DATA_URL` fetches — confirmed this path
+is NOT tracked/committed anywhere in this repo, meaning the real deploy-
+time sync from `data/sportsbook_props/clv_log.csv` into that relative
+path happens outside this repo, e.g. a Cloudflare Pages build step not
+visible here — the local copy was for this session's own testing only
+and was deleted before closing), started the server, and drove a real
+Chromium tab to the Props tab. Confirmed directly, by screenshot and page
+text: the updated heading and copy render correctly; real BetMGM rows
+(Chase Brown, Derrick Henry, Cam Skattebo, etc., `platform=betmgm`)
+appear correctly interleaved with real DraftKings rows, sorted by model
+edge across all platforms together (not grouped or segregated by
+platform); each BetMGM row correctly shows the `Acct. limit risk` badge;
+each BetMGM row's `Game time` column correctly shows "—" (confirming the
+named gap above is real and currently visible, not silently hidden).
+
+**Files created/modified:**
+- `frontend/index.html` — Track 5 heading and explanatory paragraph text.
+- `frontend/app.js` — `renderRiskBadges()` tooltip text, plus updated
+section-header comments.
+- `.claude/launch.json` — new, minimal local-preview config for this
+project's frontend (`python -m http.server` on port 8098) — none existed
+before this session; kept as reusable infrastructure for future frontend
+testing, not a one-off throwaway.
+
+**Decisions made:**
+1. **No table-structure or data-loading code changes** — the existing
+Session 6.6 design was already platform-generic; the only real gap was
+inaccurate, hardcoded copy naming just two of the three real platforms.
+2. **Game-time/Blocked-badge gap for BetMGM named, not fixed** — real,
+visible (not silently hidden — confirmed live), and non-critical to
+safety (the CLV close-on-disappearance mechanism is the real protection;
+this is a faster early-warning convenience DK/FD rows have and BetMGM
+rows currently don't). Left as an explicit, scoped follow-up rather than
+pulled into this session's scope.
+3. **`.claude/launch.json` added and kept** — this project had no
+frontend local-preview config before this session, and the user's/
+system's own standing instruction is to test UI changes in a real browser
+before declaring them done; this makes that possible for any future
+frontend session, not just this one.
+
+**Open items / deferred validations:**
+- BetMGM `Game time`/Blocked-badge gap (see above) — real, scoped,
+un-fixed; would need a second real data source (Rotowire's game-odds
+page) joined in by `gameID`.
+- **This closes the last of the project's seven build stages for
+BetMGM(-via-Rotowire) as a props venue** (ingestion, estimation
+adaptation, CLV logging, sizing, automation, frontend — Sessions 6.9's
+various sub-entries above). Sizing dampener re-derivation and BetMGM
+line-freshness measurement both remain named, open Session-8.3-class
+items, same as every other track's placeholders.
+
 **Next session:** None yet — Session 5.7 remains open, same as before.
