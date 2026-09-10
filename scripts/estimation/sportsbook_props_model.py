@@ -219,6 +219,24 @@ DK_TD_MARKET_STAT_TYPES = {
     "anytime td scorer": "anytime",
     "2+ tds": "two_plus",
     "first td scorer": "unsupported_first_scorer",
+    # Session 6.9 (CLV hook-in) -- BetMGM's real TD-scorer rows (via
+    # Rotowire, see ingest_rotowire_betmgm_props.py) use Rotowire's own raw
+    # stat keys ("anytd" etc.), not DK's descriptive strings above. Without
+    # these, every real BetMGM TD-scorer row (347 of 377 in this session's
+    # real pull -- the large majority of BetMGM's real coverage) silently
+    # fell into "unsupported_stat_type", never reaching "estimated" and so
+    # never reaching CLV logging at all -- caught by actually running the
+    # real pipeline end-to-end with real BetMGM data, not assumed fine.
+    # "lasttd"/"threetd" are real market shapes this model has never
+    # supported for ANY platform (order-dependent-in-game or 3+-TD tail
+    # events, same real difficulty as DK's own "first td scorer") --
+    # marked unsupported explicitly rather than silently miscounted as
+    # "anytime"/"two_plus".
+    "anytd": "anytime",
+    "twotd": "two_plus",
+    "firsttd": "unsupported_first_scorer",
+    "lasttd": "unsupported_order_dependent",
+    "threetd": "unsupported_order_dependent",
 }
 
 
@@ -466,10 +484,13 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
             market_kind = DK_TD_MARKET_STAT_TYPES.get(stat_key_lower)
             row["resolved_stat_key"] = "+".join(TD_COMPOSITE_COLUMNS)
 
-            if market_kind == "unsupported_first_scorer" or market_kind is None:
-                row["model_status"] = (
-                    "unsupported_market_first_scorer" if market_kind else "unsupported_stat_type"
-                )
+            if market_kind in ("unsupported_first_scorer", "unsupported_order_dependent") or market_kind is None:
+                if market_kind == "unsupported_first_scorer":
+                    row["model_status"] = "unsupported_market_first_scorer"
+                elif market_kind == "unsupported_order_dependent":
+                    row["model_status"] = "unsupported_market_order_dependent"
+                else:
+                    row["model_status"] = "unsupported_stat_type"
                 row.update(_blank_model_fields())
                 out_rows.append(row)
                 continue

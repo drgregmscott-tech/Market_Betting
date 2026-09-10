@@ -3811,6 +3811,28 @@ binary and needed generalizing for a real third platform). Caesars
 (Session 6.10) is unaffected and must still be checked independently —
 this same Rotowire/Action-Network path may or may not apply to it and
 should not be assumed.
+50. **CLV logging hook-in for BetMGM, same day (2026-09-10).**
+`clv_logger.py`'s props pipeline was already fully platform-generic
+(Session 6.3, plus decision #49's own N-platform consensus fix) — no new
+CLV-logging code needed structurally. But BetMGM had nothing real to log:
+its raw Rotowire stat keys (`anytd`, etc.) weren't registered in the
+estimation model's TD-market lookup, so every BetMGM row fell into
+`unsupported_stat_type` — fixed in `sportsbook_props_model.py`. Running
+the real pipeline end-to-end then surfaced two more real, pre-existing
+consensus-matching bugs, neither caused by BetMGM but both first exposed
+by it: (1) the match key included each platform's own internal `game_id`,
+which structurally can never coincide across platforms — confirmed 0 of
+154 real pre-existing DraftKings flags ever had a real consensus match
+before this fix; fixed by dropping `game_id` (safe for NFL: one real open
+game per player at a time). (2) every TD-scorer-shaped market (Anytime/
+2+/First/Last) shares one `resolved_stat_key`, so matching on that alone
+produced real "consensus_available=True" flags with a blank
+`consensus_price` (matched to the wrong TD-market type); fixed with a
+narrow TD-market-kind disambiguator, scoped only to TD-composite stats.
+Real result: 291 BetMGM rows now reach `estimated` (up from 0), 210
+newly flagged into `clv_log.csv`, 104 with a real cross-platform
+consensus check, 94 with a real non-blank consensus price. Full trail
+in SESSION_LOG.md.
 
 ---
 *Update this file at the close of each future session, per the project's

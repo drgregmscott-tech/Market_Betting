@@ -965,18 +965,66 @@ def run_politics(estimates_path: Optional[Path]) -> dict:
 # SPORTSBOOK PROPS TRACK (Session 6.3)
 # ===========================================================================
 
+# Session 6.9 (BetMGM CLV hook-in) -- real finding: sportsbook_props_
+# model.py gives EVERY TD-scorer-shaped market (Anytime, 2+, First, Last)
+# the SAME resolved_stat_key ("rushing_tds+receiving_tds" -- it's the same
+# underlying stat, only the probability QUESTION differs). Matching on
+# resolved_stat_key alone silently merged three real, different DraftKings
+# markets for the same player into one match-key bucket, so a real
+# consensus lookup could pick "First TD Scorer" (unsupported, blank
+# implied_prob) as a "match" for a BetMGM "Anytime TD Scorer" flag --
+# caught by inspecting this session's own first real post-fix run's output
+# (consensus_available=True but consensus_price/consensus_edge blank),
+# not assumed correct because the flag count looked right. Only TD-shaped
+# markets need this extra bucket -- every other real stat already gets a
+# distinct resolved_stat_key per real stat (e.g. "passing_yards" vs
+# "rushing_yards"), so this map is deliberately narrow, not a general
+# stat_type normalizer.
+_TD_MARKET_KIND_SYNONYMS = {
+    "anytime td scorer": "anytime", "anytd": "anytime",
+    "2+ tds": "two_plus", "twotd": "two_plus",
+    "first td scorer": "first", "firsttd": "first",
+    "last td scorer": "last", "lasttd": "last",
+    "3+ tds": "three_plus", "threetd": "three_plus",
+}
+
+
+def _props_market_kind(row) -> Optional[str]:
+    resolved_stat_key = row.get("resolved_stat_key")
+    if resolved_stat_key != "rushing_tds+receiving_tds":
+        return None  # not a TD-composite market -- resolved_stat_key alone already distinguishes it
+    raw = str(row.get("stat_type") or "").strip().lower()
+    return _TD_MARKET_KIND_SYNONYMS.get(raw, raw)
+
+
 def _props_match_key(row) -> Optional[str]:
+    """Session 6.9 (BetMGM CLV hook-in) -- real finding: this key used to
+    include `game_id`, which is each PLATFORM'S OWN internal event id (DK's
+    own numbering, Rotowire's own numbering, etc.) -- confirmed directly
+    against real data that the SAME real player/game/stat gets two totally
+    different game_id values across platforms (e.g. Jahmyr Gibbs' real
+    Anytime-TD-Scorer market this week: DraftKings' own id "34118210" vs.
+    Rotowire/BetMGM's own id "2978635"). Including it meant cross-platform
+    consensus could structurally never match on real data -- confirmed 0
+    of 154 real pre-existing DraftKings flags had a consensus match before
+    this fix, not a coincidence. Only the earlier synthetic test fixtures
+    (which hand the same fake game_id to both platforms) ever exercised
+    the matching path. Dropped `game_id` from the key: (player_name,
+    resolved_stat_key) alone is a safe real-world match for this track
+    because an NFL player has at most one real upcoming game open across
+    every ingested platform at any one time -- there is no real ambiguity
+    this would introduce for this sport."""
     name = row.get("player_name")
     stat_key = row.get("resolved_stat_key")
-    game_id = row.get("game_id")
     if not name or not isinstance(name, str):
         return None
     if not stat_key or not isinstance(stat_key, str):
         return None
-    if not game_id or (isinstance(game_id, float) and pd.isna(game_id)):
-        return None
     norm_name = " ".join(name.strip().lower().split())
-    return f"{norm_name}|{stat_key}|{game_id}"
+    market_kind = _props_market_kind(row)
+    if market_kind:
+        return f"{norm_name}|{stat_key}|{market_kind}"
+    return f"{norm_name}|{stat_key}"
 
 
 def _props_implied_for_side(row, side: str) -> Optional[float]:

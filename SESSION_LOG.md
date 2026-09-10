@@ -8531,4 +8531,168 @@ rather than assuming it's done because ingestion works.
 independent feasibility check — this session's Rotowire/Action-Network
 finding is not assumed to carry over.
 
+---
+
+### Session 6.9, CLV logging hook-in for BetMGM (2026-09-10, same day)
+
+**What was actually done:** Checked whether `clv_logger.py`'s props
+pipeline (`build_props_candidates`, `build_props_present_and_prices`,
+`price_for_side_props`, `generic_process_run`, `run_props`) needed any new
+code for BetMGM. It didn't, structurally — every one of those functions
+already reads `platform` generically off each row (confirmed by reading
+the code directly, and by the fact this session's own earlier fix to
+`find_props_consensus_row` had already generalized it to N platforms).
+So the real work here wasn't writing new CLV-logging logic; it was making
+sure real BetMGM rows actually reach it, and then verifying the whole
+real pipeline end-to-end rather than assuming "the code is generic"
+was sufficient on its own.
+
+**Real gap #1, found by actually running the pipeline: BetMGM's raw stat
+keys weren't registered.** Re-ran `sportsbook_props_model.py --season
+2025` (the pipeline's real current default) with real BetMGM data in the
+mix: all 377 BetMGM rows landed on `unsupported_stat_type` (292),
+`no_player_match` (57), or `stale_season_stats` (28) — zero reached
+`estimated`. Root cause: `DK_TD_MARKET_STAT_TYPES` (in `sportsbook_
+props_model.py`) is keyed by DraftKings' own descriptive stat_type
+strings ("anytime td scorer", "2+ tds", "first td scorer") — Rotowire's
+raw keys (`anytd`, `twotd`, `firsttd`, `lasttd`, `threetd`) were never
+added, so BetMGM's TD-scorer rows (347 of 377 — the large majority of
+BetMGM's real coverage) fell straight into "unsupported," never reaching
+the CLV logger at all. **Fixed**: added `anytd`→`anytime`, `twotd`→
+`two_plus` (both already-supported market kinds), and `firsttd`→
+`unsupported_first_scorer` (same real difficulty DK's own "First TD
+Scorer" has — matches DK's existing, deliberate non-support). `lasttd`/
+`threetd` are real market shapes this model has never supported for ANY
+platform (order-dependent-in-game / 3+-TD tail events) — added a new,
+explicit `unsupported_market_order_dependent` status rather than
+silently miscounting them as a supported kind.
+
+**Result after fix #1**: re-ran `--season 2025` — 291 real BetMGM rows
+now reach `estimated` (up from 0). Total `estimated` across all platforms
+rose from 326 to 617.
+
+**Real gap #2, found by running `clv_logger.py --track props` against
+that real output: cross-platform consensus never actually worked, for
+ANY platform, ever — a real, pre-existing bug this session's own new data
+happened to expose, not something this session broke.** All 210 newly
+flagged BetMGM rows came back with `consensus_available=False`.
+Investigated directly rather than assuming BetMGM-specific cause: checked
+the 154 real, pre-existing DraftKings flags already in `clv_log.csv`
+(logged in earlier sessions, well before this one) — **all 154 also have
+`consensus_available=False`**, confirmed by reading the real file, not
+inferred. Root cause: `_props_match_key()` included `game_id` in its
+match key, and `game_id` is each PLATFORM'S OWN internal event
+identifier — confirmed directly against real data that the exact same
+real player/game/stat gets two totally different `game_id` values across
+platforms (Jahmyr Gibbs' real Anytime-TD-Scorer market this week:
+DraftKings' own id `34118210` vs. Rotowire/BetMGM's own id `2978635`).
+Matching on that key could never succeed across any two real platforms —
+the only reason the project's own existing test suite never caught this
+is that its synthetic fixtures hand both platforms the SAME fake
+`game_id` by construction, which real data never does. **Fixed**:
+dropped `game_id` from the match key entirely — safe for this sport/track
+because an NFL player has at most one real open game across every
+ingested platform at any one time, so `(player_name, resolved_stat_key)`
+alone is unambiguous in practice.
+
+**Real gap #3, found immediately after fixing #2 by inspecting the real
+output rather than trusting the "it worked" flag count: TD-market types
+collapse onto one `resolved_stat_key`.** After the game_id fix, `clv_
+logger.py` logged real "Multiple consensus candidates" warnings, and
+spot-checking a real "consensus_available=True" BetMGM row showed a
+blank `consensus_price`/`consensus_edge` — a match had been found, but to
+the wrong thing. Root cause: `sportsbook_props_model.py` gives every
+TD-scorer-shaped market (Anytime, 2+, First, Last) the identical
+`resolved_stat_key` ("rushing_tds+receiving_tds" — genuinely the same
+underlying stat, but a different real probability question per market
+type). A real DraftKings player has THREE such rows sharing that one key;
+the match logic could pick any of them, including DraftKings' own
+"First TD Scorer" row (deliberately unsupported, blank `implied_prob`).
+**Fixed**: added `_props_market_kind()`, a narrow disambiguator that only
+activates for the TD-composite `resolved_stat_key` (every other real
+stat already gets its own distinct key — e.g. "passing_yards" vs
+"rushing_yards" — so this is not a general stat-type normalizer, just a
+fix for the one real case where two platforms' naming needed reconciling:
+DK's "Anytime TD Scorer" and Rotowire's "anytd" both now resolve to the
+same `anytime` bucket, and so on for the other three TD-market kinds).
+
+**Result after all three fixes, confirmed against a real, fresh, full
+pipeline run (estimation → CLV logging), not assumed from the code
+alone:**
+- `sportsbook_props_model.py --season 2025`: 617 `estimated` rows total
+(326 draftkings, 291 betmgm).
+- `clv_logger.py --track props`: 210 newly flagged rows this run (`clv_
+log.csv` grew from 154 to 364 total rows), 0 "multiple consensus
+candidates" warnings (down from several per run before fix #3).
+- Of BetMGM's 210 new flags: 104 have `consensus_available=True`; 94 of
+those have a real, non-blank `consensus_price`/`consensus_edge` (the
+remaining 10 point to a real matched DK row that itself has no priced
+implied probability yet — a real, separate, legitimate gap, not
+re-investigated further this session).
+- Spot-checked one real example end-to-end: `betmgm|15876` (James Cook,
+`anytd`, flagged `over`, edge 0.4383) correctly matched DraftKings'
+consensus (`draftkings`, consensus_price 0.1085, consensus_edge 0.4385)
+— both platforms independently see a large edge on the same real player/
+market, the kind of cross-platform corroboration this consensus field
+exists to surface, now actually working for the first time in this
+project's real data.
+
+**Files created/modified:**
+- `scripts/estimation/sportsbook_props_model.py` — `DK_TD_MARKET_STAT_
+TYPES` extended with Rotowire's raw keys; new `unsupported_market_order_
+dependent` status added for `lasttd`/`threetd`.
+- `scripts/calibration/clv_logger.py` — `_props_match_key()` no longer
+includes `game_id`; new `_props_market_kind()` and `_TD_MARKET_KIND_
+SYNONYMS` added to disambiguate TD-composite markets within the match key.
+- `data/sportsbook_props/clv_log.csv`, `data/sportsbook_props/
+clv_snapshots/clv_log_20260910T163812Z.csv`, `output/estimation/
+sportsbook_props_latest.csv`, `output/estimation/sportsbook_props_
+estimates_20260910T163709Z.csv` — real pipeline output from the runs
+described above.
+
+**Validation results:**
+- `scripts/calibration/test_clv_logger.py`'s props scenarios (7-11): all
+5 pass, run directly (the file's own `run_all()` entry point hits an
+unrelated, pre-existing failure in the pickem track's scenario_1 — see
+Corrections below — so the props scenarios were run individually to
+confirm they specifically still pass after this session's match-key
+change).
+- `scripts/estimation/test_sportsbook_props_model.py`: 11/11 pass.
+- Real end-to-end pipeline run (see "Result after all three fixes"
+above) — this is the actual validation that matters for "is the hook-in
+real," per this project's standing rule that a model isn't validated
+until it's logging CLV-equivalent data on every flagged opportunity; a
+synthetic-fixture pass alone would not have caught gaps #1-#3, all three
+of which only surfaced by running the real pipeline against real data.
+
+**Corrections/reversals during the session:**
+- **Found, but explicitly NOT fixed this session**: `scripts/calibration/
+test_clv_logger.py`'s `run_all()` entry point fails at `scenario_1_new_
+flag_with_consensus` (a pickem-track scenario, unrelated to props/
+BetMGM) with `expected 2 flags, got 6852`. Confirmed via `git stash` that
+this failure exists on the original, pre-session code too — not
+introduced by this session's changes. Root cause (not fully
+investigated): that scenario calls `clv_logger.load_clv_log_pickem()`,
+which appears to load the real, accumulated `data/pickem/clv_log.csv`
+from disk rather than an isolated empty log the way the props scenarios
+use `_empty_props_log()` — a real, pre-existing test-isolation gap in the
+pickem track's own test harness, out of this session's scope (props/
+BetMGM). Flagged here explicitly so a future session doesn't waste time
+re-discovering it, and doesn't mistake it for something this session
+broke.
+
+**Open items / deferred validations:**
+- The 10 BetMGM flags with `consensus_available=True` but a blank
+`consensus_price` (matched to a real DK row lacking its own priced
+implied probability) were not further investigated — a real, minor,
+legitimate gap, not re-opened as a blocker.
+- `scripts/calibration/test_clv_logger.py`'s pickem-track test-isolation
+bug (see Corrections above) — real, pre-existing, out of scope for this
+session, left for whichever future session next touches the pickem
+track's own test harness.
+- Sizing, automation, and frontend integration for BetMGM remain
+undone, same as stated at the end of the prior entry — this session
+closed out CLV logging specifically (stage 3 of the project's seven-stage
+pattern), not the remaining stages.
+
 **Next session:** None yet — Session 5.7 remains open, same as before.

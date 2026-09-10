@@ -9416,3 +9416,13 @@ Call log:
 2026-09-10 15:55:54,026 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-10 15:55:54,027 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-10 15:55:54,028 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-10 16:38:26,509 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-10 16:38:26,510 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-10 16:38:26,511 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-10 16:38:26,512 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-10 16:38:26,513 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-10 16:39:42,066 UTC | WARNING | Skipped one malformed DraftKings selection: 'str' object has no attribute 'get'
+2026-09-10 16:39:42,067 UTC | ERROR | DraftKings markets response missing expected 'markets'/'selections' lists — schema may have changed. Skipping this event/subcategory.
+2026-09-10 16:39:42,069 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
+2026-09-10 16:39:42,069 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
+2026-09-10 16:39:42,070 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
