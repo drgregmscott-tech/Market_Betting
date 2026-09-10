@@ -286,6 +286,12 @@ PROPS_EXTRA_COLUMNS = [
     "player_name", "team", "sport", "stat_type", "prop_category",
     "resolved_stat_key", "line", "game_id", "game_start_time",
     "implied_prob_includes_field_vig",
+    # Real American odds as the book itself quotes them, carried straight
+    # through from the estimates file (over_american_odds/under_american_odds
+    # already exist there -- see sportsbook_props_model.py's output columns)
+    # -- added 2026-09-10 so the frontend can show the real quoted odds
+    # instead of only an implied-probability price.
+    "over_american_odds", "under_american_odds",
 ]
 CLV_LOG_COLUMNS_PROPS = CLV_CORE_COLUMNS + PROPS_EXTRA_COLUMNS
 
@@ -1071,6 +1077,8 @@ def build_props_candidates(df: pd.DataFrame) -> list[dict]:
             "game_id": row.get("game_id"),
             "game_start_time": row.get("game_start_time"),
             "implied_prob_includes_field_vig": row.get("implied_prob_includes_field_vig"),
+            "over_american_odds": row.get("over_american_odds"),
+            "under_american_odds": row.get("under_american_odds"),
         })
     return candidates
 

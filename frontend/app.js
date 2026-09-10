@@ -84,6 +84,104 @@ function venueLinkHtml(platform, ticker, title, label) {
   return `<a class="venue-link" href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${text} ↗</a>`;
 }
 
+// ---------------------------------------------------------------------
+// American odds -- Kalshi/Polymarket quote a price in cents-on-the-dollar
+// (an implied probability, e.g. 0.32); most people asking "what are the
+// odds" mean the sportsbook-style +/-XXX number. This is an exact,
+// deterministic conversion of that same real price (not a separate,
+// guessed number) -- shown as a convenience alongside the real price, per
+// the user's request, 2026-09-10.
+// ---------------------------------------------------------------------
+function americanOddsFromProb(p) {
+  const prob = toNum(p);
+  if (prob === null || prob <= 0 || prob >= 1) return null;
+  return prob >= 0.5 ? -Math.round((prob / (1 - prob)) * 100) : Math.round(((1 - prob) / prob) * 100);
+}
+
+function fmtAmericanOdds(n) {
+  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+function fmtAmericanOddsFromProb(p) {
+  return fmtAmericanOdds(americanOddsFromProb(p));
+}
+
+// ---------------------------------------------------------------------
+// Readiness signal -- answers "is there a known reason NOT to act on this
+// row right now," using only checks this project already computes for
+// itself (fillability, legal footprint, cross-source corroboration,
+// staleness). This is NOT a claim that green means "this will win" --
+// every track's own copy elsewhere on this page already says the model
+// can be wrong. It only means no already-tracked execution/reliability
+// caveat is present. Added 2026-09-10 at the user's request for a
+// clearer at-a-glance read than scanning every column by hand.
+// ---------------------------------------------------------------------
+function isTrueField(v) {
+  return String(v).trim().toLowerCase() === "true";
+}
+
+function readiness(track, r) {
+  const reasons = [];
+  let level = "green";
+  const downgrade = (lvl, reason) => {
+    reasons.push(reason);
+    if (lvl === "red" || level !== "red") level = lvl;
+  };
+
+  if (track === "arb") {
+    if (!isTrueField(r.liquidity_sufficient)) {
+      downgrade("red", "Not fillable at the flagged size on the latest run.");
+    }
+    if (r.legal_footprint_status && r.legal_footprint_status !== "both_venues_available") {
+      downgrade("red", "Legal footprint restriction flagged for one venue -- check eligibility before trading.");
+    }
+    const sim = toNum(r.title_similarity);
+    if (sim !== null && sim < 0.6) {
+      downgrade("yellow", "Lower title-match confidence between the two legs -- double-check they're really the same event.");
+    }
+  } else if (track === "weather") {
+    const lead = toNum(r.lead_days);
+    if (lead !== null && lead <= 0) {
+      downgrade("red", "Lead time has passed zero days -- this contract may already be resolving.");
+    } else if (lead === null) {
+      downgrade("yellow", "Lead time unknown.");
+    } else if (lead > 7) {
+      downgrade("yellow", "More than a week out -- weather forecast uncertainty grows with lead time.");
+    }
+  } else if (track === "politics") {
+    if (!isTrueField(r.consensus_available)) {
+      downgrade("yellow", "No corroborating Polymarket price for this race -- Kalshi's own line is the only source.");
+    }
+    const hours = toNum(r.hours_to_resolution);
+    if (hours !== null && hours > 24 * 60) {
+      downgrade("yellow", "Long-dated position (55+ days to resolution) -- capital is tied up a while.");
+    }
+    if (hours !== null && hours <= 0) {
+      downgrade("red", "Resolution window has passed.");
+    }
+  } else {
+    // pickem + props: consensus = a second platform pricing the same side
+    if (!isTrueField(r.consensus_available)) {
+      downgrade("yellow", "No second platform corroborates this line -- only one source is pricing it.");
+    }
+    if (r.game_start_time && new Date(r.game_start_time).getTime() < Date.now()) {
+      downgrade("red", "Game start time has already passed.");
+    }
+  }
+
+  if (!reasons.length) reasons.push("No known execution or corroboration caveat from this project's own checks.");
+  return { level, reasons };
+}
+
+const READINESS_COLOR = { green: "var(--accent-pos)", yellow: "#ecb44f", red: "var(--accent-neg)" };
+
+function readinessDotHtml(track, r) {
+  const { level, reasons } = readiness(track, r);
+  const title = escapeAttr(reasons.join(" "));
+  return `<span class="signal-dot signal-${level}" title="${title}" style="background:${READINESS_COLOR[level]}"></span>`;
+}
+
 // Selected legs for the sizing calculator: Map<flag_id, row>
 const selectedLegs = new Map();
 
@@ -325,6 +423,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
+          <td>${readinessDotHtml("pickem", r)}</td>
           <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.team) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
@@ -639,13 +738,14 @@ function renderArbTable(rows) {
       const netProfit = toNum(r.net_profit_per_dollar);
       return `
         <tr>
+          <td>${readinessDotHtml("arb", r)}</td>
           <td>${escapeHtml(r.opportunity_type) || "—"}</td>
           <td>${escapeHtml(r.platform_a) || "—"}</td>
           <td class="name-cell" title="${escapeAttr(r.title_a)}">${venueLinkHtml(r.platform_a, r.market_a, r.title_a, r.title_a)}</td>
-          <td>${escapeHtml(r.leg_a_ask) || "—"}</td>
+          <td>${escapeHtml(r.leg_a_ask) || "—"} <span class="ticker-cell">(${fmtAmericanOddsFromProb(r.leg_a_ask)})</span></td>
           <td>${escapeHtml(r.platform_b) || "—"}</td>
           <td class="name-cell" title="${escapeAttr(r.title_b)}">${venueLinkHtml(r.platform_b, r.market_b, r.title_b, r.title_b)}</td>
-          <td>${escapeHtml(r.leg_b_ask) || "—"}</td>
+          <td>${escapeHtml(r.leg_b_ask) || "—"} <span class="ticker-cell">(${fmtAmericanOddsFromProb(r.leg_b_ask)})</span></td>
           <td class="${edgeClass(netProfit)}">${fmtNetProfit(netProfit)}</td>
           <td>${fmtBool(r.liquidity_sufficient)}</td>
           <td>${escapeHtml(r.legal_footprint_status) || "—"}</td>
@@ -745,12 +845,14 @@ function renderWeatherOpenTable(open) {
       const edge = toNum(r.first_flagged_edge);
       return `
         <tr>
+          <td>${readinessDotHtml("weather", r)}</td>
           <td class="name-cell">${escapeHtml(r.city_label) || "—"}</td>
           <td>${fmtDate(r.target_date)}</td>
           <td>${escapeHtml(r.forecast_kind) || "—"}${r.forecast_value_f ? " " + escapeHtml(r.forecast_value_f) + "°F" : ""}</td>
           <td>${fmtStrike(r)}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
           <td>${escapeHtml(r.first_flagged_market_price) || "—"}</td>
+          <td class="ticker-cell">${fmtAmericanOddsFromProb(r.first_flagged_market_price)}</td>
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
           <td>${escapeHtml(r.lead_days) || "—"}d</td>
           <td class="ticker-cell">${venueLinkHtml("kalshi", r.flag_id || r.series_ticker, r.city_label, r.flag_id || r.series_ticker)}</td>
@@ -884,12 +986,14 @@ function renderPoliticsOpenTable(open) {
       const waitClass = hours !== null && hours > 24 * 60 ? "wait-long" : "";
       return `
         <tr>
+          <td>${readinessDotHtml("politics", r)}</td>
           <td class="name-cell" title="${escapeAttr(r.candidate_name)}">${escapeHtml(r.candidate_name) || "—"}</td>
           <td>${escapeHtml(r.party) || "—"}</td>
           <td>${escapeHtml(r.state) || "—"}</td>
           <td>${escapeHtml(r.chamber) || "—"}${r.district ? " " + escapeHtml(r.district) : ""}</td>
           <td>${escapeHtml(r.venue) || "—"}</td>
           <td>${escapeHtml(r.first_flagged_market_price) || "—"}</td>
+          <td class="ticker-cell">${fmtAmericanOddsFromProb(r.first_flagged_market_price)}</td>
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
           <td class="${waitClass}">${fmtHoursToResolution(hours)}</td>
         </tr>`;
@@ -1023,14 +1127,20 @@ function renderPropsOpenTable(open) {
   tbody.innerHTML = sorted
     .map((r) => {
       const edge = toNum(r.first_flagged_edge);
+      const rawOdds = r.flagged_side === "under" ? r.under_american_odds : r.over_american_odds;
+      const oddsDisplay = rawOdds !== undefined && rawOdds !== null && rawOdds !== ""
+        ? fmtAmericanOdds(toNum(rawOdds))
+        : fmtAmericanOddsFromProb(r.first_flagged_market_price);
       return `
         <tr>
+          <td>${readinessDotHtml("props", r)}</td>
           <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.team) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
           <td>${escapeHtml(r.platform) || "—"}</td>
           <td>${escapeHtml(r.line) || "—"}</td>
+          <td class="ticker-cell">${oddsDisplay}</td>
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
           <td>${fmtDate(r.game_start_time)}</td>
           <td>${renderRiskBadges(r)}</td>

@@ -284,6 +284,14 @@ main {
   white-space: nowrap;
 }
 
+.signal-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: help;
+}
+
 /* ---------- track headings (new, Session 3.5) ---------- */
 /* Marks the start of each track's section on the page so the two tracks
    are clearly distinguished, per Session 3.5's validation requirement,
