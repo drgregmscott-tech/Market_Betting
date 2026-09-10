@@ -9434,3 +9434,165 @@ follow-up — removed as an open item.
 added; all six pickem scenarios' initial log input swapped to it)
 
 **Next session:** None yet — Session 5.7 remains the longest-open item.
+
+---
+
+### Session 6.10, follow-up — BetMGM `flag_id` collision fixed directly, per
+the user's explicit request (2026-09-10, same day)
+
+**Date completed:** 2026-09-10
+**Status:** ✅ Complete
+
+**What was actually done:** The BetMGM `flag_id`-collision bug flagged
+(not fixed) in this session's prior entry was fixed directly this round,
+at the user's explicit instruction, following the exact plan named in
+that entry's `spawn_task`.
+
+1. Confirmed the real cause of the collision precisely: BetMGM's own
+Rotowire-sourced `source_market_id` (e.g. `anytd`, `rushrec` — the stat
+key itself) is the real, stable per-market differentiator already present
+in the schema and already flowing through the estimation pipeline, but
+never used when building a props flag's identity.
+2. Added `props_flag_id(platform, source_market_id, selection_id)` in
+`scripts/calibration/clv_logger.py` as the single shared source of truth
+for a props flag's identity, replacing the two separate inline
+`f"{platform}|{selection_id}"` constructions in
+`build_props_candidates()` and `build_props_present_and_prices()` (which
+could previously drift out of sync from each other, even though they
+didn't in practice). New format: `f"{platform}|{source_market_id}|
+{selection_id}"`. Applied uniformly across all three real platforms
+(DraftKings, FanDuel, BetMGM), not special-cased to BetMGM only —
+consistent with this project's own established preference (Session 6.9's
+`find_props_consensus_row()` generalization) for generic, non-hardcoded
+platform handling. Harmless for DraftKings/FanDuel, whose own
+`source_selection_id` was already unique per market on its own — this
+only widens their already-unique flag_id, it does not change their real
+behavior.
+3. **Real, one-time data migration required and performed carefully, not
+skipped:** every existing row in the live `data/sportsbook_props/
+clv_log.csv` (364 rows, 348 open) was built under the OLD two-part
+flag_id format. Naively shipping the code change alone would have caused
+EVERY open flag (not just BetMGM's 28 real collisions) to look "not
+present" under the new key format on the very next pipeline run, falsely
+closing 348 real, legitimately-still-open flags and corrupting real CLV
+grading history with fake "closed" events — a real, avoidable
+side effect the original `spawn_task` prompt's "let them re-open cleanly"
+suggestion had not accounted for at this scale, caught before executing
+the migration, not after.
+4. Found the CLV log already stores each row's own `source_market_id`
+column (confirmed directly), making a clean in-place rekey possible
+instead: recomputed `flag_id` for all 364 existing rows directly from
+their own already-stored `platform`/`source_market_id`/
+`source_selection_id` columns.
+5. **Found and corrected a real formatting quirk before writing anything:**
+the stored `source_market_id` values in the existing log carried a
+literal trailing `.0` (e.g. `"334323199.0"`), left over from an earlier
+point in the pipeline where that column was read with a float dtype (an
+artifact of a different run's data, not something this session caused).
+A fresh read of the current `output/estimation/sportsbook_props_latest.csv`
+confirmed `source_market_id` loads clean (no `.0`) today, so a naive
+rekey would have permanently baked in a MISMATCH between rekeyed
+historical flag_ids and every future run's freshly-built ones —
+re-triggering exactly the same false-close problem this migration was
+meant to avoid. Normalized by stripping a trailing `.0` from any
+purely-numeric id component during the rekey.
+6. **Verified safety before writing to the real file, not after:**
+simulated what the very next real pipeline run's `present_ids` set would
+contain (via `clv_logger.build_props_present_and_prices()` against the
+real, current estimation file) and confirmed all 348 rekeyed open flag_ids
+land inside it — zero would have been falsely closed. Only then was the
+real `data/sportsbook_props/clv_log.csv` overwritten, with an inline
+assertion guarding against any introduced duplicate flag_id or row-count
+change before the write.
+7. Ran the real `clv_logger.py --track props` pipeline live immediately
+after the rekey to confirm end-to-end stability: `newly_flagged: 0,
+newly_closed: 0, still_open: 348` — exactly the predicted, disruption-free
+outcome.
+8. Added `scenario_12_props_betmgm_selection_id_collision()` to
+`test_clv_logger.py`, using two synthetic BetMGM rows (Jahmyr Gibbs'
+real `anytd`/`rushrec` collision, reproduced exactly) sharing a
+`source_selection_id` but differing in `source_market_id`, asserting two
+distinct flag_ids and correctly separated prices. **Verified this test
+actually catches the bug**: ran it against the pre-fix code via
+`git stash` — failed with the real collision (`{'betmgm|16808'}`, a
+single merged flag_id), confirming it as a real regression guard.
+
+**Validation results:**
+- `python scripts/calibration/test_clv_logger.py` — all 12 scenarios pass
+(6 pickem + 5 props + this session's new BetMGM-collision scenario).
+- Confirmed live in the real, rekeyed `data/sportsbook_props/clv_log.csv`:
+zero duplicate `flag_id` values across all 364 rows (previously masked
+duplicates, since the OLD format's collisions merged onto one row rather
+than showing as visible duplicates — checked the correct thing, not just
+"no dupes in the new column," which would have been true even if the
+migration had been wrong).
+- Confirmed Jahmyr Gibbs' real `anytd` flag survived the rekey correctly
+as `betmgm|anytd|16808` (his `rushrec` market had never independently
+cleared the edge threshold in this log's real history, so only one of his
+two real markets had an existing row to rekey — expected, not a gap).
+
+**Decisions made:**
+1. **Rekeyed existing data in place rather than letting flags "re-open
+cleanly"** — the `spawn_task` prompt had named this as an acceptable
+fallback, but a full accounting of the blast radius (348 real open flags
+across all platforms, not just BetMGM's 28) made in-place rekey clearly
+the better real choice once it was confirmed to be possible (Decision
+made mid-session, not pre-committed to the fallback before checking).
+2. **Format change applied to all platforms, not BetMGM-specifically** —
+matches this project's own stated preference against platform
+special-casing (Session 6.9's own precedent), and DK/FD are unaffected in
+practice since their own ids were already unique.
+3. **The trailing-`.0` formatting artifact was fixed as part of this
+migration, not separately** — leaving it would have silently reintroduced
+a version of the same false-close bug this migration exists to prevent,
+so it was in-scope by necessity, not scope creep.
+
+**Corrections/reversals during the session:** The originally-spawned
+task's suggested fallback ("let them re-open cleanly on the next pipeline
+run") was not used — corrected to an in-place rekey once its real,
+larger-than-anticipated blast radius (all 348 open flags, not just
+BetMGM's 28) was actually calculated, before any data was written.
+
+**Open items / deferred validations:** None remaining from either this
+entry or its parent — the props frozen-odds bug (fixed), the
+`test_clv_logger.py` pickem isolation bug (fixed), and the BetMGM
+`flag_id` collision (fixed) are all closed as of this entry.
+
+**Handoff note — the "parallel work" warning below was raised, then
+checked, then walked back; recorded here for the full trail, not just the
+final answer.** When this session tried to withdraw the `spawn_task` chip
+for this fix after finishing it directly, the tool reported back
+"already started by the user." Checked for real corroborating evidence
+before treating that as fact: `git worktree list` showed only this
+session's own working directory (no second worktree), `git fetch` pulled
+no new remote branches, `git stash list` was empty, and ROADMAP.md/
+SESSION_LOG.md had no prior entry tracking this BetMGM `flag_id`
+collision as an open item from any earlier session — it was first found
+and named in this session's own prior entry, the same session that then
+spawned the task. **The user directly confirmed they had not clicked
+anything to start a parallel session.** With no supporting evidence from
+git, no prior tracked open item, and the user's own denial, the
+"already started by the user" response is treated here as an unreliable
+or stale signal from the task-chip system, not evidence of real
+concurrent work — logged accurately rather than either asserted as fact
+or silently dropped. If a genuine second version of this fix does surface
+later (an unexpected branch, an unfamiliar commit, or a merge conflict on
+these files), treat THAT as the real signal and reconcile then, per this
+project's standing rule (ROADMAP.md, "Rule for sessions left open across
+other work") — but do not hold this session's own, verified-working fix
+back on the strength of the chip response alone.
+
+**Files created/modified:**
+- `scripts/calibration/clv_logger.py` (modified: `props_flag_id()` added,
+both construction sites updated to use it)
+- `scripts/calibration/test_clv_logger.py` (modified: existing props
+flag_id assertions updated to the new 3-part format;
+`scenario_12_props_betmgm_selection_id_collision` added)
+- `data/sportsbook_props/clv_log.csv` (real data: all 364 rows rekeyed to
+the new flag_id format, then regenerated again by this session's live
+pipeline run — 0 newly closed, 0 newly flagged, confirming a
+disruption-free migration)
+- `data/sportsbook_props/clv_snapshots/clv_log_20260910T173713Z.csv` (new,
+real snapshot from this session's live run)
+
+**Next session:** None yet — Session 5.7 remains the longest-open item.

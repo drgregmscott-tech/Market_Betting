@@ -242,7 +242,7 @@ def scenario_7_props_new_flag_with_consensus():
     log_df = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
 
     assert len(log_df) == 2, f"expected 2 flags (both platforms clear threshold), got {len(log_df)}"
-    r = log_df[log_df["flag_id"] == "draftkings|sel_dk_1"].iloc[0]
+    r = log_df[log_df["flag_id"] == "draftkings|mkt_1|sel_dk_1"].iloc[0]
     assert r["flagged_side"] == "over"
     assert r["consensus_available"] == True  # noqa: E712
     assert r["consensus_label"] == "fanduel"
@@ -310,7 +310,7 @@ def scenario_10_props_refresh_and_close():
     # Run 3: prop disappears (game locked / market pulled).
     other_row = _props_base_row(source_selection_id="sel_unrelated", game_id="game_other")
     log3 = _run_props(pd.DataFrame([other_row]), log2, "2026-09-01T12:00:00Z")
-    closed = log3[log3["flag_id"] == "draftkings|sel_lifecycle"].iloc[0]
+    closed = log3[log3["flag_id"] == "draftkings|mkt_1|sel_lifecycle"].iloc[0]
     assert closed["status"] == "closed"
     assert closed["closing_market_price"] == 0.55
     assert closed["closing_pulled_at"] == "2026-09-01T11:00:00Z"
@@ -331,6 +331,42 @@ def scenario_11_props_idempotent_same_file_twice():
     print("PASS: scenario_11_props_idempotent_same_file_twice")
 
 
+def scenario_12_props_betmgm_selection_id_collision():
+    """Real bug found 2026-09-10: BetMGM (via Rotowire) reuses the same
+    plain numeric source_selection_id across genuinely different real
+    markets for the same player -- e.g. Jahmyr Gibbs' real id 16808 was
+    simultaneously his Anytime TD Scorer market AND his separate
+    rushing+receiving yards market. flag_id built from platform+
+    selection_id alone silently collapsed both onto one CLV-log row, each
+    overwriting the other's price/status on every refresh. This locks in
+    the fix: flag_id must also include source_market_id."""
+    anytd_row = _props_base_row(
+        platform="betmgm", source_event_id="evt_gibbs", source_market_id="anytd",
+        source_selection_id="16808", stat_type="anytd", over_american_odds=-325,
+        under_american_odds=None,
+    )
+    rushrec_row = _props_base_row(
+        platform="betmgm", source_event_id="evt_gibbs", source_market_id="rushrec",
+        source_selection_id="16808",  # same real selection_id, different real market
+        stat_type="rushrec", line=124.5, over_american_odds=-120, under_american_odds=110,
+        implied_prob_over=0.52, implied_prob_under=0.48,
+    )
+    estimates_df = pd.DataFrame([anytd_row, rushrec_row])
+    log_df = _run_props(estimates_df, _empty_props_log(), "2026-09-01T10:00:00Z")
+
+    assert len(log_df) == 2, (
+        f"expected 2 distinct flags (same selection_id, different market) -- "
+        f"got {len(log_df)}, meaning the collision bug is back"
+    )
+    flag_ids = set(log_df["flag_id"])
+    assert flag_ids == {"betmgm|anytd|16808", "betmgm|rushrec|16808"}, flag_ids
+    anytd = log_df[log_df["flag_id"] == "betmgm|anytd|16808"].iloc[0]
+    rushrec = log_df[log_df["flag_id"] == "betmgm|rushrec|16808"].iloc[0]
+    assert anytd["over_american_odds"] == -325
+    assert rushrec["over_american_odds"] == -120
+    print("PASS: scenario_12_props_betmgm_selection_id_collision")
+
+
 def run_all():
     # Redirect logging to a throwaway location so the test doesn't write
     # into a real repo's logs/ directory.
@@ -349,9 +385,10 @@ def run_all():
     scenario_9_props_below_threshold_not_flagged()
     scenario_10_props_refresh_and_close()
     scenario_11_props_idempotent_same_file_twice()
+    scenario_12_props_betmgm_selection_id_collision()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 11 scenarios passed.")
+    print("\nAll 12 scenarios passed.")
 
 
 if __name__ == "__main__":

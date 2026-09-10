@@ -1083,6 +1083,27 @@ def find_props_consensus_row(df: pd.DataFrame, index: dict, own_platform: str, m
     return df.loc[candidates[0]]
 
 
+def props_flag_id(platform, source_market_id, selection_id) -> Optional[str]:
+    """Single source of truth for a props flag's identity, shared by
+    build_props_candidates() and build_props_present_and_prices() so the
+    two can never drift apart. Must include source_market_id, not just
+    source_selection_id: confirmed real 2026-09-10 that BetMGM (via
+    Rotowire) reuses the same plain numeric selection_id across DIFFERENT
+    real markets for the same player (e.g. Jahmyr Gibbs' real id 16808 is
+    both his Anytime TD Scorer market AND his separate rushing+receiving
+    yards market) -- platform+selection_id alone silently collapsed two
+    real props onto one CLV-log row, each overwriting the other's price/
+    status on every refresh. DraftKings/FanDuel's own selection_id is
+    already a compound string encoding market identity, so this is not a
+    behavior change for them beyond widening (harmlessly) their own
+    already-unique flag_id."""
+    if not platform or source_market_id is None or selection_id is None:
+        return None
+    if isinstance(source_market_id, float) and source_market_id != source_market_id:  # NaN
+        return None
+    return f"{platform}|{source_market_id}|{selection_id}"
+
+
 def build_props_candidates(df: pd.DataFrame) -> list[dict]:
     """Mirrors pick'em's determine_flagged_side/consensus-search pattern
     (cross-row, not same-row -- see module docstring), but emits the
@@ -1109,9 +1130,9 @@ def build_props_candidates(df: pd.DataFrame) -> list[dict]:
 
         platform = row.get("platform")
         selection_id = row.get("source_selection_id")
-        if not platform or selection_id is None:
+        flag_id = props_flag_id(platform, row.get("source_market_id"), selection_id)
+        if flag_id is None:
             continue
-        flag_id = f"{platform}|{selection_id}"
 
         match_key = _props_match_key(row)
         consensus_row = find_props_consensus_row(df, index, platform, match_key) if match_key else None
@@ -1164,9 +1185,9 @@ def build_props_present_and_prices(df: pd.DataFrame) -> tuple[set[str], dict[str
     for _, row in df.iterrows():
         platform = row.get("platform")
         selection_id = row.get("source_selection_id")
-        if not platform or selection_id is None:
+        flag_id = props_flag_id(platform, row.get("source_market_id"), selection_id)
+        if flag_id is None:
             continue
-        flag_id = f"{platform}|{selection_id}"
         present_ids.add(flag_id)
         rows_by_id[flag_id] = {
             "implied_prob_over": row.get("implied_prob_over"),
