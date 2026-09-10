@@ -26,6 +26,19 @@ import pandas as pd
 import clv_logger
 
 
+def _empty_pickem_log() -> pd.DataFrame:
+    """An isolated, empty pickem CLV log fixture -- every scenario below
+    must start from this, never from `clv_logger.load_clv_log_pickem()`
+    directly. That function reads the real, ever-growing production file
+    at `data/pickem/clv_log.csv` (thousands of real rows as of Session
+    6.x), which made every scenario's row-count assertions fail against
+    live data instead of proving the logic in isolation -- a real,
+    pre-existing test-isolation bug found 2026-09-10 while fixing an
+    unrelated props display bug. Matches the isolation pattern
+    `_empty_props_log()` already used for the props scenarios below."""
+    return pd.DataFrame(columns=clv_logger.CLV_LOG_COLUMNS_PICKEM, dtype=object)
+
+
 def _base_row(**overrides):
     row = {
         "platform": "prizepicks",
@@ -73,7 +86,7 @@ def scenario_1_new_flag_with_consensus():
         edge_under=-0.10,
     )
     estimates_df = pd.DataFrame([pp_row, ud_row])
-    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, _empty_pickem_log(), "2026-09-01T10:00:00Z")
 
     # Both platforms independently clear the edge threshold here, so both
     # get logged, each pointing at the other as its consensus match.
@@ -91,7 +104,7 @@ def scenario_1_new_flag_with_consensus():
 def scenario_2_new_flag_without_consensus():
     pp_row = _base_row(game_id="game_solo")
     estimates_df = pd.DataFrame([pp_row])
-    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, _empty_pickem_log(), "2026-09-01T10:00:00Z")
 
     assert len(log_df) == 1
     r = log_df.iloc[0]
@@ -107,7 +120,7 @@ def scenario_3_below_threshold_not_flagged():
         edge_over=0.01, edge_under=-0.01,
     )
     estimates_df = pd.DataFrame([pp_row])
-    log_df = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_df = clv_logger.process_run_pickem(estimates_df, _empty_pickem_log(), "2026-09-01T10:00:00Z")
     assert len(log_df) == 0, f"expected 0 flags below threshold, got {len(log_df)}"
     print("PASS: scenario_3_below_threshold_not_flagged")
 
@@ -115,7 +128,7 @@ def scenario_3_below_threshold_not_flagged():
 def scenario_4_refresh_open_flag_line_moves():
     pp_row_run1 = _base_row(source_line_id="pp_refresh", line=275.5)
     estimates_run1 = pd.DataFrame([pp_row_run1])
-    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, _empty_pickem_log(), "2026-09-01T10:00:00Z")
     assert len(log_after_run1) == 1
     assert log_after_run1.iloc[0]["last_seen_line"] == 275.5
 
@@ -136,7 +149,7 @@ def scenario_4_refresh_open_flag_line_moves():
 def scenario_5_flag_closes_when_prop_disappears():
     pp_row_run1 = _base_row(source_line_id="pp_close_me", line=275.5, prob_over=0.60)
     estimates_run1 = pd.DataFrame([pp_row_run1])
-    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, _empty_pickem_log(), "2026-09-01T10:00:00Z")
 
     # Run 2: line moves while still open.
     pp_row_run2 = _base_row(source_line_id="pp_close_me", line=277.0, prob_over=0.60)
@@ -161,7 +174,7 @@ def scenario_5_flag_closes_when_prop_disappears():
 def scenario_6_idempotent_same_file_twice():
     pp_row = _base_row(source_line_id="pp_idempotent")
     estimates_df = pd.DataFrame([pp_row])
-    log_after_first = clv_logger.process_run_pickem(estimates_df, clv_logger.load_clv_log_pickem(), "2026-09-01T10:00:00Z")
+    log_after_first = clv_logger.process_run_pickem(estimates_df, _empty_pickem_log(), "2026-09-01T10:00:00Z")
     assert len(log_after_first) == 1
 
     # Re-run the SAME file against the SAME timestamp -- must not duplicate

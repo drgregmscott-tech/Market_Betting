@@ -9313,3 +9313,124 @@ current for every open props flag, not just newly-created ones)
 real snapshot from the same live run)
 
 **Next session:** None yet — Session 5.7 remains the longest-open item.
+
+---
+
+### Session 6.10, follow-up — checked all other open props for the same
+frozen-odds pattern, then fixed the pre-existing `test_clv_logger.py`
+pickem test-isolation bug named above (2026-09-10, same day)
+
+**Date completed:** 2026-09-10
+**Status:** ✅ Complete
+
+**What was actually done, part 1 — swept every other open props flag for
+the same frozen-odds pattern**, at the user's explicit request, before
+declaring the fix above sufficient on its own:
+
+1. Loaded the real, freshly-regenerated `data/sportsbook_props/clv_log.csv`
+(348 real open rows) directly and checked for any row where BOTH
+`over_american_odds` and `under_american_odds` were still empty (the exact
+condition that forces the stale-probability-reconstruction fallback the
+Nacua bug exposed). **Zero such rows** — the live pipeline run already
+performed as part of the fix above had already refreshed every open flag.
+2. Not satisfied with "the columns are populated" alone (a stale-but-
+non-empty value would look the same as a correct one at a glance) — cross-
+checked every open DraftKings/FanDuel row's `over_american_odds`/
+`under_american_odds` (whichever side it was flagged on) directly against
+that exact selection's live price in the same run's
+`output/estimation/sportsbook_props_latest.csv`. **Zero mismatches** for
+DK/FD — every open DK/FD flag's displayed odds are confirmed live-current,
+not just non-empty.
+3. **A real, separate, pre-existing bug found as a byproduct of this
+check, NOT fixed this session (flagged, not fixed, per its own scope):**
+BetMGM's `flag_id` is built as `f"{platform}|{source_selection_id}"`
+(`build_props_candidates()`/`build_props_present_and_prices()`), but
+BetMGM's real `source_selection_id` is **not unique per market** the way
+DraftKings'/FanDuel's compound selection-id strings are — confirmed
+directly against the real estimation output: `betmgm|16808` is Jahmyr
+Gibbs' real numeric selection id for BOTH his real `anytd` (Anytime TD
+Scorer, -325) market AND his real `rushrec` (rushing+receiving yards,
+-120) market simultaneously — two genuinely different real props
+colliding onto one CLV-log row. 28 of BetMGM's real, currently-open
+selection ids collide this way (confirmed by counting duplicate `flag_id`
+values in the same live estimation file). **This means the CLV log can
+silently show one BetMGM market's price under a different market's flag,
+or overwrite one market's open/closed lifecycle with another's**, for any
+player whose numeric BetMGM selection id happens to repeat across stat
+categories. Out of scope for this session's props-display-odds fix (a
+correctness bug in flag *identity*, not the odds-refresh bug this session
+was fixing) — flagged via `spawn_task` for a dedicated future session
+rather than folded in here or silently left for a future session to
+rediscover from scratch.
+
+**What was actually done, part 2 — fixed the pre-existing
+`test_clv_logger.py` pickem test-isolation bug** named as an explicit open
+item in this session's own entry above, per the user's direct request:
+
+4. Root cause (already traced above, now actually fixed): all six pickem
+scenarios (`scenario_1` through `scenario_6`) called
+`clv_logger.load_clv_log_pickem()` directly as their "existing log"
+input — a function that unconditionally reads the real, ever-growing
+production file at `data/pickem/clv_log.csv` (now thousands of real rows).
+This made every scenario's row-count assertions (`assert len(log_df) ==
+2`, etc.) compare against live production data instead of an isolated
+fixture, so the whole suite failed at `scenario_1` before any of the
+other five pickem scenarios could even run.
+5. Added `_empty_pickem_log()` — an empty `pd.DataFrame` built from
+`clv_logger.CLV_LOG_COLUMNS_PICKEM`, the exact same isolation pattern
+`_empty_props_log()` already used for the props scenarios in this same
+file (so this wasn't a new pattern invented for pickem, just the existing
+one finally applied consistently).
+6. Replaced every `clv_logger.load_clv_log_pickem()` call across all six
+pickem scenarios with `_empty_pickem_log()`. Scenarios 4 and 5 (the
+refresh/close lifecycle tests) already correctly chained each run's own
+returned `log_df` into the next call for their second/third runs — only
+the FIRST call in each scenario needed the swap, confirmed by checking
+each scenario individually rather than a blind find/replace across the
+whole file.
+
+**Validation results:**
+- `python scripts/calibration/test_clv_logger.py` (the file's own
+`run_all()` entry point) now runs clean end to end: **all 11 scenarios
+pass** (6 pickem + 5 props), confirmed live, not assumed from the diff
+alone.
+- Confirmed via `git status` that running the test suite did not write to
+or modify any real production data file (`data/pickem/clv_log.csv`
+included) — the isolation fix means the tests never touch that file at
+all now, by construction, not just by getting lucky this run.
+- Re-confirmed the props frozen-odds fix itself (this session's earlier
+entry) remains intact and unaffected by this test-file-only change.
+
+**Decisions made:**
+1. **The BetMGM `flag_id` collision is flagged, not fixed, this
+session** — real, confirmed, and worth a dedicated session (likely
+switching BetMGM's flag_id to include `source_market_id` the way
+DraftKings/FanDuel's compound selection-id strings already effectively
+do, then handling the one-time re-keying of BetMGM's existing open CLV-log
+rows), but is a different class of bug (flag identity/correctness) from
+this session's actual scope (a display-odds refresh bug), and the user's
+request was to check for "similar frozen-odds issues," not to fix
+every bug found along the way.
+2. **`_empty_pickem_log()` added as a small, targeted fixture, not a
+broader test-harness rewrite** — the six pickem scenarios' own logic was
+already correct (they passed immediately once given real isolation);
+only their input source was wrong.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- **BetMGM `flag_id` collision (28 real currently-open selection ids
+affected)** — flagged via `spawn_task`, not scheduled to any specific
+future session number. A future session should treat this as a real
+correctness bug affecting BetMGM's props CLV log specifically (DK/FD are
+confirmed unaffected, per this session's own check above), not a
+cosmetic issue.
+- The `test_clv_logger.py` open item recorded earlier in this session's
+first entry (pickem scenarios unrunnable) is now **closed** by this
+follow-up — removed as an open item.
+
+**Files created/modified:**
+- `scripts/calibration/test_clv_logger.py` (modified: `_empty_pickem_log()`
+added; all six pickem scenarios' initial log input swapped to it)
+
+**Next session:** None yet — Session 5.7 remains the longest-open item.
