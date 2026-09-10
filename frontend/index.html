@@ -312,6 +312,23 @@ above is. Sizing a flagged pair is still a manual step
 (<code>sizing_engine.py arbitrage size</code>) &mdash; this page never sizes or places anything.
 </p>
 </div>
+<div class="howto">
+<strong>What this row actually is:</strong> the same real-world event, priced on two different exchanges
+(Kalshi and Polymarket). "Market A" and "Market B" are the opposite sides of that same event &mdash; one
+YES-leaning, one NO-leaning &mdash; priced so that buying both together, right now, costs less than $1
+combined. If it resolves, exactly one leg pays out $1 and the other pays $0, so the gap between what you
+paid and that guaranteed $1 is your profit, regardless of which side wins.
+<ol>
+<li>Click the "Market A" and "Market B" links below &mdash; they open that exact contract on Kalshi, or a
+live search for its title on Polymarket (Polymarket doesn't have stable per-market URLs to link to
+directly).</li>
+<li>Confirm the title, side (YES/NO), and price on the venue still match this row &mdash; prices move
+between when this page was built and when you look.</li>
+<li>Run <code>sizing_engine.py arbitrage size</code> to get a real position size, then place <em>both</em>
+legs yourself, at both venues &mdash; this only works as arbitrage if both legs actually fill. A half-filled
+position is a directional bet, not arbitrage.</li>
+</ol>
+</div>
 <div class="table-wrap">
 <table id="arbTable">
 <thead>
@@ -382,6 +399,14 @@ benchmark (a contract disappearing from a fresh pull) is what grades these flags
 well for this track specifically because weather contracts resolve in days, not weeks or months.
 </p>
 </div>
+<div class="howto">
+<strong>How to find this contract on Kalshi:</strong> click the ticker in the last column &mdash; it opens
+that exact market on Kalshi's site. Buy the side shown in "Side" (YES or NO) at or below the price shown in
+"Mkt price" &mdash; that's the edge this row is claiming. This table is a point-in-time snapshot from the
+last automated run, and this track only has flags when the model disagrees with Kalshi's own price by
+enough to clear the edge threshold &mdash; an empty table means no disagreement was found on the latest run,
+not that the pipeline is broken.
+</div>
 <div class="table-wrap">
 <table id="weatherOpenTable">
 <thead>
@@ -394,6 +419,7 @@ well for this track specifically because weather contracts resolve in days, not 
 <th>Market price</th>
 <th>Model edge</th>
 <th>Lead time</th>
+<th>Find it on Kalshi</th>
 </tr>
 </thead>
 <tbody id="weatherOpenTableBody"></tbody>

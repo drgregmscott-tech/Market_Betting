@@ -242,6 +242,48 @@ main {
   max-width: 68ch;
 }
 
+/* ---------- "how to actually place this" callouts ---------- */
+.howto {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  border-left-width: 3px;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.55;
+  max-width: 72ch;
+}
+
+.howto strong { color: var(--text); }
+
+.howto ol, .howto ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.howto li + li { margin-top: 4px; }
+
+.panel-arb .howto { border-left-color: var(--accent-arb); }
+.panel-weather .howto { border-left-color: var(--accent-weather); }
+
+.venue-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.venue-link:hover { color: var(--accent-line); }
+
+.ticker-cell {
+  font-family: var(--mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 /* ---------- track headings (new, Session 3.5) ---------- */
 /* Marks the start of each track's section on the page so the two tracks
    are clearly distinguished, per Session 3.5's validation requirement,

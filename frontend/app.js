@@ -48,6 +48,42 @@ const MAX_SINGLE_POSITION_PCT = 0.05;
 const MIN_BANKROLL = 1.0;
 const SAME_GAME_CAUTION_MULTIPLIER = 0.85;
 
+// ---------------------------------------------------------------------
+// Venue links -- helps answer "where do I actually place this?" Kalshi
+// tickers resolve directly to that exact market's page
+// (kalshi.com/markets/<ticker, lowercased>, confirmed live). Polymarket
+// has no stable per-market URL to link to, so it links to a live title
+// search instead. Other platforms (PrizePicks/Underdog/DraftKings/
+// FanDuel) have no public deep-link scheme, so they link to the
+// platform's own homepage as a fallback.
+// ---------------------------------------------------------------------
+const VENUE_HOMEPAGE = {
+  kalshi: "https://kalshi.com",
+  polymarket: "https://polymarket.com",
+  prizepicks: "https://app.prizepicks.com",
+  underdog: "https://underdogfantasy.com",
+  draftkings: "https://sportsbook.draftkings.com",
+  fanduel: "https://sportsbook.fanduel.com",
+};
+
+function venueLinkUrl(platform, ticker, title) {
+  const p = (platform || "").trim().toLowerCase();
+  if (p === "kalshi" && ticker) {
+    return `https://kalshi.com/markets/${encodeURIComponent(ticker.trim().toLowerCase())}`;
+  }
+  if (p === "polymarket" && title) {
+    return `https://polymarket.com/search?q=${encodeURIComponent(title.trim())}`;
+  }
+  return VENUE_HOMEPAGE[p] || null;
+}
+
+function venueLinkHtml(platform, ticker, title, label) {
+  const url = venueLinkUrl(platform, ticker, title);
+  const text = escapeHtml(label || ticker || "Find it") || "Find it";
+  if (!url) return text;
+  return `<a class="venue-link" href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${text} ↗</a>`;
+}
+
 // Selected legs for the sizing calculator: Map<flag_id, row>
 const selectedLegs = new Map();
 
@@ -605,10 +641,10 @@ function renderArbTable(rows) {
         <tr>
           <td>${escapeHtml(r.opportunity_type) || "—"}</td>
           <td>${escapeHtml(r.platform_a) || "—"}</td>
-          <td class="name-cell" title="${escapeAttr(r.title_a)}">${escapeHtml(r.title_a) || "—"}</td>
+          <td class="name-cell" title="${escapeAttr(r.title_a)}">${venueLinkHtml(r.platform_a, r.market_a, r.title_a, r.title_a)}</td>
           <td>${escapeHtml(r.leg_a_ask) || "—"}</td>
           <td>${escapeHtml(r.platform_b) || "—"}</td>
-          <td class="name-cell" title="${escapeAttr(r.title_b)}">${escapeHtml(r.title_b) || "—"}</td>
+          <td class="name-cell" title="${escapeAttr(r.title_b)}">${venueLinkHtml(r.platform_b, r.market_b, r.title_b, r.title_b)}</td>
           <td>${escapeHtml(r.leg_b_ask) || "—"}</td>
           <td class="${edgeClass(netProfit)}">${fmtNetProfit(netProfit)}</td>
           <td>${fmtBool(r.liquidity_sufficient)}</td>
@@ -717,6 +753,7 @@ function renderWeatherOpenTable(open) {
           <td>${escapeHtml(r.first_flagged_market_price) || "—"}</td>
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
           <td>${escapeHtml(r.lead_days) || "—"}d</td>
+          <td class="ticker-cell">${venueLinkHtml("kalshi", r.flag_id || r.series_ticker, r.city_label, r.flag_id || r.series_ticker)}</td>
         </tr>`;
     })
     .join("");
