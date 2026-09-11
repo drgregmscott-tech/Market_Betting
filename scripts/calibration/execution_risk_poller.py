@@ -50,6 +50,13 @@ python execution_risk_poller.py --poll \
 # the latest detector.py run automatically:
 python execution_risk_poller.py --poll --auto --interval-seconds 120 --duration-minutes 20
 
+# Single-leg mode -- for tracks with no cross-venue pair to poll (e.g.
+# weather, which only trades on Kalshi). Tracks one market's own real
+# yes_ask_size/yes_bid_size directly, no fillable-size math needed:
+python execution_risk_poller.py --poll --single-leg \
+    --market-a KXHIGHCHI-26SEP11-T83 --side-a YES --platform-a kalshi \
+    --interval-seconds 120 --duration-minutes 20
+
 # Summarize every real poll session logged so far:
 python execution_risk_poller.py --report
 """
@@ -179,6 +186,53 @@ def _price_for_side(market: dict, platform: str, side: str) -> Optional[float]:
     return None
 
 
+def poll_once_single_leg(market_a: str, side_a: str, platform_a: str) -> dict:
+    """Single-venue variant for tracks with no cross-venue pair to poll
+    against (weather trades only on Kalshi -- Open Decision #17 confirms
+    no live Kalshi/Polymarket climate match has ever been observed).
+    Reads the real, single-sided fillable size directly (the size field
+    a buyer of `side_a` would actually consume) rather than routing
+    through `estimate_fillable_size()`'s two-leg minimum, which would
+    otherwise always return 0 with no real second leg to compare against."""
+    fetchers = {"kalshi": fetch_kalshi_market, "polymarket": fetch_polymarket_market}
+    raw_a = fetchers[platform_a](market_a)
+    if raw_a is None:
+        return {
+            "polled_at": datetime.now(timezone.utc).isoformat(),
+            "market_a": market_a, "price_a": None, "market_b": None, "price_b": None,
+            "fillable_size_dollars": None,
+            "fillable_size_basis": "leg_a_fetch_failed",
+            "leg_a_fetch_ok": False, "leg_b_fetch_ok": None,
+        }
+
+    price_a = _price_for_side(raw_a, platform_a, side_a)
+    if platform_a == "kalshi":
+        size = raw_a.get("yes_ask_size_fp") if side_a == "YES" else raw_a.get("yes_bid_size_fp")
+        basis = "kalshi_real_order_book_size_field_single_leg"
+    else:
+        size = _polymarket_leg_contracts_standalone(raw_a, price_a)
+        basis = "polymarket_liquidity_dollars_divided_by_price_approximation_single_leg"
+
+    return {
+        "polled_at": datetime.now(timezone.utc).isoformat(),
+        "market_a": market_a,
+        "price_a": price_a,
+        "market_b": None,
+        "price_b": None,
+        "fillable_size_dollars": round(_to_float(size), 2) if _to_float(size) is not None else None,
+        "fillable_size_basis": basis,
+        "leg_a_fetch_ok": True,
+        "leg_b_fetch_ok": None,
+    }
+
+
+def _polymarket_leg_contracts_standalone(market: dict, price: Optional[float]) -> Optional[float]:
+    liquidity = _to_float(market.get("liquidity"))
+    if liquidity is None or price is None or price <= 0:
+        return None
+    return liquidity / price
+
+
 def poll_once(
     market_a: str, side_a: str, platform_a: str,
     market_b: str, side_b: str, platform_b: str,
@@ -246,20 +300,29 @@ def _auto_pick_pair() -> Optional[dict]:
 
 def run_poll_session(
     market_a: str, side_a: str, platform_a: str,
-    market_b: str, side_b: str, platform_b: str,
+    market_b: Optional[str], side_b: Optional[str], platform_b: Optional[str],
     interval_seconds: int, duration_minutes: int,
+    single_leg: bool = False,
 ) -> Path:
     POLLS_DIR.mkdir(parents=True, exist_ok=True)
     session_started = datetime.now(timezone.utc)
     out_path = POLLS_DIR / f"poll_{session_started.strftime('%Y-%m-%dT%H-%M-%SZ')}.csv"
 
     total_polls = max(1, (duration_minutes * 60) // interval_seconds + 1)
-    log.info(
-        "Starting real execution-risk poll: %s/%s (%s) vs %s/%s (%s), "
-        "every %ds for %d min (%d polls total) -> %s",
-        platform_a, market_a, side_a, platform_b, market_b, side_b,
-        interval_seconds, duration_minutes, total_polls, out_path,
-    )
+    if single_leg:
+        log.info(
+            "Starting real SINGLE-LEG execution-risk poll: %s/%s (%s), "
+            "every %ds for %d min (%d polls total) -> %s",
+            platform_a, market_a, side_a,
+            interval_seconds, duration_minutes, total_polls, out_path,
+        )
+    else:
+        log.info(
+            "Starting real execution-risk poll: %s/%s (%s) vs %s/%s (%s), "
+            "every %ds for %d min (%d polls total) -> %s",
+            platform_a, market_a, side_a, platform_b, market_b, side_b,
+            interval_seconds, duration_minutes, total_polls, out_path,
+        )
 
     fieldnames = [
         "polled_at", "market_a", "price_a", "market_b", "price_b",
@@ -270,7 +333,10 @@ def run_poll_session(
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for i in range(total_polls):
-            reading = poll_once(market_a, side_a, platform_a, market_b, side_b, platform_b)
+            if single_leg:
+                reading = poll_once_single_leg(market_a, side_a, platform_a)
+            else:
+                reading = poll_once(market_a, side_a, platform_a, market_b, side_b, platform_b)
             writer.writerow(reading)
             f.flush()
             log.info(
@@ -353,6 +419,7 @@ if __name__ == "__main__":
     parser.add_argument("--poll", action="store_true", help="Run a real poll session.")
     parser.add_argument("--report", action="store_true", help="Summarize all poll sessions on disk.")
     parser.add_argument("--auto", action="store_true", help="Auto-pick the largest real flagged pair from the latest detector.py run.")
+    parser.add_argument("--single-leg", action="store_true", help="Poll one market's own order book directly (no cross-venue pair) -- for tracks like weather with no real second leg.")
     parser.add_argument("--market-a")
     parser.add_argument("--side-a", choices=["YES", "NO"])
     parser.add_argument("--platform-a", choices=["kalshi", "polymarket"])
@@ -366,22 +433,33 @@ if __name__ == "__main__":
     if args.report:
         report()
     elif args.poll:
-        if args.auto:
+        if args.single_leg:
+            required = [args.market_a, args.side_a, args.platform_a]
+            if any(v is None for v in required):
+                parser.error("--single-leg requires --market-a/--side-a/--platform-a.")
+            run_poll_session(
+                args.market_a, args.side_a, args.platform_a,
+                None, None, None,
+                args.interval_seconds, args.duration_minutes,
+                single_leg=True,
+            )
+        elif args.auto:
             pair = _auto_pick_pair()
             if pair is None:
                 sys.exit(1)
+            run_poll_session(
+                pair["market_a"], pair["side_a"], pair["platform_a"],
+                pair["market_b"], pair["side_b"], pair["platform_b"],
+                args.interval_seconds, args.duration_minutes,
+            )
         else:
             required = [args.market_a, args.side_a, args.platform_a, args.market_b, args.side_b, args.platform_b]
             if any(v is None for v in required):
-                parser.error("Either pass --auto, or all of --market-a/--side-a/--platform-a/--market-b/--side-b/--platform-b.")
-            pair = {
-                "market_a": args.market_a, "side_a": args.side_a, "platform_a": args.platform_a,
-                "market_b": args.market_b, "side_b": args.side_b, "platform_b": args.platform_b,
-            }
-        run_poll_session(
-            pair["market_a"], pair["side_a"], pair["platform_a"],
-            pair["market_b"], pair["side_b"], pair["platform_b"],
-            args.interval_seconds, args.duration_minutes,
-        )
+                parser.error("Either pass --auto, --single-leg, or all of --market-a/--side-a/--platform-a/--market-b/--side-b/--platform-b.")
+            run_poll_session(
+                args.market_a, args.side_a, args.platform_a,
+                args.market_b, args.side_b, args.platform_b,
+                args.interval_seconds, args.duration_minutes,
+            )
     else:
         parser.error("Pass --poll (with --auto or explicit market args) or --report.")
