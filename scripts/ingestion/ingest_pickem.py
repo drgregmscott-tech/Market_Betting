@@ -278,25 +278,58 @@ def normalize_prizepicks(payload: dict, pulled_at: str) -> list[NormalizedProp]:
 def build_underdog_team_lookup(games: list[dict], solo_games: list[dict]) -> dict[str, str]:
     """Underdog's raw payload has no standalone "teams" list with real
     names -- confirmed live 2026-09-11, appearances/players only carry a
-    team_id UUID. Real names only exist on each GAME record's
-    full_team_names_title (e.g. "Alabama Crimson Tide @ Kentucky
-    Wildcats"), keyed by that same game's away_team_id/home_team_id ("Away
-    @ Home" order, confirmed against real data by cross-checking a known
-    player's team_id against which half of the title it fell on). Built
-    once per run from every game currently in the feed, not guessed from
-    the ID's shape."""
+    team_id UUID. Real names only exist on each GAME record's own title
+    fields, keyed by that same game's away_team_id/home_team_id ("Away @
+    Home" or "Away vs Home" order, confirmed against real data by
+    cross-checking a known player's team_id against which half of the
+    title it fell on).
+
+    FIX (2026-09-11, same-day follow-up): the first version of this
+    function only read full_team_names_title and only split on " @ ",
+    which left ~3.5k real rows across several sports resolving to a raw
+    UUID instead of a name -- confirmed NOT a dead end for most of them by
+    checking the real raw payload directly:
+      - Soccer/esports (FIFA, CS, LOL) title their games "Team A vs Team
+        B", not "Team A @ Team B" -- a separator gap, not a missing-data
+        gap. Now tried after " @ ".
+      - Some sports (confirmed: BASKETBALL, CFL) carry a real
+        away_team_id/home_team_id pair and a usable name in short_title
+        ("Alouettes @ Lions") or title ("USAW @ ESP") even when
+        full_team_names_title itself is None for that game. Now tried, in
+        that priority order, as real fallbacks -- never overwriting a
+        better name already found via a higher-priority field.
+      - A genuine, real dead end remains for events with NO team concept
+        at all (confirmed: RACING -- away_team_id/home_team_id are both
+        None on the game itself, e.g. "Enjoy Illinois 300"), and for a
+        prop whose match_id isn't in `games`/`solo_games` yet at all
+        (confirmed: some NHL rows) -- both correctly fall through to this
+        function returning no entry, and normalize_underdog()'s own
+        raw-ID fallback stays visible rather than fabricating a name."""
     lookup: dict[str, str] = {}
-    for game in list(games) + list(solo_games or []):
-        title = game.get("full_team_names_title")
-        if not isinstance(title, str) or " @ " not in title:
-            continue
-        away_name, home_name = title.split(" @ ", 1)
-        away_id = game.get("away_team_id")
-        home_id = game.get("home_team_id")
-        if away_id:
-            lookup[str(away_id)] = away_name.strip()
-        if home_id:
-            lookup[str(home_id)] = home_name.strip()
+    all_games = list(games) + list(solo_games or [])
+    for title_field in ("full_team_names_title", "short_title", "title"):
+        for game in all_games:
+            away_id = game.get("away_team_id")
+            home_id = game.get("home_team_id")
+            if not away_id and not home_id:
+                continue  # no real team concept for this event (e.g. an individual race)
+
+            title = game.get(title_field)
+            if not isinstance(title, str) or not title.strip():
+                continue
+            if " @ " in title:
+                away_name, home_name = title.split(" @ ", 1)
+            elif " vs " in title:
+                away_name, home_name = title.split(" vs ", 1)
+            else:
+                continue
+
+            # Priority order across the three fields: only fill a gap,
+            # never downgrade a name already found via a better field.
+            if away_id and str(away_id) not in lookup:
+                lookup[str(away_id)] = away_name.strip()
+            if home_id and str(home_id) not in lookup:
+                lookup[str(home_id)] = home_name.strip()
     return lookup
 
 
@@ -364,15 +397,23 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
             # "teams" list -- appearances/players only carry a team_id
             # UUID, so this field used to fall back straight to that raw
             # UUID with no way to turn it back into a real name ("Ravens").
-            # Real team names only exist on each GAME record
-            # (full_team_names_title, "Away Name @ Home Name", keyed by
-            # away_team_id/home_team_id) -- build_underdog_team_lookup()
-            # above turns that into a team_id -> name map once per run.
-            # Still falls back to the raw team_id if a player's game
-            # container isn't in this run's feed yet (see the sport_id
-            # fallback note below for why that can happen) -- a raw ID is
-            # a real, visible gap, same as this file's other fallbacks,
-            # not a silently wrong value.
+            # Real team names only exist on each GAME record's own title
+            # fields -- build_underdog_team_lookup() above turns that into
+            # a team_id -> name map once per run, trying multiple title
+            # fields and both real separators Underdog uses ("@" and
+            # "vs") before giving up (see that function's own docstring).
+            #
+            # Checked directly 2026-09-11 what remains unresolved after
+            # that: a handful of props (confirmed: NHL) whose game
+            # container isn't published in this run's feed at all yet --
+            # a real, temporary timing gap, same shape as the "Series"
+            # early-NFL-props gap already documented below -- and events
+            # with no real team concept at all (confirmed: RACING --
+            # an individual race has no home/away side). A raw team_id
+            # UUID is not a meaningful value for a human reading either
+            # case (it read as broken data, not as "unavailable" --
+            # exactly what prompted this fix), so this now falls back to
+            # None (renders as "—" on the frontend) instead of the raw ID.
             raw_team_id = appearance.get("team_id") or player_attrs.get("team_id")
             team_name = team_name_by_id.get(str(raw_team_id)) if raw_team_id else None
 
@@ -381,7 +422,7 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     platform="underdog",
                     source_line_id=str(line.get("id")),
                     player_name=player_name or None,
-                    team=team_name or raw_team_id or player_attrs.get("team"),
+                    team=team_name or player_attrs.get("team"),
                     # FIX (Open Decision #11, and supersedes Open Decision
                     # #10's "Underdog has zero NFL lines" finding, which is
                     # now stale): confirmed live 2026-09-02 that Underdog
