@@ -301,3 +301,23 @@ working pipeline (no crash, no error) while quietly modeling almost
 nothing. Recorded here as a real, concrete example of why every field this
 model reads is checked against a live pull first, not assumed from a
 sibling project's code.
+
+## Session 2.12 addendum — multi-sport plug-in architecture
+
+Everything above this line describes the NFL-specific logic as it stood at
+Session 2.3 — still accurate for NFL, but as of Session 2.12 it lives in
+`scripts/estimation/pickem_sport_plugins/nfl.py`, not directly in
+`pickem_model.py`. `pickem_model.py` now holds only the sport-agnostic
+scoring math (season-avg/recent-form blend, sample sigma, normal-CDF
+probability) plus a generic `process_props()` loop that dispatches to
+whichever `SportPlugin` matches a prop's `sport` field (see
+`pickem_sport_plugins/__init__.py` for the plug-in contract). This was a
+pure refactor — NFL scoring output is proven byte-for-byte unchanged via
+`scripts/estimation/test_pickem_model.py`'s regression fixture, not just
+re-described here. Every input/gap named above (NFL-only stat coverage,
+the two named PrizePicks formulas, the player-name-matching approach) is
+still exactly correct; only its file location changed. Future sports
+(Sessions 2.13+, starting with MLB) get their own plug-in file under
+`pickem_sport_plugins/`, each with its own spec-doc section following this
+same "no unnamed black-box factors" standard, rather than being folded into
+this NFL-specific document.

@@ -167,10 +167,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ingestion"))
 
 from pickem_model import (  # noqa: E402  (path insert must happen first)
-    NFL_SPORT_LABELS,
     build_name_lookup,
     build_stat_series,
-    fetch_nfl_weekly_stats,
     normalize_name,
     recent_form,
     resolve_stat_spec,
@@ -178,6 +176,12 @@ from pickem_model import (  # noqa: E402  (path insert must happen first)
     sample_sigma,
     season_average,
 )
+# Session 2.12: fetch_nfl_weekly_stats/NFL_SPORT_LABELS moved out of
+# pickem_model.py into the NFL plug-in (see ROADMAP.md Session 2.12). This
+# file is still NFL-only (Track 5 sportsbook props), so it keeps using the
+# NFL plug-in directly rather than the generic plugin_for_sport() dispatch.
+from pickem_sport_plugins.nfl import NFL_PLUGIN, NFL_SPORT_LABELS
+from pickem_sport_plugins.nfl import fetch_nfl_weekly_stats
 from schema_props import (  # noqa: E402
     american_odds_to_implied_probability,
     normalize_field_vig,
@@ -495,7 +499,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
                 out_rows.append(row)
                 continue
 
-            series = build_stat_series(weekly_df, player_id, "columns", TD_COMPOSITE_COLUMNS)
+            series = build_stat_series(NFL_PLUGIN, weekly_df, player_id, "columns", TD_COMPOSITE_COLUMNS)
             if len(series) < 2:
                 row["model_status"] = "insufficient_history"
                 row.update(_blank_model_fields())
@@ -559,7 +563,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
             out_rows.append(row)
             continue
 
-        kind, value, reason = resolve_stat_spec(raw_stat_type)
+        kind, value, reason = resolve_stat_spec(NFL_PLUGIN, raw_stat_type)
         if kind is None:
             row["model_status"] = reason
             row["resolved_stat_key"] = None
@@ -569,7 +573,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
 
         row["resolved_stat_key"] = resolved_stat_key_for(kind, value)
 
-        series = build_stat_series(weekly_df, player_id, kind, value)
+        series = build_stat_series(NFL_PLUGIN, weekly_df, player_id, kind, value)
         full_mean, full_sigma, games_played, games_remaining = project_season_total(series)
 
         if full_mean is None:

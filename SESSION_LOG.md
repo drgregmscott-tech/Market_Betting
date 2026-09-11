@@ -10200,3 +10200,185 @@ function + `size_arbitrage_position()`'s buffer selection + docstring),
 decision — it's closed. The named single-moment-depth limitation above
 remains a real, separate, smaller gap for a future session, not blocking
 this resolution.
+
+---
+
+## Session 2.12 — Multi-Sport Estimation Architecture (Pick'em)
+
+**Date completed:** 2026-09-11
+**Status:** ✅ Complete
+
+**What was actually done:** Refactored `scripts/estimation/pickem_model.py`
+from an NFL-hardcoded script into a generic engine that dispatches to
+per-sport plug-ins, per the roadmap card. Session 2.10's
+`sport_inventory.md` had already confirmed the real cost of staying
+NFL-only (~2.5% of ~59,000 real ingested props actually scored); this
+session builds the architecture the next five sport sessions (2.13–2.17)
+plug into, without each one re-copying the estimation engine.
+
+1. Created `scripts/estimation/pickem_sport_plugins/__init__.py`: a
+`SportPlugin` dataclass (name, sport_labels, fetch_stats, stat_type_map,
+composite_stat_types, computed_stat_types, computed_required_columns), a
+`PLUGINS` registry, and `plugin_for_sport()`. Documented the
+`fetch_stats(season)` contract explicitly: must return a DataFrame with
+`player_id`, `player_display_name`, and a chronological `sort_key` column,
+plus whatever raw stat columns that sport's maps reference.
+2. Moved Session 2.3's NFL logic (the nflverse fetch, `NFL_STAT_TYPE_MAP`,
+`COMPOSITE_STAT_TYPES`, `COMPUTED_STAT_TYPES`, both PrizePicks scoring
+formulas) into `pickem_sport_plugins/nfl.py`, unchanged, registered as
+`NFL_PLUGIN`. The one real code change: `fetch_nfl_weekly_stats()` now
+aliases nflverse's `week` column into `sort_key` to satisfy the plug-in
+contract — additive, not a behavior change.
+3. Rewrote `pickem_model.py`'s `resolve_stat_spec()`, `build_name_lookup()`,
+`build_stat_series()`, and `process_props()` to be sport-agnostic: each
+takes a `SportPlugin` (or dispatches to one via `plugin_for_sport()`)
+instead of reading NFL's dicts directly. The season-avg/recent-form/sigma/
+normal-CDF math was left untouched, per the roadmap card's instruction.
+`process_props()` now lazily fetches and caches each plug-in's stats only
+for sports actually present in the input, so a props file with only NFL
+rows never triggers an MLB API call.
+4. Built `pickem_sport_plugins/mlb.py` as the "second real plug-in" proof
+case the roadmap card required. Real, working MLB Stats API code (roster
+walk across all 30 teams' real team IDs, then a per-player season hitting
+game log) — not a mock — but a deliberately small, unverified stat map
+(hits, home runs, runs, RBIs, strikeouts, total bases, walks), explicitly
+labeled in the file's own docstring as not yet checked against real
+ingested MLB `stat_type` strings. That verification is Session 2.13's own
+stated job, per its roadmap card ("confirm the real ingested strings
+directly, don't guess the list in advance").
+5. Built `scripts/estimation/test_pickem_model.py`: a 10-row synthetic
+fixture (built from scratch, not reusing any prior session's fixture)
+exercising every `process_props()` code path — a plain column stat
+(Pass Yards), a composite stat (Rush+Rec Yards), both computed formulas
+(Kicking Points, Fantasy Score), `unsupported_sport`, `unsupported_stat_type`,
+`unsupported_odds_type` (a `demon` row, per Session 6.2's odds-type gate),
+`no_player_match`, `insufficient_history` (a 1-game player), and an
+Underdog row using the per-side-multiplier implied-probability path.
+6. **Captured a golden snapshot from the pre-refactor code before touching
+any production logic.** A one-off script (`_capture_golden.py`, deleted
+after use — not a project deliverable) ran the fixture through the
+original, unrefactored `process_props(props_df, weekly_df)` and saved the
+output to `data/pickem/_test_fixtures/nfl_regression_golden.csv`. Only
+after that snapshot existed did the actual refactor begin.
+7. Ran the refactored code against the same fixture and diffed it against
+the golden snapshot column-by-column and value-by-value (via
+`pd.testing.assert_frame_equal`, both sides round-tripped through CSV
+first to avoid a dtype-only false positive on a numeric-looking ID
+string) — identical, including column order. This is the roadmap card's
+first validation item, proven, not asserted.
+8. **Found and fixed a real downstream break during this session, not
+listed in the original card:** `scripts/estimation/sportsbook_props_model.py`
+(Track 5 — Session 6.2 onward) imports `NFL_SPORT_LABELS`,
+`build_name_lookup`, `build_stat_series`, `fetch_nfl_weekly_stats`, and
+`resolve_stat_spec` directly from `pickem_model.py`. The refactor removed
+`NFL_SPORT_LABELS`/`fetch_nfl_weekly_stats` from that file entirely and
+changed `build_stat_series()`/`resolve_stat_spec()`'s signatures to take a
+plug-in as their first argument. Found by grepping the whole `scripts/`
+tree for every symbol the refactor touched before considering the session
+done, not by waiting for a later session to discover a broken import.
+Fixed by importing `NFL_PLUGIN`/`NFL_SPORT_LABELS`/`fetch_nfl_weekly_stats`
+from the new `pickem_sport_plugins.nfl` module and passing `NFL_PLUGIN`
+explicitly at each of `sportsbook_props_model.py`'s three call sites
+(`build_stat_series` x2, `resolve_stat_spec` x1) — that file stays
+NFL-only by design (Track 5's own scope), so it uses the NFL plug-in
+directly rather than the generic `plugin_for_sport()` dispatch.
+`test_sportsbook_props_model.py`'s full 11-test suite still passes
+unchanged after the fix.
+9. Confirmed the refactored `pickem_model.py` still works through its real
+production entry point, not just via direct import: `run_pipeline.py`
+loads `pickem_model.py` dynamically by file path (`load_module()`) and
+calls `.run(season)` — ran this for real against the repo's actual
+(small, synthetic) `data/pickem/normalized/latest.csv`, producing
+`{'unsupported_sport': 4}`, the correct result since no sport plug-in is
+registered for that fixture's sport label yet.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_model.py` — refactored: NFL-specific fetch/
+maps/formulas removed; `resolve_stat_spec()`, `build_name_lookup()`,
+`build_stat_series()`, `process_props()` generalized to take/dispatch a
+`SportPlugin`; `run()` no longer fetches stats itself, delegates to
+`process_props()`'s lazy per-plugin fetch.
+- `scripts/estimation/pickem_sport_plugins/__init__.py` — new.
+`SportPlugin` dataclass, `PLUGINS` registry, `plugin_for_sport()`.
+- `scripts/estimation/pickem_sport_plugins/nfl.py` — new. Session 2.3's
+NFL logic, moved unchanged (plus the `sort_key` alias, Decision #1).
+- `scripts/estimation/pickem_sport_plugins/mlb.py` — new. Real MLB Stats
+API proof-case plug-in (Decision #2).
+- `scripts/estimation/test_pickem_model.py` — new. Regression + plug-in
+architecture test suite (4 tests).
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` — new. Golden
+snapshot from the pre-refactor code.
+- `scripts/estimation/sportsbook_props_model.py` — import fix + 3 call
+sites updated for the new plug-in-first signatures (Decision #3).
+- `docs/research/pickem_estimation_model_spec.md` — Session 2.12 addendum
+noting the file-location change; no prior content altered.
+- `ROADMAP.md` — Session 2.12 card closed with full validation detail.
+
+**Validation results:**
+- [x] NFL scoring output byte-for-byte unchanged before/after refactor —
+PASS (`test_nfl_regression_matches_golden_snapshot`, 10-row fixture, all
+columns and values identical, column order identical).
+- [x] Adding a second real sport plug-in touches only that plug-in's own
+file — PASS. `mlb.py` added with zero edits to `process_props()`'s core
+loop beyond the one generalization pass the NFL-only refactor already
+required; confirmed by `test_second_plugin_registered_without_touching_core_loop`.
+- [x] `model_status="unsupported_sport"` still fires correctly for
+unregistered sports — PASS, both via a synthetic made-up sport label
+(`test_unsupported_sport_still_falls_through_cleanly`) and via a real run
+against the repo's live ingested data through `run_pipeline.py`'s actual
+module-loading path.
+- Full existing test suites re-run for regression: `test_pickem_model.py`
+(4/4 pass) and `test_sportsbook_props_model.py` (11/11 pass, after the
+Decision #3 fix) — 15/15 total.
+
+**Decisions made:**
+1. **`fetch_stats(season)`'s cross-sport contract requires a `sort_key`
+column** (chronological order within one player's rows), rather than
+reusing NFL's own `week` column name generically. Reasoning: `week` is a
+real, meaningful NFL-specific concept (an MLB or soccer season has no
+"week" in the same sense), so forcing every future plug-in to produce a
+column literally named `week` would have been a leaky abstraction. NFL's
+plug-in aliases `week` into `sort_key` (additive, not a rename) to keep
+`fetch_nfl_weekly_stats()`'s own real column intact for anything else
+that might read it directly.
+2. **MLB's plug-in ships with real, working fetch code but a deliberately
+small, unverified stat map**, rather than either (a) skipping MLB
+entirely this session or (b) guessing a large "complete-looking" stat map
+without checking it against real ingested data. This is a direct
+application of this project's standing rule (Session 2.3, reaffirmed
+Session 2.13's own card): stat-type strings get confirmed against real
+ingested data, not assumed. Choosing option (b) here would have violated
+that rule for the sake of looking more finished; the roadmap explicitly
+splits this into 2.12 (architecture, proof case) vs. 2.13 (real,
+verified MLB coverage) for exactly this reason, and this session holds
+that line rather than blurring it.
+3. **`sportsbook_props_model.py`'s broken imports were found and fixed
+within this session, not deferred to a "someone will notice eventually"
+gap.** This project's own Session 3.6 standing rule (ROADMAP.md, "Rule
+for sessions left open across other work") exists because undiscovered
+cross-file breakage from one session's refactor has caused real handoff
+problems before; this session applied the same discipline proactively by
+grepping the full `scripts/` tree for every symbol name the refactor
+removed or changed before considering the regression validation
+complete, rather than relying on the two test suites alone to surface
+the break.
+4. **The golden snapshot was captured from the actual pre-refactor code,
+in-repo, before any refactor edit landed** — not reconstructed from
+memory or hand-computed expected values after the fact. This is the same
+"prove it against the real prior behavior" standard Session 2.2 onward
+has applied to every other regression-sensitive change in this project.
+
+**Corrections/reversals during the session:** None — the plug-in shape
+matched the roadmap card's description on the first pass; the one
+non-trivial design choice (the `sort_key` contract, Decision #1) was
+resolved before writing code, not discovered as a rework.
+
+**Open items / deferred validations:** Session 2.13 (MLB Support) owns:
+(1) pulling real, live MLB `stat_type` strings from actual ingested
+PrizePicks/Underdog data and confirming/expanding `mlb.py`'s stat map
+against them one-by-one, (2) proving at least one real, live MLB prop
+scores end-to-end (this session's test suite deliberately does not
+exercise `mlb.py`'s live network path — see Decision #2), and (3) the
+MLB section of `pickem_estimation_model_spec.md`. Sessions 2.14–2.17
+(soccer, NBA, CFB, tennis) each add one new plug-in file the same way,
+per the architecture this session built.

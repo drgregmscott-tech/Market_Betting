@@ -3,6 +3,11 @@ Session 2.3 -- Estimation Engine v1 (Fixed-Line Pick'em Platforms)
 Session 2.4 addition: added `resolved_stat_key` to the output row (see the
 "SESSION 2.4 ADDITION" note below the module docstring) -- no other logic
 in this file changed.
+Session 2.12 addition: refactored the previously NFL-hardcoded stats-source
+and stat-type-map logic into a per-sport plug-in shape (see
+pickem_sport_plugins/__init__.py). NFL scoring behavior is unchanged --
+proven byte-for-byte via test_pickem_model.py's regression fixture, not just
+re-derived. See the "SESSION 2.12 REFACTOR" note below for what moved where.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -139,9 +144,23 @@ error in it. No code in this file changed as a result of this
 clarification -- it exists solely to prevent this same confusion from
 recurring in a future session.
 
+SESSION 2.12 REFACTOR -- what moved where
+------------------------------------------
+Everything that was NFL-specific (the nflverse fetch, NFL_STAT_TYPE_MAP,
+COMPOSITE_STAT_TYPES, COMPUTED_STAT_TYPES, and the two PrizePicks scoring
+formulas) moved to pickem_sport_plugins/nfl.py, unchanged, as this project's
+first SportPlugin. What stays in THIS file is the sport-agnostic part: the
+season-avg / recent-form / sigma / normal-CDF scoring math (untouched), and
+a generic process_props() loop that looks up the right plug-in per row via
+pickem_sport_plugins.plugin_for_sport() instead of hardcoding NFL. Adding a
+new sport (Sessions 2.13+) means adding a new plug-in file under
+pickem_sport_plugins/, not touching this file's core loop. See
+pickem_sport_plugins/__init__.py for the plug-in contract and
+test_pickem_model.py for the regression proof that NFL output is unchanged.
+
 USAGE
 -----
-pip install pandas numpy pyarrow --break-system-packages
+pip install pandas numpy pyarrow requests --break-system-packages
 python pickem_model.py --season 2025
 """
 
@@ -154,10 +173,12 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
 import numpy as np
 import pandas as pd
+
+from pickem_sport_plugins import SportPlugin, plugin_for_sport
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -168,17 +189,10 @@ OUTPUT_DIR = BASE_DIR / "output" / "estimation"
 LOG_PATH = BASE_DIR / "logs" / "estimation.log"
 
 # ---------------------------------------------------------------------------
-# nflverse data pull -- same minimal, no-API-key parquet read as
-# DFS_Optimizer/scripts/nflverse_fetch.py (see module docstring for why).
-# ---------------------------------------------------------------------------
-NFLVERSE_BASE_URL = "https://github.com/nflverse/nflverse-data/releases/download"
-WEEKLY_STATS_URL_TEMPLATE = (
-    f"{NFLVERSE_BASE_URL}/stats_player/stats_player_week_{{season}}.parquet"
-)
-
-# ---------------------------------------------------------------------------
 # Model constants -- named here, explicitly, per this project's "no
-# unnamed black-box factors" documentation standard.
+# unnamed black-box factors" documentation standard. Sport-agnostic: these
+# apply identically regardless of which plug-in produced the per-game
+# stat series (see SESSION 2.12 REFACTOR note above).
 # ---------------------------------------------------------------------------
 RECENCY_WEIGHTS = [0.35, 0.25, 0.20, 0.12, 0.08]
 SEASON_AVG_BLEND_WEIGHT = 0.5
@@ -188,144 +202,6 @@ SIGMA_FLOOR_FRACTION = 0.15  # sigma floor, as a fraction of the mean, used
 # only when a player has exactly MIN_GAMES_FOR_ESTIMATE games and their
 # observed sample sigma is implausibly small (near-zero) -- prevents a
 # probability estimate of ~100%/~0% off two coincidentally similar games.
-
-NFL_SPORT_LABELS = {"nfl", "football", "nfl football"}
-
-# Maps a pick'em platform's stat_type string (lowercased, trimmed) to the
-# single nflverse weekly-stats column measuring the same real-world
-# quantity. Add new entries here as real ingested data surfaces stat-type
-# strings not yet covered -- do not guess new ones in advance.
-NFL_STAT_TYPE_MAP: dict[str, str] = {
-    "pass yards": "passing_yards",
-    "passing yards": "passing_yards",
-    "pass yds": "passing_yards",
-    "rush yards": "rushing_yards",
-    "rushing yards": "rushing_yards",
-    "rush yds": "rushing_yards",
-    "receiving yards": "receiving_yards",
-    "rec yards": "receiving_yards",
-    "receptions": "receptions",
-    "recs": "receptions",  # confirmed real variant, Session 2.3 real-data check
-    "pass completions": "completions",
-    "completions": "completions",
-    "pass attempts": "attempts",
-    "attempts": "attempts",
-    "pass tds": "passing_tds",
-    "passing tds": "passing_tds",  # real FanDuel wording, Session 6.2 continuation
-    "passing touchdowns": "passing_tds",
-    "rush tds": "rushing_tds",
-    "rushing tds": "rushing_tds",  # real FanDuel wording, Session 6.2 continuation
-    "rushing touchdowns": "rushing_tds",
-    # --- Added Session 2.3, from real ingested-data stat_type strings,
-    # each checked directly against nflverse's real column list before
-    # being added (see pickem_estimation_model_spec.md, "Stat-type
-    # coverage" section, for the verification record) ---
-    "int": "passing_interceptions",
-    "rec tds": "receiving_tds",
-    "sacks": "def_sacks",  # a defensive player's own sacks recorded
-    "rec targets": "targets",
-    "fg made": "fg_made",
-}
-
-# Composite stat types are summed across more than one nflverse column.
-# Kept separate from NFL_STAT_TYPE_MAP (which is a 1:1 lookup) so the
-# single-column and multi-column cases can never be silently confused.
-COMPOSITE_STAT_TYPES: dict[str, list[str]] = {
-    "rush+rec yards": ["rushing_yards", "receiving_yards"],
-    "rush + rec yards": ["rushing_yards", "receiving_yards"],
-    "rushing + receiving yards": ["rushing_yards", "receiving_yards"],
-    "rush+rec yds": ["rushing_yards", "receiving_yards"],  # real variant, Session 2.3
-    "pass+rush+rec yards": ["passing_yards", "rushing_yards", "receiving_yards"],
-    "pass + rush + rec yards": ["passing_yards", "rushing_yards", "receiving_yards"],
-    # --- Added Session 2.3, from real ingested-data stat_type strings ---
-    "player tds": ["passing_tds", "rushing_tds", "receiving_tds"],
-    "pass+rush yds": ["passing_yards", "rushing_yards"],
-    "pass+rush+rec tds": ["passing_tds", "rushing_tds", "receiving_tds"],
-}
-
-# ---------------------------------------------------------------------------
-# Computed stat types -- unlike NFL_STAT_TYPE_MAP (one column) and
-# COMPOSITE_STAT_TYPES (sum of columns), these apply a real, weighted
-# scoring FORMULA across several columns. Both formulas below were taken
-# directly from PrizePicks' own official scoring pages, not estimated or
-# guessed -- and every nflverse column each formula reads was individually
-# confirmed to exist before being used here.
-# ---------------------------------------------------------------------------
-def _compute_kicking_points(games: pd.DataFrame) -> pd.Series:
-    """PrizePicks' official Kicking Points formula (confirmed directly via
-    PrizePicks Support on X and prizepicks.com/playbook-article/how-to-play-
-    prizepicks-nfl-fantasy-scoring-system, Sept 2025): field goals are
-    tiered by distance, not flat -- 0-39 yds = 3 pts, 40-49 yds = 4 pts,
-    50+ yds = 5 pts; PAT made = 1 pt; a missed FG or missed PAT is -1 pt
-    each. This is explicitly NOT the same as Fantasy Score (PrizePicks'
-    own distinction, stated on their scoring page)."""
-    fg_0_39 = games[["fg_made_0_19", "fg_made_20_29", "fg_made_30_39"]].sum(axis=1)
-    fg_40_49 = games["fg_made_40_49"]
-    fg_50_plus = games[["fg_made_50_59", "fg_made_60_"]].sum(axis=1)
-    fg_missed = games["fg_missed"]
-    pat_made = games["pat_made"]
-    pat_missed = games["pat_missed"]
-    return (
-        fg_0_39 * 3
-        + fg_40_49 * 4
-        + fg_50_plus * 5
-        + pat_made * 1
-        - fg_missed * 1
-        - pat_missed * 1
-    ).reset_index(drop=True)
-
-
-def _compute_fantasy_score(games: pd.DataFrame) -> pd.Series:
-    """PrizePicks' official NFL offensive Fantasy Score formula (confirmed
-    directly via prizepicks.com/playbook-article/how-to-play-prizepicks-nfl-
-    fantasy-scoring-system, Sept 2025): full PPR. Deliberately OMITS two
-    real components of PrizePicks' own table -- Offensive Fumble Recovery
-    TDs and Kick/Punt/FG Return TDs (6 pts each) -- because nflverse's
-    closest-named columns for these do not reliably correspond to the same
-    real-world event (checked directly against real 2025 data: nflverse's
-    `pt_return_tds` column fires for PUNTERS on real rows, not the players
-    who returned a kick). Both events are rare across a full season, so
-    this is a small, real, and explicitly named gap, not a hidden one."""
-    fumbles_lost = games[
-        ["rushing_fumbles_lost", "receiving_fumbles_lost", "sack_fumbles_lost"]
-    ].sum(axis=1)
-    two_pt = games[
-        ["passing_2pt_conversions", "rushing_2pt_conversions", "receiving_2pt_conversions"]
-    ].sum(axis=1)
-    return (
-        games["passing_yards"] * 0.04
-        + games["passing_tds"] * 4
-        - games["passing_interceptions"] * 1
-        + games["rushing_yards"] * 0.1
-        + games["rushing_tds"] * 6
-        + games["receptions"] * 1
-        + games["receiving_yards"] * 0.1
-        + games["receiving_tds"] * 6
-        - fumbles_lost * 1
-        + two_pt * 2
-    ).reset_index(drop=True)
-
-
-COMPUTED_STAT_TYPES: dict[str, Callable[[pd.DataFrame], pd.Series]] = {
-    "kicking points": _compute_kicking_points,
-    "fantasy score": _compute_fantasy_score,
-}
-
-# Every nflverse column each computed formula reads, so a missing/renamed
-# column is caught with a clear message instead of a raw KeyError.
-_COMPUTED_STAT_REQUIRED_COLUMNS: dict[str, list[str]] = {
-    "kicking points": [
-        "fg_made_0_19", "fg_made_20_29", "fg_made_30_39", "fg_made_40_49",
-        "fg_made_50_59", "fg_made_60_", "fg_missed", "pat_made", "pat_missed",
-    ],
-    "fantasy score": [
-        "passing_yards", "passing_tds", "passing_interceptions",
-        "rushing_yards", "rushing_tds", "receptions", "receiving_yards",
-        "receiving_tds", "rushing_fumbles_lost", "receiving_fumbles_lost",
-        "sack_fumbles_lost", "passing_2pt_conversions",
-        "rushing_2pt_conversions", "receiving_2pt_conversions",
-    ],
-}
 
 NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 
@@ -356,29 +232,6 @@ log = setup_logging()
 
 
 # ---------------------------------------------------------------------------
-# nflverse fetch
-# ---------------------------------------------------------------------------
-def fetch_nfl_weekly_stats(season: int) -> pd.DataFrame:
-    """Pulls one season of nflverse weekly player stats directly from the
-    published parquet release. No API key required. If this 404s, nflverse
-    has likely renamed the release again -- see
-    https://github.com/nflverse/nflverse-data/releases and update
-    WEEKLY_STATS_URL_TEMPLATE above."""
-    url = WEEKLY_STATS_URL_TEMPLATE.format(season=season)
-    try:
-        df = pd.read_parquet(url, engine="pyarrow")
-    except Exception as exc:  # noqa: BLE001
-        raise RuntimeError(
-            f"Failed to fetch nflverse weekly stats for season {season} from "
-            f"{url}. If this is a 404, nflverse may have renamed the release "
-            f"-- check https://github.com/nflverse/nflverse-data/releases. "
-            f"Original error: {exc}"
-        ) from exc
-    df = df[df["season_type"] == "REG"].copy()
-    return df
-
-
-# ---------------------------------------------------------------------------
 # Name normalization / matching
 # ---------------------------------------------------------------------------
 def normalize_name(name: Optional[str]) -> str:
@@ -393,13 +246,16 @@ def normalize_name(name: Optional[str]) -> str:
     return " ".join(tokens).strip()
 
 
-def build_name_lookup(weekly_df: pd.DataFrame) -> dict[str, str]:
+def build_name_lookup(stats_df: pd.DataFrame) -> dict[str, str]:
     """Builds normalized_name -> player_id, using each player's MOST RECENT
-    name on record. Uses nflverse's `player_display_name` column, NOT
-    `player_name` (see Session 2.3 notes -- `player_name` is abbreviated and
-    would have silently broken almost every match)."""
+    name on record (sorted by the plug-in's `sort_key` column -- see the
+    fetch_stats contract in pickem_sport_plugins/__init__.py). Uses
+    `player_display_name`, NOT any abbreviated name column a source might
+    also carry (see Session 2.3 notes on nflverse's own `player_name` vs.
+    `player_display_name` -- the abbreviated form silently broke almost
+    every match)."""
     most_recent = (
-        weekly_df.sort_values("week")
+        stats_df.sort_values("sort_key")
         .groupby("player_id")[["player_display_name"]]
         .last()
         .reset_index()
@@ -415,11 +271,16 @@ def build_name_lookup(weekly_df: pd.DataFrame) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 # Stat resolution + per-player stat series
 # ---------------------------------------------------------------------------
-def resolve_stat_spec(stat_type: Optional[str]) -> tuple[Optional[str], object, str]:
+def resolve_stat_spec(
+    plugin: SportPlugin, stat_type: Optional[str]
+) -> tuple[Optional[str], object, str]:
     """Returns (kind, value, reason). kind is 'computed', 'columns', or
     None. For 'computed', value is the stat_type key. For 'columns', value
-    is the list of nflverse columns to sum. reason is only meaningful when
-    kind is None."""
+    is the list of that plug-in's stats-source columns to sum. reason is
+    only meaningful when kind is None. Looks the stat_type up against the
+    given plug-in's own stat_type_map / composite_stat_types /
+    computed_stat_types -- generic across sports (see SESSION 2.12
+    REFACTOR note in this module's docstring)."""
     # FIX (2026-09-02, surfaced by Open Decision #11's fix): the old check
     # `if not stat_type` correctly catches a real Python None, but pandas
     # represents a genuinely blank/missing cell as NaN -- a float -- and
@@ -440,12 +301,12 @@ def resolve_stat_spec(stat_type: Optional[str]) -> tuple[Optional[str], object, 
     if not isinstance(stat_type, str) or not stat_type.strip():
         return None, None, "unsupported_stat_type"
     key = stat_type.strip().lower()
-    if key in COMPUTED_STAT_TYPES:
+    if key in plugin.computed_stat_types:
         return "computed", key, ""
-    if key in COMPOSITE_STAT_TYPES:
-        return "columns", COMPOSITE_STAT_TYPES[key], ""
-    if key in NFL_STAT_TYPE_MAP:
-        return "columns", [NFL_STAT_TYPE_MAP[key]], ""
+    if key in plugin.composite_stat_types:
+        return "columns", plugin.composite_stat_types[key], ""
+    if key in plugin.stat_type_map:
+        return "columns", [plugin.stat_type_map[key]], ""
     return None, None, "unsupported_stat_type"
 
 
@@ -466,31 +327,35 @@ def resolved_stat_key_for(kind: Optional[str], value: object) -> Optional[str]:
 
 
 def build_stat_series(
-    weekly_df: pd.DataFrame, player_id: str, kind: str, value: object
+    plugin: SportPlugin, stats_df: pd.DataFrame, player_id: str, kind: str, value: object
 ) -> pd.Series:
     """Returns the player's per-game value for the target stat, across
-    their REG-season games so far this season, sorted oldest to newest."""
-    games = weekly_df[weekly_df["player_id"] == player_id].sort_values("week")
+    their season so far, sorted oldest to newest by the plug-in's
+    `sort_key` column. Generic across sports -- reads the computed-formula
+    function and its required columns from the given plug-in rather than a
+    hardcoded NFL dict (see SESSION 2.12 REFACTOR note in this module's
+    docstring)."""
+    games = stats_df[stats_df["player_id"] == player_id].sort_values("sort_key")
     if games.empty:
         return pd.Series(dtype=float)
 
     if kind == "computed":
         stat_key = value
-        required = _COMPUTED_STAT_REQUIRED_COLUMNS[stat_key]
+        required = plugin.computed_required_columns[stat_key]
         missing = [c for c in required if c not in games.columns]
         if missing:
             log.warning(
-                "nflverse weekly data is missing columns required for computed "
-                "stat '%s': %s", stat_key, missing,
+                "%s stats data is missing columns required for computed "
+                "stat '%s': %s", plugin.name, stat_key, missing,
             )
             return pd.Series(dtype=float)
-        return COMPUTED_STAT_TYPES[stat_key](games)
+        return plugin.computed_stat_types[stat_key](games)
 
     # kind == "columns"
     stat_cols = value
     for col in stat_cols:
         if col not in games.columns:
-            log.warning("nflverse weekly data is missing expected column '%s'", col)
+            log.warning("%s stats data is missing expected column '%s'", plugin.name, col)
             return pd.Series(dtype=float)
     return games[stat_cols].sum(axis=1).reset_index(drop=True)
 
@@ -582,15 +447,31 @@ def is_scorable_prizepicks_odds_type(row: dict) -> bool:
 # ---------------------------------------------------------------------------
 # Main per-row processing
 # ---------------------------------------------------------------------------
-def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFrame:
-    name_lookup = build_name_lookup(weekly_df)
+def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
+    """Generic across every registered sport plug-in (see SESSION 2.12
+    REFACTOR note in this module's docstring). A plug-in's fetch_stats() and
+    the resulting name lookup are pulled lazily and cached per plug-in, so a
+    run only fetches stats for sports actually present in props_df."""
+    stats_cache: dict[str, pd.DataFrame] = {}
+    lookup_cache: dict[str, dict[str, str]] = {}
+
+    def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
+        if plugin.name not in stats_cache:
+            stats_df = plugin.fetch_stats(season)
+            log.info(
+                "Loaded %d %s stat rows for season %d", len(stats_df), plugin.name, season
+            )
+            stats_cache[plugin.name] = stats_df
+            lookup_cache[plugin.name] = build_name_lookup(stats_df)
+        return stats_cache[plugin.name], lookup_cache[plugin.name]
 
     out_rows = []
     for _, prop in props_df.iterrows():
         row = prop.to_dict()
         sport = str(row.get("sport") or "").strip().lower()
+        plugin = plugin_for_sport(sport)
 
-        if sport not in NFL_SPORT_LABELS:
+        if plugin is None:
             row["model_status"] = "unsupported_sport"
             row["resolved_stat_key"] = None
             row.update(_blank_model_fields())
@@ -604,7 +485,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
             out_rows.append(row)
             continue
 
-        kind, value, reason = resolve_stat_spec(row.get("stat_type"))
+        kind, value, reason = resolve_stat_spec(plugin, row.get("stat_type"))
         if kind is None:
             row["model_status"] = reason
             row["resolved_stat_key"] = None
@@ -619,6 +500,8 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
         # matcher can still use.
         row["resolved_stat_key"] = resolved_stat_key_for(kind, value)
 
+        stats_df, name_lookup = get_stats_and_lookup(plugin)
+
         norm_name = normalize_name(row.get("player_name"))
         player_id = name_lookup.get(norm_name)
         if player_id is None:
@@ -627,7 +510,7 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
             out_rows.append(row)
             continue
 
-        series = build_stat_series(weekly_df, player_id, kind, value)
+        series = build_stat_series(plugin, stats_df, player_id, kind, value)
         if len(series) < MIN_GAMES_FOR_ESTIMATE:
             row["model_status"] = "insufficient_history"
             row.update(_blank_model_fields())
@@ -703,10 +586,10 @@ def run(season: int) -> dict:
     props_df = pd.read_csv(NORMALIZED_LATEST)
     log.info("Loaded %d ingested props from %s", len(props_df), NORMALIZED_LATEST)
 
-    weekly_df = fetch_nfl_weekly_stats(season)
-    log.info("Loaded %d nflverse weekly-stat rows for season %d", len(weekly_df), season)
-
-    result_df = process_props(props_df, weekly_df)
+    # Per-plug-in stats fetching happens lazily inside process_props() now
+    # (see SESSION 2.12 REFACTOR note in this module's docstring) -- only
+    # sports actually present in props_df get fetched.
+    result_df = process_props(props_df, season)
 
     status_counts = result_df["model_status"].value_counts(dropna=False).to_dict()
     log.info("Model status breakdown: %s", status_counts)
@@ -746,7 +629,7 @@ if __name__ == "__main__":
         "--season",
         type=int,
         required=True,
-        help="NFL season year to pull nflverse weekly stats for (e.g. 2025).",
+        help="Season year to pull each sport plug-in's stats for (e.g. 2025).",
     )
     args = parser.parse_args()
     summary = run(args.season)

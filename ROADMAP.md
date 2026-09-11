@@ -1337,7 +1337,7 @@ only when a 2-leg entry's single pair does.
 ---
 
 ### Session 2.12 — Multi-Sport Estimation Architecture (Pick'em)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-11) — see SESSION_LOG.md for full detail.
 **Prerequisites:** None new — this generalizes `pickem_model.py`'s existing
 NFL path; no other track or file needs to change first.
 
@@ -1363,20 +1363,51 @@ it operates on a plain per-game numeric series — and should not be
 touched. Every later sport session (2.13+) then adds one plug-in file,
 not a second copy of the estimation engine.
 
-**Files touched:** `scripts/estimation/pickem_model.py` (refactor, no
-behavior change for NFL — validated by regression), possibly a new
-`scripts/estimation/pickem_sport_plugins/` package if one file per sport
-reads more clearly than one growing dict.
+**Files touched:** `scripts/estimation/pickem_model.py` (refactored —
+NFL-specific logic moved out, generic `process_props()`/`resolve_stat_spec()`/
+`build_name_lookup()`/`build_stat_series()` added),
+`scripts/estimation/pickem_sport_plugins/__init__.py` (new — `SportPlugin`
+dataclass + `PLUGINS` registry + `plugin_for_sport()`),
+`scripts/estimation/pickem_sport_plugins/nfl.py` (new — Session 2.3's NFL
+logic moved here unchanged), `scripts/estimation/pickem_sport_plugins/mlb.py`
+(new — proof-case second plug-in, real MLB Stats API code, placeholder stat
+map — see Decision #2), `scripts/estimation/test_pickem_model.py` (new —
+regression + architecture test suite),
+`data/pickem/_test_fixtures/nfl_regression_golden.csv` (new — golden
+snapshot captured from the pre-refactor code),
+`scripts/estimation/sportsbook_props_model.py` (real downstream consumer of
+`pickem_model.py`'s NFL-specific symbols — updated to import from the new
+NFL plug-in and pass it explicitly to the now-generic helper functions; not
+in the original card, found and fixed during this session — see Decision
+#3), `docs/research/pickem_estimation_model_spec.md` (Session 2.12 addendum
+noting the file-location change).
 
 **Validation (required to close session):**
-- [ ] NFL scoring output is byte-for-byte unchanged for a real, fixed
-input snapshot before/after the refactor (regression, not just "tests
-still pass")
-- [ ] Adding a second real sport plug-in (done as part of this session,
-using MLB as the proof case — see Session 2.13) requires touching only
-that sport's own plug-in file, not `process_props()`'s core loop
-- [ ] `model_status="unsupported_sport"` still fires correctly for every
-sport with no plug-in registered yet — nothing silently drops
+- [x] NFL scoring output is byte-for-byte unchanged for a real, fixed
+input snapshot before/after the refactor — confirmed via
+`test_pickem_model.py::test_nfl_regression_matches_golden_snapshot`:
+a 10-row synthetic fixture covering every code path (plain column
+stat, composite stat, both computed formulas, unsupported_sport,
+unsupported_stat_type, unsupported_odds_type, no_player_match,
+insufficient_history, and an Underdog per-side-multiplier row) was
+scored with the pre-refactor code, saved as a golden CSV, then
+re-scored with the refactored plug-in architecture and diffed
+column-by-column and value-by-value — identical, including column
+order.
+- [x] Adding a second real sport plug-in requires touching only that
+sport's own plug-in file, not `process_props()`'s core loop —
+confirmed by adding `pickem_sport_plugins/mlb.py` (real MLB Stats API
+code, see Decision #2) with zero changes to `pickem_model.py`'s loop
+beyond what the NFL-only refactor itself already required;
+`test_second_plugin_registered_without_touching_core_loop` confirms
+both plug-ins are live in the registry.
+- [x] `model_status="unsupported_sport"` still fires correctly for every
+sport with no plug-in registered yet — confirmed via
+`test_unsupported_sport_still_falls_through_cleanly` (a made-up sport
+label with no plug-in) and via a real run against the repo's live
+`data/pickem/normalized/latest.csv` through `run_pipeline.py`'s own
+module loader (not just direct import), which produced
+`{'unsupported_sport': 4}` for real data with no registered sport.
 
 ---
 
