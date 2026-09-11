@@ -275,6 +275,31 @@ def normalize_prizepicks(payload: dict, pulled_at: str) -> list[NormalizedProp]:
     return rows
 
 
+def build_underdog_team_lookup(games: list[dict], solo_games: list[dict]) -> dict[str, str]:
+    """Underdog's raw payload has no standalone "teams" list with real
+    names -- confirmed live 2026-09-11, appearances/players only carry a
+    team_id UUID. Real names only exist on each GAME record's
+    full_team_names_title (e.g. "Alabama Crimson Tide @ Kentucky
+    Wildcats"), keyed by that same game's away_team_id/home_team_id ("Away
+    @ Home" order, confirmed against real data by cross-checking a known
+    player's team_id against which half of the title it fell on). Built
+    once per run from every game currently in the feed, not guessed from
+    the ID's shape."""
+    lookup: dict[str, str] = {}
+    for game in list(games) + list(solo_games or []):
+        title = game.get("full_team_names_title")
+        if not isinstance(title, str) or " @ " not in title:
+            continue
+        away_name, home_name = title.split(" @ ", 1)
+        away_id = game.get("away_team_id")
+        home_id = game.get("home_team_id")
+        if away_id:
+            lookup[str(away_id)] = away_name.strip()
+        if home_id:
+            lookup[str(home_id)] = home_name.strip()
+    return lookup
+
+
 def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
     rows: list[NormalizedProp] = []
 
@@ -306,6 +331,7 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
     solo_games_by_id = {
         str(g.get("id")): g for g in (payload.get("solo_games") or [])
     }
+    team_name_by_id = build_underdog_team_lookup(games, payload.get("solo_games") or [])
 
     for line in lines:
         try:
@@ -334,12 +360,28 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                 f"{player_attrs.get('last_name', '')}".strip()
             ) or player_attrs.get("name")
 
+            # FIX (2026-09-11): Underdog's raw feed has no standalone
+            # "teams" list -- appearances/players only carry a team_id
+            # UUID, so this field used to fall back straight to that raw
+            # UUID with no way to turn it back into a real name ("Ravens").
+            # Real team names only exist on each GAME record
+            # (full_team_names_title, "Away Name @ Home Name", keyed by
+            # away_team_id/home_team_id) -- build_underdog_team_lookup()
+            # above turns that into a team_id -> name map once per run.
+            # Still falls back to the raw team_id if a player's game
+            # container isn't in this run's feed yet (see the sport_id
+            # fallback note below for why that can happen) -- a raw ID is
+            # a real, visible gap, same as this file's other fallbacks,
+            # not a silently wrong value.
+            raw_team_id = appearance.get("team_id") or player_attrs.get("team_id")
+            team_name = team_name_by_id.get(str(raw_team_id)) if raw_team_id else None
+
             rows.append(
                 NormalizedProp(
                     platform="underdog",
                     source_line_id=str(line.get("id")),
                     player_name=player_name or None,
-                    team=appearance.get("team_id") or player_attrs.get("team"),
+                    team=team_name or raw_team_id or player_attrs.get("team"),
                     # FIX (Open Decision #11, and supersedes Open Decision
                     # #10's "Underdog has zero NFL lines" finding, which is
                     # now stale): confirmed live 2026-09-02 that Underdog

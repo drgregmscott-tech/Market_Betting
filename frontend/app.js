@@ -1239,9 +1239,15 @@ const TRACK_META = {
 };
 
 function mapPickemForOverview(r) {
+  const pickemLine = r.last_seen_line || r.first_flagged_line;
+  const pickemStatWithLine = [r.stat_type, pickemLine].filter(Boolean).join(" ");
   return {
     track: "pickem",
-    opportunity: [r.player_name, r.stat_type].filter(Boolean).join(" — ") || "—",
+    // Line folded in here (not a separate column) so the Overview tab
+    // tells you what the bet actually IS -- "Jordan Mason — Rush Yards
+    // 24.5" -- without reopening the column-overflow problem fixed
+    // 2026-09-11 by adding more columns to already-wide tables.
+    opportunity: [r.player_name, pickemStatWithLine].filter(Boolean).join(" — ") || "—",
     side: r.flagged_side || "—",
     venue: r.platform || "—",
     edge: toNum(r.first_flagged_edge),
@@ -1253,9 +1259,11 @@ function mapPickemForOverview(r) {
 }
 
 function mapArbForOverview(r) {
+  const arbAsks = [r.leg_a_ask, r.leg_b_ask].filter((v) => v !== undefined && v !== null && v !== "");
+  const arbPriceLabel = arbAsks.length ? `(${arbAsks.join(" / ")})` : null;
   return {
     track: "arb",
-    opportunity: r.title_a || r.opportunity_type || "—",
+    opportunity: [r.title_a || r.opportunity_type || "—", arbPriceLabel].filter(Boolean).join(" ") || "—",
     side: r.opportunity_type || "—",
     venue: [r.platform_a, r.platform_b].filter(Boolean).join(" / ") || "—",
     edge: toNum(r.net_profit_per_dollar),
@@ -1267,9 +1275,10 @@ function mapArbForOverview(r) {
 }
 
 function mapWeatherForOverview(r) {
+  const weatherForecastWithStrike = [r.forecast_kind, `(strike ${fmtStrike(r)})`].filter(Boolean).join(" ");
   return {
     track: "weather",
-    opportunity: [r.city_label, r.forecast_kind].filter(Boolean).join(" — ") || "—",
+    opportunity: [r.city_label, weatherForecastWithStrike].filter(Boolean).join(" — ") || "—",
     side: r.flagged_side || "—",
     venue: "Kalshi",
     edge: toNum(r.first_flagged_edge),
@@ -1282,9 +1291,13 @@ function mapWeatherForOverview(r) {
 
 function mapPoliticsForOverview(r) {
   const hours = toNum(r.hours_to_resolution);
+  const politicsPrice = toNum(r.first_flagged_market_price);
+  const politicsRaceWithPrice = [r.chamber, politicsPrice !== null ? `(mkt ${(politicsPrice * 100).toFixed(0)}%)` : null]
+    .filter(Boolean)
+    .join(" ");
   return {
     track: "politics",
-    opportunity: [r.candidate_name, r.chamber].filter(Boolean).join(" — ") || "—",
+    opportunity: [r.candidate_name, politicsRaceWithPrice].filter(Boolean).join(" — ") || "—",
     side: r.party || "—",
     venue: r.venue || "—",
     edge: toNum(r.first_flagged_edge),
@@ -1296,9 +1309,10 @@ function mapPoliticsForOverview(r) {
 }
 
 function mapPropsForOverview(r) {
+  const propsStatWithLine = [r.stat_type, r.line].filter(Boolean).join(" ");
   return {
     track: "props",
-    opportunity: [r.player_name, r.stat_type].filter(Boolean).join(" — ") || "—",
+    opportunity: [r.player_name, propsStatWithLine].filter(Boolean).join(" — ") || "—",
     side: r.flagged_side || "—",
     venue: r.platform || "—",
     edge: toNum(r.first_flagged_edge),

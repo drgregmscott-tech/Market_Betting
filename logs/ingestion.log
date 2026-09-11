@@ -9578,3 +9578,75 @@ Call log:
 2026-09-11 12:43:57,746 UTC | WARNING | Attempt 3/3 failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
 2026-09-11 12:43:57,746 UTC | ERROR | Underdog ingestion failed for this run: All attempts failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
 2026-09-11 12:43:58,730 UTC | INFO | === Ingestion run complete: 40431 total rows (PrizePicks OK, Underdog FAILED) ===
+2026-09-11 17:28:15,843 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:28:20,851 UTC | INFO | PrizePicks: 45762 normalized rows
+2026-09-11 17:28:25,824 UTC | INFO | Underdog: 14437 normalized rows
+2026-09-11 17:28:27,235 UTC | INFO | === Ingestion run complete: 60199 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:41:20,774 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:20,776 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:41:20,777 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:41:20,781 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:41:20,790 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:20,792 UTC | ERROR | PrizePicks response missing expected top-level 'data'/'included' lists — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:41:20,792 UTC | INFO | PrizePicks: 0 normalized rows
+2026-09-11 17:41:20,793 UTC | ERROR | Underdog response missing one of the expected top-level lists ('over_under_lines', 'players', 'appearances', 'games') — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:41:20,793 UTC | INFO | Underdog: 0 normalized rows
+2026-09-11 17:41:20,795 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:41:20,797 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:20,798 UTC | ERROR | PrizePicks response missing expected top-level 'data'/'included' lists — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:41:20,798 UTC | INFO | PrizePicks: 0 normalized rows
+2026-09-11 17:41:20,799 UTC | ERROR | Underdog response missing one of the expected top-level lists ('over_under_lines', 'players', 'appearances', 'games') — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:41:20,799 UTC | INFO | Underdog: 0 normalized rows
+2026-09-11 17:41:20,801 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:41:20,803 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:20,803 UTC | WARNING | Attempt 1/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:41:23,804 UTC | WARNING | Attempt 2/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:41:26,805 UTC | WARNING | Attempt 3/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:41:26,805 UTC | ERROR | PrizePicks ingestion failed for this run: All attempts failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:41:26,806 UTC | WARNING | Attempt 1/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:41:29,811 UTC | WARNING | Attempt 2/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:41:32,812 UTC | WARNING | Attempt 3/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:41:32,813 UTC | ERROR | Underdog ingestion failed for this run: All attempts failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:41:32,815 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks FAILED, Underdog FAILED) ===
+2026-09-11 17:41:32,817 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:32,818 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:41:32,826 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:41:32,829 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:41:32,830 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:41:32,831 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:41:32,832 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:41:32,834 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:44:08,876 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:08,877 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:44:08,878 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:44:08,882 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:44:08,893 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:08,894 UTC | ERROR | PrizePicks response missing expected top-level 'data'/'included' lists — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:44:08,894 UTC | INFO | PrizePicks: 0 normalized rows
+2026-09-11 17:44:08,895 UTC | ERROR | Underdog response missing one of the expected top-level lists ('over_under_lines', 'players', 'appearances', 'games') — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:44:08,895 UTC | INFO | Underdog: 0 normalized rows
+2026-09-11 17:44:08,897 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:44:08,898 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:08,899 UTC | ERROR | PrizePicks response missing expected top-level 'data'/'included' lists — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:44:08,899 UTC | INFO | PrizePicks: 0 normalized rows
+2026-09-11 17:44:08,900 UTC | ERROR | Underdog response missing one of the expected top-level lists ('over_under_lines', 'players', 'appearances', 'games') — schema may have changed. Skipping this platform for this run.
+2026-09-11 17:44:08,900 UTC | INFO | Underdog: 0 normalized rows
+2026-09-11 17:44:08,902 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:44:08,904 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:08,904 UTC | WARNING | Attempt 1/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:44:11,905 UTC | WARNING | Attempt 2/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:44:14,906 UTC | WARNING | Attempt 3/3 failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:44:14,906 UTC | ERROR | PrizePicks ingestion failed for this run: All attempts failed for https://partner-api.prizepicks.com/projections: simulated network failure
+2026-09-11 17:44:14,907 UTC | WARNING | Attempt 1/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:44:17,912 UTC | WARNING | Attempt 2/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:44:20,913 UTC | WARNING | Attempt 3/3 failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:44:20,913 UTC | ERROR | Underdog ingestion failed for this run: All attempts failed for https://api.underdogfantasy.com/v1/over_under_lines: simulated network failure
+2026-09-11 17:44:20,915 UTC | INFO | === Ingestion run complete: 0 total rows (PrizePicks FAILED, Underdog FAILED) ===
+2026-09-11 17:44:20,917 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:20,918 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:44:20,919 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:44:20,921 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 17:44:20,921 UTC | INFO | === Ingestion run starting ===
+2026-09-11 17:44:20,922 UTC | INFO | PrizePicks: 2 normalized rows
+2026-09-11 17:44:20,924 UTC | INFO | Underdog: 2 normalized rows
+2026-09-11 17:44:20,925 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
