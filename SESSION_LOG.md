@@ -10070,3 +10070,48 @@ GitHub Support/status-page investigation, per the prior entry's plan.
 meantime (2-for-2 real success rate).
 
 **Next session:** None yet — Session 5.7 remains open.
+
+## Session 3.3 continuation — execution_risk_poller.py built, first real run (2026-09-11)
+
+**What was built:** `scripts/calibration/execution_risk_poller.py` — the
+dedicated short-interval order-book poller named as the real next step in
+this same day's earlier Open Decision #23 write-up. Polls one live
+flagged pair's real order book at a short, fixed interval for a bounded
+real duration, reusing `liquidity_check.py`'s `estimate_fillable_size()`
+directly so readings are comparable to `detector.py`'s own numbers.
+`--auto` picks the largest current real opportunity from
+`arbitrage_flags_latest.csv`; `--report` summarizes the worst observed
+decay across all sessions without auto-applying anything.
+
+**First real run:** 30 real minutes, 16 readings every 2 minutes, against
+the largest real flagged pair at the time (Kalshi `HOUSEVA7-26-R` vs.
+Polymarket's VA-07 House-seat market). **Result: 0% movement across every
+single one of the 16 readings** — fillable size sat exactly at $300.00
+the entire 30 minutes.
+
+**Why this does not resolve Open Decision #23:** this is a real result,
+but it's a fourth single-market data point that still conflicts with the
+original 67%-in-13-minutes finding (Session 3.3, `KXHIGHPHIL` weather
+market) rather than settling anything. The most likely real explanation:
+a down-ballot House-race contract sitting months from its actual
+resolution has near-zero real trading turnover — nobody's actively
+working that order book, so of course it didn't move in any 2-minute
+window. The original 67% finding came from an active weather market
+close to its own resolution window, a structurally different kind of
+instrument. **`EXECUTION_RISK_BUFFER` stays at 0.85** — a flat reading on
+one thin, rarely-traded market is exactly as weak a basis for changing it
+as the earlier volatile reading on one different, active market was.
+
+**Files created/modified:** `scripts/calibration/execution_risk_poller.py`
+(new), `data/arbitrage/execution_risk_polls/poll_2026-09-11T13-46-08Z.csv`
+(new, the real 16-reading session), `logs/execution_risk_poller.log`
+(new), `ROADMAP.md` (Open Decision #23 updated again).
+
+**Open items / deferred validations:** Open Decision #23 remains open.
+The real, updated next step: run `execution_risk_poller.py` against an
+actively-traded, near-resolution market — a weather threshold contract
+close to its settlement window is this project's best real candidate —
+rather than another low-turnover election contract. The instrument
+choice matters as much as the polling interval; this session's real
+result confirms polling the wrong kind of market produces a real but
+uninformative flat reading no matter how many more times it's repeated.

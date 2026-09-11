@@ -3520,12 +3520,22 @@ anything about execution-time risk specifically. These two real
 findings directly conflict, and the arbitrage detector's own ~4–6 hour
 polling cadence (Open Decision #26) is structurally too coarse to
 resolve which one reflects real execution risk — more days of the same
-cadence will not fix this. **Action needed, updated:** a dedicated
-short-interval (minutes-scale) order-book poll against a live flagged
-market, repeated enough times to build a real distribution — the same
-one-off method used for the original 67% finding, not the arbitrage
-pipeline's own snapshot cadence. See SESSION_LOG.md's 2026-09-11 entry
-for the full evidence trail.
+cadence will not fix this. Built `execution_risk_poller.py` (new) to
+poll a single live pair's real order book at short, fixed intervals.
+**First real run (2026-09-11, 30 real minutes, 16 readings every 2
+min, Kalshi `HOUSEVA7-26-R` vs. Polymarket's VA-07 market): 0% movement
+across every single reading.** This is a fourth real, single-market
+data point, and it still conflicts with the original 67%-in-13-minutes
+finding rather than resolving anything — most likely because a
+down-ballot election contract months from resolution has near-zero
+real turnover, unlike the actively-traded weather market the original
+finding came from. **Action needed, updated again:** run
+`execution_risk_poller.py` against an ACTIVELY traded, near-resolution
+market (a weather threshold contract close to its settlement window is
+the best real candidate this project has) rather than another
+low-turnover election contract — the instrument matters as much as the
+polling interval. See SESSION_LOG.md's 2026-09-11 entries for the full
+evidence trail.
 24. **Opened Session 3.3, UPDATED Session 3.4 (2026-09-06):**
 `sizing_engine.py`'s arbitrage sizing has been validated against
 constructed test cases and against real Kalshi order-book numbers
