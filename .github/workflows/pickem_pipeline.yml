@@ -85,13 +85,35 @@ jobs:
         run: python scripts/run_pipeline.py --season 2025
 
       - name: Commit and push updated CLV log and digest
+        id: commit
         run: |
           git config user.name "pickem-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv
-          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git commit -m "Automated pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # Hotfix, 2026-09-11: the commit above is deliberately tagged
+      # [skip ci] (so an hourly bot commit doesn't re-trigger this same
+      # workflow) -- but Cloudflare Pages treats [skip ci] the same way
+      # and silently skips auto-deploying that commit too. This was a
+      # known, real gap (first hit on the arbitrage track, Session 3.5;
+      # recurred here) that left the live frontend showing stale data
+      # after a run that DID produce new flags. A Cloudflare Pages
+      # "Deploy hook" is a URL that starts a deploy regardless of any
+      # git metadata -- POSTing to it here closes the gap for real,
+      # rather than relying on someone noticing and manually redeploying.
+      # Only runs when the commit step actually pushed something, so a
+      # no-op run doesn't trigger a pointless rebuild.
+      - name: Trigger Cloudflare Pages deploy
+        if: steps.commit.outputs.committed == 'true'
+        run: curl -sf -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK_URL }}"
 
       - name: Upload logs as a build artifact
         if: always()

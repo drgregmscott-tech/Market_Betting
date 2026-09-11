@@ -3937,6 +3937,33 @@ live 2-leg Underdog entry
 `entry_type: "2-pick Standard"`, real 3.5x payout, 0.85 platform
 dampener, `$2.42` suggested stake on a $500 bankroll. Underdog is fully
 live again, not dropped.
+56. **Resolved, 2026-09-11 — the "no automated redeploy follows a
+`[skip ci]` pipeline commit" gap (first flagged as an open item back in
+Session 3.5's SESSION_LOG entry, never previously promoted to a numbered
+decision here) is now closed for real, project-wide.** This gap is what
+caused the very confusion #54/#55 above surfaced from the user's side:
+after fixing Underdog's ingestion, the live frontend still showed stale
+data because the pipeline's own data commit is tagged `[skip ci]` (by
+design, to avoid an hourly bot commit re-triggering the same GitHub
+Actions workflow) — and Cloudflare Pages, it turns out, honors that same
+tag and silently skips auto-deploying that commit too. Confirmed
+directly: the live site's served `data/clv_log.csv` matched an EARLIER
+commit's exact byte count, not the latest one, proving the real fix's
+data had never actually reached production. Fixed by adding a Cloudflare
+Pages **Deploy Hook** (a URL that starts a deploy regardless of git
+metadata) — the user created one in the Cloudflare dashboard and stored
+it as the GitHub Actions repository secret `CF_PAGES_DEPLOY_HOOK_URL`.
+All five data-producing pipeline workflows (pick'em, weather, props,
+arbitrage, politics — the two non-frontend workflows, weather
+calibration and the sport-inventory scan, don't need it) now `curl -X
+POST` that secret as their final step, gated on the commit step actually
+having pushed something (`steps.commit.outputs.committed == 'true'`,
+newly added to each commit step) so a genuinely no-op run doesn't trigger
+a pointless rebuild. Every future pipeline run now redeploys the live
+frontend automatically, `[skip ci]` or not — this was previously named
+as "Greg's call, not applied unilaterally" (Session 3.5); the user's
+explicit direction this session ("set up the deploy hook now") is that
+call being made.
 
 ---
 *Update this file at the close of each future session, per the project's

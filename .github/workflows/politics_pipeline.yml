@@ -146,13 +146,29 @@ jobs:
         run: python scripts/run_politics_pipeline.py
 
       - name: Commit and push updated data, estimates, CLV log, and digest
+        id: commit
         run: |
           git config user.name "politics-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/politics/normalized/ data/politics/estimates/ data/politics/clv_log.csv data/politics/clv_snapshots/ output/digest/politics_digest_latest.md output/digest/politics_digest_*.md
-          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git commit -m "Automated politics pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # Hotfix, 2026-09-11: see pickem_pipeline.yml's own comment on this
+      # same step for the full incident -- Cloudflare Pages does not
+      # auto-deploy a commit tagged [skip ci], so without this step a real
+      # new politics flag could sit unpublished on the live frontend
+      # indefinitely. Only fires when the commit step actually pushed
+      # something.
+      - name: Trigger Cloudflare Pages deploy
+        if: steps.commit.outputs.committed == 'true'
+        run: curl -sf -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK_URL }}"
 
       - name: Upload logs as a build artifact
         if: always()

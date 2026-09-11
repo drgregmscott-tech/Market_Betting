@@ -144,13 +144,29 @@ jobs:
         run: python scripts/run_weather_pipeline.py
 
       - name: Commit and push updated data, estimates, CLV log, and digest
+        id: commit
         run: |
           git config user.name "weather-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/weather/raw/ data/weather/normalized/ data/weather/estimates/ data/weather/clv_log.csv data/weather/clv_snapshots/ output/digest/weather_digest_latest.md output/digest/weather_digest_*.md
-          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git commit -m "Automated weather pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # Hotfix, 2026-09-11: see pickem_pipeline.yml's own comment on this
+      # same step for the full incident -- Cloudflare Pages does not
+      # auto-deploy a commit tagged [skip ci], so without this step a real
+      # new weather flag could sit unpublished on the live frontend
+      # indefinitely. Only fires when the commit step actually pushed
+      # something.
+      - name: Trigger Cloudflare Pages deploy
+        if: steps.commit.outputs.committed == 'true'
+        run: curl -sf -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK_URL }}"
 
       - name: Upload logs as a build artifact
         if: always()

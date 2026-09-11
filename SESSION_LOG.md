@@ -9807,3 +9807,113 @@ verified end-to-end this session. The pipeline crash fix (`run_pickem`)
 and this endpoint fix are both now live in the same `main` branch state;
 the next scheduled GitHub Actions run should produce a normal, healthy
 commit for the first time in ~3 days across both platforms.
+
+---
+
+### Addendum 2, same day (2026-09-11) — real frontend gap: Cloudflare Pages was not deploying the fix
+
+**What happened:** the user committed the Underdog endpoint fix and
+manually triggered the Pick'em Pipeline workflow; both showed green.
+Cloudflare Pages also showed a deployment finishing about a minute
+later. But the live frontend still showed zero Underdog opportunities.
+
+**Diagnosed by comparing exact byte counts, not by guessing.** Fetched
+the live site's served `data/clv_log.csv` directly
+(`fetch('/data/clv_log.csv')` in the browser console) and compared its
+`content-length` (2,203,001 bytes) against each recent commit's own
+`data/pickem/clv_log.csv` size via `git show <hash>:path | wc -c`. It
+matched commit `e47d8b0` (the pipeline run right after the crash fix,
+before the Underdog endpoint fix existed — still only 1 Underdog row)
+byte-for-byte, NOT `df65081` (the run with the real 548-row Underdog
+fix). This proved the live site was one full pipeline cycle behind, not
+just slow to update.
+
+**Reconstructed why from full commit timestamps:** the user's endpoint-fix
+push (`015531d`, 13:04:56 local) is a normal commit, so it DID trigger a
+real Cloudflare deploy — but that deploy captured whatever was in the
+repo AT THAT INSTANT, which was still `e47d8b0`'s data, because the
+pipeline hadn't run again yet with the new endpoint. The pipeline THEN
+ran two minutes later and produced the real fix (`df65081`) — but that
+commit is tagged `[skip ci]` (a deliberate, pre-existing practice so an
+hourly bot commit doesn't re-trigger the same GitHub Actions workflow),
+and Cloudflare Pages, it turns out, treats `[skip ci]` the same way and
+silently skips auto-deploying that commit too. So the "green checkmark
+a minute later" the user saw was real, but it was deploying the WRONG
+(previous) commit's data, and the commit that actually mattered never
+triggered a deploy at all.
+
+**This is not a new bug — it's a recurrence of an already-documented
+gap.** Session 3.5's own SESSION_LOG entry hit this exact failure mode
+on the arbitrage track and named it directly: "Because pipeline-bot
+commits use `[skip ci]` by design, Track 2's section on the live page
+will only ever reflect the most recent run that happened to be followed
+by *some* other, non-`[skip ci]` push (or a manual redeploy)." That
+entry explicitly deferred the real fix ("whether to build a deploy hook
+triggered by the pipeline workflows themselves... Greg's call, not
+applied unilaterally") rather than closing it. It was never promoted to
+a numbered ROADMAP.md Open Decision, so it sat as a known-but-unfixed
+gap in SESSION_LOG.md alone until it recurred here.
+
+**Fixed for real, all five tracks at once, per the user's explicit
+direction ("set up the deploy hook now").** The user created a
+Cloudflare Pages **Deploy Hook** (dashboard: Settings → Builds &
+deployments → Deploy hooks, branch `main`) and stored its URL as the
+GitHub Actions repository secret `CF_PAGES_DEPLOY_HOOK_URL` — the URL
+itself was never shared in chat, only the secret's name, consistent with
+this project's standing practice of keeping credentials out of the
+conversation and out of committed files.
+
+Modified all five data-producing pipeline workflows the same way
+(`pickem_pipeline.yml`, `arbitrage_pipeline.yml`, `politics_pipeline.yml`,
+`props_pipeline.yml`, `weather_pipeline.yml` — `weather_calibration_
+pipeline.yml` and `sport_inventory_scan.yml` don't touch frontend-served
+data, so they were left alone):
+1. The existing "Commit and push" step was given `id: commit` and now
+writes `committed=true`/`committed=false` to `$GITHUB_OUTPUT` depending
+on whether `git diff --cached --quiet` found real changes (previously
+it just printed a message and exited early on a no-op run — there was
+no machine-readable signal for a later step to check).
+2. A new step, "Trigger Cloudflare Pages deploy," runs immediately after,
+gated on `if: steps.commit.outputs.committed == 'true'`, and does
+`curl -sf -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK_URL }}"` — this
+starts a real Cloudflare Pages deploy regardless of any `[skip ci]`
+tag, and is skipped entirely on a genuine no-op run so a quiet hour
+doesn't trigger a pointless rebuild.
+
+All five workflow files were validated with `yaml.safe_load()` after
+editing (all parsed clean) — this environment cannot actually trigger a
+GitHub Actions run to prove the new step fires correctly end-to-end, so
+that remains a real verification for the next real scheduled run of any
+of the five pipelines to confirm.
+
+**Decisions made:**
+1. **One shared deploy hook for all five pipelines, not one hook per
+track.** A Cloudflare Pages deploy hook just starts a build of the whole
+site from the current `main` branch — it has no concept of "which
+track's data changed," so five separate hooks would behave identically
+to one. One hook, five workflows referencing the same secret, is simpler
+and was not resisted by any real constraint found.
+2. **Promoted this from an unresolved SESSION_LOG-only item to a real,
+numbered ROADMAP.md Open Decision (#56) as part of closing it** — it had
+sat as a known gap since Session 3.5 without a durable, easy-to-find
+record of its existence in the roadmap itself, which is arguably how it
+was able to recur here without anyone remembering it was already a known
+issue.
+
+**Files created/modified (this addendum):**
+- `.github/workflows/pickem_pipeline.yml`,
+`.github/workflows/arbitrage_pipeline.yml`,
+`.github/workflows/politics_pipeline.yml`,
+`.github/workflows/props_pipeline.yml`,
+`.github/workflows/weather_pipeline.yml` — each: commit step now emits
+a `committed` output; new conditional "Trigger Cloudflare Pages deploy"
+step added right after it.
+- `ROADMAP.md` — new Open Decision #56 recording this gap and its fix
+(the gap itself was previously undocumented at the ROADMAP.md level).
+
+**Open items / deferred validations:** The new deploy-hook step has not
+yet been observed firing on a real scheduled (non-manual) pipeline run —
+worth a quick real check (watch the Cloudflare Pages Deployments tab
+after the next hourly run of any of the five pipelines) the next time
+any of them is touched, to confirm the `curl` step behaves the same way
+under a real `schedule`-triggered run as it does conceptually here.
