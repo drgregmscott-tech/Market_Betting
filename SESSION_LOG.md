@@ -10155,3 +10155,48 @@ explicit user direction rather than applied unilaterally.
 now with a real, evidence-based shape for the fix (depth-tiered, not
 flat) rather than just a number — pending user direction on the exact
 depth thresholds and per-tier values before touching `sizing_engine.py`.
+
+## Session 3.3 continuation — Open Decision #23 resolved: depth-tiered buffer applied (2026-09-11)
+
+**What was decided:** given the real, clean depth-vs-decay pattern found
+across 3 real weather poll sessions (see prior entry this session), user
+chose the depth-tiered design over the alternatives (raising the
+sufficiency floor instead, gathering more sessions first, or leaving it
+undecided).
+
+**What was built:** `sizing_engine.py`'s flat `EXECUTION_RISK_BUFFER`
+replaced with `execution_risk_buffer_for_depth(fillable_contracts)`,
+selecting between `EXECUTION_RISK_BUFFER_LIQUID = 0.85` (unchanged, for
+real fillable size ≥ `EXECUTION_RISK_LIQUID_DEPTH_THRESHOLD_DOLLARS =
+150.0`) and `EXECUTION_RISK_BUFFER_THIN = 0.15` (new) below that
+threshold. `size_arbitrage_position()` now selects the tier from the
+market's own real `fillable_contracts` (order-book depth), not
+`raw_contracts` (which can be smaller purely because OUR bankroll capped
+it — a self-inflicted cap is not the same real condition as a thin
+market and shouldn't trigger the thin-market haircut).
+
+**Verified:** ran the real `test_sizing_engine.py` suite — all 22
+existing synthetic tests still pass unchanged (none exercised this exact
+constant). Manually checked both tiers against constructed rows: a
+$244-deep row correctly gets 0.85 (86.73 suggested contracts); an
+identical row with `fillable_size_dollars=50.0` correctly gets 0.15
+(7.5 suggested contracts) — an 11.6x difference in suggested size for
+the same nominal opportunity, which is exactly the real risk difference
+the poller data showed.
+
+**Named, honest limitation carried forward, not solved:** the threshold
+reads depth at one moment. `KXHIGHTDAL`'s real data (a single $200.97
+reading immediately followed by a 92% crash two minutes later) shows a
+single "liquid" reading is not proof of sustained depth. Not fixed this
+session — a real future refinement (e.g. require 2 consecutive polls
+above threshold) would need more poll sessions to validate against, not
+guessed now.
+
+**Files touched:** `scripts/sizing/sizing_engine.py` (constants + tier
+function + `size_arbitrage_position()`'s buffer selection + docstring),
+`ROADMAP.md` (Open Decision #23 marked resolved).
+
+**Open items / deferred validations:** None new for this specific
+decision — it's closed. The named single-moment-depth limitation above
+remains a real, separate, smaller gap for a future session, not blocking
+this resolution.

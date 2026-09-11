@@ -3504,38 +3504,34 @@ check) and should be re-verified, not assumed still accurate, before a
 future session leans on it for real sizing/suppression logic. See
 `ingest_politics_markets.py`'s module docstring and SESSION_LOG.md's
 Session 5.1 entry for the full evidence trail.
-23. **New, opened Session 3.3; revisited 2026-09-11, still NOT
-RESOLVED.** `EXECUTION_RISK_BUFFER = 0.85` in `sizing_engine.py` is a
-named placeholder, sanity-checked but not fully validated against real
-data. Real live Kalshi quotes (MO-05, `KXHIGHPHIL`) were pulled twice,
-roughly 13–30 real minutes apart: quoted PRICE was completely unchanged
-both times, but real order-book SIZE at the best price moved as much as
-67% in 13 real minutes on one market. **Revisited 2026-09-11** once
-Session 3.4's automation had produced 5 real days / 21 snapshot files:
-pulled all of them and found only 2 of 15 distinct flagged pairs were
-ever observed more than once. One (MI-07) showed 0% real size decay
-across three short (10–68 min) gaps; the other (TX-32) showed real
-±86–133% swings, but only across multi-hour gaps too coarse to say
-anything about execution-time risk specifically. These two real
-findings directly conflict, and the arbitrage detector's own ~4–6 hour
-polling cadence (Open Decision #26) is structurally too coarse to
-resolve which one reflects real execution risk — more days of the same
-cadence will not fix this. Built `execution_risk_poller.py` (new) to
-poll a single live pair's real order book at short, fixed intervals.
-**First real run (2026-09-11, 30 real minutes, 16 readings every 2
-min, Kalshi `HOUSEVA7-26-R` vs. Polymarket's VA-07 market): 0% movement
-across every single reading.** This is a fourth real, single-market
-data point, and it still conflicts with the original 67%-in-13-minutes
-finding rather than resolving anything — most likely because a
-down-ballot election contract months from resolution has near-zero
-real turnover, unlike the actively-traded weather market the original
-finding came from. **Action needed, updated again:** run
-`execution_risk_poller.py` against an ACTIVELY traded, near-resolution
-market (a weather threshold contract close to its settlement window is
-the best real candidate this project has) rather than another
-low-turnover election contract — the instrument matters as much as the
-polling interval. See SESSION_LOG.md's 2026-09-11 entries for the full
-evidence trail.
+23. ~~New, opened Session 3.3.~~ **Resolved 2026-09-11.**
+`EXECUTION_RISK_BUFFER = 0.85` in `sizing_engine.py` was a named,
+unvalidated placeholder. Real live Kalshi quotes (MO-05, `KXHIGHPHIL`)
+pulled 13–30 real minutes apart first found order-book SIZE moving as
+much as 67% in 13 minutes on one market — too thin a sample to act on.
+Revisiting against `detector.py`'s own 5-day/21-file snapshot history
+(too coarse a cadence to resolve minutes-scale risk) and a first
+`execution_risk_poller.py` run against a low-turnover election
+contract (0% movement, wrong instrument) both left it unresolved. **Real
+resolution, same day, via 3 more `execution_risk_poller.py` sessions
+against active weather markets** (30 real minutes each, 2-minute
+intervals): found a clean, real pattern — deep order books ($200+
+sustained) showed 0% to -6.6% real decay; thin ones (mostly under ~$80)
+showed -67% to -92%, even measured only from readings that had already
+crossed the existing `MIN_SUFFICIENT_LIQUIDITY_DOLLARS=50` floor, which
+is therefore confirmed NOT protective against real execution-time risk
+on its own. A single flat buffer cannot fit both regimes. Replaced with
+a depth-tiered lookup (`execution_risk_buffer_for_depth()`):
+`EXECUTION_RISK_BUFFER_LIQUID = 0.85` (unchanged, for fillable size
+≥ `EXECUTION_RISK_LIQUID_DEPTH_THRESHOLD_DOLLARS = 150.0`) and
+`EXECUTION_RISK_BUFFER_THIN = 0.15` (new, below that threshold) — real,
+sourced numbers, not guessed. **Named, honest limitation, not solved
+here:** one thin-market session (`KXHIGHTDAL`) briefly showed a single
+$200.97 reading immediately before crashing 92% two minutes later —
+this rule reads depth at one moment, not whether it's sustained; a
+future session could require two consecutive polls above threshold
+before trusting "liquid." See SESSION_LOG.md's 2026-09-11 entries for
+the full evidence trail.
 24. **Opened Session 3.3, UPDATED Session 3.4 (2026-09-06):**
 `sizing_engine.py`'s arbitrage sizing has been validated against
 constructed test cases and against real Kalshi order-book numbers

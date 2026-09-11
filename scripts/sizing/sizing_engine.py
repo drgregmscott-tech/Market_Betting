@@ -280,19 +280,51 @@ orders, some of that size may already be gone or the price may have
 ticked. Flagged explicitly as a candidate for Session 8.3 recalibration
 once real placed-and-filled arbitrage trades exist to check it against.
 
-RECALIBRATION ATTEMPT, 2026-09-11 (Open Decision #23) -- STILL 0.85,
-NOT MOVED. Pulled all 21 real arbitrage snapshot files accumulated since
-Session 3.4 (2026-09-06 through 2026-09-11) and grouped by (market_a,
-market_b) pair to find real repeated observations. Only 2 of 15 distinct
-pairs were ever seen more than once: one (MI-07) showed 0% real
-fillable-size decay across three short (10-68 minute) gaps; the other
-(TX-32) showed real +133%/-86% swings, but only across multi-hour gaps.
-These two real findings conflict, and the arbitrage pipeline's own
-~4-6 hour snapshot cadence is structurally too coarse to distinguish
-"real execution-time risk" from "the market genuinely moved between
-runs" -- more accumulated days of this same cadence will not resolve
-it. Left at 0.85 rather than moved off either single-market data point.
-See SESSION_LOG.md's 2026-09-11 entry for the full trail.
+RECALIBRATION ATTEMPT, 2026-09-11 (Open Decision #23) -- FIRST PASS LEFT
+AT 0.85, NOT MOVED. Pulled all 21 real arbitrage snapshot files
+accumulated since Session 3.4 (2026-09-06 through 2026-09-11) and
+grouped by (market_a, market_b) pair to find real repeated
+observations. Only 2 of 15 distinct pairs were ever seen more than
+once: one (MI-07) showed 0% real fillable-size decay across three short
+(10-68 minute) gaps; the other (TX-32) showed real +133%/-86% swings,
+but only across multi-hour gaps. These two real findings conflict, and
+the arbitrage pipeline's own ~4-6 hour snapshot cadence is structurally
+too coarse to distinguish "real execution-time risk" from "the market
+genuinely moved between runs" -- more accumulated days of this same
+cadence would not resolve it.
+
+REAL RECALIBRATION, SAME DAY, VIA execution_risk_poller.py -- BUFFER
+NOW DEPTH-TIERED, NOT FLAT. Built a dedicated short-interval poller
+(new: scripts/calibration/execution_risk_poller.py) and ran 4 real
+30-minute sessions (2-minute intervals, 16 readings each) against live
+markets: one down-ballot election contract (flat, uninformative -- near
+zero real turnover) and three active weather contracts. Found a real,
+clean pattern: fillable-size decay tracks how DEEP the order book is,
+not which market it is. Two markets that stayed consistently at $200+
+resting size showed 0% and -6.6% worst-case decay; two markets that sat
+mostly below ~$80 showed -67% and -92% worst-case decay -- even
+measured only from readings that had already crossed the OLD
+MIN_SUFFICIENT_LIQUIDITY_DOLLARS=50 floor in liquidity_check.py, which
+is therefore confirmed NOT protective against real execution-time risk
+on its own. A single flat buffer cannot be correct for both regimes at
+once. Replaced with EXECUTION_RISK_BUFFER_LIQUID (0.85, unchanged --
+real evidence at depth supports the existing value with real margin)
+and EXECUTION_RISK_BUFFER_THIN (0.15, new -- a deliberately conservative
+round number between the two real thin-market findings of -67%/-92%,
+not the literal worst case, given only 2 real thin-market sessions
+exist so far), selected by EXECUTION_RISK_LIQUID_DEPTH_THRESHOLD_DOLLARS
+(150.0 -- chosen to sit clearly above both thin markets' real sustained
+range and clearly below both deep markets' real sustained range).
+
+NAMED, HONEST LIMITATION -- NOT SOLVED HERE: one of the two real thin-
+market sessions (KXHIGHTDAL) briefly showed a single $200.97 reading
+(above the depth threshold) immediately before crashing 92% two minutes
+later. This rule reads depth at ONE moment, not whether it's been
+SUSTAINED -- a single deep reading is not proven to be a persistence
+guarantee by this project's own real data. Flagged for a future
+refinement (e.g. requiring two consecutive polls above threshold before
+trusting "liquid" classification) rather than treated as solved.
+See SESSION_LOG.md's 2026-09-11 entries for the full trail.
 
 MAX_ARBITRAGE_POSITION_PCT -- SAME HARD-CAP PATTERN, APPLIED TO COMBINED CAPITAL
 -----------------------------------------------------------------------------------
@@ -735,7 +767,25 @@ SAME_GAME_CAUTION_MULTIPLIER = 0.85  # stated, direction-agnostic placeholder --
 # addendum for the reasoning behind each one.
 # ---------------------------------------------------------------------------
 ARBITRAGE_SUPPORTED_PLATFORMS = {"kalshi", "polymarket"}
-EXECUTION_RISK_BUFFER = 0.85  # stated placeholder -- legging-risk haircut, see docstring
+
+# Depth-tiered execution-risk haircut (recalibrated 2026-09-11, see
+# docstring's "REAL RECALIBRATION" section for the full real-data trail
+# via execution_risk_poller.py). Real evidence: deep order books ($200+
+# sustained) showed 0% to -6.6% real decay over 30 real minutes; thin
+# ones (mostly under ~$80) showed -67% to -92% -- a single flat number
+# cannot fit both regimes.
+EXECUTION_RISK_LIQUID_DEPTH_THRESHOLD_DOLLARS = 150.0
+EXECUTION_RISK_BUFFER_LIQUID = 0.85  # unchanged -- real margin above the -6.6% worst case observed at depth
+EXECUTION_RISK_BUFFER_THIN = 0.15  # new -- conservative round number between the real -67%/-92% thin-market findings
+
+
+def execution_risk_buffer_for_depth(fillable_contracts: float) -> float:
+    """Real, evidence-based depth-tiered lookup -- see the module
+    docstring's 2026-09-11 recalibration section for where these two
+    numbers and the threshold between them come from."""
+    if fillable_contracts >= EXECUTION_RISK_LIQUID_DEPTH_THRESHOLD_DOLLARS:
+        return EXECUTION_RISK_BUFFER_LIQUID
+    return EXECUTION_RISK_BUFFER_THIN
 MAX_ARBITRAGE_POSITION_PCT = 0.05  # hard cap vs. TOTAL combined bankroll -- see docstring
 MIN_ARBITRAGE_BANKROLL = 1.0  # guards against a zero/negative bankroll figure
 
@@ -1297,7 +1347,13 @@ def size_arbitrage_position(
             f"Committed capital so far: {committed}."
         )
 
-    buffered_contracts = round(raw_contracts * EXECUTION_RISK_BUFFER, 4)
+    # Tier selection uses the market's own real fillable_contracts (order-
+    # book depth), not raw_contracts -- a position capped small by our
+    # OWN bankroll isn't the same real-world condition as a market that's
+    # actually thin, and the buffer is meant to reflect the latter. See
+    # execution_risk_buffer_for_depth()'s docstring for the real evidence.
+    execution_risk_buffer = execution_risk_buffer_for_depth(fillable_contracts)
+    buffered_contracts = round(raw_contracts * execution_risk_buffer, 4)
     was_capped = binding_constraint != "fillable_contracts"
 
     capital_a = round(buffered_contracts * ask_a, 2)
@@ -1326,7 +1382,7 @@ def size_arbitrage_position(
         "max_position_pct_cap_dollars": round(max_capital_by_pct, 2),
         "binding_constraint": binding_constraint,
         "raw_contracts_before_execution_buffer": round(raw_contracts, 4),
-        "execution_risk_buffer_applied": EXECUTION_RISK_BUFFER,
+        "execution_risk_buffer_applied": execution_risk_buffer,
         "suggested_contracts": buffered_contracts,
         "capital_required_at_platform_a": capital_a,
         "capital_required_at_platform_b": capital_b,
