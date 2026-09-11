@@ -10115,3 +10115,43 @@ rather than another low-turnover election contract. The instrument
 choice matters as much as the polling interval; this session's real
 result confirms polling the wrong kind of market produces a real but
 uninformative flat reading no matter how many more times it's repeated.
+
+## Session 3.3 continuation — 3 more real weather poll sessions, real pattern found (2026-09-11)
+
+**What was run:** Two more real 30-minute `execution_risk_poller.py --single-leg`
+sessions (Kalshi `KXHIGHTATL-26SEP11-T89`, `KXHIGHTDAL-26SEP11-T96`), on top
+of the earlier Chicago session — 3 real weather-market sessions total, plus
+the earlier flat election-market one, 4 sessions / 64 real readings overall.
+
+**Real, clean pattern found — decay tracks order-book DEPTH, not which
+market it is:**
+| Market | Depth range observed | Worst decay (conditional on already passing the $50 sufficiency floor) |
+|---|---|---|
+| `HOUSEVA7-26-R` (election) | flat $300 | 0.0% |
+| `KXHIGHCHI-26SEP11-T83` | $221–244 | -6.6% |
+| `KXHIGHTATL-26SEP11-T89` | $3–78 | -67.0% |
+| `KXHIGHTDAL-26SEP11-T96` | $10–201 | -92.0% |
+
+The two deep markets (consistently $200+) barely moved. The two thin
+markets swung wildly even measured only from readings that had already
+crossed the existing `MIN_SUFFICIENT_LIQUIDITY_DOLLARS = 50` floor in
+`liquidity_check.py` — meaning that floor is not, by itself, protective
+against real execution-time decay; it only screens out permanently-dead
+markets, not ones that are real but volatile at small size.
+
+**Why this changes what Open Decision #23 actually needs:** a flat
+`EXECUTION_RISK_BUFFER` cannot be correct for both regimes at once — any
+single number is either far too generous for thin markets (real observed
+decay up to -92%, dwarfing a 15% haircut) or needlessly punitive on deep
+ones (which showed 0-7% real decay, not 15%). This is a real, evidence-
+based case for a depth-tiered buffer rather than a single recalibrated
+constant — a bigger design change than swapping one number, so left for
+explicit user direction rather than applied unilaterally.
+
+**Files created:** `data/arbitrage/execution_risk_polls/poll_2026-09-11T15-11-53Z.csv`,
+`poll_2026-09-11T15-13-58Z.csv` (the two new real sessions).
+
+**Open items / deferred validations:** Open Decision #23 remains open,
+now with a real, evidence-based shape for the fix (depth-tiered, not
+flat) rather than just a number — pending user direction on the exact
+depth thresholds and per-tier values before touching `sizing_engine.py`.
