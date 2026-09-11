@@ -1336,6 +1336,211 @@ only when a 2-leg entry's single pair does.
 
 ---
 
+### Session 2.12 — Multi-Sport Estimation Architecture (Pick'em)
+**Status:** Not started
+**Prerequisites:** None new — this generalizes `pickem_model.py`'s existing
+NFL path; no other track or file needs to change first.
+
+**Why this exists:** Session 2.10's `/docs/research/sport_inventory.md`
+confirmed the real cost of staying NFL-only: as of 2026-09-11, of ~59,000
+ingested pick'em props, only ~2.5% (NFL) are actually scored — the other
+~80%+ get a real, visible `model_status="unsupported_sport"` row and
+nothing else. That's a stated, deliberate v1 scope decision (Session 2.3),
+not an oversight, but nobody has come back to build the next step. This
+session is that step, done once, generically, instead of once per sport.
+
+**What this session does:** `pickem_model.py` today hardcodes nflverse as
+the only stats source and `NFL_STAT_TYPE_MAP`/`COMPOSITE_STAT_TYPES`/
+`COMPUTED_STAT_TYPES` as the only stat vocabulary. Refactor into a
+per-sport plug-in shape — a `SportPlugin` (or equivalent) that supplies:
+a stats-fetch function (season-long per-player game log, same shape as
+`fetch_nfl_weekly_stats`), a stat-type map (platform stat string →
+canonical column/formula), and a sport-label set (matches PrizePicks/
+Underdog's own `sport_id` strings for that sport). The season-avg /
+recent-form / sigma / normal-CDF scoring math (`season_average`,
+`recent_form`, `sample_sigma`, `prob_over`) is already sport-agnostic —
+it operates on a plain per-game numeric series — and should not be
+touched. Every later sport session (2.13+) then adds one plug-in file,
+not a second copy of the estimation engine.
+
+**Files touched:** `scripts/estimation/pickem_model.py` (refactor, no
+behavior change for NFL — validated by regression), possibly a new
+`scripts/estimation/pickem_sport_plugins/` package if one file per sport
+reads more clearly than one growing dict.
+
+**Validation (required to close session):**
+- [ ] NFL scoring output is byte-for-byte unchanged for a real, fixed
+input snapshot before/after the refactor (regression, not just "tests
+still pass")
+- [ ] Adding a second real sport plug-in (done as part of this session,
+using MLB as the proof case — see Session 2.13) requires touching only
+that sport's own plug-in file, not `process_props()`'s core loop
+- [ ] `model_status="unsupported_sport"` still fires correctly for every
+sport with no plug-in registered yet — nothing silently drops
+
+---
+
+### Session 2.13 — MLB Support (Pick'em)
+**Status:** Not started
+**Prerequisites:** Session 2.12 (plug-in architecture) complete.
+
+**Why this sport, first:** Per `/docs/research/sport_inventory.md`'s
+"Candidates" section — strongest data source of any non-NFL sport (MLB
+Stats API, `statsapi.mlb.com`, official, free, no key/account, confirmed
+live) plus real, large confirmed volume on PrizePicks (1,875 live
+projections + 315 in a separate live in-game category, as of the
+2026-09-02–11 scan window). In season now.
+
+**What gets built:** An MLB stats-fetch function (same shape as
+`fetch_nfl_weekly_stats`, reading `statsapi.mlb.com`'s per-player game
+logs for the current season) plus a stat-type map from PrizePicks/
+Underdog's real MLB stat strings (hits, total bases, strikeouts, runs,
+RBIs, etc. — confirm the real ingested strings directly, don't guess the
+list in advance, same rule Session 2.3 followed for NFL) to MLB Stats
+API's own column names.
+
+**Files touched:** New MLB plug-in file (see Session 2.12's shape);
+`docs/pickem_estimation_model_spec.md` (MLB stat-coverage section, same
+pattern as NFL's).
+
+**Validation (required to close session):**
+- [ ] Real, current MLB stat-type strings pulled live from both
+platforms' actual ingested rows (not assumed from PrizePicks' own site
+copy) and mapped one-by-one, each confirmed against a real MLB Stats API
+column before being added
+- [ ] A real, live MLB prop scores end-to-end (ingested → `model_status=
+"estimated"` → a real edge number) and the player's own recent game log,
+pulled independently, sanity-checks against the model's `season_avg`/
+`recent_form`
+- [ ] `model_status` breakdown after this session shows a real, nonzero
+MLB `estimated` count in `output/estimation/latest.csv`, not just NFL
+
+---
+
+### Session 2.14 — Soccer Support (Pick'em): EPL, then everything else
+**Status:** Not started
+**Prerequisites:** Session 2.12 complete.
+
+**Why this sport:** Per `/docs/research/sport_inventory.md` — two real,
+free, no-key data sources confirmed live: the official Fantasy Premier
+League API (`fantasy.premierleague.com/api`, EPL specifically — 651 real
+current players with per-player goals/assists/minutes/xG/xA, confirmed
+live) and ESPN's public sports API (`site.api.espn.com`, everything else
+— La Liga/Serie A/MLS confirmed live via the same URL pattern, Bundesliga/
+Ligue 1 expected to follow but not individually re-verified). Real,
+large combined volume (6,387 live soccer projections across PrizePicks'
+scan window, 2,373 of those EPL specifically).
+
+**What gets built:** Two plug-ins sharing one soccer stat-type map (goals,
+assists, shots, etc. — same real-ingested-strings-first rule as MLB) —
+one reading the FPL API for EPL, one reading ESPN's per-league endpoint
+(`rosters[].roster[].stats`, **not** the more obvious `boxscore.players`,
+which only carries team-level totals for soccer specifically — a real
+gotcha `sport_inventory.md` already found and documented) for every other
+league. Real per-row `sport_id`/league string from ingested data decides
+which plug-in a given row uses.
+
+**Files touched:** New soccer plug-in file(s).
+
+**Validation (required to close session):**
+- [ ] Bundesliga and Ligue 1 individually confirmed live against ESPN's
+API (not assumed from the La Liga/EPL/MLS pattern holding) before being
+turned on
+- [ ] EPL scores via the FPL API path, every other confirmed league scores
+via the ESPN path — confirmed by checking `resolved_stat_key`/data-source
+provenance on real output rows, not just that a number appears
+- [ ] Real, live props from at least 3 distinct non-EPL leagues score
+end-to-end
+
+---
+
+### Session 2.15 — NBA Support (Pick'em)
+**Status:** Not started — blocked on season start, not on research.
+**Prerequisites:** Session 2.12 complete; NBA regular season underway
+(starts mid-October) so there's real, live data to validate against —
+`sport_inventory.md` found `nba_api` fully documented and ready but
+couldn't live-check it against a real game during the 2026-09 research
+window since the season hadn't started yet.
+
+**Why this sport:** Largest betting *audience* of any sport by some
+measures (~40% of US bettors, per the real-popularity ranking in
+`sport_inventory.md`) even though it showed small in live pick'em volume
+during the (off-season) research window — that's a calendar artifact, not
+a real signal about NBA's eventual size once the season is live.
+
+**What gets built:** An NBA plug-in using `nba_api` (official
+`stats.nba.com`/`cdn.nba.com` data, free, no key, MIT-licensed wrapper) —
+same shape as the MLB/soccer plug-ins.
+
+**Validation (required to close session):**
+- [ ] `nba_api` re-confirmed live against a real, currently-in-progress
+NBA game (the one check `sport_inventory.md` couldn't do before the
+season started)
+- [ ] Real, current NBA stat-type strings pulled live from both platforms
+and mapped one-by-one, same rule as every other sport session
+- [ ] A real, live NBA prop scores end-to-end
+
+---
+
+### Session 2.16 — CFB Support (Pick'em)
+**Status:** Not started
+**Prerequisites:** Session 2.12 complete; a College Football Data API
+(`collegefootballdata.com`) free-tier key obtained (user action — this
+project doesn't hold API credentials on its own).
+
+**Why this is a real build-out, not a quick add:** Per
+`sport_inventory.md` — real, substantial live volume confirmed on both
+platforms (4,511 PrizePicks projections in-run), and a real free data
+source exists, but unlike `nflverse`/MLB Stats API/`nba_api`, CFBD's free
+tier is capped at **1,000 calls/month** — a real constraint the ingestion
+design has to respect (e.g. caching a full season's game logs rather than
+re-pulling per run), not a drop-in the way MLB/NBA are.
+
+**What gets built:** A CFB plug-in reading CFBD, designed around the
+1,000-call/month cap from the start (batch/cache strategy named
+explicitly, not discovered after hitting the limit).
+
+**Validation (required to close session):**
+- [ ] Real call-budget plan stated and followed — confirmed by checking
+CFBD's own usage dashboard after a real week of running, not assumed from
+the design doc alone
+- [ ] Real, current CFB stat-type strings mapped, same rule as every
+other sport session
+- [ ] A real, live CFB prop scores end-to-end without exceeding the
+free-tier cap in a normal week of hourly pipeline runs
+
+---
+
+### Session 2.17 — Tennis Support (Pick'em)
+**Status:** Not started — open decision required before scoping, not a
+research gap.
+**Prerequisites:** Session 2.12 complete; **a decision from the user**
+(see below) — this session cannot be scoped further until that's made.
+
+**Why this one is different:** Per `sport_inventory.md` — real,
+substantial volume confirmed on both platforms (1,179 live PrizePicks
+projections, plus real Underdog volume — tennis is one of only 3 sports
+Underdog's pick'em product offers at all), but **no adequate free,
+real-time, per-match stats source was found**. A free historical archive
+exists (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) but isn't
+built for fast post-match grading. The real choice is between paying for
+a live provider or accepting a slower, lag-based grading source — a real
+product/cost decision, not something to default silently.
+
+**What this session does:** Once the user decides which path (paid
+provider vs. lag-based free source vs. skip tennis), build the
+corresponding plug-in. Not scoped in detail yet since the two paths
+imply materially different designs (a real-time fetch vs. a
+periodic-archive-sync-and-grade-on-delay pattern).
+
+**Validation (required to close session):**
+- [ ] Explicit decision recorded (which data-source path, or a decision
+to leave tennis out of scope entirely)
+- [ ] If building: a real, live tennis prop scores end-to-end against
+whichever source was chosen
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
