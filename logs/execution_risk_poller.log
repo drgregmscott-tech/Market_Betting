@@ -9,3 +9,6 @@
 2026-09-11 08:50:09,755 INFO Poll 3/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
 2026-09-11 08:52:09,996 INFO Poll 4/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
 2026-09-11 08:54:10,213 INFO Poll 5/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:56:10,591 INFO Poll 6/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:58:11,012 INFO Poll 7/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 09:00:11,235 INFO Poll 8/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
