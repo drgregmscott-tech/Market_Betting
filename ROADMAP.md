@@ -1432,7 +1432,12 @@ API's own column names.
 
 **Files touched:** New MLB plug-in file (see Session 2.12's shape);
 `docs/pickem_estimation_model_spec.md` (MLB stat-coverage section, same
-pattern as NFL's).
+pattern as NFL's). Same-day follow-up (2026-09-11) also fixed a real
+cross-sport bug found while verifying two-way-player handling
+(`scripts/estimation/pickem_model.py`'s `build_stat_series()` was
+silently including a two-way player's unrelated other-game-log rows in a
+stat query — see SESSION_LOG.md's "Same-day follow-up" entry) and added 7
+new MLB regression tests to `scripts/estimation/test_pickem_model.py`.
 
 **Validation (required to close session):**
 - [x] Real, current MLB stat-type strings pulled live from both

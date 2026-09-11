@@ -334,7 +334,29 @@ def build_stat_series(
     `sort_key` column. Generic across sports -- reads the computed-formula
     function and its required columns from the given plug-in rather than a
     hardcoded NFL dict (see SESSION 2.12 REFACTOR note in this module's
-    docstring)."""
+    docstring).
+
+    SESSION 2.13 FIX -- a multi-game-log player (real example: Shohei
+    Ohtani, whose MLB plug-in row set includes both his real hitting AND
+    real pitching game logs under the same player_id, each with its own
+    `sort_key` starting at 1 -- see pickem_sport_plugins/mlb.py) previously
+    had EVERY one of his rows summed together for any stat request, not
+    just the rows from the relevant game log. A hitting-stat query (e.g.
+    Home Runs) silently included his pitching rows too -- pandas'
+    .sum(axis=1) treats a NaN cell (his pitching rows have no `homeRuns`
+    value at all) as 0 rather than excluding the row, so the SUM came out
+    right but the row COUNT did not (his real 130 hitting games plus 14
+    unrelated pitching games = 144, diluting season_average), and
+    recent_form's "last 5 by sort_key" could mix real batting games with
+    real pitching games that happen to share a sort_key, since the two
+    logs each restart their own sort_key at 1. Confirmed live against
+    Ohtani's real 2026 data before this fix (Home Runs season_average came
+    out 30/144 = 0.208 instead of the real 30/130 = 0.231). Dropping rows
+    where the requested stat's own columns are entirely absent -- i.e. rows
+    from a DIFFERENT game log than the one this stat actually belongs to --
+    before summing/computing fixes this for every current and future
+    plug-in that might fetch more than one game-log type per player, not
+    just MLB."""
     games = stats_df[stats_df["player_id"] == player_id].sort_values("sort_key")
     if games.empty:
         return pd.Series(dtype=float)
@@ -349,6 +371,9 @@ def build_stat_series(
                 "stat '%s': %s", plugin.name, stat_key, missing,
             )
             return pd.Series(dtype=float)
+        games = games.dropna(subset=required, how="all")
+        if games.empty:
+            return pd.Series(dtype=float)
         return plugin.computed_stat_types[stat_key](games)
 
     # kind == "columns"
@@ -357,6 +382,9 @@ def build_stat_series(
         if col not in games.columns:
             log.warning("%s stats data is missing expected column '%s'", plugin.name, col)
             return pd.Series(dtype=float)
+    games = games.dropna(subset=stat_cols, how="all")
+    if games.empty:
+        return pd.Series(dtype=float)
     return games[stat_cols].sum(axis=1).reset_index(drop=True)
 
 

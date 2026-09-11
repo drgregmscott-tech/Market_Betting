@@ -267,3 +267,13 @@
 2026-09-11 19:02:57,290 UTC | INFO | Wrote 57628 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260911T190256Z.csv
 2026-09-11 19:02:57,977 UTC | INFO | Wrote 57628 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv
 2026-09-11 19:05:10,223 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-11 19:10:04,443 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-11 19:11:27,317 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-11 19:11:38,114 UTC | INFO | === Estimation run starting (season=2026) ===
+2026-09-11 19:11:38,308 UTC | INFO | Loaded 57628 ingested props from C:\Users\gmsco\Desktop\Market_Betting\data\pickem\normalized\latest.csv
+2026-09-11 19:13:07,632 UTC | INFO | Loaded 50838 mlb stat rows for season 2026
+2026-09-11 19:13:12,946 UTC | INFO | Loaded 135 nfl stat rows for season 2026
+2026-09-11 19:13:23,149 UTC | INFO | Model status breakdown: {'unsupported_sport': 34384, 'unsupported_odds_type': 13811, 'unsupported_stat_type': 4816, 'estimated': 2880, 'no_player_match': 1704, 'no_line_value': 22, 'insufficient_history': 11}
+2026-09-11 19:13:23,790 UTC | INFO | Wrote 57628 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260911T191323Z.csv
+2026-09-11 19:13:24,469 UTC | INFO | Wrote 57628 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv
+2026-09-11 19:16:03,400 UTC | INFO | Loaded 18 nfl stat rows for season 2025

@@ -10560,10 +10560,167 @@ fetch split, and the formula sourcing were new work for this session, all
 matching what the roadmap card and Session 2.12's own handoff notes
 already called for.
 
-**Open items / deferred validations:** Underdog's real MLB `Fantasy
-Points` formula stays unsupported until a real, sourceable official
-formula is found (not this session's job to keep chasing — flagged here
-so a future session doesn't have to rediscover the same dead-end URLs).
+**Open items / deferred validations (at first handoff):** Underdog's real
+MLB `Fantasy Points` formula stays unsupported until a real, sourceable
+official formula is found. Two items were flagged as claimed-but-not-yet-
+independently-verified: two-way-player handling (architecturally reasoned
+through, not proven against real data) and no dedicated regression test
+coverage for `mlb.py`'s new stat map/formulas. Both were closed in a same-
+day follow-up — see below.
+
+---
+
+### Same-day follow-up (2026-09-11) — two-way player bug found and fixed, MLB regression tests added
+
+Requested directly: close the two open verification gaps (two-way-player
+handling, missing test coverage) before touching the three stated scope
+boundaries (Underdog Fantasy Points, batter pitch-count splits/inning-
+level props, the pre-existing Demon/Goblin odds-type gap).
+
+**What was found:** Attempting to verify two-way-player handling against
+real data (no real Ohtani prop existed in today's ingested snapshot, so
+this required pulling his real MLB Stats API season data directly)
+surfaced a real bug in `build_stat_series()` — see the full technical
+writeup in `docs/research/pickem_estimation_model_spec.md`'s new "Real bug
+found and fixed: two-way players" section. Summary: a hitting-stat query
+for a two-way player silently included that same player's unrelated
+pitching rows (both share one `player_id`), because the function filtered
+by player only, not by which game log the requested stat actually belongs
+to. `.sum(axis=1)`'s NaN-as-0 behavior meant the SUM was numerically right
+but the game COUNT was wrong — Ohtani's real Home Runs season_average came
+out `30/144 = 0.208` (should be `30/130 = 0.231`) — and `recent_form`'s
+"last 5" window could mix real batting games with real pitching games
+entirely, since each log restarts its own `sort_key` at 1.
+
+**Fix:** `build_stat_series()` now drops rows where the requested stat's
+own columns are entirely absent before summing/computing. This is a fix
+in the shared, sport-agnostic file (affects every plug-in), not an
+MLB-only patch — MLB is simply the first plug-in whose real fetch code
+produces more than one game-log type per player.
+
+**Verification:**
+1. Re-ran both existing regression suites (NFL golden snapshot,
+`sportsbook_props_model.py`) after the fix — all still pass unchanged,
+confirming the fix is a no-op for every single-game-log-type scenario
+(every sport this project supports except this one real edge case).
+2. Re-verified Ohtani's real 2026 data (Los Angeles Dodgers, team id 119)
+directly against MLB Stats API after the fix: Home Runs now correctly
+resolves to his 130 real hitting games (season_average `0.230769...`,
+matching an independent hand-filter of his real hitting rows exactly); Ks
+correctly resolves to his 14 real pitching games, with no cross-
+contamination either direction.
+3. Re-ran the full production pipeline (`pickem_model.py --season 2026`)
+against the same real 57,628-row snapshot used earlier this session — the
+`model_status` breakdown is byte-for-byte identical to the pre-fix run
+(2,880 `estimated`, same every other count), confirming the fix did not
+disturb today's real output (expected, since no two-way player has a live
+prop today) while now protecting any future run where one does.
+4. Added `test_pickem_model.py::test_mlb_two_way_player_stats_do_not_
+cross_contaminate` (a synthetic two-way-player fixture reproducing the
+exact real row shape that exposed the bug) plus six more new MLB tests
+covering the plain-column, pitching-column, composite, and all three
+computed-formula code paths, and a registry test confirming `mlblive`
+stays unregistered. Full suite: 23/23 pass (12 in `test_pickem_model.py`,
+11 in `test_sportsbook_props_model.py`).
+
+**Files created/modified (this follow-up):**
+- `scripts/estimation/pickem_model.py` — `build_stat_series()` fix
+(sport-agnostic; the "SESSION 2.13 FIX" docstring note explains the bug
+and fix inline).
+- `scripts/estimation/test_pickem_model.py` — 7 new MLB tests, including
+the two-way-player regression test.
+- `docs/research/pickem_estimation_model_spec.md` — new "Real bug found
+and fixed: two-way players" section.
+- `output/estimation/latest.csv` — re-generated after the fix (identical
+status counts to the pre-fix run — see point 3 above).
+
+**Decisions made:**
+1. **Fixed in the shared `pickem_model.py`, not in `mlb.py`.** The bug's
+root cause — filtering a player's stat rows by `player_id` alone, with no
+awareness that the same ID could span more than one game-log type — lives
+in the sport-agnostic function every plug-in calls, not in anything
+MLB-specific about `fetch_mlb_season_stats()`'s real two-way-player
+branch. A plug-in-local workaround (e.g. tagging rows with a `group`
+column) would have hidden a real cross-sport-capable bug behind an
+MLB-only patch; fixing it in `build_stat_series()` protects Sessions
+2.14–2.17 the same way, for free, if any of them ever needs a similar
+multi-log fetch shape.
+2. **This gap was found by ATTEMPTING real independent verification, not
+by code review.** The original session report already reasoned through
+why two-way handling "should" work from the architecture; that reasoning
+was wrong in a way that only real data exposed (NaN-as-0 summing behavior
+is not obvious from reading the code — it required actually running
+Ohtani's real numbers and comparing against an independent hand-filter).
+This is the same standard this project has applied throughout ("prove it
+against real data, don't reason from the code that it must be fine") —
+applied here to this project's own prior claim, not just to external data
+sources.
+
+**Open items / deferred validations:** Still open, and next up per the
+user's own stated order: (1) Underdog's real MLB `Fantasy Points`
+formula — confirm it's a genuine scope boundary, not a solvable gap; (2)
+batter pitch-count splits / all inning-level props (including the
+separate `MLBLIVE` sport label) — confirm the "no per-game number exists"
+architecture-mismatch reasoning holds; (3) the pre-existing Demon/Goblin
+`unsupported_odds_type` gap (Session 6.2) — confirm it is genuinely out of
+this session's scope and not something Session 2.13 should have touched.
+One real, still-open gap from the two-way-player fix itself: no real
+ingested prop for a two-way player has been used to prove this end-to-end
+through the actual props pipeline (only via direct MLB Stats API data plus
+the new synthetic test) — flagged for re-confirmation the next time one is
+live on either platform.
+
+**Items 1–3 reviewed, same session — all three confirmed as genuine scope
+boundaries, none reopened:**
+
+1. **Underdog `Fantasy Points`** — checked one more real avenue before
+confirming: inspected Underdog's own raw ingested JSON response directly
+(`data/pickem/raw/underdog_20260911T185609Z.json`) for any embedded
+scoring-rule/weight metadata on a real `Fantasy Points` line (511 real
+such lines exist in that pull) — found none; the raw payload carries only
+the line value and price, no formula. Combined with the earlier
+same-session finding that every real Underdog rules URL dead-ends (JS
+shell redirect or 403), there is no remaining real avenue to source this
+formula without either (a) Underdog publishing it somewhere reachable, or
+(b) reverse-engineering it by regression against many real graded
+outcomes after the fact — a materially different, much larger task this
+project's ingestion pipeline doesn't currently even capture the inputs
+for (Underdog's own post-game "graded" fantasy score isn't part of
+today's ingested schema). **Confirmed: genuine scope boundary**, not a
+solvable-today gap.
+
+2. **Inning-level props (batter pitch-count splits + all `1st Inn.`/
+`MLBLIVE` stats)** — the original claim ("this data does not exist in MLB
+Stats API") was checked further and found **imprecise**: inning-by-inning
+data DOES exist at MLB Stats API, confirmed live via its per-GAME
+`/game/{gamePk}/feed/live` endpoint (real innings array with 9 real
+entries for a real 2026-09-10 game). What does NOT exist is any way to
+get it from the per-PLAYER season game log this plug-in (and every other
+plug-in in this architecture) is built around — pulling a season's worth
+of 1st-inning strikeouts for one pitcher would mean fetching and parsing
+play-by-play from every game he pitched, one API call per GAME instead of
+one per player per SEASON, a fundamentally larger and slower fetch shape
+than anything else this architecture does today. **Confirmed: a real
+scope boundary, but restated more precisely** — this is "a materially
+larger, different-shaped feature" (a per-game play-by-play fetch layer
+that doesn't exist yet, for any sport), not "impossible." Left
+unsupported for this session; worth a line in a future roadmap card if
+inning-level props are ever prioritized, rather than treated as
+permanently closed.
+
+3. **`unsupported_odds_type` (Demon/Goblin)** — confirmed genuinely
+pre-existing and sport-agnostic, not something this session touched or
+should have: the gate (`PRIZEPICKS_SCORABLE_ODDS_TYPES`,
+`pickem_model.py` lines ~446–472) lives in the shared, sport-agnostic
+file and is applied to every platform/sport's rows identically in
+`process_props()`, before any plug-in dispatch happens. Traced its origin
+directly (not assumed): `test_pickem_model.py`'s own Session 2.12 fixture
+comment attributes the real gate to **Session 6.2** ("a `demon` row, per
+Session 6.2's odds-type gate") — corrected here from this same log
+entry's own earlier, wrong "Session 2.5" citation, caught while verifying
+rather than left uncorrected. **Confirmed: genuine scope boundary.**
+
 Sessions 2.14–2.17 (soccer, NBA, CFB, tennis) each add one new plug-in
-file the same way, per the Session 2.12 architecture — no changes needed
-to that architecture as a result of this session's work.
+file per the Session 2.12 architecture — no
+further changes needed to that architecture as a result of this
+follow-up.

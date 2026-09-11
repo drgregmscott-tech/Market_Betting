@@ -438,3 +438,56 @@ existing, sport-agnostic gap, not this session's scope), `estimated`
 2,880, `unsupported_stat_type` 387 (all of them real, stated gaps from the
 table above — nothing unexpected/unmapped), `no_player_match` 29,
 `no_line_value` 22.
+
+### Real bug found and fixed: two-way players (`build_stat_series()`)
+
+While independently verifying a two-way player's (real example: Shohei
+Ohtani, MLB Stats API person id 660271) real data against the model,
+found that `build_stat_series()` in `pickem_model.py` filtered a player's
+rows by `player_id` only, then summed the requested stat across every one
+of those rows — for a normal player, every row is the same game-log type,
+so this was correct; for a two-way player, whose row set (per
+`fetch_mlb_season_stats()`) includes BOTH his real hitting rows and real
+pitching rows under one `player_id`, a hitting-stat query silently
+included his unrelated pitching rows too. `.sum(axis=1)` treats the
+missing (`NaN`) hitting columns on his pitching rows as 0 rather than
+excluding those rows, so the SUM came out numerically right but the game
+COUNT did not — confirmed live: his real Home Runs season_average came
+out `30/144 = 0.208` (144 = his real 130 hitting games + his real 14
+unrelated pitching games) instead of the real `30/130 = 0.231`.
+`recent_form`'s "last 5 by `sort_key`" was worse: since his hitting and
+pitching logs each restart `sort_key` at 1, his real last-5-batting-games
+window could be contaminated with rows from his pitching log entirely.
+
+**Fix:** `build_stat_series()` now drops rows where the requested stat's
+own columns are entirely absent (`games.dropna(subset=stat_cols,
+how="all")`) before summing/computing — so a hitting-stat query only ever
+sees a player's hitting rows, and a pitching-stat query only ever sees
+their pitching rows, regardless of what else shares their `player_id`.
+This is a fix in the shared, sport-agnostic file, not MLB-specific — it
+protects any current or future plug-in that might fetch more than one
+game-log type per player.
+
+**Verified after the fix**, against Ohtani's real 2026 data (Los Angeles
+Dodgers, MLB Stats API team id 119): Home Runs now resolves to exactly his
+130 real hitting games, season_average `0.230769...`, matching an
+independent hand-filter of his real hitting-only rows to the same value;
+Ks (a pitching stat) resolves to exactly his 14 real pitching games,
+correctly excluded from his hitting query and vice versa.
+
+The regression suite (`test_pickem_model.py`) gained a dedicated test,
+`test_mlb_two_way_player_stats_do_not_cross_contaminate`, built from a
+synthetic two-way-player fixture reproducing this exact row shape, so this
+cannot silently regress. The existing NFL golden-snapshot regression test
+was re-run after the fix and is still byte-for-byte identical — the fix
+is a no-op for every single-game-log-type scenario, which is every sport
+this project supports except this one real MLB edge case.
+
+No real ingested prop for a two-way player existed in this session's own
+live pull (checked directly — zero rows for "Ohtani" or any name variant
+in the real 2026-09-11 ingested data), so this could not be proven via a
+real end-to-end props → estimate run today. It was instead proven against
+his real MLB Stats API season data directly, independently of the ingested
+props pipeline, plus the new synthetic regression test. This should be
+re-confirmed via a real ingested prop the next time a two-way player has
+one live on either platform.
