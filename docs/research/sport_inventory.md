@@ -1,15 +1,9 @@
 # Sport Inventory — Track 1 (Fixed-Line Pick'em Platforms)
 
 Session: 2.10 — Cross-Sport +EV Inventory
-Status: **Closing now, with one item explicitly deferred to a bounded,
-automated follow-up — not left open-ended.** Four of five validation
-checklist items are fully met. The fifth (Underdog's full sport list)
-has a real, running mechanism in place (see "Deferred" section below)
-that will finish gathering what's needed over the next 4 days without
-requiring anyone to run anything by hand. This session should be
-treated as closed once these files are committed and pushed; the
-deferred item gets closed out separately, as its own short follow-up,
-once the 4-day window ends.
+Status: **Closed, including the deferred item.** All five validation
+checklist items are now fully met — see "Deferred item — closed out"
+below for the real findings from the automated scan window.
 
 This document exists to stop Track 1's scope from silently narrowing to
 whichever sport happens to be visible at the moment (Open Decision #14).
@@ -24,8 +18,8 @@ candidate, a real build-out, or ruled out.
 1. **"Every sport currently listed on PrizePicks confirmed live" —
    ✅ Met.** 29 leagues, live pull via `sport_inventory_scan.py`.
 2. **"Every sport currently listed on Underdog confirmed live" —
-   🕐 Deferred, with a real mechanism now running.** See "Deferred"
-   section below for the exact plan and closing criteria.
+   ✅ Met.** Closed out via the automated scan window — see "Deferred
+   item — closed out" below.
 3. **"For each sport found: a real, named answer on data-source
    availability" — ✅ Met**, including the long tail (UFC, F1, golf,
    cricket, boxing/AFL flagged as hypothesis-not-verified, KBO/NPB/
@@ -200,36 +194,55 @@ item genuinely cannot be closed in a single sitting, no matter how much
 more research is done — it requires real elapsed time across different
 days, which is a fact about the task, not a gap in effort.
 
-## Deferred — real mechanism now in place, not a vague "come back later"
+## Deferred item — closed out
 
-This item is being deferred as a **named, bounded action**, not left as
-an open-ended TODO — matching this project's standing practice for
-deferrals (e.g. Session 2.5's Open Decision #12).
+The automated workflow (`.github/workflows/sport_inventory_scan.yml`,
+now deleted — see below) ran three times a day from **2026-09-03
+through 2026-09-11**: **25 runs** across 8 days, well past the originally
+planned 4-day/12-run window (nobody came back to close it out at the
+4-day mark, so it kept running — the exact "unnamed, unexplained ongoing
+behavior" this deferral was designed to avoid; caught and closed now).
+That's a real time-of-day and day-of-week spread — multiple weekdays and
+a full weekend, all three run times represented many times over — which
+is exactly the kind of sample the original checklist item needed and a
+single sitting of same-day pulls could not provide.
 
-**The mechanism:** a new GitHub Actions workflow
-(`.github/workflows/sport_inventory_scan.yml`) runs an automated version
-of the scan script three times a day — 08:00, 16:00, and 00:00 UTC — for
-**4 days from whenever it's first merged: 12 total runs**, enough to
-cover every time of day across a full week-cycle including a weekend.
-Each run writes a new dated JSON file to `docs/research/scans/` and
-commits it back to the repo automatically — no one needs to be at a
-keyboard, and no one needs to remember to run anything by hand.
+**Underdog — real result: still only 3 sports, across every run.**
+Summed across all 25 runs (`games`/`solo_games`/`players` sport-id
+counts): **NFL** (1,733 combined line/appearance count), **CFB** (522),
+**TENNIS** (503). No other sport appeared in a single one of the 25
+runs, spread across 8 days and all three times of day. This is a much
+stronger negative result than the original 3 same-day pulls — it's now
+fair to say Underdog's pick'em product, as actually observed over more
+than a week including a full weekend, offers only these 3 sports right
+now, not that other sports were simply missed by bad timing. (Underdog's
+own site claims 16-18 leagues, per the third-party tool cited earlier in
+this doc — but that figure evidently includes non-pick'em products, e.g.
+sportsbook-style spreads/moneylines, not real pick'em pick availability,
+which is the only thing this scan checks.) **Checklist item 2 is now
+genuinely met**, not just calendar-reasoned around.
 
-**Files to place (see full paths and content below):**
-- `scripts/ingestion/sport_inventory_scan_automated.py`
-- `.github/workflows/sport_inventory_scan.yml`
+**PrizePicks — bonus finding: a materially larger sport list than any
+single earlier snapshot showed.** Summed across the same 25 runs, 41
+distinct league codes appeared (vs. 29 in the original single-snapshot
+count), including several not seen before: **NASCAR** (240 combined
+count — this resolves the "named but unconfirmed" NASCAR item from the
+priority list below as **confirmed live**), plus FIBA, R6 (Rainbow Six,
+esports), Dota2, CFL, KBO, DARTS, LAX (lacrosse), TT (table tennis), and
+split-period variants (EPL1H, SOCCER1H, CFB2H, NFL2H, CFB4Q, BEACHVB,
+INDYCAR). This confirms the doc's own earlier point: a wider time window
+surfaces real sports a single snapshot misses, simply because different
+sports have games at different hours and on different days.
 
-**Closing this deferred item, when the window ends:** come back to this
-document, read the 12 accumulated files in `docs/research/scans/`
-directly from GitHub, build the real union list across all of them (both
-platforms — the automated script checks PrizePicks too, since it runs
-from GitHub's servers, not through any blocked network, giving a second,
-independent, unattended check on PrizePicks as a side benefit), fill in
-the "Confirmed live" tables above with the complete picture, and
-**disable or delete the workflow file** — it's explicitly temporary, not
-a permanent addition to the pipeline, so leaving it running past its
-defined window would itself be exactly the kind of unnamed, unexplained
-ongoing behavior this project avoids.
+**Workflow disabled and removed, per this item's own closing
+instructions.** `.github/workflows/sport_inventory_scan.yml` has been
+deleted now that its job is done — leaving it running further would have
+kept committing scan files for a question that's now answered. The
+scan script itself (`scripts/ingestion/sport_inventory_scan_automated.py`)
+was left in place in case a future one-off re-check is ever wanted, but
+it is no longer scheduled to run automatically. The 25 accumulated JSON
+files remain in `docs/research/scans/` as the underlying record for the
+findings above.
 
 ---
 
@@ -455,11 +468,13 @@ count):**
 | 9 | Golf | Smaller but real, named in multiple sources |
 | 10 | Boxing | Smaller than UFC, also event-driven |
 
-**NASCAR was named as a hypothesis but not confirmed** — it did not
-appear as a top-10 sport in any of the sources checked for this
-correction. Worth a direct, separate check if it matters for this
-project, rather than assumed onto the list without evidence, holding it
-to the same standard as everything else here.
+**NASCAR was named as a hypothesis but not confirmed at the time this
+section was written** — it did not appear as a top-10 sport in any of
+the sources checked for this correction. It has since been **confirmed
+live on PrizePicks** (240 combined count across the 25-run automated
+scan window — see "Deferred item — closed out" above), so the live-line
+question is resolved even though it isn't a top-10 sport by real US
+betting popularity.
 
 **What today's live snapshot is actually useful for:** confirming a
 sport is *currently tradeable on these specific platforms right now* —
@@ -519,8 +534,8 @@ priority):**
 NHL, golf, esports (CS2/LoL/Valorant/Apex), KBO, handball, F1,
 badminton, AFL, NPB, cricket.
 
-**Named but unconfirmed — needs its own direct check, not assumed:**
-NASCAR.
+**Confirmed live (via the automated scan window), lower priority by real
+popularity data:** NASCAR.
 
 **Ruled out:**
 - None yet. Nothing checked so far has come back with no live lines at
