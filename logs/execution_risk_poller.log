@@ -1,0 +1,11 @@
+2026-09-11 08:44:56,621 INFO Starting real execution-risk poll: kalshi/HOUSEVA7-26-R (YES) vs polymarket/0x45686d5a8bf5c8c3345c19d3b1af5cd96c4142fa971e6f58f7569935dfd852a1 (NO), every 30s for 1 min (3 polls total) -> C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T13-44-56Z.csv
+2026-09-11 08:44:56,976 INFO Poll 1/3: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:45:27,356 INFO Poll 2/3: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:45:57,529 INFO Poll 3/3: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:45:57,529 INFO Real poll session complete -- 3 readings written to C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T13-44-56Z.csv
+2026-09-11 08:46:08,961 INFO Starting real execution-risk poll: kalshi/HOUSEVA7-26-R (YES) vs polymarket/0x45686d5a8bf5c8c3345c19d3b1af5cd96c4142fa971e6f58f7569935dfd852a1 (NO), every 120s for 30 min (16 polls total) -> C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T13-46-08Z.csv
+2026-09-11 08:46:09,137 INFO Poll 1/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:48:09,354 INFO Poll 2/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:50:09,755 INFO Poll 3/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:52:09,996 INFO Poll 4/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
+2026-09-11 08:54:10,213 INFO Poll 5/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
