@@ -9703,11 +9703,107 @@ outputs from the same verification run.
 - `ROADMAP.md` — Open Decisions #54 (the crash, resolved) and #55
 (Underdog's 426 block, open/external) added.
 
-**Open items / deferred validations:** Underdog ingestion remains fully
-blocked pending either (a) a legitimate client-version value confirmed by
-directly inspecting Underdog's real app/site network traffic (not
-guessed), or (b) a deliberate decision to drop Underdog from active
-ingestion the way DK Pick6 was dropped in Session 2.1 — recorded as Open
-Decision #55, not silently left unresolved. The pipeline itself
-(PrizePicks' half) is confirmed healthy and producing fresh flags again;
-no further action needed there unless it stalls again.
+**Open items at the time this entry was first written:** Underdog
+ingestion was blocked pending either a legitimate client-version value or
+a decision to drop it — **superseded same day, see addendum below.**
+
+---
+
+### Addendum, same day (2026-09-11) — Underdog's real endpoint found, not dropped
+
+**User's direction:** explicitly did not want Underdog dropped, and asked
+to keep pursuing the real fix rather than accept the guessed-header dead
+end above.
+
+**What was actually done:**
+
+1. **Opened Underdog's real, live webapp directly in the browser**
+(`underdogfantasy.com` redirects to `underdogsports.com` — confirms the
+rebrand suspected earlier) rather than continuing to guess at headers
+against the old API. The board itself sits behind a login, so the target
+became the site's own bundled JavaScript, not a captured login session.
+
+2. **Found the real, current endpoint path by reading the app's own
+compiled JS**, not by guessing: fetched the main JS bundles directly via
+`fetch()` in the browser console and searched them for `over_under_lines`.
+Found the literal routing table the real app uses:
+`sW={regular:"/v1/over_under_lines", live:"/beta/v2/live_over_under_lines"}`.
+Underdog didn't just bump a version number — it dropped the `beta` prefix
+entirely for its main feed. This explains why every `beta/vN` guess (v3
+through v6) hit the identical 426 gate: none of them were ever going to
+work, because the whole `beta/` path is retired for this feed, not
+version-gated within it.
+
+3. **Confirmed directly via `curl`, not assumed from reading the JS
+alone:** `https://api.underdogfantasy.com/v1/over_under_lines` returns
+HTTP 200 with 14,076 real `over_under_lines` rows — roughly 50x the ~250
+rows the old `beta/v3` endpoint carried even when it was healthy. Checked
+the full response shape field-by-field against what
+`normalize_underdog()` (`ingest_pickem.py`) already expects:
+`over_under_lines[].over_under.appearance_stat`,
+`options[].choice`/`payout_multiplier`/`selection_subheader`,
+`players[].first_name`/`last_name`/`sport_id`, `appearances[].match_id`/
+`player_id`, `games[].scheduled_at`/`sport_id`/`sport_name` — every field
+the normalizer reads is present and unchanged. This meant the fix was
+exactly one line (the `UNDERDOG_ENDPOINT` constant), not a normalizer
+rewrite.
+
+4. **Applied the fix and verified end-to-end on real, live data**, the
+same discipline as the crash fix above. Ran `ingest_pickem.py` alone
+first: 14,077 real Underdog rows ingested (`Underdog: 14077 normalized
+rows`, both platforms `OK`). Then ran the full
+`run_pipeline.py --season 2025`: all 3 stages completed, and the run
+flagged **547 real, open Underdog opportunities** into the live
+`clv_log.csv` — real players (James Cook, Josh Allen, David Montgomery),
+real NFL stat types (Rush Yards, Pass TDs, Receptions, etc.), real edges
+(0.037-0.31 range in the sample checked).
+
+5. **Closed Session 2.11's own deferred validation** as a direct
+consequence: that session's sizing-math extension for Underdog was
+verified only against a synthetic fixture, because no real, live 2-leg
+Underdog entry existed yet. One now does. Ran
+`sizing_engine.py pickem --flag-ids "underdog|a5fbbed4-..."
+"underdog|883a47f2-..." --bankroll 500` against two real, currently-open
+Underdog legs: correctly resolved `entry_type: "2-pick Standard"`, used
+Underdog's real 3.5x payout (not PrizePicks' 3x), applied the 0.85
+platform dampener, and produced a real `$2.42` suggested stake. This is
+the real-data verification Session 2.11's card left as an open item —
+now genuinely closed, not just re-deferred.
+
+**Decisions made:**
+1. **Did not accept the "drop it like DK Pick6" fallback named in Open
+Decision #55**, per the user's explicit direction — the header-guessing
+dead end from earlier the same day was a real, exhausted attempt, not
+the final word; reading the live app's own compiled JS directly was a
+different, legitimate technique (the same "manually reverse-engineer via
+the real client" fallback Session 2.1's own `prototype_dkpick6.py`
+docstring named as a valid option, just not pursued at the time) and it
+worked on the first real attempt.
+2. **No login was used or required.** The real fix came from the app's
+publicly-served JavaScript bundles (served to any visitor, logged in or
+not) and the API endpoint itself requires no authentication for this
+read-only market data — consistent with this project's standing "no
+login required for pick'em ingestion" design principle (Session 0.1
+Decision #4), not an exception to it.
+
+**Files created/modified (this addendum):**
+- `scripts/ingestion/ingest_pickem.py` — `UNDERDOG_ENDPOINT` changed from
+`https://api.underdogfantasy.com/beta/v3/over_under_lines` to
+`https://api.underdogfantasy.com/v1/over_under_lines`, with a docstring
+comment at the constant recording the real cause and source (the app's
+own bundled JS) so a future session doesn't have to re-derive this.
+- `data/pickem/clv_log.csv`, `data/pickem/clv_snapshots/`,
+`data/pickem/normalized/` — real, live data from the verification run
+(547 new real Underdog flags, plus PrizePicks' own continuing flow).
+- `output/estimation/pickem_estimates_20260911T125923Z.csv`,
+`output/estimation/latest.csv`, `output/digest/digest_latest.md` — real
+outputs from the same run.
+- `ROADMAP.md` — Open Decision #55 updated in place from "open/external
+block" to "resolved, same day."
+
+**Open items / deferred validations:** None new. Underdog is fully live
+again — ingesting, estimating, flagging, and sizing on real data, all
+verified end-to-end this session. The pipeline crash fix (`run_pickem`)
+and this endpoint fix are both now live in the same `main` branch state;
+the next scheduled GitHub Actions run should produce a normal, healthy
+commit for the first time in ~3 days across both platforms.

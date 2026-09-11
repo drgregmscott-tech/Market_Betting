@@ -105,7 +105,19 @@ NORMALIZED_DIR = BASE_DIR / "data" / "pickem" / "normalized"
 LOG_PATH = BASE_DIR / "logs" / "ingestion.log"
 
 PRIZEPICKS_ENDPOINT = "https://partner-api.prizepicks.com/projections"
-UNDERDOG_ENDPOINT = "https://api.underdogfantasy.com/beta/v3/over_under_lines"
+# Hotfix, 2026-09-11: Underdog retired the "beta/v3" path -- confirmed by
+# inspecting the real webapp's own bundled JS (app.underdogsports.com,
+# their new domain post-rebrand from underdogfantasy.com), which calls
+# "/v1/over_under_lines" with no "beta" prefix at all (source:
+# sW={regular:"/v1/over_under_lines", live:"/beta/v2/live_over_under_lines"}
+# in their entry.app bundle). The old "beta/v3" path now returns a hard
+# HTTP 426 "upgrade_required" on every request, with no header combination
+# (8 tried) able to bypass it -- this is a real endpoint move, not a
+# gate to defeat. Verified live: the new path returns 14,000+ real
+# over_under_lines rows (vs. ~250 on the old endpoint) in the exact same
+# JSON shape normalize_underdog() below already expects -- no normalizer
+# changes needed, only this URL.
+UNDERDOG_ENDPOINT = "https://api.underdogfantasy.com/v1/over_under_lines"
 
 HEADERS = {
     "User-Agent": (

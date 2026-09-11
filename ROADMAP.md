@@ -3907,36 +3907,36 @@ is why PrizePicks flags looked normal on the frontend throughout the
 outage (thousands of pre-existing open rows masked the staleness) while
 Underdog showed zero (it has never had more than one flag total — see
 #55).
-55. **New, found investigating #54, 2026-09-11 — Underdog's ingestion
-endpoint is now hard-blocked, independent of the pipeline bug above.**
-`api.underdogfantasy.com/beta/v3/over_under_lines` returns HTTP 426
-"Upgrade Required" (`{"api_code":"upgrade_required","detail":"A new
-version is required to continue"}`) on every request, confirmed via
-direct `curl`, not just this project's own client. Checked directly
-rather than assumed: the same 426 fires identically on API versions v3
-through v6 (v7/v8 return a plain 404 — those routes don't exist), and
-across eight different plausible client-identification headers tried
-(`Client-Version`, `X-Client-Version`, `Underdog-Client-Version`,
-`App-Version`, `X-App-Version`, lowercase `client-version`,
-`X-Client-Type`, `X-Platform`) — none bypassed it. A real, still-
-maintained public reference scraper
-(github.com/aidanhall21/underdog-fantasy-pickem-scraper) uses `v5` with
-plain browser-style headers and gets the same block, confirming this is
-a real, current change on Underdog's side (likely tied to the
-`underdogfantasy.com` → `underdogsports.com` rebrand already visible in
-Session 2.11's own sourcing), not a stale local assumption. Per this
-project's own standing rule (Session 2.1's DK Pick6 precedent: don't
-fake a login or guess indefinitely at an undocumented endpoint's real
-gate), this was NOT force-fixed by guessing further. **Underdog
-ingestion is fully blocked until this is resolved** — `ingest_pickem.py`
-already treats this as a non-fatal per-platform failure (PrizePicks
-keeps flowing normally), so the pipeline itself is healthy; only
-Underdog's own data is currently unreachable. Re-check by hand
-(`curl -s https://api.underdogfantasy.com/beta/v5/over_under_lines`) the
-next time this is revisited — a real fix would need either a legitimate
-client-version value confirmed by inspecting Underdog's real app/site
-traffic directly (not guessed), or accepting this as a second dropped
-platform the way DK Pick6 was dropped in Session 2.1.
+55. **Resolved, 2026-09-11, same day — Underdog's real endpoint found and
+fixed; the block in the first half of this entry is now historical, not
+current.** After eight guessed headers and a version sweep (v3-v8, all
+gated or 404) failed, the user asked to keep pursuing it rather than drop
+it. Found the real answer by inspecting Underdog's own live webapp
+directly (app.underdogsports.com, via browser) rather than guessing
+further: its bundled JS names the current real path outright —
+`sW={regular:"/v1/over_under_lines", live:"/beta/v2/live_over_under_lines"}`
+— Underdog dropped the `beta` prefix entirely for its main feed, a full
+endpoint restructure, not a version bump or a header gate. Confirmed
+directly via `curl`:
+`https://api.underdogfantasy.com/v1/over_under_lines` returns HTTP 200
+with 14,076 real `over_under_lines` rows (vs. ~250 on the dead `beta/v3`
+path — roughly 50x more real inventory), in the exact same JSON shape
+`normalize_underdog()` already expected (confirmed field-by-field:
+`over_under.appearance_stat`, `options[].choice`/`payout_multiplier`,
+`players[].first_name`/`last_name`/`sport_id`, `games[].scheduled_at`/
+`sport_id` all present and unchanged) — so the fix was a one-line URL
+change in `ingest_pickem.py` (`UNDERDOG_ENDPOINT`), no normalizer
+changes needed. **Verified end-to-end on real, live data**: ingestion
+pulled 14,077 real Underdog rows; the full pipeline
+(`run_pipeline.py --season 2025`) ran clean and flagged **547 real, open
+Underdog opportunities** (real players — James Cook, Josh Allen — real
+NFL stat types, real edges) into the live `clv_log.csv`. This also
+closes Session 2.11's own deferred validation item: sized a real,
+live 2-leg Underdog entry
+(`underdog|a5fbbed4-...` + `underdog|883a47f2-...`) — correctly resolved
+`entry_type: "2-pick Standard"`, real 3.5x payout, 0.85 platform
+dampener, `$2.42` suggested stake on a $500 bankroll. Underdog is fully
+live again, not dropped.
 
 ---
 *Update this file at the close of each future session, per the project's
