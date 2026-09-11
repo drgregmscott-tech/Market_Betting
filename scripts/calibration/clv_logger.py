@@ -255,8 +255,12 @@ CLV_CORE_COLUMNS = [
 
 # Pick'em keeps its exact, unchanged Session 2.4 schema (own file, own
 # columns) -- listed here only so load/save helpers can validate against it.
+# FIX (2026-09-11): "team" (the player's own team name) replaced with
+# "game_matchup" (the game's "Away @ Home" string) -- see schema.py's own
+# docstring for why; ingest_pickem.py's normalized rows no longer carry a
+# "team" field at all.
 CLV_LOG_COLUMNS_PICKEM = [
-    "flag_id", "platform", "source_line_id", "player_name", "team", "sport",
+    "flag_id", "platform", "source_line_id", "player_name", "game_matchup", "sport",
     "stat_type", "resolved_stat_key", "game_id", "game_start_time",
     "flagged_side", "first_flagged_at", "first_flagged_line",
     "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
@@ -521,7 +525,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "platform": row.get("platform"),
             "source_line_id": row.get("source_line_id"),
             "player_name": row.get("player_name"),
-            "team": row.get("team"),
+            "game_matchup": row.get("game_matchup"),
             "sport": row.get("sport"),
             "stat_type": row.get("stat_type"),
             "resolved_stat_key": row.get("resolved_stat_key"),

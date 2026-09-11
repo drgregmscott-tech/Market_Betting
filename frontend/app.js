@@ -382,9 +382,20 @@ function renderChart(closed) {
   `;
 }
 
+// The flagged-opportunities table can run into the thousands of rows
+// (every open flag across both platforms) -- per the user's 2026-09-11
+// request, only the top N (already sorted by edge, so the most
+// interesting rows) render by default, with a "Show all" toggle for
+// anyone who wants the full list. This is the main fix for "big hassle to
+// scroll through all of it" -- most of the list is rows nobody was going
+// to act on anyway.
+const OPEN_TABLE_DEFAULT_LIMIT = 25;
+let openTableShowAll = false;
+
 function renderOpenTable(open) {
   const tbody = document.getElementById("openTableBody");
   const emptyNote = document.getElementById("openEmpty");
+  const showAllBtn = document.getElementById("openShowAllBtn");
   if (!tbody || !emptyNote) return;
 
   const sorted = open
@@ -394,11 +405,29 @@ function renderOpenTable(open) {
   if (!sorted.length) {
     emptyNote.hidden = false;
     tbody.innerHTML = "";
+    if (showAllBtn) showAllBtn.hidden = true;
     return;
   }
   emptyNote.hidden = true;
 
-  tbody.innerHTML = sorted
+  const visible = openTableShowAll ? sorted : sorted.slice(0, OPEN_TABLE_DEFAULT_LIMIT);
+
+  if (showAllBtn) {
+    if (sorted.length > OPEN_TABLE_DEFAULT_LIMIT) {
+      showAllBtn.hidden = false;
+      showAllBtn.textContent = openTableShowAll
+        ? "Show top 25 only"
+        : `Show all ${sorted.length} flags`;
+      showAllBtn.onclick = () => {
+        openTableShowAll = !openTableShowAll;
+        renderOpenTable(open);
+      };
+    } else {
+      showAllBtn.hidden = true;
+    }
+  }
+
+  tbody.innerHTML = visible
     .map((r) => {
       const edge = toNum(r.first_flagged_edge);
       const checked = selectedLegs.has(r.flag_id) ? "checked" : "";
@@ -408,7 +437,7 @@ function renderOpenTable(open) {
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
           <td class="name-cell">${blockedBadgeHtml("pickem", r)}${escapeHtml(r.player_name) || "—"}</td>
-          <td>${escapeHtml(r.team) || "—"}</td>
+          <td>${escapeHtml(r.game_matchup) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
           <td>${escapeHtml(r.platform) || "—"}</td>
@@ -450,7 +479,29 @@ function onLegToggle(e, currentOpenRows) {
 
   renderSelectedLegs();
   renderSizingResult();
+  renderSelectionMiniBar();
   syncCheckboxes();
+}
+
+function renderSelectionMiniBar() {
+  const bar = document.getElementById("selectionMiniBar");
+  const text = document.getElementById("selectionMiniBarText");
+  if (!bar || !text) return;
+  if (!selectedLegs.size) {
+    bar.hidden = true;
+    return;
+  }
+  bar.hidden = false;
+  text.textContent = `${selectedLegs.size} leg${selectedLegs.size === 1 ? "" : "s"} selected`;
+}
+
+function initSelectionMiniBar() {
+  const jumpBtn = document.getElementById("selectionMiniBarJump");
+  if (!jumpBtn) return;
+  jumpBtn.addEventListener("click", () => {
+    const panel = document.getElementById("sizing-panel");
+    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 
 function syncCheckboxes() {
@@ -486,6 +537,7 @@ function renderSelectedLegs() {
       selectedLegs.delete(btn.getAttribute("data-remove-flag-id"));
       renderSelectedLegs();
       renderSizingResult();
+      renderSelectionMiniBar();
       syncCheckboxes();
     });
   });
@@ -1472,6 +1524,7 @@ function initTabs() {
 
 async function init() {
   initTabs();
+  initSelectionMiniBar();
 
   // All tracks load independently and in parallel: a failure or an empty
   // result in one must never block or hide another track's real data.

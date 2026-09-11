@@ -216,7 +216,7 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <tr>
 <th class="checkbox-col"></th>
 <th title="A ⛔ badge appears next to the player's name only when this row cannot actually be placed right now (not fillable / already started / legal restriction) — sort by edge for how favorable it is.">Player</th>
-<th>Team</th>
+<th title="The game this prop belongs to, e.g. CLE @ JAC — blank for a prop with no single-game matchup (a season-long futures line, or an individual event).">Game</th>
 <th>Stat</th>
 <th>Side</th>
 <th>Platform</th>
@@ -229,6 +229,7 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 </table>
 </div>
 <p id="openEmpty" class="empty-note" hidden>No open flags right now.</p>
+<button id="openShowAllBtn" class="show-all-btn" type="button" hidden></button>
 </section>
 
 <section class="panel" id="sizing-panel">
@@ -287,6 +288,16 @@ stake you've already placed, so update the bankroll figure yourself between entr
 <p id="loadError" class="load-error" hidden>
 Could not load <code>data/clv_log.csv</code>. This page reads that file from its own build, so a fresh Cloudflare Pages deploy is needed after any pipeline run for this page to update.
 </p>
+
+<!-- Stays fixed on screen while scrolling the (potentially very long) flagged-
+     opportunities table above, so checking legs to size doesn't require
+     scrolling back up to see the sizing calculator or your own selection —
+     per the user's 2026-09-11 request. Hidden until at least one leg is
+     checked. -->
+<div id="selectionMiniBar" class="selection-mini-bar" hidden>
+<span id="selectionMiniBarText" class="selection-mini-bar-text"></span>
+<button id="selectionMiniBarJump" class="selection-mini-bar-jump" type="button">Go to sizing calculator ↓</button>
+</div>
 
 </div>
 

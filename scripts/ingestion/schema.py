@@ -25,8 +25,6 @@ FIELD NOTES (traced back to Session 2.1's real captured field names)
   (note the field is named "new_player", not "player" — a real naming quirk
   found in Session 2.1). Underdog: players[].attributes name field, joined
   via appearances[].player_id.
-- team: PrizePicks: included[type=team].attributes.name (joined via the
-  player's team relationship). Underdog: from the players/appearances join.
 - stat_type: PrizePicks: attributes.stat_display_name or stat_type.
   Underdog: over_under[].appearance_stat / display_stat.
 - line: the numeric prop value. PrizePicks: attributes.line_score (already
@@ -43,6 +41,19 @@ FIELD NOTES (traced back to Session 2.1's real captured field names)
 - pulled_at: UTC timestamp set by THIS pipeline at fetch time, not by the
   platform. This is what lets later sessions ask "how fresh was this row
   when it was flagged."
+- game_matchup: FIX (2026-09-11, replaces the old per-player `team` field):
+  a compact "Away @ Home" string for the specific game this prop belongs to
+  (e.g. "CLE @ JAC"), not the player's own team name. Chosen over `team`
+  because it needs no per-player team_id resolution at all -- both
+  platforms already carry a ready-made matchup string directly on the GAME
+  record itself. PrizePicks: built from included[type=game]'s
+  away_team_data/home_team_data relationships, joined to
+  included[type=team].attributes.abbreviation. Underdog: games[]/
+  solo_games[].short_title (falls back to abbreviated_title, then title,
+  then full_team_names_title if short_title is missing). None for a prop
+  whose game has no real two-side matchup at all (a season-long futures
+  market, or an individual event like a race) -- a real, stated gap, not a
+  guess.
 - odds_type: PrizePicks-only (attributes.odds_type). PrizePicks offers more
   than one line per player/stat: "standard" (the default line most people
   mean when they say "the line"), plus "demon" and "goblin" alt-lines
@@ -67,7 +78,7 @@ NORMALIZED_COLUMNS = [
     "platform",
     "source_line_id",
     "player_name",
-    "team",
+    "game_matchup",
     "sport",
     "stat_type",
     "line",
@@ -89,7 +100,7 @@ class NormalizedProp:
     platform: str
     source_line_id: str
     player_name: Optional[str]
-    team: Optional[str]
+    game_matchup: Optional[str]
     sport: Optional[str]
     stat_type: Optional[str]
     line: Optional[float]
