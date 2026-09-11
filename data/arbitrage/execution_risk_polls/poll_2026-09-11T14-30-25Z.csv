@@ -1,0 +1,4 @@
+polled_at,market_a,price_a,market_b,price_b,fillable_size_dollars,fillable_size_basis,leg_a_fetch_ok,leg_b_fetch_ok
+2026-09-11T14:30:25.538081+00:00,KXHIGHCHI-26SEP11-T83,0.02,,,224.0,kalshi_real_order_book_size_field_single_leg,True,
+2026-09-11T14:32:25.661943+00:00,KXHIGHCHI-26SEP11-T83,0.02,,,227.0,kalshi_real_order_book_size_field_single_leg,True,
+2026-09-11T14:34:25.786108+00:00,KXHIGHCHI-26SEP11-T83,0.02,,,227.0,kalshi_real_order_book_size_field_single_leg,True,

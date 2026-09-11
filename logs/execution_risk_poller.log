@@ -21,3 +21,13 @@
 2026-09-11 09:14:13,725 INFO Poll 15/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
 2026-09-11 09:16:13,917 INFO Poll 16/16: fillable=$300.00 (basis=leg_a=kalshi_real_order_book_size_field_leg_b=polymarket_liquidity_dollars_divided_by_price_approximation_min_leg_a_binding)
 2026-09-11 09:16:13,917 INFO Real poll session complete -- 16 readings written to C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T13-46-08Z.csv
+2026-09-11 09:29:17,021 INFO Starting real SINGLE-LEG execution-risk poll: kalshi/KXHIGHCHI-26SEP11-T83 (YES), every 20s for 1 min (4 polls total) -> C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T14-29-17Z.csv
+2026-09-11 09:29:17,256 INFO Poll 1/4: fillable=$199.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:29:37,365 INFO Poll 2/4: fillable=$182.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:29:57,458 INFO Poll 3/4: fillable=$182.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:30:17,608 INFO Poll 4/4: fillable=$224.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:30:17,608 INFO Real poll session complete -- 4 readings written to C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T14-29-17Z.csv
+2026-09-11 09:30:25,411 INFO Starting real SINGLE-LEG execution-risk poll: kalshi/KXHIGHCHI-26SEP11-T83 (YES), every 120s for 30 min (16 polls total) -> C:\Users\gmsco\Desktop\Market_Betting\data\arbitrage\execution_risk_polls\poll_2026-09-11T14-30-25Z.csv
+2026-09-11 09:30:25,538 INFO Poll 1/16: fillable=$224.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:32:25,662 INFO Poll 2/16: fillable=$227.00 (basis=kalshi_real_order_book_size_field_single_leg)
+2026-09-11 09:34:25,786 INFO Poll 3/16: fillable=$227.00 (basis=kalshi_real_order_book_size_field_single_leg)
