@@ -552,6 +552,32 @@ def implied_prob_over_underdog(over_mult: Optional[float], under_mult: Optional[
 
 PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5  # stated, unverified assumption -- see docstring
 
+# FIX (2026-09-11, real finding): PRIZEPICKS_ASSUMED_IMPLIED_PROB is only
+# defensible for a Standard-odds line. PrizePicks also offers "demon" (harder)
+# and "goblin" (easier) alt-lines on the same player/stat at real, different
+# payout multipliers this project's ingestion does not capture -- confirmed
+# live, e.g. Edgerrin Cooper's real Sacks props included a 0.5 AND a 1.5 line,
+# both tagged odds_type="demon", simultaneously. Scoring a Demon/Goblin line
+# against a flat 50% "implied" breakeven is not a rounding error: a Demon line
+# is deliberately set at an easy bar, so the model's own true-probability
+# estimate on it is naturally close to 100%, which manufactures an edge that
+# caps out just under 50% regardless of whether the line is really mispriced.
+# These rows get an explicit, named gap (model_status="unsupported_odds_type")
+# instead -- consistent with this project's "no unnamed black-box factors"
+# rule -- rather than a fabricated edge that outranks real Standard-line
+# flags. Re-enabling scoring for these requires PrizePicks' real per-type
+# payout multipliers, which are not in this response.
+PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard"}
+
+
+def is_scorable_prizepicks_odds_type(row: dict) -> bool:
+    if row.get("platform") != "prizepicks":
+        return True
+    odds_type = row.get("odds_type")
+    if not isinstance(odds_type, str) or not odds_type.strip():
+        return True  # missing odds_type -- treat as Standard, matching pre-fix behavior
+    return odds_type.strip().lower() in PRIZEPICKS_SCORABLE_ODDS_TYPES
+
 
 # ---------------------------------------------------------------------------
 # Main per-row processing
@@ -566,6 +592,13 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame) -> pd.DataFra
 
         if sport not in NFL_SPORT_LABELS:
             row["model_status"] = "unsupported_sport"
+            row["resolved_stat_key"] = None
+            row.update(_blank_model_fields())
+            out_rows.append(row)
+            continue
+
+        if not is_scorable_prizepicks_odds_type(row):
+            row["model_status"] = "unsupported_odds_type"
             row["resolved_stat_key"] = None
             row.update(_blank_model_fields())
             out_rows.append(row)

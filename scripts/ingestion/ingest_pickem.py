@@ -263,6 +263,7 @@ def normalize_prizepicks(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     game_start_time=game_attrs.get("start_time")
                     or attrs.get("start_time"),
                     status=attrs.get("status"),
+                    odds_type=attrs.get("odds_type"),
                     pulled_at=pulled_at,
                 )
             )
@@ -376,6 +377,7 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     game_start_time=game_attrs.get("scheduled_at")
                     or game_attrs.get("start_time"),
                     status=line.get("status"),
+                    odds_type=None,  # PrizePicks-only concept -- see schema.py
                     pulled_at=pulled_at,
                 )
             )

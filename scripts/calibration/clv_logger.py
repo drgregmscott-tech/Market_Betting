@@ -439,6 +439,30 @@ def find_consensus_row_pickem(
     return estimates_df.loc[candidates[0]]
 
 
+def _is_scorable_pickem_row(row: pd.Series) -> bool:
+    """FIX (2026-09-11): mirrors pickem_model.py's own
+    is_scorable_prizepicks_odds_type() -- a PrizePicks Demon/Goblin
+    alt-line has no real implied probability in this project's data (see
+    that function's docstring) and pickem_model.py now marks it
+    model_status="unsupported_odds_type" rather than "estimated". Without
+    this check, a Demon/Goblin row that was flagged and logged BEFORE that
+    fix would still show up in `present_flag_ids` below (it's still a real,
+    live PrizePicks line) and keep getting refreshed as "open" forever,
+    even though it can never be newly flagged again -- exactly the stuck,
+    stale-looking flags found live in data/pickem/clv_log.csv (e.g.
+    Edgerrin Cooper/Karl Brooks Sacks at a Demon 1.5 line, Jordan Mason
+    Receiving Yards at a Demon 19.5 line). Treating a non-scorable row as
+    "not present" lets the existing close-on-disappearance logic below
+    retire these the same way it would if PrizePicks had stopped returning
+    the line altogether."""
+    if row.get("platform") != "prizepicks":
+        return True
+    odds_type = row.get("odds_type")
+    if not isinstance(odds_type, str) or not odds_type.strip():
+        return True
+    return odds_type.strip().lower() == "standard"
+
+
 def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
     log_df = existing_log.copy()
     log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
@@ -447,7 +471,8 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
 
     estimates_df = estimates_df.copy()
     estimates_df["_flag_id"] = estimates_df["platform"].astype(str) + "|" + estimates_df["source_line_id"].astype(str)
-    present_flag_ids = set(estimates_df["_flag_id"])
+    scorable_mask = estimates_df.apply(_is_scorable_pickem_row, axis=1)
+    present_flag_ids = set(estimates_df.loc[scorable_mask, "_flag_id"])
 
     new_rows = []
     existing_flag_ids = set(log_df["flag_id"]) if not log_df.empty else set()
@@ -455,16 +480,20 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
     for _, row in estimates_df.iterrows():
         side = determine_flagged_side_pickem(row)
         flag_id = row["_flag_id"]
+        scorable = _is_scorable_pickem_row(row)
 
         if flag_id in existing_flag_ids:
-            log_df.loc[flag_id, "last_seen_at"] = run_pulled_at
-            log_df.loc[flag_id, "last_seen_line"] = row.get("line")
-            side_for_update = log_df.loc[flag_id, "flagged_side"]
-            log_df.loc[flag_id, "last_seen_implied_prob"] = implied_prob_same_side_pickem(row, side_for_update)
-            log_df.loc[flag_id, "status"] = "open"
+            if scorable:
+                log_df.loc[flag_id, "last_seen_at"] = run_pulled_at
+                log_df.loc[flag_id, "last_seen_line"] = row.get("line")
+                side_for_update = log_df.loc[flag_id, "flagged_side"]
+                log_df.loc[flag_id, "last_seen_implied_prob"] = implied_prob_same_side_pickem(row, side_for_update)
+                log_df.loc[flag_id, "status"] = "open"
+            # else: leave it alone -- it's not in present_flag_ids, so the
+            # close-on-disappearance pass below will retire it correctly.
             continue
 
-        if side is None:
+        if side is None or not scorable:
             continue
 
         match_key = consensus_match_key_pickem(row)

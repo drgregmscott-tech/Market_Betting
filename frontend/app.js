@@ -407,8 +407,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td>${blockedBadgeHtml("pickem", r)}</td>
-          <td class="name-cell">${escapeHtml(r.player_name) || "—"}</td>
+          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.team) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>

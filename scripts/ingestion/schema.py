@@ -43,6 +43,18 @@ FIELD NOTES (traced back to Session 2.1's real captured field names)
 - pulled_at: UTC timestamp set by THIS pipeline at fetch time, not by the
   platform. This is what lets later sessions ask "how fresh was this row
   when it was flagged."
+- odds_type: PrizePicks-only (attributes.odds_type). PrizePicks offers more
+  than one line per player/stat: "standard" (the default line most people
+  mean when they say "the line"), plus "demon" and "goblin" alt-lines
+  priced at different, real payout multipliers PrizePicks does not publish
+  in this response. Found real and necessary 2026-09-11: a player's Demon
+  and Goblin projections were being ingested as ordinary rows with no way
+  to tell them apart from the Standard one, and pickem_model.py's flat 50%
+  implied-probability assumption (which is only defensible for a Standard
+  line) was being applied to them too -- producing a fabricated edge and
+  surfacing the wrong line as "the" flagged opportunity. None otherwise
+  (including for every Underdog row -- Underdog has no equivalent
+  concept in this project's ingested data).
 """
 
 from dataclasses import dataclass, asdict
@@ -64,6 +76,7 @@ NORMALIZED_COLUMNS = [
     "game_id",
     "game_start_time",
     "status",
+    "odds_type",
     "pulled_at",
 ]
 
@@ -85,6 +98,7 @@ class NormalizedProp:
     game_id: Optional[str]
     game_start_time: Optional[str]
     status: Optional[str]
+    odds_type: Optional[str]
     pulled_at: str
 
     def as_row(self) -> dict:
