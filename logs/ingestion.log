@@ -9571,3 +9571,10 @@ Call log:
 2026-09-10 16:46:44,001 UTC | INFO | Found 22 real data array(s) embedded in the page
 2026-09-10 16:46:44,027 UTC | INFO | BetMGM (via Rotowire): 377 normalized rows
 2026-09-10 16:46:44,039 UTC | INFO | === Rotowire BetMGM props ingestion run complete: 377 rows (OK) ===
+2026-09-11 12:43:46,823 UTC | INFO | === Ingestion run starting ===
+2026-09-11 12:43:51,327 UTC | INFO | PrizePicks: 40431 normalized rows
+2026-09-11 12:43:51,486 UTC | WARNING | Attempt 1/3 failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
+2026-09-11 12:43:54,614 UTC | WARNING | Attempt 2/3 failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
+2026-09-11 12:43:57,746 UTC | WARNING | Attempt 3/3 failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
+2026-09-11 12:43:57,746 UTC | ERROR | Underdog ingestion failed for this run: All attempts failed for https://api.underdogfantasy.com/beta/v3/over_under_lines: 426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines
+2026-09-11 12:43:58,730 UTC | INFO | === Ingestion run complete: 40431 total rows (PrizePicks OK, Underdog FAILED) ===

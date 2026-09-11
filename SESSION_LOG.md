@@ -9596,3 +9596,118 @@ disruption-free migration)
 real snapshot from this session's live run)
 
 **Next session:** None yet — Session 5.7 remains the longest-open item.
+
+---
+
+## Hotfix — Pick'em Pipeline Outage (2026-09-11)
+
+**Date completed:** 2026-09-11
+**Status:** ✅ Complete (the crash bug) / ❌ Blocked (Underdog's endpoint,
+external) — not a numbered roadmap session, an incident found while
+answering the user's question "why am I not seeing any flagged
+opportunities for Underdog?"
+
+**What was actually done:**
+
+1. **Diagnosed why Underdog showed zero flags on the frontend.** Local
+data showed `data/pickem/clv_log.csv` had exactly one Underdog row ever,
+already closed, while PrizePicks had thousands of open rows. Checked git
+commit history for the automated pipeline's own trail (each pipeline
+leaves an `Automated <track> pipeline run <timestamp> [skip ci]` commit):
+weather/props/arbitrage/politics had all committed fresh data within
+hours of "now" (2026-09-11), but the pick'em pipeline's last successful
+commit was `641f665`, timestamped `2026-09-08T14:29:24Z` — roughly 69
+hours stale. This meant the real problem was project-wide pipeline
+staleness, not something specific to Underdog; PrizePicks' large existing
+backlog of open flags simply masked the same outage that made Underdog's
+already-thin backlog (one row) show as zero.
+
+2. **Asked the user to pull the actual GitHub Actions failure log**
+(this environment has no GitHub Actions/API access of its own — confirmed
+by trying `gh` CLI, unauthenticated `curl` against the API, and searching
+locally for a Windows Task Scheduler entry, all dead ends, since the real
+automation runs entirely on GitHub's own runners per
+`.github/workflows/pickem_pipeline.yml`). The log the user provided
+showed ingestion and estimation both completing normally, then a crash
+in stage 3: `AttributeError: module 'clv_logger' has no attribute 'run'`.
+
+3. **Root-caused via git history, not guessing.** `git log -S "def
+run_pickem"` on `clv_logger.py` showed the flat `run()` function was
+renamed to `run_pickem()` in commit `1d738d3` ("5.2 log updates",
+2026-09-08 17:42 UTC) as part of generalizing the module for weather/
+politics/props (each track now gets its own `run_<track>()` entry
+point). `scripts/run_pipeline.py` (Session 2.7's orchestrator, last
+touched 2026-09-01) still called the old `clv_module.run(estimates_path)`
+and was never updated. The timing lines up exactly: the last successful
+pipeline commit (14:29 UTC) was BEFORE the rename (17:42 UTC); every run
+after the rename crashed.
+
+4. **Fixed with a one-line change** in `run_clv_logging()`:
+`clv_module.run(estimates_path)` → `clv_module.run_pickem(estimates_path)`,
+plus a docstring comment at the call site naming the incident so a future
+rename of any `run_<track>()` function doesn't silently reintroduce this
+same class of bug.
+
+5. **Verified for real, not just syntax-checked.** Ran
+`python scripts/run_pipeline.py --season 2025` locally end-to-end: all
+three stages completed, and the run wrote 702 real new flags to the live
+`data/pickem/clv_log.csv` (open count rose from 3,005 to 4,518) — the
+first successful pick'em pipeline run since the outage began. This is a
+real, live production fix, not a local-only patch — the same file this
+session edited is what GitHub Actions runs on its own schedule.
+
+6. **Investigated Underdog's zero-row ingestion failure separately**,
+since fixing the crash alone would not restore Underdog data — its own
+ingestion request was failing every run, independent of the CLV-logging
+bug. Confirmed directly via `curl` (not assumed from the project's own
+retry-warning log alone): `api.underdogfantasy.com/beta/v3/over_under_lines`
+returns HTTP 426 "Upgrade Required" with body
+`{"api_code":"upgrade_required","detail":"A new version is required to
+continue"}`. Tested API versions v3 through v8 directly (v3-v6: same 426;
+v7-v8: plain 404, meaning those routes don't exist) and eight plausible
+client-identification headers (`Client-Version`, `X-Client-Version`,
+`Underdog-Client-Version`, `App-Version`, `X-App-Version`, lowercase
+`client-version`, `X-Client-Type`, `X-Platform`) — none bypassed the
+block. Found and checked a real, currently-maintained public reference
+scraper (`github.com/aidanhall21/underdog-fantasy-pickem-scraper`) that
+uses `v5` with plain browser headers and gets the identical block,
+confirming this is a real, current, external change on Underdog's side
+(plausibly tied to the `underdogfantasy.com` → `underdogsports.com`
+rebrand Session 2.11 already noticed while sourcing Underdog's payout
+table), not a stale assumption or a bug in this project's own request
+code.
+
+**Decisions made:**
+1. **Did not attempt to guess further at Underdog's real client-version
+gate.** Per this project's own standing precedent (Session 2.1's DK
+Pick6: don't fake a login or reverse-engineer indefinitely against an
+undocumented endpoint's real protection), eight header guesses and a
+public reference implementation were checked and exhausted before
+stopping — this is treated as a real, external blocker to report, not a
+puzzle to keep guessing at.
+2. **The crash fix was applied and verified immediately** (not deferred
+to a future numbered session) since it was a one-line, low-risk, high-
+value fix restoring a 3-day production outage affecting both platforms,
+and Session 2.6's own precedent already established this kind of
+same-day hotfix pattern (the Windows Task Scheduler path bug, Session
+2.2, Decision #2).
+
+**Files created/modified:**
+- `scripts/run_pipeline.py` — one-line fix (`run()` → `run_pickem()`) plus
+an explanatory comment at the call site.
+- `data/pickem/clv_log.csv`, `data/pickem/clv_snapshots/` — real,
+live data updated by the verification run (702 new flags).
+- `output/estimation/pickem_estimates_20260911T124420Z.csv`,
+`output/estimation/latest.csv`, `output/digest/digest_latest.md` — real
+outputs from the same verification run.
+- `ROADMAP.md` — Open Decisions #54 (the crash, resolved) and #55
+(Underdog's 426 block, open/external) added.
+
+**Open items / deferred validations:** Underdog ingestion remains fully
+blocked pending either (a) a legitimate client-version value confirmed by
+directly inspecting Underdog's real app/site network traffic (not
+guessed), or (b) a deliberate decision to drop Underdog from active
+ingestion the way DK Pick6 was dropped in Session 2.1 — recorded as Open
+Decision #55, not silently left unresolved. The pipeline itself
+(PrizePicks' half) is confirmed healthy and producing fresh flags again;
+no further action needed there unless it stalls again.

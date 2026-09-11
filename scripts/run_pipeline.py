@@ -177,7 +177,15 @@ def run_estimation(season: int) -> tuple[dict, Path]:
 def run_clv_logging(estimates_path: Path) -> dict:
     log.info("--- Stage 3/3: CLV logging ---")
     clv_module = load_module(CLV_SCRIPT, "clv_logger")
-    summary = clv_module.run(estimates_path)
+    # Session 5.2 (2026-09-08) renamed clv_logger.py's flat run() to
+    # run_pickem() when generalizing the module for weather/politics/props
+    # (each track now gets its own run_<track>() entry point). This call
+    # site was never updated to match, which broke the automated pick'em
+    # GitHub Actions pipeline silently -- every scheduled run after the
+    # rename crashed here with AttributeError, and none of them could
+    # commit a fresh clv_log.csv as a result (see SESSION_LOG.md for the
+    # full incident writeup).
+    summary = clv_module.run_pickem(estimates_path)
     log.info("CLV logging summary: %s", summary)
     return summary
 

@@ -3881,6 +3881,62 @@ real, named, un-fixed gap (Rotowire's player-props page carries no
 kickoff-time field; the Blocked-badge convenience doesn't fire for
 BetMGM rows, though the underlying CLV close-on-disappearance safety
 mechanism is unaffected). Full trail in SESSION_LOG.md.
+54. **Resolved, 2026-09-11 — real production incident found and fixed:
+the automated Pick'em Pipeline (GitHub Actions) had been failing on
+EVERY scheduled run for ~3 days straight (2026-09-08 14:29 UTC through
+2026-09-11), with zero new flags logged for either platform in that
+entire window.** Root cause: Session 5.2 (2026-09-08) renamed
+`clv_logger.py`'s flat `run()` to `run_pickem()` when generalizing the
+module for weather/politics/props (each track got its own `run_<track>()`
+entry point), but `scripts/run_pipeline.py`'s call site
+(`clv_module.run(estimates_path)`) was never updated to match — every
+run after the rename crashed with `AttributeError: module 'clv_logger'
+has no attribute 'run'` at the CLV-logging stage, after ingestion and
+estimation had already completed successfully, so nothing looked wrong
+until the final commit step silently never happened. Found by reading
+the actual GitHub Actions failure log the user pulled directly (this
+environment has no Actions/API access of its own) — the crash traceback
+named the exact bad call site. Fixed with a one-line change
+(`clv_module.run(...)` → `clv_module.run_pickem(...)`) plus a docstring
+note at the call site explaining why, so a future rename doesn't
+reintroduce the same gap silently. Verified by running the real pipeline
+end-to-end locally: it completed all 3 stages and wrote 702 real new
+flags to the live `clv_log.csv` (open count rose from 3,005 to 4,518) —
+the first successful pick'em pipeline run since the outage began. This
+is why PrizePicks flags looked normal on the frontend throughout the
+outage (thousands of pre-existing open rows masked the staleness) while
+Underdog showed zero (it has never had more than one flag total — see
+#55).
+55. **New, found investigating #54, 2026-09-11 — Underdog's ingestion
+endpoint is now hard-blocked, independent of the pipeline bug above.**
+`api.underdogfantasy.com/beta/v3/over_under_lines` returns HTTP 426
+"Upgrade Required" (`{"api_code":"upgrade_required","detail":"A new
+version is required to continue"}`) on every request, confirmed via
+direct `curl`, not just this project's own client. Checked directly
+rather than assumed: the same 426 fires identically on API versions v3
+through v6 (v7/v8 return a plain 404 — those routes don't exist), and
+across eight different plausible client-identification headers tried
+(`Client-Version`, `X-Client-Version`, `Underdog-Client-Version`,
+`App-Version`, `X-App-Version`, lowercase `client-version`,
+`X-Client-Type`, `X-Platform`) — none bypassed it. A real, still-
+maintained public reference scraper
+(github.com/aidanhall21/underdog-fantasy-pickem-scraper) uses `v5` with
+plain browser-style headers and gets the same block, confirming this is
+a real, current change on Underdog's side (likely tied to the
+`underdogfantasy.com` → `underdogsports.com` rebrand already visible in
+Session 2.11's own sourcing), not a stale local assumption. Per this
+project's own standing rule (Session 2.1's DK Pick6 precedent: don't
+fake a login or guess indefinitely at an undocumented endpoint's real
+gate), this was NOT force-fixed by guessing further. **Underdog
+ingestion is fully blocked until this is resolved** — `ingest_pickem.py`
+already treats this as a non-fatal per-platform failure (PrizePicks
+keeps flowing normally), so the pipeline itself is healthy; only
+Underdog's own data is currently unreachable. Re-check by hand
+(`curl -s https://api.underdogfantasy.com/beta/v5/over_under_lines`) the
+next time this is revisited — a real fix would need either a legitimate
+client-version value confirmed by inspecting Underdog's real app/site
+traffic directly (not guessed), or accepting this as a second dropped
+platform the way DK Pick6 was dropped in Session 2.1.
 
 ---
 *Update this file at the close of each future session, per the project's

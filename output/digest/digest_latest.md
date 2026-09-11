@@ -1,9 +1,9 @@
-# Pipeline Digest -- 2026-09-08T14:28:46Z
+# Pipeline Digest -- 2026-09-11T12:43:46Z
 
 ## Run summary
-- Ingestion: 38850 rows (PrizePicks OK, Underdog FAILED)
-- Estimation: 38850 rows estimated (from 38850 ingested props)
-- CLV logging: 31 newly flagged, 0 newly closed, 4606 still open (6850 total ever logged)
+- Ingestion: 40431 rows (PrizePicks OK, Underdog FAILED)
+- Estimation: 40431 rows estimated (from 40431 ingested props)
+- CLV logging: 702 newly flagged, 0 newly closed, 4518 still open (7552 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
@@ -11,164 +11,189 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_edge | first_flagged_at | game_start_time |
 |---|---|---|---|---|---|---|---|
 | prizepicks|14514522 | prizepicks | J.K. Dobbins | Rec Yards | under | 0.5 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472942 | prizepicks | Jordan Mason | Rec Yards | under | 0.5 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14464726 | prizepicks | Karl Brooks | Sacks | under | 0.5 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14495447 | prizepicks | Jordan Mason | Rec Yards | under | 0.5 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14462677 | prizepicks | Edgerrin Cooper | Sacks | under | 0.5 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14464726 | prizepicks | Karl Brooks | Sacks | under | 0.5 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14339741 | prizepicks | George Holani | Rec Yards | under | 0.4999999999999998 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14496407 | prizepicks | George Holani | Recs | under | 0.4999999999982621 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14629602 | prizepicks | David Montgomery | Recs | under | 0.4999999999971607 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472942 | prizepicks | Jordan Mason | Rec Yards | under | 0.5 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649467 | prizepicks | Dexter Lawrence II | Sacks | under | 0.5 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473078 | prizepicks | Bhayshul Tuten | Recs | under | 0.499999999997073 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474864 | prizepicks | Charlie Kolar | Recs | under | 0.4999999999923621 | 2026-09-06T09:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14599981 | prizepicks | Tua Tagovailoa | Rush Yards | under | 0.4999999999828377 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495041 | prizepicks | Jayden Reed | Rec Yards | under | 0.4999999997742157 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390286 | prizepicks | Derick Hall | Sacks | under | 0.4999999997279929 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14294868 | prizepicks | Kyler Murray | Rush Yards | under | 0.4999999996148492 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961528 | prizepicks | George Holani | Rush Yards | under | 0.4999999967100166 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14473893 | prizepicks | David Montgomery | Rec Yards | under | 0.4999999998716935 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14514389 | prizepicks | Jayden Reed | Rec Yards | under | 0.4999999997742157 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14477581 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.499999998624248 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311674 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4999999944412849 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402689 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4999999936183305 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649193 | prizepicks | Adam Butler | Sacks | under | 0.4999999932800353 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14636906 | prizepicks | Nick Bolton | Sacks | under | 0.4999999920278599 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136899 | prizepicks | Kyler Murray | Pass+Rush Yds | under | 0.499999981779657 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14464724 | prizepicks | Lukas Van Ness | Sacks | under | 0.4999999731028435 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390033 | prizepicks | George Holani | Recs | under | 0.4999999618935435 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14568548 | prizepicks | Quinnen Williams | Sacks | under | 0.4999999610550719 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14560514 | prizepicks | Kyler Murray | Pass Yards | under | 0.4999999521820661 | 2026-09-06T19:06:29Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475261 | prizepicks | Joe Burrow | Rush Yards | under | 0.4999999574638456 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14687051 | prizepicks | Zaven Collins | Sacks | under | 0.4999999325388693 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14387733 | prizepicks | Samaje Perine | Rec Yards | under | 0.4999999123713079 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311680 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4999998722181005 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472872 | prizepicks | Samaje Perine | Rec Yards | under | 0.4999999123713079 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14589170 | prizepicks | Aaron Rodgers | Rush Yards | under | 0.4999998580981619 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14372893 | prizepicks | Davante Adams | Recs | under | 0.4999997971275386 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14527671 | prizepicks | George Holani | Rush Yards | under | 0.4999997731083323 | 2026-09-05T23:49:54Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14719154 | prizepicks | Nolan Smith Jr. | Sacks | under | 0.4999998461409756 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14738409 | prizepicks | Minkah Fitzpatrick | Sacks | under | 0.4999998343311438 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685716 | prizepicks | Abdul Carter | Sacks | under | 0.4999997757363636 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14686642 | prizepicks | Kirk Cousins | Rush Yards | under | 0.4999997392241896 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14580961 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4999996753355176 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14614693 | prizepicks | Zach Allen | Sacks | under | 0.4999995908005648 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14473079 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.4999994122503861 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721523 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.4999990084498181 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719151 | prizepicks | Jalen Carter | Sacks | under | 0.4999977624113731 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473923 | prizepicks | Rachaad White | Rec Yards | under | 0.4999976781500153 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380101 | prizepicks | George Holani | Rush+Rec Yds | under | 0.4999975672898606 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14294869 | prizepicks | Kyler Murray | Rush Yards | under | 0.4999973903167316 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472364 | prizepicks | Malik Washington | Rec Yards | under | 0.4999971583957578 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14601085 | prizepicks | Kirk Cousins | Rush Yards | under | 0.4999970811624095 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14320397 | prizepicks | Joe Burrow | Rush Yards | under | 0.4999958585986807 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720965 | prizepicks | Kyle Monangai | Rec Yards | under | 0.4999955008758745 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495268 | prizepicks | Jayden Reed | Recs | under | 0.499994079984609 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472562 | prizepicks | Kyler Murray | Rush Yards | over | 0.4999939869387222 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390240 | prizepicks | Leonard Williams | Sacks | under | 0.4999939136648799 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14568560 | prizepicks | Donovan Ezeiruaku | Sacks | under | 0.4999928600570403 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14462616 | prizepicks | Zaire Franklin | Sacks | under | 0.4999928600570403 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100099 | prizepicks | Justin Jefferson | Player TDs | under | 0.4999928600570403 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14462616 | prizepicks | Zaire Franklin | Sacks | under | 0.4999928600570403 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14487645 | prizepicks | Derrick Henry | Recs | under | 0.4999926410322817 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719998 | prizepicks | Grady Jarrett | Sacks | under | 0.4999922754917496 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473071 | prizepicks | Tony Pollard | Rec Yards | under | 0.4999916312083026 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599982 | prizepicks | Tua Tagovailoa | Rush Yards | under | 0.4999899203640014 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497534 | prizepicks | Brock Purdy | Pass Attempts | under | 0.4999880264673597 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14339208 | prizepicks | J.K. Dobbins | Recs | under | 0.4999872523022913 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13978248 | prizepicks | George Holani | Player TDs | under | 0.4999860533774979 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14294865 | prizepicks | Christian Watson | Recs | under | 0.499985360385018 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14373284 | prizepicks | Terrance Ferguson | Recs | under | 0.499985100697313 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14665750 | prizepicks | Brian Robinson Jr. | Rush Yards | under | 0.4999858118798619 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402671 | prizepicks | Bhayshul Tuten | Recs | under | 0.4999810370114841 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14320396 | prizepicks | Joe Burrow | Rush Yards | under | 0.4999792015899313 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14402835 | prizepicks | David Montgomery | Recs | under | 0.4999763170353886 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14402948 | prizepicks | Charlie Kolar | Rec Yards | under | 0.4999751011326718 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14741040 | prizepicks | Alontae Taylor | Sacks | under | 0.4999730919313569 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738412 | prizepicks | Jamien Sherwood | Sacks | under | 0.4999730919313569 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14644542 | prizepicks | Brian Robinson Jr. | Rush+Rec Yds | under | 0.4999727909839899 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346313 | prizepicks | Tre' Harris | Rec Yards | under | 0.4999668554969374 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402944 | prizepicks | Charlie Kolar | Recs | under | 0.4999664973745787 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14373280 | prizepicks | Terrance Ferguson | Rec Yards | under | 0.4999661954650365 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14339662 | prizepicks | George Holani | Rec Yards | under | 0.4999613866022472 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14580956 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4999572383985249 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14653883 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4999572383985249 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719160 | prizepicks | A.J. Epenesa | Sacks | under | 0.4999547627716525 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14568553 | prizepicks | Kenny Clark | Sacks | under | 0.499954383374582 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294826 | prizepicks | Kyler Murray | Rush Yards | over | 0.4999516180496526 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14686442 | prizepicks | Budda Baker | Sacks | under | 0.4999466876502489 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649472 | prizepicks | Dexter Lawrence II | Sacks | under | 0.4999466876502489 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14462675 | prizepicks | Edgerrin Cooper | Sacks | under | 0.4999466876502489 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14493632 | prizepicks | Derrick Henry | Rec Yards | under | 0.4999458435242354 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633936 | prizepicks | Tyler Shough | INT | under | 0.49994171008088 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649615 | prizepicks | Boye Mafe | Sacks | under | 0.4999391327283249 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14099745 | prizepicks | Isaiah Likely | Recs | under | 0.4999384614117038 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14597180 | prizepicks | George Holani | Rec Targets | under | 0.4999260988448328 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14496406 | prizepicks | George Holani | Recs | under | 0.4999260988448328 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14718091 | prizepicks | Jared Goff | Rush Yards | under | 0.499929376605625 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475343 | prizepicks | Tyjae Spears | Rec Yards | under | 0.4999226755352017 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738408 | prizepicks | Kevin Winston Jr. | Sacks | under | 0.4999225319185533 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474802 | prizepicks | Jonathan Taylor | Recs | under | 0.499917113093612 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477949 | prizepicks | Kenneth Walker III | Recs | under | 0.499910507267689 | 2026-09-04T00:57:06Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14405843 | prizepicks | Josh Jobe | Sacks | under | 0.4999094012981631 | 2026-09-02T09:32:24Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14103573 | prizepicks | Luther Burden III | Player TDs | under | 0.4998997056482552 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14476689 | prizepicks | Travis Etienne Jr. | Recs | under | 0.4998982462447827 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14390244 | prizepicks | DeMarcus Lawrence | Sacks | under | 0.4998911547664881 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14732021 | prizepicks | Alim McNeill | Sacks | under | 0.4998973121319294 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339221 | prizepicks | J.K. Dobbins | Rec Yards | under | 0.4998856342761094 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14147105 | prizepicks | Matthew Golden | Recs | under | 0.4998693113359267 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14602696 | prizepicks | Adam Trautman | Rec Yards | under | 0.4998529562982363 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472305 | prizepicks | Gunnar Helm | Rec Yards | under | 0.4998497254203913 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980683 | prizepicks | DeMario Douglas | Recs | under | 0.4998470029045687 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14614148 | prizepicks | Brandon Jones | Sacks | under | 0.4998457326667685 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14387727 | prizepicks | Samaje Perine | Rec Yards | under | 0.4998326071066632 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385284 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.4998310214599026 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390378 | prizepicks | Christian Barmore | Sacks | under | 0.4998256703670347 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311246 | prizepicks | Lamar Jackson | Rush Yards | under | 0.4998060718218915 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095436 | prizepicks | Javonte Williams | Rec Yards | under | 0.4997996227019524 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14344682 | prizepicks | Omarion Hampton | Player TDs | under | 0.4997948109184389 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649446 | prizepicks | T.J. Watt | Sacks | under | 0.4997932144560641 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14431859 | prizepicks | Josh Downs | Rec Yards | under | 0.4997745245273346 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136920 | prizepicks | Terry McLaurin | Rec Yards | under | 0.4997713314913259 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14696801 | prizepicks | Demario Davis | Sacks | under | 0.4997552612060318 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311023 | prizepicks | Bucky Irving | Rush Yards | under | 0.4997500373986796 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14327285 | prizepicks | Mark Andrews | Rec Yards | under | 0.499749844749438 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472325 | prizepicks | Tyjae Spears | Rec Yards | under | 0.4997292206218462 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14350851 | prizepicks | Malik Willis | Pass TDs | under | 0.4997372318806563 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14466897 | prizepicks | Rashod Bateman | Rec Yards | under | 0.4997189174673686 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495733 | prizepicks | Jonathan Taylor | Rec Yards | under | 0.4997148937252554 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095435 | prizepicks | CeeDee Lamb | Recs | under | 0.4997120899691751 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13961518 | prizepicks | Sam Darnold | Rush Yards | under | 0.4997037843911367 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14265357 | prizepicks | Jaylen Waddle | Recs | under | 0.4996937349925994 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14634570 | prizepicks | Justin Herbert | Pass TDs | under | 0.4996811110959082 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14518493 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.499679605436067 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697871 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.4996697441299611 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14732024 | prizepicks | Aidan Hutchinson | Sacks | under | 0.4996667552604551 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649616 | prizepicks | Myles Murphy | Sacks | under | 0.4996484919488746 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14346394 | prizepicks | Tyler Allgeier | Recs | under | 0.4996358717708776 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14536911 | prizepicks | Tyler Warren | Recs | under | 0.499619841956971 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311292 | prizepicks | Emeka Egbuka | Recs | under | 0.4996178434166141 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689502 | prizepicks | Jordyn Brooks | Sacks | under | 0.4996142155495046 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311123 | prizepicks | Tee Higgins | Recs | under | 0.4995876161683934 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14718484 | prizepicks | Zack Baun | Sacks | under | 0.4995860600182459 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472981 | prizepicks | Malik Washington | Recs | under | 0.499578814976348 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14310211 | prizepicks | Jaylen Warren | Recs | under | 0.4995776016764109 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472579 | prizepicks | Braelon Allen | Rush Yards | under | 0.4995744510763624 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14136669 | prizepicks | Christian Watson | Recs | under | 0.4995665070491908 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14464722 | prizepicks | Karl Brooks | Sacks | under | 0.4995495322018199 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697522 | prizepicks | Josh Oliver | Recs | under | 0.4995403506739901 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14496691 | prizepicks | Matthew Golden | Rec Yards | under | 0.4995368909222364 | 2026-09-05T23:49:54Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14464727 | prizepicks | Barryn Sorrell | Sacks | under | 0.4995330297879389 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14594902 | prizepicks | Osa Odighizuwa | Sacks | under | 0.49950549270441 | 2026-09-07T16:25:44Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311221 | prizepicks | Mark Andrews | Rec Yards | under | 0.4994921455213272 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14512736 | prizepicks | Rashod Bateman | Recs | under | 0.4994689751480825 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14466915 | prizepicks | Rashod Bateman | Recs | under | 0.4994689751480825 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14390278 | prizepicks | Uchenna Nwosu | Sacks | under | 0.4994594674817755 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14649463 | prizepicks | Jonathan Allen | Sacks | under | 0.499447234355421 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14476863 | prizepicks | Pat Freiermuth | Recs | under | 0.499421195490045 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14614831 | prizepicks | D.J. Jones | Sacks | under | 0.4994032049232757 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14403623 | prizepicks | Rachaad White | Rush+Rec Yds | under | 0.4993730764626798 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14521103 | prizepicks | Rachaad White | Rush+Rec Yds | under | 0.4993730764626798 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14521351 | prizepicks | Tyler Warren | Rec Yards | under | 0.4993644847751776 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14683616 | prizepicks | Chris Brooks | Recs | under | 0.4993173020468711 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14474803 | prizepicks | Woody Marks | Recs | under | 0.499248584238851 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976399 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.4992426054285899 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14136911 | prizepicks | Terry McLaurin | Recs | under | 0.4992323432918021 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14718515 | prizepicks | Andrew Mukuba | Sacks | under | 0.4992268982614596 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14732030 | prizepicks | Derrick Barnes | Sacks | under | 0.4992153733160424 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978032 | prizepicks | CeeDee Lamb | Player TDs | under | 0.4992041100909312 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14420603 | prizepicks | Bo Nix | Rush Yards | under | 0.4991977085617766 | 2026-09-06T21:18:23Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14505884 | prizepicks | Malik Willis | Pass Attempts | under | 0.4991924662406376 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324378 | prizepicks | Chris Godwin Jr. | Recs | under | 0.4991804231740301 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311962 | prizepicks | Trevor Lawrence | Rush Yards | under | 0.4991708550476263 | 2026-09-03T00:08:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600966 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.4991707680799382 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474944 | prizepicks | Rashid Shaheed | Rush Yards | under | 0.4990998374703217 | 2026-09-05T10:30:11Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311259 | prizepicks | Sam LaPorta | Recs | under | 0.4990866492213741 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957556 | prizepicks | Cooper Kupp | Rec Yards | under | 0.4990605036058428 | 2026-09-04T16:17:23Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14720592 | prizepicks | James Cook III | Recs | under | 0.4990827478074086 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649448 | prizepicks | Cameron Heyward | Sacks | under | 0.4990686423140608 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136736 | prizepicks | Justin Jefferson | Rec Yards | under | 0.4990549850845825 | 2026-09-08T09:35:41Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14646710 | prizepicks | Tommy Tremble | Rec Yards | under | 0.4990094387748838 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14634012 | prizepicks | Jordan Love | INT | under | 0.4989761339231656 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14513937 | prizepicks | Isaac TeSlaa | Rec Yards | under | 0.4989662998832205 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13955087 | prizepicks | Tee Higgins | Rec Yards | under | 0.4989369010694356 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472992 | prizepicks | Braelon Allen | Rec Yards | under | 0.4989170820620178 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14137011 | prizepicks | T.J. Hockenson | Recs | under | 0.4989035612180115 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14402949 | prizepicks | Charlie Kolar | Rec Yards | under | 0.4988234970890572 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14381650 | prizepicks | Tyler Allgeier | Rush+Rec Yds | under | 0.4987904205774003 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14645939 | prizepicks | Xavier Worthy | Rush+Rec Yds | under | 0.498774894878965 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393588 | prizepicks | David Montgomery | Rush+Rec Yds | under | 0.4987616716452901 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14453319 | prizepicks | Rashid Shaheed | Rush+Rec Yds | under | 0.498643215969867 | 2026-09-05T21:10:18Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14603910 | prizepicks | Blake Cashman | Sacks | under | 0.4986079172233268 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14352543 | prizepicks | Tre Tucker | Recs | under | 0.4985648567774421 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721524 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.4985034430343252 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14683623 | prizepicks | Chris Brooks | Rec Yards | under | 0.4984987150192457 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14632537 | prizepicks | Tyler Shough | Pass TDs | under | 0.4984622533051237 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352544 | prizepicks | De'Von Achane | Recs | under | 0.4984439372153335 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14685566 | prizepicks | Quinshon Judkins | Rec Yards | under | 0.4983256421089639 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100144 | prizepicks | DeVonta Smith | Player TDs | under | 0.498320687701947 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14283566 | prizepicks | DJ Moore | Rec Yards | under | 0.4982853324053389 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14540147 | prizepicks | George Holani | Rec Yards | under | 0.4981267595473539 | 2026-09-06T04:29:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14100118 | prizepicks | Chuba Hubbard | Player TDs | under | 0.4981241138577132 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14431797 | prizepicks | Tyler Warren | Rec Yards | under | 0.4981060993753891 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495043 | prizepicks | Jayden Reed | Rec Yards | over | 0.4980638210239566 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990775 | prizepicks | Kyren Williams | Rush Yards | under | 0.4980557815986344 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13978319 | prizepicks | Travis Kelce | Player TDs | under | 0.4980156047275648 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14100112 | prizepicks | Kyle Monangai | Player TDs | under | 0.4980156047275648 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13978319 | prizepicks | Travis Kelce | Player TDs | under | 0.4980156047275648 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633138 | prizepicks | Kyler Murray | Pass TDs | under | 0.4980147812121278 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346570 | prizepicks | Tre' Harris | Recs | under | 0.4980091127168846 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14685597 | prizepicks | Ashton Jeanty | Rec Yards | under | 0.4979858570298944 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338708 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.4979635622268068 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586755 | prizepicks | Noah Gray | Recs | under | 0.4979176896114634 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14391879 | prizepicks | Braden Fiske | Sacks | under | 0.4978954269661944 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14534368 | prizepicks | Matthew Stafford | Rush Yards | under | 0.4978388372781049 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14294835 | prizepicks | Justin Jefferson | Recs | under | 0.4978107298881444 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472576 | prizepicks | Braelon Allen | Rush Yards | under | 0.4978934596703857 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632536 | prizepicks | Daniel Jones | Pass TDs | under | 0.4978745187435374 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633916 | prizepicks | Jacoby Brissett | INT | under | 0.497788357499337 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311523 | prizepicks | Tetairoa McMillan | Recs | under | 0.4977835403807361 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14095835 | prizepicks | Xavier Worthy | Rec Yards | under | 0.4975870401603464 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14507352 | prizepicks | Kyren Williams | Rush Yards | over | 0.4975573079960749 | 2026-09-05T05:39:10Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13961570 | prizepicks | Drake Maye | Rush Yards | under | 0.4975376215085116 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14338869 | prizepicks | Jonathan Taylor | Recs | under | 0.4975289623136345 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686415 | prizepicks | Kyle Monangai | Recs | under | 0.4976822413987866 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536902 | prizepicks | Josh Downs | Recs | under | 0.4974787046049371 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327284 | prizepicks | Mark Andrews | Recs | under | 0.4974665144575794 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14136860 | prizepicks | DeVonta Smith | Recs | under | 0.4974614686135834 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14599980 | prizepicks | Tua Tagovailoa | Rush Yards | under | 0.4973308185617375 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14731852 | prizepicks | Jack Campbell | Sacks | under | 0.4974087462329173 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472313 | prizepicks | Gunnar Helm | Rec Yards | under | 0.4973840571734323 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402677 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4972981975765437 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14308460 | prizepicks | Blake Corum | Rec Yards | under | 0.4972589729911089 | 2026-09-07T04:28:26Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14634386 | prizepicks | Bo Nix | INT | under | 0.4972846936000454 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14339695 | prizepicks | D'Andre Swift | Recs | under | 0.4972181374138897 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402751 | prizepicks | Jordan Mason | Rush+Rec Yds | under | 0.4970796310163956 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534939 | prizepicks | Jahan Dotson | Recs | under | 0.4970084934100609 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339394 | prizepicks | Aaron Jones Sr. | Rec Yards | under | 0.497007075915858 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475292 | prizepicks | Jack Bech | Rec Yards | under | 0.4969648056252613 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295672 | prizepicks | Jayden Daniels | Rush Yards | under | 0.4969606083860409 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14731980 | prizepicks | Devin White | Sacks | under | 0.4969502594448344 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473081 | prizepicks | Bhayshul Tuten | Recs | under | 0.4969099162131682 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14351530 | prizepicks | Geno Smith | Rush Yards | under | 0.4967727586461845 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598326 | prizepicks | Demarcus Robinson | Rec Yards | under | 0.4967495824815884 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14695334 | prizepicks | Jalen Nailor | Rec Yards | under | 0.4968978542182558 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499367 | prizepicks | Caleb Williams | Pass Attempts | under | 0.4967113509019834 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495448 | prizepicks | Kyren Williams | Rush Yards | over | 0.496537861228514 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14534985 | prizepicks | Jalen Hurts | Rush Yards | under | 0.4966292530647729 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14603926 | prizepicks | Andrew Van Ginkel | Sacks | under | 0.4964756346741521 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402909 | prizepicks | Rachaad White | Recs | under | 0.4964459217487372 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14615529 | prizepicks | George Karlaftis | Sacks | under | 0.4964359718268858 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
@@ -178,379 +203,400 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14346378 | prizepicks | Isaiah Likely | Rec Yards | under | 0.4963706826607965 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14411995 | prizepicks | Saquon Barkley | Rush+Rec Yds | under | 0.4963650512682398 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095776 | prizepicks | Travis Kelce | Rec Yards | under | 0.4963280344252372 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633939 | prizepicks | Kirk Cousins | INT | under | 0.4963181738356912 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633911 | prizepicks | Dak Prescott | INT | under | 0.4962453577887542 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14649462 | prizepicks | B.J. Hill | Sacks | under | 0.4962056110633475 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265365 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.4961728371260486 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14603958 | prizepicks | Dallas Turner | Sacks | under | 0.4961374751765405 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633933 | prizepicks | Josh Allen | INT | under | 0.4961350561363673 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136901 | prizepicks | Kyler Murray | Pass+Rush Yds | under | 0.4961321975888788 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14286633 | prizepicks | Nico Collins | Recs | under | 0.4961169642790324 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649188 | prizepicks | Quay Walker | Sacks | under | 0.4961037763191323 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721452 | prizepicks | Tank Bigsby | Recs | under | 0.4960551317444545 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14330164 | prizepicks | Kyler Murray | Pass Yards | under | 0.4960189459366535 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100107 | prizepicks | Aaron Jones Sr. | Player TDs | under | 0.4960145484250098 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14501477 | prizepicks | Cam Ward | Rush Yards | under | 0.4959246473343131 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649473 | prizepicks | Derrick Harmon | Sacks | under | 0.4960145484250098 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393149 | prizepicks | Jalen Coker | Rec Yards | under | 0.4958543996847258 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14135011 | prizepicks | DK Metcalf | Recs | under | 0.4958494167933474 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136825 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.4958462585231724 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633945 | prizepicks | Bryce Young | INT | under | 0.4958072538682063 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265097 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.4957868068054069 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472967 | prizepicks | Darnell Washington | Recs | under | 0.495786142146239 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294896 | prizepicks | Jordan Mason | Rush Yards | under | 0.4955522647971095 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14266939 | prizepicks | David Montgomery | Rush Yards | under | 0.4955179483628702 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14476862 | prizepicks | Chris Rodriguez Jr. | Rec Yards | under | 0.4954991026108446 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472979 | prizepicks | Charlie Kolar | Recs | under | 0.4954381951640518 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311961 | prizepicks | Trevor Lawrence | Rush Yards | under | 0.4953279992910213 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633931 | prizepicks | C.J. Stroud | INT | under | 0.495318476181233 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136326 | prizepicks | Harold Fannin Jr. | Recs | under | 0.4952510562421721 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380042 | prizepicks | George Holani | Rush+Rec Yds | under | 0.4952181751091903 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14475259 | prizepicks | Saquon Barkley | Recs | under | 0.4951171381975472 | 2026-09-05T23:49:54Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14341827 | prizepicks | Brenton Strange | Rec Yards | under | 0.4950910357017609 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14601174 | prizepicks | Kyle Juszczyk | Recs | under | 0.4950325646606179 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697879 | prizepicks | Chuba Hubbard | Rec Yards | under | 0.4952024080661557 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14493349 | prizepicks | Breece Hall | Rec Yards | under | 0.4951112627238535 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14253968 | prizepicks | Chris Olave | Rec Yards | under | 0.4950081640078174 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495571 | prizepicks | Tyjae Spears | Rush Yards | under | 0.4949655316747813 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632237 | prizepicks | Baker Mayfield | Pass TDs | under | 0.4948182193205637 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14156733 | prizepicks | Saquon Barkley | Rec Yards | under | 0.4946728592819758 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14305914 | prizepicks | Saquon Barkley | Rec Yards | under | 0.4946728592819758 | 2026-09-05T23:49:54Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381522 | prizepicks | Braelon Allen | Rush+Rec Yds | under | 0.4946053939317847 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978114 | prizepicks | Davante Adams | Rec Yards | under | 0.4943354363787025 | 2026-08-31T21:38:20Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14536906 | prizepicks | Alec Pierce | Recs | under | 0.4943025459074767 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14496728 | prizepicks | Jayden Reed | Rush+Rec Yds | over | 0.4942916730814444 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14376958 | prizepicks | D'Andre Swift | Player TDs | under | 0.4942730384051522 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721520 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.4941617084294032 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14478360 | prizepicks | Malik Willis | Rush Yards | under | 0.4941282241249836 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978314 | prizepicks | J.K. Dobbins | Player TDs | under | 0.4940894310816888 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14582606 | prizepicks | Aaron Jones Sr. | Recs | under | 0.4940837027027761 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14308679 | prizepicks | Bijan Robinson | Player TDs | under | 0.4940777009226212 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14648933 | prizepicks | Maxx Crosby | Sacks | under | 0.494081961273119 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14514538 | prizepicks | J.K. Dobbins | Rec Yards | under | 0.4940318446542696 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472566 | prizepicks | Breece Hall | Recs | under | 0.4940244742858029 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393581 | prizepicks | James Cook III | Recs | under | 0.4938840390052887 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14375956 | prizepicks | Breece Hall | Recs | under | 0.4940244742858029 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719161 | prizepicks | Jalyx Hunt | Sacks | under | 0.4939190589591429 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14171764 | prizepicks | De'Von Achane | Rec Yards | under | 0.4938819423563746 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697865 | prizepicks | Chuba Hubbard | Recs | under | 0.4937837141174712 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649184 | prizepicks | Malcolm Koonce | Sacks | under | 0.4937778555610297 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472915 | prizepicks | Jacoby Brissett | Rush Yards | under | 0.4937563227950614 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14391999 | prizepicks | Jack Bech | Rec Yards | under | 0.4937473711919867 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14488568 | prizepicks | Jalen Nailor | Recs | under | 0.4937124284770549 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14392673 | prizepicks | Jalen Nailor | Recs | under | 0.4937124284770549 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14136905 | prizepicks | Terry McLaurin | Recs | under | 0.4936181206618973 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586392 | prizepicks | Pat Bryant | Rec Yards | under | 0.4935255282102953 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14340754 | prizepicks | Trevor Lawrence | Pass Yards | under | 0.4934712505146973 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14422828 | prizepicks | Jalen Coker | Recs | under | 0.493443668367422 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472797 | prizepicks | George Holani | Rec Yards | under | 0.4933775854870799 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13957574 | prizepicks | DeMario Douglas | Rec Yards | under | 0.493370507281554 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14393146 | prizepicks | Jalen Coker | Recs | under | 0.493443668367422 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472835 | prizepicks | Javonte Williams | Rec Yards | under | 0.4933413460543282 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14460636 | prizepicks | C.J. Stroud | Rush Yards | under | 0.4933297863752612 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14266946 | prizepicks | C.J. Stroud | Pass Yards | under | 0.4931707666193207 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14352070 | prizepicks | Brock Bowers | Recs | under | 0.4930950441527453 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633850 | prizepicks | Cam Ward | INT | under | 0.4932847240222384 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686646 | prizepicks | Tyler Allgeier | Rush Yards | under | 0.4932008339566891 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14495741 | prizepicks | Greg Dulcich | Recs | under | 0.4931876402777077 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14389710 | prizepicks | Quinshon Judkins | Rush+Rec Yds | under | 0.4930057440635043 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989776 | prizepicks | Christian McCaffrey | Rec Yards | under | 0.4927605995919712 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14468858 | prizepicks | Kyren Williams | Rec Yards | under | 0.4927182614001542 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14100133 | prizepicks | Bucky Irving | Player TDs | under | 0.4926559524678213 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294854 | prizepicks | Jordan Love | Rush Yards | under | 0.4925801506433833 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100128 | prizepicks | Jameson Williams | Player TDs | under | 0.4925070425341669 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136804 | prizepicks | Matthew Golden | Recs | under | 0.4924652007442497 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14283635 | prizepicks | Tre Tucker | Recs | under | 0.4923662335580968 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14438481 | prizepicks | Kenneth Walker III | Rec Yards | under | 0.4921870249235207 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14488716 | prizepicks | Rashod Bateman | Rec Yards | under | 0.4922182883782831 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283560 | prizepicks | Josh Allen | Rush Yards | under | 0.4921690678926964 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474684 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4921042861541032 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283558 | prizepicks | Dalton Kincaid | Recs | under | 0.4920995533663999 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472571 | prizepicks | Tyjae Spears | Rush Yards | under | 0.4920962616595503 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499787 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.4920743356245831 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306453 | prizepicks | DJ Moore | Recs | under | 0.4920405168546463 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14506280 | prizepicks | Omarion Hampton | Rec Yards | under | 0.4920090769185925 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14255867 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.491812587303413 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14713172 | prizepicks | Nick Folk | FG Made | under | 0.4918304080189495 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095791 | prizepicks | Xavier Worthy | Recs | under | 0.4918040152118517 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14390379 | prizepicks | Elijah Ponder | Sacks | under | 0.4916583183726937 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14294834 | prizepicks | Justin Jefferson | Recs | under | 0.4917871361483188 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136989 | prizepicks | Jordan Addison | Rec Yards | under | 0.4916528560622462 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14342284 | prizepicks | Brenton Strange | Rec Yards | under | 0.4916453117456139 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473903 | prizepicks | David Njoku | Rec Yards | under | 0.4916450532387277 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265099 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.4914563147842055 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633693 | prizepicks | Trevor Lawrence | INT | under | 0.4913916340849571 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327286 | prizepicks | Zay Flowers | Recs | under | 0.4913752733067107 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311693 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.4912897093148454 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311544 | prizepicks | Ladd McConkey | Recs | under | 0.4912819730348214 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14304854 | prizepicks | DeVonta Smith | Recs | under | 0.4912556861957357 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136915 | prizepicks | Jayden Daniels | Pass+Rush Yds | under | 0.4912045182602679 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14464728 | prizepicks | Javon Hargrave | Sacks | under | 0.4910914056202107 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136656 | prizepicks | Jakobi Meyers | Rec Yards | under | 0.4910769488714975 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311497 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.4908985794579188 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14687738 | prizepicks | Jaylin Noel | Rec Yards | under | 0.4910557913300453 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265089 | prizepicks | J.K. Dobbins | Rush Yards | under | 0.4908343397276993 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14340378 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.49080782806676 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14580957 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4907889372729505 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14463104 | prizepicks | Cole Kmet | Recs | under | 0.490754775665671 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14513941 | prizepicks | Isaac TeSlaa | Recs | under | 0.4907081010159824 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14568551 | prizepicks | James Houston IV | Sacks | under | 0.4906715298417369 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14096849 | prizepicks | Evan McPherson | FG Made | under | 0.4906668685523908 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495046 | prizepicks | Jayden Reed | Rec Yards | over | 0.4906561609339162 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649464 | prizepicks | Keeanu Benton | Sacks | under | 0.4904226539940468 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686914 | prizepicks | Walter Nolen III | Sacks | under | 0.4903562566018613 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14255884 | prizepicks | Travis Etienne Jr. | Recs | under | 0.4903027795700785 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14276130 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.4902246822364156 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14655029 | prizepicks | Kenneth Walker III | Rush Yards | under | 0.4901157196525357 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14360626 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.4900918847261805 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580960 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | under | 0.4899185418338974 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14320443 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.4896571607051885 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697094 | prizepicks | Treylon Burks | Rec Yards | under | 0.4896421197909371 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311526 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.4896020828541823 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495491 | prizepicks | Gunnar Helm | Recs | under | 0.489539332331103 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719159 | prizepicks | Moro Ojomo | Sacks | under | 0.4895919165616466 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14380221 | prizepicks | Sam LaPorta | Recs | under | 0.489500733833788 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14566822 | prizepicks | Ashton Jeanty | Player TDs | under | 0.4894145387289099 | 2026-09-06T19:06:29Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294870 | prizepicks | Kyler Murray | Rush Yards | over | 0.4893720580040569 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14320398 | prizepicks | Joe Burrow | Rush Yards | under | 0.4893283530057606 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402676 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4892017045080323 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14505895 | prizepicks | Malik Willis | Pass Attempts | under | 0.4891354623372979 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100084 | prizepicks | Ladd McConkey | Player TDs | under | 0.4891334378516673 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14265090 | prizepicks | Kenneth Walker III | Rush Yards | under | 0.4891255300097799 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14374574 | prizepicks | Geno Smith | Rush Yards | under | 0.4890949286310826 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343235 | prizepicks | Matthew Golden | Fantasy Score | under | 0.489064307703858 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475485 | prizepicks | Justice Hill | Rec Yards | under | 0.4890613016320118 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100540 | prizepicks | Javonte Williams | Player TDs | under | 0.4890375573508291 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14345876 | prizepicks | Chris Rodriguez Jr. | Recs | under | 0.488944949533338 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498238 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.4888676262396756 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346063 | prizepicks | Justin Herbert | Pass TDs | under | 0.4888480622734144 | 2026-09-02T14:24:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311592 | prizepicks | Omarion Hampton | Rush Yards | under | 0.4887999082514664 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473083 | prizepicks | Greg Dulcich | Rec Yards | over | 0.4887247992732353 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311316 | prizepicks | Garrett Wilson | Rec Yards | under | 0.4885840142781659 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283562 | prizepicks | Khalil Shakir | Rec Yards | under | 0.4885813805177043 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380172 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | under | 0.4885541886049116 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957565 | prizepicks | Rashid Shaheed | Rec Yards | under | 0.4884827675478822 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14136993 | prizepicks | Jordan Addison | Recs | under | 0.4884322085454008 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14498976 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.4883791909047328 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255865 | prizepicks | Juwan Johnson | Rec Yards | under | 0.4882240882318225 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14276129 | prizepicks | Dontayvion Wicks | Recs | under | 0.488206719160166 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14255854 | prizepicks | Juwan Johnson | Recs | under | 0.4881897323425461 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499523 | prizepicks | Jordan Love | Pass Attempts | under | 0.4881000089194932 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14738693 | prizepicks | Darnell Mooney | Recs | under | 0.4880881408410118 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14283565 | prizepicks | Dalton Kincaid | Rec Yards | under | 0.4880775295918867 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14524526 | prizepicks | Cam Ward | Pass+Rush Yds | under | 0.4879541813044072 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957545 | prizepicks | Romeo Doubs | Rec Yards | under | 0.4879345502889424 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311618 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.4879246433662743 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311237 | prizepicks | Chase Brown | Rec Yards | under | 0.4878467027969171 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14602699 | prizepicks | Adam Trautman | Rec Yards | under | 0.4877893299431319 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14337058 | prizepicks | Luther Burden III | Recs | under | 0.4877811229695621 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311675 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4876464962375186 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586381 | prizepicks | Evan Engram | Rec Yards | under | 0.4875547271087448 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13974040 | prizepicks | Cooper Kupp | Recs | under | 0.4874386157371529 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14100104 | prizepicks | Parker Washington | Player TDs | under | 0.4872105486762685 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294859 | prizepicks | Tucker Kraft | Recs | under | 0.4870430620960089 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14580901 | prizepicks | D'Andre Swift | Rush+Rec Yds | under | 0.4869926981308345 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472762 | prizepicks | Rachaad White | Rush Yards | under | 0.4869871657396134 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134601 | prizepicks | Tre Tucker | Rec Yards | under | 0.4869579861868727 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14095828 | prizepicks | Xavier Worthy | Rec Yards | under | 0.4868516299284205 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14586396 | prizepicks | RJ Harvey | Rec Yards | under | 0.486791412187868 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14100129 | prizepicks | Sam LaPorta | Player TDs | under | 0.4866770608889332 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14295674 | prizepicks | Jalen Hurts | Rush Yards | under | 0.4866331226521989 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14540156 | prizepicks | George Holani | Recs | under | 0.4865716522462378 | 2026-09-06T04:29:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14176275 | prizepicks | Sam Darnold | Rush Yards | under | 0.4863266844855322 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13992264 | prizepicks | Deebo Samuel Sr. | Rec Yards | under | 0.4862071348013097 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14633965 | prizepicks | Baker Mayfield | INT | under | 0.4864621273502085 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14310174 | prizepicks | Rico Dowdle | Recs | under | 0.4860872767924038 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136661 | prizepicks | Christian Watson | Rec Yards | under | 0.4860265660593553 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974047 | prizepicks | Jaxon Smith-Njigba | Recs | under | 0.4859934258773255 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14630046 | prizepicks | Tua Tagovailoa | Rush Yards | under | 0.4859173310707448 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14569819 | prizepicks | Ashton Jeanty | Recs | under | 0.4858667972383278 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697510 | prizepicks | KaVontae Turpin | Recs | under | 0.4858662062233341 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14393593 | prizepicks | David Montgomery | Recs | under | 0.4856932912432057 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402565 | prizepicks | C.J. Stroud | Pass+Rush Yds | under | 0.4856372134124511 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14106153 | prizepicks | Emeka Egbuka | Player TDs | under | 0.4854754889190297 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339079 | prizepicks | Caleb Williams | Pass+Rush Yds | under | 0.4853605405651362 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14172308 | prizepicks | Javonte Williams | Recs | under | 0.4853468250114133 | 2026-08-31T20:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14497533 | prizepicks | Brock Purdy | Pass Attempts | under | 0.485288576087613 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472918 | prizepicks | Derrick Henry | Recs | under | 0.4852440868240437 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14373283 | prizepicks | Terrance Ferguson | Recs | under | 0.4851849418073901 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13974049 | prizepicks | Romeo Doubs | Recs | under | 0.4851213277876338 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311966 | prizepicks | Caleb Williams | Rush Yards | under | 0.4847721859447973 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14615564 | prizepicks | D'Andre Swift | Rush Yards | under | 0.4849737812141552 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498412 | prizepicks | Caleb Williams | Rush Yards | under | 0.4847721859447973 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13979452 | prizepicks | Ka'imi Fairbairn | FG Made | over | 0.4847320846264502 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14568650 | prizepicks | J.K. Dobbins | Rush+Rec Yds | under | 0.4844653611565035 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14387937 | prizepicks | Drew Sample | Recs | under | 0.4843609457808349 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136336 | prizepicks | Harold Fannin Jr. | Rec Yards | under | 0.4843476619750295 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385298 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | under | 0.4843278931680932 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475328 | prizepicks | Jake Ferguson | Rec Yards | under | 0.4840253662718995 | 2026-09-04T05:48:41Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14506068 | prizepicks | Bucky Irving | Rec Yards | under | 0.4842764710379952 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689497 | prizepicks | Chop Robinson | Sacks | under | 0.4840196871107221 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586377 | prizepicks | Evan Engram | Recs | under | 0.4838774793041986 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14164236 | prizepicks | DeVonta Smith | Rec Yards | under | 0.4837445687772552 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14684283 | prizepicks | Vita Vea | Sacks | under | 0.483718945629456 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14597665 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.4836214900604629 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265360 | prizepicks | Rashee Rice | Recs | under | 0.483609685442568 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14340377 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.483583580949947 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100125 | prizepicks | DK Metcalf | Player TDs | under | 0.4835527383990741 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14378300 | prizepicks | Breece Hall | Rec Yards | under | 0.4835248836607995 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496665 | prizepicks | Woody Marks | Player TDs | under | 0.4835044956340572 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14709224 | prizepicks | Ryan Fitzgerald | FG Made | under | 0.4835124937146831 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978320 | prizepicks | Kenneth Walker III | Player TDs | under | 0.4834691202631717 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633943 | prizepicks | Caleb Williams | INT | under | 0.4832974319706594 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514503 | prizepicks | Tyquan Thornton | Recs | under | 0.483240195718446 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14697091 | prizepicks | Treylon Burks | Recs | under | 0.4832234550063669 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486862 | prizepicks | Xavier Hutchinson | Recs | under | 0.4831026872734631 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136641 | prizepicks | Brian Thomas Jr. | Rec Yards | under | 0.4830201560851732 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311159 | prizepicks | Cam Ward | Pass Yards | under | 0.4829357646923327 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420595 | prizepicks | Justice Hill | Recs | under | 0.4829239705091402 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095783 | prizepicks | Travis Kelce | Recs | under | 0.4827652493484936 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633947 | prizepicks | Kyler Murray | INT | under | 0.4827032207749524 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475703 | prizepicks | Jaylen Warren | Rec Yards | under | 0.4826551273589891 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13969702 | prizepicks | AJ Barner | Rec Yards | under | 0.4825959999346538 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14498420 | prizepicks | Daniel Jones | Pass Attempts | under | 0.4825978696225472 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486926 | prizepicks | Xavier Legette | Rec Yards | under | 0.4825618282118615 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719250 | prizepicks | Jake Elliott | FG Made | under | 0.4825590212811927 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14604139 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | under | 0.4825481116360537 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381557 | prizepicks | Tyjae Spears | Rush+Rec Yds | under | 0.4822821563984003 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14601086 | prizepicks | Kirk Cousins | Rush Yards | under | 0.4822259412479257 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978305 | prizepicks | Mike Evans | Player TDs | under | 0.4821904705100464 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13991141 | prizepicks | Brock Purdy | Rush Yards | under | 0.4821603787615548 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697629 | prizepicks | Roman Wilson | Recs | under | 0.4821846896263823 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311614 | prizepicks | Marvin Harrison Jr. | Recs | under | 0.482149952023672 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14578900 | prizepicks | Caleb Williams | Pass Attempts | over | 0.4819982167139409 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14677503 | prizepicks | RJ Harvey | Recs | under | 0.4821466747681724 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14311855 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.4819737060924507 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380083 | prizepicks | Chase Brown | Rush+Rec Yds | under | 0.4819413683460545 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13992681 | prizepicks | Mike Evans | Rec Yards | under | 0.4818027021476327 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14380693 | prizepicks | Kyren Williams | Rush+Rec Yds | under | 0.4817554014895295 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472900 | prizepicks | Saquon Barkley | Rush Yards | under | 0.481657549337015 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14616528 | prizepicks | Josh Allen | Pass Attempts | under | 0.4816321341157974 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14276145 | prizepicks | Dallas Goedert | Rec Yards | under | 0.4815929005390214 | 2026-09-01T05:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14136863 | prizepicks | Saquon Barkley | Recs | under | 0.4813130368908294 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14266936 | prizepicks | Woody Marks | Rush Yards | under | 0.4812832545575637 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14505889 | prizepicks | Malik Willis | Pass Attempts | under | 0.4812622312877601 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14614150 | prizepicks | Justin Strnad | Sacks | under | 0.4810834718866812 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14539808 | prizepicks | Tyler Warren | Recs | under | 0.4809175579537696 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311298 | prizepicks | Travis Etienne Jr. | Rush Yards | under | 0.4808633102283516 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721522 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.4810112239114058 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100121 | prizepicks | Tony Pollard | Player TDs | under | 0.4804574562780476 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14477588 | prizepicks | Malik Willis | Rush Yards | under | 0.4801647458464977 | 2026-09-08T14:29:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402720 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4800661233210841 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472925 | prizepicks | Calvin Ridley | Recs | under | 0.4800608203937146 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14137007 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.4800258405214959 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136688 | prizepicks | Jakobi Meyers | Recs | under | 0.479879698105086 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346308 | prizepicks | Tre' Harris | Recs | under | 0.4797761391249823 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13996152 | prizepicks | Ka'imi Fairbairn | Kicking Points | over | 0.479872965886263 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14565436 | prizepicks | Bhayshul Tuten | Recs | under | 0.4796815937220763 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599995 | prizepicks | Bhayshul Tuten | Rec Targets | under | 0.4796358516295147 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990911 | prizepicks | Mike Evans | Recs | under | 0.479239076331547 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14717672 | prizepicks | Jacoby Brissett | Pass TDs | under | 0.4793898627892825 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14514500 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.4792457731971253 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14337055 | prizepicks | Colston Loveland | Rec Yards | under | 0.4791827779982887 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134840 | prizepicks | Chris Olave | Recs | under | 0.4790330731456008 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14337052 | prizepicks | Rome Odunze | Rec Yards | under | 0.4790209195034827 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14286634 | prizepicks | Nico Collins | Rec Yards | under | 0.4788525578832108 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14100085 | prizepicks | Tyler Allgeier | Player TDs | under | 0.4786132133399867 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472818 | prizepicks | Charlie Kolar | Rec Yards | under | 0.478652765230491 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14460642 | prizepicks | Kayshon Boutte | Recs | under | 0.4785743336184158 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100115 | prizepicks | Jordan Mason | Player TDs | under | 0.4784618795385387 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390377 | prizepicks | Milton Williams | Sacks | under | 0.4784494263766018 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14095431 | prizepicks | George Pickens | Recs | under | 0.4784015521177238 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14311026 | prizepicks | Chase Brown | Rush Yards | under | 0.4783356855038904 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393598 | prizepicks | David Montgomery | Rec Yards | under | 0.4780687238897425 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14346316 | prizepicks | Ladd McConkey | Rec Yards | under | 0.4781813854214369 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14463388 | prizepicks | David Montgomery | Rec Yards | under | 0.4780687238897425 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324364 | prizepicks | Chris Godwin Jr. | Rec Yards | under | 0.4780159764939455 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980674 | prizepicks | Rhamondre Stevenson | Recs | under | 0.4775290610849076 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14719563 | prizepicks | Riley Patterson | FG Made | under | 0.4778836626346983 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649475 | prizepicks | Alex Highsmith | Sacks | under | 0.4776053540461343 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632569 | prizepicks | Aaron Rodgers | Pass TDs | under | 0.4775103936730073 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265369 | prizepicks | Courtland Sutton | Rec Yards | under | 0.4775083513592698 | 2026-09-03T05:43:24Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14387734 | prizepicks | Samaje Perine | Recs | under | 0.4773843160858806 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14594728 | prizepicks | Daniel Jones | Pass Attempts | under | 0.4773699242419534 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14615525 | prizepicks | Ashton Gillotte | Sacks | under | 0.4772531124575252 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14100126 | prizepicks | Rico Dowdle | Player TDs | under | 0.4770239846941984 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14496727 | prizepicks | Jayden Reed | Rush+Rec Yds | under | 0.4768687282693603 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475540 | prizepicks | Chig Okonkwo | Recs | under | 0.4767689392037888 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14495270 | prizepicks | Jayden Reed | Recs | under | 0.4767075963696593 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957672 | prizepicks | Drake Maye | Pass+Rush Yds | under | 0.4765307331225134 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14339690 | prizepicks | D'Andre Swift | Rec Yards | under | 0.4763954157799206 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136895 | prizepicks | Kyler Murray | Rush Yards | over | 0.4763930657248103 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14467736 | prizepicks | Kenneth Walker III | Recs | under | 0.4760803939752076 | 2026-09-03T19:46:31Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14614802 | prizepicks | Nik Bonitto | Sacks | under | 0.4760018817490368 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14390242 | prizepicks | Dre'Mont Jones | Sacks | under | 0.475755815132024 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14380694 | prizepicks | Kyren Williams | Rush+Rec Yds | over | 0.4756746129670928 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14539809 | prizepicks | Alec Pierce | Recs | under | 0.4759829026346551 | 2026-09-06T13:38:09Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14318429 | prizepicks | Rico Dowdle | Rec Yards | under | 0.4756377638206164 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697632 | prizepicks | Roman Wilson | Rec Yards | under | 0.475531363345451 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339594 | prizepicks | Jerry Jeudy | Rec Yards | under | 0.4755289395027664 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14310220 | prizepicks | Jaylen Warren | Recs | under | 0.4754877159687085 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311293 | prizepicks | Lamar Jackson | Rush Yards | under | 0.475472512289424 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14479660 | prizepicks | Adonai Mitchell | Recs | under | 0.4753370594717937 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495050 | prizepicks | Hunter Henry | Rec Yards | under | 0.4752992685208598 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14603240 | prizepicks | Puka Nacua | Rush Yards | under | 0.4751294976754311 | 2026-09-08T09:35:41Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14689714 | prizepicks | Jonnu Smith | Rec Yards | under | 0.4750494160327593 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343239 | prizepicks | Kyler Murray | Fantasy Score | under | 0.474994694822251 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390287 | prizepicks | Byron Murphy II | Sacks | under | 0.4747546972319245 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14647285 | prizepicks | Tommy Tremble | Recs | under | 0.4749382968189262 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711290 | prizepicks | Jaylin Noel | Recs | under | 0.4748972795645541 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719602 | prizepicks | Jalen Redmond | Sacks | under | 0.4745265467134439 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338643 | prizepicks | Dalton Schultz | Rec Yards | under | 0.4744439843289432 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474440 | prizepicks | Drake Maye | Pass Yards | over | 0.4744043336639627 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14337066 | prizepicks | Colston Loveland | Recs | under | 0.4741839074235372 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375149 | prizepicks | Garrett Wilson | Recs | under | 0.4740967121487547 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14316175 | prizepicks | Javonte Williams | Rush Yards | under | 0.4740131554519056 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14697071 | prizepicks | Mitchell Evans | Recs | under | 0.473961564121073 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14502842 | prizepicks | Cam Ward | Pass Attempts | under | 0.4739470424233415 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14539240 | prizepicks | Drake Maye | Pass Attempts | under | 0.4738891222676974 | 2026-09-06T04:29:20Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14685714 | prizepicks | Brian Burns | Sacks | under | 0.4739209056628151 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14265362 | prizepicks | Courtland Sutton | Recs | under | 0.4738053008521894 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633937 | prizepicks | Tyler Shough | INT | under | 0.4737100183882035 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339231 | prizepicks | Patrick Mahomes | Pass+Rush Yds | under | 0.473672324110085 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14359808 | prizepicks | Bryce Young | Rush Yards | under | 0.4736405768327607 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341836 | prizepicks | Brenton Strange | Recs | under | 0.4733007937594392 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380044 | prizepicks | George Holani | Rush+Rec Yds | under | 0.47328667854227 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14499090 | prizepicks | Jared Goff | Pass Yards | over | 0.4725465001389259 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311128 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.4721613082893274 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14379625 | prizepicks | Davante Adams | Recs | under | 0.4718237555166851 | 2026-09-01T21:48:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14633971 | prizepicks | Daniel Jones | INT | under | 0.4720830904449982 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14276149 | prizepicks | Dallas Goedert | Rec Yards | under | 0.4715131545095672 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14600001 | prizepicks | Charlie Kolar | Rec Targets | under | 0.4714354948933568 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14337044 | prizepicks | Rome Odunze | Recs | under | 0.4711069649279398 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475481 | prizepicks | James Cook III | Recs | under | 0.4709518129335558 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697870 | prizepicks | Chuba Hubbard | Rec Yards | under | 0.470890476631953 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460651 | prizepicks | Kayshon Boutte | Rec Yards | under | 0.4707086538153768 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339423 | prizepicks | Brian Thomas Jr. | Recs | under | 0.4703745419537926 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14463114 | prizepicks | Mark Andrews | Player TDs | under | 0.4703302686634915 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13955004 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.4703257709920192 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257512 | prizepicks | Bijan Robinson | Recs | under | 0.4702829612951404 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352767 | prizepicks | Matthew Golden | Rec Targets | under | 0.4701632738039301 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14372895 | prizepicks | Colby Parkinson | Recs | under | 0.4697021017458511 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13996225 | prizepicks | Ben Skowronek | Player TDs | under | 0.4696036382347386 | 2026-09-01T15:38:28Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14082902 | prizepicks | Brevyn Spann-Ford | Player TDs | under | 0.4696036382347386 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13978315 | prizepicks | Evan Engram | Player TDs | under | 0.4696036382347386 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14498241 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.4699571712144493 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14613761 | prizepicks | Alex Singleton | Sacks | under | 0.4696036382347386 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14462529 | prizepicks | Xavier McKinney | Sacks | under | 0.4696036382347386 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13996225 | prizepicks | Ben Skowronek | Player TDs | under | 0.4696036382347386 | 2026-09-01T15:38:28Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688089 | prizepicks | Amani Hooker | Sacks | under | 0.4696036382347386 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14082902 | prizepicks | Brevyn Spann-Ford | Player TDs | under | 0.4696036382347386 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13980615 | prizepicks | Tre' Harris | Player TDs | under | 0.4696036382347386 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13978315 | prizepicks | Evan Engram | Player TDs | under | 0.4696036382347386 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311576 | prizepicks | Quentin Johnston | Recs | under | 0.4695209512723057 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136927 | prizepicks | Terry McLaurin | Rec Yards | over | 0.4694857808620867 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14473629 | prizepicks | Jauan Jennings | Rec Yards | over | 0.4692822097028051 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14393575 | prizepicks | James Cook III | Rec Yards | under | 0.4691921514675676 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381728 | prizepicks | Bucky Irving | Rush+Rec Yds | under | 0.4691569809182754 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486818 | prizepicks | Malik Willis | Pass Attempts | under | 0.4689807240441485 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402903 | prizepicks | Chig Okonkwo | Rec Yards | under | 0.4688294569421003 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957680 | prizepicks | Sam Darnold | Pass+Rush Yds | under | 0.4684139483409468 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14472863 | prizepicks | Jonathan Taylor | Recs | under | 0.4682307862067205 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691199 | prizepicks | Mo Alie-Cox | Rec Yards | under | 0.4681608453708179 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472836 | prizepicks | Jordan Mason | Recs | under | 0.4679705992540073 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14592935 | prizepicks | Luther Burden III | Rush+Rec Yds | under | 0.4678559773068933 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381200 | prizepicks | J.K. Dobbins | Rush+Rec Yds | over | 0.4676297598897589 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13990644 | prizepicks | Christian McCaffrey | Recs | under | 0.4676258609538639 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14575169 | prizepicks | George Holani | Rec Yards | under | 0.4674566367536166 | 2026-09-07T10:11:36Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14697863 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.4675346199684873 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136428 | prizepicks | Quinshon Judkins | Recs | under | 0.4667447276096939 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633909 | prizepicks | Jaxson Dart | INT | under | 0.466662796224501 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14327543 | prizepicks | Jahan Dotson | Recs | under | 0.4659824642425074 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14255866 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.465839946195951 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976408 | prizepicks | Jake Ferguson | Rec Yards | under | 0.4657388878094592 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294843 | prizepicks | Matthew Golden | Recs | under | 0.4656684306679475 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978311 | prizepicks | Christian McCaffrey | Player TDs | under | 0.465517833330473 | 2026-09-03T19:46:31Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14311136 | prizepicks | Lamar Jackson | Pass Yards | under | 0.4656329377533451 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978026 | prizepicks | George Pickens | Player TDs | under | 0.4655146306388006 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14402680 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4650720607228431 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697066 | prizepicks | Mitchell Evans | Rec Yards | under | 0.4650060129351419 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311493 | prizepicks | Michael Pittman Jr. | Recs | under | 0.46494036109697 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996188 | prizepicks | Jahan Dotson | Player TDs | under | 0.4646494275670085 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649194 | prizepicks | Adam Butler | Sacks | under | 0.4646494275670085 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978031 | prizepicks | Darnell Mooney | Player TDs | under | 0.4646494275670085 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14633128 | prizepicks | C.J. Stroud | Pass TDs | under | 0.4644193821097586 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473919 | prizepicks | Dawson Knox | Rec Yards | under | 0.4643624535906 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632702 | prizepicks | Cam Ward | Pass TDs | under | 0.4643356421134509 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14603924 | prizepicks | Eric Wilson | Sacks | under | 0.4638769742127591 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472966 | prizepicks | Darnell Washington | Recs | under | 0.463765660755099 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390618 | prizepicks | Breece Hall | Recs | under | 0.4636246411524427 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311294 | prizepicks | Breece Hall | Rush Yards | under | 0.4634317586539493 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311676 | prizepicks | Jakobi Meyers | Recs | over | 0.4631331714036877 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499951 | prizepicks | Kalif Raymond | Recs | under | 0.4630839876288956 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357932 | prizepicks | Tre' Harris | Fantasy Score | under | 0.4630648463900979 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311313 | prizepicks | Sam LaPorta | Rec Yards | under | 0.4630591557016 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978303 | prizepicks | Blake Corum | Player TDs | under | 0.463031456555351 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14342346 | prizepicks | A.J. Brown | Rec Yards | under | 0.4629307387698033 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13976407 | prizepicks | Brandon Aubrey | FG Made | under | 0.4628561597991401 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14265371 | prizepicks | Jaylen Waddle | Recs | under | 0.4626935734440192 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14588010 | prizepicks | Cam Ward | Pass Yards | under | 0.4625560840687357 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691252 | prizepicks | Ashton Dulin | Recs | under | 0.4626615243218246 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343241 | prizepicks | Kyler Murray | Fantasy Score | over | 0.4624733859835239 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14632675 | prizepicks | Bryce Young | Pass TDs | under | 0.4623978883586241 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346400 | prizepicks | Darnell Mooney | Recs | over | 0.4623545358533056 | 2026-09-01T00:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14432416 | prizepicks | Cam Ward | Rush Yards | under | 0.4622490458997172 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14351526 | prizepicks | Cam Ward | Rush Yards | under | 0.4622490458997172 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402832 | prizepicks | Woody Marks | Rec Yards | under | 0.4621600166947832 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14683624 | prizepicks | Chris Brooks | Rec Yards | under | 0.4619062899831933 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14319771 | prizepicks | Bucky Irving | Rush Yards | over | 0.4617374060909145 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14384895 | prizepicks | Saquon Barkley | Rush+Rec Yds | under | 0.4617240218741296 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957661 | prizepicks | Drake Maye | Pass+Rush Yds | over | 0.4616745992953499 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14466914 | prizepicks | Rashod Bateman | Recs | under | 0.4616308361075334 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14603236 | prizepicks | Adam Trautman | Recs | under | 0.4615018818313291 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14100117 | prizepicks | Rome Odunze | Player TDs | under | 0.4612227588693347 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14381578 | prizepicks | Blake Corum | Rush+Rec Yds | under | 0.4609346207143506 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14726698 | prizepicks | Garrett Wilson | Rec Yards | under | 0.4610570808144023 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311477 | prizepicks | Drake London | Recs | under | 0.460760207970067 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496678 | prizepicks | Sam Darnold | Pass Attempts | under | 0.4607461941388553 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14728054 | prizepicks | Chad Ryland | FG Made | under | 0.4604499751021095 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100096 | prizepicks | Bhayshul Tuten | Player TDs | under | 0.4604346566644943 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474435 | prizepicks | Malik Washington | Recs | under | 0.4603840594225462 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499519 | prizepicks | Kyler Murray | Pass Attempts | under | 0.4601727738117949 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14385297 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | under | 0.4600738016484244 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14283563 | prizepicks | Khalil Shakir | Recs | under | 0.4598865720902183 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688549 | prizepicks | Ashton Jeanty | Rush Yards | under | 0.4597292107661564 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311394 | prizepicks | Cam Skattebo | Rush Yards | under | 0.4593283078137874 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14381535 | prizepicks | Tony Pollard | Rush+Rec Yds | under | 0.4592694198698149 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499780 | prizepicks | Jalen Hurts | Pass Attempts | under | 0.4590711700187133 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14339442 | prizepicks | Luther Burden III | Recs | under | 0.4590476024290828 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14500182 | prizepicks | Trevor Lawrence | Pass Attempts | under | 0.4588978050321937 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14082896 | prizepicks | Hunter Luepke | Player TDs | under | 0.4588238924735965 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13993321 | prizepicks | Jeremy Ruckert | Player TDs | under | 0.4588238924735965 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978331 | prizepicks | Xavier Worthy | Player TDs | under | 0.4588238924735965 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311350 | prizepicks | Sam LaPorta | Recs | over | 0.4588230313789115 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14486869 | prizepicks | Greg Dulcich | Recs | under | 0.4585402173577317 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311794 | prizepicks | Jordan Love | Pass+Rush Yds | under | 0.4584861030698077 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14577229 | prizepicks | George Pickens | Rec Yards | under | 0.4584602103789559 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14472889 | prizepicks | Gunnar Helm | Recs | under | 0.4583677416682248 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633892 | prizepicks | Jayden Daniels | INT | under | 0.4583501170308461 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14387728 | prizepicks | Samaje Perine | Rush+Rec Yds | under | 0.4582252865229368 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343148 | prizepicks | Drake Maye | Fantasy Score | over | 0.4581229839412564 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13980684 | prizepicks | DeMario Douglas | Recs | under | 0.4580091142427647 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14295690 | prizepicks | Jalen Hurts | Rush Yards | under | 0.4574122962949021 | 2026-09-05T23:49:54Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14286631 | prizepicks | Nico Collins | Rec Yards | under | 0.4572236866968613 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14520848 | prizepicks | Bucky Irving | Rush Yards | over | 0.4570671769728915 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311858 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.456703089988302 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487268 | prizepicks | Mason Taylor | Rec Yards | under | 0.4566192712154415 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14583324 | prizepicks | Aaron Jones Sr. | Recs | under | 0.4558742507332539 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100100 | prizepicks | Chris Rodriguez Jr. | Player TDs | under | 0.4558300264532049 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14502919 | prizepicks | Geno Smith | Pass Attempts | under | 0.455699258465288 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402929 | prizepicks | Rachaad White | Rec Yards | under | 0.4554744634797391 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473609 | prizepicks | Rachaad White | Rec Yards | under | 0.4554744634797391 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14402929 | prizepicks | Rachaad White | Rec Yards | under | 0.4554744634797391 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14713173 | prizepicks | Nick Folk | Kicking Points | under | 0.4554675595964376 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534937 | prizepicks | Jayden Reed | Fantasy Score | under | 0.4548456302814508 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14004226 | prizepicks | Drake Maye | Pass Yards | over | 0.45427976892002 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14710581 | prizepicks | Evan McPherson | FG Made | under | 0.4542589675871334 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472323 | prizepicks | Tony Pollard | Recs | under | 0.453947267362236 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961532 | prizepicks | George Holani | Rush Yards | under | 0.4538154196163615 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472922 | prizepicks | Jacoby Brissett | Rush Yards | under | 0.4533829402167928 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311290 | prizepicks | Juwan Johnson | Rec Yards | over | 0.4533427567641512 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420599 | prizepicks | Justice Hill | Rush+Rec Yds | under | 0.4531542780015782 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14420452 | prizepicks | Justice Hill | Rec Yards | under | 0.4530394829393123 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14092175 | prizepicks | Trey McBride | Rec Yards | under | 0.4528539036457464 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14286632 | prizepicks | Nico Collins | Recs | under | 0.4525704804980335 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475630 | prizepicks | Andre Szmyt | Kicking Points | over | 0.4523455651025522 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14712019 | prizepicks | Tyler Loop | FG Made | under | 0.4522588913942924 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324376 | prizepicks | Jalen McMillan | Recs | under | 0.4521182891667008 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338603 | prizepicks | Bryce Young | Pass+Rush Yds | under | 0.4520232429323459 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324327 | prizepicks | Tyler Shough | Rush Yards | under | 0.452001639817007 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14405802 | prizepicks | Robert Spillane | Sacks | under | 0.4519538352721634 | 2026-09-02T09:32:24Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14685732 | prizepicks | Tremaine Edmunds | Sacks | under | 0.4519538352721632 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|13978321 | prizepicks | Pat Bryant | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|13995002 | prizepicks | Darnell Washington | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13980630 | prizepicks | Keaton Mitchell | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14214233 | prizepicks | Adam Trautman | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13983451 | prizepicks | Mason Taylor | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13988379 | prizepicks | Michael Mayer | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13995002 | prizepicks | Darnell Washington | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978321 | prizepicks | Pat Bryant | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14214233 | prizepicks | Adam Trautman | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14288899 | prizepicks | Ameer Abdullah | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978252 | prizepicks | Elijah Arroyo | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13980630 | prizepicks | Keaton Mitchell | Player TDs | under | 0.4519538352721632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14382791 | prizepicks | Jahmyr Gibbs | Rush+Rec Yds | under | 0.4517262067930967 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460635 | prizepicks | C.J. Stroud | Rush Yards | under | 0.4514924373805824 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976989 | prizepicks | Rashee Rice | Rec Yards | under | 0.4514629905248736 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14722335 | prizepicks | Keenan Allen | Rec Yards | under | 0.4514517256818828 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719327 | prizepicks | Matt Gay | FG Made | under | 0.4514214143414023 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14568554 | prizepicks | Rashan Gary | Sacks | under | 0.4513991309163556 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14095788 | prizepicks | Rashee Rice | Recs | over | 0.4510940856474095 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14568680 | prizepicks | Jalen Thompson | Sacks | under | 0.4507809068366109 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14505900 | prizepicks | Malik Willis | Pass Attempts | under | 0.4506812129361384 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14372903 | prizepicks | Colby Parkinson | Rec Yards | under | 0.4505999258578782 | 2026-09-02T14:24:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14645932 | prizepicks | Malik Willis | Pass Attempts | under | 0.4506812129361384 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14513942 | prizepicks | Travis Etienne Jr. | Recs | under | 0.4504754289657293 | 2026-09-05T10:30:11Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351529 | prizepicks | Geno Smith | Rush Yards | under | 0.4503766248445573 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311258 | prizepicks | Breece Hall | Rush Yards | under | 0.4503739875580104 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311558 | prizepicks | Quentin Johnston | Rec Yards | under | 0.4502772852097196 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14596390 | prizepicks | Kenny Gainwell | Rec Yards | under | 0.4496178117919329 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311267 | prizepicks | Chase Brown | Recs | under | 0.4496107841486457 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311045 | prizepicks | De'Von Achane | Rush Yards | under | 0.44943374069359 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472190 | prizepicks | Dak Prescott | Rush Yards | under | 0.4491153012166713 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14711261 | prizepicks | Daniel Carlson | FG Made | under | 0.4494244239601861 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472193 | prizepicks | Dak Prescott | Rush Yards | under | 0.4491153012166713 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14100092 | prizepicks | Omarion Hampton | Player TDs | under | 0.4490751457938284 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14413156 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.4490614050279274 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472535 | prizepicks | Daniel Jones | Rush Yards | under | 0.4490124131103038 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
@@ -558,58 +604,63 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14136657 | prizepicks | Christian Watson | Recs | under | 0.4488093027332385 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534208 | prizepicks | Bhayshul Tuten | Fantasy Score | under | 0.4483576051833677 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472178 | prizepicks | Isaiah Likely | Recs | under | 0.4483256301642024 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14709255 | prizepicks | Cairo Santos | FG Made | under | 0.4482316197267906 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540804 | prizepicks | Kenny Gainwell | Recs | over | 0.4481600540522116 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346357 | prizepicks | Darnell Mooney | Rec Yards | under | 0.4481326042532182 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14500055 | prizepicks | Dak Prescott | Pass Attempts | under | 0.4479503595032845 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14432863 | prizepicks | Kobie Turner | Sacks | under | 0.4477608477701696 | 2026-09-03T16:21:45Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14601472 | prizepicks | Samaje Perine | Rec Yards | under | 0.4476324022572508 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14653882 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4477829231606316 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095985 | prizepicks | Tetairoa McMillan | Player TDs | under | 0.4474158987000378 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503112 | prizepicks | Bo Nix | Pass Attempts | under | 0.4473169694298141 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14341050 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.4471038276035515 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990773 | prizepicks | Blake Corum | Rush Yards | under | 0.4470733314213888 | 2026-09-05T10:30:11Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14591303 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.4471038276035515 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14499372 | prizepicks | Caleb Williams | Pass Attempts | over | 0.4468929632685221 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358237 | prizepicks | Kyler Murray | Pass Yards | under | 0.4468148854144583 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136659 | prizepicks | Parker Washington | Recs | under | 0.4467701329681687 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979447 | prizepicks | Josh Allen | Pass+Rush Yds | under | 0.4467412059971416 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14562245 | prizepicks | Dak Prescott | Pass+Rush Yds | under | 0.4463955229513571 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14257580 | prizepicks | Drake London | Rec Yards | under | 0.4463853475709516 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311021 | prizepicks | Bucky Irving | Rush Yards | over | 0.4463488413838337 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14267218 | prizepicks | Devaughn Vele | Recs | under | 0.4462627500667449 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256249 | prizepicks | Baker Mayfield | Pass+Rush Yds | under | 0.4461848835460644 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100141 | prizepicks | Nico Collins | Player TDs | under | 0.4456777792493395 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995749 | prizepicks | Trevor Lawrence | Player TDs | over | 0.4454731868026469 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477578 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.4453741428984861 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255860 | prizepicks | Juwan Johnson | Rec Yards | over | 0.4452963200014201 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989753 | prizepicks | Brock Purdy | Pass+Rush Yds | under | 0.4450810529389805 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14403004 | prizepicks | David Njoku | Rec Yards | under | 0.4448071490632663 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14591482 | prizepicks | Trevor Lawrence | Pass Attempts | under | 0.4450074513335762 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311659 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.4449165243999373 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14093870 | prizepicks | Malik Nabers | Recs | under | 0.4447604868332342 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14495271 | prizepicks | Jayden Reed | Recs | over | 0.4447143088613272 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14594844 | prizepicks | Dontayvion Wicks | Recs | under | 0.4445614977345798 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14573517 | prizepicks | Andy Borregales | FG Made | under | 0.4443453114310078 | 2026-09-06T23:49:06Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13961569 | prizepicks | Sam Darnold | Rush Yards | under | 0.4443383103097225 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14486331 | prizepicks | George Kittle | Recs | under | 0.4439080342370805 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14384058 | prizepicks | Emari Demercado | Player TDs | under | 0.443824401154768 | 2026-09-02T00:04:19Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14402830 | prizepicks | Woody Marks | Recs | under | 0.4444196096230335 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720915 | prizepicks | Kyle Monangai | Rush Yards | under | 0.4442178682726541 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14643452 | prizepicks | Jauan Jennings | Rec Yards | over | 0.444207599818135 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14294905 | prizepicks | Jauan Jennings | Rec Yards | over | 0.444207599818135 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633690 | prizepicks | Jordan Love | Pass TDs | under | 0.4439207607577622 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996250 | prizepicks | Drew Sample | Player TDs | under | 0.443824401154768 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978016 | prizepicks | Darius Slayton | Player TDs | under | 0.443803872076203 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14384058 | prizepicks | Emari Demercado | Player TDs | under | 0.443824401154768 | 2026-09-02T00:04:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14503528 | prizepicks | C.J. Stroud | Pass Attempts | under | 0.4437571826692809 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14506276 | prizepicks | Drake Maye | Pass Yards | over | 0.4437514937258056 | 2026-09-05T05:39:10Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311325 | prizepicks | Emeka Egbuka | Recs | under | 0.4437415916664602 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472726 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.4435949656791259 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14697875 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.4433753613469996 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100140 | prizepicks | David Montgomery | Player TDs | under | 0.4432260726699371 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343352 | prizepicks | CeeDee Lamb | Fantasy Score | under | 0.4431863188611217 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311686 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.4430556213051979 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14544361 | prizepicks | Tyquan Thornton | Rec Yards | under | 0.4428780788232093 | 2026-09-06T09:21:45Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14352419 | prizepicks | Saquon Barkley | Recs | under | 0.4428658394176143 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13993299 | prizepicks | Kyler Murray | Player TDs | over | 0.4428625525953624 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633964 | prizepicks | Dak Prescott | Pass TDs | under | 0.4428062978128987 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14719252 | prizepicks | Jake Elliott | Kicking Points | under | 0.4427947303081995 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649466 | prizepicks | Nick Herbig | Sacks | under | 0.4426791273369448 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14266945 | prizepicks | C.J. Stroud | Pass Yards | under | 0.4423912111505674 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14138600 | prizepicks | Rasheen Ali | Player TDs | under | 0.4423733043090485 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472332 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4423675088396603 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633918 | prizepicks | Aaron Rodgers | INT | under | 0.4422714438301796 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486859 | prizepicks | Xavier Hutchinson | Rec Yards | under | 0.4421960358653353 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14231271 | prizepicks | Rhamondre Stevenson | Rush Yards | under | 0.4421945851171088 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14100097 | prizepicks | Colston Loveland | Player TDs | under | 0.4418772181190026 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402569 | prizepicks | Aaron Rodgers | Pass+Rush Yds | under | 0.441403235417911 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14600967 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.4413786296410364 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14568556 | prizepicks | Von Miller | Sacks | under | 0.4412987351855325 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14389725 | prizepicks | Cam Skattebo | Rush+Rec Yds | under | 0.4412879808674881 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14498722 | prizepicks | Trey McBride | Rec Yards | over | 0.4409221857298291 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14524529 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.4408813314225722 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14372902 | prizepicks | Colby Parkinson | Rec Yards | under | 0.4405381038996795 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14596010 | prizepicks | Parker Washington | Rec Yards | under | 0.4405553393297242 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13979188 | prizepicks | Will Reichard | Kicking Points | over | 0.4401119902011368 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311371 | prizepicks | Jameson Williams | Rec Yards | under | 0.4400320448368862 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14713170 | prizepicks | Chris Boswell | FG Made | under | 0.4397849578047212 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472293 | prizepicks | Malik Washington | Rec Yards | under | 0.4395357680637646 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346304 | prizepicks | Quentin Johnston | Player TDs | under | 0.4392667193456356 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311232 | prizepicks | Zay Flowers | Rec Yards | under | 0.439010677171251 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -618,43 +669,46 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14338715 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.4386114230260741 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14493356 | prizepicks | Jaylen Warren | Rush Yards | over | 0.4385028552433812 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534887 | prizepicks | Charlie Kolar | Fantasy Score | under | 0.4381546601337691 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311926 | prizepicks | Kyler Murray | Pass Yards | over | 0.4376855585821194 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475392 | prizepicks | Jared Goff | Pass+Rush Yds | over | 0.4379520317793104 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14710857 | prizepicks | Jake Bates | FG Made | under | 0.4376385875556612 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339582 | prizepicks | Jerry Jeudy | Recs | under | 0.4375868319347296 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343228 | prizepicks | Jayden Reed | Fantasy Score | over | 0.4375793284609719 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14532835 | prizepicks | Nick Bosa | Sacks | under | 0.4374343129839066 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697883 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.4374591153393864 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474949 | prizepicks | Jayden Daniels | Pass Yards | under | 0.4373740833429231 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14295677 | prizepicks | Jacory Croskey-Merritt | Rush Yards | under | 0.4370441429522242 | 2026-09-08T09:35:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402530 | prizepicks | Jared Goff | Pass+Rush Yds | under | 0.4370082254567797 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14586370 | prizepicks | RJ Harvey | Recs | under | 0.4368884062606796 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13979215 | prizepicks | Will Reichard | FG Made | over | 0.4368395537245189 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14615528 | prizepicks | Nick Bolton | Sacks | under | 0.4367405576124283 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14613939 | prizepicks | Riley Moss | Sacks | under | 0.4367405576124283 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472550 | prizepicks | Chris Olave | Rec Yards | over | 0.4365881639758353 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14615528 | prizepicks | Nick Bolton | Sacks | under | 0.4367405576124283 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14381312 | prizepicks | Breece Hall | Rush+Rec Yds | under | 0.4364431598219946 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14499512 | prizepicks | Jordan Love | Pass Attempts | under | 0.4364126404950952 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13996119 | prizepicks | Ka'imi Fairbairn | Kicking Points | over | 0.4362079468472862 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953336 | prizepicks | Jacoby Brissett | Pass TDs | over | 0.43600449933762 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380688 | prizepicks | Christian McCaffrey | Rush+Rec Yds | under | 0.4359741742457619 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14339553 | prizepicks | Blake Corum | Recs | under | 0.4359102550561482 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14380691 | prizepicks | Kyren Williams | Rush+Rec Yds | over | 0.4357679978421502 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14406069 | prizepicks | Trent McDuffie | Sacks | under | 0.4357292472508176 | 2026-09-02T09:32:24Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14336858 | prizepicks | Caleb Williams | Pass TDs | under | 0.4359101795596312 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719997 | prizepicks | Montez Sweat | Sacks | under | 0.4359085655113743 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14008761 | prizepicks | Bo Melton | Player TDs | under | 0.4357292472508176 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294833 | prizepicks | Jauan Jennings | Recs | over | 0.4356971399754132 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14536907 | prizepicks | Alec Pierce | Rec Yards | under | 0.4354366722076117 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472885 | prizepicks | Javonte Williams | Rec Yards | under | 0.4353911043070424 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13976219 | prizepicks | George Pickens | Rec Yards | under | 0.4351896658773659 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357941 | prizepicks | Isaiah Likely | Fantasy Score | under | 0.4351751495892044 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14283633 | prizepicks | Dare Ogunbowale | Player TDs | under | 0.4348218860279355 | 2026-09-02T00:04:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978257 | prizepicks | Drake Maye | Player TDs | over | 0.4346914673017166 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14632570 | prizepicks | Jalen Hurts | Pass TDs | under | 0.4351044355007829 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14631875 | prizepicks | Patrick Mahomes | Pass TDs | under | 0.4346800593472462 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14339230 | prizepicks | Bo Nix | Pass+Rush Yds | under | 0.4346725564655044 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14499339 | prizepicks | Bryce Young | Pass Attempts | under | 0.4345684785397963 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497547 | prizepicks | Matthew Stafford | Pass Attempts | under | 0.4342213658506284 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14475358 | prizepicks | Kyler Murray | Pass+Rush Yds | over | 0.4341767251399931 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375722 | prizepicks | Alvin Kamara | Player TDs | under | 0.4341659919885929 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14312494 | prizepicks | Dyami Brown | Player TDs | under | 0.4341659919885929 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381219 | prizepicks | Kenneth Walker III | Rush+Rec Yds | under | 0.4341067023059445 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294916 | prizepicks | Kyler Murray | Rush Yards | over | 0.4339444894226787 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990932 | prizepicks | Deebo Samuel Sr. | Recs | under | 0.4338379616311828 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14324182 | prizepicks | Jayden Daniels | Pass TDs | under | 0.433796918142878 | 2026-09-03T11:08:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14495520 | prizepicks | Terry McLaurin | Rec Yards | over | 0.4337376672143004 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14324140 | prizepicks | Jared Goff | Pass TDs | under | 0.4335337494868525 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14634013 | prizepicks | Jordan Love | INT | under | 0.4334620191558507 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633942 | prizepicks | Tua Tagovailoa | INT | under | 0.4334182934534427 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337053 | prizepicks | Rome Odunze | Rec Yards | under | 0.432912316437815 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14095730 | prizepicks | Kenneth Walker III | Rec Yards | under | 0.432883913405133 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14403222 | prizepicks | Kalif Raymond | Rec Yards | under | 0.4328734065884043 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473914 | prizepicks | Justice Hill | Rush Yards | under | 0.4327720257430973 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311671 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.4326017646285045 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14488683 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.4326017646285045 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375950 | prizepicks | Wan'Dale Robinson | Recs | over | 0.4325231366170483 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136923 | prizepicks | Jayden Daniels | Pass+Rush Yds | under | 0.4324263536565943 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -665,319 +719,320 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14173097 | prizepicks | Greg Dulcich | Rec Yards | over | 0.4320990931077837 | 2026-09-01T16:14:47Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14259226 | prizepicks | Bucky Irving | Recs | under | 0.431781676612005 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311875 | prizepicks | Jared Goff | Pass Yards | over | 0.4316943890844968 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343143 | prizepicks | Cooper Kupp | Fantasy Score | under | 0.4316439100610337 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14687047 | prizepicks | Zaven Collins | Sacks | under | 0.431678575117642 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311542 | prizepicks | Ladd McConkey | Recs | under | 0.4315444748009635 | 2026-08-31T23:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974066 | prizepicks | AJ Barner | Recs | under | 0.4315183817656471 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14601416 | prizepicks | Demarcus Robinson | Recs | under | 0.4314117898115687 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14265098 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.4313630791313058 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14719564 | prizepicks | Riley Patterson | Kicking Points | under | 0.4313317025598622 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691247 | prizepicks | Ashton Dulin | Rec Yards | under | 0.4311608121599254 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100146 | prizepicks | Saquon Barkley | Player TDs | under | 0.4311139101839509 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14498328 | prizepicks | George Kittle | Rec Yards | over | 0.4309054088738624 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14135019 | prizepicks | DK Metcalf | Rec Yards | under | 0.4308794621539333 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686589 | prizepicks | Kirk Cousins | Pass+Rush Yds | under | 0.4307013832230738 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311511 | prizepicks | Kyler Murray | Pass Yards | under | 0.4306523920776157 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14136803 | prizepicks | Matthew Golden | Rec Yards | under | 0.4306033261793224 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134375 | prizepicks | Isaiah Davis | Player TDs | under | 0.4298937282887769 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580432 | prizepicks | Patrick Mahomes | Pass+Rush Yds | over | 0.4297877740970844 | 2026-09-07T04:28:26Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14489111 | prizepicks | Nick Folk | FG Made | over | 0.4294535944309002 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974069 | prizepicks | A.J. Brown | Recs | under | 0.4293914030615142 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14472228 | prizepicks | Samaje Perine | Rush Yards | under | 0.4290211577798963 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14626133 | prizepicks | Chris Rodriguez Jr. | Rush+Rec Yds | under | 0.428918792107074 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311047 | prizepicks | Malik Willis | Pass TDs | under | 0.4288651806887396 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978245 | prizepicks | A.J. Brown | Player TDs | under | 0.4281430591818488 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14341653 | prizepicks | Chris Rodriguez Jr. | Rush Yards | under | 0.4281273095344726 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475127 | prizepicks | Trey McBride | Rec Yards | over | 0.4279072798887235 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14129385 | prizepicks | Cam Skattebo | Recs | under | 0.4275848835579523 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14385308 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | over | 0.4275126343913455 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13971084 | prizepicks | Jake Bates | FG Made | over | 0.4269967119866793 | 2026-08-31T23:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14577221 | prizepicks | Alec Pierce | Rec Yards | over | 0.4266400911512142 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632573 | prizepicks | Jaxson Dart | Pass TDs | under | 0.4276207266267651 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14630090 | prizepicks | Cam Skattebo | Recs | under | 0.4275848835579523 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14536926 | prizepicks | Alec Pierce | Rec Yards | over | 0.4266400911512142 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14577221 | prizepicks | Alec Pierce | Rec Yards | over | 0.4266400911512142 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13988388 | prizepicks | Jalen Tolbert | Player TDs | under | 0.4263520362785324 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324333 | prizepicks | Cade Otton | Recs | under | 0.4260919618677594 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136827 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.4256504907585309 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14535165 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.4255789972540609 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632236 | prizepicks | Joe Burrow | Pass TDs | under | 0.4253915571227571 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473107 | prizepicks | Woody Marks | Rush Yards | over | 0.4253661736963574 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13980644 | prizepicks | Jacoby Brissett | Player TDs | over | 0.4252464624413017 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14283564 | prizepicks | James Cook III | Rush Yards | under | 0.4251496828269632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978260 | prizepicks | Jaxon Smith-Njigba | Player TDs | under | 0.4251038088310419 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14276146 | prizepicks | Dallas Goedert | Recs | under | 0.42493256461686 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14718092 | prizepicks | Jared Goff | Rush Yards | under | 0.4247470233940393 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14253961 | prizepicks | Chris Olave | Rec Yards | over | 0.4247190140127097 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14505886 | prizepicks | Malik Willis | Pass Attempts | under | 0.4246366789596782 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341835 | prizepicks | Brenton Strange | Rec Yards | over | 0.4246352319219728 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14256017 | prizepicks | Devaughn Vele | Rec Yards | under | 0.4246058833232413 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403214 | prizepicks | Cole Kmet | Recs | under | 0.4245515285008516 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320404 | prizepicks | Baker Mayfield | Rush Yards | under | 0.4244469258452195 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294823 | prizepicks | Jauan Jennings | Rec Yards | under | 0.4242083759735623 | 2026-09-05T10:30:11Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472487 | prizepicks | Pat Freiermuth | Recs | under | 0.4237253421846789 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685247 | prizepicks | Ashton Jeanty | Rush+Rec Yds | under | 0.4231031600586779 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14536912 | prizepicks | Tyler Warren | Recs | under | 0.4230937436681374 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294836 | prizepicks | Aaron Jones Sr. | Rush Yards | under | 0.4229316577993425 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381534 | prizepicks | Tony Pollard | Rush+Rec Yds | over | 0.4229291307474101 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978329 | prizepicks | Brashard Smith | Player TDs | under | 0.4229064821785081 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472203 | prizepicks | Mike Gesicki | Recs | under | 0.4228668380756092 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14536905 | prizepicks | Alec Pierce | Recs | under | 0.4227452711054944 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339664 | prizepicks | George Holani | Rec Yards | under | 0.4226355382573107 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14633934 | prizepicks | Josh Allen | INT | under | 0.4226751906833077 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13955063 | prizepicks | Bucky Irving | Rush TDs | under | 0.4226355382573108 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14138599 | prizepicks | Chris Moore | Player TDs | under | 0.4226355382573107 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978307 | prizepicks | Konata Mumpfield | Player TDs | under | 0.4226355382573107 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311596 | prizepicks | Caleb Williams | Pass Yards | over | 0.4223016354585733 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311570 | prizepicks | Caleb Williams | Pass Yards | over | 0.4223016354585733 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996248 | prizepicks | Kalif Raymond | Player TDs | under | 0.4222098261039011 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649190 | prizepicks | Jeremy Chinn | Sacks | under | 0.4222098261039011 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473084 | prizepicks | Greg Dulcich | Rec Yards | over | 0.4221741212356502 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420726 | prizepicks | Kendrick Bourne | Recs | under | 0.4220822953088389 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14170414 | prizepicks | Jaxson Dart | Rush Yards | under | 0.4218118619542372 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14390038 | prizepicks | George Holani | Fantasy Score | under | 0.4215614458363541 | 2026-09-05T23:49:54Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14709225 | prizepicks | Ryan Fitzgerald | Kicking Points | under | 0.4216314207291037 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633910 | prizepicks | Dak Prescott | INT | under | 0.421588375026958 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14464731 | prizepicks | Devonte Wyatt | Sacks | under | 0.4214262151916292 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475394 | prizepicks | Ka'imi Fairbairn | FG Made | over | 0.4212806217714919 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257517 | prizepicks | Bijan Robinson | Rec Yards | under | 0.4210773785009178 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14095438 | prizepicks | Javonte Williams | Rec Yards | under | 0.4208411178769604 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14616487 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.4205166439335592 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633702 | prizepicks | Geno Smith | INT | under | 0.4210020669816259 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14308536 | prizepicks | Rashee Rice | Rec Targets | over | 0.420449891677032 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14573450 | prizepicks | Harrison Mevis | FG Made | under | 0.4203005045294119 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14495042 | prizepicks | Jayden Reed | Rec Yards | under | 0.4199910249946978 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14506262 | prizepicks | Jayden Reed | Rec Yards | under | 0.4199910249946978 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472795 | prizepicks | Braelon Allen | Rush Yards | over | 0.4197007335683771 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381208 | prizepicks | J.K. Dobbins | Rush+Rec Yds | over | 0.4195785919271884 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13990648 | prizepicks | Christian McCaffrey | Rush Yards | under | 0.4194093651936446 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14476357 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.4192739802488032 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475484 | prizepicks | Jalen Nailor | Rec Yards | under | 0.4190218691838785 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14339699 | prizepicks | D'Andre Swift | Rec Yards | under | 0.4188173652740397 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265383 | prizepicks | Bo Nix | Rush Yards | over | 0.4187833230401236 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14274021 | prizepicks | Nico Collins | Rec Yards | over | 0.4182412166334037 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14495357 | prizepicks | Andrei Iosivas | Recs | under | 0.4185150711454797 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14301976 | prizepicks | Dalton Kincaid | Recs | under | 0.4181874453435613 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311473 | prizepicks | Drake London | Rec Yards | under | 0.4177803364251846 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14264382 | prizepicks | Rashee Rice | Rec Yards | under | 0.4176187349462541 | 2026-09-05T23:49:54Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311524 | prizepicks | Tetairoa McMillan | Recs | under | 0.4174089873849841 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346856 | prizepicks | Xavier Worthy | Fantasy Score | under | 0.4173933717952967 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14512509 | prizepicks | Zay Flowers | Rec Yards | over | 0.4170931182918688 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136454 | prizepicks | Trevor Lawrence | Pass+Rush Yds | under | 0.4168869899883403 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14335790 | prizepicks | Jahmyr Gibbs | Rec Yards | under | 0.4168815888590352 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100122 | prizepicks | Jaylen Warren | Player TDs | under | 0.4166674839129243 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136690 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.4166547247639196 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473658 | prizepicks | Sam LaPorta | Rec Yards | over | 0.4164567372437047 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475740 | prizepicks | Chig Okonkwo | Rec Yards | under | 0.4164068434590744 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14630091 | prizepicks | Pat Bryant | Rec Yards | over | 0.4162978689414318 | 2026-09-08T14:29:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13978034 | prizepicks | Isaiah Likely | Player TDs | under | 0.4161862226583585 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14341652 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.4160379072691744 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14172861 | prizepicks | Greg Dulcich | Rec Yards | under | 0.4160196322928339 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14101038 | prizepicks | Jahmyr Gibbs | Player TDs | under | 0.4157773219380505 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402584 | prizepicks | Justin Herbert | Pass+Rush Yds | under | 0.4155095358767086 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136461 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.4154521195909653 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472295 | prizepicks | Justin Herbert | Rush Yards | under | 0.4154140359511917 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978237 | prizepicks | Rashid Shaheed | Player TDs | under | 0.4153363513939685 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472258 | prizepicks | Derrick Henry | Rush Yards | over | 0.414786144895219 | 2026-09-06T21:18:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311218 | prizepicks | Derrick Henry | Rush Yards | over | 0.4147861448952189 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475334 | prizepicks | Tyjae Spears | Recs | under | 0.4147567790772979 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324365 | prizepicks | Jalen McMillan | Rec Yards | under | 0.4147339822443747 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402900 | prizepicks | Chig Okonkwo | Recs | under | 0.4147299160829376 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14502726 | prizepicks | Tyler Higbee | Recs | over | 0.4145805233030574 | 2026-09-05T00:53:35Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14346404 | prizepicks | Tyler Allgeier | Rec Yards | under | 0.4146621155420404 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14495525 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.4144994988194241 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14372896 | prizepicks | Colby Parkinson | Recs | over | 0.413902386878878 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14486215 | prizepicks | George Kittle | Rec Yards | over | 0.413871390073236 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13978290 | prizepicks | Demarcus Robinson | Player TDs | under | 0.4135638397294527 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14688018 | prizepicks | Minkah Fitzpatrick | Sacks | under | 0.4135638397294527 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14137008 | prizepicks | T.J. Hockenson | Recs | under | 0.4135290688504205 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14483875 | prizepicks | Rico Dowdle | Recs | over | 0.4134140218264001 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472278 | prizepicks | Darnell Mooney | Rec Yards | over | 0.4133597500342425 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14100134 | prizepicks | Breece Hall | Player TDs | under | 0.4132875810044671 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095433 | prizepicks | CeeDee Lamb | Recs | under | 0.4132572658392608 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990902 | prizepicks | Puka Nacua | Recs | over | 0.4131535367165884 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14323816 | prizepicks | Zay Flowers | Rec Yards | over | 0.4129843527797963 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974056 | prizepicks | Jaxon Smith-Njigba | Recs | over | 0.4129110758999041 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14311244 | prizepicks | Travis Etienne Jr. | Rush Yards | under | 0.4131242936966869 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503114 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.4126904967435868 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14475398 | prizepicks | Bhayshul Tuten | Recs | under | 0.4125088528817876 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598325 | prizepicks | Kyle Juszczyk | Recs | under | 0.4120269742207478 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14634387 | prizepicks | Bo Nix | INT | under | 0.4123847074617912 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14402851 | prizepicks | Woody Marks | Rush+Rec Yds | under | 0.4119314602681205 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14359059 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.4116683251131585 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095833 | prizepicks | Noah Gray | Rec Yards | under | 0.4115214116485419 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14584183 | prizepicks | Dawson Knox | Recs | over | 0.4114655142495034 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996700 | prizepicks | Ka'imi Fairbairn | Kicking Points | over | 0.4111526214145269 | 2026-09-02T22:31:15Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134616 | prizepicks | Brock Bowers | Rec Yards | under | 0.4111153521386601 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14356857 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.4108141165781378 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528885 | prizepicks | Chase Young | Sacks | over | 0.4107238893722673 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474446 | prizepicks | Samaje Perine | Rush Yards | under | 0.4106144326581398 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573449 | prizepicks | Eddy Pineiro | FG Made | under | 0.4103905025018326 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14633926 | prizepicks | Jared Goff | INT | under | 0.4107055996238207 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14379527 | prizepicks | Travis Hunter | Rec Yards | over | 0.4104496093217328 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498947 | prizepicks | Cam Ward | Rush Yards | under | 0.4104002363390879 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294832 | prizepicks | Jauan Jennings | Recs | under | 0.4103784550141347 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380043 | prizepicks | George Holani | Rush+Rec Yds | under | 0.409497916728798 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472490 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.4094941222037243 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472869 | prizepicks | Derrick Henry | Rec Yards | under | 0.4088505822422373 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14288903 | prizepicks | Elijah Moore | Player TDs | under | 0.4087887802741321 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534938 | prizepicks | Jayden Reed | Fantasy Score | over | 0.4087311965395106 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14603234 | prizepicks | Adam Trautman | Recs | over | 0.4086768720834571 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14311277 | prizepicks | Dalton Schultz | Recs | under | 0.4086626692796785 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14365755 | prizepicks | Dalton Schultz | Recs | under | 0.4086626692796785 | 2026-09-01T09:42:28Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275106 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.4082141096555423 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14568559 | prizepicks | Donovan Ezeiruaku | Sacks | under | 0.4079806864017873 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14613940 | prizepicks | Talanoa Hufanga | Sacks | under | 0.4079806864017873 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14568559 | prizepicks | Donovan Ezeiruaku | Sacks | under | 0.4079806864017873 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14462615 | prizepicks | Zaire Franklin | Sacks | under | 0.4079806864017873 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12396203 | prizepicks | Justin Jefferson | Player TDs | under | 0.4079806864017872 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995005 | prizepicks | Brian Robinson Jr. | Player TDs | under | 0.4079806864017872 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|12396203 | prizepicks | Justin Jefferson | Player TDs | under | 0.4079806864017872 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402670 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.4079603462928327 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688420 | prizepicks | Jaylin Noel | Recs | under | 0.4078458350024065 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100088 | prizepicks | Trey McBride | Player TDs | under | 0.407760959218701 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499884 | prizepicks | Caleb Williams | Pass+Rush Yds | over | 0.4075475431356883 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100136 | prizepicks | Kenny Gainwell | Player TDs | under | 0.4072087738011996 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14221958 | prizepicks | Rashid Shaheed | Recs | under | 0.4068381848184328 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14404009 | prizepicks | Cole Kmet | Recs | over | 0.4068261274777773 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14375939 | prizepicks | Davante Adams | Rec Yards | over | 0.4068175002530474 | 2026-09-02T00:04:19Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14093844 | prizepicks | Cam Skattebo | Rec Yards | under | 0.406604802078343 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294844 | prizepicks | Christian Watson | Rec Yards | over | 0.4065195199656034 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472266 | prizepicks | Colby Parkinson | Rec Yards | over | 0.4065046627344549 | 2026-09-04T16:17:23Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14483876 | prizepicks | Rico Dowdle | Rush Yards | under | 0.4064703552870312 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100089 | prizepicks | De'Von Achane | Player TDs | under | 0.4061586137333017 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14473096 | prizepicks | Quentin Johnston | Rec Yards | over | 0.4061544686364358 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559965 | prizepicks | Tyler Warren | Fantasy Score | under | 0.4059622556176796 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311879 | prizepicks | Jared Goff | Pass Yards | over | 0.4059292878641407 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499494 | prizepicks | Joe Burrow | Pass Attempts | under | 0.4058091271280324 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14283634 | prizepicks | Tre Tucker | Recs | under | 0.4057975475732638 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472538 | prizepicks | Daniel Jones | Rush Yards | under | 0.4055396129323028 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319749 | prizepicks | Baker Mayfield | Pass TDs | under | 0.4054370672276179 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14502727 | prizepicks | Tyler Higbee | Rec Yards | over | 0.4049677210673355 | 2026-09-08T14:29:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14486216 | prizepicks | George Kittle | Rec Yards | under | 0.4049005080664299 | 2026-09-08T04:27:30Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14362831 | prizepicks | Rhamondre Stevenson | Recs | under | 0.4048117920002293 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14580954 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4048102032156391 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14599979 | prizepicks | Tua Tagovailoa | Rush Yards | under | 0.4046698816422722 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996375 | prizepicks | Harrison Butker | FG Made | over | 0.4050106657130244 | 2026-09-04T00:57:06Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14387938 | prizepicks | Drew Sample | Recs | over | 0.4050010139195575 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14726341 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.4048102032156391 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977009 | prizepicks | Wil Lutz | Kicking Points | over | 0.4044275227318092 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14311386 | prizepicks | Josh Allen | Rush Yards | under | 0.4043952071500671 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14344963 | prizepicks | Dalton Schultz | Rec Yards | over | 0.4037524829446267 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685977 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.4037377951961871 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472410 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.4036225487918612 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13994675 | prizepicks | Joe Burrow | Player TDs | over | 0.403486119055173 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311584 | prizepicks | Ladd McConkey | Rec Yards | under | 0.4030130138028089 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978302 | prizepicks | Brock Purdy | Player TDs | over | 0.4027990486618759 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14733723 | prizepicks | Cam Little | FG Made | under | 0.4033824473582058 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633914 | prizepicks | Jacoby Brissett | INT | under | 0.4029918898675213 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311859 | prizepicks | Bijan Robinson | Rush Yards | under | 0.4028489440221099 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357898 | prizepicks | Harold Fannin Jr. | Fantasy Score | over | 0.4027536251517101 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393665 | prizepicks | Derrick Henry | Rush+Rec Yds | over | 0.4027448165019631 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420557 | prizepicks | Pat Freiermuth | Recs | over | 0.4027231060865681 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14486040 | prizepicks | Matthew Golden | Rec Yards | under | 0.4027061616684341 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633979 | prizepicks | Lamar Jackson | INT | under | 0.402542846643708 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14379063 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.4024060646498066 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311611 | prizepicks | Trey McBride | Recs | over | 0.4020790808023237 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311610 | prizepicks | Trey McBride | Recs | under | 0.4019475590293702 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095705 | prizepicks | Jake Ferguson | Recs | under | 0.4018631229955447 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14343227 | prizepicks | Jayden Reed | Fantasy Score | under | 0.4015101155418576 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697055 | prizepicks | Darren Waller | Rec Yards | under | 0.4018012800727446 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275116 | prizepicks | Patrick Mahomes | Pass+Rush Yds | over | 0.4014369208624908 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14437364 | prizepicks | Quentin Johnston | Rec Yards | over | 0.4013824152179923 | 2026-09-02T22:17:03Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586397 | prizepicks | Pat Bryant | Recs | under | 0.401187845509102 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393601 | prizepicks | James Cook III | Recs | under | 0.4005266211377407 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14174312 | prizepicks | Parker Washington | Rec Yards | over | 0.4004615385123002 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990646 | prizepicks | Christian McCaffrey | Recs | over | 0.4003420487328095 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697090 | prizepicks | Treylon Burks | Rec Yards | under | 0.4002153940963353 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995878 | prizepicks | Cole Kmet | Player TDs | under | 0.3998801313919831 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13986164 | prizepicks | Saquon Barkley | Rec TDs | under | 0.3998801313919831 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14138628 | prizepicks | Jonathan Taylor | Player TDs | under | 0.3997791397939798 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319967 | prizepicks | Sam LaPorta | Rec Yards | over | 0.3996221024885185 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14357944 | prizepicks | Darius Slayton | Fantasy Score | over | 0.399401075390716 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14486329 | prizepicks | George Kittle | Recs | over | 0.3993725306866087 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14380200 | prizepicks | Rico Dowdle | Rush+Rec Yds | under | 0.399351244895308 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633930 | prizepicks | C.J. Stroud | INT | under | 0.3989568450559904 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311132 | prizepicks | Wan'Dale Robinson | Rec Yards | under | 0.3989134703464709 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14488316 | prizepicks | Colby Parkinson | Rec Yards | over | 0.3986395907255067 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13978292 | prizepicks | Kyren Williams | Player TDs | under | 0.3984395755511943 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14643444 | prizepicks | Malik Washington | Rec Yards | under | 0.3984966296605765 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977048 | prizepicks | Andre Szmyt | FG Made | over | 0.3980910176719046 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497552 | prizepicks | Matthew Stafford | Pass Attempts | over | 0.3979500953190924 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14339175 | prizepicks | Jahmyr Gibbs | Recs | under | 0.3977977711711886 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14735816 | prizepicks | Keenan Allen | Rec Yards | over | 0.397959131418472 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632535 | prizepicks | Lamar Jackson | Pass TDs | under | 0.3979097693632163 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14339745 | prizepicks | Jahmyr Gibbs | Recs | under | 0.3977977711711886 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580126 | prizepicks | Kenneth Walker III | Rush Yards | over | 0.3976114629388032 | 2026-09-07T04:28:26Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14598316 | prizepicks | Demarcus Robinson | Recs | over | 0.3974932941894925 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311483 | prizepicks | DK Metcalf | Recs | over | 0.3974303878159453 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385287 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.3973629819885451 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14391994 | prizepicks | Jack Bech | Rec Yards | under | 0.3971654048405608 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961516 | prizepicks | TreVeyon Henderson | Rush Yards | under | 0.3969157611896623 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14501795 | prizepicks | George Holani | Rush Yards | under | 0.3966691563220187 | 2026-09-05T23:49:54Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14171763 | prizepicks | De'Von Achane | Rec Yards | under | 0.3969600490331042 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14379520 | prizepicks | Travis Hunter | Recs | over | 0.3969562314963575 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14615523 | prizepicks | Chris Jones | Sacks | under | 0.3961654646212768 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14275199 | prizepicks | Xavier Worthy | Recs | under | 0.3961461702494332 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14294888 | prizepicks | Jordan Love | Pass Yards | under | 0.3960870526203814 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961515 | prizepicks | Drake Maye | Pass TDs | over | 0.3959468061011881 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14719811 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.3961058106957805 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532808 | prizepicks | Dawson Knox | Fantasy Score | over | 0.3958711161739174 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311367 | prizepicks | Jameson Williams | Recs | under | 0.3957476893611642 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403227 | prizepicks | Cole Kmet | Rec Yards | under | 0.395704765002863 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475270 | prizepicks | Cam Ward | Rush Yards | under | 0.3955123100395397 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957668 | prizepicks | Cooper Kupp | Rec Yards | under | 0.3952760602597185 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14092602 | prizepicks | Hunter Henry | Recs | under | 0.3951487167738023 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14503515 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.3949605899923747 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14095847 | prizepicks | Tyquan Thornton | Rec Yards | under | 0.3946774096788699 | 2026-08-31T18:38:20Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14493634 | prizepicks | Puka Nacua | Rec Yards | over | 0.3945762538330459 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14739728 | prizepicks | Theo Johnson | Rec Yards | over | 0.3949348609156753 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14685724 | prizepicks | Kirk Cousins | Pass TDs | under | 0.3947627861863338 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14600965 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.3944703843201629 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346402 | prizepicks | Darnell Mooney | Recs | under | 0.394404679309604 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13961578 | prizepicks | Romeo Doubs | Rec Yards | over | 0.394299975796502 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14372899 | prizepicks | Davante Adams | Recs | over | 0.3942850207073107 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14460628 | prizepicks | David Montgomery | Recs | under | 0.3941727643736656 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697501 | prizepicks | KaVontae Turpin | Rec Yards | under | 0.393999092711048 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14306252 | prizepicks | Matthew Golden | Fantasy Score | under | 0.3936688850943222 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339694 | prizepicks | D'Andre Swift | Recs | under | 0.3936136737228676 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14712018 | prizepicks | Tyler Loop | Kicking Points | under | 0.3932824086790374 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100094 | prizepicks | Quinshon Judkins | Player TDs | under | 0.3932440182642094 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380196 | prizepicks | Jaylen Warren | Rush+Rec Yds | over | 0.3930607801113501 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393141 | prizepicks | Jalen Coker | Recs | under | 0.3925765262971754 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14336860 | prizepicks | Caleb Williams | Pass Yards | under | 0.3924682433487632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14489110 | prizepicks | Blake Grupe | FG Made | over | 0.3924634703399425 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14477593 | prizepicks | Devaughn Vele | Rec Yards | over | 0.3923599183217465 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13986129 | prizepicks | Treylon Burks | Player TDs | under | 0.3920375305299297 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324345 | prizepicks | Cade Otton | Rec Yards | under | 0.3920298969330617 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265372 | prizepicks | Jaylen Waddle | Recs | under | 0.3916060284574733 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14264405 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.3915420604847501 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14644545 | prizepicks | Brian Robinson Jr. | Rush+Rec Yds | under | 0.391468411127136 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14523956 | prizepicks | Isaac TeSlaa | Rec Yards | over | 0.3914145754730123 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320391 | prizepicks | Baker Mayfield | Rush Yards | over | 0.3913923819747446 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957674 | prizepicks | Drake Maye | Pass+Rush Yds | over | 0.3913425432525863 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14379967 | prizepicks | Tony Pollard | Rush Yards | over | 0.3912915465528969 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14406111 | prizepicks | Quentin Lake | Sacks | under | 0.3912658869282288 | 2026-09-02T09:32:24Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14349077 | prizepicks | KeAndre Lambert-Smith | Player TDs | under | 0.3912658869282288 | 2026-08-31T23:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14487056 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.3912532841226552 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393597 | prizepicks | James Cook III | Rush+Rec Yds | under | 0.3911488347655817 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266926 | prizepicks | Woody Marks | Rush Yards | over | 0.3911025971630328 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13994672 | prizepicks | Andrei Iosivas | Player TDs | under | 0.3909376881596031 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14214234 | prizepicks | Marvin Mims Jr. | Player TDs | under | 0.3909376881596031 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14688561 | prizepicks | Deone Walker | Sacks | under | 0.3909376881596031 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13994672 | prizepicks | Andrei Iosivas | Player TDs | under | 0.3909376881596031 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996300 | prizepicks | Baker Mayfield | Player TDs | over | 0.3908900094781493 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14647286 | prizepicks | Tommy Tremble | Recs | under | 0.3907806314630512 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311398 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.390699835095937 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319345 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.3906148053258818 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337040 | prizepicks | Luther Burden III | Recs | under | 0.3905207727443345 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357856 | prizepicks | Zay Flowers | Fantasy Score | over | 0.3903670753710884 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402994 | prizepicks | Charlie Kolar | Recs | under | 0.3902949071511056 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472584 | prizepicks | De'Von Achane | Rush Yards | over | 0.3900070988196502 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14711260 | prizepicks | Daniel Carlson | Kicking Points | under | 0.390263761913515 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498202 | prizepicks | Jared Goff | Pass Attempts | over | 0.3897325048478191 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311344 | prizepicks | Jameson Williams | Rec Yards | under | 0.3892843416332703 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957571 | prizepicks | Andy Borregales | Kicking Points | over | 0.3892773286739508 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14475991 | prizepicks | Lamar Jackson | Pass Yards | under | 0.3890456317003888 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697885 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.3891162794428662 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311020 | prizepicks | Kirk Cousins | Pass Yards | under | 0.3887361460442242 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346310 | prizepicks | Tre' Harris | Recs | under | 0.3885195213923833 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14052843 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.38817344888678 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14690308 | prizepicks | Johnny Mundt | Rec Yards | over | 0.3880731929264178 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633944 | prizepicks | Bryce Young | INT | under | 0.3880070855403426 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358213 | prizepicks | Michael Wilson | Rec Yards | over | 0.3880019234354053 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14514490 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.3879612939027321 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13961560 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.3879531408549865 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13684681 | prizepicks | Matthew Stafford | Pass TDs | over | 0.3879215765883024 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14498606 | prizepicks | Charlie Kolar | Rec Yards | under | 0.3877657607859306 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136697 | prizepicks | Parker Washington | Rec Yards | over | 0.3872227534830521 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14293220 | prizepicks | Matthew Golden | Recs | under | 0.3869675048659824 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598616 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.3867284174307452 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14406070 | prizepicks | Kam Curl | Sacks | under | 0.3864722730047334 | 2026-09-02T09:32:24Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14379529 | prizepicks | Travis Hunter | Fantasy Score | over | 0.3869670403112811 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13998624 | prizepicks | Jerry Jeudy | Player TDs | under | 0.3864722730047334 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499796 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.3863983781611362 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311099 | prizepicks | Tony Pollard | Rush Yards | over | 0.3861211207361734 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14699995 | prizepicks | Tony Pollard | Rush Yards | over | 0.3861211207361734 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503120 | prizepicks | Patrick Mahomes | Pass Attempts | under | 0.3861011337169158 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14315287 | prizepicks | Matthew Stafford | Pass Yards | over | 0.3857972192484719 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14472549 | prizepicks | Dawson Knox | Rec Yards | over | 0.3857490593982179 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14739816 | prizepicks | Dawson Knox | Rec Yards | over | 0.3857490593982179 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498251 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.3857189017747127 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633694 | prizepicks | Trevor Lawrence | INT | under | 0.3857083295513563 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472425 | prizepicks | Malik Washington | Rec Yards | under | 0.3856216536718514 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14294842 | prizepicks | Jauan Jennings | Rec Yards | under | 0.3851755348628192 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341863 | prizepicks | Brenton Strange | Rec Yards | over | 0.385035079811951 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499643 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.3848199984010859 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311162 | prizepicks | Ja'Marr Chase | Recs | under | 0.384814869986947 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686644 | prizepicks | Tyler Allgeier | Rush Yards | under | 0.3848017295352595 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499520 | prizepicks | Kyler Murray | Pass Attempts | over | 0.3846430127637137 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357962 | prizepicks | J.K. Dobbins | Fantasy Score | over | 0.3845754920618884 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14343155 | prizepicks | Rhamondre Stevenson | Fantasy Score | over | 0.3845725555822086 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14486871 | prizepicks | Greg Dulcich | Recs | over | 0.3845560932087711 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380687 | prizepicks | Christian McCaffrey | Rush+Rec Yds | over | 0.3841788284904007 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697861 | prizepicks | Chuba Hubbard | Rec Yards | under | 0.3845421587315738 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475700 | prizepicks | Dawson Knox | Recs | under | 0.3843512702420837 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697263 | prizepicks | Ian Thomas | Rec Yards | under | 0.3840615886648132 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14392066 | prizepicks | Brashard Smith | Recs | under | 0.3837361651325015 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357786 | prizepicks | Chase Brown | Fantasy Score | over | 0.3835740753688355 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995863 | prizepicks | Ryan Fitzgerald | FG Made | under | 0.383495667228908 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100101 | prizepicks | Jacory Croskey-Merritt | Player TDs | under | 0.3832406868439567 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13994940 | prizepicks | Caleb Williams | Player TDs | over | 0.3832288262304832 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598319 | prizepicks | Kyle Juszczyk | Rec Yards | under | 0.3831702854013938 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472391 | prizepicks | Tyjae Spears | Rec Yards | under | 0.3829982604072643 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14273958 | prizepicks | DJ Moore | Recs | under | 0.3829658421542172 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283567 | prizepicks | Josh Allen | Rush Yards | over | 0.3829370976810251 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390311 | prizepicks | Jalen Nailor | Recs | under | 0.3829173228599223 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14559608 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.3828808597848543 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14341654 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.3828808597848543 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14093859 | prizepicks | Jalen Hurts | Player TDs | over | 0.3828287363419249 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14710816 | prizepicks | Chase McLaughlin | FG Made | under | 0.3827823159363099 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357907 | prizepicks | Chris Rodriguez Jr. | Fantasy Score | over | 0.3827695999996845 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311613 | prizepicks | Marvin Harrison Jr. | Recs | under | 0.3826744410788811 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472608 | prizepicks | Mike Gesicki | Rec Yards | over | 0.3826336348231041 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14493655 | prizepicks | Chase Brown | Rush Yards | over | 0.3825733813192753 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311052 | prizepicks | Baker Mayfield | Pass TDs | over | 0.3824660901033202 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472563 | prizepicks | Kyler Murray | Rush Yards | over | 0.3823462676482115 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379229 | prizepicks | Aaron Rodgers | Rush Yards | over | 0.3816661582496081 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691200 | prizepicks | Mo Alie-Cox | Rec Yards | over | 0.3816652993813425 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353257 | prizepicks | Jauan Jennings | Rec Targets | over | 0.3815429409704527 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721525 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.3813474666692816 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540019 | prizepicks | Quinshon Judkins | Recs | over | 0.3813283708894656 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311173 | prizepicks | Lamar Jackson | Pass Yards | under | 0.3813089128195471 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14006857 | prizepicks | Jared Goff | Player TDs | over | 0.3811278902994255 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978243 | prizepicks | Mack Hollins | Player TDs | under | 0.3810384056831508 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13996240 | prizepicks | Mitchell Evans | Player TDs | under | 0.3810384056831507 | 2026-09-03T11:08:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381209 | prizepicks | J.K. Dobbins | Rush+Rec Yds | over | 0.3809682532807747 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13986214 | prizepicks | Jake Elliott | FG Made | under | 0.3808018728789704 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311852 | prizepicks | Bijan Robinson | Rush Yards | under | 0.3807256052374959 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14647305 | prizepicks | Lamar Jackson | Rush Yards | under | 0.3806145457608967 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976591 | prizepicks | Chase McLaughlin | FG Made | over | 0.3800235174899218 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14373285 | prizepicks | Terrance Ferguson | Recs | under | 0.3800026421009875 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14273976 | prizepicks | Nico Collins | Recs | under | 0.3798866355748767 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472171 | prizepicks | Baker Mayfield | Rush Yards | over | 0.3799310964091494 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14431788 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.3797310758241092 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540803 | prizepicks | Kenny Gainwell | Recs | over | 0.3795993171998513 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390059 | prizepicks | Trevor Lawrence | Fantasy Score | over | 0.3794373374356867 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136638 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.3789341071874956 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14295687 | prizepicks | Jayden Daniels | Rush Yards | under | 0.3788839125917383 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473614 | prizepicks | Stefon Diggs | Rec Yards | over | 0.3786372165067295 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14495492 | prizepicks | Kyren Williams | Recs | under | 0.3786306813618271 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14719328 | prizepicks | Matt Gay | Kicking Points | under | 0.3784774131478816 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14728036 | prizepicks | Chad Ryland | Kicking Points | under | 0.3784683649898599 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311297 | prizepicks | Chase Brown | Rec Yards | under | 0.378344414010477 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13980626 | prizepicks | Justin Herbert | Player TDs | over | 0.3779905035808507 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978251 | prizepicks | Cooper Kupp | Player TDs | under | 0.3777395263935091 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|13976422 | prizepicks | Javonte Williams | Rec TDs | under | 0.3777395263935091 | 2026-09-01T00:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14100979 | prizepicks | Derrick Henry | Player TDs | under | 0.3773892464139876 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14693929 | prizepicks | Jauan Jennings | Recs | over | 0.3773384112811311 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420550 | prizepicks | Pat Freiermuth | Rec Yards | under | 0.3772370988254969 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14451137 | prizepicks | Kyren Williams | Rush Yards | over | 0.3771873177506786 | 2026-09-03T05:43:24Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311051 | prizepicks | Malik Willis | Pass Yards | under | 0.3769386542743143 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311104 | prizepicks | Tee Higgins | Recs | under | 0.3769122517938532 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472881 | prizepicks | Tyler Higbee | Rec Yards | over | 0.3763804797280474 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13989737 | prizepicks | Matthew Stafford | Pass Yards | over | 0.3763091090606216 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472589 | prizepicks | Chase Brown | Rush Yards | over | 0.3761967555203289 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14504063 | prizepicks | Justin Herbert | Pass Attempts | under | 0.3761505715475841 | 2026-09-05T13:51:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100091 | prizepicks | Ashton Jeanty | Player TDs | under | 0.3761268650849393 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586919 | prizepicks | Pat Bryant | Rec Yards | over | 0.3761264770663596 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13961574 | prizepicks | Drake Maye | Rush Yards | over | 0.3760215938768927 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14728058 | prizepicks | Cameron Dicker | FG Made | under | 0.3760068009927593 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14505898 | prizepicks | Kirk Cousins | Pass Attempts | under | 0.3759410285734939 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472856 | prizepicks | Gunnar Helm | Recs | under | 0.3758934605050381 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474422 | prizepicks | Aaron Jones Sr. | Rec Yards | under | 0.3757886014495457 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
@@ -985,21 +1040,24 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14514479 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.375730977156011 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294893 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.3756402475256547 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978028 | prizepicks | Marquez Valdes-Scantling | Player TDs | under | 0.3756132032999844 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13989730 | prizepicks | Brock Purdy | Pass TDs | over | 0.3752808929852487 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13980662 | prizepicks | Omarion Hampton | Rec TDs | under | 0.3756132032999844 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14136695 | prizepicks | Christian Watson | Rec Yards | over | 0.3753631993965494 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719156 | prizepicks | A.J. Epenesa | Sacks | under | 0.3752193229714069 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472324 | prizepicks | Justin Herbert | Rush Yards | over | 0.3752179217707099 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586694 | prizepicks | Evan Engram | Rec Yards | over | 0.3751918940642935 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14512266 | prizepicks | Tre' Harris | Rec Yards | over | 0.375127865463434 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357842 | prizepicks | Jahan Dotson | Fantasy Score | under | 0.3750948395940682 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357791 | prizepicks | Chris Olave | Fantasy Score | over | 0.3750886267028372 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14217677 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.3750062997188284 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14641906 | prizepicks | Saquon Barkley | Rush Yards | over | 0.3748634885665731 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475623 | prizepicks | Tyjae Spears | Recs | over | 0.3748525992479489 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338555 | prizepicks | Quentin Johnston | Rec Yards | over | 0.3748478989381036 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473070 | prizepicks | Tony Pollard | Rec Yards | under | 0.3746087880138267 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392013 | prizepicks | Jack Bech | Recs | under | 0.3745843811942059 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14688684 | prizepicks | Jack Bech | Recs | under | 0.3745843811942059 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14532703 | prizepicks | Rashod Bateman | Fantasy Score | under | 0.3745502784840826 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14489122 | prizepicks | Nick Folk | Kicking Points | over | 0.374530857207914 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996146 | prizepicks | James Cook III | Rec TDs | under | 0.374465531075518 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311302 | prizepicks | Amon-Ra St. Brown | Recs | under | 0.3742914720271101 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990907 | prizepicks | Puka Nacua | Rec Yards | under | 0.3742702807150027 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311641 | prizepicks | Trevor Lawrence | Pass TDs | over | 0.3742656531244358 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14573560 | prizepicks | Kyler Murray | Pass+Rush Yds | under | 0.3742381281098406 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977004 | prizepicks | Wil Lutz | FG Made | over | 0.3742124339360275 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
@@ -1010,21 +1068,23 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14618001 | prizepicks | RJ Harvey | Rush Yards | over | 0.3738173228473377 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14540789 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.373287321509662 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357884 | prizepicks | Brenton Strange | Fantasy Score | over | 0.3731080536099631 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691201 | prizepicks | Mo Alie-Cox | Recs | over | 0.3730823631186512 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472620 | prizepicks | Josh Downs | Rec Yards | over | 0.372782771780209 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487262 | prizepicks | Xavier Legette | Recs | under | 0.3727235015537952 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604147 | prizepicks | Aaron Rodgers | Pass+Rush Yds | over | 0.3724507517065692 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100114 | prizepicks | D'Andre Swift | Player TDs | under | 0.3722976567220148 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486246 | prizepicks | Kalif Raymond | Rec Yards | over | 0.3722613026961743 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14586393 | prizepicks | Pat Bryant | Rec Yards | under | 0.3721573562055218 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14514496 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.3721233253746571 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14339076 | prizepicks | Caleb Williams | Pass+Rush Yds | over | 0.3720878120510806 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100110 | prizepicks | Zay Flowers | Player TDs | under | 0.3719279037103279 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14648932 | prizepicks | Maxx Crosby | Sacks | under | 0.3718742678145607 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534990 | prizepicks | Greg Dulcich | Fantasy Score | over | 0.3718566866000046 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136919 | prizepicks | Terry McLaurin | Recs | under | 0.3718190032948547 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100123 | prizepicks | Amon-Ra St. Brown | Player TDs | under | 0.3716425971959926 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499363 | prizepicks | Caleb Williams | Pass Attempts | over | 0.3716038833631072 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14567183 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.3713665616643529 | 2026-09-06T19:06:29Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14489121 | prizepicks | Blake Grupe | Kicking Points | over | 0.3711578342373444 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475571 | prizepicks | Rashod Bateman | Rec Yards | under | 0.371012293187367 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721475 | prizepicks | Theo Johnson | Rec Yards | under | 0.371024690757613 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357914 | prizepicks | Ladd McConkey | Fantasy Score | under | 0.3709849800199841 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14568549 | prizepicks | Kenny Clark | Sacks | under | 0.3708384685320618 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14100135 | prizepicks | Ja'Marr Chase | Player TDs | under | 0.3706939872175412 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1037,29 +1097,30 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|13980614 | prizepicks | Charlie Kolar | Player TDs | under | 0.3700444816647895 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472895 | prizepicks | Cam Skattebo | Rec Yards | over | 0.3699768759561039 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294876 | prizepicks | Jauan Jennings | Rec Yards | over | 0.3698568008041509 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14687048 | prizepicks | Josh Sweat | Sacks | under | 0.369316324030847 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311236 | prizepicks | Juwan Johnson | Recs | over | 0.369261838603355 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14415685 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.3690751786170249 | 2026-09-08T14:29:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14559845 | prizepicks | George Kittle | Fantasy Score | over | 0.3688605828525253 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14683788 | prizepicks | Brandon Dorlus | Sacks | under | 0.3691059086726096 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257565 | prizepicks | Kyle Pitts Sr. | Rec Yards | under | 0.368689497296081 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402908 | prizepicks | Rachaad White | Recs | under | 0.3684818514799657 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14534367 | prizepicks | Matthew Stafford | Rush Yards | under | 0.3684349166958673 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14339552 | prizepicks | Davante Adams | Recs | under | 0.3683902556293545 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697630 | prizepicks | Roman Wilson | Rec Yards | under | 0.3684010840895997 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14411977 | prizepicks | Bijan Robinson | Rush+Rec Yds | under | 0.3683227173244922 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596249 | prizepicks | RJ Harvey | Rush+Rec Yds | over | 0.3682715735470494 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14100093 | prizepicks | Dylan Sampson | Player TDs | under | 0.3681845757521128 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14350853 | prizepicks | Bijan Robinson | Recs | over | 0.3681722003716811 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265378 | prizepicks | Patrick Mahomes | Rush Yards | over | 0.3681591312812702 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14720054 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.3680790608995372 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339341 | prizepicks | Wan'Dale Robinson | Recs | over | 0.3679782543107519 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14577264 | prizepicks | A.J. Brown | Rec Yards | over | 0.3679021128096275 | 2026-09-07T10:11:36Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14733722 | prizepicks | Cam Little | Kicking Points | over | 0.3677866489689079 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311960 | prizepicks | Caleb Williams | Rush Yards | under | 0.367722818763003 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472269 | prizepicks | Kyren Williams | Rec Yards | over | 0.3677099198713167 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14265392 | prizepicks | Rashee Rice | Recs | over | 0.367378003989422 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14738721 | prizepicks | Theo Johnson | Recs | over | 0.3673711846148133 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14136812 | prizepicks | Matthew Golden | Rec Yards | under | 0.3673504262478628 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472265 | prizepicks | Chase Brown | Rec Yards | over | 0.3671017163035445 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14578777 | prizepicks | Darnell Washington | Rec Yards | over | 0.3670991581280666 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14487646 | prizepicks | Darnell Washington | Rec Yards | over | 0.3670991581280666 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402882 | prizepicks | Chig Okonkwo | Recs | over | 0.3670022471401224 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14474800 | prizepicks | Hunter Henry | Rec Yards | over | 0.3668067810663571 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14586390 | prizepicks | Pat Bryant | Rec Yards | over | 0.3666917619420686 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14489113 | prizepicks | Nick Folk | FG Made | under | 0.3665554694739716 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14690323 | prizepicks | Johnny Mundt | Recs | under | 0.3665158999844399 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14164736 | prizepicks | Dak Prescott | Pass Yards | under | 0.366290359525101 | 2026-08-31T19:38:24Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14586405 | prizepicks | J.K. Dobbins | Rec Yards | under | 0.3662603439072184 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136902 | prizepicks | Kyler Murray | Pass+Rush Yds | under | 0.3662283157563719 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -1068,24 +1129,25 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|13996354 | prizepicks | Adonai Mitchell | Player TDs | under | 0.3654650115461386 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499957 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.365389823983556 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14248987 | prizepicks | Jalen Nailor | Rec Yards | under | 0.3653676593314894 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14102608 | prizepicks | Drake London | Player TDs | under | 0.3650495989929962 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338640 | prizepicks | Dalton Schultz | Rec Yards | over | 0.3648525026225326 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995889 | prizepicks | Bryce Young | Player TDs | over | 0.3648396708206149 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14312154 | prizepicks | De'Von Achane | Rush Yards | over | 0.3647602933355495 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473286 | prizepicks | Bryce Young | Pass Yards | under | 0.3645009749344948 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357844 | prizepicks | Jaylen Warren | Fantasy Score | over | 0.3643692931286537 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532947 | prizepicks | David Montgomery | Fantasy Score | under | 0.3642993204478684 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402531 | prizepicks | Jared Goff | Pass+Rush Yds | over | 0.3642313625159303 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402911 | prizepicks | Darnell Washington | Rec Yards | under | 0.3641453834651837 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980675 | prizepicks | Hunter Henry | Recs | over | 0.3640716790538841 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14295757 | prizepicks | DeVonta Smith | Recs | under | 0.3640664848165533 | 2026-09-01T21:48:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14403003 | prizepicks | David Njoku | Rec Yards | under | 0.3640302651744955 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473641 | prizepicks | Mark Andrews | Rec Yards | under | 0.3640207053232566 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338850 | prizepicks | Derrick Henry | Recs | under | 0.363993328960509 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295771 | prizepicks | Stefon Diggs | Rec Yards | over | 0.3638737456990724 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472559 | prizepicks | C.J. Stroud | Pass Yards | over | 0.3638308155444865 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14710580 | prizepicks | Evan McPherson | Kicking Points | under | 0.3637947353079891 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633912 | prizepicks | Justin Herbert | INT | under | 0.3637114568856319 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294898 | prizepicks | Jordan Love | Rush Yards | under | 0.3635730441490135 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598324 | prizepicks | Kyle Juszczyk | Recs | over | 0.3634927009951151 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14475710 | prizepicks | Jaylen Warren | Rush Yards | over | 0.3633728515891757 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14524268 | prizepicks | Isaiah Williams | Rec Yards | under | 0.3633125909731783 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311321 | prizepicks | Zay Flowers | Rec Yards | over | 0.3632838488231353 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472263 | prizepicks | Saquon Barkley | Rush Yards | over | 0.363195499463872 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095779 | prizepicks | Kenneth Walker III | Recs | under | 0.3631775523352891 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393663 | prizepicks | Derrick Henry | Rush+Rec Yds | over | 0.3629910217013914 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14422830 | prizepicks | Jalen Coker | Rec Yards | over | 0.3628908588195457 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1093,145 +1155,131 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|13994701 | prizepicks | Mo Alie-Cox | Player TDs | under | 0.362798407402811 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600968 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.36275062391414 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100127 | prizepicks | Bijan Robinson | Player TDs | under | 0.3625861619930672 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13977037 | prizepicks | Andre Szmyt | Kicking Points | over | 0.3622551320633025 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14337063 | prizepicks | Colston Loveland | Recs | over | 0.362065955602094 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14082196 | prizepicks | Malik Nabers | Rec Yards | under | 0.3616512451639517 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14311643 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.361589431877958 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536910 | prizepicks | Josh Downs | Recs | under | 0.3613722600246747 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957573 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.3613592556054562 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14697525 | prizepicks | Josh Oliver | Rec Yards | under | 0.3612462444754183 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721019 | prizepicks | Tee Higgins | Rec Yards | over | 0.361217122165582 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697860 | prizepicks | Chuba Hubbard | Recs | under | 0.3611297058751553 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136821 | prizepicks | Jordan Love | Pass+Rush Yds | under | 0.3609659223907631 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14603020 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.3609471793062258 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974050 | prizepicks | Cooper Kupp | Recs | under | 0.360819038560457 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14641337 | prizepicks | Harrison Smith | Sacks | under | 0.3604643690626593 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14273968 | prizepicks | Nico Collins | Rec Yards | over | 0.3603893748959755 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265382 | prizepicks | Bo Nix | Rush Yards | over | 0.3601119937863997 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357867 | prizepicks | Wan'Dale Robinson | Fantasy Score | over | 0.3600556218483064 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14502728 | prizepicks | Tyler Higbee | Rec Yards | over | 0.3600242410930128 | 2026-09-05T00:53:35Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14691280 | prizepicks | Dylan Sampson | Rush+Rec Yds | under | 0.3598854509431792 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474801 | prizepicks | Chig Okonkwo | Rec Yards | over | 0.3598749692363407 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14327278 | prizepicks | Mark Andrews | Recs | under | 0.3597334917877288 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14337153 | prizepicks | Colston Loveland | Recs | under | 0.3596629012220806 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095186 | prizepicks | Kyler Murray | Pass Yards | under | 0.3595933873463035 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14103700 | prizepicks | Hunter Henry | Rec Yards | over | 0.3593132508146073 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14665746 | prizepicks | Breece Hall | Rush Yards | over | 0.3594317055484546 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14665965 | prizepicks | Malik Davis | Rush Yards | over | 0.3593301264846427 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14136853 | prizepicks | Saquon Barkley | Recs | under | 0.3592453517916841 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14135010 | prizepicks | DK Metcalf | Recs | under | 0.3592426847856937 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573452 | prizepicks | Harrison Mevis | Kicking Points | over | 0.3592141728682485 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14257579 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.3591502254889891 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14521342 | prizepicks | Devaughn Vele | Rec Yards | over | 0.3590386125878444 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403215 | prizepicks | Kalif Raymond | Recs | under | 0.3589112414369464 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255328 | prizepicks | Tyler Shough | Pass+Rush Yds | under | 0.3588840738096013 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375957 | prizepicks | Breece Hall | Recs | under | 0.3588566085593143 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514546 | prizepicks | Patrick Mahomes | Rush Yards | over | 0.3585626703774727 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472326 | prizepicks | Michael Mayer | Rec Yards | over | 0.3584935492887549 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14211306 | prizepicks | Matthew Stafford | Pass Yards | over | 0.358404861228645 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14473622 | prizepicks | Lamar Jackson | Rush Yards | under | 0.358302646856961 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14506318 | prizepicks | Omarion Hampton | Rec Yards | under | 0.3582625983822132 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978529 | prizepicks | Riley Patterson | FG Made | under | 0.3581705672685586 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472920 | prizepicks | Adonai Mitchell | Recs | under | 0.3579071627950702 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14709257 | prizepicks | Cairo Santos | Kicking Points | under | 0.3574967880408295 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402592 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.3574318430246501 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980679 | prizepicks | Drake Maye | Fantasy Score | over | 0.3574277713473576 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13957682 | prizepicks | Sam Darnold | Pass+Rush Yds | under | 0.3573309799680552 | 2026-09-03T05:43:24Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14513945 | prizepicks | Isaac TeSlaa | Rec Yards | over | 0.3572724935656808 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357915 | prizepicks | Aaron Jones Sr. | Fantasy Score | over | 0.3570070435152795 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691263 | prizepicks | Keenan Allen | Rec Yards | over | 0.3569233313063531 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602702 | prizepicks | Adam Trautman | Rec Yards | over | 0.356890085000788 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14095429 | prizepicks | Javonte Williams | Recs | under | 0.3568712469088686 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472386 | prizepicks | Darnell Washington | Rec Yards | over | 0.3567250670022024 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14595344 | prizepicks | Nico Collins | Rec Yards | under | 0.35671515172396 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13993302 | prizepicks | Tyler Shough | Player TDs | over | 0.3566254893204708 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957555 | prizepicks | Romeo Doubs | Rec Yards | over | 0.3566216887892441 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14019877 | prizepicks | Puka Nacua | Recs | under | 0.356572110070827 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14375135 | prizepicks | Malik Washington | Rec Yards | under | 0.356480459750869 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961561 | prizepicks | Cooper Kupp | Rec Yards | over | 0.3558729444450625 | 2026-09-03T00:08:22Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14093858 | prizepicks | Josh Allen | Player TDs | over | 0.3558555811476387 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14632571 | prizepicks | Trevor Lawrence | Pass TDs | under | 0.3557661751027046 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14679194 | prizepicks | Kalif Raymond | Recs | over | 0.3556996597940763 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306259 | prizepicks | Jauan Jennings | Fantasy Score | over | 0.3555673052728222 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136636 | prizepicks | Brian Thomas Jr. | Recs | over | 0.355518926086916 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586756 | prizepicks | Noah Gray | Recs | over | 0.3553847734244002 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472331 | prizepicks | Tony Pollard | Recs | under | 0.3552572067087434 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343224 | prizepicks | Christian McCaffrey | Fantasy Score | over | 0.3552342139262028 | 2026-08-31T20:38:20Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14540018 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.3550951679719347 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14603982 | prizepicks | Rico Dowdle | Rush Yards | under | 0.3548459512135435 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14739730 | prizepicks | Theo Johnson | Rec Yards | over | 0.3549175891742353 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14385306 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | over | 0.3546029727827406 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598587 | prizepicks | Kyren Williams | Recs | over | 0.3544402409551277 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14631874 | prizepicks | Bo Nix | Pass TDs | under | 0.3545253408440783 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357874 | prizepicks | Tony Pollard | Fantasy Score | over | 0.354378958991618 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472395 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.3542663507952078 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14382832 | prizepicks | De'Von Achane | Rush+Rec Yds | over | 0.3537982371649881 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14454880 | prizepicks | Kenneth Walker III | Rush Yards | over | 0.3536305598799028 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346532 | prizepicks | Dallas Goedert | Fantasy Score | over | 0.3535619994208612 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586365 | prizepicks | Pat Bryant | Recs | over | 0.3534260527278157 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14494019 | prizepicks | Woody Marks | Rush+Rec Yds | over | 0.3532552356826444 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990645 | prizepicks | Christian McCaffrey | Rec Yards | over | 0.3531100129696567 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311397 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.3530879320575367 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498190 | prizepicks | Jared Goff | Pass Attempts | under | 0.3530167038095595 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100132 | prizepicks | Tee Higgins | Player TDs | under | 0.352949830239464 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14212293 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.3528642109965516 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136726 | prizepicks | Justin Jefferson | Recs | under | 0.3528436664169418 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13980187 | prizepicks | Juwan Johnson | Player TDs | under | 0.3526515912454186 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472494 | prizepicks | Jordan Love | Rush Yards | over | 0.3524714136585343 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586382 | prizepicks | Evan Engram | Rec Yards | over | 0.3524132250799197 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14378998 | prizepicks | Cam Ward | Pass+Rush Yds | under | 0.3520910727137151 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720966 | prizepicks | Kyle Monangai | Rec Yards | over | 0.3517385639604121 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983432 | prizepicks | Cam Ward | Player TDs | over | 0.3516535586180386 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14264969 | prizepicks | Rashee Rice | Player TDs | under | 0.3516510383609676 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311538 | prizepicks | Ladd McConkey | Recs | under | 0.3513865929990292 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14489108 | prizepicks | Harrison Mevis | FG Made | over | 0.351385469099523 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14575937 | prizepicks | Kalif Raymond | Rec Yards | over | 0.3511408722604693 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14096511 | prizepicks | Rashee Rice | Rec Yards | over | 0.3509592773209263 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14375734 | prizepicks | Gunnar Helm | Fantasy Score | under | 0.3509015164638929 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633127 | prizepicks | Josh Allen | Pass TDs | under | 0.350777514333584 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420596 | prizepicks | Justice Hill | Recs | under | 0.3505738219087593 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257582 | prizepicks | Drake London | Recs | under | 0.3505243672412979 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14476486 | prizepicks | Josh Downs | Rec Yards | over | 0.3502465611262451 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346557 | prizepicks | Stefon Diggs | Fantasy Score | over | 0.3501875586372475 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14310213 | prizepicks | Jaylen Warren | Rush Yards | over | 0.3499071743898408 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472955 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.34981674380895 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357901 | prizepicks | Jakobi Meyers | Fantasy Score | over | 0.3495085323607516 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358378 | prizepicks | Jayden Daniels | Rush Yards | over | 0.3494973671127397 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14476910 | prizepicks | Michael Mayer | Rec Yards | over | 0.3493970799714659 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14163190 | prizepicks | Malik Nabers | Player TDs | under | 0.3491064714228306 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990913 | prizepicks | Mike Evans | Recs | under | 0.348314420833227 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13990951 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.348250637798374 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13980158 | prizepicks | George Holani | Rush TDs | under | 0.3479639830415655 | 2026-09-05T23:49:54Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13978249 | prizepicks | George Holani | Player TDs | under | 0.3479639830415655 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14473643 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.3478993993874403 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14723478 | prizepicks | David Montgomery | Rec Yards | over | 0.3488237723586629 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977044 | prizepicks | Andre Szmyt | FG Made | under | 0.3478872352120592 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688017 | prizepicks | Jamien Sherwood | Sacks | under | 0.3478635114457593 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688076 | prizepicks | Alontae Taylor | Sacks | under | 0.3478635114457593 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688027 | prizepicks | Dane Belton | Sacks | under | 0.3478635114457593 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602880 | prizepicks | Samaje Perine | Recs | over | 0.3476696063154345 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100116 | prizepicks | Christian Watson | Player TDs | under | 0.3474985371705497 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719320 | prizepicks | Brandon Aubrey | FG Made | under | 0.3474863719956371 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14315785 | prizepicks | Spencer Shrader | Kicking Points | over | 0.3474120217360821 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14434269 | prizepicks | Myles Garrett | Sacks | under | 0.3471721468419122 | 2026-09-08T09:35:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14575010 | prizepicks | RJ Harvey | Rush Yards | under | 0.3470834251156034 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14559601 | prizepicks | Braelon Allen | Rush Yards | over | 0.3470745636442855 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13991139 | prizepicks | Brock Purdy | Rush Yards | over | 0.3469362343324045 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13954756 | prizepicks | Evan McPherson | FG Made | under | 0.3468773902243308 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514476 | prizepicks | Courtland Sutton | Rec Yards | over | 0.3467945477287288 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14318603 | prizepicks | Woody Marks | Rush Yards | over | 0.346775885321311 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496724 | prizepicks | Jayden Reed | Rush+Rec Yds | over | 0.346638764096393 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14135844 | prizepicks | Michael Wilson | Rec Yards | over | 0.3465874361295431 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14573082 | prizepicks | Jaxson Dart | Pass Yards | under | 0.3465205810887257 | 2026-09-07T16:25:44Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14337077 | prizepicks | Colston Loveland | Rec Yards | over | 0.346482768858425 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996637 | prizepicks | Josh Whyle | Player TDs | under | 0.3462829170363022 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338630 | prizepicks | Jakobi Meyers | Recs | over | 0.3462201572180159 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14005691 | prizepicks | Luke Farrell | Player TDs | under | 0.3461562523124613 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14339064 | prizepicks | Luther Burden III | Rec Yards | under | 0.3461315758691117 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560322 | prizepicks | Cam Skattebo | Rec Yards | over | 0.3461158342284939 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14738724 | prizepicks | Theo Johnson | Rec Yards | over | 0.3458203311966026 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14466887 | prizepicks | Rashod Bateman | Recs | under | 0.3456903508629845 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13955088 | prizepicks | Tee Higgins | Rec Yards | over | 0.3455761688272358 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13973369 | prizepicks | Tee Higgins | Rec Yards | over | 0.3455761688272358 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14641854 | prizepicks | Tee Higgins | Rec Yards | over | 0.3455761688272358 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487058 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.3454995593632999 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14379517 | prizepicks | Travis Hunter | Rec Yards | over | 0.3453286267164928 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14350303 | prizepicks | Geno Smith | Pass TDs | under | 0.3452141346010324 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295689 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.3451500441063888 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14604813 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.3451500441063888 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978281 | prizepicks | Eddy Pineiro | Kicking Points | over | 0.3451113903306475 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14135020 | prizepicks | DK Metcalf | Rec Yards | over | 0.3451037695281247 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311299 | prizepicks | Amon-Ra St. Brown | Recs | over | 0.344910617686647 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990903 | prizepicks | Puka Nacua | Recs | over | 0.3446934138841404 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14515046 | prizepicks | Rashee Rice | Rec Yards | over | 0.344603343663598 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14686098 | prizepicks | Mike Gesicki | Rec Yards | over | 0.3443478399885991 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477049 | prizepicks | Charlie Kolar | Rec Yards | under | 0.3441694848914129 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14402951 | prizepicks | Charlie Kolar | Rec Yards | under | 0.3441694848914129 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295755 | prizepicks | Stefon Diggs | Rec Yards | under | 0.3440990949091038 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14474961 | prizepicks | Tucker Kraft | Player TDs | under | 0.3440307168063776 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338864 | prizepicks | Jonathan Taylor | Recs | over | 0.3439286582462568 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357936 | prizepicks | Trey McBride | Fantasy Score | over | 0.3437392796457738 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14517040 | prizepicks | Bijan Robinson | Rush Yards | over | 0.3435580770085706 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514491 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.3434425525812709 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14503519 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.3434200589318977 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136866 | prizepicks | Saquon Barkley | Rec Yards | under | 0.3433217568128553 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978246 | prizepicks | DeMario Douglas | Player TDs | under | 0.3432204879727638 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14534348 | prizepicks | Braelon Allen | Fantasy Score | under | 0.343181208713982 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14256361 | prizepicks | Bucky Irving | Rec Yards | under | 0.3430598733654713 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633913 | prizepicks | Jalen Hurts | INT | under | 0.3431807757872127 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14743885 | prizepicks | Darren Waller | Rec Yards | over | 0.3431793946441004 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559966 | prizepicks | Josh Downs | Fantasy Score | under | 0.3430560144700685 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989814 | prizepicks | Christian McCaffrey | Rec Yards | over | 0.3429646049619048 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14631567 | prizepicks | Tua Tagovailoa | Pass TDs | under | 0.342965207280562 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559963 | prizepicks | Alec Pierce | Fantasy Score | over | 0.3429010857428038 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14294872 | prizepicks | Jordan Mason | Rush Yards | over | 0.342785560333293 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311152 | prizepicks | Daniel Jones | Pass TDs | over | 0.3427493607471275 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14497727 | prizepicks | Chase McLaughlin | Kicking Points | over | 0.3423908689366186 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375151 | prizepicks | Garrett Wilson | Recs | under | 0.3420113729121043 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14479661 | prizepicks | Tyjae Spears | Rush Yards | over | 0.3419759417574546 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420198 | prizepicks | Bucky Irving | Recs | under | 0.3419557672107087 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1239,126 +1287,129 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14560087 | prizepicks | Kenny Gainwell | Fantasy Score | over | 0.3418586621616684 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486997 | prizepicks | Greg Dulcich | Recs | under | 0.3415805478621171 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357950 | prizepicks | Ryan Flournoy | Fantasy Score | over | 0.3415687146844623 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14099739 | prizepicks | A.J. Brown | Rec Yards | over | 0.341450588600903 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14387842 | prizepicks | Andrei Iosivas | Rec Yards | under | 0.3413604380309663 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295773 | prizepicks | Stefon Diggs | Recs | under | 0.3413566067971602 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475586 | prizepicks | Chris Boswell | FG Made | over | 0.3410116465435797 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473662 | prizepicks | AJ Barner | Rec Yards | over | 0.3408711491589575 | 2026-09-04T11:11:02Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14465819 | prizepicks | Chase Brown | Rush Yards | over | 0.3407019532359578 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14604018 | prizepicks | Samaje Perine | Rec Yards | over | 0.3406091470566029 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294861 | prizepicks | Jordan Addison | Recs | under | 0.340480193452945 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990927 | prizepicks | Deebo Samuel Sr. | Recs | over | 0.340131867824506 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13996120 | prizepicks | Ka'imi Fairbairn | Kicking Points | over | 0.3404391134858685 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691253 | prizepicks | Ashton Dulin | Rec Yards | under | 0.3399594362328457 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311239 | prizepicks | Emeka Egbuka | Recs | under | 0.3399308437443985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534992 | prizepicks | Malik Washington | Fantasy Score | over | 0.3396989902324638 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14093869 | prizepicks | Malik Nabers | Recs | under | 0.3396501539840696 | 2026-09-07T23:28:23Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14720914 | prizepicks | Kyle Monangai | Recs | under | 0.3396826305826904 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472198 | prizepicks | Samaje Perine | Recs | under | 0.3396046586517736 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311273 | prizepicks | Jameson Williams | Rec Yards | over | 0.3395670619047912 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14690301 | prizepicks | Johnny Mundt | Rec Yards | under | 0.3394064253601978 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14418630 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.3392274014837561 | 2026-09-02T14:24:20Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13989831 | prizepicks | Puka Nacua | Rec Yards | over | 0.3391535343186411 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14653619 | prizepicks | Tucker Kraft | Rec Yards | over | 0.339178757076505 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346529 | prizepicks | DeVonta Smith | Fantasy Score | under | 0.3388657383865541 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294863 | prizepicks | Tucker Kraft | Rec Yards | under | 0.3385867619226486 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13983408 | prizepicks | Gunnar Helm | Player TDs | under | 0.3384478741369356 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14683621 | prizepicks | Chris Brooks | Recs | under | 0.3384408331120427 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586384 | prizepicks | RJ Harvey | Rec Yards | over | 0.3379834661403121 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14624564 | prizepicks | Jauan Jennings | Rec Yards | over | 0.3379569421499642 | 2026-09-08T14:29:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472760 | prizepicks | Rachaad White | Rush Yards | over | 0.3379166756165649 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719999 | prizepicks | Grady Jarrett | Sacks | under | 0.3374656349348601 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357935 | prizepicks | Michael Wilson | Fantasy Score | over | 0.3372558041286044 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995866 | prizepicks | Ja'Tavion Sanders | Player TDs | under | 0.3368257633389638 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472402 | prizepicks | Cole Kmet | Rec Yards | over | 0.3367979975509354 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323875 | prizepicks | Jaxson Dart | Player TDs | over | 0.3367144331585989 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14295764 | prizepicks | Stefon Diggs | Recs | over | 0.3365176651555588 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14710856 | prizepicks | Jake Bates | Kicking Points | over | 0.3364349221402151 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13993329 | prizepicks | C.J. Stroud | Player TDs | over | 0.3363662544416324 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14550781 | prizepicks | Bo Nix | Pass Attempts | over | 0.336185722029525 | 2026-09-06T13:38:09Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14472960 | prizepicks | Braelon Allen | Recs | under | 0.3360273410024965 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719324 | prizepicks | Will Reichard | FG Made | under | 0.3356179982048461 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380192 | prizepicks | Jaylen Warren | Rush+Rec Yds | over | 0.3355677649221293 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596570 | prizepicks | RJ Harvey | Fantasy Score | over | 0.3354865889966487 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14311116 | prizepicks | Tony Pollard | Rush Yards | under | 0.335349482820084 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686413 | prizepicks | Kyle Monangai | Rush+Rec Yds | under | 0.3354249640652031 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14354049 | prizepicks | Wan'Dale Robinson | Rec Targets | over | 0.3353052568060175 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14187612 | prizepicks | Kendre Miller | Player TDs | under | 0.3352566585469335 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358425 | prizepicks | Jayden Daniels | Pass Yards | under | 0.3350977257070563 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14689140 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.334999327232242 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311251 | prizepicks | Derrick Henry | Rush Yards | over | 0.3348758407421405 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392725 | prizepicks | Michael Mayer | Recs | under | 0.3348206435509375 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14688729 | prizepicks | Michael Mayer | Recs | under | 0.3348206435509375 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380154 | prizepicks | Jared Goff | Pass Attempts | over | 0.3345685279229342 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311554 | prizepicks | Ladd McConkey | Rec Yards | under | 0.3345381540967451 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14505897 | prizepicks | Kirk Cousins | Pass Attempts | under | 0.3344139053542763 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343141 | prizepicks | Rashid Shaheed | Fantasy Score | under | 0.3342786253991167 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472734 | prizepicks | Bijan Robinson | Rush Yards | over | 0.3338299015923003 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343144 | prizepicks | Jaxon Smith-Njigba | Fantasy Score | over | 0.3338258329746116 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14331798 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.3337982494760165 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14101055 | prizepicks | RJ Harvey | Player TDs | under | 0.333580202059911 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14521348 | prizepicks | Justice Hill | Rush Yards | under | 0.3333552590781037 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14521601 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.3333330331301269 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357952 | prizepicks | Darnell Mooney | Fantasy Score | over | 0.3332920686935587 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14332540 | prizepicks | T.J. Hockenson | Rec Yards | over | 0.3331583279210217 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14683629 | prizepicks | Chris Brooks | Fantasy Score | under | 0.3331815256283148 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311703 | prizepicks | Harold Fannin Jr. | Recs | over | 0.3330380724417068 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977030 | prizepicks | Courtland Sutton | Rec Yards | over | 0.3330258267253034 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13978299 | prizepicks | Davis Allen | Player TDs | under | 0.333000872089001 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13995886 | prizepicks | Xavier Legette | Player TDs | under | 0.333000872089001 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14466324 | prizepicks | Tyler Higbee | Rec Yards | over | 0.3328398426177135 | 2026-09-03T19:46:31Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14266941 | prizepicks | David Montgomery | Rush Yards | under | 0.3329578356855738 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953357 | prizepicks | Chad Ryland | Kicking Points | over | 0.3326954353820666 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393599 | prizepicks | David Montgomery | Rec Yards | under | 0.3326724844096391 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375138 | prizepicks | Malik Washington | Recs | under | 0.332351354973064 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14597266 | prizepicks | Jacoby Brissett | Rush Yards | over | 0.3319713460938436 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14489239 | prizepicks | Tyler Higbee | Recs | under | 0.3318679311347554 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14497554 | prizepicks | Matthew Stafford | Pass Attempts | over | 0.3317984830412462 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14689711 | prizepicks | Jonnu Smith | Rec Yards | under | 0.3322192837577078 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14255885 | prizepicks | Travis Etienne Jr. | Recs | under | 0.3317491904662786 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14710858 | prizepicks | Jake Bates | Kicking Points | under | 0.3317216724431651 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689755 | prizepicks | Jonnu Smith | Recs | over | 0.331440224202346 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978030 | prizepicks | Javonte Williams | Player TDs | under | 0.3310526497875949 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13988385 | prizepicks | Greg Dulcich | Player TDs | under | 0.3310526497875948 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586372 | prizepicks | RJ Harvey | Recs | under | 0.3309889303941249 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14402875 | prizepicks | Darnell Washington | Recs | under | 0.3309405940172483 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474888 | prizepicks | Jacory Croskey-Merritt | Rush Yards | under | 0.3308456110664264 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14739817 | prizepicks | Dawson Knox | Rec Yards | over | 0.3308863733335527 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14135839 | prizepicks | Michael Wilson | Rec Yards | under | 0.3308540840748359 | 2026-09-02T14:24:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14514532 | prizepicks | Noah Gray | Rec Yards | over | 0.3306343003159829 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14343246 | prizepicks | Jordan Addison | Fantasy Score | under | 0.3305157100596658 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14411978 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.330448468209087 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357849 | prizepicks | Derrick Henry | Fantasy Score | over | 0.330272709521397 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357806 | prizepicks | Emeka Egbuka | Fantasy Score | under | 0.33014384479085 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475364 | prizepicks | Bo Nix | Pass+Rush Yds | over | 0.330139384812524 | 2026-09-07T04:28:26Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14688087 | prizepicks | Kevin Winston Jr. | Sacks | under | 0.3301085128220905 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311275 | prizepicks | Dalton Schultz | Recs | over | 0.3300904364202512 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14431862 | prizepicks | Josh Downs | Rec Yards | under | 0.3300827057521321 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380085 | prizepicks | Chase Brown | Rush+Rec Yds | over | 0.3298306676185295 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979480 | prizepicks | Jaylin Noel | Player TDs | under | 0.3294606381456403 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573518 | prizepicks | Andy Borregales | Kicking Points | under | 0.3293700760115601 | 2026-09-06T23:49:06Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14688675 | prizepicks | Jack Bech | Rec Yards | over | 0.3294570997708745 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14481899 | prizepicks | Trevor Lawrence | Rush Yards | over | 0.3293039878886494 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343237 | prizepicks | T.J. Hockenson | Fantasy Score | under | 0.3287754297024527 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534888 | prizepicks | David Njoku | Fantasy Score | over | 0.3287630858342707 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14503518 | prizepicks | Aaron Rodgers | Pass Attempts | under | 0.3287572250074428 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380685 | prizepicks | Christian McCaffrey | Rush+Rec Yds | over | 0.3287026236853339 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14346364 | prizepicks | Kendrick Bourne | Rec Yards | under | 0.3285516765754699 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14295160 | prizepicks | Jalen Hurts | Pass Yards | under | 0.3284016311579221 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13971276 | prizepicks | Tyler Loop | FG Made | over | 0.3283825639077344 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14373287 | prizepicks | Terrance Ferguson | Rec Yards | over | 0.3283576283896724 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14472201 | prizepicks | Malik Davis | Rush Yards | over | 0.3283522397139378 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559800 | prizepicks | Mason Taylor | Rec Yards | over | 0.328317634618822 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720304 | prizepicks | Jahan Dotson | Recs | over | 0.3281894886172498 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487637 | prizepicks | Jaylen Warren | Rush Yards | over | 0.3281015818036317 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14540792 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.3279427871335487 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14265086 | prizepicks | Kenneth Walker III | Rush Yards | over | 0.3274583878340471 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14586375 | prizepicks | Evan Engram | Recs | under | 0.3270464621170662 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311227 | prizepicks | Chris Olave | Recs | over | 0.3268089627818409 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534989 | prizepicks | Malik Washington | Fantasy Score | under | 0.326640402443806 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346889 | prizepicks | Jaylen Waddle | Fantasy Score | under | 0.326440447504019 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14499785 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.3263598393402378 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14293222 | prizepicks | Jauan Jennings | Rec Yards | over | 0.3262773775422221 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14320394 | prizepicks | Baker Mayfield | Rush Yards | over | 0.3257092949813208 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14136880 | prizepicks | DeVonta Smith | Rec Yards | under | 0.3254162137235143 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978115 | prizepicks | Davante Adams | Rec Yards | over | 0.3253711843205615 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14473120 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.3257257877451794 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357833 | prizepicks | DK Metcalf | Fantasy Score | over | 0.3253696849098791 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14569473 | prizepicks | Dak Prescott | Pass Attempts | under | 0.3253070691101762 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14385285 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.3252539168841717 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472903 | prizepicks | Rico Dowdle | Rush Yards | under | 0.325166165487507 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600962 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.3250707661997167 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357818 | prizepicks | Dalton Schultz | Fantasy Score | over | 0.3250077825489237 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697261 | prizepicks | Ian Thomas | Rec Yards | over | 0.3249855973245757 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472582 | prizepicks | Breece Hall | Rush Yards | over | 0.3249208329189543 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393668 | prizepicks | Jonathan Taylor | Rush+Rec Yds | under | 0.3248078007028796 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14591325 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.324753477942922 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14390029 | prizepicks | Rashid Shaheed | Rush+Rec Yds | under | 0.3246325270066692 | 2026-09-05T21:10:18Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14095188 | prizepicks | Kyren Williams | Rush Yards | over | 0.324584311554941 | 2026-08-31T18:38:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14472610 | prizepicks | Andrei Iosivas | Rec Yards | over | 0.3246882817168643 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472169 | prizepicks | Joe Burrow | Rush Yards | over | 0.3243242352790405 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164712 | prizepicks | Javonte Williams | Rush Yards | over | 0.3241219476826613 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14382837 | prizepicks | De'Von Achane | Rush+Rec Yds | over | 0.3240359934272528 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472423 | prizepicks | Matthew Golden | Rec Yards | under | 0.3240164354820468 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14738452 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.3239220297915868 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14324379 | prizepicks | Chris Godwin Jr. | Recs | under | 0.323826710043597 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978525 | prizepicks | Riley Patterson | Kicking Points | over | 0.3237469057585861 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14540790 | prizepicks | Kenny Gainwell | Rush Yards | under | 0.3236838174428571 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295688 | prizepicks | Jayden Daniels | Rush Yards | over | 0.3236439772868047 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990772 | prizepicks | Blake Corum | Rush Yards | over | 0.3236413318548048 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311265 | prizepicks | Sam LaPorta | Recs | over | 0.3233347219122806 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14340715 | prizepicks | Wan'Dale Robinson | Recs | over | 0.3232709992009666 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688567 | prizepicks | Jadeveon Clowney | Sacks | over | 0.3230521982858561 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346852 | prizepicks | Travis Kelce | Fantasy Score | under | 0.3229542801461333 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14568552 | prizepicks | Quinnen Williams | Sacks | under | 0.3228285105183417 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559725 | prizepicks | Isaiah Likely | Rec Targets | under | 0.3227487082149241 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14276120 | prizepicks | Dontayvion Wicks | Recs | under | 0.3224466969603911 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14363226 | prizepicks | Jerry Jeudy | Recs | under | 0.322364863128685 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311935 | prizepicks | Bryce Young | Rush Yards | under | 0.3223560738424387 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13977002 | prizepicks | Cam Little | Kicking Points | over | 0.3222456885153613 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697872 | prizepicks | Chuba Hubbard | Fantasy Score | under | 0.3220328198780311 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352837 | prizepicks | Jakobi Meyers | Rec Targets | over | 0.3220029504925377 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498193 | prizepicks | Tyler Shough | Pass Attempts | under | 0.3217339637678148 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472940 | prizepicks | Justin Herbert | Rush Yards | over | 0.3216697225940286 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
@@ -1368,134 +1419,134 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14474420 | prizepicks | Aaron Jones Sr. | Rec Yards | over | 0.3208183264493631 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14591502 | prizepicks | Daniel Jones | Pass Attempts | under | 0.3207507947805541 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393780 | prizepicks | Ryan Flournoy | Rush+Rec Yds | under | 0.3206806592863184 | 2026-09-05T21:10:18Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14728043 | prizepicks | Cameron Dicker | Kicking Points | under | 0.320589276195899 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13979463 | prizepicks | Matt Gay | FG Made | over | 0.3205381627105681 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357893 | prizepicks | Parker Washington | Fantasy Score | over | 0.3204079432734228 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961562 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.320114757641727 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14389722 | prizepicks | Cam Skattebo | Rush+Rec Yds | over | 0.3200839123047635 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13955006 | prizepicks | Ja'Marr Chase | Rec Yards | over | 0.3200086515657889 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14524515 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.3199541803489585 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978298 | prizepicks | Kyle Juszczyk | Player TDs | under | 0.3198795936115274 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14311342 | prizepicks | Lamar Jackson | Rush Yards | under | 0.3198293057053907 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14522241 | prizepicks | Jordan Love | Pass Attempts | under | 0.3193352525377668 | 2026-09-05T16:47:46Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649470 | prizepicks | Boye Mafe | Sacks | under | 0.3198795936115274 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14681368 | prizepicks | Brian Robinson Jr. | Rush Yards | over | 0.3193349812676692 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14274002 | prizepicks | Josh Allen | Rush Yards | over | 0.3192143161848313 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14723965 | prizepicks | Keenan Allen | Recs | over | 0.3191931156887519 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14575013 | prizepicks | RJ Harvey | Rush Yards | over | 0.3191867162623458 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294891 | prizepicks | Christian Watson | Recs | over | 0.319159790394093 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13953355 | prizepicks | Chad Ryland | FG Made | over | 0.3190376306154139 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346851 | prizepicks | Patrick Mahomes | Fantasy Score | over | 0.3190333048965232 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14392054 | prizepicks | Brashard Smith | Rec Yards | under | 0.3189848214345522 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14577438 | prizepicks | Brashard Smith | Rec Yards | under | 0.3189848214345522 | 2026-09-07T04:28:26Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472892 | prizepicks | Derrick Henry | Rec Yards | under | 0.3187995692704251 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14392054 | prizepicks | Brashard Smith | Rec Yards | under | 0.3189848214345522 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393750 | prizepicks | Chris Rodriguez Jr. | Rush+Rec Yds | over | 0.3186424920852801 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499795 | prizepicks | Jalen Hurts | Pass Attempts | under | 0.3185756598779629 | 2026-09-08T14:29:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697886 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.3185611881219392 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14615526 | prizepicks | Drue Tranquill | Sacks | under | 0.3184591382207846 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13995745 | prizepicks | Jakobi Meyers | Player TDs | under | 0.3182073151218556 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473616 | prizepicks | Dawson Knox | Rec Yards | over | 0.3181568242833037 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473837 | prizepicks | Colby Parkinson | Rec Yards | over | 0.3181324630272016 | 2026-09-07T04:28:26Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14535110 | prizepicks | Rachaad White | Fantasy Score | under | 0.3178630674910262 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294900 | prizepicks | Tucker Kraft | Rec Yards | over | 0.3177551887786065 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339589 | prizepicks | Jerry Jeudy | Recs | over | 0.3177492158535875 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352086 | prizepicks | Trey McBride | Rec Targets | over | 0.3176747340201435 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14372403 | prizepicks | Tyler Allgeier | Recs | under | 0.3176367626531451 | 2026-09-01T13:38:26Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14403379 | prizepicks | Tyler Allgeier | Recs | under | 0.3176367626531451 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13979187 | prizepicks | Will Reichard | Kicking Points | over | 0.3175146102272621 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14134612 | prizepicks | Brock Bowers | Recs | under | 0.3175020851201808 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475369 | prizepicks | Sam Darnold | Pass+Rush Yds | over | 0.3174075300009107 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14339566 | prizepicks | Matthew Stafford | Pass+Rush Yds | under | 0.3173889552696187 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14738692 | prizepicks | Darnell Mooney | Rec Yards | over | 0.3174863876879185 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14472954 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.3173615196041702 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14345878 | prizepicks | Chris Rodriguez Jr. | Rec Yards | over | 0.3173247725034303 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996189 | prizepicks | Olamide Zaccheaus | Player TDs | under | 0.3172183409055131 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14473910 | prizepicks | Kendrick Bourne | Rec Yards | under | 0.3170868394305083 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14487259 | prizepicks | Mason Taylor | Recs | under | 0.3167177925579048 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586754 | prizepicks | Noah Gray | Recs | under | 0.316684564142186 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14534207 | prizepicks | Bhayshul Tuten | Fantasy Score | under | 0.3165854180953031 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14379001 | prizepicks | Brock Purdy | Pass Yards | under | 0.3164806431762907 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311518 | prizepicks | Tetairoa McMillan | Recs | under | 0.3164555343335 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534940 | prizepicks | Jahan Dotson | Recs | under | 0.3161627765098984 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534344 | prizepicks | Adonai Mitchell | Fantasy Score | under | 0.3160838282678002 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338867 | prizepicks | Jonathan Taylor | Recs | under | 0.3159463991076541 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14382831 | prizepicks | De'Von Achane | Rush+Rec Yds | under | 0.3157418802717417 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100138 | prizepicks | Chris Olave | Player TDs | under | 0.3155941587087629 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14564138 | prizepicks | Brock Purdy | Pass Attempts | under | 0.315559115271236 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13976221 | prizepicks | George Pickens | Rec Yards | over | 0.3155542355975033 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14697257 | prizepicks | Ian Thomas | Recs | over | 0.3153850107614664 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295758 | prizepicks | Terry McLaurin | Recs | over | 0.3153701648165631 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357804 | prizepicks | Chris Godwin Jr. | Fantasy Score | under | 0.3152518950948794 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535163 | prizepicks | Brashard Smith | Fantasy Score | over | 0.3147613269482676 | 2026-09-06T04:29:20Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13980911 | prizepicks | Rashid Shaheed | Recs | under | 0.3147093228343965 | 2026-08-31T21:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14342812 | prizepicks | Jonnu Smith | Player TDs | under | 0.3146554986365784 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14495499 | prizepicks | George Kittle | Rec Yards | over | 0.3145158421457081 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14513934 | prizepicks | Isaac TeSlaa | Recs | over | 0.3144491832590288 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14578899 | prizepicks | Caleb Williams | Pass Attempts | over | 0.3141477453823722 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497538 | prizepicks | Brock Purdy | Pass Attempts | over | 0.3138882270533201 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14339388 | prizepicks | Aaron Jones Sr. | Recs | under | 0.3138813020143914 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095244 | prizepicks | Isaiah Likely | Recs | under | 0.313750881977956 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14516921 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.3137110074627929 | 2026-09-05T10:30:11Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738443 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.3134835329900314 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311481 | prizepicks | DK Metcalf | Rec Yards | over | 0.3134699788726311 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14494712 | prizepicks | Jack Bech | Rec Yards | over | 0.3133804493089158 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393661 | prizepicks | Derrick Henry | Rush+Rec Yds | over | 0.3133641247830567 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402852 | prizepicks | Woody Marks | Rush+Rec Yds | over | 0.3133425290475685 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357929 | prizepicks | Marvin Harrison Jr. | Fantasy Score | under | 0.3132933651797713 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380198 | prizepicks | Jaylen Warren | Rush+Rec Yds | under | 0.3131513944661324 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14476443 | prizepicks | Dontayvion Wicks | Rec Yards | over | 0.3130788904507253 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375179 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.3129949048219309 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14606352 | prizepicks | Tyler Higbee | Rec Yards | over | 0.3129433707352577 | 2026-09-07T23:28:23Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14095140 | prizepicks | Kyren Williams | Rush+Rec Yds | over | 0.3127708514330038 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14649187 | prizepicks | Tonka Hemingway | Sacks | under | 0.3129384314377283 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14521637 | prizepicks | Cam Ward | Pass Attempts | under | 0.3128781677085774 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357951 | prizepicks | Cam Skattebo | Fantasy Score | over | 0.3127665415350622 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14473811 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.3127626728225545 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346855 | prizepicks | Rashee Rice | Fantasy Score | over | 0.3126868114126087 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14598618 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.3124936753717009 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14645414 | prizepicks | Joe Burrow | INT | under | 0.3124302201028377 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265087 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.3124116501648453 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14311355 | prizepicks | Jayden Daniels | Pass Yards | under | 0.311763210840468 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14718482 | prizepicks | Zack Baun | Sacks | under | 0.3122237568143706 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472401 | prizepicks | Tyjae Spears | Rec Yards | over | 0.3118110482268631 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495474 | prizepicks | Jayden Daniels | Pass Yards | under | 0.311763210840468 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311355 | prizepicks | Jayden Daniels | Pass Yards | under | 0.311763210840468 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14732019 | prizepicks | Alim McNeill | Sacks | under | 0.3116204410942089 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357777 | prizepicks | Sam LaPorta | Fantasy Score | over | 0.3114995998708867 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14514474 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.3114746840991269 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14068331 | prizepicks | Sam Darnold | Pass Yards | over | 0.3114117432287053 | 2026-09-01T16:14:47Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14586383 | prizepicks | RJ Harvey | Rec Yards | over | 0.3113216712579854 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14273984 | prizepicks | Dalton Kincaid | Recs | under | 0.3113095758771584 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319807 | prizepicks | Jameson Williams | Rec Yards | over | 0.3110871373939128 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720327 | prizepicks | Drake London | Rec Yards | over | 0.3107393874744454 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357863 | prizepicks | Jerry Jeudy | Fantasy Score | under | 0.3104864987921336 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14493652 | prizepicks | Javonte Williams | Rec Yards | under | 0.3101755396100532 | 2026-09-06T09:21:45Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14598588 | prizepicks | Kyren Williams | Rec Yards | over | 0.3101326177062999 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311163 | prizepicks | Ja'Marr Chase | Recs | over | 0.3100415219943175 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472168 | prizepicks | Baker Mayfield | Rush Yards | over | 0.3100335531784421 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357843 | prizepicks | Mark Andrews | Fantasy Score | under | 0.3100208917202696 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14464214 | prizepicks | De'Von Achane | Rush Yards | over | 0.3099378155574742 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14315786 | prizepicks | Spencer Shrader | FG Made | over | 0.3098141121123267 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14187613 | prizepicks | Noah Fant | Player TDs | under | 0.3097724373748057 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323877 | prizepicks | CeeDee Lamb | Player TDs | under | 0.3097724373748057 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14187613 | prizepicks | Noah Fant | Player TDs | under | 0.3097724373748057 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995865 | prizepicks | Luther Burden III | Player TDs | under | 0.3095613850872583 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14406068 | prizepicks | Jaylen Watson | Sacks | under | 0.3095613850872583 | 2026-09-02T09:32:24Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13978017 | prizepicks | KaVontae Turpin | Player TDs | under | 0.3095613850872583 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14402740 | prizepicks | Jordan Mason | Recs | under | 0.3094497306599731 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14319750 | prizepicks | Joe Burrow | Pass Yards | under | 0.3093738212548527 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532805 | prizepicks | Dawson Knox | Fantasy Score | over | 0.3093692829268422 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978581 | prizepicks | Keenan Allen | Player TDs | under | 0.3090700853597611 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14732028 | prizepicks | Derrick Barnes | Sacks | under | 0.3090700853597611 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14436804 | prizepicks | Jalen Coker | Rec Yards | over | 0.3088835571022418 | 2026-09-02T21:47:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14466890 | prizepicks | Rashod Bateman | Rec Yards | under | 0.3088395763901699 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475877 | prizepicks | Rashod Bateman | Rec Yards | under | 0.3088395763901699 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14466890 | prizepicks | Rashod Bateman | Rec Yards | under | 0.3088395763901699 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390060 | prizepicks | Aaron Rodgers | Fantasy Score | over | 0.3086723360761421 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633969 | prizepicks | Daniel Jones | INT | under | 0.3082587085937401 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472959 | prizepicks | Aidan Hutchinson | Sacks | over | 0.3081719121535429 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499524 | prizepicks | Kyler Murray | Pass Attempts | over | 0.3080161042304399 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14536900 | prizepicks | Alec Pierce | Recs | under | 0.3079861484069727 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989931 | prizepicks | Brock Purdy | Pass Yards | over | 0.3079404327391598 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14534954 | prizepicks | Jordan Mason | Fantasy Score | under | 0.3079391640571667 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14347240 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.3077785138204483 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14565431 | prizepicks | Lil'Jordan Humphrey | Player TDs | under | 0.3076634686322456 | 2026-09-06T19:06:29Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311382 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.3076531033159633 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460638 | prizepicks | Kayshon Boutte | Rec Yards | over | 0.3076289196242088 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495565 | prizepicks | James Cook III | Rec Yards | under | 0.3076281181484959 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14393573 | prizepicks | James Cook III | Rec Yards | under | 0.3076281181484959 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337074 | prizepicks | Colston Loveland | Rec Yards | over | 0.3074488037378774 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14486328 | prizepicks | George Kittle | Recs | over | 0.3074378329610228 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14519946 | prizepicks | George Kittle | Recs | over | 0.3074378329610228 | 2026-09-05T13:51:36Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14473951 | prizepicks | James Cook III | Rush Yards | over | 0.3074214691197221 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472733 | prizepicks | James Cook III | Rush Yards | over | 0.3074214691197221 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495045 | prizepicks | Jayden Reed | Rec Yards | under | 0.307395256456856 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14496670 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.3071873529894738 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721717 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.3071873529894739 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311225 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.3071873529894739 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389713 | prizepicks | Javonte Williams | Rush+Rec Yds | under | 0.307136136339508 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13953354 | prizepicks | Chad Ryland | FG Made | under | 0.3069522775411496 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534278 | prizepicks | Isaac TeSlaa | Fantasy Score | over | 0.3069076792544571 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496689 | prizepicks | Kyler Murray | Pass Yards | over | 0.3065745941587945 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14523934 | prizepicks | Drake Maye | Pass Attempts | under | 0.3065043719080844 | 2026-09-05T19:00:04Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13978288 | prizepicks | Eddy Pineiro | FG Made | over | 0.3064192873644302 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14472167 | prizepicks | Joe Burrow | Rush Yards | under | 0.3063706963722439 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14572360 | prizepicks | Jason Myers | Kicking Points | over | 0.3062930004427089 | 2026-09-06T21:18:23Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14499535 | prizepicks | Kyler Murray | Pass Yards | over | 0.3065745941587945 | 2026-09-05T10:30:11Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691277 | prizepicks | Dylan Sampson | Rush Yards | over | 0.3062778645577793 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357800 | prizepicks | Cade Otton | Fantasy Score | over | 0.3062194389856508 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339560 | prizepicks | Matthew Stafford | Pass+Rush Yds | over | 0.3058444222721241 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697526 | prizepicks | Josh Oliver | Rec Yards | over | 0.3058114024932139 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14135820 | prizepicks | Trey McBride | Recs | over | 0.3057808735890492 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721466 | prizepicks | Theo Johnson | Rec Yards | over | 0.3057423324174692 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559734 | prizepicks | Kenny Gainwell | Rec Targets | over | 0.3056454185035095 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14093563 | prizepicks | Jaxson Dart | Pass+Rush Yds | under | 0.3054190206490145 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14295767 | prizepicks | Dallas Goedert | Rec Yards | over | 0.3054023852154701 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472870 | prizepicks | Cam Skattebo | Rec Yards | over | 0.3052066418759775 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13983401 | prizepicks | Tyjae Spears | Player TDs | under | 0.3051919601942106 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688558 | prizepicks | Ashton Jeanty | Rec Yards | over | 0.3051363493877845 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295162 | prizepicks | Jalen Hurts | Pass TDs | over | 0.3050714071261929 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472748 | prizepicks | Calvin Ridley | Rec Yards | under | 0.3050278269669862 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14524507 | prizepicks | C.J. Stroud | Pass+Rush Yds | over | 0.3047233943168581 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1503,29 +1554,25 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14336859 | prizepicks | Tetairoa McMillan | Rec Yards | over | 0.304598691199526 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311514 | prizepicks | Khalil Shakir | Rec Yards | over | 0.3045120041426126 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375107 | prizepicks | Malik Washington | Rec Yards | under | 0.3040694777811981 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14498602 | prizepicks | Brock Purdy | Pass Yards | over | 0.3039469422973457 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14586364 | prizepicks | Evan Engram | Recs | over | 0.3039028543631568 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311274 | prizepicks | Mark Andrews | Rec Yards | under | 0.3038626177179933 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961572 | prizepicks | Drake Maye | Rush Yards | over | 0.3036629101346897 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14514548 | prizepicks | Patrick Mahomes | Rush Yards | over | 0.3036267908022367 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14580958 | prizepicks | Rachaad White | Rush+Rec Yds | over | 0.303533379945937 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13996268 | prizepicks | Tanner Hudson | Player TDs | under | 0.3033962402219441 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14494940 | prizepicks | Daniel Jones | Pass Yards | under | 0.303347477262226 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14487271 | prizepicks | Mason Taylor | Rec Yards | over | 0.3035015409352681 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978578 | prizepicks | Cairo Santos | FG Made | under | 0.3032666399634518 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14533444 | prizepicks | Cole Kmet | Fantasy Score | over | 0.3032515948499479 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472986 | prizepicks | Omarion Hampton | Rec Yards | over | 0.3030101588020286 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380156 | prizepicks | Jahmyr Gibbs | Rush+Rec Yds | under | 0.3027897217610842 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14357756 | prizepicks | TreVeyon Henderson | Fantasy Score | over | 0.3027236647756981 | 2026-09-01T03:38:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13974046 | prizepicks | Jaxon Smith-Njigba | Recs | over | 0.3025877839258015 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14489120 | prizepicks | Harrison Mevis | Kicking Points | over | 0.3024319727103046 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14488600 | prizepicks | Bijan Robinson | Rec Yards | over | 0.3024241828246952 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403230 | prizepicks | Cole Kmet | Rec Yards | over | 0.3022503553891986 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14164718 | prizepicks | Jaxson Dart | Pass Yards | under | 0.3020192170875341 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14273959 | prizepicks | Khalil Shakir | Recs | over | 0.3019772393247231 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14256022 | prizepicks | Devaughn Vele | Rec Yards | over | 0.3016632152396854 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14246336 | prizepicks | Rhamondre Stevenson | Fantasy Score | over | 0.3014230933354969 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472736 | prizepicks | David Montgomery | Rush Yards | under | 0.3012519553585178 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697070 | prizepicks | Mitchell Evans | Rec Yards | under | 0.3017248990583222 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689483 | prizepicks | Jordyn Brooks | Sacks | under | 0.3017049376330367 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14514495 | prizepicks | Xavier Worthy | Rec Yards | over | 0.3013834076545061 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14359052 | prizepicks | Javonte Williams | Fantasy Score | under | 0.3011983991731681 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341829 | prizepicks | Brenton Strange | Recs | over | 0.3009597346135884 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686407 | prizepicks | Kyle Monangai | Recs | over | 0.3009499382257365 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460630 | prizepicks | C.J. Stroud | Rush Yards | under | 0.30079097483798 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602929 | prizepicks | Jacoby Brissett | Pass+Rush Yds | under | 0.3007565556123595 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402688 | prizepicks | Bhayshul Tuten | Rush+Rec Yds | under | 0.3005966169457901 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1534,91 +1581,97 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14460641 | prizepicks | Kayshon Boutte | Recs | under | 0.3004071032197599 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14253960 | prizepicks | Chris Olave | Rec Yards | over | 0.3003552950868955 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535065 | prizepicks | Michael Mayer | Fantasy Score | over | 0.3002178023179893 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14337069 | prizepicks | Luther Burden III | Rec Yards | over | 0.299863965641177 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381527 | prizepicks | Braelon Allen | Rush+Rec Yds | under | 0.2997524859349192 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14163501 | prizepicks | CeeDee Lamb | Recs | under | 0.2997343708480009 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472337 | prizepicks | Gunnar Helm | Rec Yards | over | 0.2995429568014942 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14671407 | prizepicks | Gunnar Helm | Rec Yards | over | 0.2995429568014942 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596250 | prizepicks | RJ Harvey | Rush+Rec Yds | under | 0.2993998941417484 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14338573 | prizepicks | Omarion Hampton | Recs | over | 0.2992006002695939 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100120 | prizepicks | Travis Etienne Jr. | Player TDs | under | 0.2991639602669039 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13988404 | prizepicks | De'Von Achane | Rec TDs | under | 0.2991321814723011 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095775 | prizepicks | Travis Kelce | Rec Yards | under | 0.2990831346652194 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13957654 | prizepicks | Andy Borregales | FG Made | under | 0.2989816967242774 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357882 | prizepicks | Brian Thomas Jr. | Fantasy Score | over | 0.2989679982252969 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346527 | prizepicks | Jalen Hurts | Fantasy Score | under | 0.2989202798327681 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14465183 | prizepicks | Kayshon Boutte | Rec Yards | over | 0.2987298654241994 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164717 | prizepicks | Dak Prescott | Pass TDs | under | 0.2986326055910719 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990638 | prizepicks | Christian McCaffrey | Recs | over | 0.2985039491646202 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14343220 | prizepicks | Brock Purdy | Fantasy Score | over | 0.2980946659590905 | 2026-08-31T20:38:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14494000 | prizepicks | D'Andre Swift | Rush Yards | under | 0.2983942513312172 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472187 | prizepicks | Malik Davis | Rush Yards | under | 0.2981091624515873 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14489133 | prizepicks | Daniel Carlson | FG Made | over | 0.2980186864264716 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719294 | prizepicks | Ka'imi Fairbairn | FG Made | under | 0.2979314779646766 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14473020 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.2978309200062153 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14495511 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.2978309200062153 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472192 | prizepicks | Dak Prescott | Rush Yards | under | 0.2977981125304045 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14294894 | prizepicks | Jordan Mason | Rush Yards | over | 0.2977172743409618 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343633 | prizepicks | C.J. Stroud | Fantasy Score | over | 0.2970890600452247 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14486273 | prizepicks | D'Andre Swift | Rush Yards | over | 0.2970059966044943 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14713171 | prizepicks | Chris Boswell | Kicking Points | under | 0.2969775250271083 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14743883 | prizepicks | Darren Waller | Rec Yards | over | 0.296936026607788 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697052 | prizepicks | Mitchell Evans | Recs | over | 0.2969037335073301 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472378 | prizepicks | Darnell Washington | Rec Yards | over | 0.2968466093390953 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379080 | prizepicks | Jayden Daniels | Pass Yards | under | 0.2968310672747782 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14431796 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.2968110112120098 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357769 | prizepicks | Juwan Johnson | Fantasy Score | over | 0.2967455510000045 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977055 | prizepicks | Harrison Butker | Kicking Points | over | 0.2965309247873327 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13996372 | prizepicks | Tyquan Thornton | Player TDs | under | 0.2964919863643128 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14317895 | prizepicks | Juwan Johnson | Rec Yards | over | 0.2961130816282586 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472361 | prizepicks | Jaylen Warren | Rush Yards | over | 0.29604085830069 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337047 | prizepicks | Tetairoa McMillan | Rec Yards | over | 0.2958186147074465 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13986166 | prizepicks | Jake Elliott | Kicking Points | under | 0.295471419155652 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14373279 | prizepicks | Terrance Ferguson | Recs | over | 0.2953142046527472 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14691240 | prizepicks | Mo Alie-Cox | Fantasy Score | over | 0.2954219462033927 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14477579 | prizepicks | Malik Willis | Rush Yards | under | 0.2949102242125019 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311472 | prizepicks | Bryce Young | Pass TDs | over | 0.2947256538852789 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598318 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.2946565282200191 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14343232 | prizepicks | Christian Watson | Fantasy Score | over | 0.2943307372990488 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14319425 | prizepicks | Cam Skattebo | Rush Yards | over | 0.2942674456930221 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341837 | prizepicks | Brenton Strange | Recs | under | 0.2941737934949693 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14477600 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.2940933066327947 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559707 | prizepicks | Quinshon Judkins | Rec Targets | over | 0.2940321596222036 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357886 | prizepicks | Quinshon Judkins | Fantasy Score | under | 0.2939085231737556 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14646713 | prizepicks | Tommy Tremble | Rec Yards | over | 0.29371307153614 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475627 | prizepicks | Rico Dowdle | Rec Yards | under | 0.2936633595850237 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472927 | prizepicks | Calvin Ridley | Recs | under | 0.2936575452619612 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472268 | prizepicks | Kyren Williams | Rec Yards | over | 0.2936278047377804 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14357808 | prizepicks | Jalen McMillan | Fantasy Score | under | 0.2936066144837433 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14477113 | prizepicks | Kyren Williams | Rush Yards | over | 0.293591538387793 | 2026-09-04T00:57:06Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14327282 | prizepicks | Zay Flowers | Recs | under | 0.2934072513449057 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534431 | prizepicks | Mike Gesicki | Fantasy Score | over | 0.2931133843864111 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14147109 | prizepicks | Christian Watson | Rec Yards | over | 0.2930645981218673 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14533442 | prizepicks | Kalif Raymond | Fantasy Score | over | 0.2929639883980017 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560383 | prizepicks | Jacoby Brissett | Fantasy Score | over | 0.2929525939805708 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14337039 | prizepicks | Luther Burden III | Rec Yards | over | 0.2929349172102393 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14100090 | prizepicks | Brock Bowers | Player TDs | under | 0.2928733802401524 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472427 | prizepicks | Luther Burden III | Rec Yards | over | 0.2929349172102393 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14581896 | prizepicks | Tony Pollard | Recs | over | 0.2928014631080349 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14583326 | prizepicks | Charlie Kolar | Rec Yards | over | 0.2925084966908176 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14641902 | prizepicks | David Montgomery | Rush Yards | under | 0.2927919702292298 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697947 | prizepicks | Darren Waller | Recs | under | 0.2925183838323859 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14350241 | prizepicks | Cam Ward | Pass Yards | under | 0.2924525008767129 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311973 | prizepicks | Trevor Lawrence | Rush Yards | over | 0.2924226202520972 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487266 | prizepicks | Mason Taylor | Recs | over | 0.2923871934812929 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14489125 | prizepicks | Daniel Carlson | FG Made | under | 0.2923714360467702 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311329 | prizepicks | Derrick Henry | Rush Yards | under | 0.2921381401080007 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343230 | prizepicks | Tucker Kraft | Fantasy Score | over | 0.2920311346201184 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14738162 | prizepicks | Jaylen Warren | Rec Yards | over | 0.2918275152094139 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14362834 | prizepicks | Tony Pollard | Rush Yards | under | 0.2915746038327145 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311684 | prizepicks | Parker Washington | Recs | over | 0.2915194979089369 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164728 | prizepicks | George Pickens | Recs | under | 0.2913374685128569 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341649 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.2912386768517639 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311510 | prizepicks | Kyler Murray | Pass Yards | under | 0.2911387715338585 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691291 | prizepicks | Dylan Sampson | Rec Yards | under | 0.2910573134411054 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13998709 | prizepicks | Brock Wright | Player TDs | under | 0.2910565178412496 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339700 | prizepicks | D'Andre Swift | Rec Yards | under | 0.2910018785625633 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498421 | prizepicks | Daniel Jones | Pass Attempts | under | 0.290981129821023 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283561 | prizepicks | Dalton Kincaid | Rec Yards | over | 0.2905682425705527 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13995450 | prizepicks | Grant Calcaterra | Player TDs | under | 0.2905506407531628 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14551101 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.290505355992551 | 2026-09-06T13:38:09Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14095703 | prizepicks | Ryan Flournoy | Recs | over | 0.2904844474062275 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14572721 | prizepicks | Jason Myers | FG Made | under | 0.2904813122377769 | 2026-09-06T21:18:23Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14346567 | prizepicks | Josh Allen | Fantasy Score | over | 0.2904129325429947 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978530 | prizepicks | Riley Patterson | FG Made | over | 0.2902675054937665 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14479342 | prizepicks | Mark Andrews | Rec Yards | under | 0.2901340778685157 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14597704 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.2900857571025225 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14387846 | prizepicks | Andrei Iosivas | Recs | under | 0.2900170932095971 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13976402 | prizepicks | CeeDee Lamb | Rec Yards | over | 0.2899946118165069 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14164727 | prizepicks | Malik Nabers | Rec Yards | under | 0.2899432919121378 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357817 | prizepicks | Tetairoa McMillan | Fantasy Score | under | 0.2899026310048882 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390253 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.2898841071739437 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357787 | prizepicks | Devaughn Vele | Fantasy Score | over | 0.2896097402530555 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979246 | prizepicks | Jayden Reed | Player TDs | under | 0.2895856797325149 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472498 | prizepicks | Justin Jefferson | Rec Yards | over | 0.2895284978950689 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472273 | prizepicks | Samaje Perine | Rush Yards | over | 0.289484810428271 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346368 | prizepicks | Darnell Mooney | Rec Yards | over | 0.2894498641755707 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13961565 | prizepicks | Sam Darnold | Pass Yards | over | 0.2892969657277819 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311133 | prizepicks | Xavier Worthy | Rec Yards | over | 0.2892889980037294 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14293219 | prizepicks | Jauan Jennings | Recs | over | 0.2892856443733853 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14486264 | prizepicks | Samaje Perine | Rec Yards | under | 0.2892415763340527 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14735705 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.2892502285270321 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266924 | prizepicks | C.J. Stroud | Pass TDs | over | 0.2888962179240547 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14454879 | prizepicks | Lamar Jackson | Pass Yards | under | 0.288833941846828 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472843 | prizepicks | Woody Marks | Recs | under | 0.2888472765004581 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14598790 | prizepicks | Andre Szmyt | Kicking Points | over | 0.2886493814600215 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979444 | prizepicks | Ray Davis | Player TDs | under | 0.2885735167933401 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14690276 | prizepicks | Drew Sample | Rec Yards | over | 0.2885702291861896 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487057 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.2885559437536391 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978411 | prizepicks | Lamar Jackson | Player TDs | over | 0.2883141537454443 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275103 | prizepicks | Bo Nix | Pass+Rush Yds | over | 0.2883114742512649 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
@@ -1628,62 +1681,51 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14535112 | prizepicks | Chig Okonkwo | Fantasy Score | over | 0.2879133078230451 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338706 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.287810235490734 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380171 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | over | 0.2876968237341413 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14068338 | prizepicks | Brock Purdy | Pass Yards | over | 0.2874758983926266 | 2026-09-01T03:38:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14719319 | prizepicks | Brandon Aubrey | Kicking Points | over | 0.287515645763545 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14352545 | prizepicks | De'Von Achane | Recs | under | 0.2873536440344593 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357826 | prizepicks | Kyle Pitts Sr. | Fantasy Score | over | 0.2872251965099068 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14318497 | prizepicks | T.J. Hockenson | Recs | under | 0.287028743227939 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14164723 | prizepicks | Jaxson Dart | Rush Yards | over | 0.2868564797556237 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472230 | prizepicks | Jaxson Dart | Rush Yards | over | 0.2868564797556237 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13971284 | prizepicks | Tyler Loop | FG Made | under | 0.286841633800369 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14504192 | prizepicks | Jacoby Brissett | Pass Attempts | under | 0.2867266118165184 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14495269 | prizepicks | Jayden Reed | Recs | under | 0.2866429359189895 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343146 | prizepicks | AJ Barner | Fantasy Score | over | 0.2866044216852652 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13995870 | prizepicks | Ryan Fitzgerald | Kicking Points | under | 0.2863333229226472 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996181 | prizepicks | Austin Hooper | Player TDs | under | 0.2863271524953741 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095702 | prizepicks | Ryan Flournoy | Recs | under | 0.2862341957590426 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472292 | prizepicks | Rico Dowdle | Rec Yards | over | 0.2862033534537773 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472388 | prizepicks | Brock Bowers | Rec Yards | under | 0.2861364255659387 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14731082 | prizepicks | Chris Olave | Rush Yards | under | 0.2857224683246904 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14307034 | prizepicks | Tony Pollard | Rush+Rec Yds | over | 0.2856997420877023 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311322 | prizepicks | Breece Hall | Rush Yards | over | 0.2854681381047886 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14403376 | prizepicks | Tony Pollard | Rush+Rec Yds | over | 0.2856997420877023 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499518 | prizepicks | Jordan Love | Pass Attempts | under | 0.2853336151869603 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475741 | prizepicks | Chig Okonkwo | Rec Yards | over | 0.2853007592309153 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472898 | prizepicks | Chig Okonkwo | Rec Yards | over | 0.2853007592309153 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375731 | prizepicks | Tyjae Spears | Fantasy Score | over | 0.2852021254489618 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535067 | prizepicks | Jack Bech | Fantasy Score | under | 0.2851663542178381 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14700979 | prizepicks | Ashton Jeanty | Recs | under | 0.285131216972003 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14690279 | prizepicks | Alec Pierce | Recs | over | 0.2850465251115733 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472568 | prizepicks | Tyjae Spears | Rush Yards | over | 0.2849777676425099 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697116 | prizepicks | Elijah Higgins | Recs | under | 0.2846424435687578 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346886 | prizepicks | Bo Nix | Fantasy Score | over | 0.2845906116381382 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14257507 | prizepicks | Bijan Robinson | Rec Yards | over | 0.2844937233692562 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14103703 | prizepicks | DeMario Douglas | Recs | under | 0.2843497180164823 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14475361 | prizepicks | Tyler Higbee | Recs | over | 0.2842834116821708 | 2026-09-04T00:57:06Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14381730 | prizepicks | Bucky Irving | Rush+Rec Yds | over | 0.2842365331485006 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311366 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.2839841653487156 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633966 | prizepicks | Baker Mayfield | INT | under | 0.2839771252195322 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14394196 | prizepicks | Malik Davis | Rush Yards | over | 0.2839557816004638 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14390061 | prizepicks | Lamar Jackson | Fantasy Score | under | 0.283911822788377 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294890 | prizepicks | Christian Watson | Recs | under | 0.2837405353492471 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14256015 | prizepicks | Devaughn Vele | Rec Yards | under | 0.2835055172410632 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14567329 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.2834184168718301 | 2026-09-06T19:06:29Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13961520 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.2834184168718301 | 2026-09-02T21:15:45Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14381525 | prizepicks | Cam Ward | Pass Attempts | under | 0.2832398518448495 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691251 | prizepicks | Keenan Allen | Recs | under | 0.2832281423062647 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996312 | prizepicks | Ollie Gordon II | Player TDs | under | 0.2831838402440592 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341845 | prizepicks | Jerry Jeudy | Rec Yards | over | 0.283146510614076 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311172 | prizepicks | Lamar Jackson | Pass Yards | under | 0.2830176754687499 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14581011 | prizepicks | Rachaad White | Rec Yards | over | 0.2829523433341718 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995750 | prizepicks | Brian Thomas Jr. | Player TDs | under | 0.2828026939256647 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14265366 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.2827006543344939 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14405067 | prizepicks | Christian McCaffrey | Rush+Rec Yds | under | 0.2824710530532801 | 2026-09-05T21:10:18Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14559720 | prizepicks | Colby Parkinson | Rec Targets | over | 0.2824621387968472 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14580964 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | over | 0.2824295026361698 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380886 | prizepicks | Luther Burden III | Rush+Rec Yds | over | 0.2824074776726715 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472179 | prizepicks | Rashid Shaheed | Rush Yards | under | 0.2823167267241175 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14721454 | prizepicks | Tank Bigsby | Rec Yards | over | 0.2821440616302523 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14536913 | prizepicks | Tyler Warren | Recs | under | 0.2821006740605591 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560386 | prizepicks | Cam Ward | Fantasy Score | under | 0.2820088941908886 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978253 | prizepicks | Emanuel Wilson | Player TDs | under | 0.2820044986249305 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13957647 | prizepicks | Emanuel Wilson | Rush TDs | under | 0.2820044986249305 | 2026-09-08T14:29:16Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311500 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.2819019924991863 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14740228 | prizepicks | Woody Marks | Recs | over | 0.2819249753906392 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311252 | prizepicks | Jameson Williams | Recs | over | 0.2818831029929514 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14532830 | prizepicks | Osa Odighizuwa | Sacks | under | 0.2818812247848726 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13986121 | prizepicks | Jayden Daniels | Player TDs | over | 0.2817262029454476 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14500185 | prizepicks | Trevor Lawrence | Pass Attempts | over | 0.2816970716460538 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980673 | prizepicks | Rhamondre Stevenson | Recs | over | 0.2816354901634099 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357846 | prizepicks | Michael Pittman Jr. | Fantasy Score | under | 0.2815488939196925 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472618 | prizepicks | Cade Otton | Rec Yards | over | 0.2813923964043134 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14345879 | prizepicks | Chris Rodriguez Jr. | Fantasy Score | over | 0.2810402322311327 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1694,78 +1736,79 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14136699 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.2803166343131552 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472393 | prizepicks | Breece Hall | Rec Yards | over | 0.2802947525895034 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14028129 | prizepicks | Joey Slye | FG Made | over | 0.280278629172308 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14375949 | prizepicks | Wan'Dale Robinson | Recs | under | 0.2802202697293938 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14420241 | prizepicks | Wan'Dale Robinson | Recs | under | 0.2802202697293938 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294862 | prizepicks | Tucker Kraft | Recs | over | 0.2800908265501636 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14256013 | prizepicks | Devaughn Vele | Recs | under | 0.2798043662597445 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14665753 | prizepicks | Brian Robinson Jr. | Rush Yards | over | 0.2797046257447818 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266781 | prizepicks | Woody Marks | Rush Yards | over | 0.2796616961176185 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14323085 | prizepicks | Jaylen Warren | Recs | over | 0.2794197015968883 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385286 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.2793584111163618 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974072 | prizepicks | A.J. Brown | Recs | over | 0.2791259017023806 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14346401 | prizepicks | Darnell Mooney | Recs | over | 0.2790610430072674 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14439976 | prizepicks | Tre' Harris | Rec Yards | under | 0.2790124064362786 | 2026-09-03T00:08:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472436 | prizepicks | Tre' Harris | Rec Yards | under | 0.2790124064362786 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14439976 | prizepicks | Tre' Harris | Rec Yards | under | 0.2790124064362786 | 2026-09-03T00:08:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472447 | prizepicks | Tyler Shough | Rush Yards | over | 0.2787277175685085 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697093 | prizepicks | Treylon Burks | Rec Yards | under | 0.2786397158783738 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136898 | prizepicks | Kyler Murray | Pass+Rush Yds | under | 0.2785992181778345 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534437 | prizepicks | Drew Sample | Fantasy Score | over | 0.2784553254684676 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534883 | prizepicks | Charlie Kolar | Fantasy Score | under | 0.2781536414425831 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14135015 | prizepicks | DK Metcalf | Rec Yards | over | 0.2781185738079426 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357959 | prizepicks | Kenneth Walker III | Fantasy Score | under | 0.2780790855703545 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14475286 | prizepicks | Jahmyr Gibbs | Rec Yards | over | 0.27806685865923 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14512364 | prizepicks | Josh Allen | Pass Yards | over | 0.2778232906443939 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311378 | prizepicks | Josh Allen | Pass Yards | over | 0.2778232906443938 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686286 | prizepicks | D'Andre Swift | Rush+Rec Yds | over | 0.2777884893129956 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265368 | prizepicks | Bo Nix | Rush Yards | over | 0.2777781956994396 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14539884 | prizepicks | Alec Pierce | Rec Yards | over | 0.2775664571439649 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14536921 | prizepicks | Alec Pierce | Rec Yards | over | 0.2775664571439649 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14274007 | prizepicks | DJ Moore | Rec Yards | under | 0.2775350520363856 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402480 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.2775302889974538 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337248 | prizepicks | Bryce Young | Rush Yards | over | 0.2774704259242758 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961527 | prizepicks | AJ Barner | Rec Yards | over | 0.277131831534972 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14500176 | prizepicks | Samaje Perine | Rush Yards | over | 0.2773590852569919 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486860 | prizepicks | Xavier Hutchinson | Recs | under | 0.2771110867027306 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14496694 | prizepicks | Jonathan Taylor | Rec Yards | under | 0.2768747886830118 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311700 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.2767621479087154 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324183 | prizepicks | Jayden Daniels | Pass+Rush Yds | under | 0.2766020742312263 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352557 | prizepicks | Tre Tucker | Recs | under | 0.2763678449261415 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14614832 | prizepicks | D.J. Jones | Sacks | under | 0.2762868469016152 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14343152 | prizepicks | Hunter Henry | Fantasy Score | over | 0.2760418417770722 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14257560 | prizepicks | Kyle Pitts Sr. | Recs | under | 0.276008864180661 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339066 | prizepicks | Caleb Williams | Pass+Rush Yds | under | 0.2759410169743496 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13958714 | prizepicks | George Holani | Rush Yards | under | 0.2759299558077468 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14343630 | prizepicks | Nico Collins | Fantasy Score | under | 0.2757648175124463 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402757 | prizepicks | Jordan Mason | Rush+Rec Yds | over | 0.2754930424943076 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14387918 | prizepicks | Mike Gesicki | Recs | under | 0.2754243678451654 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311109 | prizepicks | Cam Ward | Pass TDs | over | 0.2753976250452976 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14582088 | prizepicks | Michael Mayer | Rec Yards | over | 0.2751088358512015 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586389 | prizepicks | RJ Harvey | Recs | over | 0.2749286366399366 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472285 | prizepicks | Tyjae Spears | Rec Yards | over | 0.2748518449690127 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14542467 | prizepicks | Dak Prescott | Rush Yards | under | 0.2744332878591498 | 2026-09-07T04:28:26Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14498180 | prizepicks | Xavier Hutchinson | Rec Yards | under | 0.2742928127534751 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14350242 | prizepicks | Geno Smith | Pass Yards | under | 0.2743078464573868 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514518 | prizepicks | Noah Gray | Rec Yards | under | 0.2740072456549288 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14294882 | prizepicks | Justin Jefferson | Recs | over | 0.27400559192712 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12325683 | prizepicks | Travis Kelce | Player TDs | under | 0.2738148196613195 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13978412 | prizepicks | Tyler Warren | Player TDs | under | 0.2738148196613195 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|12325683 | prizepicks | Travis Kelce | Player TDs | under | 0.2738148196613195 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13994961 | prizepicks | Kyle Monangai | Player TDs | under | 0.2738148196613195 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978322 | prizepicks | Bo Nix | Player TDs | over | 0.2737324693745441 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14489119 | prizepicks | Nick Folk | Kicking Points | under | 0.2736364675213542 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14486279 | prizepicks | D'Andre Swift | Rec Yards | under | 0.2737268192776292 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337050 | prizepicks | Luther Burden III | Rec Yards | under | 0.2735563023456413 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540799 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.2733922196943465 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14450012 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.2733485116371661 | 2026-09-03T05:43:24Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14257561 | prizepicks | Kyle Pitts Sr. | Recs | over | 0.2733450981740352 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311030 | prizepicks | Chase Brown | Rush Yards | under | 0.2733256336767321 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472950 | prizepicks | Chig Okonkwo | Recs | under | 0.2733032905926993 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136815 | prizepicks | Matthew Golden | Rec Yards | under | 0.2726515262789565 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649474 | prizepicks | Jonathan Allen | Sacks | under | 0.2725056394150394 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996124 | prizepicks | Xavier Hutchinson | Player TDs | under | 0.2724418581438879 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14215637 | prizepicks | CeeDee Lamb | Fantasy Score | under | 0.2723495853697766 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14514482 | prizepicks | Travis Kelce | Rec Yards | over | 0.2722216646141613 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14524004 | prizepicks | Isaiah Williams | Recs | over | 0.2721661808247886 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995003 | prizepicks | Roman Wilson | Player TDs | under | 0.2721209517790444 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496654 | prizepicks | Drake Maye | Pass Attempts | under | 0.2720174219704729 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14686654 | prizepicks | Tyler Allgeier | Rush Yards | over | 0.2720114335576477 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14327276 | prizepicks | Zay Flowers | Recs | over | 0.2717872352046016 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100142 | prizepicks | James Cook III | Player TDs | under | 0.2717802470351913 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346531 | prizepicks | Saquon Barkley | Fantasy Score | under | 0.2712512962418107 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311181 | prizepicks | Lamar Jackson | Pass Yards | under | 0.2711115088787279 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14524006 | prizepicks | Isaiah Williams | Rec Yards | over | 0.2710779381370238 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472279 | prizepicks | Sam Darnold | Rush Yards | over | 0.2709317706917467 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14495044 | prizepicks | Jayden Reed | Rec Yards | over | 0.2708602165144794 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14622489 | prizepicks | C.J. Stroud | Pass Yards | over | 0.2707478178252123 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14273973 | prizepicks | C.J. Stroud | Pass Yards | over | 0.2707478178252123 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311279 | prizepicks | C.J. Stroud | Pass Yards | over | 0.2707478178252123 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403029 | prizepicks | David Njoku | Recs | under | 0.2706858806242146 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14275111 | prizepicks | Bo Nix | Pass+Rush Yds | under | 0.2705999908423702 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14066122 | prizepicks | Tim Patrick | Player TDs | under | 0.2704218901727282 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339160 | prizepicks | Jackson Hawes | Player TDs | under | 0.2704218901727282 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514502 | prizepicks | Tyquan Thornton | Recs | under | 0.2703994659874249 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14006531 | prizepicks | Andy Borregales | Kicking Points | over | 0.2701982557704727 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14476645 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | under | 0.2698617582526679 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14533443 | prizepicks | D'Andre Swift | Fantasy Score | under | 0.2698493606038671 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357836 | prizepicks | Bijan Robinson | Fantasy Score | over | 0.26982090159514 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -1773,85 +1816,82 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14473074 | prizepicks | Jahan Dotson | Rec Yards | over | 0.2691499396562093 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379226 | prizepicks | Derrick Henry | Rush Yards | over | 0.2689166177294466 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357778 | prizepicks | Travis Etienne Jr. | Fantasy Score | over | 0.2688989503000676 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721517 | prizepicks | Chuba Hubbard | Rush Yards | under | 0.2688533804958033 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14603237 | prizepicks | Adam Trautman | Recs | under | 0.268741182916747 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13995879 | prizepicks | Tommy Tremble | Player TDs | under | 0.2685809283642255 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14477602 | prizepicks | Christian Barmore | Sacks | under | 0.2685809283642255 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472890 | prizepicks | Chris Godwin Jr. | Recs | over | 0.2685418606652963 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14295686 | prizepicks | Jalen Hurts | Rush Yards | under | 0.2683672356790096 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311281 | prizepicks | Chase Brown | Recs | over | 0.268359737040406 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689756 | prizepicks | Jonnu Smith | Rec Yards | over | 0.2683281685598035 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311222 | prizepicks | Chase Brown | Rec Yards | over | 0.2681813216649188 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645940 | prizepicks | Xavier Worthy | Rush+Rec Yds | under | 0.2681405057548091 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311616 | prizepicks | Marvin Harrison Jr. | Recs | under | 0.2680776729753711 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339397 | prizepicks | Aaron Jones Sr. | Recs | over | 0.268073605974543 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697508 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.2680287904021671 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14477222 | prizepicks | Cam Little | Kicking Points | over | 0.2678928214767764 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393603 | prizepicks | James Cook III | Rush+Rec Yds | over | 0.2674145403680706 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14403438 | prizepicks | Blake Grupe | Kicking Points | over | 0.2673776155450659 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495738 | prizepicks | Baker Mayfield | Pass Yards | over | 0.267355854344719 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14362826 | prizepicks | Jalen Hurts | Pass Yards | under | 0.2673203855476203 | 2026-09-01T05:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14486247 | prizepicks | Jake Ferguson | Rec Yards | under | 0.267239481427956 | 2026-09-04T05:48:41Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14513940 | prizepicks | Isaac TeSlaa | Recs | under | 0.2672077712614527 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600012 | prizepicks | Chig Okonkwo | Rec Targets | over | 0.2671339197442706 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14381577 | prizepicks | Blake Corum | Rush+Rec Yds | over | 0.2671243363181113 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14598323 | prizepicks | Kyle Juszczyk | Rec Yards | under | 0.2670964916123992 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14357589 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.2669916990598793 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473663 | prizepicks | Tyler Warren | Rec Yards | under | 0.2667203977493525 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294822 | prizepicks | Tucker Kraft | Recs | under | 0.2665401423341609 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311100 | prizepicks | Lamar Jackson | Pass TDs | over | 0.2665175012035189 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559721 | prizepicks | Tyler Higbee | Rec Targets | over | 0.2664862080631387 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14489126 | prizepicks | Daniel Carlson | Kicking Points | over | 0.2664329454677492 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14004212 | prizepicks | Sam Darnold | Pass Yards | over | 0.2657303950862141 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14135843 | prizepicks | Michael Wilson | Rec Yards | under | 0.2656724620903361 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13979195 | prizepicks | T.J. Hockenson | Player TDs | under | 0.2656417087768963 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14218340 | prizepicks | Matt Gay | Kicking Points | over | 0.2656360708365479 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14514497 | prizepicks | Bo Nix | Pass Yards | over | 0.2654767154898485 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14264404 | prizepicks | Bo Nix | Pass Yards | over | 0.2654767154898485 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14514497 | prizepicks | Bo Nix | Pass Yards | over | 0.2654767154898485 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13986203 | prizepicks | Patrick Mahomes | Player TDs | over | 0.2653167310027136 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346436 | prizepicks | Ja'Marr Chase | Fantasy Score | over | 0.2652967877261243 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357796 | prizepicks | Tee Higgins | Fantasy Score | over | 0.2652358090568405 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390058 | prizepicks | Jared Goff | Fantasy Score | under | 0.2652175837153789 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14571022 | prizepicks | Jalen Nailor | Rec Yards | over | 0.2651947000103076 | 2026-09-06T21:18:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420235 | prizepicks | Cam Ward | Pass Yards | under | 0.2651423130143987 | 2026-09-03T05:43:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14335788 | prizepicks | Jahmyr Gibbs | Rec Yards | under | 0.2651093237114198 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343151 | prizepicks | Romeo Doubs | Fantasy Score | over | 0.2649129501861521 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14095784 | prizepicks | Travis Kelce | Recs | under | 0.2647841923217138 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14475705 | prizepicks | Brashard Smith | Rush Yards | over | 0.2647103295014882 | 2026-09-04T00:57:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13976400 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.2646902306900582 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14495472 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.2646902306900582 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472750 | prizepicks | Calvin Ridley | Rec Yards | over | 0.2645444617628472 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343217 | prizepicks | Mike Evans | Fantasy Score | under | 0.2645139643112578 | 2026-08-31T20:38:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14475500 | prizepicks | Jordan Love | Pass Yards | under | 0.2644357306270382 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14358161 | prizepicks | Jordan Love | Pass Yards | under | 0.264435730627038 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14581969 | prizepicks | Jalen McMillan | Rec Yards | over | 0.264224102149832 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311515 | prizepicks | CeeDee Lamb | Rec Yards | over | 0.2642126027203477 | 2026-08-31T23:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14476690 | prizepicks | Jared Goff | Pass Attempts | over | 0.2641289902466607 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353313 | prizepicks | DeVonta Smith | Rec Targets | under | 0.26401206793526 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989813 | prizepicks | Christian McCaffrey | Rec Yards | under | 0.2639977287470467 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14466896 | prizepicks | Rashod Bateman | Rec Yards | under | 0.2639576598702358 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14418631 | prizepicks | Bo Nix | Pass Attempts | over | 0.2639522664973606 | 2026-09-02T14:24:20Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14337056 | prizepicks | Luther Burden III | Recs | under | 0.2638880736483124 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540488 | prizepicks | Kenny Gainwell | Recs | over | 0.263837990147441 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14512441 | prizepicks | Luther Burden III | Rec Yards | over | 0.2638350970851938 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402873 | prizepicks | Darnell Washington | Recs | over | 0.2638243029597279 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14574997 | prizepicks | RJ Harvey | Rush Yards | over | 0.2638194239661657 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472761 | prizepicks | Rachaad White | Rush Yards | over | 0.2637092047758733 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14488578 | prizepicks | Baker Mayfield | Pass Yards | over | 0.2636755070912531 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390047 | prizepicks | Tyler Shough | Fantasy Score | over | 0.2636688943931397 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14461860 | prizepicks | Cole Kmet | Rec Yards | over | 0.2636184648068371 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14562235 | prizepicks | Malik Washington | Rec Yards | under | 0.2634113633240992 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14379623 | prizepicks | Colby Parkinson | Recs | over | 0.2632699195758249 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14486243 | prizepicks | D'Andre Swift | Rec Yards | over | 0.2633033390645969 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503612 | prizepicks | Josh Allen | Pass Attempts | under | 0.2632536718395508 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342873 | prizepicks | Chase Brown | Fantasy Score | over | 0.2631906284907472 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13991225 | prizepicks | Brock Purdy | Pass+Rush Yds | over | 0.2631430816505317 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14495014 | prizepicks | David Montgomery | Rec Yards | over | 0.2630707520162509 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392729 | prizepicks | Michael Mayer | Rec Yards | over | 0.2630207666382282 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14294825 | prizepicks | Jordan Love | Pass TDs | over | 0.2628680277376569 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13979199 | prizepicks | Jordan Love | Player TDs | over | 0.2628680277376569 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14294825 | prizepicks | Jordan Love | Pass TDs | over | 0.2628680277376569 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14340022 | prizepicks | T.J. Hockenson | Rec Yards | over | 0.2626865212058835 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472921 | prizepicks | Cade Otton | Recs | over | 0.2623613435094782 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14522665 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.2623430106003659 | 2026-09-05T16:47:46Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14476700 | prizepicks | Charlie Kolar | Rec Yards | over | 0.2622817848656127 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995885 | prizepicks | Chuba Hubbard | Player TDs | under | 0.2622796376662626 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14403005 | prizepicks | Dawson Knox | Recs | over | 0.2621143358414102 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14373289 | prizepicks | Terrance Ferguson | Rec Yards | over | 0.2620233929227373 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14732560 | prizepicks | Jaylin Noel | Rec Yards | over | 0.2621584033968841 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14741426 | prizepicks | Dawson Knox | Recs | over | 0.2621143358414102 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13988384 | prizepicks | Malik Willis | Player TDs | over | 0.2619706739726796 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719812 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.2618856877356983 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540795 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.2618856877356982 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265376 | prizepicks | Courtland Sutton | Recs | over | 0.2618728119711717 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13991140 | prizepicks | Brock Purdy | Rush Yards | under | 0.2618121628378262 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14293218 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.2615912177606618 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14494761 | prizepicks | Tyler Shough | Rush Yards | over | 0.26156137363019 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402995 | prizepicks | Dawson Knox | Rec Yards | over | 0.2614952930753521 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13953365 | prizepicks | Trey McBride | Rec Yards | over | 0.2614738254534298 | 2026-09-02T14:24:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14135828 | prizepicks | Michael Wilson | Recs | under | 0.2614633967881207 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719187 | prizepicks | Ladd McConkey | Rec Yards | under | 0.261435906843507 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995897 | prizepicks | Mike Gesicki | Player TDs | under | 0.2613864692730216 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532946 | prizepicks | Xavier Hutchinson | Fantasy Score | over | 0.2613393212038264 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134447 | prizepicks | Ryan Flournoy | Rec Yards | under | 0.2612301410168736 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
@@ -1859,284 +1899,262 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14496872 | prizepicks | Justin Herbert | Pass Yards | over | 0.2610161416627081 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534345 | prizepicks | Mason Taylor | Fantasy Score | over | 0.2608082731450781 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294871 | prizepicks | Kyler Murray | Rush Yards | over | 0.2606050460239126 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14573454 | prizepicks | Eddy Pineiro | Kicking Points | under | 0.2605699207369631 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311685 | prizepicks | Brian Thomas Jr. | Recs | under | 0.260414238113887 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472628 | prizepicks | Cam Ward | Pass Yards | under | 0.2604049799389353 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14494757 | prizepicks | Jordan Addison | Rec Yards | under | 0.2603500952668037 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14577436 | prizepicks | Rachaad White | Rec Yards | under | 0.2603328397296489 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402952 | prizepicks | Charlie Kolar | Rec Yards | under | 0.260297444435392 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14720918 | prizepicks | Kyle Monangai | Rec Yards | over | 0.260045995204853 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311234 | prizepicks | Amon-Ra St. Brown | Recs | over | 0.2599133825087594 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403224 | prizepicks | Kalif Raymond | Rec Yards | over | 0.2599107594309846 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711988 | prizepicks | Spencer Shrader | Kicking Points | over | 0.2598930595306514 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14601834 | prizepicks | Adam Trautman | Rec Yards | over | 0.2598810180807913 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294830 | prizepicks | Kyler Murray | Pass TDs | over | 0.2596524051039418 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14453181 | prizepicks | Kyren Williams | Rush Yards | over | 0.259568478697542 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14357887 | prizepicks | Jakobi Meyers | Fantasy Score | under | 0.2595381580867051 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390041 | prizepicks | Trevor Lawrence | Fantasy Score | over | 0.2594834385658218 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996144 | prizepicks | Khalil Shakir | Player TDs | under | 0.2593961350356361 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14512507 | prizepicks | C.J. Stroud | Rush Yards | over | 0.2593287235785415 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978097 | prizepicks | Geno Smith | Player TDs | over | 0.2591867421532685 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978099 | prizepicks | Geno Smith | Pass TDs | over | 0.2591867421532685 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13971149 | prizepicks | Jake Bates | Kicking Points | over | 0.2588596542120664 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697122 | prizepicks | Elijah Higgins | Rec Yards | under | 0.2591644300854658 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995006 | prizepicks | Chris Boswell | FG Made | under | 0.2587973350300565 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265232 | prizepicks | Bo Nix | Rush Yards | over | 0.258500977614959 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14686590 | prizepicks | Kirk Cousins | Pass+Rush Yds | under | 0.2584581335554616 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338644 | prizepicks | Dalton Schultz | Rec Yards | over | 0.2582496534553766 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472440 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.2582124606098817 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341971 | prizepicks | Michael Wilson | Fantasy Score | over | 0.2581303216078477 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357823 | prizepicks | Colston Loveland | Fantasy Score | over | 0.257993568666171 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14677509 | prizepicks | Stefon Diggs | Rec Yards | over | 0.2578675182259908 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14606716 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.2578311101299615 | 2026-09-08T04:27:30Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14346890 | prizepicks | Courtland Sutton | Fantasy Score | over | 0.2576817346703924 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14390285 | prizepicks | Derick Hall | Sacks | under | 0.2574993435582156 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14472586 | prizepicks | Kyler Murray | Pass Yards | over | 0.2573396014626724 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14340702 | prizepicks | Kyler Murray | Pass Yards | over | 0.2573396014626724 | 2026-08-31T19:38:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14350969 | prizepicks | Emeka Egbuka | Recs | under | 0.2573394006981289 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337042 | prizepicks | Rome Odunze | Rec Yards | over | 0.2572884421408302 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473072 | prizepicks | Tony Pollard | Rec Yards | under | 0.2572829450516352 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559843 | prizepicks | George Kittle | Fantasy Score | over | 0.2571940081956968 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14174050 | prizepicks | Drake Maye | Pass+Rush Yds | over | 0.2570799804495058 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14507744 | prizepicks | Terrance Ferguson | Rec Yards | under | 0.2569062952847094 | 2026-09-07T04:28:26Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13961546 | prizepicks | Romeo Doubs | Rec Yards | over | 0.256892409882813 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14473620 | prizepicks | David Montgomery | Rush Yards | under | 0.2568885301866176 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14306248 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.2572761038934822 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14688421 | prizepicks | Jaylin Noel | Recs | under | 0.2570993472290446 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719155 | prizepicks | Nolan Smith Jr. | Sacks | under | 0.2569393686663517 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341637 | prizepicks | Isaiah Likely | Fantasy Score | under | 0.2568806978208289 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14255325 | prizepicks | Tyler Shough | Pass+Rush Yds | over | 0.2568162370511362 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978579 | prizepicks | Cairo Santos | FG Made | over | 0.2567373634533512 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14515026 | prizepicks | Bo Nix | Pass Yards | over | 0.2565560324883842 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14134627 | prizepicks | Brock Bowers | Rec Yards | under | 0.2565419038427339 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14706657 | prizepicks | Keenan Allen | Fantasy Score | over | 0.2564693766026562 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14273960 | prizepicks | Josh Allen | Pass TDs | over | 0.2564690984993216 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14377152 | prizepicks | Tre Tucker | Rec Yards | over | 0.2563960710499385 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375162 | prizepicks | Garrett Wilson | Rec Yards | over | 0.2563534801738044 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697627 | prizepicks | Roman Wilson | Rec Yards | under | 0.2560736872121906 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979209 | prizepicks | Will Reichard | FG Made | over | 0.2560478996301624 | 2026-09-01T00:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14274035 | prizepicks | Khalil Shakir | Rec Yards | over | 0.2558143534175636 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472303 | prizepicks | Justin Herbert | Rush Yards | over | 0.2555581386360184 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14378975 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.2555507544765079 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14164730 | prizepicks | Malik Nabers | Recs | under | 0.2553773609180325 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14320590 | prizepicks | Chase Brown | Recs | under | 0.2553028722168907 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14341834 | prizepicks | Brenton Strange | Rec Yards | under | 0.2551602198150076 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979458 | prizepicks | Josh Allen | Pass+Rush Yds | over | 0.2551447865516079 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12323867 | prizepicks | Rhamondre Stevenson | Player TDs | over | 0.2551414263196893 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311346 | prizepicks | Sam LaPorta | Recs | under | 0.2548812705833458 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294828 | prizepicks | Jordan Love | Rush Yards | over | 0.2548476555657548 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095795 | prizepicks | Xavier Worthy | Recs | under | 0.2548419440704181 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14379522 | prizepicks | Travis Hunter | Rec Yards | over | 0.2548008164298425 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979247 | prizepicks | Will Reichard | Kicking Points | over | 0.25469550728919 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14688562 | prizepicks | Greg Rousseau | Sacks | over | 0.2546713340807967 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472917 | prizepicks | Jacoby Brissett | Rush Yards | over | 0.2545326398006131 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375153 | prizepicks | Garrett Wilson | Recs | under | 0.2545146954908668 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473095 | prizepicks | Tre Tucker | Rec Yards | under | 0.2543574578527228 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311491 | prizepicks | Bryce Young | Pass Yards | under | 0.2542499409014431 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14134622 | prizepicks | Tre Tucker | Rec Yards | under | 0.2543574578527228 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559701 | prizepicks | Rashod Bateman | Rec Targets | under | 0.2542311106159378 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14095844 | prizepicks | Xavier Worthy | Rec Yards | under | 0.254152099283061 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14265265 | prizepicks | Jaylen Waddle | Recs | under | 0.2540820712613727 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14352688 | prizepicks | Amon-Ra St. Brown | Rec Targets | over | 0.2539998003694216 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339210 | prizepicks | J.K. Dobbins | Recs | under | 0.2539736513414794 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13995868 | prizepicks | Ryan Fitzgerald | FG Made | over | 0.2539087134289525 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341611 | prizepicks | Harold Fannin Jr. | Fantasy Score | over | 0.2538433930011949 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390062 | prizepicks | Caleb Williams | Fantasy Score | over | 0.2536685623122471 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691198 | prizepicks | Mo Alie-Cox | Rec Yards | under | 0.2536589822105576 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420558 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.2534992065860083 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472274 | prizepicks | Jake Ferguson | Rec Yards | over | 0.2534772166091747 | 2026-09-04T05:48:41Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14343631 | prizepicks | Nico Collins | Fantasy Score | over | 0.2532851741169113 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14394117 | prizepicks | Dak Prescott | Pass+Rush Yds | over | 0.2532384866021004 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14361272 | prizepicks | Jalen Hurts | Rush Yards | under | 0.2530387939939513 | 2026-09-01T04:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957544 | prizepicks | Jason Myers | Kicking Points | over | 0.2526702949784138 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14381217 | prizepicks | Kenneth Walker III | Rush+Rec Yds | over | 0.2526151328120993 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472976 | prizepicks | Justice Hill | Rush Yards | under | 0.252547639707924 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474442 | prizepicks | Dontayvion Wicks | Rec Yards | over | 0.2525772458372364 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473913 | prizepicks | Justice Hill | Rush Yards | under | 0.252547639707924 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13986216 | prizepicks | Jake Elliott | FG Made | over | 0.2525188775057332 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14173579 | prizepicks | Cam Ward | Pass+Rush Yds | under | 0.2524999114546218 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14276134 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.2522052996766535 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14541472 | prizepicks | Kenny Gainwell | Rush+Rec Yds | over | 0.2522041653023676 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472569 | prizepicks | Geno Smith | Rush Yards | under | 0.2520021638555797 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978526 | prizepicks | Riley Patterson | Kicking Points | under | 0.2519404717183815 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14340380 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.2518457343029666 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14236213 | prizepicks | Drake Maye | Pass Yards | over | 0.2517669707478416 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13986128 | prizepicks | Rachaad White | Player TDs | under | 0.2517431837565376 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265231 | prizepicks | Patrick Mahomes | Rush Yards | over | 0.2515127860134638 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14381559 | prizepicks | Tyjae Spears | Rush+Rec Yds | under | 0.2514548609549869 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472442 | prizepicks | Jaylen Warren | Rush Yards | over | 0.251321253870443 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14273977 | prizepicks | Nico Collins | Recs | under | 0.2512839104934381 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311492 | prizepicks | Drake London | Recs | under | 0.2511899376969748 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14502841 | prizepicks | Cam Ward | Pass Attempts | under | 0.2510543548077292 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738393 | prizepicks | Joey Slye | Kicking Points | over | 0.251175965440308 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14700425 | prizepicks | Cam Ward | Pass Attempts | under | 0.2510543548077292 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472941 | prizepicks | Jacoby Brissett | Rush Yards | under | 0.2507925479471269 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14375427 | prizepicks | Dallas Goedert | Rec Yards | over | 0.2507245965387239 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14276158 | prizepicks | Dallas Goedert | Rec Yards | over | 0.2507245965387239 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343343 | prizepicks | Baker Mayfield | Fantasy Score | under | 0.2506135097648709 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380082 | prizepicks | Chase Brown | Rush+Rec Yds | over | 0.2505765859276804 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13991138 | prizepicks | Brock Purdy | Rush Yards | over | 0.2505674045251964 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14136637 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.2505245124275852 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474421 | prizepicks | Aaron Jones Sr. | Rec Yards | under | 0.250441163899245 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472957 | prizepicks | Derrick Henry | Rush Yards | over | 0.2503847824948244 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14506278 | prizepicks | Jaxon Smith-Njigba | Rec Yards | under | 0.2503472029592785 | 2026-09-08T14:29:16Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14136424 | prizepicks | Quinshon Judkins | Rec Yards | under | 0.2499472708323902 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393590 | prizepicks | James Cook III | Recs | under | 0.2498907931457866 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720332 | prizepicks | James Cook III | Recs | under | 0.2498907931457867 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534430 | prizepicks | Andrei Iosivas | Fantasy Score | over | 0.2498233915891479 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14392724 | prizepicks | Michael Mayer | Recs | over | 0.2497617808713768 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095780 | prizepicks | Kenneth Walker III | Recs | over | 0.2496745648058957 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14255858 | prizepicks | Juwan Johnson | Rec Yards | over | 0.2495926852645571 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974048 | prizepicks | Jaxon Smith-Njigba | Recs | under | 0.2495583771335627 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14156729 | prizepicks | DeVonta Smith | Recs | under | 0.2495074666575946 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14095138 | prizepicks | Rhamondre Stevenson | Rush+Rec Yds | over | 0.2492728609170167 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14095700 | prizepicks | Jake Ferguson | Recs | under | 0.249271383696439 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14474526 | prizepicks | Rome Odunze | Rec Yards | over | 0.2492331041799377 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540489 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.2491012522562077 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265390 | prizepicks | Travis Kelce | Recs | over | 0.2488840706158765 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14138310 | prizepicks | Travis Hunter | Player TDs | under | 0.2488537214742887 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957665 | prizepicks | Andy Borregales | FG Made | over | 0.2487948709170152 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311393 | prizepicks | Cam Skattebo | Rush Yards | over | 0.2487237985593127 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14372463 | prizepicks | Daniel Jones | Pass Yards | under | 0.2486636982021172 | 2026-09-01T13:38:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14594135 | prizepicks | Daniel Jones | Pass Yards | under | 0.2486636982021172 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573549 | prizepicks | Kirk Cousins | Pass Yards | under | 0.2486558674911886 | 2026-09-08T14:29:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14372463 | prizepicks | Daniel Jones | Pass Yards | under | 0.2486636982021172 | 2026-09-01T13:38:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472910 | prizepicks | Samaje Perine | Rec Yards | over | 0.2484289921799742 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486845 | prizepicks | Xavier Legette | Recs | under | 0.2483153258566085 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385181 | prizepicks | Jordan Love | Pass Attempts | under | 0.247879964731476 | 2026-09-02T00:04:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14602705 | prizepicks | Gunnar Helm | Rec Yards | under | 0.2478674705920751 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389726 | prizepicks | Cam Skattebo | Rush+Rec Yds | over | 0.2477891236789736 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990905 | prizepicks | Puka Nacua | Recs | over | 0.24775426432954 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14381305 | prizepicks | Cam Ward | Pass+Rush Yds | under | 0.2476937394591576 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14575002 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.2475795856727989 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14738722 | prizepicks | Theo Johnson | Rec Yards | over | 0.2475710589504212 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14541474 | prizepicks | Kenny Gainwell | Rush+Rec Yds | under | 0.2475155923118388 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393664 | prizepicks | Derrick Henry | Rush+Rec Yds | over | 0.2474597511042422 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596254 | prizepicks | RJ Harvey | Rush+Rec Yds | over | 0.2474453782795089 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14266947 | prizepicks | David Montgomery | Rush Yards | under | 0.2474140414947179 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14731854 | prizepicks | Jack Campbell | Sacks | under | 0.247391162577246 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983404 | prizepicks | Joey Slye | FG Made | under | 0.2470564020125781 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357774 | prizepicks | Amon-Ra St. Brown | Fantasy Score | over | 0.2470036882019826 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346418 | prizepicks | Darius Slayton | Fantasy Score | over | 0.2469695238248452 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|13979461 | prizepicks | Ka'imi Fairbairn | FG Made | over | 0.2467850871577537 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346561 | prizepicks | Terry McLaurin | Fantasy Score | over | 0.246734350308146 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978261 | prizepicks | Oronde Gadsden II | Player TDs | under | 0.2467150358493123 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472557 | prizepicks | DJ Moore | Rec Yards | under | 0.246682984166245 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14376458 | prizepicks | DJ Moore | Rec Yards | under | 0.246682984166245 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14384897 | prizepicks | Saquon Barkley | Rush+Rec Yds | over | 0.2466752831192256 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978310 | prizepicks | Christian McCaffrey | Player TDs | under | 0.2466397425610708 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14339746 | prizepicks | Jahmyr Gibbs | Recs | over | 0.2464617458616892 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136828 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.2464303392872411 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14498252 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.2463974511028202 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346568 | prizepicks | Khalil Shakir | Fantasy Score | under | 0.2461115675542237 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475386 | prizepicks | Tyler Warren | Rec Yards | over | 0.2460804515036407 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14629552 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | over | 0.2459742263495214 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711990 | prizepicks | Spencer Shrader | FG Made | under | 0.2459362073931057 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586403 | prizepicks | Pat Bryant | Rec Yards | over | 0.2458159556145031 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14436805 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.245775039370645 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402526 | prizepicks | Jared Goff | Pass+Rush Yds | over | 0.2457746557508913 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311508 | prizepicks | Jordan Mason | Rush Yards | over | 0.2456996962569078 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12379223 | prizepicks | Tony Pollard | Rush Yards | over | 0.2456090283326109 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14699998 | prizepicks | Jordan Mason | Rush Yards | over | 0.2456996962569078 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14462541 | prizepicks | Tony Pollard | Rush Yards | over | 0.2456090283326109 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496193 | prizepicks | Terry McLaurin | Rec Yards | over | 0.2455763771361601 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|12379223 | prizepicks | Tony Pollard | Rush Yards | over | 0.2456090283326109 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983399 | prizepicks | Daniel Bellinger | Player TDs | under | 0.245564958614337 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14294904 | prizepicks | Jauan Jennings | Rec Yards | over | 0.245475377204135 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473630 | prizepicks | Jauan Jennings | Rec Yards | over | 0.2454753772041349 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343238 | prizepicks | T.J. Hockenson | Fantasy Score | over | 0.2452796728918774 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13976217 | prizepicks | George Pickens | Rec Yards | over | 0.2451521012917068 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341049 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.2451203669907689 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343214 | prizepicks | Mike Evans | Fantasy Score | over | 0.2449385617256791 | 2026-08-31T20:38:20Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14496679 | prizepicks | Sam Darnold | Pass Attempts | under | 0.2449043608190489 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14375729 | prizepicks | Calvin Ridley | Fantasy Score | under | 0.2449031986074662 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14575923 | prizepicks | Kalif Raymond | Rec Yards | over | 0.2447669746029009 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357894 | prizepicks | Brian Thomas Jr. | Fantasy Score | under | 0.2447228810530328 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14340356 | prizepicks | Jalen Hurts | Pass Yards | under | 0.2445525589744288 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14464725 | prizepicks | Lukas Van Ness | Sacks | under | 0.2445303250625754 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472735 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.2445159574736696 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14381306 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.2445159574736696 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338700 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.2444290426467693 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14338704 | prizepicks | Marvin Harrison Jr. | Rec Yards | over | 0.2443527323127825 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499644 | prizepicks | Baker Mayfield | Pass Attempts | over | 0.2443006136428995 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337064 | prizepicks | Colston Loveland | Recs | over | 0.244074248031837 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995000 | prizepicks | Aaron Rodgers | Player TDs | over | 0.244074248031837 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311249 | prizepicks | Garrett Wilson | Rec Yards | under | 0.2440133214982204 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13980186 | prizepicks | Devaughn Vele | Player TDs | under | 0.2438106811314131 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503613 | prizepicks | Josh Allen | Pass Attempts | over | 0.2437896930829208 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473633 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.2436781831276853 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402529 | prizepicks | Jared Goff | Pass+Rush Yds | under | 0.2433086601976722 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14743887 | prizepicks | Darren Waller | Rec Yards | over | 0.2433934086156062 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341713 | prizepicks | Wan'Dale Robinson | Fantasy Score | over | 0.2431925959657114 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13992265 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.2431654853007863 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14295762 | prizepicks | Dallas Goedert | Recs | over | 0.242991237269231 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14266929 | prizepicks | C.J. Stroud | Pass Yards | over | 0.2428692342214932 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14103706 | prizepicks | DeMario Douglas | Rec Yards | over | 0.2428073289992747 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14534184 | prizepicks | Jalen Coker | Fantasy Score | over | 0.2428025974162961 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387928 | prizepicks | Drew Sample | Rec Yards | under | 0.2427772402950964 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14506180 | prizepicks | Drew Sample | Rec Yards | under | 0.2427772402950962 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379224 | prizepicks | Lamar Jackson | Rush Yards | under | 0.2425945757742404 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473106 | prizepicks | Isaiah Likely | Rec Yards | over | 0.2425116220615529 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13986123 | prizepicks | Chig Okonkwo | Player TDs | under | 0.2424531752612503 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14535109 | prizepicks | Chig Okonkwo | Fantasy Score | under | 0.2424207667860147 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13976592 | prizepicks | Ja'Marr Chase | Rec Yards | over | 0.2423917115416283 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134611 | prizepicks | Brock Bowers | Recs | over | 0.242282032905531 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294848 | prizepicks | Jordan Love | Rush Yards | under | 0.2421310888880969 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12335536 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.2421214041433098 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319344 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.2421214041433098 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256243 | prizepicks | Baker Mayfield | Pass+Rush Yds | under | 0.2420787719224949 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14310171 | prizepicks | Rico Dowdle | Recs | over | 0.2420628063136279 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14391995 | prizepicks | Jack Bech | Rec Yards | under | 0.2420143257488709 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974044 | prizepicks | Cooper Kupp | Recs | over | 0.2419110802019778 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14596569 | prizepicks | RJ Harvey | Fantasy Score | over | 0.2418699151178452 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311883 | prizepicks | Tyler Shough | Pass TDs | over | 0.2418660152157148 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14476865 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.2417034747258467 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14318544 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.2416853789122417 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402747 | prizepicks | Jordan Mason | Rush+Rec Yds | under | 0.2416369778623218 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974068 | prizepicks | AJ Barner | Recs | under | 0.2416033210139541 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13961575 | prizepicks | Drake Maye | Rush Yards | under | 0.2414962110292617 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14718089 | prizepicks | Jared Goff | Rush Yards | under | 0.2416165842878652 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357858 | prizepicks | Garrett Wilson | Fantasy Score | under | 0.2414793576807654 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14324184 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.2413014939246773 | 2026-09-04T16:17:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13685190 | prizepicks | Trey McBride | Recs | over | 0.241162953863004 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14274014 | prizepicks | Dalton Kincaid | Rec Yards | over | 0.2411581839360717 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974042 | prizepicks | Romeo Doubs | Recs | under | 0.2411321776817599 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14337051 | prizepicks | Rome Odunze | Rec Yards | over | 0.2410383751616549 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352329 | prizepicks | DJ Moore | Rec Targets | under | 0.2409636877906488 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472617 | prizepicks | Isaiah Likely | Rec Yards | under | 0.2409140815600721 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14343156 | prizepicks | A.J. Brown | Fantasy Score | over | 0.2408382080582706 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13986134 | prizepicks | DeVonta Smith | Player TDs | under | 0.2407845067510174 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14246843 | prizepicks | CeeDee Lamb | Rec Targets | under | 0.2407681081813626 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14311585 | prizepicks | Ladd McConkey | Rec Yards | under | 0.2407300007659005 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14403439 | prizepicks | Tyjae Spears | Recs | over | 0.2407237889987612 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14585887 | prizepicks | Tyquan Thornton | Recs | over | 0.2406911354127945 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14684536 | prizepicks | Brian Robinson Jr. | Rush Yards | under | 0.2405947924923976 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337045 | prizepicks | Colston Loveland | Recs | under | 0.240573724807277 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311017 | prizepicks | Kirk Cousins | Pass TDs | over | 0.2405703122864946 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14544224 | prizepicks | Kenny Gainwell | Recs | under | 0.2402599292903549 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357917 | prizepicks | De'Von Achane | Fantasy Score | over | 0.2402402677403792 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14583181 | prizepicks | De'Von Achane | Rec Yards | under | 0.2402113715118771 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338577 | prizepicks | Omarion Hampton | Recs | under | 0.2401979142495178 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14497422 | prizepicks | Chris Godwin Jr. | Rec Yards | over | 0.2401790871120758 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357812 | prizepicks | Bucky Irving | Fantasy Score | under | 0.2399132770875163 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14381561 | prizepicks | Brock Purdy | Pass Attempts | under | 0.2398000500423832 | 2026-09-01T21:48:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472622 | prizepicks | Cade Otton | Rec Yards | over | 0.239763894151035 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604148 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | under | 0.2396571984686988 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977034 | prizepicks | Andre Szmyt | Kicking Points | under | 0.2395875603792068 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14600010 | prizepicks | Demarcus Robinson | Rec Targets | over | 0.2393850882083609 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13955027 | prizepicks | Bucky Irving | Rec TDs | under | 0.2394858025216564 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473636 | prizepicks | Dontayvion Wicks | Rec Yards | over | 0.23933186615788 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14713169 | prizepicks | Chris Boswell | Kicking Points | over | 0.2392428052411771 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978025 | prizepicks | Dak Prescott | Player TDs | over | 0.2392398427101795 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14320400 | prizepicks | Baker Mayfield | Rush Yards | over | 0.2391483328431995 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996138 | prizepicks | Dalton Schultz | Player TDs | under | 0.2391411595786405 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357797 | prizepicks | Bucky Irving | Fantasy Score | over | 0.2390797437364469 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14524517 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.2386651974587057 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528937 | prizepicks | Baker Mayfield | INT | over | 0.2385991211877884 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357900 | prizepicks | De'Von Achane | Fantasy Score | under | 0.2385274368103509 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393749 | prizepicks | Chris Rodriguez Jr. | Rush+Rec Yds | over | 0.2384042681385704 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346383 | prizepicks | Kendrick Bourne | Recs | under | 0.2382789019129596 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14020714 | prizepicks | Drake Maye | Pass+Rush+Rec TDs | over | 0.2381252610321488 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13978112 | prizepicks | Kimani Vidal | Player TDs | under | 0.238038547721237 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311624 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.2380018411649688 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14516910 | prizepicks | J.K. Dobbins | Rush Yards | over | 0.2379867644098834 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14525321 | prizepicks | Tyler Shough | Pass Yards | over | 0.23779351290831 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14569464 | prizepicks | Ashton Jeanty | Rush+Rec Yds | over | 0.2377410069794596 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691279 | prizepicks | Dylan Sampson | Rush+Rec Yds | over | 0.2375668199640139 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095774 | prizepicks | Travis Kelce | Rec Yards | over | 0.237492644522679 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472533 | prizepicks | Jaylen Warren | Rec Yards | over | 0.2374558846042564 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14283556 | prizepicks | Josh Allen | Rush Yards | over | 0.2372701190402113 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14392719 | prizepicks | Michael Mayer | Rec Yards | under | 0.2371511059771374 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311604 | prizepicks | Justin Herbert | Pass Yards | over | 0.237311006829638 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472407 | prizepicks | Gunnar Helm | Rec Yards | over | 0.2370845296327728 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402836 | prizepicks | Woody Marks | Rec Yards | under | 0.236957143802088 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14135846 | prizepicks | Michael Wilson | Rec Yards | over | 0.2368873532205057 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306741 | prizepicks | Dallas Goedert | Fantasy Score | over | 0.2368501977813795 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14336866 | prizepicks | TreVeyon Henderson | Recs | under | 0.2368360967637045 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14136698 | prizepicks | Parker Washington | Rec Yards | over | 0.2368038734839066 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472838 | prizepicks | DJ Moore | Rec Yards | over | 0.2367644841816001 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495799 | prizepicks | Brenton Strange | Rec Yards | over | 0.2366763259601554 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14420440 | prizepicks | Jaxson Dart | Pass Yards | under | 0.2365989853713929 | 2026-09-02T21:15:45Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14742522 | prizepicks | Jaxson Dart | Pass Yards | under | 0.2365989853713928 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14265355 | prizepicks | Jaylen Waddle | Rec Yards | over | 0.2365859495503584 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14573451 | prizepicks | Eddy Pineiro | Kicking Points | over | 0.236508114219121 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14597996 | prizepicks | George Holani | Recs | under | 0.2364553715672309 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311479 | prizepicks | Michael Pittman Jr. | Recs | under | 0.2362318344542788 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535064 | prizepicks | Jack Bech | Fantasy Score | over | 0.2362043055576812 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990908 | prizepicks | Mike Evans | Rec Yards | over | 0.2361758604692527 | 2026-09-01T16:14:47Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14534182 | prizepicks | Xavier Legette | Fantasy Score | under | 0.2361655977124749 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536919 | prizepicks | Josh Downs | Recs | over | 0.2360744279095699 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323884 | prizepicks | Chase Brown | Player TDs | over | 0.2359316784488404 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460640 | prizepicks | David Montgomery | Recs | over | 0.2358021818182341 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14485429 | prizepicks | George Kittle | Rec Yards | over | 0.235686344127517 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13976414 | prizepicks | Brandon Aubrey | Kicking Points | over | 0.2356565899550278 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14134618 | prizepicks | Brock Bowers | Rec Yards | under | 0.2356457292212368 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14378967 | prizepicks | Breece Hall | Rec Yards | under | 0.2355377744538491 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475356 | prizepicks | Blake Grupe | Kicking Points | over | 0.2355961324375306 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311602 | prizepicks | Caleb Williams | Pass TDs | under | 0.2354929051127197 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311848 | prizepicks | Tua Tagovailoa | Pass TDs | over | 0.2354147384033894 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14295761 | prizepicks | Stefon Diggs | Rec Yards | over | 0.2353739605867447 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14304353 | prizepicks | Baker Mayfield | Pass+Rush Yds | over | 0.2353662613738321 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14466403 | prizepicks | Baker Mayfield | Pass+Rush Yds | over | 0.2353662613738321 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14304353 | prizepicks | Baker Mayfield | Pass+Rush Yds | over | 0.2353662613738321 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14402885 | prizepicks | Darnell Washington | Rec Yards | under | 0.2351663888449495 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136429 | prizepicks | Quinshon Judkins | Recs | under | 0.2351025003517217 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13996007 | prizepicks | Hunter Henry | Recs | over | 0.2350507022780373 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14605308 | prizepicks | Justin Herbert | Pass Attempts | over | 0.2350272010451476 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14710815 | prizepicks | Chase McLaughlin | Kicking Points | under | 0.2346970983575751 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560086 | prizepicks | Kenny Gainwell | Fantasy Score | over | 0.2345018518355142 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311881 | prizepicks | Jared Goff | Pass Yards | over | 0.2344627549285738 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979451 | prizepicks | Josh Allen | Pass+Rush Yds | under | 0.2344302753472548 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357859 | prizepicks | Breece Hall | Fantasy Score | under | 0.2341540154653416 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978308 | prizepicks | Deebo Samuel Sr. | Player TDs | under | 0.2340144709512994 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13978522 | prizepicks | Harrison Mevis | Kicking Points | over | 0.2336483277134053 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14156735 | prizepicks | DeVonta Smith | Rec Yards | under | 0.2335941411761307 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473587 | prizepicks | DeVonta Smith | Rec Yards | under | 0.2335941411761306 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311283 | prizepicks | Amon-Ra St. Brown | Rec Yards | under | 0.2335567768734286 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472897 | prizepicks | Adonai Mitchell | Recs | under | 0.2335429616825864 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14622472 | prizepicks | Baker Mayfield | Pass Yards | over | 0.2331103546405349 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686411 | prizepicks | Kyle Monangai | Rec Yards | over | 0.2330564883244803 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14464733 | prizepicks | Barryn Sorrell | Sacks | under | 0.2329040811265905 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14589173 | prizepicks | Aaron Rodgers | Rush Yards | under | 0.2328885477256589 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487269 | prizepicks | Mason Taylor | Rec Yards | over | 0.2326468452831974 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2146,12 +2164,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14422826 | prizepicks | Jalen Coker | Recs | over | 0.2324282738011247 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486098 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.2323669461054018 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375137 | prizepicks | Malik Washington | Recs | over | 0.2323133234361922 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14138314 | prizepicks | Raheim Sanders | Player TDs | under | 0.2322279637820354 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983396 | prizepicks | Braelon Allen | Player TDs | under | 0.2322279637820354 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379227 | prizepicks | Zay Flowers | Rush Yards | over | 0.2321995414270676 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357834 | prizepicks | Zay Flowers | Fantasy Score | over | 0.2321711550413735 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495783 | prizepicks | James Cook III | Rec Yards | under | 0.2321154200147466 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600955 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.2320647365166753 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720923 | prizepicks | Kyle Monangai | Rush Yards | over | 0.2318690556810941 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14133870 | prizepicks | Ja'Marr Chase | Recs | over | 0.2318334249642168 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357928 | prizepicks | Dontayvion Wicks | Fantasy Score | under | 0.2317610770345732 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996190 | prizepicks | Pat Freiermuth | Player TDs | under | 0.2316076378827612 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2162,127 +2180,120 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14565439 | prizepicks | Travis Etienne Jr. | Recs | under | 0.2313530638305625 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14082874 | prizepicks | Malik Davis | Player TDs | under | 0.2312652645221732 | 2026-09-03T11:08:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14273987 | prizepicks | Josh Allen | Pass Yards | over | 0.231040993213061 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957560 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.2310166302837646 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13954754 | prizepicks | Joe Burrow | Pass TDs | over | 0.230947103921985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472537 | prizepicks | Daniel Jones | Rush Yards | over | 0.2309424764869164 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14641530 | prizepicks | Daniel Jones | Rush Yards | over | 0.2309424764869164 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472621 | prizepicks | Jalen McMillan | Rec Yards | over | 0.2308658738879883 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311217 | prizepicks | Derrick Henry | Rush Yards | under | 0.2308065138335737 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385305 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | over | 0.2307675502495574 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095832 | prizepicks | Noah Gray | Rec Yards | over | 0.2306955868844644 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14402563 | prizepicks | Aaron Rodgers | Pass+Rush Yds | over | 0.2305771130272934 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311164 | prizepicks | Lamar Jackson | Pass Yards | over | 0.2305673415978815 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14569457 | prizepicks | Ashton Jeanty | Recs | over | 0.2304872941060605 | 2026-09-06T21:18:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14402914 | prizepicks | Rachaad White | Rush+Rec Yds | over | 0.2304821431097596 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346367 | prizepicks | Darnell Mooney | Rec Yards | under | 0.2303512199338593 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14265361 | prizepicks | Courtland Sutton | Recs | under | 0.2303229979196825 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13980672 | prizepicks | Rhamondre Stevenson | Recs | under | 0.23030467978671 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13977047 | prizepicks | Harrison Butker | FG Made | over | 0.2302965653737365 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311125 | prizepicks | Tee Higgins | Recs | under | 0.2302352310605369 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14356856 | prizepicks | Bo Nix | Pass Yards | under | 0.2302273796525196 | 2026-09-08T09:35:41Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379496 | prizepicks | Ladd McConkey | Rec Yards | under | 0.2300392975948866 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346569 | prizepicks | Khalil Shakir | Fantasy Score | over | 0.2300320855767106 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257656 | prizepicks | Jahan Dotson | Rec Yards | under | 0.229823874319504 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339555 | prizepicks | Kyren Williams | Recs | under | 0.2298004096000072 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14499797 | prizepicks | Jalen Hurts | Pass Attempts | over | 0.2296720496132541 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311864 | prizepicks | Bijan Robinson | Rush Yards | over | 0.229534410460955 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532326 | prizepicks | Tua Tagovailoa | Fantasy Score | under | 0.2295095346130726 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460633 | prizepicks | David Montgomery | Rec Yards | over | 0.2294508444579324 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957673 | prizepicks | Drake Maye | Pass+Rush Yds | over | 0.2294197558363002 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13990779 | prizepicks | Blake Corum | Rush Yards | over | 0.2294086774943556 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14688548 | prizepicks | Ashton Jeanty | Rec Yards | over | 0.2294141113795432 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14543002 | prizepicks | Dak Prescott | Rush Yards | over | 0.2293386088913451 | 2026-09-06T09:21:45Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14380191 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.2291351907417911 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974067 | prizepicks | AJ Barner | Recs | over | 0.2290864265125314 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14521057 | prizepicks | Justin Jefferson | Rec Yards | under | 0.2291059914575349 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473019 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.2290717719356917 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534441 | prizepicks | Samaje Perine | Fantasy Score | over | 0.2289987716167586 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134604 | prizepicks | Brock Bowers | Rec Yards | over | 0.2289513359293074 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14599996 | prizepicks | Noah Gray | Rec Targets | over | 0.2288819637554091 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136696 | prizepicks | Parker Washington | Rec Yards | over | 0.228878361420263 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473650 | prizepicks | Justice Hill | Rec Yards | over | 0.2288690113114557 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357910 | prizepicks | Tre Tucker | Fantasy Score | under | 0.228828061223507 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473926 | prizepicks | Trey McBride | Rec Yards | over | 0.2286947545290322 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341936 | prizepicks | Derrick Henry | Fantasy Score | over | 0.2285681714101286 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976412 | prizepicks | Jake Ferguson | Rec Yards | under | 0.2285647685806335 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311871 | prizepicks | Jared Goff | Pass TDs | under | 0.2284760608911711 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528949 | prizepicks | Patrick Mahomes | INT | over | 0.2284683263080489 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14591496 | prizepicks | Geno Smith | Pass Attempts | under | 0.2283654028163592 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14502920 | prizepicks | Geno Smith | Pass Attempts | under | 0.2283654028163591 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387935 | prizepicks | Drew Sample | Rec Yards | over | 0.2283012162849443 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528932 | prizepicks | Geno Smith | INT | over | 0.2282337963136598 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978286 | prizepicks | Eddy Pineiro | FG Made | under | 0.2281354492447145 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13989757 | prizepicks | Brock Purdy | Pass+Rush Yds | under | 0.2279484484452655 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14473604 | prizepicks | Daniel Jones | Rush Yards | under | 0.2278473716261744 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311889 | prizepicks | Tyler Shough | Pass Yards | over | 0.2276109885612767 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559612 | prizepicks | Davante Adams | Rec Yards | under | 0.2275716903810335 | 2026-09-07T23:28:23Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14475260 | prizepicks | Andrei Iosivas | Rec Yards | under | 0.2275713154315832 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14387850 | prizepicks | Andrei Iosivas | Rec Yards | under | 0.2275713154315832 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136918 | prizepicks | Terry McLaurin | Rec Yards | under | 0.2273261442360191 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14385288 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.2272382439104974 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989749 | prizepicks | Kyren Williams | Rec Yards | under | 0.2272114987490441 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14534189 | prizepicks | Jalen Coker | Fantasy Score | under | 0.2271098154857381 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14626356 | prizepicks | Lamar Jackson | Pass TDs | under | 0.2270821649496339 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357821 | prizepicks | Rome Odunze | Fantasy Score | under | 0.2270306921523915 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311072 | prizepicks | De'Von Achane | Rush Yards | over | 0.2269227371317632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13954721 | prizepicks | Evan McPherson | Kicking Points | under | 0.2268450840673599 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604214 | prizepicks | Woody Marks | Rush Yards | over | 0.2268398391881483 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474808 | prizepicks | Mark Andrews | Rec Yards | over | 0.2267072047838634 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14495457 | prizepicks | Mark Andrews | Rec Yards | over | 0.2267072047838634 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357815 | prizepicks | Luther Burden III | Fantasy Score | under | 0.2266554747035176 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311546 | prizepicks | Quentin Johnston | Recs | over | 0.2265804881029348 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14276147 | prizepicks | Dallas Goedert | Recs | under | 0.2265444541768512 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14294847 | prizepicks | Jordan Love | Pass Yards | under | 0.2265274365305478 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343407 | prizepicks | Dak Prescott | Fantasy Score | under | 0.226351938685017 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14093945 | prizepicks | Puka Nacua | Player TDs | over | 0.2263415968325687 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472260 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.2261271645941363 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472491 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.2260539339827525 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402997 | prizepicks | David Njoku | Rec Yards | under | 0.2259975199444027 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295693 | prizepicks | Saquon Barkley | Rush Yards | over | 0.2259846170929831 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697511 | prizepicks | KaVontae Turpin | Fantasy Score | over | 0.2259602565653745 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472489 | prizepicks | Jordan Love | Rush Yards | over | 0.2259159283388865 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14244358 | prizepicks | Matthew Golden | Recs | under | 0.2259086030341898 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13986122 | prizepicks | Terry McLaurin | Player TDs | under | 0.2258658428934844 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14335789 | prizepicks | Jahmyr Gibbs | Rec Yards | over | 0.2258435520473953 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472500 | prizepicks | DeVonta Smith | Rec Yards | under | 0.2256410070915909 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379351 | prizepicks | Luther Burden III | Rush Yards | over | 0.2255933153833172 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311151 | prizepicks | Bo Nix | Pass Yards | under | 0.2254531521695486 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14310221 | prizepicks | Jaylen Warren | Recs | under | 0.2254374128122288 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343409 | prizepicks | George Pickens | Fantasy Score | under | 0.2254300399865872 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14403228 | prizepicks | Cole Kmet | Rec Yards | under | 0.2254036478662828 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957557 | prizepicks | Cooper Kupp | Rec Yards | over | 0.2252636686652589 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14136725 | prizepicks | Justin Jefferson | Recs | under | 0.2252484555016796 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14337048 | prizepicks | Rome Odunze | Recs | under | 0.2251731790023536 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324326 | prizepicks | Tyler Shough | Rush Yards | over | 0.2251451947686126 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472229 | prizepicks | Samaje Perine | Rush Yards | over | 0.2250742591165346 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697882 | prizepicks | Chuba Hubbard | Rush+Rec Yds | under | 0.2250630695496895 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311357 | prizepicks | Sam LaPorta | Rec Yards | over | 0.2250473383911827 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14600008 | prizepicks | Rico Dowdle | Rec Targets | over | 0.2249997715148753 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14593458 | prizepicks | Jacoby Brissett | Rush Yards | over | 0.2250029556599582 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486863 | prizepicks | Xavier Hutchinson | Recs | over | 0.2249358649997838 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338582 | prizepicks | Ladd McConkey | Recs | under | 0.2248813780769056 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343233 | prizepicks | Jordan Love | Fantasy Score | under | 0.2247387377255545 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311057 | prizepicks | De'Von Achane | Rec Yards | over | 0.2246946243532468 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475288 | prizepicks | De'Von Achane | Rec Yards | over | 0.2246946243532468 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14093946 | prizepicks | Puka Nacua | Rush Yards | over | 0.2246199904962142 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14311673 | prizepicks | Parker Washington | Rec Yards | under | 0.2242477820271127 | 2026-09-05T16:47:46Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14371451 | prizepicks | Derrick Henry | Rush Yards | over | 0.224498461361449 | 2026-09-03T05:43:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649445 | prizepicks | Cameron Heyward | Sacks | under | 0.224485779129499 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472485 | prizepicks | Saquon Barkley | Rec Yards | under | 0.2244241005858447 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402916 | prizepicks | Darnell Washington | Rec Yards | over | 0.2241116884626122 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402636 | prizepicks | D'Andre Swift | Rush+Rec Yds | under | 0.2239717476266183 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379498 | prizepicks | Cam Skattebo | Rec Yards | over | 0.2238952055401328 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14164720 | prizepicks | Jaxson Dart | Rush Yards | over | 0.2238730938401194 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14577225 | prizepicks | Joe Burrow | Pass Yards | over | 0.2238126465513138 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978259 | prizepicks | Kyle Williams | Player TDs | under | 0.223683346659661 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14532945 | prizepicks | Kayshon Boutte | Fantasy Score | over | 0.223651424166299 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600000 | prizepicks | Omarion Hampton | Rec Targets | over | 0.2235571685222369 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380292 | prizepicks | Jared Goff | Pass Attempts | over | 0.2235040321632755 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311377 | prizepicks | Aaron Rodgers | Pass TDs | over | 0.2234855116100718 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14499031 | prizepicks | Daniel Jones | Pass Attempts | under | 0.2234196492748709 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402593 | prizepicks | Daniel Jones | Pass Attempts | under | 0.2234196492748709 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134440 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.2232939390546758 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14499031 | prizepicks | Daniel Jones | Pass Attempts | under | 0.2234196492748709 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14464732 | prizepicks | Javon Hargrave | Sacks | under | 0.2231915040171098 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311968 | prizepicks | Caleb Williams | Rush Yards | under | 0.2229005376538155 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095846 | prizepicks | Xavier Worthy | Rec Yards | over | 0.2226979510507953 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14489115 | prizepicks | Harrison Mevis | FG Made | under | 0.2226054973175876 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14351883 | prizepicks | Justin Herbert | Pass TDs | under | 0.222523547373164 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311549 | prizepicks | Quentin Johnston | Rec Yards | over | 0.2224646829531336 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352414 | prizepicks | Luther Burden III | Rec Targets | under | 0.2224538201540193 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14341304 | prizepicks | TreVeyon Henderson | Fantasy Score | over | 0.2223369515053883 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311930 | prizepicks | Jordan Love | Pass Yards | under | 0.2221363187453835 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390030 | prizepicks | Rashid Shaheed | Rush+Rec Yds | under | 0.2220527562073193 | 2026-09-05T21:10:18Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14164744 | prizepicks | Javonte Williams | Rush Yards | over | 0.2220630832081036 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357918 | prizepicks | Omarion Hampton | Fantasy Score | over | 0.2219516268777104 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134781 | prizepicks | Jacoby Brissett | Pass+Rush Yds | over | 0.2219348898985343 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13986124 | prizepicks | Stefon Diggs | Player TDs | under | 0.2219313902364361 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14494001 | prizepicks | D'Andre Swift | Rush Yards | over | 0.2219083957212824 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342669 | prizepicks | J.K. Dobbins | Fantasy Score | over | 0.2218736437754129 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14372909 | prizepicks | Colby Parkinson | Rec Yards | over | 0.2218680093916323 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13971310 | prizepicks | Derrick Henry | Rush TDs | over | 0.2211156397242699 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323882 | prizepicks | Derrick Henry | Player TDs | over | 0.2211156397242699 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342441 | prizepicks | Ryan Flournoy | Fantasy Score | over | 0.2210449066488525 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14585900 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.2209022197951663 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486872 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.2209011927425563 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346453 | prizepicks | Justin Herbert | Pass Yards | over | 0.2208647040094582 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721451 | prizepicks | Tank Bigsby | Rush Yards | over | 0.220829693804065 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472996 | prizepicks | Omarion Hampton | Rec Yards | over | 0.2207482206608226 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559958 | prizepicks | Alec Pierce | Fantasy Score | over | 0.220688906085489 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295170 | prizepicks | Jalen Hurts | Pass Yards | under | 0.220672070860309 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -2291,44 +2302,46 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14420597 | prizepicks | Justice Hill | Rush+Rec Yds | under | 0.220436126487313 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390057 | prizepicks | Justin Herbert | Fantasy Score | under | 0.2200488831612216 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379072 | prizepicks | Lamar Jackson | Pass Yards | under | 0.2200063336768836 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14324352 | prizepicks | Cade Otton | Recs | under | 0.2199879338159667 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532809 | prizepicks | James Cook III | Fantasy Score | over | 0.2199813443782154 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472493 | prizepicks | Justin Jefferson | Rec Yards | under | 0.2198406871930764 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472823 | prizepicks | Tyler Higbee | Rec Yards | over | 0.2197778880702479 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14311504 | prizepicks | Bryce Young | Pass Yards | under | 0.2197395100693183 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353255 | prizepicks | T.J. Hockenson | Rec Targets | under | 0.2196317305744484 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978313 | prizepicks | J.K. Dobbins | Player TDs | under | 0.2193620819327111 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13685192 | prizepicks | CeeDee Lamb | Recs | under | 0.2191993094813614 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14472450 | prizepicks | Ladd McConkey | Rec Yards | under | 0.2191324087304009 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357958 | prizepicks | Tyquan Thornton | Fantasy Score | over | 0.2191226768303675 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14597099 | prizepicks | Sam Darnold | Pass Attempts | over | 0.2190227549720544 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13996205 | prizepicks | Michael Pittman Jr. | Player TDs | under | 0.2189654837898396 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266928 | prizepicks | DJ Moore | Recs | under | 0.2188849637982497 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14690272 | prizepicks | DJ Moore | Recs | under | 0.2188849637982497 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14170328 | prizepicks | Jaxson Dart | Pass Yards | under | 0.2186734176491792 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14726211 | prizepicks | Keenan Allen | Rec Yards | over | 0.2185077485999399 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532943 | prizepicks | Woody Marks | Fantasy Score | over | 0.2185003365724838 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573524 | prizepicks | Quinshon Judkins | Recs | over | 0.2184790811941016 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14136422 | prizepicks | Quinshon Judkins | Recs | over | 0.2184790811941016 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721471 | prizepicks | Theo Johnson | Recs | under | 0.2184280169950738 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472354 | prizepicks | Omarion Hampton | Rush Yards | under | 0.2183804206557322 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473918 | prizepicks | Josh Downs | Rec Yards | over | 0.2183014119986974 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341451 | prizepicks | Chris Olave | Fantasy Score | over | 0.218276777159998 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534343 | prizepicks | Braelon Allen | Fantasy Score | over | 0.2182174712885815 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311665 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.2182103049314279 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472868 | prizepicks | Gunnar Helm | Recs | over | 0.2181485691746134 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472864 | prizepicks | Gunnar Helm | Recs | under | 0.2181485691746134 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559729 | prizepicks | George Kittle | Rec Targets | over | 0.2179748454864498 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14612139 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.2179211230891995 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311327 | prizepicks | Derrick Henry | Rush Yards | over | 0.217826517815553 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559964 | prizepicks | Josh Downs | Fantasy Score | over | 0.2178238872091631 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14489127 | prizepicks | Daniel Carlson | Kicking Points | under | 0.2177728568293144 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14644355 | prizepicks | Jacory Croskey-Merritt | Rec Yards | under | 0.2177468456666995 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14599989 | prizepicks | RJ Harvey | Rec Targets | over | 0.2175740014837192 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14387732 | prizepicks | Samaje Perine | Rush+Rec Yds | under | 0.2174626083599959 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346428 | prizepicks | Darnell Mooney | Fantasy Score | over | 0.2173907953318922 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14498993 | prizepicks | Garrett Wilson | Rec Yards | under | 0.2172680324407438 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14489004 | prizepicks | Jared Goff | Pass Yards | over | 0.2172315347458996 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352418 | prizepicks | Saquon Barkley | Recs | under | 0.2172105034099188 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472182 | prizepicks | Javonte Williams | Rush Yards | under | 0.2171930378775535 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14472433 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.2171245705371507 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311608 | prizepicks | Michael Wilson | Recs | over | 0.217123854632469 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14351524 | prizepicks | Geno Smith | Rush Yards | under | 0.2167724820695602 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14004071 | prizepicks | Christian McCaffrey | Fantasy Score | over | 0.2166085879893067 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14095802 | prizepicks | Rashee Rice | Recs | over | 0.2165450606303856 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14375180 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.2163501487403167 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977057 | prizepicks | Harrison Butker | Kicking Points | over | 0.2163097927931305 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14712020 | prizepicks | Tyler Loop | Kicking Points | over | 0.2162351175214669 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14488765 | prizepicks | Daniel Jones | Pass Yards | under | 0.2161914511243811 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14567252 | prizepicks | Jordan Addison | Recs | under | 0.2161747374969544 | 2026-09-06T21:18:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352328 | prizepicks | Dalton Kincaid | Rec Targets | under | 0.2161141691832001 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339610 | prizepicks | Jerry Jeudy | Rec Yards | over | 0.2160594228756742 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2339,32 +2352,39 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14599990 | prizepicks | Pat Bryant | Rec Targets | over | 0.2156752495219704 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14496723 | prizepicks | Jayden Reed | Rush+Rec Yds | over | 0.2156124647000801 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14479666 | prizepicks | Woody Marks | Rush+Rec Yds | over | 0.2156098822441461 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13986136 | prizepicks | Jayden Daniels | Pass TDs | under | 0.2154123327180683 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14264398 | prizepicks | Bo Nix | Pass TDs | over | 0.2153237331709856 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14343159 | prizepicks | DeMario Douglas | Fantasy Score | under | 0.2151554423602057 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14633941 | prizepicks | Tua Tagovailoa | INT | under | 0.2151758303930964 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353198 | prizepicks | Ladd McConkey | Rec Targets | under | 0.2151392788452573 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598321 | prizepicks | Demarcus Robinson | Recs | under | 0.2151386568778799 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14728031 | prizepicks | Cameron Dicker | Kicking Points | over | 0.2151011542228138 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420438 | prizepicks | Jaxson Dart | Pass Yards | under | 0.2150188907781626 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14339563 | prizepicks | Matthew Stafford | Pass+Rush Yds | over | 0.2149803290406579 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14472241 | prizepicks | Jonathan Taylor | Rush Yards | over | 0.2148525732974081 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14579148 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.2147567242168633 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474448 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.2147567242168633 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14580907 | prizepicks | Tyjae Spears | Rush+Rec Yds | over | 0.2146973994159073 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560397 | prizepicks | Cam Ward | Fantasy Score | over | 0.214611130601106 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14273966 | prizepicks | DJ Moore | Rec Yards | over | 0.2145967893520609 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319795 | prizepicks | Zay Flowers | Rec Yards | over | 0.2145918475013162 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474428 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.214505826800916 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14493642 | prizepicks | Cade Otton | Rec Yards | under | 0.2142903180769699 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357816 | prizepicks | Jaylen Warren | Fantasy Score | over | 0.2142756559321269 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14309861 | prizepicks | Jordan Love | Pass+Rush Yds | under | 0.2142008309918852 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598220 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.2139408576912492 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14581897 | prizepicks | Tony Pollard | Rec Yards | over | 0.2139031620160804 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534434 | prizepicks | Samaje Perine | Fantasy Score | under | 0.2138243021378474 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13996008 | prizepicks | Hunter Henry | Rec Yards | over | 0.2137874369443757 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472365 | prizepicks | Matthew Golden | Rec Yards | under | 0.2137707654145373 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996298 | prizepicks | Jaylen Wright | Player TDs | under | 0.2137681977326 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14582087 | prizepicks | Malik Willis | Rush Yards | over | 0.2136931104602888 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472222 | prizepicks | Jake Ferguson | Rec Yards | over | 0.2136790717727095 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14740229 | prizepicks | Jaylin Noel | Recs | over | 0.2136925826510446 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311358 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.2136133552062927 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14617999 | prizepicks | RJ Harvey | Rush Yards | over | 0.213534674174262 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14559826 | prizepicks | Kyle Juszczyk | Rec Yards | over | 0.2134013711786726 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14501237 | prizepicks | Rico Dowdle | Rec Yards | over | 0.2132680764920895 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164740 | prizepicks | Dak Prescott | Pass Yards | over | 0.2132666153700779 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14273985 | prizepicks | Josh Allen | Pass Yards | over | 0.2128805441955963 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14496673 | prizepicks | Josh Allen | Pass Yards | over | 0.2128805441955963 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685726 | prizepicks | Michael Mayer | Recs | under | 0.2128086486106788 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14350970 | prizepicks | Kyle Pitts Sr. | Recs | over | 0.2127109960411495 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697058 | prizepicks | Darren Waller | Recs | over | 0.2127047840748531 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14595335 | prizepicks | Tyjae Spears | Rec Yards | over | 0.2124028533204499 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403001 | prizepicks | Dawson Knox | Recs | under | 0.2123655853367674 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14464567 | prizepicks | Xavier Worthy | Rec Yards | under | 0.2121802031275422 | 2026-09-05T23:49:54Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311662 | prizepicks | Joe Burrow | Pass Yards | over | 0.212177433680393 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2374,176 +2394,164 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14346562 | prizepicks | Dalton Kincaid | Fantasy Score | under | 0.2118480600489791 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311048 | prizepicks | Malik Willis | Pass Yards | under | 0.2118437136686224 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14255851 | prizepicks | Juwan Johnson | Recs | over | 0.2117653937978942 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311296 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.2116317033604648 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472803 | prizepicks | Jalen McMillan | Recs | under | 0.211552392349996 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477596 | prizepicks | Adonai Mitchell | Rec Yards | over | 0.21144567841439 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14516874 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.2111549692162246 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311568 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.2111549692162246 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14545329 | prizepicks | Samaje Perine | Rush Yards | over | 0.2111174745020814 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14465887 | prizepicks | Tetairoa McMillan | Recs | over | 0.210825636821027 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14494863 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.2105637468312404 | 2026-09-04T16:17:23Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13961581 | prizepicks | Rashid Shaheed | Rec Yards | over | 0.210517265113266 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14275096 | prizepicks | Patrick Mahomes | Pass+Rush Yds | under | 0.2103864919824406 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14532849 | prizepicks | Justin Herbert | Rush Yards | over | 0.210309248331038 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13983397 | prizepicks | Chimere Dike | Player TDs | under | 0.2103071972424135 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961576 | prizepicks | Drake Maye | Rush Yards | over | 0.2102890095651958 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14540788 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.2102321392535546 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13971083 | prizepicks | Tyler Shough | Pass TDs | under | 0.2101959747814217 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380063 | prizepicks | TreVeyon Henderson | Rush+Rec Yds | over | 0.2101653475513659 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14732022 | prizepicks | Aidan Hutchinson | Sacks | under | 0.2100561802071736 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14384893 | prizepicks | Saquon Barkley | Rush+Rec Yds | under | 0.2100375299974168 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472443 | prizepicks | Jordan Addison | Rec Yards | under | 0.2094585576204197 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13958715 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.2092062531600673 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14295685 | prizepicks | Jalen Hurts | Rush Yards | over | 0.2091268635459215 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311287 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.2091256368440887 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311970 | prizepicks | Trevor Lawrence | Rush Yards | under | 0.2091037511831993 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473271 | prizepicks | Calvin Ridley | Rec Yards | over | 0.2091031358247156 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266086 | prizepicks | Wil Lutz | Kicking Points | over | 0.2090336279850717 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14540354 | prizepicks | Braelon Allen | Rush Yards | over | 0.2088742499034044 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343139 | prizepicks | Sam Darnold | Fantasy Score | under | 0.2088276309665108 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14739412 | prizepicks | Theo Johnson | Recs | over | 0.2088314559197371 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14475378 | prizepicks | Jalen McMillan | Recs | over | 0.2088052827215997 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498819 | prizepicks | Jalen Nailor | Rec Yards | under | 0.2087951484953938 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14498204 | prizepicks | Dak Prescott | Pass Yards | over | 0.2086953504118673 | 2026-09-04T22:20:14Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14402880 | prizepicks | Chig Okonkwo | Rec Yards | over | 0.2084770604752818 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14338607 | prizepicks | Bryce Young | Pass+Rush Yds | under | 0.2084297617314748 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343236 | prizepicks | Matthew Golden | Fantasy Score | under | 0.2084061632301822 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472275 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.208327238971903 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14540787 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.208220553102494 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14512268 | prizepicks | Ladd McConkey | Rec Yards | under | 0.2080168286630954 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311494 | prizepicks | Michael Pittman Jr. | Recs | over | 0.2080156034793034 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164716 | prizepicks | Jaxson Dart | Pass TDs | over | 0.2078861007554304 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13986157 | prizepicks | Luke McCaffrey | Player TDs | under | 0.2076961206234338 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13986155 | prizepicks | Dontayvion Wicks | Player TDs | under | 0.2075975170850814 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14560388 | prizepicks | Geno Smith | Fantasy Score | under | 0.207555417572592 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14315788 | prizepicks | Spencer Shrader | Kicking Points | over | 0.2075493286143597 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14717675 | prizepicks | Spencer Shrader | Kicking Points | over | 0.2075493286143597 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473621 | prizepicks | Lamar Jackson | Rush Yards | under | 0.2074756926394922 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14718664 | prizepicks | Danielle Hunter | Sacks | under | 0.2073639165791256 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14253963 | prizepicks | Chris Olave | Rec Yards | over | 0.20731641871977 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393121 | prizepicks | Jordan Love | Pass Attempts | under | 0.207237558972315 | 2026-09-05T16:47:46Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14473017 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.2071635487343956 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381685 | prizepicks | Omarion Hampton | Rush+Rec Yds | under | 0.2069691505073813 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306256 | prizepicks | Justin Jefferson | Fantasy Score | under | 0.2068710937519118 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14137012 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.206703827388372 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14499492 | prizepicks | Joe Burrow | Pass Attempts | under | 0.206597664422477 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475384 | prizepicks | Daniel Jones | Pass+Rush Yds | over | 0.2064873421821048 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14507659 | prizepicks | Geno Smith | Pass Yards | over | 0.2064863665458659 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499525 | prizepicks | Kyler Murray | Pass Attempts | over | 0.2063303939999061 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472458 | prizepicks | Jack Bech | Recs | under | 0.2062907413199193 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14615527 | prizepicks | George Karlaftis | Sacks | under | 0.2062481448582555 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12323876 | prizepicks | Cam Skattebo | Player TDs | over | 0.2062162341163711 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472333 | prizepicks | Tyjae Spears | Rec Yards | under | 0.2060100560301324 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389798 | prizepicks | Rico Dowdle | Fantasy Score | under | 0.2059426788083569 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380882 | prizepicks | Luther Burden III | Rush+Rec Yds | over | 0.205818902539964 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14068333 | prizepicks | Sam Darnold | Pass Yards | under | 0.2058026381558362 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14580329 | prizepicks | Tre Tucker | Rec Yards | over | 0.2057763204772013 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134623 | prizepicks | Tre Tucker | Rec Yards | over | 0.2057763204772011 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14535314 | prizepicks | Bucky Irving | Rec Yards | over | 0.2057453320347619 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358021 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.2054517496046221 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978021 | prizepicks | Theo Johnson | Player TDs | under | 0.2054227672749708 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13995894 | prizepicks | Tez Johnson | Player TDs | under | 0.2054227672749708 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14677511 | prizepicks | Tommy Tremble | Rec Yards | over | 0.2053718328706602 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604488 | prizepicks | Bryce Young | Pass Attempts | over | 0.20536855295011 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977000 | prizepicks | Cam Little | Kicking Points | over | 0.205364521136304 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14481949 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.2053477192203845 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14363878 | prizepicks | Jayden Daniels | Rush Yards | under | 0.2053309519424389 | 2026-09-01T07:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14474386 | prizepicks | Jayden Daniels | Rush Yards | under | 0.2053309519424389 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14382796 | prizepicks | Bryce Young | Pass Attempts | under | 0.2051824405002145 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14648576 | prizepicks | Bryce Young | Pass Attempts | under | 0.2051824405002146 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342372 | prizepicks | Cam Skattebo | Fantasy Score | over | 0.2051564546617234 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13971082 | prizepicks | Jake Bates | FG Made | under | 0.2050236979287663 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387797 | prizepicks | Andrei Iosivas | Rec Yards | over | 0.2049875622595781 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136689 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.2049810208635698 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320395 | prizepicks | Bucky Irving | Rush Yards | over | 0.2049182087717178 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14020517 | prizepicks | Ashton Jeanty | Rush TDs | under | 0.2049022994796393 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14581932 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.2048158032727873 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352173 | prizepicks | Kyle Pitts Sr. | Rec Targets | over | 0.204531835433615 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392727 | prizepicks | Jalen Nailor | Recs | under | 0.2042819585394053 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14695203 | prizepicks | Jalen Nailor | Recs | under | 0.2042819585394053 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13988419 | prizepicks | Matt Gay | Kicking Points | under | 0.2042818993592592 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14493656 | prizepicks | Michael Wilson | Rec Yards | over | 0.2042786905500355 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14560387 | prizepicks | Kirk Cousins | Fantasy Score | under | 0.204185621802672 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559712 | prizepicks | David Montgomery | Rec Targets | under | 0.2041105473295124 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697121 | prizepicks | Elijah Higgins | Rec Yards | over | 0.2038538852042496 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14533441 | prizepicks | Cole Kmet | Fantasy Score | under | 0.2037585639829903 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738442 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.2034418318559379 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14393662 | prizepicks | Derrick Henry | Rush+Rec Yds | under | 0.2033645341676428 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14644546 | prizepicks | Brian Robinson Jr. | Rush+Rec Yds | under | 0.2033362955547739 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996266 | prizepicks | Emeka Egbuka | Player TDs | under | 0.2031833635048859 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311027 | prizepicks | Bucky Irving | Rush Yards | under | 0.2030662027314852 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324331 | prizepicks | Tyler Shough | Rush Yards | under | 0.2030496542226018 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13988383 | prizepicks | Malik Willis | Pass TDs | over | 0.2028477592643982 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14593457 | prizepicks | Omarion Hampton | Rec Yards | over | 0.2024965019492435 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472294 | prizepicks | Gunnar Helm | Rec Yards | under | 0.2021945569179242 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560391 | prizepicks | Daniel Jones | Fantasy Score | under | 0.2017764004356771 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14384019 | prizepicks | Blake Grupe | Kicking Points | over | 0.2017416237611398 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14476485 | prizepicks | Tyler Higbee | Rec Yards | under | 0.2016982128185649 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311178 | prizepicks | Daniel Jones | Pass Yards | under | 0.2016851083706006 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602876 | prizepicks | Lamar Jackson | Pass Attempts | under | 0.2012424062571567 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13974911 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.2010169246268844 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472416 | prizepicks | Jalen Nailor | Rec Yards | over | 0.2009967858886696 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957536 | prizepicks | AJ Barner | Rec Yards | over | 0.2009171540828516 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14343251 | prizepicks | Joe Burrow | Fantasy Score | over | 0.2008771551441062 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375728 | prizepicks | Calvin Ridley | Fantasy Score | over | 0.2008646404225865 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14306254 | prizepicks | Jayden Reed | Fantasy Score | over | 0.2005030910465847 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14477592 | prizepicks | Malik Willis | Rush Yards | over | 0.2004366195438477 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13983394 | prizepicks | Wan'Dale Robinson | Player TDs | under | 0.200373824700319 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14575017 | prizepicks | RJ Harvey | Rush Yards | over | 0.2002136716877727 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379084 | prizepicks | Jaxson Dart | Pass Yards | under | 0.2001788763450771 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990915 | prizepicks | Mike Evans | Recs | under | 0.2001061996133991 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14586379 | prizepicks | Evan Engram | Rec Yards | over | 0.2000788927351332 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357830 | prizepicks | Luther Burden III | Fantasy Score | over | 0.2000156531550093 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14541476 | prizepicks | Kenny Gainwell | Rush+Rec Yds | over | 0.1999163512064776 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295158 | prizepicks | Jayden Daniels | Pass Yards | under | 0.1998718382659445 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14473664 | prizepicks | Tyler Warren | Rec Yards | under | 0.1997333282631324 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14698227 | prizepicks | Tyler Warren | Rec Yards | under | 0.1997333282631324 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14350979 | prizepicks | Sam LaPorta | Recs | over | 0.1997315433845472 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306736 | prizepicks | Stefon Diggs | Fantasy Score | over | 0.1996561803258687 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13983402 | prizepicks | Cam Ward | Pass TDs | under | 0.1996237707243794 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957601 | prizepicks | Jason Myers | FG Made | over | 0.1995363873279888 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14136701 | prizepicks | Christian Watson | Rec Yards | under | 0.1994982375922085 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989830 | prizepicks | Kyren Williams | Rec Yards | over | 0.1993445899352498 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14473666 | prizepicks | Tyjae Spears | Rush Yards | over | 0.1992501409799135 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379214 | prizepicks | Baker Mayfield | Rush Yards | over | 0.1991902436576189 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559703 | prizepicks | James Cook III | Rec Targets | under | 0.1989647650782233 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420549 | prizepicks | Pat Freiermuth | Recs | under | 0.1989262230066737 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14256005 | prizepicks | Devaughn Vele | Rec Yards | over | 0.1989016641025709 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535162 | prizepicks | Brashard Smith | Fantasy Score | over | 0.1988866283619961 | 2026-09-06T04:29:20Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346564 | prizepicks | DJ Moore | Fantasy Score | under | 0.1988407615957901 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14381731 | prizepicks | Bucky Irving | Rush+Rec Yds | over | 0.1988405466142979 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357903 | prizepicks | Aaron Jones Sr. | Fantasy Score | under | 0.1987996121603142 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14474423 | prizepicks | Aaron Jones Sr. | Rec Yards | over | 0.1984321285428045 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402482 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.1981698223015965 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473654 | prizepicks | Juwan Johnson | Rec Yards | over | 0.1979799825384595 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560379 | prizepicks | Daniel Jones | Fantasy Score | over | 0.1978211696221277 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475346 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.1977345960683579 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697527 | prizepicks | Josh Oliver | Fantasy Score | over | 0.1976506027087752 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14514484 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.1975246475036096 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14461858 | prizepicks | Cole Kmet | Recs | under | 0.1974545126034108 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14327250 | prizepicks | Brock Bowers | Recs | under | 0.1973576301732378 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12337851 | prizepicks | David Montgomery | Rush Yards | under | 0.1972828123663775 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134834 | prizepicks | Chris Olave | Recs | over | 0.1972525854089274 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14135021 | prizepicks | DK Metcalf | Rec Yards | over | 0.1970907758348405 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256517 | prizepicks | Bucky Irving | Recs | under | 0.1970253420661722 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477607 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.1969026926910232 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136686 | prizepicks | Jakobi Meyers | Recs | under | 0.1968832581510005 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14540805 | prizepicks | Samaje Perine | Rush Yards | over | 0.1968359150834414 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14342833 | prizepicks | Nick Folk | Kicking Points | over | 0.1967549732699668 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14513935 | prizepicks | Isaac TeSlaa | Rec Yards | over | 0.1967266934961271 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528881 | prizepicks | Aidan Hutchinson | Sacks | over | 0.1967225741933914 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536924 | prizepicks | Tyler Warren | Recs | over | 0.1965364175133587 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311105 | prizepicks | Patrick Mahomes | Pass Yards | under | 0.1965353964013936 | 2026-09-05T16:47:46Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14473000 | prizepicks | Kalif Raymond | Rec Yards | over | 0.19651456519273 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536909 | prizepicks | Josh Downs | Recs | under | 0.1963414951588999 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14505891 | prizepicks | Kirk Cousins | Pass Attempts | under | 0.1963083849222018 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978393 | prizepicks | Zay Flowers | Player TDs | over | 0.1962657863894561 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14497730 | prizepicks | Andre Szmyt | Kicking Points | over | 0.1960173701450065 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977028 | prizepicks | Andre Szmyt | Kicking Points | over | 0.1960173701450065 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381201 | prizepicks | J.K. Dobbins | Rush+Rec Yds | over | 0.1958969726732939 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472309 | prizepicks | Jaylen Warren | Rush Yards | under | 0.1958913214116363 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343342 | prizepicks | Baker Mayfield | Fantasy Score | over | 0.19579425151266 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393609 | prizepicks | James Cook III | Rush+Rec Yds | over | 0.1957603889399298 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311168 | prizepicks | Jalen Hurts | Pass Yards | under | 0.1957561807806975 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961552 | prizepicks | Sam Darnold | Pass TDs | over | 0.1957118697993852 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13978242 | prizepicks | Sam Darnold | Player TDs | over | 0.1957118697993852 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14633704 | prizepicks | Patrick Mahomes | INT | under | 0.1957296465218989 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14384896 | prizepicks | Saquon Barkley | Rush+Rec Yds | over | 0.195628683884678 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311561 | prizepicks | Justin Herbert | Pass Yards | over | 0.1952945359608493 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957667 | prizepicks | Sam Darnold | Pass+Rush Yds | over | 0.1952343735140576 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472288 | prizepicks | Charlie Kolar | Rec Yards | over | 0.1952099334054836 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14687739 | prizepicks | Jaylin Noel | Rec Yards | over | 0.195168080033259 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095796 | prizepicks | Rashee Rice | Recs | under | 0.1950929791639291 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14475333 | prizepicks | Javonte Williams | Recs | under | 0.1949325536386457 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14306253 | prizepicks | Tucker Kraft | Fantasy Score | over | 0.1948171159708973 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14359053 | prizepicks | Javonte Williams | Fantasy Score | over | 0.1945415014931035 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341849 | prizepicks | Brenton Strange | Fantasy Score | over | 0.1944321145802873 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573453 | prizepicks | Harrison Mevis | Kicking Points | under | 0.1944109051190654 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14355872 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.1943793147028464 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379071 | prizepicks | Cam Ward | Pass Yards | under | 0.1943551184511619 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379209 | prizepicks | Rashid Shaheed | Rush Yards | over | 0.1941578580142583 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13989764 | prizepicks | Puka Nacua | Rec Yards | over | 0.194153045644693 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14381377 | prizepicks | Drake Maye | Pass Attempts | under | 0.1936939579827795 | 2026-09-07T04:28:26Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13974051 | prizepicks | Cooper Kupp | Recs | under | 0.1936611268731564 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14649189 | prizepicks | Quay Walker | Sacks | under | 0.1941249196689156 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697270 | prizepicks | Ian Thomas | Fantasy Score | over | 0.1940307983988618 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14373324 | prizepicks | C.J. Stroud | Pass Yards | under | 0.1935799805345291 | 2026-09-01T14:38:25Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402850 | prizepicks | Woody Marks | Rush+Rec Yds | over | 0.1934882584683113 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311374 | prizepicks | Geno Smith | Pass Yards | over | 0.1933588769483669 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472742 | prizepicks | Geno Smith | Pass Yards | over | 0.1933588769483669 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311374 | prizepicks | Geno Smith | Pass Yards | over | 0.1933588769483669 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472351 | prizepicks | Rico Dowdle | Rec Yards | over | 0.1933496795369347 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14021383 | prizepicks | Christian McCaffrey | Recs | under | 0.1933439633485468 | 2026-09-02T00:04:19Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14320402 | prizepicks | Joe Burrow | Rush Yards | under | 0.1933208247215337 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990934 | prizepicks | Deebo Samuel Sr. | Recs | under | 0.1932205820111423 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13978325 | prizepicks | Jaylen Waddle | Player TDs | under | 0.1932205820111423 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14359083 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1931894406177994 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327263 | prizepicks | Mark Andrews | Recs | under | 0.1930737637990469 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2552,50 +2560,40 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14473087 | prizepicks | Charlie Kolar | Rec Yards | under | 0.1929644979437675 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295161 | prizepicks | Jalen Hurts | Pass Yards | over | 0.1929560266814641 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402906 | prizepicks | Rachaad White | Rush Yards | over | 0.1929282079311173 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691238 | prizepicks | Ashton Dulin | Rec Yards | under | 0.1929009704039224 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306825 | prizepicks | Xavier Worthy | Fantasy Score | under | 0.1927610647577451 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14339097 | prizepicks | Joe Burrow | Pass+Rush Yds | under | 0.1927245459371129 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499877 | prizepicks | Joe Burrow | Pass+Rush Yds | under | 0.1927245459371129 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14665751 | prizepicks | Brian Robinson Jr. | Rush Yards | under | 0.1927085737329942 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995900 | prizepicks | Bucky Irving | Player TDs | under | 0.1926893344631212 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14593221 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.1926574286452211 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100130 | prizepicks | Jahmyr Gibbs | Player TDs | under | 0.1925599573537392 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100105 | prizepicks | Jonathan Taylor | Player TDs | under | 0.1924594543425751 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14559617 | prizepicks | Isaiah Williams | Rec Yards | under | 0.1923452990744782 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14647287 | prizepicks | Tommy Tremble | Recs | under | 0.1923319350130498 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357781 | prizepicks | Jameson Williams | Fantasy Score | over | 0.192228762083894 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311868 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.192095838860329 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957563 | prizepicks | Jason Myers | Kicking Points | over | 0.191996353511555 | 2026-09-01T03:38:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14295703 | prizepicks | Jalen Hurts | Rush Yards | over | 0.1919688941143038 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697859 | prizepicks | Chuba Hubbard | Rec Yards | under | 0.192152849027778 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697078 | prizepicks | Darren Waller | Fantasy Score | over | 0.1920203305579711 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528933 | prizepicks | Cam Ward | INT | under | 0.1917870521634703 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420566 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.1917650981941818 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14621822 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.1916373610818624 | 2026-09-08T09:35:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14534187 | prizepicks | Bryce Young | Fantasy Score | over | 0.1915346775709513 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14493343 | prizepicks | Jaylen Warren | Rush Yards | over | 0.1914492381012819 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532942 | prizepicks | Xavier Hutchinson | Fantasy Score | under | 0.1913976086965104 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339557 | prizepicks | Kyren Williams | Recs | over | 0.191360155731721 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14472616 | prizepicks | Emeka Egbuka | Rec Yards | over | 0.1913819317730101 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534987 | prizepicks | Greg Dulcich | Fantasy Score | over | 0.1912919538040036 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12379484 | prizepicks | Brock Bowers | Rec Yards | under | 0.1912835958493308 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14475403 | prizepicks | David Njoku | Recs | over | 0.1911947727342823 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14402992 | prizepicks | David Njoku | Recs | over | 0.1911947727342823 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420445 | prizepicks | Justice Hill | Recs | under | 0.1911844655823664 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957586 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.191146739257501 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14604143 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | over | 0.1910589561588601 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691176 | prizepicks | Johnny Mundt | Recs | over | 0.1910144190258742 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14493647 | prizepicks | Tyler Warren | Rec Yards | over | 0.1909842140643117 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14500178 | prizepicks | Trevor Lawrence | Pass Attempts | over | 0.19089359084566 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14381560 | prizepicks | Matthew Stafford | Pass Attempts | over | 0.1908656457053018 | 2026-09-01T21:48:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14352542 | prizepicks | De'Von Achane | Recs | over | 0.190838297319744 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957566 | prizepicks | Andy Borregales | Kicking Points | over | 0.1907237738874276 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311547 | prizepicks | Ladd McConkey | Rec Yards | over | 0.190653457011263 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14568558 | prizepicks | James Houston IV | Sacks | under | 0.190532384092679 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472752 | prizepicks | Gunnar Helm | Rec Yards | over | 0.1905153605123841 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14324325 | prizepicks | Dalton Schultz | Recs | over | 0.1904425642235739 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989824 | prizepicks | Blake Corum | Rec Yards | over | 0.1901481682826475 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14311320 | prizepicks | Dalton Schultz | Recs | over | 0.1904425642235739 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499962 | prizepicks | Jaxson Dart | Pass+Rush Yds | under | 0.1900578290298267 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14095827 | prizepicks | Noah Gray | Rec Yards | under | 0.1899792134076552 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379462 | prizepicks | Sam LaPorta | Rec Yards | over | 0.1899388826834369 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343153 | prizepicks | Rhamondre Stevenson | Fantasy Score | over | 0.1897955990128919 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13979203 | prizepicks | Jordan Addison | Player TDs | under | 0.1897626328183145 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402551 | prizepicks | C.J. Stroud | Pass+Rush Yds | under | 0.1897335198269801 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311623 | prizepicks | Marvin Harrison Jr. | Rec Yards | over | 0.1897249023791724 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990937 | prizepicks | Deebo Samuel Sr. | Recs | over | 0.1896999397455122 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14473645 | prizepicks | Josh Downs | Rec Yards | under | 0.1896306239049197 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13685181 | prizepicks | Puka Nacua | Recs | over | 0.1894143721724184 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14604213 | prizepicks | Kirk Cousins | Pass Attempts | over | 0.1892278274073453 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472755 | prizepicks | Bryce Young | Rush Yards | over | 0.1892015979389839 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352088 | prizepicks | Michael Wilson | Rec Targets | over | 0.1891977432073559 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
@@ -2605,120 +2603,115 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14357957 | prizepicks | Jake Ferguson | Fantasy Score | over | 0.188855854340867 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13976442 | prizepicks | Brandon Aubrey | FG Made | over | 0.1888305879885773 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472565 | prizepicks | Braelon Allen | Rush Yards | under | 0.1887854743482199 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14684285 | prizepicks | Vita Vea | Sacks | under | 0.1887646692667931 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686657 | prizepicks | Tyler Allgeier | Rush Yards | over | 0.1885747608797172 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402904 | prizepicks | Chig Okonkwo | Recs | over | 0.1885099990919984 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380174 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | over | 0.1883171419174691 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953359 | prizepicks | Chad Ryland | Kicking Points | over | 0.1883014136346857 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12323869 | prizepicks | Christian McCaffrey | Player TDs | over | 0.1881975578021555 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14008763 | prizepicks | Kyler Murray | Pass TDs | under | 0.1879485225706282 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14539885 | prizepicks | Alec Pierce | Rec Yards | over | 0.187619541880902 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343158 | prizepicks | DeMario Douglas | Fantasy Score | over | 0.1875804465928661 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14535066 | prizepicks | Jalen Nailor | Fantasy Score | over | 0.1875621299102218 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475345 | prizepicks | Devaughn Vele | Rec Yards | over | 0.18744140591751 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14723693 | prizepicks | Keenan Allen | Recs | over | 0.1873792225318946 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134418 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.1873742731827515 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14136829 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.1872276410250967 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472893 | prizepicks | Derrick Henry | Rec Yards | under | 0.1871859007720318 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535068 | prizepicks | Jalen Nailor | Fantasy Score | under | 0.1871083302953339 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14339092 | prizepicks | Michael Pittman Jr. | Rec Yards | over | 0.1870953204392459 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14378588 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.1870572064922604 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14597172 | prizepicks | TreVeyon Henderson | Recs | over | 0.1869590823913991 | 2026-09-07T20:32:16Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14473080 | prizepicks | Greg Dulcich | Rec Yards | over | 0.1868603469034513 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14431789 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.1868443998956425 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599999 | prizepicks | Michael Mayer | Rec Targets | over | 0.1866901250589483 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14135007 | prizepicks | DK Metcalf | Recs | over | 0.186417950706722 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14319343 | prizepicks | Devaughn Vele | Recs | over | 0.1863894460378291 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14294851 | prizepicks | Tucker Kraft | Rec Yards | over | 0.1863813493673146 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14496725 | prizepicks | Jayden Reed | Rush+Rec Yds | under | 0.1863154796403107 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14004069 | prizepicks | Brock Purdy | Fantasy Score | over | 0.1861190618742343 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13990910 | prizepicks | Mike Evans | Recs | over | 0.185929115776803 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14685248 | prizepicks | Ashton Jeanty | Rec Yards | under | 0.1861143201510788 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14503526 | prizepicks | C.J. Stroud | Pass Attempts | under | 0.1858151982952023 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393660 | prizepicks | Derrick Henry | Rush+Rec Yds | over | 0.1855841840672215 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14135013 | prizepicks | DK Metcalf | Rec Yards | under | 0.1855091999313268 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14486219 | prizepicks | George Kittle | Rec Yards | over | 0.1854968782121515 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14533446 | prizepicks | D'Andre Swift | Fantasy Score | over | 0.1853660645263748 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339693 | prizepicks | D'Andre Swift | Recs | under | 0.1853615010277027 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596973 | prizepicks | Justin Herbert | Pass Yards | under | 0.1852348600316168 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14264396 | prizepicks | Patrick Mahomes | Pass TDs | over | 0.1852175763816697 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14501941 | prizepicks | Christian Watson | Rec Yards | over | 0.1851276239980182 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14136693 | prizepicks | Christian Watson | Rec Yards | over | 0.1851276239980183 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14585933 | prizepicks | Pat Bryant | Rec Yards | over | 0.1849471010695614 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14506161 | prizepicks | Mike Gesicki | Rec Yards | under | 0.1849291097739093 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14482630 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1847166006627922 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357850 | prizepicks | DK Metcalf | Fantasy Score | under | 0.184672570537423 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473665 | prizepicks | Cam Ward | Rush Yards | over | 0.1845037127649521 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352625 | prizepicks | Jaylen Waddle | Rec Targets | under | 0.1844778925125175 | 2026-09-01T01:38:22Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14604140 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | under | 0.1841261775508985 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352087 | prizepicks | Marvin Harrison Jr. | Rec Targets | under | 0.1840539891385191 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311056 | prizepicks | De'Von Achane | Rush Yards | over | 0.1840042856162326 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14336236 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.1839659292801493 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311098 | prizepicks | Tee Higgins | Recs | over | 0.1839609809405985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379063 | prizepicks | Drake Maye | Pass Yards | over | 0.1838539636363734 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14353121 | prizepicks | Xavier Worthy | Rec Targets | under | 0.1838038392205481 | 2026-09-01T01:38:22Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472298 | prizepicks | Michael Mayer | Rec Yards | over | 0.1835698960980019 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697060 | prizepicks | Darren Waller | Rec Yards | over | 0.1833041434945568 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473077 | prizepicks | Jahan Dotson | Rec Yards | over | 0.1832320200530108 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534889 | prizepicks | Jahan Dotson | Rec Yards | over | 0.1832320200530108 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13558874 | prizepicks | Brock Purdy | Pass TDs | over | 0.1831986725696147 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14311502 | prizepicks | Bryce Young | Pass Yards | under | 0.1830379209251392 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14500056 | prizepicks | Dak Prescott | Pass Attempts | under | 0.1829998356720299 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13980169 | prizepicks | Chris Olave | Player TDs | over | 0.1829575754697333 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14569466 | prizepicks | Ashton Jeanty | Rush+Rec Yds | over | 0.1829513452234779 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265393 | prizepicks | Jaylen Waddle | Rec Yards | over | 0.1828637108559082 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14719810 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.1828424801259922 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339424 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.182799677240496 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14136646 | prizepicks | Brian Thomas Jr. | Rec Yards | under | 0.182762419588098 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474948 | prizepicks | Jordan Love | Pass Yards | over | 0.1827847570484497 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14599002 | prizepicks | Tony Pollard | Rush+Rec Yds | under | 0.1827279494077477 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691278 | prizepicks | Dylan Sampson | Recs | under | 0.182605757027348 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14351527 | prizepicks | Cam Ward | Rush Yards | under | 0.1825582957958333 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381537 | prizepicks | Tony Pollard | Rush+Rec Yds | over | 0.1825553207996554 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472235 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.1825238977909031 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14634889 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.1825241400889049 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14390050 | prizepicks | Jared Goff | Fantasy Score | over | 0.1824786895541472 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486928 | prizepicks | Xavier Legette | Rec Yards | over | 0.1824517703769623 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14354796 | prizepicks | Brock Bowers | Fantasy Score | under | 0.1822222774192549 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13980632 | prizepicks | Marvin Harrison Jr. | Player TDs | under | 0.1822151891996942 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14487255 | prizepicks | Mason Taylor | Recs | under | 0.1820762130581718 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14605014 | prizepicks | Jalen Hurts | Pass Attempts | over | 0.1820640998108103 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311971 | prizepicks | Trevor Lawrence | Rush Yards | over | 0.182053879823638 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686425 | prizepicks | Kyle Monangai | Rush+Rec Yds | over | 0.1820027750215145 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257518 | prizepicks | Bijan Robinson | Rec Yards | over | 0.1819650112246071 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393610 | prizepicks | David Montgomery | Rush+Rec Yds | under | 0.1818650204114377 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474804 | prizepicks | Will Reichard | Kicking Points | over | 0.1818031856323922 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357919 | prizepicks | Tre' Harris | Fantasy Score | over | 0.1817525478230222 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472528 | prizepicks | Jaylen Warren | Rec Yards | under | 0.1816559649925048 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311574 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.1815981639613025 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341961 | prizepicks | Trey McBride | Fantasy Score | over | 0.1815666087250111 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14739729 | prizepicks | Theo Johnson | Rec Yards | over | 0.1813290773453695 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14136738 | prizepicks | Justin Jefferson | Rec Yards | under | 0.1813209912728877 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978567 | prizepicks | Woody Marks | Player TDs | under | 0.1812807080736296 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136658 | prizepicks | Brian Thomas Jr. | Recs | over | 0.1811994576473817 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14478561 | prizepicks | Leonard Williams | Sacks | under | 0.1811338511362508 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12379233 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.1809477857186052 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472358 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.1807581750696063 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257516 | prizepicks | Bijan Robinson | Rec Yards | under | 0.180671549641902 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983412 | prizepicks | Elic Ayomanor | Player TDs | under | 0.1806703963528071 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974045 | prizepicks | Rashid Shaheed | Recs | under | 0.1805497466831562 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14586385 | prizepicks | RJ Harvey | Rec Yards | over | 0.1804903609245305 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14691283 | prizepicks | Dylan Sampson | Fantasy Score | over | 0.1804642311606822 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711309 | prizepicks | Ka'imi Fairbairn | Kicking Points | over | 0.1804045054579472 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306467 | prizepicks | Josh Allen | Fantasy Score | over | 0.1801970326221345 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14698334 | prizepicks | Roman Wilson | Recs | under | 0.180152293934975 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338584 | prizepicks | Omarion Hampton | Recs | over | 0.1801391805170906 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14103698 | prizepicks | DeMario Douglas | Rec Yards | over | 0.1801004784846104 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14477603 | prizepicks | Milton Williams | Sacks | under | 0.1800615112860668 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14351884 | prizepicks | Malik Willis | Pass TDs | under | 0.1798900285986568 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957537 | prizepicks | Rhamondre Stevenson | Rec Yards | over | 0.1798789041010061 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14265380 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.1797784884978935 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14381532 | prizepicks | Cam Ward | Pass Attempts | under | 0.1797752231815774 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379464 | prizepicks | Garrett Wilson | Rec Yards | under | 0.1796476194575449 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978029 | prizepicks | Cam Skattebo | Player TDs | under | 0.1796375851325966 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311306 | prizepicks | Mark Andrews | Rec Yards | under | 0.179605888276302 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957644 | prizepicks | Drake Maye | Rush TDs | under | 0.1795978958785542 | 2026-09-08T14:29:16Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13988380 | prizepicks | Jalen Nailor | Player TDs | under | 0.1795978958785542 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14585932 | prizepicks | Pat Bryant | Recs | over | 0.17951513986235 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14598617 | prizepicks | Demarcus Robinson | Rec Yards | under | 0.1794168366412714 | 2026-09-08T09:35:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13971295 | prizepicks | Tyler Loop | Kicking Points | under | 0.1793728128004099 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14243824 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.1793688474807385 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13990952 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.1791142163444761 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14353162 | prizepicks | Brock Bowers | Rec Targets | under | 0.1790876609809967 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472768 | prizepicks | Isaiah Likely | Rec Yards | over | 0.1793146402535389 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14473623 | prizepicks | Stefon Diggs | Rec Yards | over | 0.1790659492615431 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486873 | prizepicks | Greg Dulcich | Recs | over | 0.179055164840149 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136457 | prizepicks | Trevor Lawrence | Pass+Rush Yds | under | 0.1788850856830958 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14462244 | prizepicks | Tucker Kraft | Rec Yards | over | 0.178875925179065 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14375735 | prizepicks | Gunnar Helm | Fantasy Score | over | 0.178668308908046 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472406 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.1786669511853289 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14502655 | prizepicks | Geno Smith | Pass Yards | under | 0.178551986886543 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475708 | prizepicks | Malik Washington | Rec Yards | over | 0.1785223380730425 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473634 | prizepicks | Jonathan Taylor | Rec Yards | under | 0.1784933618210326 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14137009 | prizepicks | T.J. Hockenson | Rec Yards | over | 0.1783968932693675 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311581 | prizepicks | Caleb Williams | Pass Yards | over | 0.1782998025456941 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14374589 | prizepicks | Braelon Allen | Rec Yards | over | 0.1782875677912039 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14382838 | prizepicks | Braelon Allen | Rec Yards | over | 0.1782875677912039 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711282 | prizepicks | Jaylin Noel | Rec Yards | under | 0.1781212558189292 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13994673 | prizepicks | Chris Godwin Jr. | Player TDs | under | 0.1780943395567426 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14647324 | prizepicks | Jordan Love | Pass Yards | over | 0.1780868919680918 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719321 | prizepicks | Brandon Aubrey | Kicking Points | over | 0.1780285294283254 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311488 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.1779830887507238 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402576 | prizepicks | Justin Herbert | Pass+Rush Yds | over | 0.1779691386182224 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14477606 | prizepicks | Bhayshul Tuten | Rec Yards | over | 0.1779358061302447 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379451 | prizepicks | Hunter Henry | Rec Yards | over | 0.1779350996265576 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14600006 | prizepicks | Dontayvion Wicks | Rec Targets | under | 0.1778543301189611 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472200 | prizepicks | Malik Davis | Rush Yards | over | 0.1777875891052736 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13980163 | prizepicks | Jameson Williams | Player TDs | under | 0.1777792303399288 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14329818 | prizepicks | Chase Brown | Rec Yards | over | 0.1777786645708112 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14589171 | prizepicks | Aaron Rodgers | Rush Yards | over | 0.1777388477325819 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2730,122 +2723,110 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14534433 | prizepicks | Drew Sample | Fantasy Score | under | 0.1774786387461829 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559723 | prizepicks | Travis Etienne Jr. | Rec Targets | under | 0.1774749291233737 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13955028 | prizepicks | Chase McLaughlin | Kicking Points | over | 0.1774313544542204 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14347374 | prizepicks | Davante Adams | Recs | over | 0.1772983697503883 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14136870 | prizepicks | DeVonta Smith | Recs | under | 0.1772506337866602 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265394 | prizepicks | Patrick Mahomes | Rush Yards | over | 0.1772495171508459 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14601836 | prizepicks | Adam Trautman | Fantasy Score | over | 0.1771797953054159 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311303 | prizepicks | Dalton Schultz | Rec Yards | over | 0.1771209936272331 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14473880 | prizepicks | Nico Collins | Rec Yards | over | 0.1770749623436397 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503123 | prizepicks | Bo Nix | Pass Attempts | over | 0.176971185832407 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341338 | prizepicks | Parker Washington | Fantasy Score | over | 0.1769562391685162 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13986158 | prizepicks | Dallas Goedert | Player TDs | over | 0.1768889861159401 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14485428 | prizepicks | George Kittle | Recs | over | 0.1768837247977965 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14534425 | prizepicks | Mike Gesicki | Fantasy Score | over | 0.1768414953092396 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311175 | prizepicks | Daniel Jones | Pass Yards | over | 0.1765265533497582 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14156734 | prizepicks | DeVonta Smith | Rec Yards | over | 0.1765097464538956 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136333 | prizepicks | Harold Fannin Jr. | Recs | over | 0.1764134425823984 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256510 | prizepicks | Bucky Irving | Recs | over | 0.1763313603215976 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13971085 | prizepicks | Jake Bates | FG Made | over | 0.1763222190145656 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13971152 | prizepicks | Jake Bates | FG Made | over | 0.1763222190145656 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14259047 | prizepicks | Terry McLaurin | Recs | under | 0.1763085325276567 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13988376 | prizepicks | Tre Tucker | Player TDs | under | 0.1762829071491014 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311967 | prizepicks | Caleb Williams | Rush Yards | over | 0.1761438537034331 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14389712 | prizepicks | Quinshon Judkins | Rush+Rec Yds | under | 0.1761361008710285 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402580 | prizepicks | Justin Herbert | Pass+Rush Yds | under | 0.176067137769643 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14476905 | prizepicks | Jahan Dotson | Rec Yards | under | 0.176058017605021 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14340379 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.1760372738969151 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13953358 | prizepicks | Chad Ryland | Kicking Points | under | 0.176027547260304 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472962 | prizepicks | Devaughn Vele | Rec Yards | over | 0.1757969660225052 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691271 | prizepicks | Keenan Allen | Rec Yards | over | 0.1759373944734894 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14536901 | prizepicks | Tyler Warren | Recs | under | 0.1757562517472299 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13684683 | prizepicks | Jaxson Dart | Pass TDs | under | 0.1756392124115477 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14374593 | prizepicks | Braelon Allen | Rush Yards | over | 0.175562406488998 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14212284 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.1755410075795042 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311870 | prizepicks | Tua Tagovailoa | Pass Yards | over | 0.1754167993906175 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311851 | prizepicks | Tua Tagovailoa | Pass Yards | over | 0.1754167993906175 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14477599 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.17507256810876 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534884 | prizepicks | David Njoku | Fantasy Score | over | 0.174997534583107 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14499064 | prizepicks | George Kittle | Rec Yards | over | 0.1749886613303893 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14274009 | prizepicks | Josh Allen | Pass Yards | under | 0.1748677387473221 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402907 | prizepicks | Rachaad White | Recs | over | 0.1748146778207807 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379497 | prizepicks | Javonte Williams | Rec Yards | under | 0.1746451458860998 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14487272 | prizepicks | Mason Taylor | Rec Yards | under | 0.1745834979378843 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534190 | prizepicks | Bryce Young | Fantasy Score | under | 0.1745415478877676 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472231 | prizepicks | DeMario Douglas | Rec Yards | under | 0.1744533798449179 | 2026-09-07T20:32:16Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13954999 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.1743726531142884 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14461332 | prizepicks | Blake Corum | Rush Yards | over | 0.1743196328936761 | 2026-09-03T16:21:45Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14560378 | prizepicks | Geno Smith | Fantasy Score | over | 0.1742381371942292 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995857 | prizepicks | Ryan Fitzgerald | Kicking Points | over | 0.1739953672157042 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649468 | prizepicks | Keeanu Benton | Sacks | under | 0.1738956873860637 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14093566 | prizepicks | Jaxson Dart | Pass+Rush Yds | under | 0.1737795284690326 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14273981 | prizepicks | Khalil Shakir | Recs | under | 0.1737649018813953 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14542468 | prizepicks | Dak Prescott | Rush Yards | over | 0.1737540992612852 | 2026-09-06T09:21:45Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13986120 | prizepicks | Tank Bigsby | Player TDs | under | 0.1736383599196985 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996122 | prizepicks | Dalton Kincaid | Player TDs | under | 0.173608913003632 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14136928 | prizepicks | Terry McLaurin | Rec Yards | over | 0.1735499822525532 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265370 | prizepicks | Bo Nix | Rush Yards | over | 0.1731397053464027 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294909 | prizepicks | Jordan Addison | Rec Yards | under | 0.1729426352803236 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14468857 | prizepicks | Braden Fiske | Sacks | under | 0.1724965644371939 | 2026-09-07T16:25:44Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14472234 | prizepicks | Jake Ferguson | Rec Yards | under | 0.1724664997732173 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14380160 | prizepicks | Jahmyr Gibbs | Rush+Rec Yds | under | 0.1723923787704709 | 2026-09-03T00:08:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357825 | prizepicks | Drake London | Fantasy Score | under | 0.172346140564101 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14512332 | prizepicks | Jalen Hurts | Pass Yards | over | 0.172259967519312 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357767 | prizepicks | Jameson Williams | Fantasy Score | under | 0.1722514037545257 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532328 | prizepicks | Tua Tagovailoa | Fantasy Score | over | 0.1719839475330749 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14568555 | prizepicks | Von Miller | Sacks | over | 0.1719523687425009 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14266949 | prizepicks | Woody Marks | Rush Yards | under | 0.1719364887818846 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475400 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.1718358674997067 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685715 | prizepicks | Brian Burns | Sacks | over | 0.1717945174642556 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341272 | prizepicks | Kyle Pitts Sr. | Fantasy Score | over | 0.1717462218903651 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306823 | prizepicks | Patrick Mahomes | Fantasy Score | over | 0.1714385742955405 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393152 | prizepicks | Jalen Coker | Rec Yards | under | 0.1714325732396451 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475382 | prizepicks | Josh Downs | Rec Yards | under | 0.1713800547316563 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14431860 | prizepicks | Josh Downs | Rec Yards | under | 0.1713800547316563 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473661 | prizepicks | Justin Jefferson | Rec Yards | under | 0.1713532031290097 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379489 | prizepicks | Tucker Kraft | Rec Yards | over | 0.1712967090908372 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380189 | prizepicks | Jaylen Warren | Rush+Rec Yds | over | 0.1712142435886442 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14500053 | prizepicks | Dak Prescott | Pass Attempts | over | 0.171207736565737 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311280 | prizepicks | Jameson Williams | Recs | under | 0.1711841403004399 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358217 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.1711462906613804 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472502 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.1711462906613803 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14255329 | prizepicks | Tyler Shough | Pass+Rush Yds | over | 0.1711309880478668 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503609 | prizepicks | Josh Allen | Pass Attempts | under | 0.1709115600298527 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14496676 | prizepicks | Sam Darnold | Pass Attempts | over | 0.1708754755128122 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13977049 | prizepicks | Cam Little | FG Made | over | 0.1708404229375399 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346306 | prizepicks | Tre' Harris | Recs | over | 0.170833972460847 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649461 | prizepicks | Derrick Harmon | Sacks | under | 0.1708337765539035 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979244 | prizepicks | Aaron Jones Sr. | Player TDs | under | 0.1708337765539035 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14420404 | prizepicks | Kirk Cousins | Pass Yards | under | 0.1708072293744071 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14512359 | prizepicks | Tyler Warren | Rec Yards | under | 0.1707017132339131 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13976436 | prizepicks | George Pickens | Rec Yards | over | 0.1706903950676321 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|12379212 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.1706225448512007 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14720913 | prizepicks | Kyle Monangai | Rush Yards | over | 0.1706473610868188 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559728 | prizepicks | Pat Freiermuth | Rec Targets | over | 0.17060039256788 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686592 | prizepicks | Kirk Cousins | Pass+Rush Yds | under | 0.1705588616712705 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14255861 | prizepicks | Juwan Johnson | Rec Yards | over | 0.1705002880541105 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324361 | prizepicks | Cade Otton | Rec Yards | over | 0.1704614297671736 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978282 | prizepicks | Eddy Pineiro | Kicking Points | over | 0.1704227207785343 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14068374 | prizepicks | Matthew Stafford | Pass Yards | over | 0.1702385473442556 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14688563 | prizepicks | Bradley Chubb | Sacks | over | 0.1703602547296617 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311509 | prizepicks | Dak Prescott | Pass Yards | under | 0.170116142293224 | 2026-09-07T23:28:23Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14420449 | prizepicks | Justice Hill | Rec Yards | under | 0.1701119266305603 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645646 | prizepicks | Justice Hill | Rec Yards | under | 0.1701119266305603 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604138 | prizepicks | Aaron Rodgers | Pass+Rush Yds | over | 0.1700537418142831 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389717 | prizepicks | Javonte Williams | Rush+Rec Yds | over | 0.1699525341726404 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14352838 | prizepicks | Brenton Strange | Rec Targets | over | 0.1698332567504122 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381216 | prizepicks | Kenneth Walker III | Rush+Rec Yds | over | 0.1698239583356738 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13978580 | prizepicks | Cairo Santos | Kicking Points | under | 0.169818155254528 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14565435 | prizepicks | Jahan Dotson | Recs | under | 0.1696220622616331 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12335670 | prizepicks | Romeo Doubs | Rec Yards | over | 0.1693414551436777 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14477583 | prizepicks | Malik Willis | Rush Yards | under | 0.1693366367205093 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|13954722 | prizepicks | Evan McPherson | Kicking Points | under | 0.1695083003579831 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14164725 | prizepicks | Javonte Williams | Rush Yards | under | 0.1691764250437816 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14380195 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.1690639268610856 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604163 | prizepicks | Bryce Young | Pass+Rush Yds | under | 0.1690182976457034 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14171766 | prizepicks | De'Von Achane | Rec Yards | under | 0.1690132655459781 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473119 | prizepicks | Jalen Hurts | Rush Yards | under | 0.1689804722523261 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14460646 | prizepicks | C.J. Stroud | Rush Yards | under | 0.1689171132942382 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346891 | prizepicks | Courtland Sutton | Fantasy Score | under | 0.1689080803367995 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341943 | prizepicks | Quentin Johnston | Fantasy Score | over | 0.1687995440353031 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343145 | prizepicks | Jaxon Smith-Njigba | Fantasy Score | under | 0.1686411971602004 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14136818 | prizepicks | Jordan Love | Pass+Rush Yds | under | 0.1685658799446925 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14622483 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.1684556571082145 | 2026-09-08T09:35:41Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14614829 | prizepicks | Malcolm Roach | Sacks | under | 0.1684434872836002 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14374573 | prizepicks | Woody Marks | Rush Yards | over | 0.1684057443768145 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14596957 | prizepicks | Jacoby Brissett | Pass+Rush Yds | under | 0.16818949643679 | 2026-09-08T04:27:30Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14512264 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.1681120432462539 | 2026-09-06T16:58:08Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13978326 | prizepicks | Troy Franklin | Player TDs | under | 0.1680822561717404 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472322 | prizepicks | Tony Pollard | Recs | under | 0.1678946698644968 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580955 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | under | 0.1678838263712679 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379219 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.1675903189726546 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976401 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.1675628218842726 | 2026-09-02T21:15:45Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14306439 | prizepicks | Josh Allen | Pass+Rush+Rec TDs | over | 0.1675233978434251 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14100143 | prizepicks | Josh Allen | Player TDs | over | 0.1675233978434251 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14306439 | prizepicks | Josh Allen | Pass+Rush+Rec TDs | over | 0.1675233978434251 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311080 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1674799134419519 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357851 | prizepicks | Jonathan Taylor | Fantasy Score | over | 0.1674397714068286 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346322 | prizepicks | Ladd McConkey | Rec Yards | over | 0.1672644488023988 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12528927 | prizepicks | Brock Purdy | INT | over | 0.1671939568686415 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14739407 | prizepicks | Theo Johnson | Rec Yards | over | 0.1672488987850965 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14431652 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.167124913906161 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499344 | prizepicks | Bryce Young | Pass Attempts | over | 0.167121140049646 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341643 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.1671080122866362 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2853,46 +2834,45 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14366263 | prizepicks | Kirk Cousins | Pass Yards | under | 0.1670471781585369 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346563 | prizepicks | Dalton Kincaid | Fantasy Score | over | 0.1670379189490005 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311122 | prizepicks | Jalen Hurts | Pass Yards | over | 0.1669988523531822 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311158 | prizepicks | Cam Ward | Pass Yards | under | 0.1669662901630774 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14335797 | prizepicks | Trey McBride | Recs | over | 0.166917292926189 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14274024 | prizepicks | DJ Moore | Rec Yards | under | 0.1668403737510483 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380170 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | under | 0.1667739129618748 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472747 | prizepicks | Tyjae Spears | Rec Yards | over | 0.1666747044339999 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697115 | prizepicks | Elijah Higgins | Recs | over | 0.1668335865742922 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13994999 | prizepicks | Chris Boswell | Kicking Points | over | 0.1666724705799658 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14306989 | prizepicks | Nico Collins | Recs | under | 0.1666179132196089 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12335690 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.166551133443932 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14595908 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.166551133443932 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13977058 | prizepicks | Kenneth Walker III | Rush TDs | under | 0.1665000135094114 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12325681 | prizepicks | Kenneth Walker III | Player TDs | under | 0.1665000135094114 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14095141 | prizepicks | Christian McCaffrey | Rush+Rec Yds | over | 0.166462496271146 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14359241 | prizepicks | De'Von Achane | Rec Targets | under | 0.1664369600633717 | 2026-09-01T21:48:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691292 | prizepicks | Dylan Sampson | Rec Yards | over | 0.1661929854742601 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977043 | prizepicks | Cam Little | FG Made | under | 0.1661899637365509 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475867 | prizepicks | Byron Murphy II | Sacks | under | 0.1661542493792559 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14603962 | prizepicks | Byron Murphy Jr. | Sacks | under | 0.1661542493792559 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12528941 | prizepicks | Justin Herbert | INT | over | 0.1661542493792559 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357828 | prizepicks | Jahan Dotson | Fantasy Score | over | 0.1661531153347408 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311507 | prizepicks | Dak Prescott | Pass Yards | over | 0.1661093028549822 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14517564 | prizepicks | Calvin Ridley | Rec Yards | over | 0.1661013398377381 | 2026-09-05T10:30:11Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14585897 | prizepicks | Calvin Ridley | Rec Yards | over | 0.1661013398377381 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311522 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.1658933230959901 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14490083 | prizepicks | Tyler Shough | Rush Yards | over | 0.1658517852378964 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957650 | prizepicks | Rhamondre Stevenson | Rush TDs | over | 0.1656316229572805 | 2026-09-05T23:49:54Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14276151 | prizepicks | Dallas Goedert | Rec Yards | under | 0.1660618280471798 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475280 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.1658933230959901 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14646716 | prizepicks | Tommy Tremble | Rec Yards | over | 0.1657219702828749 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475310 | prizepicks | Jauan Jennings | Rec Yards | over | 0.1655364698908693 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357948 | prizepicks | Jake Ferguson | Fantasy Score | under | 0.1653291668902333 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14524524 | prizepicks | Geno Smith | Pass+Rush Yds | over | 0.1652034623482783 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352766 | prizepicks | Christian Watson | Rec Targets | under | 0.1650372282533651 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352250 | prizepicks | Mark Andrews | Rec Targets | under | 0.1649742300914074 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311933 | prizepicks | Bryce Young | Rush Yards | over | 0.1649701803766853 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14493346 | prizepicks | Bucky Irving | Rush Yards | under | 0.1649664504484892 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498978 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.1648402462485406 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13971092 | prizepicks | Jake Bates | Kicking Points | over | 0.1647155667486862 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13971091 | prizepicks | Jake Bates | Kicking Points | over | 0.1647155667486862 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499648 | prizepicks | Baker Mayfield | Pass Attempts | over | 0.1644539235878421 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14356859 | prizepicks | Garrett Wilson | Rec Yards | over | 0.1644150516533742 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14486333 | prizepicks | George Kittle | Rec Yards | over | 0.1643393617154864 | 2026-09-04T05:48:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13980625 | prizepicks | Tyler Allgeier | Player TDs | under | 0.164227508580406 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14021281 | prizepicks | Christian McCaffrey | Rec Targets | over | 0.1641043759694208 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14580534 | prizepicks | D'Andre Swift | Rec Yards | over | 0.1639763009058903 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14486241 | prizepicks | D'Andre Swift | Rec Yards | over | 0.1639763009058903 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311490 | prizepicks | Bryce Young | Pass Yards | under | 0.163955374416672 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14494762 | prizepicks | Lamar Jackson | Pass Yards | under | 0.1639283586832876 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996269 | prizepicks | Samaje Perine | Player TDs | under | 0.1637302090365329 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420555 | prizepicks | Pat Freiermuth | Rec Yards | under | 0.1636897537458133 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528883 | prizepicks | Montez Sweat | Sacks | over | 0.163612971671029 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961529 | prizepicks | George Holani | Rush Yards | under | 0.1636092064297856 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472375 | prizepicks | Jordan Addison | Rec Yards | under | 0.1635297205106985 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14384018 | prizepicks | Blake Grupe | FG Made | over | 0.1635250888007635 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499490 | prizepicks | Joe Burrow | Pass Attempts | over | 0.1632736548708762 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2903,14 +2883,13 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14129384 | prizepicks | Cam Skattebo | Recs | under | 0.1628625948468318 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472412 | prizepicks | Omarion Hampton | Rush Yards | under | 0.1628020344105235 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14389724 | prizepicks | Cam Skattebo | Rush+Rec Yds | over | 0.1625426015959563 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14353529 | prizepicks | Deebo Samuel Sr. | Rec Targets | over | 0.1625238557496428 | 2026-09-01T02:38:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14357753 | prizepicks | Sam LaPorta | Fantasy Score | over | 0.162254405669297 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14575924 | prizepicks | Kalif Raymond | Rec Yards | over | 0.1622440859795518 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14403226 | prizepicks | Kalif Raymond | Rec Yards | over | 0.1622440859795518 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379079 | prizepicks | Jordan Love | Pass Yards | under | 0.1621441035024098 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14381579 | prizepicks | Blake Corum | Rush+Rec Yds | over | 0.1620368961255975 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311102 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.1620035790121543 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311216 | prizepicks | Dalton Schultz | Recs | under | 0.1619276609500627 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311380 | prizepicks | Jaxson Dart | Pass Yards | under | 0.1616369568084854 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14265363 | prizepicks | Patrick Mahomes | Rush Yards | under | 0.1616335786925198 | 2026-09-02T22:17:03Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14294838 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.1615659071316852 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357873 | prizepicks | Breece Hall | Fantasy Score | over | 0.1615532464897752 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -2926,89 +2905,89 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14374551 | prizepicks | Tyjae Spears | Rush Yards | over | 0.1611108910862599 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095729 | prizepicks | Kenneth Walker III | Rec Yards | under | 0.1610620713371466 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393905 | prizepicks | Luther Burden III | Rush+Rec Yds | under | 0.1610550352049004 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14600229 | prizepicks | Tony Pollard | Rush Yards | over | 0.1610376706612866 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473898 | prizepicks | Tony Pollard | Rush Yards | over | 0.1610376706612866 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14245991 | prizepicks | Hunter Henry | Fantasy Score | over | 0.1610293625875579 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14402999 | prizepicks | Dawson Knox | Rec Yards | over | 0.1610231270203438 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473850 | prizepicks | Dawson Knox | Rec Yards | over | 0.1610231270203438 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275112 | prizepicks | Bo Nix | Pass+Rush Yds | over | 0.1610117912593781 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14532697 | prizepicks | Rashod Bateman | Fantasy Score | under | 0.1609584608736182 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957548 | prizepicks | AJ Barner | Rec Yards | under | 0.1609176318110702 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311153 | prizepicks | Lamar Jackson | Pass Yards | over | 0.1609161430619606 | 2026-09-01T15:38:28Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13558875 | prizepicks | Drake Maye | Pass TDs | over | 0.1609157683309933 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14093947 | prizepicks | Puka Nacua | Rec Yards | over | 0.1608226451955818 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14276122 | prizepicks | Dontayvion Wicks | Recs | over | 0.160686918343433 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14475564 | prizepicks | Rashod Bateman | Rec Yards | over | 0.1606282517426163 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472529 | prizepicks | Jaylen Warren | Rec Yards | over | 0.1605448026490616 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475501 | prizepicks | Tee Higgins | Rec Yards | under | 0.1604666212140274 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14591321 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1604003225849637 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14375181 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1604003225849637 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306740 | prizepicks | DeVonta Smith | Fantasy Score | under | 0.1601188647111119 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352774 | prizepicks | Nico Collins | Rec Targets | under | 0.1600672100936254 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311863 | prizepicks | Bijan Robinson | Rush Yards | over | 0.1600184746115076 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14502507 | prizepicks | Bijan Robinson | Rush Yards | over | 0.1600184746115076 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711989 | prizepicks | Spencer Shrader | Kicking Points | under | 0.1598579148620498 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381107 | prizepicks | Caleb Williams | Pass Attempts | over | 0.1597732243555014 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472249 | prizepicks | Jaxson Dart | Rush Yards | under | 0.1596431147138191 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14339422 | prizepicks | Trevor Lawrence | Pass TDs | over | 0.1593524550788811 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486839 | prizepicks | Xavier Legette | Rec Yards | under | 0.1592759778761667 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343252 | prizepicks | Joe Burrow | Fantasy Score | under | 0.1589470747902169 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14718586 | prizepicks | Danielle Hunter | Sacks | over | 0.1589405906470976 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14485425 | prizepicks | Rico Dowdle | Rush Yards | over | 0.158765599415406 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14493831 | prizepicks | Rico Dowdle | Rush Yards | over | 0.158765599415406 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14421109 | prizepicks | Malik Willis | Pass Yards | under | 0.1585536883299086 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343149 | prizepicks | Drake Maye | Fantasy Score | over | 0.1584954280151997 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14381691 | prizepicks | Omarion Hampton | Rush+Rec Yds | over | 0.1584628976419354 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265386 | prizepicks | Jaylen Waddle | Recs | over | 0.1583827297574905 | 2026-08-31T18:38:20Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13979217 | prizepicks | Jordan Mason | Player TDs | under | 0.1582986605889678 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095701 | prizepicks | Ryan Flournoy | Recs | over | 0.1582610437418479 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14095432 | prizepicks | George Pickens | Recs | under | 0.1581773601327167 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14559718 | prizepicks | Kyren Williams | Rec Targets | over | 0.1581514269987679 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14136678 | prizepicks | Parker Washington | Recs | over | 0.1581313907879487 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14569467 | prizepicks | Ashton Jeanty | Rush+Rec Yds | over | 0.1580740894462571 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402716 | prizepicks | Bhayshul Tuten | Rec Yards | under | 0.1579621108024298 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473817 | prizepicks | Mike Evans | Rec Yards | under | 0.157683449561073 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13989761 | prizepicks | Mike Evans | Rec Yards | under | 0.157683449561073 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14311054 | prizepicks | Baker Mayfield | Pass Yards | over | 0.15777872068594 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473601 | prizepicks | Rachaad White | Rush Yards | under | 0.1575666439186628 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402738 | prizepicks | Jordan Mason | Rush+Rec Yds | over | 0.1575166104788826 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14572359 | prizepicks | Jason Myers | Kicking Points | under | 0.1574383240205594 | 2026-09-06T21:18:23Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14697068 | prizepicks | Mitchell Evans | Rec Yards | over | 0.1574995590997138 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390063 | prizepicks | Justin Herbert | Fantasy Score | over | 0.1574267155931579 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14533445 | prizepicks | Kalif Raymond | Fantasy Score | under | 0.1572157019850846 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295696 | prizepicks | Jayden Daniels | Rush Yards | over | 0.1571325404592926 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14645938 | prizepicks | Xavier Worthy | Rush+Rec Yds | under | 0.157128441592826 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14513827 | prizepicks | Isaac TeSlaa | Rec Yards | over | 0.1570340678367255 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352836 | prizepicks | Brian Thomas Jr. | Rec Targets | over | 0.1567971710397886 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686913 | prizepicks | Walter Nolen III | Sacks | under | 0.1566861598172813 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14536925 | prizepicks | Derrick Henry | Rec Yards | under | 0.1566389108028368 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257583 | prizepicks | Drake London | Recs | over | 0.1565621860319395 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996636 | prizepicks | Tucker Kraft | Player TDs | over | 0.1565445971757104 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14353119 | prizepicks | Kenneth Walker III | Rec Targets | under | 0.1564621422536454 | 2026-09-01T01:38:22Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472257 | prizepicks | Christian McCaffrey | Rec Yards | over | 0.1563929364330309 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14342085 | prizepicks | Dalton Schultz | Fantasy Score | over | 0.1563881395388343 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474450 | prizepicks | Quinshon Judkins | Rush Yards | over | 0.1563448785033074 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13971277 | prizepicks | Daniel Jones | Pass Yards | under | 0.1562756187286142 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14466138 | prizepicks | Cole Kmet | Recs | over | 0.1562255960027156 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633701 | prizepicks | Geno Smith | INT | under | 0.1562249757012422 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604763 | prizepicks | Kirk Cousins | Pass Attempts | over | 0.1561852717316081 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357931 | prizepicks | Omarion Hampton | Fantasy Score | under | 0.1561775024854409 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14476644 | prizepicks | Jahmyr Gibbs | Rec Yards | over | 0.1560922576045458 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341978 | prizepicks | Ladd McConkey | Fantasy Score | under | 0.1560506705395719 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311219 | prizepicks | Emeka Egbuka | Recs | under | 0.1559245908504763 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136660 | prizepicks | Parker Washington | Recs | under | 0.1559017112422805 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689145 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.1558375649109917 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13954752 | prizepicks | Chase McLaughlin | FG Made | under | 0.1557798127598925 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14412942 | prizepicks | Michael Wilson | Rec Yards | over | 0.1557538214769988 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14389716 | prizepicks | Quinshon Judkins | Rush+Rec Yds | over | 0.1556039832850025 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688566 | prizepicks | Will Anderson Jr. | Sacks | over | 0.1555944066143397 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499875 | prizepicks | Joe Burrow | Pass+Rush Yds | over | 0.1555757776743183 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14305992 | prizepicks | Jayden Reed | Recs | over | 0.1555696211716162 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977033 | prizepicks | Courtland Sutton | Rec Yards | over | 0.1555271955014623 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14709256 | prizepicks | Cairo Santos | Kicking Points | over | 0.155505680899915 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14614694 | prizepicks | Zach Allen | Sacks | under | 0.1554626595991169 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136465 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.1554493261606584 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14465930 | prizepicks | Jalen Coker | Rec Yards | under | 0.1554034449852221 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095425 | prizepicks | George Pickens | Recs | over | 0.1552964303272453 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14494017 | prizepicks | Darnell Mooney | Rec Yards | over | 0.1551490837687514 | 2026-09-04T22:20:14Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14380081 | prizepicks | Chase Brown | Rush+Rec Yds | over | 0.1550955035809667 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311376 | prizepicks | C.J. Stroud | Pass Yards | under | 0.155093623531653 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379480 | prizepicks | Quinshon Judkins | Rec Yards | over | 0.1550214930904687 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14492723 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.154962361146792 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503530 | prizepicks | C.J. Stroud | Pass Attempts | over | 0.1548522789970117 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14379521 | prizepicks | Travis Hunter | Recs | over | 0.1548218870255306 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14565182 | prizepicks | Malik Washington | Rec Targets | under | 0.1547924973639403 | 2026-09-06T19:06:29Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14354751 | prizepicks | Jahmyr Gibbs | Rush+Rec Yds | under | 0.1546543152581796 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472405 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.1545988968296223 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13980613 | prizepicks | Michael Wilson | Player TDs | over | 0.1545539282741745 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343142 | prizepicks | Cooper Kupp | Fantasy Score | over | 0.1544245725488938 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472456 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.1543962295228533 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14464893 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.1543962295228533 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13685186 | prizepicks | Amon-Ra St. Brown | Recs | over | 0.1543903501089755 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532806 | prizepicks | Dawson Knox | Fantasy Score | over | 0.1543454836245399 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649476 | prizepicks | Alex Highsmith | Sacks | over | 0.1543431447998212 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691281 | prizepicks | Dylan Sampson | Rec Yards | under | 0.15428748551031 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978019 | prizepicks | Ryan Flournoy | Player TDs | under | 0.1542718018612343 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14599998 | prizepicks | Jalen Nailor | Rec Targets | under | 0.154262643439452 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14521532 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.1542338580530344 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3017,46 +2996,42 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14474809 | prizepicks | Cam Ward | Pass Yards | over | 0.1541730766254322 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14379309 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.154068640335982 | 2026-09-01T19:49:22Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14535060 | prizepicks | Michael Mayer | Fantasy Score | over | 0.1540073856178916 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13685179 | prizepicks | A.J. Brown | Recs | over | 0.1538828685593971 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14489118 | prizepicks | Blake Grupe | FG Made | under | 0.1537740886482403 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295759 | prizepicks | Stefon Diggs | Rec Yards | over | 0.153496333523083 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14506224 | prizepicks | Wan'Dale Robinson | Rec Yards | over | 0.1534830774294877 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306824 | prizepicks | Rashee Rice | Fantasy Score | over | 0.1534736724140479 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346565 | prizepicks | DJ Moore | Fantasy Score | over | 0.1534353528730578 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473657 | prizepicks | Geno Smith | Rush Yards | over | 0.1533691236872606 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311589 | prizepicks | Quentin Johnston | Rec Yards | over | 0.1533489697457812 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136921 | prizepicks | Jayden Daniels | Pass+Rush Yds | under | 0.1532453991327321 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379076 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.1531907551063233 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559959 | prizepicks | Tyler Warren | Fantasy Score | under | 0.1531565224019404 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14604759 | prizepicks | Gunnar Helm | Rec Yards | under | 0.1530808357793018 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14266950 | prizepicks | Woody Marks | Rush Yards | over | 0.1530519148154141 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719323 | prizepicks | Will Reichard | Kicking Points | under | 0.1530716923808068 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14351523 | prizepicks | Cam Ward | Rush Yards | over | 0.1530228037386332 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14170413 | prizepicks | Jaxson Dart | Rush Yards | over | 0.1529182230660001 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14320392 | prizepicks | Joe Burrow | Rush Yards | over | 0.1528401875446843 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978527 | prizepicks | Riley Patterson | Kicking Points | over | 0.1528241806868691 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352331 | prizepicks | Tetairoa McMillan | Rec Targets | under | 0.1528127242633483 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14246236 | prizepicks | Hunter Henry | Recs | over | 0.152782186126048 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14733825 | prizepicks | T.J. Hockenson | Rec Yards | under | 0.152740749373426 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691273 | prizepicks | Dylan Sampson | Recs | over | 0.1526844615785569 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472370 | prizepicks | Quinshon Judkins | Rec Yards | under | 0.1524313541846996 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495734 | prizepicks | Bryce Young | Pass Yards | over | 0.1524030573097723 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387564 | prizepicks | Samaje Perine | Rush Yards | over | 0.1522235045961382 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978294 | prizepicks | Colby Parkinson | Player TDs | over | 0.1521727937994326 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14633891 | prizepicks | Joe Burrow | Pass+Rush Yds | under | 0.1519488188386012 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534993 | prizepicks | Greg Dulcich | Fantasy Score | under | 0.1519012611316805 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311043 | prizepicks | Kirk Cousins | Pass Yards | under | 0.15184160086593 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14171762 | prizepicks | De'Von Achane | Rec Yards | over | 0.1517458195345173 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14093865 | prizepicks | Malik Nabers | Recs | under | 0.1517311237380191 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14473644 | prizepicks | Chris Godwin Jr. | Rec Yards | under | 0.1516884533799184 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381556 | prizepicks | Tyjae Spears | Rush+Rec Yds | over | 0.151408813516108 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357838 | prizepicks | Drake London | Fantasy Score | over | 0.1513949064000359 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13685180 | prizepicks | Christian McCaffrey | Recs | over | 0.1513899730578601 | 2026-09-02T00:04:19Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14266090 | prizepicks | Wil Lutz | FG Made | over | 0.1513655718270879 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14353314 | prizepicks | Dallas Goedert | Rec Targets | over | 0.1513475012638141 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14008762 | prizepicks | Josh Oliver | Player TDs | under | 0.1513406219376674 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14502916 | prizepicks | Geno Smith | Pass Attempts | under | 0.1513204460193413 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353564 | prizepicks | Emeka Egbuka | Rec Targets | under | 0.1513118685327125 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311588 | prizepicks | Omarion Hampton | Rush Yards | under | 0.151191646303172 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379481 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.151083206727365 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346209 | prizepicks | Tre' Harris | Recs | under | 0.1510799015915067 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989791 | prizepicks | Blake Corum | Rush Yards | over | 0.1510702258256695 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14454878 | prizepicks | Cam Ward | Rush Yards | under | 0.1510026399062165 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14347630 | prizepicks | Tre' Harris | Recs | under | 0.1510799015915067 | 2026-08-31T23:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311131 | prizepicks | Tony Pollard | Rush Yards | over | 0.1510015327214818 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311548 | prizepicks | Quentin Johnston | Recs | under | 0.1509984945485109 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14476811 | prizepicks | Pat Freiermuth | Recs | over | 0.1509753821101941 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3067,63 +3042,59 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14357960 | prizepicks | J.K. Dobbins | Fantasy Score | under | 0.1506945930524915 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14475307 | prizepicks | Chase McLaughlin | FG Made | over | 0.1506463019290262 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586363 | prizepicks | RJ Harvey | Recs | under | 0.1506199233381148 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14380035 | prizepicks | Drake Maye | Pass Attempts | under | 0.1505363900497381 | 2026-09-01T21:48:22Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14420439 | prizepicks | Dak Prescott | Pass Yards | under | 0.1505221631361223 | 2026-09-02T21:15:45Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14474678 | prizepicks | Spencer Shrader | Kicking Points | over | 0.15044432242595 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341506 | prizepicks | Aaron Jones Sr. | Fantasy Score | over | 0.1504115033792687 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14731884 | prizepicks | Devin White | Sacks | under | 0.1503718590905658 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953337 | prizepicks | Cameron Dicker | FG Made | under | 0.1503593830391784 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095849 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.1503445358482432 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14306991 | prizepicks | Stefon Diggs | Recs | over | 0.1503100018442406 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12337327 | prizepicks | Malik Willis | Pass Yards | under | 0.150244296266262 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14420423 | prizepicks | Cam Skattebo | Rush Yards | under | 0.1500270580921228 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14343410 | prizepicks | George Pickens | Fantasy Score | over | 0.1500079807520291 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14522655 | prizepicks | Mason Taylor | Recs | over | 0.1499988271812949 | 2026-09-05T16:47:46Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14486855 | prizepicks | Mason Taylor | Recs | over | 0.1499988271812949 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402895 | prizepicks | Darnell Washington | Fantasy Score | over | 0.1499757939528624 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311082 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1498816024918139 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473617 | prizepicks | Rachaad White | Rec Yards | over | 0.1498748191297567 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14711276 | prizepicks | Ladd McConkey | Rec Yards | under | 0.1496114377769156 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14540796 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.1495130111644624 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134780 | prizepicks | Jacoby Brissett | Pass+Rush Yds | over | 0.1494720274484127 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357954 | prizepicks | Tyquan Thornton | Fantasy Score | under | 0.1494029434706054 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14257511 | prizepicks | Bijan Robinson | Recs | under | 0.1493580892255784 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311929 | prizepicks | Jordan Love | Pass Yards | over | 0.1493214281709299 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379491 | prizepicks | DeVonta Smith | Rec Yards | under | 0.1492684502360408 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14496683 | prizepicks | Sam Darnold | Pass Attempts | under | 0.1492594618642646 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13974054 | prizepicks | Rashid Shaheed | Recs | over | 0.1491623511597766 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357961 | prizepicks | Kenneth Walker III | Fantasy Score | over | 0.1490985754739862 | 2026-09-01T03:38:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14649469 | prizepicks | B.J. Hill | Sacks | under | 0.1490477351379115 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953338 | prizepicks | Cameron Dicker | FG Made | over | 0.1490186063868063 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14604810 | prizepicks | Jayden Daniels | Rush Yards | under | 0.1489131727878944 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14481860 | prizepicks | David Montgomery | Rush Yards | over | 0.1487823241565777 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649186 | prizepicks | Tonka Hemingway | Sacks | over | 0.1488439292284417 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472414 | prizepicks | Jordan Addison | Rec Yards | over | 0.1487505908273062 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379466 | prizepicks | Zay Flowers | Rec Yards | over | 0.148743246880299 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14319743 | prizepicks | Joe Burrow | Pass Yards | under | 0.148706761068611 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379450 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.1486338703044543 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14685312 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1487175943077432 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379081 | prizepicks | Jalen Hurts | Pass Yards | under | 0.1485998615544129 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14604011 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | under | 0.1485676196703167 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14378987 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.1485070190302967 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475553 | prizepicks | Bryce Young | Pass Yards | under | 0.1483759600484645 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134609 | prizepicks | Tre Tucker | Rec Yards | under | 0.1483716250198924 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14486271 | prizepicks | D'Andre Swift | Rush Yards | under | 0.1485087149988204 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738214 | prizepicks | Tre Tucker | Rec Yards | under | 0.1483716250198924 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14503604 | prizepicks | Josh Allen | Pass Attempts | over | 0.1482859529945379 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14585898 | prizepicks | James Cook III | Rec Yards | over | 0.1482643204885072 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497535 | prizepicks | Brock Purdy | Pass Attempts | over | 0.1482627038644888 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14352341 | prizepicks | Romeo Doubs | Rec Targets | under | 0.1481082605264375 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14357518 | prizepicks | Mike Evans | Rec Yards | under | 0.1481034894762589 | 2026-09-01T03:38:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14600005 | prizepicks | Mason Taylor | Rec Targets | over | 0.1478507260967611 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13963260 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.1477183863151717 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14295679 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.1477610772439062 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14616642 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.1477183863151717 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14376409 | prizepicks | Breece Hall | Rec Yards | under | 0.1477087750851624 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14498409 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.1476497633040585 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14466328 | prizepicks | Tyler Higbee | Recs | under | 0.1475823582169667 | 2026-09-03T19:46:31Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13996183 | prizepicks | Rico Dowdle | Player TDs | under | 0.1475144420693526 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379494 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.1474307409363368 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697876 | prizepicks | Chuba Hubbard | Recs | under | 0.1473969175889917 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460634 | prizepicks | C.J. Stroud | Rush Yards | over | 0.147331104445584 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256244 | prizepicks | Bucky Irving | Rush Yards | over | 0.1472190215048323 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311301 | prizepicks | Emeka Egbuka | Rec Yards | over | 0.1470795097212848 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957679 | prizepicks | Drake Maye | Pass+Rush Yds | under | 0.1467561829733453 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14311256 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.1470073805752838 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719322 | prizepicks | Brandon Aubrey | Kicking Points | under | 0.1468765928969192 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14498423 | prizepicks | Daniel Jones | Pass Attempts | under | 0.1466273627237211 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602703 | prizepicks | Adam Trautman | Rec Yards | under | 0.1464201418301994 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14580966 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | over | 0.1463893780478176 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311263 | prizepicks | Geno Smith | Pass Yards | under | 0.1463773427915523 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324383 | prizepicks | Chris Godwin Jr. | Recs | under | 0.1462988413609607 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323874 | prizepicks | Javonte Williams | Player TDs | over | 0.1461697666727237 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14522326 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.1461434935748359 | 2026-09-05T16:47:46Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14351817 | prizepicks | Garrett Wilson | Recs | under | 0.146085340633821 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14246209 | prizepicks | Davante Adams | Player TDs | over | 0.1460581592075778 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311867 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.1458860475776821 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560376 | prizepicks | Jacoby Brissett | Fantasy Score | over | 0.1456786946438439 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13685189 | prizepicks | Justin Jefferson | Recs | under | 0.1455759228416675 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -3131,66 +3102,60 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14100124 | prizepicks | Chase Brown | Player TDs | under | 0.1453676739628854 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257563 | prizepicks | Kyle Pitts Sr. | Recs | over | 0.1453273792495889 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14497931 | prizepicks | Bucky Irving | Rec Yards | over | 0.1453232614078859 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343138 | prizepicks | Sam Darnold | Fantasy Score | over | 0.1452381607380073 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14266931 | prizepicks | Dalton Kincaid | Recs | under | 0.1452331716711201 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14379015 | prizepicks | Breece Hall | Rec Yards | over | 0.1451943870954001 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14335428 | prizepicks | Jameson Williams | Rec Yards | over | 0.1451894428609731 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989759 | prizepicks | Mike Evans | Rec Yards | over | 0.1451141610039232 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13994676 | prizepicks | Tee Higgins | Player TDs | over | 0.1449893159046128 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346530 | prizepicks | Saquon Barkley | Fantasy Score | over | 0.1448593440929056 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472495 | prizepicks | Stefon Diggs | Rec Yards | over | 0.1448078796498424 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311368 | prizepicks | Jameson Williams | Recs | over | 0.1447994314801751 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338589 | prizepicks | Omarion Hampton | Rec Yards | over | 0.14474836962929 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12323881 | prizepicks | Jahmyr Gibbs | Player TDs | over | 0.1446726312025589 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14387793 | prizepicks | Andrei Iosivas | Recs | over | 0.1446303327358762 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691472 | prizepicks | Andrei Iosivas | Recs | over | 0.1446303327358762 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357783 | prizepicks | Tee Higgins | Fantasy Score | under | 0.1446300088925469 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980229 | prizepicks | Romeo Doubs | Recs | over | 0.1446082108185392 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14392003 | prizepicks | Myles Garrett | Sacks | over | 0.1445806949883752 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697061 | prizepicks | Darren Waller | Rec Yards | over | 0.1446171472584645 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311480 | prizepicks | Bryce Young | Pass Yards | over | 0.1445490166489741 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14601024 | prizepicks | Quinnen Williams | Sacks | under | 0.1444872964606357 | 2026-09-07T20:32:16Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14496882 | prizepicks | Trey McBride | Rec Yards | over | 0.1444753448532485 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14389110 | prizepicks | Bryce Young | Pass Yards | under | 0.1444405853895407 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14495657 | prizepicks | Rico Dowdle | Rush+Rec Yds | over | 0.1443714257089621 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474437 | prizepicks | Malik Washington | Rec Yards | under | 0.1443081973962465 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14686629 | prizepicks | Kirk Cousins | Pass Yards | under | 0.144144360673577 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311338 | prizepicks | Mark Andrews | Rec Yards | under | 0.1440745551607034 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393572 | prizepicks | James Cook III | Rec Yards | under | 0.1440322555849502 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343244 | prizepicks | Jauan Jennings | Fantasy Score | over | 0.143993327972146 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14266956 | prizepicks | Brock Bowers | Rec Yards | under | 0.1439381387118166 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14182195 | prizepicks | Matthew Stafford | Pass Yards | over | 0.1439197151910489 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14472796 | prizepicks | George Holani | Rec Yards | under | 0.1439109413723884 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14311379 | prizepicks | Cam Skattebo | Rush Yards | over | 0.1438620576201783 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14343245 | prizepicks | Jordan Addison | Fantasy Score | over | 0.1437668105041809 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977003 | prizepicks | Wil Lutz | FG Made | under | 0.1437543247504251 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136666 | prizepicks | Parker Washington | Rec Yards | over | 0.143726641663318 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392068 | prizepicks | Brashard Smith | Rush+Rec Yds | over | 0.1436299545067518 | 2026-09-05T21:10:18Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14585936 | prizepicks | Evan Engram | Rec Yards | over | 0.1435498755557773 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14339241 | prizepicks | Patrick Mahomes | Pass+Rush Yds | over | 0.1434269980257613 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13957552 | prizepicks | Rashid Shaheed | Rec Yards | under | 0.1432646523157221 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12379459 | prizepicks | Chris Olave | Rec Yards | over | 0.1432517827812256 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392069 | prizepicks | Brashard Smith | Rush+Rec Yds | under | 0.1431462576484009 | 2026-09-05T21:10:18Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13957569 | prizepicks | Cooper Kupp | Rec Yards | over | 0.1431330787819562 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14465181 | prizepicks | David Montgomery | Rush Yards | under | 0.1431266120874645 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306735 | prizepicks | Jayden Daniels | Fantasy Score | under | 0.1430136228462288 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996117 | prizepicks | Jayden Daniels | Pass TDs | over | 0.1428726423134534 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472432 | prizepicks | Cam Ward | Pass Yards | over | 0.1427946875993146 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357793 | prizepicks | Chris Godwin Jr. | Fantasy Score | over | 0.1427192666887726 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14354797 | prizepicks | Brock Bowers | Fantasy Score | over | 0.142703273324292 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586386 | prizepicks | RJ Harvey | Rec Yards | over | 0.1426845429766949 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14374549 | prizepicks | De'Von Achane | Recs | under | 0.1426081757347658 | 2026-09-01T16:14:47Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14352551 | prizepicks | De'Von Achane | Recs | under | 0.1426081757347658 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14596253 | prizepicks | RJ Harvey | Rush+Rec Yds | over | 0.1425495199806836 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14306251 | prizepicks | Christian Watson | Fantasy Score | over | 0.1425195001614222 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393673 | prizepicks | Jonathan Taylor | Rush+Rec Yds | over | 0.1424338748147854 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580427 | prizepicks | Dak Prescott | Pass+Rush Yds | under | 0.142329618743491 | 2026-09-07T04:28:26Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13989936 | prizepicks | Brock Purdy | Pass Yards | under | 0.1422626514953185 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14633940 | prizepicks | Tua Tagovailoa | INT | over | 0.1422966150607503 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599988 | prizepicks | Evan Engram | Rec Targets | over | 0.1422484265357431 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14497731 | prizepicks | Spencer Shrader | FG Made | over | 0.1421539976038039 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14315787 | prizepicks | Spencer Shrader | FG Made | over | 0.1421539976038039 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472417 | prizepicks | Jalen Nailor | Rec Yards | over | 0.1420959473551002 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14353256 | prizepicks | Jordan Addison | Rec Targets | under | 0.1420595258033862 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559736 | prizepicks | Tyjae Spears | Rec Targets | over | 0.1419897269855718 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961524 | prizepicks | Sam Darnold | Rush Yards | under | 0.1419779954832185 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14575922 | prizepicks | Kalif Raymond | Recs | under | 0.1417828176940148 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375955 | prizepicks | Breece Hall | Recs | over | 0.1417698102292133 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14274036 | prizepicks | Khalil Shakir | Rec Yards | over | 0.1417003132346507 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14603323 | prizepicks | Puka Nacua | Rush Yards | under | 0.1416716630785263 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14686337 | prizepicks | Travis Hunter | Rec Yards | over | 0.1416036520650888 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472567 | prizepicks | Tyjae Spears | Recs | under | 0.1415227503740895 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14344990 | prizepicks | Cade Otton | Fantasy Score | over | 0.1414219047644885 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13983411 | prizepicks | Tony Pollard | Player TDs | under | 0.1414085968630574 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13983436 | prizepicks | Tony Pollard | Rush TDs | under | 0.1414085968630574 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342015 | prizepicks | Mark Andrews | Fantasy Score | under | 0.1414050483023408 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472830 | prizepicks | Jake Ferguson | Recs | under | 0.1413903320561171 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472281 | prizepicks | Chase Brown | Rush Yards | over | 0.1413258071791125 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3198,70 +3163,68 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14381316 | prizepicks | Breece Hall | Rush+Rec Yds | under | 0.1410309625198891 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14522325 | prizepicks | Dak Prescott | Pass Attempts | under | 0.141019285129885 | 2026-09-05T16:47:46Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14375948 | prizepicks | Wan'Dale Robinson | Recs | over | 0.1409338570069367 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14136735 | prizepicks | Justin Jefferson | Rec Yards | over | 0.140911713919242 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306993 | prizepicks | Christian Watson | Recs | under | 0.1408098985800364 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472467 | prizepicks | Jerry Jeudy | Rec Yards | under | 0.1406727682272832 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475846 | prizepicks | Colby Parkinson | Rec Yards | over | 0.1405466568911642 | 2026-09-04T00:57:06Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14393595 | prizepicks | James Cook III | Rush+Rec Yds | under | 0.1406540841723846 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996213 | prizepicks | Bijan Robinson | Rec TDs | under | 0.1405315423310298 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472384 | prizepicks | Darnell Washington | Rec Yards | over | 0.1404977615711615 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14336752 | prizepicks | Sam LaPorta | Rec Yards | over | 0.1403435609728981 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514478 | prizepicks | Travis Kelce | Rec Yards | under | 0.1403167471160441 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14691250 | prizepicks | Keenan Allen | Recs | under | 0.1403082754815998 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338609 | prizepicks | Bryce Young | Pass+Rush Yds | under | 0.1402340736920236 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498197 | prizepicks | Tyler Shough | Pass Attempts | over | 0.140186479392528 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311079 | prizepicks | Joe Burrow | Pass Yards | under | 0.1401522420836076 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14133874 | prizepicks | Ja'Marr Chase | Recs | over | 0.1400848416402254 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13954757 | prizepicks | Evan McPherson | FG Made | under | 0.140065480198295 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14498879 | prizepicks | Michael Mayer | Rec Yards | over | 0.1400269480806693 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14591551 | prizepicks | Trevor Lawrence | Pass Attempts | over | 0.1400560105853978 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14466888 | prizepicks | Rashod Bateman | Rec Yards | under | 0.140017469284774 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475567 | prizepicks | Rashod Bateman | Rec Yards | under | 0.1400174692847738 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475976 | prizepicks | Daniel Jones | Rush Yards | over | 0.1399804940041772 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311540 | prizepicks | Justin Herbert | Pass Yards | under | 0.1399126299142258 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14540793 | prizepicks | Kenny Gainwell | Rec Yards | over | 0.1398511798758883 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472857 | prizepicks | Derrick Henry | Rec Yards | over | 0.1398027077556296 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14683875 | prizepicks | Josh Allen | Rush Yards | over | 0.1396520590070991 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14615530 | prizepicks | Chris Jones | Sacks | over | 0.1395342988926482 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14311233 | prizepicks | Breece Hall | Rush Yards | under | 0.1394931083819838 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339387 | prizepicks | Aaron Jones Sr. | Rec Yards | under | 0.1394560856703008 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14099765 | prizepicks | Cooper Kupp | Fantasy Score | under | 0.1394101050770729 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14594836 | prizepicks | Justice Hill | Rush Yards | under | 0.1393928922200396 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14620739 | prizepicks | Puka Nacua | Rush Yards | over | 0.1393543616288191 | 2026-09-08T09:35:41Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14353315 | prizepicks | Saquon Barkley | Rec Targets | under | 0.1393088361466352 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14522315 | prizepicks | Jalen Hurts | Pass Attempts | under | 0.139296426955426 | 2026-09-05T16:47:46Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379468 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.1392802992451636 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14681366 | prizepicks | Jonathan Taylor | Rec Yards | over | 0.1392802992451636 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379458 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.1392647906505005 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600007 | prizepicks | Darnell Washington | Rec Targets | over | 0.1392258468107163 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697054 | prizepicks | Darren Waller | Recs | under | 0.1392141750003878 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374562 | prizepicks | Calvin Ridley | Rec Yards | over | 0.1391609324081353 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13953328 | prizepicks | Cameron Dicker | Kicking Points | over | 0.1391055926192007 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324070 | prizepicks | Breece Hall | Recs | under | 0.1390802795856361 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339567 | prizepicks | Matthew Stafford | Pass+Rush Yds | over | 0.139010944547311 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14095139 | prizepicks | Blake Corum | Rush+Rec Yds | over | 0.1389870218761453 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14460239 | prizepicks | Kayshon Boutte | Rec Yards | over | 0.1389335914934181 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343234 | prizepicks | Jordan Love | Fantasy Score | over | 0.138892967384706 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14264410 | prizepicks | Bo Nix | Pass Yards | under | 0.1385642223953617 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14644262 | prizepicks | De'Von Achane | Rec Yards | under | 0.1385056481077647 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393613 | prizepicks | David Montgomery | Rush+Rec Yds | under | 0.1383920858790596 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306820 | prizepicks | Bo Nix | Fantasy Score | over | 0.138292784359612 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|12528880 | prizepicks | Will Anderson Jr. | Sacks | under | 0.1382844485769169 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559711 | prizepicks | Kayshon Boutte | Rec Targets | over | 0.1378910554314452 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357820 | prizepicks | DK Metcalf | Fantasy Score | over | 0.1378147969984959 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14521082 | prizepicks | Devaughn Vele | Recs | under | 0.1377587764691783 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473916 | prizepicks | David Montgomery | Rush Yards | over | 0.1376110608391563 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979476 | prizepicks | Keon Coleman | Player TDs | under | 0.1375964917657817 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379469 | prizepicks | Alec Pierce | Rec Yards | over | 0.1374575037349338 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14536923 | prizepicks | Alec Pierce | Rec Yards | over | 0.1374575037349338 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346800 | prizepicks | Jaxson Dart | Fantasy Score | over | 0.1373371174015895 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13974071 | prizepicks | A.J. Brown | Recs | under | 0.1372112521313218 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14402566 | prizepicks | C.J. Stroud | Pass+Rush Yds | over | 0.1371958517527358 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14307031 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.1371664392223477 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473615 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.137116798550842 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352550 | prizepicks | Tre Tucker | Recs | over | 0.1370834483948025 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379069 | prizepicks | Jared Goff | Pass Yards | over | 0.1370086543319636 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472596 | prizepicks | Mike Gesicki | Rec Yards | under | 0.1367189502262953 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14597667 | prizepicks | Daniel Jones | Pass+Rush Yds | under | 0.1366737050899716 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598218 | prizepicks | Demarcus Robinson | Recs | over | 0.1366311790612171 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14102100 | prizepicks | Kayshon Boutte | Player TDs | under | 0.1365647385822832 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534351 | prizepicks | Mason Taylor | Fantasy Score | under | 0.1364913393033016 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559713 | prizepicks | Alec Pierce | Rec Targets | under | 0.136453663206834 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486058 | prizepicks | Kalif Raymond | Recs | over | 0.1364493515264098 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460647 | prizepicks | Woody Marks | Rec Yards | under | 0.1362339645308335 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473924 | prizepicks | Stefon Diggs | Rec Yards | over | 0.1360434824903025 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14568550 | prizepicks | Rashan Gary | Sacks | under | 0.1361158436694522 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13977001 | prizepicks | Cam Little | Kicking Points | over | 0.1360275749895857 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472259 | prizepicks | Drake Maye | Rush Yards | under | 0.1358607637729206 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472952 | prizepicks | Joe Burrow | Pass Yards | under | 0.1358481885327218 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14523993 | prizepicks | Tyjae Spears | Rec Yards | under | 0.1358030222838314 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14174311 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.1357489419341909 | 2026-09-03T00:08:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738392 | prizepicks | Joey Slye | Kicking Points | under | 0.1356235177154812 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532700 | prizepicks | Justice Hill | Fantasy Score | under | 0.1354475735593628 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402896 | prizepicks | Rachaad White | Rush+Rec Yds | under | 0.1352838891341001 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346318 | prizepicks | Tre' Harris | Rec Yards | over | 0.1352833851384929 | 2026-08-31T23:38:19Z | 2026-09-13T16:25:00.000-04:00 |
@@ -3272,11 +3235,10 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14357790 | prizepicks | Travis Etienne Jr. | Fantasy Score | under | 0.1348748735686782 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320393 | prizepicks | Baker Mayfield | Rush Yards | over | 0.1346142738801796 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475502 | prizepicks | Bryce Young | Pass+Rush Yds | over | 0.1345733726204194 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497553 | prizepicks | Matthew Stafford | Pass Attempts | over | 0.1345675172981888 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13990782 | prizepicks | Blake Corum | Rush Yards | under | 0.1345362660167383 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697258 | prizepicks | Ian Thomas | Rec Yards | under | 0.1343924208302217 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586378 | prizepicks | Evan Engram | Recs | under | 0.1342598295463557 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13685178 | prizepicks | Jaxon Smith-Njigba | Recs | over | 0.134163283104618 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14310096 | prizepicks | Jordan Love | Pass+Rush Yds | over | 0.1340121855722719 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14720314 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.1339549071626258 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095727 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.133905708952176 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393775 | prizepicks | Ryan Flournoy | Rush+Rec Yds | over | 0.1338874264515053 | 2026-09-05T21:10:18Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559735 | prizepicks | Bucky Irving | Rec Targets | over | 0.1338443564030677 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3284,10 +3246,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14380155 | prizepicks | Jared Goff | Pass Attempts | over | 0.1332799974914515 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14521641 | prizepicks | Jared Goff | Pass Attempts | over | 0.1332799974914515 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311113 | prizepicks | Tee Higgins | Recs | under | 0.1332383112562116 | 2026-09-03T05:43:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14500184 | prizepicks | Trevor Lawrence | Pass Attempts | under | 0.1331745806068366 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14521660 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.1330377747506875 | 2026-09-05T16:47:46Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343140 | prizepicks | Rashid Shaheed | Fantasy Score | over | 0.1329543319437959 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472896 | prizepicks | Jordan Love | Pass Yards | under | 0.1328665897977693 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14481444 | prizepicks | Trevor Lawrence | Pass Yards | under | 0.1332170684456574 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294829 | prizepicks | Jordan Love | Pass Yards | under | 0.1328665897977693 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379461 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.1328583408403992 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978386 | prizepicks | Alec Pierce | Player TDs | over | 0.1328120630131029 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3298,27 +3257,29 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14341738 | prizepicks | Jakobi Meyers | Fantasy Score | over | 0.132570680424538 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976990 | prizepicks | Rashee Rice | Rec Yards | over | 0.1325511925750847 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357845 | prizepicks | Tony Pollard | Fantasy Score | over | 0.1325185149310217 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475539 | prizepicks | Geno Smith | Pass Yards | under | 0.132244245457174 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686591 | prizepicks | Kirk Cousins | Pass+Rush Yds | over | 0.1324038443472595 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381317 | prizepicks | Breece Hall | Rush+Rec Yds | over | 0.1320940271876314 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14318498 | prizepicks | T.J. Hockenson | Recs | over | 0.1320023510799071 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14512398 | prizepicks | Terrance Ferguson | Rec Yards | over | 0.1319553128911221 | 2026-09-05T05:39:10Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|12379493 | prizepicks | Trey McBride | Rec Yards | over | 0.1317103894469731 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697506 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.1316703163967345 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559704 | prizepicks | Jalen Coker | Rec Targets | under | 0.1315074256531583 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689713 | prizepicks | Jonnu Smith | Recs | over | 0.1314230814658067 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14461859 | prizepicks | Cole Kmet | Rec Yards | under | 0.1314054791828238 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14488567 | prizepicks | Kirk Cousins | Pass Yards | over | 0.1313940332399523 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14352074 | prizepicks | Kirk Cousins | Pass Yards | over | 0.1313940332399523 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14350243 | prizepicks | Cam Ward | Pass Yards | over | 0.1312878743512183 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14307030 | prizepicks | Bucky Irving | Rush+Rec Yds | over | 0.1312665878796137 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720300 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.1312304280645744 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379471 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.1312304280645744 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995919 | prizepicks | Jacoby Brissett | Pass TDs | over | 0.1309154621357278 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14443770 | prizepicks | Bucky Irving | Rec Yards | under | 0.1308184297922228 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134837 | prizepicks | Chris Olave | Recs | under | 0.1307028337309413 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14706658 | prizepicks | Keenan Allen | Fantasy Score | under | 0.1306329809637727 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472347 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.1306302533792661 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978390 | prizepicks | Justice Hill | Player TDs | under | 0.1305682474007794 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14345815 | prizepicks | Marvin Harrison Jr. | Rec Yards | over | 0.1305529294689896 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402910 | prizepicks | Rachaad White | Recs | under | 0.1304321220074119 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14477589 | prizepicks | Malik Willis | Rush Yards | over | 0.1303984819821375 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12323879 | prizepicks | Bijan Robinson | Player TDs | over | 0.1303256507449697 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14099764 | prizepicks | AJ Barner | Fantasy Score | over | 0.1303006388165754 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12379240 | prizepicks | Jordan Love | Rush Yards | over | 0.1302655111798825 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14413395 | prizepicks | Kenneth Walker III | Rush Yards | over | 0.1301981470255649 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14134441 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.1300821372733862 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
@@ -3326,26 +3287,26 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14248986 | prizepicks | Jalen Nailor | Rec Yards | over | 0.129838745113032 | 2026-09-08T09:35:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12335436 | prizepicks | DJ Moore | Rec Yards | under | 0.1298281219332536 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14575016 | prizepicks | RJ Harvey | Rush Yards | over | 0.1298241716469943 | 2026-09-06T23:49:06Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14720847 | prizepicks | James Cook III | Rec Yards | over | 0.1295438989006174 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311076 | prizepicks | Joe Burrow | Pass Yards | over | 0.1293383201799146 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14137000 | prizepicks | Jordan Addison | Rec Yards | over | 0.1293281008160018 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311959 | prizepicks | Caleb Williams | Rush Yards | under | 0.1290635913382788 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311486 | prizepicks | Michael Pittman Jr. | Rec Yards | over | 0.129054547780093 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13685182 | prizepicks | Davante Adams | Recs | under | 0.1290462299642588 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14462498 | prizepicks | Brock Purdy | Rush Yards | over | 0.1289868947990298 | 2026-09-03T16:21:45Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14644330 | prizepicks | Zay Flowers | Rec Yards | over | 0.1289582179003963 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498971 | prizepicks | Breece Hall | Rec Yards | under | 0.1289375032164532 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346799 | prizepicks | Jaxson Dart | Fantasy Score | under | 0.1288738402670892 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14697866 | prizepicks | Chuba Hubbard | Recs | over | 0.1288483271557163 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14493665 | prizepicks | Cam Skattebo | Rec Yards | over | 0.1287474071062238 | 2026-09-04T16:17:23Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13957561 | prizepicks | Cooper Kupp | Rec Yards | under | 0.1286452082315641 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14686424 | prizepicks | Kyle Monangai | Rush+Rec Yds | over | 0.1286928152470773 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560395 | prizepicks | Kirk Cousins | Fantasy Score | over | 0.1286163797142338 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13988372 | prizepicks | Kirk Cousins | Pass Yards | under | 0.1285751354286425 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311387 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.1284735594557801 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14603909 | prizepicks | Blake Cashman | Sacks | under | 0.1284453409003745 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957684 | prizepicks | Romeo Doubs | Rec Yards | over | 0.1283243905786212 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14391993 | prizepicks | Myles Garrett | Sacks | under | 0.1280999141788408 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14498797 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.1279545543309632 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295692 | prizepicks | Saquon Barkley | Rush Yards | over | 0.1278737465773938 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14524509 | prizepicks | C.J. Stroud | Pass+Rush Yds | under | 0.127742968578044 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339421 | prizepicks | Trevor Lawrence | Pass TDs | under | 0.1275594354863879 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472552 | prizepicks | Juwan Johnson | Rec Yards | over | 0.1275374670977997 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14436542 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1274267174274461 | 2026-09-02T21:47:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498705 | prizepicks | Justin Herbert | Rush Yards | over | 0.1272682041330811 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14518954 | prizepicks | Justin Herbert | Rush Yards | over | 0.1272682041330811 | 2026-09-05T13:51:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534339 | prizepicks | Mason Taylor | Fantasy Score | over | 0.1270981272912408 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3354,49 +3315,44 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14352626 | prizepicks | Courtland Sutton | Rec Targets | over | 0.1266626955974852 | 2026-09-01T01:38:22Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14381555 | prizepicks | Tyjae Spears | Rush+Rec Yds | under | 0.1266553367998579 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357809 | prizepicks | Rome Odunze | Fantasy Score | over | 0.1265788202173637 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14350981 | prizepicks | Brock Bowers | Recs | under | 0.126379850757936 | 2026-09-01T00:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14402641 | prizepicks | D'Andre Swift | Rush+Rec Yds | under | 0.1265751039212511 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514489 | prizepicks | Bo Nix | Rush Yards | over | 0.1263323175892785 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14539888 | prizepicks | Dalton Kincaid | Rec Yards | under | 0.1262456457093383 | 2026-09-06T13:38:09Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472261 | prizepicks | Puka Nacua | Rec Yards | over | 0.126183360479314 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14273988 | prizepicks | Dalton Kincaid | Rec Yards | under | 0.1262456457093382 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14569821 | prizepicks | Ashton Jeanty | Recs | under | 0.1261466514536929 | 2026-09-06T21:18:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486858 | prizepicks | Xavier Hutchinson | Rec Yards | under | 0.1259930045297811 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990919 | prizepicks | Puka Nacua | Recs | over | 0.1258730768679308 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14363072 | prizepicks | Brock Purdy | Pass Yards | under | 0.1258685058301052 | 2026-09-01T06:38:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14166505 | prizepicks | CeeDee Lamb | Recs | under | 0.1256129791467263 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14585729 | prizepicks | Parker Washington | Rec Yards | over | 0.1256070536807535 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14503113 | prizepicks | Bo Nix | Pass Attempts | under | 0.1256060074330151 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14473222 | prizepicks | Parker Washington | Rec Yards | over | 0.1256070536807535 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390046 | prizepicks | Lamar Jackson | Fantasy Score | under | 0.1253967393274776 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472817 | prizepicks | James Cook III | Rec Yards | under | 0.1252371426187781 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379470 | prizepicks | Tyler Warren | Rec Yards | under | 0.1252044361092326 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311590 | prizepicks | Ladd McConkey | Rec Yards | under | 0.1251140527121546 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14540138 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1249356853943253 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14413166 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.1251894617148554 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136929 | prizepicks | Jordan Addison | Rec Yards | under | 0.1248960954534632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14540490 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.124883047067279 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14452133 | prizepicks | Josh Allen | Pass Yards | under | 0.1247699807753758 | 2026-09-03T05:43:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13685183 | prizepicks | Drake London | Recs | under | 0.1246790768761368 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14021282 | prizepicks | Puka Nacua | Rec Targets | over | 0.1246509836622457 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14311114 | prizepicks | Daniel Jones | Pass Yards | under | 0.1246427298656907 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14568642 | prizepicks | Drake Maye | Pass Yards | over | 0.1244758132107304 | 2026-09-06T21:18:23Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14645941 | prizepicks | Xavier Worthy | Rush Yards | over | 0.1244756767873356 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346465 | prizepicks | Michael Wilson | Recs | over | 0.124473514628572 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14535928 | prizepicks | Alec Pierce | Recs | under | 0.12446006102155 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14641642 | prizepicks | Alec Pierce | Recs | under | 0.12446006102155 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14504185 | prizepicks | Jacoby Brissett | Pass Attempts | over | 0.1243999334141954 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14478557 | prizepicks | DeMarcus Lawrence | Sacks | under | 0.1243527206726871 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14473648 | prizepicks | Justice Hill | Rec Yards | under | 0.1242786979729053 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14354528 | prizepicks | Terry McLaurin | Rec Targets | under | 0.1242578580279414 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14350968 | prizepicks | DeMario Douglas | Recs | under | 0.1241634784542655 | 2026-09-01T00:38:19Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14522663 | prizepicks | Justin Herbert | Pass Attempts | under | 0.1241527303364185 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14420563 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.1240659088005334 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255333 | prizepicks | Tyler Shough | Pass+Rush Yds | under | 0.1240520412110604 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14567076 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.1239906414706855 | 2026-09-06T19:06:29Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14294912 | prizepicks | Jordan Mason | Rush Yards | over | 0.124023100847749 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534188 | prizepicks | Xavier Legette | Fantasy Score | over | 0.1239583752160995 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311148 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.1239340188705913 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295700 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.1238567717507597 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14375430 | prizepicks | Tyler Shough | Rush Yards | over | 0.1237514671802484 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311165 | prizepicks | Lamar Jackson | Pass Yards | over | 0.1236883537077857 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14513946 | prizepicks | Isaac TeSlaa | Rec Yards | under | 0.1235033417742783 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379488 | prizepicks | Christian Watson | Rec Yards | over | 0.123459260268901 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14515536 | prizepicks | Jonathan Taylor | Rec Yards | under | 0.1233892093306809 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339597 | prizepicks | Jerry Jeudy | Recs | under | 0.1232406520057117 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14502068 | prizepicks | Tyler Higbee | Rec Yards | over | 0.1231997054926452 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14472499 | prizepicks | DeVonta Smith | Rec Yards | over | 0.1231395476322475 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311620 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.1231225756015504 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14093673 | prizepicks | Jaxson Dart | Pass+Rush Yds | under | 0.1230314843839208 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14273956 | prizepicks | Nico Collins | Recs | over | 0.1229484939285547 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14156060 | prizepicks | Hunter Henry | Recs | under | 0.1229020055927612 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12379228 | prizepicks | Bijan Robinson | Rush Yards | over | 0.1228853435285473 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486270 | prizepicks | Samaje Perine | Rec Yards | under | 0.1227369272692772 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473652 | prizepicks | Geno Smith | Pass Yards | under | 0.1227202957655735 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3405,60 +3361,64 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14339100 | prizepicks | Joe Burrow | Pass+Rush Yds | under | 0.1222846668296055 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352416 | prizepicks | Rome Odunze | Rec Targets | over | 0.1222145935758688 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420598 | prizepicks | Justice Hill | Rush+Rec Yds | under | 0.1221423775841284 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343150 | prizepicks | Romeo Doubs | Fantasy Score | under | 0.1220016848469806 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311578 | prizepicks | Quentin Johnston | Rec Yards | over | 0.1218956024402592 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989736 | prizepicks | Matthew Stafford | Pass TDs | over | 0.1218752253036385 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14402930 | prizepicks | Rachaad White | Rec Yards | under | 0.121777774472038 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14460456 | prizepicks | David Montgomery | Recs | under | 0.1214480105550672 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14164713 | prizepicks | Jaxson Dart | Pass Yards | under | 0.1213219627437039 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357909 | prizepicks | Quentin Johnston | Fantasy Score | under | 0.1212998889953871 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14474946 | prizepicks | Cam Ward | Pass Yards | under | 0.1212862361994212 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14574203 | prizepicks | Jalen Hurts | Pass+Rush Yds | over | 0.1212524357217567 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14358029 | prizepicks | Justin Herbert | Pass Yards | under | 0.1211719260172941 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473588 | prizepicks | Dallas Goedert | Rec Yards | over | 0.1210195805265679 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14687742 | prizepicks | Jaylin Noel | Rec Yards | over | 0.1208994769094244 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357913 | prizepicks | Dontayvion Wicks | Fantasy Score | over | 0.12089734645131 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14515404 | prizepicks | Chig Okonkwo | Rec Yards | over | 0.1208297669453435 | 2026-09-05T10:30:11Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472431 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.1208275084925198 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14021280 | prizepicks | Jaxon Smith-Njigba | Rec Targets | over | 0.1205836381714489 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472623 | prizepicks | Cade Otton | Rec Yards | over | 0.1205406347074782 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323885 | prizepicks | James Cook III | Player TDs | over | 0.1205006628648985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379221 | prizepicks | Cam Ward | Rush Yards | over | 0.1204483200481646 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14586395 | prizepicks | RJ Harvey | Rec Yards | under | 0.1204373823942679 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14357940 | prizepicks | Marvin Harrison Jr. | Fantasy Score | over | 0.1203725891397002 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346435 | prizepicks | Ja'Marr Chase | Fantasy Score | under | 0.1203385344529122 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649449 | prizepicks | T.J. Watt | Sacks | under | 0.120336925457455 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381686 | prizepicks | Omarion Hampton | Rush+Rec Yds | under | 0.1203294081637329 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14573562 | prizepicks | Jordan Love | Pass+Rush Yds | under | 0.1202791532514994 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14474514 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.1202024339523855 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14497945 | prizepicks | Evan McPherson | FG Made | over | 0.1201462117171552 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402510 | prizepicks | Josh Allen | Pass Attempts | under | 0.1199096638977983 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379487 | prizepicks | Justin Jefferson | Rec Yards | under | 0.1197930782045936 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14474806 | prizepicks | Jayden Daniels | Pass Yards | over | 0.1197572640847791 | 2026-09-08T09:35:41Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472421 | prizepicks | Garrett Wilson | Rec Yards | under | 0.1196901067913241 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14346406 | prizepicks | Tyler Allgeier | Rec Yards | under | 0.1196846094017671 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472906 | prizepicks | Rico Dowdle | Rush Yards | over | 0.1195669041355111 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472469 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.1195499543942414 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14514481 | prizepicks | Xavier Worthy | Rec Yards | under | 0.1194617142574616 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472554 | prizepicks | Nico Collins | Rec Yards | over | 0.119398365894636 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957605 | prizepicks | A.J. Brown | Rec Yards | over | 0.1193936747580654 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13988423 | prizepicks | Kirk Cousins | Pass TDs | under | 0.1192755424442411 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14600956 | prizepicks | Tua Tagovailoa | Pass Attempts | under | 0.1191599631633506 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339176 | prizepicks | Jahmyr Gibbs | Recs | under | 0.1189990406854797 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719601 | prizepicks | Jalen Redmond | Sacks | under | 0.1189348291623402 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14649185 | prizepicks | Malcolm Koonce | Sacks | under | 0.1187165888872318 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380883 | prizepicks | Luther Burden III | Rush+Rec Yds | over | 0.1187014693861381 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379234 | prizepicks | Josh Allen | Rush Yards | over | 0.1186908587535808 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337061 | prizepicks | Luther Burden III | Recs | over | 0.1186772250196253 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294908 | prizepicks | Justin Jefferson | Recs | over | 0.1186361200150289 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324366 | prizepicks | Jalen McMillan | Rec Yards | over | 0.1186228626020966 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498811 | prizepicks | Joe Burrow | Pass Yards | under | 0.1184650120531096 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978250 | prizepicks | Rhamondre Stevenson | Player TDs | under | 0.1183308712003853 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14599992 | prizepicks | Xavier Hutchinson | Rec Targets | over | 0.1183229568220891 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14504186 | prizepicks | Jacoby Brissett | Pass Attempts | under | 0.1182226141673914 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14494510 | prizepicks | Justice Hill | Rec Yards | over | 0.1181725552859916 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13971146 | prizepicks | Travis Etienne Jr. | Rush TDs | under | 0.1181424499622434 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499515 | prizepicks | Jordan Love | Pass Attempts | under | 0.1180376481058652 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13980680 | prizepicks | Jaxon Smith-Njigba | Fantasy Score | over | 0.1179422766265374 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14743888 | prizepicks | Darren Waller | Rec Yards | over | 0.1179397341405644 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14603961 | prizepicks | Theo Jackson | Sacks | under | 0.1178054276197879 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472199 | prizepicks | Malik Davis | Rush Yards | over | 0.1177093164666287 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14375182 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1177026054264516 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14100145 | prizepicks | Jalen Hurts | Player TDs | over | 0.1176286192571174 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978238 | prizepicks | Tory Horton | Player TDs | over | 0.1175488880406148 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311339 | prizepicks | Dalton Schultz | Rec Yards | over | 0.1175235255916689 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14601835 | prizepicks | Adam Trautman | Recs | over | 0.1175192549915853 | 2026-09-07T20:32:16Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379217 | prizepicks | Jared Goff | Rush Yards | over | 0.1175124175082835 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534953 | prizepicks | Jordan Mason | Fantasy Score | over | 0.1174200856315812 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311106 | prizepicks | Chase Brown | Rec Yards | over | 0.1174046505054515 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357775 | prizepicks | Devaughn Vele | Fantasy Score | under | 0.1172252855220085 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14504506 | prizepicks | Rome Odunze | Rec Yards | under | 0.1171491202250357 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475294 | prizepicks | Darnell Mooney | Rec Yards | over | 0.1171278891000544 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14486996 | prizepicks | Xavier Legette | Rec Yards | over | 0.1169786194044496 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327281 | prizepicks | Zay Flowers | Recs | under | 0.1168756401848267 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402748 | prizepicks | Jordan Mason | Rush+Rec Yds | under | 0.1167802056861295 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
@@ -3470,29 +3430,31 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14346797 | prizepicks | Malik Nabers | Fantasy Score | under | 0.1162668901808664 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357761 | prizepicks | Amon-Ra St. Brown | Fantasy Score | under | 0.1162466979238177 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311485 | prizepicks | DK Metcalf | Recs | under | 0.116232369964645 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14603117 | prizepicks | Tua Tagovailoa | Pass Yards | over | 0.1161814773460088 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095142 | prizepicks | Cam Skattebo | Rush+Rec Yds | over | 0.1161345272092142 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13980620 | prizepicks | Ladd McConkey | Player TDs | under | 0.1160030601464654 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341285 | prizepicks | Bijan Robinson | Fantasy Score | over | 0.1157823299562175 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357870 | prizepicks | Quinshon Judkins | Fantasy Score | over | 0.1157780218482229 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976416 | prizepicks | Brandon Aubrey | Kicking Points | over | 0.115763964997388 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14136110 | prizepicks | Tony Pollard | Rec Yards | over | 0.1157382046274316 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472546 | prizepicks | Daniel Jones | Rush Yards | over | 0.115656138352796 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346526 | prizepicks | Jalen Hurts | Fantasy Score | over | 0.1156002906240057 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393802 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.1155545534894338 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14352171 | prizepicks | Bijan Robinson | Rec Targets | over | 0.1152963030459555 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256019 | prizepicks | Devaughn Vele | Rec Yards | over | 0.1151667685586901 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346289 | prizepicks | Ladd McConkey | Recs | over | 0.1150797974934656 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14711262 | prizepicks | Daniel Carlson | Kicking Points | over | 0.1151194012232587 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685719 | prizepicks | Ashton Jeanty | Rush+Rec Yds | over | 0.1150939467294845 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13979194 | prizepicks | Jauan Jennings | Player TDs | over | 0.1150519036985068 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352442 | prizepicks | Tee Higgins | Rec Targets | under | 0.1149996930560378 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402567 | prizepicks | C.J. Stroud | Pass+Rush Yds | under | 0.1148714796176623 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379492 | prizepicks | Terry McLaurin | Rec Yards | over | 0.1146902266957949 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14720339 | prizepicks | Brian Robinson Jr. | Rush Yards | under | 0.1145072816179209 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375732 | prizepicks | Tyjae Spears | Fantasy Score | under | 0.1144273125371662 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357835 | prizepicks | Michael Pittman Jr. | Fantasy Score | over | 0.1143728144947435 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381214 | prizepicks | Kenneth Walker III | Rush+Rec Yds | under | 0.1142901076622771 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14342355 | prizepicks | Devaughn Vele | Fantasy Score | over | 0.1141717703216126 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379246 | prizepicks | Dak Prescott | Rush Yards | over | 0.1140125347640189 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14352691 | prizepicks | Jahmyr Gibbs | Rec Targets | over | 0.1139932284270026 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14341847 | prizepicks | Brenton Strange | Recs | over | 0.1139795902516378 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14357677 | prizepicks | Brenton Strange | Recs | over | 0.1139795902516378 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560384 | prizepicks | Malik Willis | Fantasy Score | under | 0.1139177275575793 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379067 | prizepicks | Baker Mayfield | Pass Yards | under | 0.1137370308873079 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14378996 | prizepicks | Cam Ward | Pass+Rush Yds | under | 0.1137306998236968 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3502,64 +3464,69 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14342835 | prizepicks | Colston Loveland | Fantasy Score | over | 0.1133652980774352 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14614801 | prizepicks | Nik Bonitto | Sacks | over | 0.1133291978107194 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14534424 | prizepicks | Andrei Iosivas | Fantasy Score | over | 0.1133132581546922 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14215154 | prizepicks | Sam Darnold | Pass Yards | under | 0.1133110977777361 | 2026-08-31T21:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14100106 | prizepicks | Derrick Henry | Player TDs | under | 0.1133027929704619 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989778 | prizepicks | Christian McCaffrey | Rec Yards | under | 0.113225878352735 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14475297 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.1131047828456048 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14257574 | prizepicks | Drake London | Rec Yards | under | 0.1132910325353487 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379503 | prizepicks | Courtland Sutton | Rec Yards | over | 0.1129841649147556 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14577230 | prizepicks | Geno Smith | Rush Yards | over | 0.1129089525370574 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532948 | prizepicks | Woody Marks | Fantasy Score | under | 0.112884023980069 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343231 | prizepicks | Christian Watson | Fantasy Score | under | 0.1128332727691292 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14691352 | prizepicks | Ashton Dulin | Recs | under | 0.1128238899642204 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559731 | prizepicks | Chris Godwin Jr. | Rec Targets | under | 0.1127867893152343 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472767 | prizepicks | Jalen Hurts | Pass Yards | over | 0.1127254529480641 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|12379239 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.1127650480803366 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14006856 | prizepicks | Jared Goff | Pass TDs | over | 0.1126439235323741 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14384379 | prizepicks | Kyren Williams | Rush+Rec Yds | under | 0.1124167216418585 | 2026-09-02T21:15:45Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14617064 | prizepicks | Travis Kelce | Rec Yards | under | 0.1124101657745507 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14467968 | prizepicks | Dre'Mont Jones | Sacks | under | 0.1123356078162473 | 2026-09-07T16:25:44Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14686594 | prizepicks | Kirk Cousins | Pass+Rush Yds | under | 0.1123771640861179 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306822 | prizepicks | Jaylen Waddle | Fantasy Score | under | 0.1122870310068517 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14379622 | prizepicks | Kyren Williams | Rec Yards | over | 0.1122815908080958 | 2026-09-01T21:48:22Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697081 | prizepicks | Mitchell Evans | Fantasy Score | over | 0.1121980720012694 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559706 | prizepicks | Cole Kmet | Rec Targets | over | 0.1120962079160735 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472170 | prizepicks | Baker Mayfield | Rush Yards | over | 0.1120917426965444 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720912 | prizepicks | Kyle Monangai | Rec Yards | over | 0.1120304204941384 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393674 | prizepicks | Jonathan Taylor | Rush+Rec Yds | under | 0.1119618375011801 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559733 | prizepicks | Cade Otton | Rec Targets | over | 0.1118468218326752 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357869 | prizepicks | Garrett Wilson | Fantasy Score | over | 0.1117889474186026 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14292151 | prizepicks | DeMario Douglas | Rec Yards | over | 0.1117699179713904 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14134605 | prizepicks | Brock Bowers | Rec Yards | over | 0.1115755687259122 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346854 | prizepicks | Rashee Rice | Fantasy Score | under | 0.1115385035516363 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14683787 | prizepicks | Brandon Dorlus | Sacks | over | 0.1111911095101334 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13971265 | prizepicks | Daniel Jones | Pass TDs | under | 0.1111903641280022 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13997284 | prizepicks | Rome Odunze | Player TDs | under | 0.1109575237119576 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14580101 | prizepicks | Cade Otton | Recs | over | 0.1109045562208179 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324339 | prizepicks | Cade Otton | Recs | over | 0.1109045562208179 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311872 | prizepicks | Jared Goff | Pass Yards | over | 0.1108370554589632 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14574487 | prizepicks | Jared Goff | Pass Yards | over | 0.1108370554589632 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719152 | prizepicks | Moro Ojomo | Sacks | under | 0.1107312208614871 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14689501 | prizepicks | Chop Robinson | Sacks | under | 0.1106910058142723 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472291 | prizepicks | Adonai Mitchell | Rec Yards | over | 0.1106653442786024 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14589999 | prizepicks | Aaron Rodgers | Rush Yards | over | 0.1106034510484577 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953329 | prizepicks | Cameron Dicker | Kicking Points | under | 0.1105573624080928 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339691 | prizepicks | D'Andre Swift | Recs | over | 0.1104484520960225 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095254 | prizepicks | Isaiah Likely | Rec Yards | over | 0.1104370414375206 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14474683 | prizepicks | Chris Rodriguez Jr. | Rush Yards | over | 0.1104251688658568 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686653 | prizepicks | Tyler Allgeier | Rush Yards | over | 0.1104225232824689 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14689484 | prizepicks | Ashton Jeanty | Rush+Rec Yds | under | 0.1103913285104312 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306471 | prizepicks | C.J. Stroud | Fantasy Score | over | 0.1103875342006392 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691351 | prizepicks | Ashton Dulin | Rec Yards | over | 0.1103500936168755 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390052 | prizepicks | Aaron Rodgers | Fantasy Score | under | 0.1103328332740125 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475499 | prizepicks | Jack Bech | Rec Yards | under | 0.1102498350466583 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14391996 | prizepicks | Jack Bech | Rec Yards | under | 0.1102498350466583 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475404 | prizepicks | Jaxson Dart | Pass+Rush Yds | over | 0.110212902498927 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14295913 | prizepicks | Saquon Barkley | Rec Yards | over | 0.1101937833204461 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379237 | prizepicks | De'Von Achane | Rush Yards | over | 0.110090566992632 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381596 | prizepicks | Geno Smith | Pass Attempts | under | 0.1100285264770026 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475320 | prizepicks | Chase McLaughlin | Kicking Points | over | 0.1099772469660209 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14476868 | prizepicks | Pat Freiermuth | Rec Yards | over | 0.1099698344434073 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980159 | prizepicks | Sam Darnold | Pass+Rush Yds | under | 0.1098127249673412 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357763 | prizepicks | Sam LaPorta | Fantasy Score | under | 0.1097220521107256 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12335694 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.1096930904069949 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14498983 | prizepicks | Tyjae Spears | Rush Yards | under | 0.1096344718415558 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738209 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.1095843887416898 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473118 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.1095843887416898 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472250 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.109229428459584 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13983446 | prizepicks | Breece Hall | Rush TDs | under | 0.1091591383087928 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14522239 | prizepicks | Kyler Murray | Pass Attempts | under | 0.1091431238133598 | 2026-09-08T09:35:41Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343157 | prizepicks | A.J. Brown | Fantasy Score | under | 0.1091094815355878 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14068337 | prizepicks | Drake Maye | Pass Yards | over | 0.1090891449012735 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14143099 | prizepicks | Connor Heyward | Player TDs | under | 0.1090254627133826 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339084 | prizepicks | Marvin Harrison Jr. | Recs | under | 0.1089558933388903 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14350980 | prizepicks | Juwan Johnson | Recs | over | 0.1088680369502915 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697120 | prizepicks | Elijah Higgins | Rec Yards | under | 0.1088525066556295 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357922 | prizepicks | Michael Wilson | Fantasy Score | over | 0.1086835670417868 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13989825 | prizepicks | Brock Purdy | Pass+Rush Yds | under | 0.1086693776517409 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13989739 | prizepicks | Matthew Stafford | Pass Yards | under | 0.1085678503126993 | 2026-09-07T16:25:44Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14339621 | prizepicks | Jerry Jeudy | Rec Yards | under | 0.1085654224150853 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14381732 | prizepicks | Bucky Irving | Rush+Rec Yds | under | 0.1085222016077452 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275110 | prizepicks | Patrick Mahomes | Pass+Rush Yds | over | 0.1085029683530091 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14095414 | prizepicks | Cam Skattebo | Rec Yards | over | 0.1084781281354519 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294901 | prizepicks | Tucker Kraft | Rec Yards | over | 0.1083445129340469 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -3567,21 +3534,18 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14339608 | prizepicks | Jerry Jeudy | Rec Yards | over | 0.108268866667945 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323883 | prizepicks | Jonathan Taylor | Player TDs | over | 0.1081983595657236 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599987 | prizepicks | Kalif Raymond | Rec Targets | over | 0.1081485297907436 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14688674 | prizepicks | Jack Bech | Rec Yards | over | 0.1081214769100639 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14392011 | prizepicks | Jack Bech | Rec Yards | over | 0.1081214769100639 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14614149 | prizepicks | Justin Strnad | Sacks | under | 0.1079128171199437 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14497944 | prizepicks | Evan McPherson | Kicking Points | under | 0.1078857317572957 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351889 | prizepicks | Geno Smith | Pass TDs | over | 0.1078564090643825 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14498607 | prizepicks | Terrance Ferguson | Rec Yards | under | 0.1078124290754436 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14357883 | prizepicks | Tre Tucker | Fantasy Score | under | 0.107812904246683 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346317 | prizepicks | Tre' Harris | Rec Yards | under | 0.1077353300467819 | 2026-08-31T23:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14385295 | prizepicks | Matthew Golden | Rush+Rec Yds | under | 0.107722658996548 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14497551 | prizepicks | Matthew Stafford | Pass Attempts | under | 0.1077064944929493 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14472280 | prizepicks | Chase Brown | Rush Yards | under | 0.1077030174058267 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339568 | prizepicks | Matthew Stafford | Pass+Rush Yds | over | 0.1076898368664487 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13996185 | prizepicks | Aaron Rodgers | Pass TDs | under | 0.1074957523201883 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379483 | prizepicks | Nico Collins | Rec Yards | over | 0.1074866377824756 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14540797 | prizepicks | Kenny Gainwell | Rush Yards | under | 0.1074752743893133 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14255886 | prizepicks | Travis Etienne Jr. | Recs | under | 0.10746581762307 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351454 | prizepicks | Joe Burrow | Pass TDs | over | 0.1074514522064546 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14707535 | prizepicks | KaVontae Turpin | Rush Yards | over | 0.1073813431105626 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14293221 | prizepicks | Tucker Kraft | Recs | over | 0.1073812043639615 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472310 | prizepicks | Breece Hall | Rec Yards | over | 0.1072564905578973 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14382834 | prizepicks | De'Von Achane | Rush+Rec Yds | over | 0.1071950191725614 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
@@ -3589,8 +3553,10 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14256362 | prizepicks | Bucky Irving | Rec Yards | over | 0.1070970163258202 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472468 | prizepicks | De'Von Achane | Rec Yards | under | 0.1070907505875957 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311670 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.1070198445856931 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14499641 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.1069526843187977 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474928 | prizepicks | Tyler Shough | Pass Yards | under | 0.1069699283898288 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381980 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.1069526843187977 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14499641 | prizepicks | Baker Mayfield | Pass Attempts | under | 0.1069526843187977 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14562346 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.1069183121687715 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472911 | prizepicks | Adonai Mitchell | Recs | over | 0.1068953448351215 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381528 | prizepicks | Braelon Allen | Rush+Rec Yds | under | 0.1068682004819451 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486834 | prizepicks | Xavier Legette | Recs | over | 0.1068533038436077 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3598,57 +3564,50 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14265358 | prizepicks | Courtland Sutton | Recs | over | 0.1065339174002268 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346857 | prizepicks | Xavier Worthy | Fantasy Score | over | 0.106365500096397 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14343408 | prizepicks | Dak Prescott | Fantasy Score | over | 0.106251853176444 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14339171 | prizepicks | Jahmyr Gibbs | Rec Yards | over | 0.1062309466965162 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14539887 | prizepicks | Alec Pierce | Rec Yards | over | 0.1061141020442941 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14182196 | prizepicks | Matthew Stafford | Rush Yards | over | 0.1059041331488765 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14372897 | prizepicks | Colby Parkinson | Rec Yards | over | 0.1058537676569878 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13957670 | prizepicks | DeMario Douglas | Rec Yards | under | 0.1057270094423633 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14320449 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.1056856985783045 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14502914 | prizepicks | Geno Smith | Pass Attempts | over | 0.1056807283159364 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697641 | prizepicks | Roman Wilson | Rec Yards | under | 0.1058780842817911 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13993303 | prizepicks | Travis Etienne Jr. | Player TDs | over | 0.1057504838904478 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14602965 | prizepicks | Geno Smith | Pass Attempts | over | 0.1056807283159363 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14486879 | prizepicks | Greg Dulcich | Recs | under | 0.1056342971060093 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14337043 | prizepicks | Rome Odunze | Recs | over | 0.1055526525171022 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598331 | prizepicks | Kyle Juszczyk | Rec Yards | under | 0.1055161568781499 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14236435 | prizepicks | Drake Maye | Pass+Rush Yds | over | 0.1054707123713782 | 2026-09-05T19:00:04Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14496660 | prizepicks | Drake Maye | Pass Attempts | under | 0.1053384138444278 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14577441 | prizepicks | Malik Davis | Rush Yards | over | 0.1052884922597642 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13976410 | prizepicks | Brandon Aubrey | FG Made | under | 0.1051063921898727 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14178142 | prizepicks | Javonte Williams | Rush Yards | under | 0.1050870090466234 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14466911 | prizepicks | Rashod Bateman | Recs | under | 0.1050013141395989 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686426 | prizepicks | Kyle Monangai | Rush+Rec Yds | over | 0.1049910933195573 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14246275 | prizepicks | Travis Kelce | Rec Targets | over | 0.104913124772936 | 2026-09-01T00:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14384498 | prizepicks | Puka Nacua | Rec Yards | over | 0.1048777108011256 | 2026-09-02T00:04:19Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14691289 | prizepicks | Dylan Sampson | Rush+Rec Yds | over | 0.104809627373045 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341856 | prizepicks | Brenton Strange | Recs | under | 0.1047422931572724 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357588 | prizepicks | Brian Thomas Jr. | Rec Yards | over | 0.1044425425682724 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559716 | prizepicks | Tre Tucker | Rec Targets | under | 0.1043824229365782 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311503 | prizepicks | Bryce Young | Pass Yards | under | 0.1043014743643164 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540802 | prizepicks | Kenny Gainwell | Recs | over | 0.1042716902366317 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978318 | prizepicks | Courtland Sutton | Player TDs | under | 0.104254741400782 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472724 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.1041740699510624 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|13996682 | prizepicks | David Montgomery | Rush TDs | under | 0.1040483925257951 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357986 | prizepicks | Khalil Shakir | Rec Yards | under | 0.1040297784412561 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586398 | prizepicks | Evan Engram | Rec Yards | over | 0.103925607548193 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14402490 | prizepicks | C.J. Stroud | Pass Attempts | under | 0.1038802610417163 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12323868 | prizepicks | TreVeyon Henderson | Player TDs | over | 0.1037832673593062 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14346798 | prizepicks | Malik Nabers | Fantasy Score | over | 0.1035894198396893 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14688552 | prizepicks | Ashton Jeanty | Rec Yards | over | 0.1034718708582156 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13685195 | prizepicks | Caleb Williams | Pass TDs | over | 0.1034535667404599 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14420725 | prizepicks | Michael Mayer | Recs | over | 0.1033228273901079 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352330 | prizepicks | Khalil Shakir | Rec Targets | over | 0.1032802430930269 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989738 | prizepicks | Matthew Stafford | Pass Yards | over | 0.1031588223697721 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14533440 | prizepicks | Kalif Raymond | Fantasy Score | over | 0.1031329294366385 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095843 | prizepicks | Xavier Worthy | Rec Yards | under | 0.1031276546649816 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13980627 | prizepicks | Omarion Hampton | Player TDs | over | 0.103113736582499 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14352069 | prizepicks | Brock Bowers | Recs | over | 0.1030794173731639 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14353527 | prizepicks | Mike Evans | Rec Targets | over | 0.1030018680684892 | 2026-09-01T02:38:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14390340 | prizepicks | Elijah Ponder | Sacks | under | 0.1027762205099436 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|12379210 | prizepicks | Brock Purdy | Rush Yards | over | 0.1024718018506146 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14646521 | prizepicks | Tommy Tremble | Rec Yards | over | 0.1027437482624877 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14603923 | prizepicks | Eric Wilson | Sacks | under | 0.1024285473903464 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472242 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.1023518189600524 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14655181 | prizepicks | Kayshon Boutte | Rec Yards | over | 0.1023031749095452 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472392 | prizepicks | Jalen Coker | Rec Yards | over | 0.1021363302088066 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14392060 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.1021211456178814 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379218 | prizepicks | Tyler Shough | Rush Yards | over | 0.1020971704909727 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14680257 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.1020417080936874 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320589 | prizepicks | Chase Brown | Recs | over | 0.1020073332613692 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13974908 | prizepicks | Malik Willis | Pass Yards | under | 0.1018965602902628 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472465 | prizepicks | Tre Tucker | Rec Yards | under | 0.1017936634876547 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402554 | prizepicks | Aaron Rodgers | Pass+Rush Yds | under | 0.1017693485358015 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14465765 | prizepicks | Jake Ferguson | Recs | over | 0.101744296119358 | 2026-09-03T19:46:31Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|12528925 | prizepicks | Sam Darnold | INT | over | 0.1016386315525494 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14711980 | prizepicks | Xavier Hutchinson | Recs | over | 0.1016258708744007 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14246276 | prizepicks | Travis Kelce | Recs | under | 0.1016128172934017 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|12518168 | prizepicks | A.J. Brown | Rec Yards | over | 0.1015851305644348 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472545 | prizepicks | Dalton Kincaid | Rec Yards | under | 0.1015404197985972 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390042 | prizepicks | Tyler Shough | Fantasy Score | over | 0.1015181737731258 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311314 | prizepicks | Sam LaPorta | Rec Yards | over | 0.1014694288350562 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3658,135 +3617,125 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|12528936 | prizepicks | Jared Goff | INT | over | 0.1013229356759694 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357916 | prizepicks | Marvin Harrison Jr. | Fantasy Score | under | 0.1012663983933142 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14374575 | prizepicks | Gunnar Helm | Rec Yards | under | 0.1012485964974162 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473018 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.101154257734741 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381524 | prizepicks | Cam Ward | Pass Attempts | under | 0.1011517101736222 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14573519 | prizepicks | Andy Borregales | Kicking Points | over | 0.1011427053846313 | 2026-09-06T23:49:06Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14585931 | prizepicks | Evan Engram | Recs | over | 0.1011187375696354 | 2026-09-08T14:29:16Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13979186 | prizepicks | Will Reichard | Kicking Points | over | 0.1010838911245152 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381981 | prizepicks | Bucky Irving | Rush+Rec Yds | over | 0.1008531482494076 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14276606 | prizepicks | Dontayvion Wicks | Recs | under | 0.1007139403320751 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14320444 | prizepicks | Emeka Egbuka | Rec Yards | over | 0.1006863243463345 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375177 | prizepicks | Malik Willis | Pass+Rush Yds | under | 0.1006689512127292 | 2026-09-01T19:49:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12528946 | prizepicks | Jaxson Dart | INT | under | 0.1005963938350771 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341859 | prizepicks | Brenton Strange | Rec Yards | over | 0.1005845830793903 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532941 | prizepicks | Kayshon Boutte | Fantasy Score | over | 0.1004912944547746 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295702 | prizepicks | Jalen Hurts | Rush Yards | over | 0.1004280143579865 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14741187 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | over | 0.1003771944320297 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353311 | prizepicks | Garrett Wilson | Rec Targets | under | 0.1003468277627895 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14706656 | prizepicks | Keenan Allen | Fantasy Score | over | 0.1003278865897724 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380188 | prizepicks | Bijan Robinson | Rush+Rec Yds | under | 0.100309766750538 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13953360 | prizepicks | Chad Ryland | Kicking Points | over | 0.100301002644893 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14385309 | prizepicks | Aaron Jones Sr. | Rush+Rec Yds | over | 0.1002974768005302 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473635 | prizepicks | Tucker Kraft | Rec Yards | over | 0.1002312204181368 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379075 | prizepicks | Bryce Young | Pass Yards | under | 0.1002179206903333 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996254 | prizepicks | D'Andre Swift | Player TDs | over | 0.1002124512876356 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379207 | prizepicks | Drake Maye | Rush Yards | over | 0.1001288632086019 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14134321 | prizepicks | Romeo Doubs | Rec Yards | over | 0.1001109176360262 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|13976444 | prizepicks | Javonte Williams | Rush TDs | over | 0.1001945090257721 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341457 | prizepicks | Amon-Ra St. Brown | Fantasy Score | over | 0.1000010159578752 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14375152 | prizepicks | Garrett Wilson | Recs | over | 0.0999481337848582 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14726210 | prizepicks | Keenan Allen | Rec Yards | over | 0.0998497624146104 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995880 | prizepicks | Ryan Fitzgerald | FG Made | under | 0.0998278045957167 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257578 | prizepicks | Kyle Pitts Sr. | Rec Yards | over | 0.0997641454498798 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686417 | prizepicks | Kyle Monangai | Fantasy Score | over | 0.0996791714738032 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136651 | prizepicks | Jakobi Meyers | Recs | over | 0.0996531026155723 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697100 | prizepicks | Treylon Burks | Rec Yards | under | 0.0996474170564838 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14460643 | prizepicks | Kayshon Boutte | Recs | under | 0.0994935043173008 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14379969 | prizepicks | Tony Pollard | Rush Yards | over | 0.0993522955173047 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645937 | prizepicks | Xavier Worthy | Rush+Rec Yds | over | 0.0993084409513106 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14560088 | prizepicks | Kenny Gainwell | Fantasy Score | over | 0.0990332654188581 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472531 | prizepicks | Jaylen Warren | Rec Yards | under | 0.0990014180240355 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379220 | prizepicks | Geno Smith | Rush Yards | under | 0.0989805473098014 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311372 | prizepicks | Geno Smith | Pass Yards | under | 0.0985934045057485 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14685717 | prizepicks | Abdul Carter | Sacks | under | 0.0986511336980582 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14306258 | prizepicks | Jordan Addison | Fantasy Score | under | 0.0985792547450672 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14474554 | prizepicks | Eddy Pineiro | Kicking Points | over | 0.098530160868711 | 2026-09-06T23:49:06Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14402853 | prizepicks | Woody Marks | Rush+Rec Yds | over | 0.0984806910865356 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534986 | prizepicks | Malik Washington | Fantasy Score | over | 0.0984359891894718 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311934 | prizepicks | Bryce Young | Rush Yards | under | 0.0983805417436112 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14320403 | prizepicks | Baker Mayfield | Rush Yards | under | 0.0983758527476637 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14136826 | prizepicks | Jalen Hurts | Pass+Rush Yds | under | 0.0983093698882008 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990783 | prizepicks | Kyren Williams | Rush Yards | over | 0.0982382458013104 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14324329 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.0982180946979667 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14356664 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0980500757978544 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633915 | prizepicks | Jacoby Brissett | INT | over | 0.0982052578778411 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14136337 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0980500757978544 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14356664 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0980500757978544 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475545 | prizepicks | Jake Elliott | FG Made | under | 0.098042498516119 | 2026-09-06T19:06:29Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14317894 | prizepicks | Chris Olave | Rec Yards | over | 0.0980228089416445 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14473596 | prizepicks | Chris Olave | Rec Yards | over | 0.0980228089416445 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14463062 | prizepicks | Chris Olave | Rec Yards | over | 0.0980228089416445 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14317894 | prizepicks | Chris Olave | Rec Yards | over | 0.0980228089416445 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311170 | prizepicks | Jonathan Taylor | Rush Yards | over | 0.0979609343090985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957549 | prizepicks | Rashid Shaheed | Rec Yards | over | 0.0977514912065318 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14498994 | prizepicks | Mason Taylor | Rec Yards | over | 0.0977263299210228 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472837 | prizepicks | Kendrick Bourne | Recs | under | 0.0977252111287068 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13990906 | prizepicks | Puka Nacua | Rec Yards | over | 0.0977020139518637 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14295768 | prizepicks | DeVonta Smith | Recs | under | 0.0975877194368299 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14352345 | prizepicks | DeMario Douglas | Rec Targets | under | 0.0975329168278636 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14164733 | prizepicks | Javonte Williams | Rush Yards | over | 0.0974584833859439 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14473069 | prizepicks | Tony Pollard | Rec Yards | under | 0.0974404285856069 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351820 | prizepicks | Jayden Daniels | Pass+Rush+Rec TDs | under | 0.097413830960233 | 2026-09-01T00:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14307037 | prizepicks | Javonte Williams | Rush+Rec Yds | under | 0.0973461503723952 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14351822 | prizepicks | Kyler Murray | Pass+Rush+Rec TDs | under | 0.0973427810356898 | 2026-09-01T00:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393799 | prizepicks | Dak Prescott | Pass Attempts | under | 0.0972615736879387 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14380102 | prizepicks | Sam Darnold | Pass Attempts | under | 0.0970477817489516 | 2026-09-01T21:48:22Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14135840 | prizepicks | Michael Wilson | Rec Yards | over | 0.0970236903771355 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996313 | prizepicks | Malik Washington | Player TDs | under | 0.096975243941606 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472446 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.0969569378011567 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14641958 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.0969569378011567 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379238 | prizepicks | Malik Willis | Rush Yards | under | 0.0969012369489279 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14532938 | prizepicks | Xavier Hutchinson | Fantasy Score | over | 0.0967974009991017 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14150772 | prizepicks | Deebo Samuel Sr. | Recs | over | 0.0967717843205244 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14711978 | prizepicks | Mike Gesicki | Recs | over | 0.0967164249044221 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473813 | prizepicks | Dallas Goedert | Rec Yards | under | 0.0966782460874794 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472224 | prizepicks | Jake Ferguson | Rec Yards | under | 0.0965992416368639 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14311885 | prizepicks | Tyler Shough | Pass Yards | over | 0.096567360134446 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957542 | prizepicks | AJ Barner | Rec Yards | over | 0.0965539905272595 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14600002 | prizepicks | Greg Dulcich | Rec Targets | over | 0.0965460715823359 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346853 | prizepicks | Travis Kelce | Fantasy Score | over | 0.0964733473038337 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14474449 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.0964055273531792 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379068 | prizepicks | Joe Burrow | Pass Yards | under | 0.0963992674173774 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13684684 | prizepicks | Bo Nix | Pass TDs | under | 0.0961979379004622 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341290 | prizepicks | Michael Pittman Jr. | Fantasy Score | under | 0.0961329427465008 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13955089 | prizepicks | Tee Higgins | Rec Yards | under | 0.0961268933569658 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14484074 | prizepicks | Tee Higgins | Rec Yards | under | 0.0961268933569658 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14310179 | prizepicks | Rico Dowdle | Rec Yards | under | 0.0961135240549931 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14591323 | prizepicks | Jordan Love | Rush Yards | over | 0.0960901536141435 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534340 | prizepicks | Adonai Mitchell | Fantasy Score | under | 0.0959502295583486 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14246184 | prizepicks | Davante Adams | Rec Yards | over | 0.0957448364527916 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14496413 | prizepicks | Chris Godwin Jr. | Rec Yards | under | 0.0956874109527821 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14721455 | prizepicks | Tank Bigsby | Recs | under | 0.0954250826842509 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14535107 | prizepicks | Chig Okonkwo | Fantasy Score | over | 0.0954156563180808 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381523 | prizepicks | Braelon Allen | Rush+Rec Yds | over | 0.0953963928451731 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374865 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.0953528600570358 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379474 | prizepicks | DK Metcalf | Rec Yards | over | 0.0953263421015024 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402640 | prizepicks | D'Andre Swift | Rush+Rec Yds | under | 0.0953116921613813 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14357676 | prizepicks | Quinshon Judkins | Rush Yards | over | 0.0951710712514563 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534427 | prizepicks | Drew Sample | Fantasy Score | over | 0.0951653081273359 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13558873 | prizepicks | Sam Darnold | Pass TDs | under | 0.0950929436993619 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14020715 | prizepicks | Sam Darnold | Pass+Rush+Rec TDs | under | 0.0950929436993619 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14378990 | prizepicks | Geno Smith | Pass+Rush Yds | over | 0.0949298951109473 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14601037 | prizepicks | Mike Gesicki | Rec Targets | under | 0.0949100238489903 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14099763 | prizepicks | Romeo Doubs | Fantasy Score | over | 0.0948961457116037 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12323889 | prizepicks | Ja'Marr Chase | Player TDs | over | 0.0946909118039176 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379083 | prizepicks | Dak Prescott | Pass Yards | under | 0.0946784523773699 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341345 | prizepicks | Brian Thomas Jr. | Fantasy Score | over | 0.0946699138287608 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532807 | prizepicks | James Cook III | Fantasy Score | under | 0.0945853316308489 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14245986 | prizepicks | Malik Nabers | Recs | under | 0.0945413019497821 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14389698 | prizepicks | Rhamondre Stevenson | Rush+Rec Yds | under | 0.0945218797049629 | 2026-09-04T16:17:23Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14473585 | prizepicks | DeVonta Smith | Rec Yards | under | 0.0944945499325005 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14353323 | prizepicks | DK Metcalf | Rec Targets | over | 0.094465226410688 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14505904 | prizepicks | Kirk Cousins | Pass Attempts | under | 0.0944651836810174 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697524 | prizepicks | Josh Oliver | Rec Yards | under | 0.0943548534704565 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14273975 | prizepicks | C.J. Stroud | Pass Yards | under | 0.0943454223230469 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343702 | prizepicks | James Cook III | Rush Yards | over | 0.0943308539887448 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311474 | prizepicks | Michael Pittman Jr. | Recs | under | 0.0943109624552218 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14360587 | prizepicks | Michael Pittman Jr. | Recs | under | 0.0943109624552218 | 2026-09-01T04:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12335608 | prizepicks | Isaiah Likely | Rec Yards | under | 0.0942344687534098 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13978291 | prizepicks | Tyler Higbee | Player TDs | under | 0.0940876140462879 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14532704 | prizepicks | Justice Hill | Fantasy Score | over | 0.0939778589325537 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390051 | prizepicks | Trevor Lawrence | Fantasy Score | over | 0.0937123707093697 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379463 | prizepicks | Jahmyr Gibbs | Rec Yards | over | 0.0934507849766111 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14559715 | prizepicks | Josh Downs | Rec Targets | under | 0.0934265203775474 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14533439 | prizepicks | Cole Kmet | Fantasy Score | over | 0.0933482965664969 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14536908 | prizepicks | Alec Pierce | Recs | over | 0.0933098756046146 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980681 | prizepicks | A.J. Brown | Fantasy Score | over | 0.0931829315566079 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14020296 | prizepicks | Jonathan Taylor | Rush TDs | over | 0.0932087800621725 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357831 | prizepicks | Jaylen Warren | Fantasy Score | under | 0.0930684631930767 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559738 | prizepicks | Calvin Ridley | Rec Targets | over | 0.0930461221153775 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14295908 | prizepicks | Saquon Barkley | Rec Yards | under | 0.0930458750957293 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379490 | prizepicks | Saquon Barkley | Rec Yards | under | 0.0930458750957293 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311383 | prizepicks | Cam Skattebo | Rush Yards | under | 0.0927227623883302 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|12528877 | prizepicks | Nick Bosa | Sacks | under | 0.0927204254381004 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14375428 | prizepicks | Dallas Goedert | Recs | over | 0.0926102973053522 | 2026-09-02T00:04:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311226 | prizepicks | Emeka Egbuka | Rec Yards | under | 0.0925737492552684 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14276153 | prizepicks | Dallas Goedert | Recs | over | 0.0926102973053522 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311551 | prizepicks | Justin Herbert | Pass Yards | under | 0.0925317488690027 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134776 | prizepicks | Jacoby Brissett | Rush Yards | over | 0.0923341086269964 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14248989 | prizepicks | Jalen Nailor | Rec Yards | over | 0.0923152272542101 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486929 | prizepicks | Xavier Legette | Rec Yards | under | 0.0923045595199965 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346434 | prizepicks | Ja'Marr Chase | Fantasy Score | over | 0.092141422695819 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472341 | prizepicks | Justin Herbert | Rush Yards | over | 0.0920269184452431 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14381660 | prizepicks | Tyler Allgeier | Rush+Rec Yds | over | 0.0920231642299506 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472936 | prizepicks | Aaron Jones Sr. | Rush Yards | over | 0.0919482228018949 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14541471 | prizepicks | Kenny Gainwell | Rush+Rec Yds | over | 0.0917559080415726 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311034 | prizepicks | Kirk Cousins | Pass Yards | over | 0.0916749193413157 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14544369 | prizepicks | Kirk Cousins | Pass Yards | over | 0.0916749193413157 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14315072 | prizepicks | Javonte Williams | Recs | under | 0.09159024108555 | 2026-09-06T19:06:29Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13955009 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.0915245965836719 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341462 | prizepicks | Travis Etienne Jr. | Fantasy Score | over | 0.0914269228064967 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3794,107 +3743,96 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14524466 | prizepicks | Josh Allen | Pass+Rush Yds | under | 0.0914033746032718 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352591 | prizepicks | Harold Fannin Jr. | Rec Targets | over | 0.091272845091715 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393748 | prizepicks | Chris Rodriguez Jr. | Rush+Rec Yds | over | 0.0912564539598543 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379455 | prizepicks | Christian McCaffrey | Rec Yards | over | 0.0909714977155865 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14357897 | prizepicks | Tre Tucker | Fantasy Score | over | 0.0908960713169576 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357896 | prizepicks | Brenton Strange | Fantasy Score | under | 0.0908608505017294 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14585943 | prizepicks | Pat Bryant | Fantasy Score | over | 0.0907722069337906 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14136992 | prizepicks | T.J. Hockenson | Recs | under | 0.0907584242031978 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14596551 | prizepicks | Ashton Jeanty | Fantasy Score | under | 0.0907580447429977 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14602776 | prizepicks | Justice Hill | Recs | under | 0.0907081608725101 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14465192 | prizepicks | David Montgomery | Rec Yards | under | 0.0906994521563145 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338713 | prizepicks | Lamar Jackson | Pass+Rush Yds | over | 0.0906042965774411 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472253 | prizepicks | Blake Corum | Rush Yards | over | 0.0905882865061312 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14337070 | prizepicks | Luther Burden III | Rec Yards | over | 0.090536646167602 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974065 | prizepicks | AJ Barner | Recs | under | 0.0905059760096822 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13685187 | prizepicks | Ja'Marr Chase | Recs | over | 0.0905051676688839 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379074 | prizepicks | Caleb Williams | Pass Yards | over | 0.090498271654784 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472225 | prizepicks | Samaje Perine | Rush Yards | under | 0.0904202933734416 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499495 | prizepicks | Joe Burrow | Pass Attempts | over | 0.0903466823337421 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353304 | prizepicks | Chris Olave | Rec Targets | over | 0.0903170481986699 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389797 | prizepicks | Rico Dowdle | Fantasy Score | over | 0.0902708130848226 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559719 | prizepicks | Terrance Ferguson | Rec Targets | under | 0.0901039178413171 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14733724 | prizepicks | Cam Little | Kicking Points | under | 0.0902685678999677 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14256250 | prizepicks | Baker Mayfield | Pass+Rush Yds | under | 0.0900731151523039 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14565434 | prizepicks | Josh Downs | Recs | under | 0.090024436938259 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294856 | prizepicks | Tucker Kraft | Recs | under | 0.0899825153824926 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473638 | prizepicks | Dalton Kincaid | Rec Yards | over | 0.0898218698533778 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379086 | prizepicks | Patrick Mahomes | Pass Yards | over | 0.0898117220448527 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14472239 | prizepicks | Terrance Ferguson | Rec Yards | under | 0.0896513641953901 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14438511 | prizepicks | Quentin Johnston | Rec Yards | over | 0.0896125240704033 | 2026-09-02T22:31:15Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14498581 | prizepicks | Brock Purdy | Rush Yards | under | 0.0894758211639441 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13978521 | prizepicks | Harrison Mevis | FG Made | over | 0.0893593850650474 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14308900 | prizepicks | Matthew Stafford | Pass Yards | over | 0.0892919095292126 | 2026-09-01T03:38:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14068332 | prizepicks | Sam Darnold | Pass Yards | under | 0.088877459677615 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14424736 | prizepicks | Kirk Cousins | Pass Yards | under | 0.0887729883188993 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13977036 | prizepicks | Andre Szmyt | Kicking Points | over | 0.0887055602515457 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14706589 | prizepicks | Tommy Tremble | Recs | over | 0.0893012555254799 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13976220 | prizepicks | George Pickens | Rec Yards | over | 0.0887494464635421 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14246274 | prizepicks | Travis Kelce | Fantasy Score | under | 0.0886740447512725 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14596549 | prizepicks | Ashton Jeanty | Fantasy Score | over | 0.0885316984232855 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13685185 | prizepicks | Zay Flowers | Recs | over | 0.0885163611213675 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14570476 | prizepicks | Zay Flowers | Recs | over | 0.0885163611213675 | 2026-09-06T21:18:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14357770 | prizepicks | TreVeyon Henderson | Fantasy Score | over | 0.0884536425713831 | 2026-09-01T03:38:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357788 | prizepicks | Cade Otton | Fantasy Score | under | 0.0882928250294219 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14403268 | prizepicks | Jared Goff | Pass+Rush Yds | over | 0.0882224501465942 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460639 | prizepicks | Woody Marks | Rec Yards | over | 0.0881365626715133 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957581 | prizepicks | Hunter Henry | Rec Yards | over | 0.0880946741768395 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14512357 | prizepicks | D'Andre Swift | Rec Yards | under | 0.0880938072900415 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339698 | prizepicks | D'Andre Swift | Rec Yards | under | 0.0880938072900415 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514485 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.088016800475524 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14565425 | prizepicks | Colston Loveland | Recs | over | 0.0879468139143934 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14346307 | prizepicks | Tre' Harris | Rec Yards | over | 0.087850600837148 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295165 | prizepicks | Jalen Hurts | Pass Yards | under | 0.0877693027731937 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472945 | prizepicks | Jacoby Brissett | Rush Yards | under | 0.0877326278537615 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14720968 | prizepicks | Kyle Monangai | Rec Yards | under | 0.0876825895487131 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472777 | prizepicks | Rome Odunze | Rec Yards | under | 0.0876159495998518 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14585937 | prizepicks | Noah Gray | Fantasy Score | over | 0.0875517608082909 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14724804 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.0875365782113551 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995769 | prizepicks | Brenton Strange | Player TDs | under | 0.0874959536711783 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559962 | prizepicks | Tyler Warren | Fantasy Score | over | 0.0874933188258313 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402642 | prizepicks | D'Andre Swift | Rush+Rec Yds | over | 0.0874439938030453 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472625 | prizepicks | Jalen McMillan | Rec Yards | under | 0.0873553870325326 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14720921 | prizepicks | Kyle Monangai | Rush Yards | over | 0.0873501167771824 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995004 | prizepicks | Chris Boswell | Kicking Points | over | 0.087248896372308 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380203 | prizepicks | Rico Dowdle | Rush+Rec Yds | over | 0.0871995984357616 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645341 | prizepicks | Tua Tagovailoa | Pass TDs | over | 0.0871713763962472 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136912 | prizepicks | Terry McLaurin | Recs | over | 0.0871540032343658 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14604812 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.0871191582799438 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14532949 | prizepicks | Kayshon Boutte | Fantasy Score | under | 0.087113954618113 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978117 | prizepicks | Davante Adams | Rec Yards | under | 0.087105849795845 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14311882 | prizepicks | Tyler Shough | Pass Yards | under | 0.0870021244394892 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540791 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.0869936827487811 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352689 | prizepicks | Jameson Williams | Rec Targets | over | 0.086839558898129 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472944 | prizepicks | Rico Dowdle | Rush Yards | under | 0.086839204694945 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528931 | prizepicks | Lamar Jackson | INT | over | 0.0864634311655641 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311586 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.0864428339033716 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14390252 | prizepicks | Jalen Hurts | Pass Attempts | under | 0.0863773477140807 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14384892 | prizepicks | Jalen Hurts | Pass Attempts | under | 0.0863773477140807 | 2026-09-02T00:04:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357803 | prizepicks | Dalton Schultz | Fantasy Score | under | 0.0862987162702377 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472541 | prizepicks | Dawson Knox | Rec Yards | over | 0.0862911200982655 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472218 | prizepicks | Cam Skattebo | Rush Yards | over | 0.0862707508589376 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14599985 | prizepicks | Justice Hill | Rec Targets | under | 0.0862561957557683 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532939 | prizepicks | Woody Marks | Fantasy Score | over | 0.0862376206467777 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472958 | prizepicks | Andrei Iosivas | Recs | under | 0.0862108851990282 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14310175 | prizepicks | Rico Dowdle | Rec Yards | over | 0.0860589015673252 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14246237 | prizepicks | Cooper Kupp | Recs | under | 0.0860435213075401 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472987 | prizepicks | Omarion Hampton | Rec Yards | under | 0.0858976031374754 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311364 | prizepicks | Breece Hall | Rush Yards | over | 0.0858355488327253 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697901 | prizepicks | Breece Hall | Rush Yards | over | 0.0858355488327253 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12323878 | prizepicks | George Pickens | Player TDs | under | 0.0857889446864885 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13980189 | prizepicks | Sam LaPorta | Player TDs | under | 0.0857659364695248 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13994974 | prizepicks | Tetairoa McMillan | Player TDs | under | 0.0856503709058661 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311241 | prizepicks | Chase Brown | Recs | under | 0.0856476566219638 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14629595 | prizepicks | Tua Tagovailoa | Pass Yards | over | 0.0854049647152226 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499342 | prizepicks | Bryce Young | Pass Attempts | under | 0.0853440074351921 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473653 | prizepicks | Travis Etienne Jr. | Rush Yards | under | 0.0852695158585334 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402528 | prizepicks | Jared Goff | Pass+Rush Yds | under | 0.0852342191214214 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14136872 | prizepicks | DeVonta Smith | Rec Yards | under | 0.0851493824282604 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534338 | prizepicks | Braelon Allen | Fantasy Score | under | 0.0851288759511532 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14357517 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.0850515362976467 | 2026-09-01T03:38:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14646524 | prizepicks | Tommy Tremble | Fantasy Score | over | 0.0850825568019099 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14385186 | prizepicks | Kyler Murray | Pass Attempts | over | 0.0850317310689153 | 2026-09-02T00:04:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14685499 | prizepicks | Jordan Addison | Rec Yards | under | 0.0849662554845976 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14344996 | prizepicks | Jalen McMillan | Fantasy Score | under | 0.0847938721687546 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420199 | prizepicks | Bucky Irving | Recs | over | 0.0847780465176559 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14691259 | prizepicks | Mo Alie-Cox | Recs | over | 0.0847492640396918 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14592933 | prizepicks | Bryce Young | Pass+Rush Yds | under | 0.084728619422569 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338720 | prizepicks | Lamar Jackson | Pass+Rush Yds | under | 0.0847188548699195 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389711 | prizepicks | Javonte Williams | Rush+Rec Yds | under | 0.0846502521954298 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14311390 | prizepicks | Aaron Rodgers | Pass Yards | under | 0.0845915222472885 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14573645 | prizepicks | Bijan Robinson | Rush Yards | over | 0.0845789333066284 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311862 | prizepicks | Bijan Robinson | Rush Yards | over | 0.0845789333066284 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472588 | prizepicks | Breece Hall | Rush Yards | under | 0.0845770671521182 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14462544 | prizepicks | Rashid Shaheed | Rec Yards | under | 0.0845378604573892 | 2026-09-03T16:21:45Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14500058 | prizepicks | Dak Prescott | Pass Attempts | over | 0.0844971576798676 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|12379215 | prizepicks | Joe Burrow | Rush Yards | over | 0.0844701849842735 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14559844 | prizepicks | George Kittle | Fantasy Score | over | 0.0843590416317161 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14093864 | prizepicks | Malik Nabers | Recs | over | 0.0843460031167927 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14136824 | prizepicks | Jordan Love | Pass+Rush Yds | over | 0.0842414151285664 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14598818 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.0842283246606446 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14473655 | prizepicks | Chris Godwin Jr. | Rec Yards | under | 0.0842052550592977 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357839 | prizepicks | Jonathan Taylor | Fantasy Score | under | 0.0841881890963233 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475376 | prizepicks | Jordan Mason | Rush Yards | over | 0.0841719145856152 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14603959 | prizepicks | Dallas Turner | Sacks | over | 0.0841643754065828 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357860 | prizepicks | Derrick Henry | Fantasy Score | over | 0.0840232026857122 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14616709 | prizepicks | Pat Bryant | Rec Yards | over | 0.0838971563752783 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
@@ -3902,64 +3840,57 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14336367 | prizepicks | T.J. Hockenson | Rec Yards | over | 0.0837398467015736 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14337065 | prizepicks | Colston Loveland | Recs | under | 0.0837219021272692 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560392 | prizepicks | Malik Willis | Fantasy Score | over | 0.0835761643062734 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14387852 | prizepicks | Andrei Iosivas | Rec Yards | under | 0.0835186739693893 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311177 | prizepicks | Bo Nix | Pass Yards | under | 0.083479501964793 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13976218 | prizepicks | George Pickens | Rec Yards | under | 0.0834209398204761 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13998623 | prizepicks | Chris Rodriguez Jr. | Player TDs | over | 0.0834135461852763 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14477948 | prizepicks | Kenneth Walker III | Recs | under | 0.083408348118764 | 2026-09-04T00:57:06Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14586367 | prizepicks | RJ Harvey | Rec Yards | over | 0.0833627300459488 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14390031 | prizepicks | Rashid Shaheed | Rush+Rec Yds | under | 0.0832890362032264 | 2026-09-05T21:10:18Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14164722 | prizepicks | Jaxson Dart | Rush Yards | under | 0.0832887770164582 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559732 | prizepicks | Jalen McMillan | Rec Targets | under | 0.0832421401271025 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352775 | prizepicks | Dalton Schultz | Rec Targets | over | 0.0832335432874167 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995902 | prizepicks | Ja'Marr Chase | Rec Yards | over | 0.0830233236688514 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978317 | prizepicks | RJ Harvey | Player TDs | over | 0.0830178952867176 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14600009 | prizepicks | Kyle Juszczyk | Rec Targets | over | 0.0829568262155012 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14357943 | prizepicks | Darnell Mooney | Fantasy Score | under | 0.0828498521109022 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14246235 | prizepicks | A.J. Brown | Recs | over | 0.0828207677818856 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14252061 | prizepicks | Sam Darnold | Pass Yards | under | 0.0827107202646499 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311687 | prizepicks | Quinshon Judkins | Rush Yards | over | 0.0825960657503468 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14336871 | prizepicks | Luther Burden III | Recs | under | 0.0825527707038284 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402573 | prizepicks | Justin Herbert | Pass Attempts | over | 0.0825079363314552 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14603118 | prizepicks | Justin Herbert | Pass Attempts | over | 0.0825079363314552 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14402573 | prizepicks | Justin Herbert | Pass Attempts | over | 0.0825079363314552 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472570 | prizepicks | Braelon Allen | Rush Yards | under | 0.0824206011663251 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295756 | prizepicks | Stefon Diggs | Recs | under | 0.0823585719459334 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380690 | prizepicks | Christian McCaffrey | Rush+Rec Yds | over | 0.0823021844256779 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14258782 | prizepicks | D'Andre Swift | Rush TDs | over | 0.0823548214442554 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472470 | prizepicks | Brenton Strange | Rec Yards | over | 0.082220196123193 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540139 | prizepicks | Malik Willis | Rush Yards | under | 0.081911050226255 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095782 | prizepicks | Travis Kelce | Recs | over | 0.081889307190307 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14402737 | prizepicks | Jordan Mason | Rec Yards | over | 0.0818431450186709 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977007 | prizepicks | Wil Lutz | Kicking Points | under | 0.0816326541946899 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14352339 | prizepicks | AJ Barner | Rec Targets | over | 0.0815852849915711 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13685194 | prizepicks | George Pickens | Recs | under | 0.0814895112767674 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13969700 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.0813826441069933 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14350976 | prizepicks | Parker Washington | Recs | over | 0.0812923021198769 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380084 | prizepicks | Chase Brown | Rush+Rec Yds | over | 0.0812454170668939 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14305991 | prizepicks | Jayden Reed | Rec Yards | over | 0.0812175597887862 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14381580 | prizepicks | Blake Corum | Rush+Rec Yds | under | 0.0811095594809847 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|12528938 | prizepicks | Joe Burrow | INT | over | 0.0810835774955258 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14283636 | prizepicks | Tre Tucker | Recs | under | 0.0810791510323083 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14734110 | prizepicks | Tre Tucker | Recs | under | 0.0810791510323083 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12528929 | prizepicks | Bryce Young | INT | over | 0.0808801339502349 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475902 | prizepicks | Tyler Higbee | Recs | over | 0.0808115408529919 | 2026-09-04T00:57:06Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|13979445 | prizepicks | James Cook III | Rush TDs | over | 0.0807177220946001 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976991 | prizepicks | Rashee Rice | Rec Yards | over | 0.0806785530659057 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14390055 | prizepicks | Tyler Shough | Fantasy Score | under | 0.0806657234407191 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12528924 | prizepicks | Drake Maye | INT | under | 0.0806324312931823 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14350972 | prizepicks | Harold Fannin Jr. | Recs | over | 0.0805962447619306 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294895 | prizepicks | Jordan Love | Rush Yards | under | 0.080567244640497 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472849 | prizepicks | Cam Skattebo | Rec Yards | under | 0.0805465212051792 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|12379216 | prizepicks | Chase Brown | Rush Yards | over | 0.0804986617181648 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14393675 | prizepicks | Jonathan Taylor | Rush+Rec Yds | over | 0.0802840006846583 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13986138 | prizepicks | Jacory Croskey-Merritt | Player TDs | over | 0.0802449874574992 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13961522 | prizepicks | TreVeyon Henderson | Rush Yards | over | 0.0800349813265979 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14068375 | prizepicks | Matthew Stafford | Pass Yards | over | 0.0799837371635475 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14485426 | prizepicks | Rico Dowdle | Rush Yards | under | 0.0800271089876637 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14583322 | prizepicks | Tyler Shough | Pass Attempts | under | 0.0798299978068474 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374564 | prizepicks | Calvin Ridley | Recs | under | 0.0797537454078146 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14591487 | prizepicks | Trevor Lawrence | Pass Attempts | under | 0.0794539752665228 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379232 | prizepicks | Trevor Lawrence | Rush Yards | over | 0.079386807804491 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475291 | prizepicks | Jake Ferguson | Rec Yards | over | 0.0793540597695883 | 2026-09-07T04:28:26Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14720967 | prizepicks | Kyle Monangai | Rec Yards | over | 0.0793566194255758 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13976409 | prizepicks | Jake Ferguson | Rec Yards | over | 0.0793540597695883 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14164729 | prizepicks | CeeDee Lamb | Recs | over | 0.0793223504468499 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13994996 | prizepicks | Chris Boswell | Kicking Points | under | 0.0792852239891275 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14431784 | prizepicks | Daniel Jones | Pass+Rush Yds | over | 0.0791786482885105 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352415 | prizepicks | Colston Loveland | Rec Targets | over | 0.0791642898670669 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14694071 | prizepicks | Ashton Jeanty | Rec Targets | under | 0.0791358251403826 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14721755 | prizepicks | D'Andre Swift | Rush Yards | under | 0.0790472139322764 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14503119 | prizepicks | Bo Nix | Pass Attempts | over | 0.0790320817298494 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14381666 | prizepicks | Bo Nix | Pass Attempts | over | 0.0790320817298494 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14306990 | prizepicks | Khalil Shakir | Recs | over | 0.0789413133552658 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357864 | prizepicks | Tony Pollard | Fantasy Score | under | 0.0789159829459716 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -3967,38 +3898,30 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14487261 | prizepicks | Xavier Legette | Recs | under | 0.078882470641855 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498196 | prizepicks | Tyler Shough | Pass Attempts | over | 0.078805447328426 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357822 | prizepicks | Bijan Robinson | Fantasy Score | under | 0.0787621801313817 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13996234 | prizepicks | Nick Folk | Kicking Points | over | 0.0787115829206355 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978379 | prizepicks | Nick Folk | Kicking Points | over | 0.0787115829206355 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996234 | prizepicks | Nick Folk | Kicking Points | over | 0.0787115829206355 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472438 | prizepicks | Quentin Johnston | Rec Yards | over | 0.0787030864181944 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14532831 | prizepicks | Nick Bosa | Sacks | over | 0.07865903647284 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|13989735 | prizepicks | Brock Purdy | Pass TDs | under | 0.0786302251313741 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14352338 | prizepicks | Cooper Kupp | Rec Targets | under | 0.0783287151413104 | 2026-09-07T20:32:16Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14274015 | prizepicks | Josh Allen | Rush Yards | under | 0.0782103097662033 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14524229 | prizepicks | Isaiah Williams | Recs | under | 0.0782069939829952 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14135837 | prizepicks | Michael Wilson | Recs | under | 0.0780405601635773 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13996187 | prizepicks | DK Metcalf | Player TDs | under | 0.0780379680166537 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14295155 | prizepicks | Jayden Daniels | Pass Yards | over | 0.0779802598273151 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134607 | prizepicks | Tre Tucker | Rec Yards | under | 0.077900305484429 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14532811 | prizepicks | Myles Garrett | Sacks | over | 0.0778284646276687 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14465180 | prizepicks | Josh Allen | Pass Yards | under | 0.0777759639897539 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14373288 | prizepicks | Terrance Ferguson | Rec Yards | over | 0.0777400487341768 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14381218 | prizepicks | Kenneth Walker III | Rush+Rec Yds | over | 0.0777387441443208 | 2026-09-02T04:23:27Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14470813 | prizepicks | Rhamondre Stevenson | Rush Yards | over | 0.0777003456054182 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14402993 | prizepicks | David Njoku | Rec Yards | over | 0.0776226495043823 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534349 | prizepicks | Adonai Mitchell | Fantasy Score | over | 0.0775240060645202 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14324125 | prizepicks | Jared Goff | Pass Yards | over | 0.0774150941770331 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697098 | prizepicks | Treylon Burks | Fantasy Score | over | 0.0774346843473365 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14380304 | prizepicks | Jared Goff | Pass Yards | over | 0.0774150941770331 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14460637 | prizepicks | Kayshon Boutte | Rec Yards | over | 0.0773486811991407 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311975 | prizepicks | Caleb Williams | Rush Yards | over | 0.0772397177052092 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14524528 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.0772375478786486 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387568 | prizepicks | Samaje Perine | Rush+Rec Yds | over | 0.0772127821867844 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14182141 | prizepicks | Matthew Stafford | INT | over | 0.0772012720898842 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|13978035 | prizepicks | Jake Ferguson | Player TDs | under | 0.0771982347527165 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472217 | prizepicks | Rashid Shaheed | Rush Yards | under | 0.0771930115422575 | 2026-09-03T22:31:12Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14357911 | prizepicks | Parker Washington | Fantasy Score | under | 0.0771769711850376 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14021279 | prizepicks | A.J. Brown | Rec Targets | over | 0.0771129838198545 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14534436 | prizepicks | Andrei Iosivas | Fantasy Score | under | 0.0771063252566771 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598322 | prizepicks | Kyle Juszczyk | Rec Yards | over | 0.0769181285208793 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14475723 | prizepicks | Justin Jefferson | Rec Yards | under | 0.0768983616376762 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14743884 | prizepicks | Darren Waller | Rec Yards | over | 0.0768900207222851 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14504191 | prizepicks | Jacoby Brissett | Pass Attempts | over | 0.0767094924561494 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697095 | prizepicks | Treylon Burks | Recs | under | 0.0766060184427682 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311060 | prizepicks | Baker Mayfield | Pass Yards | under | 0.0765769247335561 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499953 | prizepicks | Jaxson Dart | Pass Attempts | over | 0.0764399756307402 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14475339 | prizepicks | Baker Mayfield | Pass Attempts | over | 0.0763787245410396 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472527 | prizepicks | Jaylen Warren | Rec Yards | over | 0.0762774160616664 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4006,54 +3929,51 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14311326 | prizepicks | Emeka Egbuka | Recs | over | 0.0759103710632211 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472534 | prizepicks | DK Metcalf | Rec Yards | over | 0.0758576613329641 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136111 | prizepicks | Tony Pollard | Recs | over | 0.0757515205130059 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974064 | prizepicks | AJ Barner | Recs | over | 0.0755816014411039 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12379473 | prizepicks | Bijan Robinson | Rec Yards | over | 0.075489324192688 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14522329 | prizepicks | Bo Nix | Pass Attempts | under | 0.0754723572019252 | 2026-09-05T16:47:46Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|13978584 | prizepicks | Cairo Santos | Kicking Points | over | 0.0754700960899472 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14387731 | prizepicks | Samaje Perine | Rush+Rec Yds | under | 0.0754535686797852 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311268 | prizepicks | Chase Brown | Rec Yards | over | 0.0753931305250957 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14255330 | prizepicks | Tyler Shough | Pass+Rush Yds | over | 0.0753371008610277 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14524521 | prizepicks | Tyler Shough | Pass+Rush Yds | over | 0.0753371008610277 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995881 | prizepicks | Jalen Coker | Player TDs | under | 0.0752510534286726 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14134442 | prizepicks | Ryan Flournoy | Rec Yards | under | 0.0749916560276111 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14357795 | prizepicks | Jalen McMillan | Fantasy Score | over | 0.0749711505961854 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379486 | prizepicks | De'Von Achane | Rec Yards | under | 0.0749620773561133 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14600056 | prizepicks | Sam LaPorta | Rec Yards | over | 0.0749545544224935 | 2026-09-08T09:35:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14484067 | prizepicks | Tyler Shough | Pass Yards | under | 0.0749088713851143 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14615567 | prizepicks | Caleb Williams | Pass+Rush Yds | over | 0.0749064699476542 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14339081 | prizepicks | Caleb Williams | Pass+Rush Yds | over | 0.0749064699476542 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311850 | prizepicks | Tua Tagovailoa | Pass TDs | under | 0.0748451907048278 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14137003 | prizepicks | Jordan Addison | Rec Yards | under | 0.0748271765695001 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14372465 | prizepicks | Jalen McMillan | Recs | under | 0.074816855948775 | 2026-09-01T13:38:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996123 | prizepicks | David Montgomery | Player TDs | under | 0.0747896280011775 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14307036 | prizepicks | Saquon Barkley | Rush+Rec Yds | under | 0.0746506040876797 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14295763 | prizepicks | Stefon Diggs | Recs | over | 0.0746118569301811 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14136694 | prizepicks | Christian Watson | Rec Yards | under | 0.0745394282773477 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341447 | prizepicks | Juwan Johnson | Fantasy Score | over | 0.0744686990442796 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13988410 | prizepicks | Brock Bowers | Player TDs | over | 0.0743177786178105 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472556 | prizepicks | Luther Burden III | Rec Yards | under | 0.0743174758622733 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13972271 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.0743101448747955 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600003 | prizepicks | Aaron Jones Sr. | Rec Targets | over | 0.0742035793691793 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14700444 | prizepicks | Travis Etienne Jr. | Rush Yards | over | 0.0741122399969891 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14542133 | prizepicks | Javonte Williams | Rec Yards | over | 0.0737281573153874 | 2026-09-06T09:21:45Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14738342 | prizepicks | Javonte Williams | Rec Yards | over | 0.0737281573153874 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14346559 | prizepicks | Jayden Daniels | Fantasy Score | over | 0.0736167261223645 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978384 | prizepicks | Devontez Walker | Player TDs | under | 0.0733093654233429 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14099766 | prizepicks | Rashid Shaheed | Fantasy Score | under | 0.0732567849615526 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14472272 | prizepicks | Samaje Perine | Rush Yards | over | 0.0732592835208033 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586371 | prizepicks | RJ Harvey | Recs | over | 0.0730290508971136 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14295772 | prizepicks | Dallas Goedert | Recs | under | 0.0730188491029694 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14380309 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | over | 0.0728820628982469 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14644544 | prizepicks | Brian Robinson Jr. | Rush+Rec Yds | under | 0.0729317259811397 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14265381 | prizepicks | Bo Nix | Rush Yards | under | 0.0728456388526335 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14345817 | prizepicks | De'Von Achane | Rec Yards | over | 0.0726916362633696 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14688568 | prizepicks | Sheldon Rankins | Sacks | under | 0.0726902964427209 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14616644 | prizepicks | Patrick Mahomes | Pass+Rush Yds | over | 0.0726812315764484 | 2026-09-08T04:27:30Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14311059 | prizepicks | Malik Willis | Pass Yards | under | 0.0726516948726407 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472501 | prizepicks | Terry McLaurin | Rec Yards | under | 0.0725824853232004 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12528939 | prizepicks | Josh Allen | INT | under | 0.0725818586470551 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978240 | prizepicks | Romeo Doubs | Player TDs | under | 0.0725818586470551 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14488552 | prizepicks | Jahmyr Gibbs | Rush Yards | over | 0.0725623964916954 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311860 | prizepicks | Tua Tagovailoa | Pass Yards | under | 0.0725590311054438 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14489401 | prizepicks | Kirk Cousins | Pass Yards | under | 0.0725668293251721 | 2026-09-07T10:11:36Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472732 | prizepicks | Jahmyr Gibbs | Rush Yards | over | 0.0725623964916954 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534428 | prizepicks | Samaje Perine | Fantasy Score | over | 0.0724992120928915 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14275688 | prizepicks | Josh Allen | Pass Yards | under | 0.0724718777938876 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14273219 | prizepicks | Nico Collins | Recs | under | 0.0724640147761562 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357811 | prizepicks | Colston Loveland | Fantasy Score | under | 0.0723985780622279 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095169 | prizepicks | Patrick Mahomes | Pass TDs | under | 0.0723269445733177 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341619 | prizepicks | Garrett Wilson | Fantasy Score | under | 0.072194550698279 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311179 | prizepicks | Cam Ward | Pass Yards | over | 0.0721704574229867 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473600 | prizepicks | Bryce Young | Rush Yards | under | 0.072065479468616 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686593 | prizepicks | Kirk Cousins | Pass+Rush Yds | under | 0.0720368926395179 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14390044 | prizepicks | Caleb Williams | Fantasy Score | over | 0.0719145916606013 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14274008 | prizepicks | James Cook III | Rush Yards | under | 0.0718642862129868 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13993312 | prizepicks | Quinshon Judkins | Player TDs | under | 0.0717170118623445 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4063,28 +3983,32 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14472804 | prizepicks | Jalen McMillan | Recs | over | 0.0716683998076272 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14350977 | prizepicks | Jahmyr Gibbs | Recs | over | 0.0715304333963328 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14535108 | prizepicks | Rachaad White | Fantasy Score | under | 0.0713143253769519 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14472256 | prizepicks | AJ Barner | Rec Yards | under | 0.0712143154561597 | 2026-09-05T05:39:10Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14324374 | prizepicks | Chris Godwin Jr. | Recs | over | 0.0711697581674285 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311621 | prizepicks | Marvin Harrison Jr. | Recs | over | 0.0711619857498637 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134775 | prizepicks | Jacoby Brissett | Pass+Rush Yds | over | 0.0711064319850469 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|12379465 | prizepicks | Breece Hall | Rec Yards | under | 0.070927720640777 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136858 | prizepicks | DeVonta Smith | Recs | over | 0.0709229503653223 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14719251 | prizepicks | Jake Elliott | Kicking Points | over | 0.0708772079361069 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14476860 | prizepicks | Aaron Rodgers | Pass+Rush Yds | over | 0.0707621651275955 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402570 | prizepicks | Aaron Rodgers | Pass+Rush Yds | over | 0.0707621651275955 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14602968 | prizepicks | Demarcus Robinson | Rec Yards | over | 0.0707595811278973 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14293224 | prizepicks | Jordan Mason | Rush Yards | over | 0.0706709243083711 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14569465 | prizepicks | Ashton Jeanty | Rush+Rec Yds | over | 0.0706497892981361 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14380193 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.0706484440336184 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14503521 | prizepicks | C.J. Stroud | Pass Attempts | over | 0.0705736770877054 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14387940 | prizepicks | Mike Gesicki | Rec Yards | over | 0.0704804646095831 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14594838 | prizepicks | Justice Hill | Rec Yards | over | 0.070324454371706 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346391 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.0702749376487159 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14493646 | prizepicks | Bhayshul Tuten | Rush Yards | under | 0.0702720588914728 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472482 | prizepicks | Saquon Barkley | Rec Yards | over | 0.0701601373239902 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14686412 | prizepicks | Kyle Monangai | Rush Yards | over | 0.070065211614154 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996230 | prizepicks | Bijan Robinson | Rush TDs | under | 0.0700363478664353 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14350975 | prizepicks | Brian Thomas Jr. | Recs | over | 0.0700033607131793 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380884 | prizepicks | Luther Burden III | Rush+Rec Yds | under | 0.0699337239471102 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342862 | prizepicks | Tee Higgins | Fantasy Score | over | 0.0699284799037376 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374863 | prizepicks | Adonai Mitchell | Recs | under | 0.0699173585556209 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352249 | prizepicks | Zay Flowers | Rec Targets | under | 0.0697620253443935 | 2026-09-06T21:18:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534209 | prizepicks | Bhayshul Tuten | Fantasy Score | under | 0.0697446499252407 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14381652 | prizepicks | Tyler Allgeier | Rush+Rec Yds | under | 0.0696569628474299 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379502 | prizepicks | Travis Kelce | Rec Yards | under | 0.0694827425648079 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14384053 | prizepicks | Terrance Ferguson | Recs | under | 0.0694601832076736 | 2026-09-02T00:04:19Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14354648 | prizepicks | Jahmyr Gibbs | Fantasy Score | under | 0.0694186177214559 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14514494 | prizepicks | Courtland Sutton | Rec Yards | over | 0.0690375212631745 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472731 | prizepicks | Bijan Robinson | Rush Yards | over | 0.0690056699614831 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4098,42 +4022,37 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14472572 | prizepicks | Tyjae Spears | Rush Yards | under | 0.0681311767277147 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487647 | prizepicks | Darnell Washington | Rec Yards | over | 0.0681009140391053 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996247 | prizepicks | Ryan Fitzgerald | Kicking Points | under | 0.0680434980044845 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14324343 | prizepicks | Chris Godwin Jr. | Rec Yards | over | 0.0680108601382396 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13995858 | prizepicks | Ryan Fitzgerald | Kicking Points | under | 0.0680434980044845 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499370 | prizepicks | Caleb Williams | Pass Attempts | over | 0.0679368240777036 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14389719 | prizepicks | Quinshon Judkins | Rush+Rec Yds | under | 0.0679336147282645 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339091 | prizepicks | Michael Pittman Jr. | Rec Yards | over | 0.0679144656345439 | 2026-09-01T05:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14489112 | prizepicks | Harrison Mevis | Kicking Points | over | 0.067877829239747 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|12528879 | prizepicks | Danielle Hunter | Sacks | over | 0.0677918497854441 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311343 | prizepicks | Zay Flowers | Rec Yards | over | 0.0677279315429303 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14381683 | prizepicks | Omarion Hampton | Rush+Rec Yds | over | 0.0675208025148912 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381595 | prizepicks | Geno Smith | Pass Attempts | under | 0.0674551834504283 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341710 | prizepicks | Breece Hall | Fantasy Score | under | 0.0672955118072613 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14633970 | prizepicks | Daniel Jones | INT | over | 0.0672336318069257 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343304 | prizepicks | Tetairoa McMillan | Fantasy Score | under | 0.067225193010224 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14488576 | prizepicks | James Cook III | Rec Yards | under | 0.0672139542010353 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402622 | prizepicks | D'Andre Swift | Rush Yards | under | 0.0671606017509021 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12323873 | prizepicks | Mike Evans | Player TDs | under | 0.0671276604086712 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14599850 | prizepicks | Tua Tagovailoa | Rush Yards | over | 0.0669510536249498 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14599994 | prizepicks | Jonathan Taylor | Rec Targets | under | 0.0669454313974582 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357942 | prizepicks | Javonte Williams | Fantasy Score | under | 0.0669334678983244 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14294917 | prizepicks | Matthew Golden | Rec Yards | over | 0.0668096376658731 | 2026-08-31T18:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14359323 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0668081865371112 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14616970 | prizepicks | Josh Allen | Pass Attempts | under | 0.0667301650917886 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14687046 | prizepicks | Josh Sweat | Sacks | over | 0.0666412057991312 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14350978 | prizepicks | Jameson Williams | Recs | over | 0.0665870989399251 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14456972 | prizepicks | Bo Nix | Pass Yards | under | 0.0665733609380931 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341475 | prizepicks | Jameson Williams | Fantasy Score | over | 0.0665029851544929 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976222 | prizepicks | George Pickens | Rec Yards | under | 0.0663758344881488 | 2026-09-02T21:15:45Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14496684 | prizepicks | Sam Darnold | Pass Attempts | over | 0.0663598073533786 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14472560 | prizepicks | Jordan Mason | Rush Yards | under | 0.0662644348338084 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14422946 | prizepicks | Jordan Mason | Rush Yards | under | 0.0662644348338084 | 2026-09-03T05:43:24Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14472560 | prizepicks | Jordan Mason | Rush Yards | under | 0.0662644348338084 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352445 | prizepicks | Chase Brown | Rec Targets | over | 0.0661042615738015 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14215639 | prizepicks | Dak Prescott | Fantasy Score | under | 0.0659714033277263 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|13971145 | prizepicks | Jahmyr Gibbs | Rec TDs | under | 0.0659016291860716 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14719093 | prizepicks | Jalen Carter | Sacks | under | 0.0658551195447328 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14484821 | prizepicks | Joey Slye | Kicking Points | over | 0.0658054731978978 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352835 | prizepicks | Parker Washington | Rec Targets | over | 0.0657462124225238 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14494764 | prizepicks | Daniel Jones | Rush Yards | over | 0.0657099082817974 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978119 | prizepicks | Davante Adams | Rec Yards | over | 0.0656352406258182 | 2026-09-01T19:49:22Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14384915 | prizepicks | Rome Odunze | Recs | under | 0.0656328930610365 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14502834 | prizepicks | Cam Ward | Pass Attempts | over | 0.065588142262587 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996136 | prizepicks | Ty Johnson | Player TDs | over | 0.0655686314000794 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13974055 | prizepicks | Jaxon Smith-Njigba | Recs | under | 0.0655674284684207 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14472548 | prizepicks | DJ Moore | Rec Yards | under | 0.0655489729665803 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379475 | prizepicks | Colston Loveland | Rec Yards | over | 0.065547995811494 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357881 | prizepicks | Wan'Dale Robinson | Fantasy Score | over | 0.0654570380758354 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4142,36 +4061,27 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14594739 | prizepicks | Joe Burrow | Pass+Rush Yds | under | 0.0653649376283637 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346528 | prizepicks | DeVonta Smith | Fantasy Score | over | 0.0652256530553445 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14580965 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | under | 0.0652084060134554 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14598439 | prizepicks | Rhamondre Stevenson | Rush Yards | under | 0.065087371120848 | 2026-09-07T20:32:16Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14274019 | prizepicks | Nico Collins | Rec Yards | under | 0.064740993597368 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472455 | prizepicks | Luther Burden III | Rec Yards | under | 0.0646969331352871 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374579 | prizepicks | Gunnar Helm | Fantasy Score | under | 0.0646650406319802 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498403 | prizepicks | Xavier Legette | Rec Yards | under | 0.0646120017043365 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559961 | prizepicks | Josh Downs | Fantasy Score | under | 0.0645719986238474 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352768 | prizepicks | Jayden Reed | Rec Targets | under | 0.0644477639128187 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14594842 | prizepicks | Calvin Ridley | Rec Yards | over | 0.064216059906986 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379065 | prizepicks | Brock Purdy | Pass Yards | under | 0.0640033555798877 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14351887 | prizepicks | Jared Goff | Pass TDs | under | 0.0639520766701119 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420560 | prizepicks | Pat Freiermuth | Fantasy Score | over | 0.0636156422696883 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979242 | prizepicks | Christian Watson | Player TDs | over | 0.0635950315257389 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14392721 | prizepicks | Michael Mayer | Rec Yards | over | 0.0635229328092015 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472254 | prizepicks | Jake Ferguson | Rec Yards | over | 0.0634827826866478 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14352343 | prizepicks | TreVeyon Henderson | Rec Targets | under | 0.0633979337031843 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14354649 | prizepicks | Jahmyr Gibbs | Fantasy Score | over | 0.0633440244120463 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379222 | prizepicks | Breece Hall | Rush Yards | over | 0.0633429650801076 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498422 | prizepicks | Daniel Jones | Pass Attempts | under | 0.0633354056356456 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342888 | prizepicks | Dak Prescott | Pass Yards | under | 0.0633000919909499 | 2026-08-31T20:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14311470 | prizepicks | Bryce Young | Pass Yards | under | 0.0630237123564929 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14267349 | prizepicks | Bijan Robinson | Rec Yards | over | 0.063142446489232 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528947 | prizepicks | Dak Prescott | INT | under | 0.062890394136824 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13990642 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.062824392612323 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
-| prizepicks|14540381 | prizepicks | George Holani | Rec Yards | under | 0.0628164694185541 | 2026-09-06T09:21:45Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14535061 | prizepicks | Jack Bech | Fantasy Score | under | 0.0627741117997755 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14601087 | prizepicks | Kirk Cousins | Rush Yards | under | 0.0627551247377815 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14475628 | prizepicks | Darnell Washington | Rec Yards | under | 0.0627295533622953 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346850 | prizepicks | Patrick Mahomes | Fantasy Score | under | 0.0626005641924961 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13980677 | prizepicks | Hunter Henry | Recs | over | 0.0625843216474697 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14475552 | prizepicks | Joe Burrow | Pass Attempts | under | 0.0625815739680262 | 2026-09-05T16:47:46Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14352342 | prizepicks | Hunter Henry | Rec Targets | over | 0.0622743129347855 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14475873 | prizepicks | Rashod Bateman | Rec Yards | over | 0.0622266757388653 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14574213 | prizepicks | Jacory Croskey-Merritt | Rush Yards | over | 0.062174099878868 | 2026-09-06T23:49:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311311 | prizepicks | Geno Smith | Pass TDs | under | 0.0620686473082687 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14582086 | prizepicks | Daniel Jones | Rush Yards | under | 0.0620275657421157 | 2026-09-07T10:11:36Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4191,7 +4101,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14311471 | prizepicks | Michael Pittman Jr. | Recs | over | 0.0613820323349915 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342885 | prizepicks | Chris Godwin Jr. | Fantasy Score | under | 0.0613471153114983 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586401 | prizepicks | Evan Engram | Rec Yards | under | 0.0612930705277967 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13980685 | prizepicks | DeMario Douglas | Recs | over | 0.061234506251554 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14719809 | prizepicks | Kenny Gainwell | Rush Yards | over | 0.0612516126545679 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14600013 | prizepicks | Rachaad White | Rec Targets | under | 0.0610691535563323 | 2026-09-07T20:32:16Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324370 | prizepicks | Chris Godwin Jr. | Rec Yards | under | 0.0610335905223028 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420444 | prizepicks | Justice Hill | Rush Yards | under | 0.0609108228438567 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4199,102 +4109,99 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14604141 | prizepicks | Tua Tagovailoa | Pass+Rush Yds | under | 0.0608905948484778 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420607 | prizepicks | Patrick Mahomes | Pass Yards | under | 0.060882569219159 | 2026-09-02T21:15:45Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14341314 | prizepicks | Kenneth Walker III | Fantasy Score | under | 0.0608521027754298 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|13974909 | prizepicks | Drake London | Rec Yards | over | 0.0608198661813939 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14339086 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.0607268805224809 | 2026-09-01T01:38:22Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379250 | prizepicks | Kenneth Walker III | Rush Yards | over | 0.0605799167442593 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311536 | prizepicks | Ladd McConkey | Recs | under | 0.0605684118402879 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14402481 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.0604229264840365 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14594040 | prizepicks | Aaron Rodgers | Pass Attempts | over | 0.0604229264840365 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341335 | prizepicks | Quinshon Judkins | Fantasy Score | under | 0.0601607303944634 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697123 | prizepicks | Elijah Higgins | Rec Yards | over | 0.0599956778380614 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14534952 | prizepicks | Jordan Mason | Fantasy Score | under | 0.0599799757108006 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472454 | prizepicks | Jameson Williams | Rec Yards | over | 0.0599426774592053 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14402586 | prizepicks | Justin Herbert | Pass+Rush Yds | under | 0.0598058527488102 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14392726 | prizepicks | Michael Mayer | Recs | under | 0.0595489144666986 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14493639 | prizepicks | Cade Otton | Recs | under | 0.0598402217248856 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14695292 | prizepicks | Michael Mayer | Recs | under | 0.0595489144666986 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379078 | prizepicks | C.J. Stroud | Pass Yards | under | 0.0594764967189129 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534179 | prizepicks | Jalen Coker | Fantasy Score | over | 0.0594472138469686 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14644376 | prizepicks | Brian Robinson Jr. | Rush Yards | under | 0.0594001363896004 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136831 | prizepicks | Jalen Hurts | Pass+Rush Yds | over | 0.0593873010393637 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14387565 | prizepicks | Samaje Perine | Rec Yards | under | 0.0592120251316382 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14315784 | prizepicks | Spencer Shrader | FG Made | under | 0.0591311996744516 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711323 | prizepicks | Tommy Tremble | Rec Yards | over | 0.0590937616546133 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472497 | prizepicks | Tucker Kraft | Rec Yards | over | 0.0590809663530607 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14540356 | prizepicks | Tyjae Spears | Rush Yards | over | 0.0590757581864824 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353254 | prizepicks | Justin Jefferson | Rec Targets | under | 0.0590395659375967 | 2026-09-01T02:38:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14633938 | prizepicks | Kirk Cousins | INT | over | 0.0590229177956008 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306096 | prizepicks | Justin Jefferson | Recs | under | 0.0589478207915321 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14346593 | prizepicks | Jake Bates | Kicking Points | over | 0.0588663806920294 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13995007 | prizepicks | Chris Boswell | FG Made | over | 0.0588651500967045 | 2026-08-31T19:38:24Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697259 | prizepicks | Ian Thomas | Recs | over | 0.0587957326008687 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14599003 | prizepicks | Jerry Jeudy | Rec Yards | over | 0.0587482807986459 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381679 | prizepicks | Kirk Cousins | Pass Attempts | under | 0.0586146244325879 | 2026-09-01T21:48:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14635354 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.0585619281837611 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14359057 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.0585619281837611 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420450 | prizepicks | Justice Hill | Rush+Rec Yds | under | 0.0585512547682817 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136679 | prizepicks | Christian Watson | Rec Yards | over | 0.0584621880575977 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14524269 | prizepicks | Isaiah Williams | Rec Yards | under | 0.0583631147406692 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294827 | prizepicks | Jordan Addison | Recs | under | 0.0582748645353993 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12528878 | prizepicks | Brian Burns | Sacks | over | 0.0582509966353964 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14100087 | prizepicks | De'Von Achane | Player TDs | over | 0.0581912703093158 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14569458 | prizepicks | Ashton Jeanty | Recs | over | 0.0581621947426118 | 2026-09-06T21:18:23Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14685708 | prizepicks | Ashton Jeanty | Recs | over | 0.0581621947426118 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14343240 | prizepicks | Justin Jefferson | Fantasy Score | over | 0.058162117506747 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14294853 | prizepicks | Tucker Kraft | Rec Yards | under | 0.0581251563964049 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379478 | prizepicks | Tetairoa McMillan | Rec Yards | under | 0.058094941540412 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390054 | prizepicks | Lamar Jackson | Fantasy Score | over | 0.0580792850276932 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346533 | prizepicks | Dallas Goedert | Fantasy Score | over | 0.0579609330554667 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311496 | prizepicks | Michael Pittman Jr. | Rec Yards | under | 0.0578417875018351 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14276127 | prizepicks | Dontayvion Wicks | Rec Yards | over | 0.0577480462803378 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352553 | prizepicks | De'Von Achane | Fantasy Score | over | 0.0577161531084507 | 2026-09-01T12:38:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14173549 | prizepicks | Geno Smith | Pass+Rush Yds | under | 0.0576873589281843 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976398 | prizepicks | CeeDee Lamb | Rec Yards | under | 0.0576110811239614 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14514473 | prizepicks | Kenneth Walker III | Rec Yards | under | 0.0575654014673507 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311110 | prizepicks | Kenneth Walker III | Rec Yards | under | 0.0575654014673507 | 2026-09-03T19:46:31Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14472604 | prizepicks | Andrei Iosivas | Rec Yards | over | 0.0573363319937063 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499028 | prizepicks | Zay Flowers | Rec Yards | over | 0.0573190302109654 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14473624 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.0572835892317439 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14599993 | prizepicks | Woody Marks | Rec Targets | over | 0.0572591650413563 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990649 | prizepicks | Christian McCaffrey | Rec Yards | over | 0.0571501965326116 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14728044 | prizepicks | Cameron Dicker | Kicking Points | over | 0.0571663499703817 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13995751 | prizepicks | Parker Washington | Player TDs | under | 0.0570973836922238 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13989833 | prizepicks | Brock Purdy | Pass+Rush Yds | under | 0.0570703869709219 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14134453 | prizepicks | CeeDee Lamb | Rec Yards | over | 0.0569982160125948 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14390283 | prizepicks | Uchenna Nwosu | Sacks | under | 0.0569506630599347 | 2026-09-02T04:23:27Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14694814 | prizepicks | Geno Smith | Rush Yards | under | 0.0569282101084901 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346370 | prizepicks | Kendrick Bourne | Recs | over | 0.0569028772957164 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13969697 | prizepicks | Cooper Kupp | Rec Yards | under | 0.0568168891190702 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13957664 | prizepicks | Jason Myers | FG Made | under | 0.0566623669126233 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14593456 | prizepicks | Jacoby Brissett | Rush Yards | over | 0.0566572172937618 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14393585 | prizepicks | James Cook III | Rush+Rec Yds | under | 0.056497276168054 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686648 | prizepicks | Tyler Allgeier | Rush Yards | under | 0.0566052071233905 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14346243 | prizepicks | Tyquan Thornton | Fantasy Score | over | 0.0564915285049537 | 2026-08-31T22:38:19Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14494756 | prizepicks | Chris Godwin Jr. | Rec Yards | over | 0.0563713800427438 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474942 | prizepicks | Daniel Carlson | Kicking Points | under | 0.0563712882556455 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374553 | prizepicks | Tyjae Spears | Recs | over | 0.0562716814084026 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13979211 | prizepicks | Will Reichard | FG Made | under | 0.0562547060037796 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14474027 | prizepicks | A.J. Brown | Rec Yards | over | 0.0562075013122338 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14599931 | prizepicks | Jared Goff | Rush Yards | over | 0.0560935072126875 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255882 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.0559952570710886 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473249 | prizepicks | Colston Loveland | Rec Yards | under | 0.0559904613334102 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379242 | prizepicks | Jalen Hurts | Rush Yards | under | 0.0559540539973508 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14473116 | prizepicks | Saquon Barkley | Rush Yards | under | 0.055827949108947 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472223 | prizepicks | Saquon Barkley | Rush Yards | under | 0.055827949108947 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14353312 | prizepicks | Breece Hall | Rec Targets | over | 0.0557212859861439 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14294883 | prizepicks | Kyler Murray | Pass Yards | under | 0.0557056815458759 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265385 | prizepicks | Jaylen Waddle | Recs | under | 0.0555393392746369 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14535063 | prizepicks | Michael Mayer | Fantasy Score | under | 0.0554021769867011 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12528944 | prizepicks | Jayden Daniels | INT | over | 0.0552653819678172 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957550 | prizepicks | Jason Myers | Kicking Points | over | 0.0551632966679667 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311341 | prizepicks | Lamar Jackson | Rush Yards | over | 0.0551500687686952 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343311 | prizepicks | Luther Burden III | Fantasy Score | under | 0.0551161879566739 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996126 | prizepicks | Dawson Knox | Player TDs | under | 0.0551026792004463 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14488887 | prizepicks | Luther Burden III | Rec Yards | under | 0.0550379405024278 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14738453 | prizepicks | KaVontae Turpin | Rec Yards | over | 0.0549728263273348 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14466404 | prizepicks | Baker Mayfield | Pass+Rush Yds | under | 0.0549630174477335 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473611 | prizepicks | Rachaad White | Rush Yards | under | 0.0549526613267928 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13974039 | prizepicks | Romeo Doubs | Recs | under | 0.0548868753459969 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14275113 | prizepicks | Bo Nix | Pass+Rush Yds | over | 0.0547904813418997 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14273986 | prizepicks | Dalton Kincaid | Recs | over | 0.0547879112444128 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978304 | prizepicks | Blake Corum | Player TDs | under | 0.0547850437515156 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14315961 | prizepicks | George Pickens | Rec Yards | over | 0.0546161386171811 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14499779 | prizepicks | Jayden Daniels | Pass Attempts | under | 0.0543766515461616 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13957685 | prizepicks | Sam Darnold | Pass+Rush Yds | under | 0.0543690821664283 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13957588 | prizepicks | DeMario Douglas | Rec Yards | over | 0.0543657342090917 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14488581 | prizepicks | Jalen Coker | Rec Yards | under | 0.0542545525265383 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14580944 | prizepicks | Trevor Lawrence | Pass Yards | under | 0.0542490348730648 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311654 | prizepicks | Trevor Lawrence | Pass Yards | under | 0.0542490348730648 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978312 | prizepicks | Terrance Ferguson | Player TDs | under | 0.0541831615623763 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14688706 | prizepicks | Ashton Jeanty | Rec Yards | under | 0.0541557803716439 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14473086 | prizepicks | Bhayshul Tuten | Rec Yards | over | 0.054136234566494 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311869 | prizepicks | Tua Tagovailoa | Pass Yards | over | 0.0540947940223719 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14337054 | prizepicks | Rome Odunze | Rec Yards | over | 0.054082016173985 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379245 | prizepicks | Omarion Hampton | Rush Yards | under | 0.0540405779460186 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14265088 | prizepicks | Kenneth Walker III | Rush Yards | under | 0.0538766756428932 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14559737 | prizepicks | Gunnar Helm | Rec Targets | under | 0.0537469698725122 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343221 | prizepicks | Brock Purdy | Fantasy Score | over | 0.053663997099048 | 2026-08-31T20:38:20Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|12379082 | prizepicks | Justin Herbert | Pass Yards | under | 0.0535881869964177 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14343154 | prizepicks | Hunter Henry | Fantasy Score | under | 0.0535030620495524 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14311812 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.0532253819850196 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14580962 | prizepicks | Rachaad White | Rush+Rec Yds | over | 0.0533759937885166 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379235 | prizepicks | C.J. Stroud | Rush Yards | over | 0.0531444972016785 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472408 | prizepicks | Drake London | Rec Yards | under | 0.0531297539284518 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14475278 | prizepicks | Blake Corum | Rush Yards | over | 0.0531274163262462 | 2026-09-05T10:30:11Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14560394 | prizepicks | Jacoby Brissett | Fantasy Score | under | 0.0527606804521482 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14539811 | prizepicks | Tyler Warren | Recs | under | 0.0526744960105222 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13978528 | prizepicks | Riley Patterson | FG Made | under | 0.0526633548239234 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
@@ -4302,37 +4209,27 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14472905 | prizepicks | Rico Dowdle | Rush Yards | under | 0.0525582665600302 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14266930 | prizepicks | Khalil Shakir | Rec Yards | over | 0.052540049081257 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14337279 | prizepicks | Trevor Lawrence | Rush Yards | over | 0.0525251840701848 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14435171 | prizepicks | Jaxson Dart | Pass Attempts | under | 0.0523572517058681 | 2026-09-06T04:29:20Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14499096 | prizepicks | Justice Hill | Rec Yards | under | 0.052314455133925 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499089 | prizepicks | Devaughn Vele | Rec Yards | under | 0.0522790538158732 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14497537 | prizepicks | Brock Purdy | Pass Attempts | under | 0.0521310841204898 | 2026-09-04T22:20:14Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14562347 | prizepicks | Drake London | Rec Yards | over | 0.0521125191964634 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14499793 | prizepicks | Jayden Daniels | Pass Attempts | over | 0.0521084184989024 | 2026-09-04T22:20:14Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379476 | prizepicks | Luther Burden III | Rec Yards | over | 0.0521013029259966 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14352340 | prizepicks | Rashid Shaheed | Rec Targets | under | 0.0519225132518582 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14648453 | prizepicks | Tommy Tremble | Rec Yards | under | 0.0520279477041072 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559727 | prizepicks | Jaylen Warren | Rec Targets | under | 0.0517375655214078 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14464215 | prizepicks | De'Von Achane | Rush Yards | over | 0.0517274961537135 | 2026-09-03T16:21:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472583 | prizepicks | De'Von Achane | Rush Yards | over | 0.0517274961537135 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14392674 | prizepicks | Christian McCaffrey | Rush Yards | over | 0.0516313816950775 | 2026-09-04T16:17:23Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14339696 | prizepicks | D'Andre Swift | Rec Yards | over | 0.0516023229382783 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379248 | prizepicks | Javonte Williams | Rush Yards | under | 0.0515798054091263 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14472991 | prizepicks | Devaughn Vele | Rec Yards | over | 0.0515762656975722 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14343147 | prizepicks | AJ Barner | Fantasy Score | under | 0.0514775389362021 | 2026-08-31T20:38:20Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311078 | prizepicks | Joe Burrow | Pass Yards | under | 0.051404276278154 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13971155 | prizepicks | Jake Bates | Kicking Points | under | 0.0513908028061801 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402899 | prizepicks | Chig Okonkwo | Recs | under | 0.0513485511724639 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13978287 | prizepicks | Eddy Pineiro | FG Made | over | 0.0512406674690663 | 2026-08-31T18:38:20Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14516924 | prizepicks | Jameson Williams | Rec Yards | over | 0.0511905229281176 | 2026-09-05T10:30:11Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14346566 | prizepicks | Josh Allen | Fantasy Score | over | 0.0511806464357793 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14378983 | prizepicks | Breece Hall | Rec Yards | under | 0.0511768492901427 | 2026-09-01T19:49:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14598317 | prizepicks | Kyle Juszczyk | Recs | under | 0.0511622092114602 | 2026-09-07T20:32:16Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14307033 | prizepicks | Breece Hall | Rush+Rec Yds | under | 0.0510609924806868 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357963 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.0509391542094418 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14352420 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.0508709304341551 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14523957 | prizepicks | Isaac TeSlaa | Rec Yards | over | 0.0508518895574272 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14533438 | prizepicks | D'Andre Swift | Fantasy Score | under | 0.0508450409372369 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14353159 | prizepicks | Brock Bowers | Recs | under | 0.0508245868783351 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12379208 | prizepicks | Sam Darnold | Rush Yards | over | 0.0507901439439475 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14505899 | prizepicks | Kirk Cousins | Pass Attempts | over | 0.0506517711053062 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14487596 | prizepicks | Isaiah Likely | Rec Yards | under | 0.0506312691956496 | 2026-09-05T00:53:35Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14341302 | prizepicks | Bucky Irving | Fantasy Score | over | 0.0505596022393499 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4340,9 +4237,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|13976413 | prizepicks | Brandon Aubrey | Kicking Points | over | 0.050353766998143 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14352172 | prizepicks | Drake London | Rec Targets | under | 0.050278537354523 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14352592 | prizepicks | Jerry Jeudy | Rec Targets | over | 0.0502193444120651 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14215137 | prizepicks | Drake Maye | Pass Yards | under | 0.0502009308903473 | 2026-09-04T00:57:06Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14596572 | prizepicks | RJ Harvey | Fantasy Score | over | 0.050131289734597 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14095728 | prizepicks | Kenneth Walker III | Rec Yards | over | 0.0500408294391538 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14512470 | prizepicks | Kayshon Boutte | Rec Yards | under | 0.0500839629255213 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472415 | prizepicks | Jalen Nailor | Rec Yards | under | 0.0499524763502235 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339624 | prizepicks | Jayden Daniels | Pass Yards | over | 0.0496008901153615 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978524 | prizepicks | Riley Patterson | Kicking Points | over | 0.0495660885163962 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14390043 | prizepicks | Jared Goff | Fantasy Score | under | 0.0494504219058327 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4350,8 +4247,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14095841 | prizepicks | Tyquan Thornton | Rec Yards | over | 0.0494071866359865 | 2026-09-07T04:28:26Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14311334 | prizepicks | Geno Smith | Pass Yards | under | 0.0492860162578707 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14276159 | prizepicks | Dallas Goedert | Rec Yards | over | 0.0492844227700037 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14380173 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | under | 0.0492049447514277 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472953 | prizepicks | Ryan Flournoy | Rec Yards | over | 0.0491854624891165 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|12379501 | prizepicks | Jake Ferguson | Rec Yards | under | 0.0490440268586112 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14307038 | prizepicks | Kenneth Walker III | Rush+Rec Yds | over | 0.0489929544831547 | 2026-09-01T21:48:22Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14633946 | prizepicks | Kyler Murray | INT | over | 0.0489400126028277 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14173631 | prizepicks | Jaxson Dart | Pass Yards | over | 0.0489331262639283 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14353305 | prizepicks | Juwan Johnson | Rec Targets | under | 0.048882488417999 | 2026-09-01T02:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357773 | prizepicks | Chris Olave | Fantasy Score | under | 0.0488136308003518 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4360,96 +4260,106 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14515839 | prizepicks | Jayden Reed | Fantasy Score | over | 0.0486617004991238 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14307035 | prizepicks | Travis Etienne Jr. | Rush+Rec Yds | over | 0.0486465595703492 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393667 | prizepicks | Jonathan Taylor | Rush+Rec Yds | under | 0.048583725955849 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14390049 | prizepicks | Justin Herbert | Fantasy Score | under | 0.0484380814868429 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13977040 | prizepicks | Andre Szmyt | FG Made | over | 0.0484188057767924 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14498195 | prizepicks | Tyler Shough | Pass Attempts | under | 0.0483125670091614 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380153 | prizepicks | Tyler Shough | Pass Attempts | under | 0.0483125670091614 | 2026-09-01T21:48:22Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957538 | prizepicks | Rashid Shaheed | Rec Yards | under | 0.0482759685363611 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14339356 | prizepicks | Aaron Jones Sr. | Rec Yards | over | 0.0482751691698273 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13983437 | prizepicks | Breece Hall | Player TDs | under | 0.0481282911741388 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306250 | prizepicks | Jordan Love | Fantasy Score | under | 0.0480507221560099 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13978024 | prizepicks | Tyrone Tracy Jr. | Player TDs | under | 0.0480470886064066 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14306264 | prizepicks | Jayden Daniels | Rush Yards | under | 0.0477750597758324 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14095823 | prizepicks | Xavier Worthy | Recs | under | 0.0476468957273399 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14393608 | prizepicks | James Cook III | Rush+Rec Yds | over | 0.0476164494618622 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472980 | prizepicks | Darnell Washington | Recs | under | 0.0476060111491283 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472418 | prizepicks | Marvin Harrison Jr. | Rec Yards | under | 0.0475956622835879 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14341722 | prizepicks | Dontayvion Wicks | Fantasy Score | under | 0.0475761843684966 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14476703 | prizepicks | Gunnar Helm | Rec Yards | under | 0.0475639478913926 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475848 | prizepicks | Gunnar Helm | Rec Yards | under | 0.0475639478913926 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14474519 | prizepicks | Rome Odunze | Rec Yards | under | 0.0474822870007776 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379482 | prizepicks | James Cook III | Rec Yards | under | 0.0474781391132778 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13957580 | prizepicks | Hunter Henry | Rec Yards | under | 0.047437792531339 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14311270 | prizepicks | Sam LaPorta | Recs | over | 0.0474053580656174 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306992 | prizepicks | Terry McLaurin | Recs | under | 0.0471980884368791 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14560374 | prizepicks | Geno Smith | Fantasy Score | under | 0.0471976125304258 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14586368 | prizepicks | Pat Bryant | Recs | under | 0.0471857454875898 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14477595 | prizepicks | Adonai Mitchell | Rec Yards | under | 0.0471330485152232 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14136640 | prizepicks | Brian Thomas Jr. | Recs | under | 0.0470810923808101 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14495506 | prizepicks | Tyjae Spears | Rush Yards | under | 0.0470629011885723 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353199 | prizepicks | Quentin Johnston | Rec Targets | over | 0.0469343738151404 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14256246 | prizepicks | Baker Mayfield | Pass+Rush Yds | over | 0.0467949376764339 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475474 | prizepicks | Baker Mayfield | Pass+Rush Yds | over | 0.0467949376764339 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14007916 | prizepicks | Courtland Sutton | Rec Yards | over | 0.0467022212157338 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14595351 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.0467008900864609 | 2026-09-08T04:27:30Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14649477 | prizepicks | Myles Murphy | Sacks | under | 0.0466561042149709 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13685184 | prizepicks | Bijan Robinson | Recs | over | 0.0465193257557641 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327277 | prizepicks | Mark Andrews | Rec Yards | over | 0.0464734871904209 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14581394 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.0464564213297259 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14357592 | prizepicks | Jakobi Meyers | Rec Yards | over | 0.0464564213297259 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351888 | prizepicks | Cam Ward | Pass TDs | over | 0.0464556119447727 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311887 | prizepicks | Tyler Shough | Pass Yards | under | 0.0464350846582425 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978244 | prizepicks | A.J. Brown | Player TDs | under | 0.0464151191057059 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|13993314 | prizepicks | Matt Gay | Kicking Points | under | 0.0463007226627337 | 2026-09-04T05:48:41Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14324358 | prizepicks | Jalen McMillan | Rec Yards | under | 0.0462627409127358 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14390304 | prizepicks | Jalen Nailor | Recs | over | 0.0462470915946114 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306739 | prizepicks | Saquon Barkley | Fantasy Score | under | 0.0462112112859036 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381693 | prizepicks | Omarion Hampton | Rush+Rec Yds | under | 0.0460870685285822 | 2026-09-02T04:23:27Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14311370 | prizepicks | Garrett Wilson | Rec Yards | under | 0.0460202000147056 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14420447 | prizepicks | Justice Hill | Rec Yards | over | 0.0459589492148144 | 2026-09-08T04:27:30Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311695 | prizepicks | Quinshon Judkins | Rush Yards | under | 0.0456750562240102 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472802 | prizepicks | Tyler Warren | Rec Yards | under | 0.0456678140482248 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14389715 | prizepicks | Quinshon Judkins | Rush+Rec Yds | over | 0.0456544175704214 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14493683 | prizepicks | Rico Dowdle | Rush Yards | under | 0.0456461111541434 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14689143 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.0456341641727304 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14311040 | prizepicks | Chase Brown | Rush Yards | under | 0.0455799649557915 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534279 | prizepicks | Isaac TeSlaa | Fantasy Score | under | 0.0455693674083915 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14420422 | prizepicks | Cam Skattebo | Rush Yards | under | 0.0453348906222121 | 2026-09-02T21:15:45Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14357819 | prizepicks | Emeka Egbuka | Fantasy Score | over | 0.0453741403051286 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257652 | prizepicks | Jahan Dotson | Rec Yards | over | 0.0452795511309923 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14527598 | prizepicks | Christian Watson | Rec Yards | over | 0.0452106575824571 | 2026-09-05T23:49:54Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14473931 | prizepicks | Christian Watson | Rec Yards | over | 0.0452106575824571 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14535062 | prizepicks | Jalen Nailor | Fantasy Score | over | 0.0451147234246664 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14339082 | prizepicks | Caleb Williams | Pass+Rush Yds | over | 0.0450183627171527 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472754 | prizepicks | Calvin Ridley | Rec Yards | over | 0.0449965597793476 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389718 | prizepicks | Javonte Williams | Rush+Rec Yds | over | 0.0449802780316285 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13995874 | prizepicks | Jahdae Walker | Player TDs | under | 0.0449696646877244 | 2026-09-03T00:08:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|12379485 | prizepicks | Ashton Jeanty | Rec Yards | over | 0.0449458634447774 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|12379236 | prizepicks | James Cook III | Rush Yards | over | 0.0448868820780735 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978241 | prizepicks | Hunter Henry | Player TDs | under | 0.0445003242693803 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|13978247 | prizepicks | AJ Barner | Player TDs | under | 0.0445003242693803 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14697504 | prizepicks | KaVontae Turpin | Recs | under | 0.0448706317376959 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|12337830 | prizepicks | Rico Dowdle | Rush Yards | over | 0.0447057559739122 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14534180 | prizepicks | Bryce Young | Fantasy Score | under | 0.0446838205431456 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14606715 | prizepicks | Jaxson Dart | Pass Attempts | over | 0.0444657694328852 | 2026-09-08T04:27:30Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14488623 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.0442815817131145 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14346392 | prizepicks | Tyler Allgeier | Rush Yards | over | 0.0443128310879004 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14359056 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.0442815817131145 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14380887 | prizepicks | Luther Burden III | Rush+Rec Yds | over | 0.0440971103227328 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14497315 | prizepicks | Xavier Hutchinson | Rec Yards | over | 0.04400974950493 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14342006 | prizepicks | Jonathan Taylor | Fantasy Score | over | 0.0438418753679903 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14649465 | prizepicks | Nick Herbig | Sacks | under | 0.0438230334148436 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472756 | prizepicks | Malik Willis | Pass Yards | over | 0.0437467549942083 | 2026-09-04T11:11:02Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14352444 | prizepicks | Ja'Marr Chase | Rec Targets | over | 0.0437066810965165 | 2026-09-01T01:38:22Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13955000 | prizepicks | Chase Brown | Rush TDs | over | 0.0436470456969266 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14493617 | prizepicks | Quinshon Judkins | Rec Yards | under | 0.0435820206459095 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13954723 | prizepicks | Evan McPherson | Kicking Points | under | 0.0434263676441646 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311876 | prizepicks | Jared Goff | Pass Yards | over | 0.043426005983056 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645943 | prizepicks | Xavier Worthy | Rush+Rec Yds | under | 0.0435377160696881 | 2026-09-11T12:44:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14594603 | prizepicks | Chris Rodriguez Jr. | Rush+Rec Yds | under | 0.0433728078802222 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357927 | prizepicks | Ladd McConkey | Fantasy Score | over | 0.0433342801996438 | 2026-09-01T03:38:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14532701 | prizepicks | Rashod Bateman | Fantasy Score | over | 0.0432215910814047 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14532864 | prizepicks | DK Metcalf | Rec Yards | under | 0.0431830735201107 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14680380 | prizepicks | Bryce Young | Pass Attempts | over | 0.0430801900933269 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14697087 | prizepicks | Treylon Burks | Rec Yards | over | 0.0430760253854931 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14486056 | prizepicks | Chase Brown | Rush Yards | over | 0.0429498060137952 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14565438 | prizepicks | Calvin Ridley | Recs | over | 0.0428806462906083 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14382798 | prizepicks | Bryce Young | Pass Attempts | under | 0.042866157193498 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14503111 | prizepicks | Patrick Mahomes | Pass Attempts | under | 0.0427569749619454 | 2026-09-05T00:53:35Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14346358 | prizepicks | Darnell Mooney | Rec Yards | under | 0.0427276466539017 | 2026-08-31T22:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14346170 | prizepicks | Quentin Johnston | Recs | over | 0.0427018822046432 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14586912 | prizepicks | RJ Harvey | Rec Yards | over | 0.0426360700272177 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14586691 | prizepicks | Evan Engram | Rec Yards | over | 0.0425490527961165 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14381582 | prizepicks | Blake Corum | Rush+Rec Yds | over | 0.0424658385679854 | 2026-09-02T04:23:27Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|12379243 | prizepicks | Saquon Barkley | Rush Yards | over | 0.0424619085629927 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472394 | prizepicks | Tyjae Spears | Rec Yards | over | 0.0424379893886992 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14488013 | prizepicks | Justin Herbert | Pass Attempts | under | 0.0424143237837311 | 2026-09-05T00:53:35Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14292149 | prizepicks | Romeo Doubs | Rec Yards | over | 0.0422346951536253 | 2026-09-08T09:35:41Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|13976424 | prizepicks | Cam Skattebo | Rush TDs | over | 0.042235013311614 | 2026-09-05T23:49:54Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14560375 | prizepicks | Cam Ward | Fantasy Score | under | 0.0422265382282343 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311495 | prizepicks | Bryce Young | Pass Yards | over | 0.0422098298395782 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14341095 | prizepicks | Tre Tucker | Fantasy Score | under | 0.0421289290753045 | 2026-08-31T22:38:19Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14580953 | prizepicks | Jacory Croskey-Merritt | Rush+Rec Yds | over | 0.0420903454028693 | 2026-09-07T16:25:44Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311161 | prizepicks | Bo Nix | Pass Yards | over | 0.0420511003996151 | 2026-09-07T16:25:44Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|13955014 | prizepicks | Chase Brown | Rec TDs | over | 0.042036648734784 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14093860 | prizepicks | Saquon Barkley | Player TDs | over | 0.0419312464143292 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14514487 | prizepicks | Tyquan Thornton | Rec Yards | under | 0.0418765405526312 | 2026-09-05T16:47:46Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14687363 | prizepicks | Jaylin Noel | Rec Yards | over | 0.0418655053572738 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14493353 | prizepicks | De'Von Achane | Rush Yards | over | 0.0418540461541527 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14311050 | prizepicks | De'Von Achane | Rush Yards | over | 0.0418540461541527 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472457 | prizepicks | Tetairoa McMillan | Rec Yards | over | 0.0417862929208584 | 2026-09-06T19:06:29Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472255 | prizepicks | Samaje Perine | Rush Yards | under | 0.0416672462598125 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14381314 | prizepicks | Breece Hall | Rush+Rec Yds | over | 0.0416260486863825 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311024 | prizepicks | Bucky Irving | Rush Yards | under | 0.0416154149282003 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472206 | prizepicks | Davante Adams | Rec Yards | under | 0.0416108302141873 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14345069 | prizepicks | Omarion Hampton | Rush Yards | under | 0.0415318625948849 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14381558 | prizepicks | Tyjae Spears | Rush+Rec Yds | over | 0.0415236227245164 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14560380 | prizepicks | Kirk Cousins | Fantasy Score | under | 0.0414721124193545 | 2026-09-06T16:58:08Z | 2026-09-13T16:25:00.000-04:00 |
@@ -4463,6 +4373,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14351823 | prizepicks | Jaxson Dart | Pass+Rush+Rec TDs | over | 0.0409675619597453 | 2026-09-01T00:38:19Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14306469 | prizepicks | Khalil Shakir | Fantasy Score | over | 0.0409489498709332 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14131858 | prizepicks | Dontayvion Wicks | Rec Yards | under | 0.0409194115193187 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14743876 | prizepicks | Darren Waller | Recs | over | 0.0408091250157678 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13976225 | prizepicks | Malik Nabers | Rec Yards | under | 0.0407667443975409 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14394170 | prizepicks | Dak Prescott | Pass+Rush Yds | under | 0.0407568039184601 | 2026-09-02T04:23:27Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14580428 | prizepicks | Dak Prescott | Pass+Rush Yds | under | 0.0407568039184601 | 2026-09-07T04:28:26Z | 2026-09-13T20:20:00.000-04:00 |
@@ -4471,112 +4382,110 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14357956 | prizepicks | Ryan Flournoy | Fantasy Score | over | 0.0405454002786191 | 2026-09-01T03:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14478357 | prizepicks | Malik Willis | Rush Yards | over | 0.0404675126185226 | 2026-09-07T04:28:26Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14351886 | prizepicks | Jayden Daniels | Pass TDs | under | 0.0404467457361623 | 2026-09-01T01:38:22Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14683617 | prizepicks | Chris Brooks | Rec Yards | under | 0.0403571556688029 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14431651 | prizepicks | Daniel Jones | Rush Yards | over | 0.0402832780718809 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14274020 | prizepicks | Nico Collins | Rec Yards | under | 0.0401243454987874 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14559726 | prizepicks | Adonai Mitchell | Rec Targets | over | 0.0400794110495302 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14686711 | prizepicks | Tyler Allgeier | Rush Yards | under | 0.039863115205933 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14402736 | prizepicks | Jordan Mason | Recs | over | 0.0398396495658428 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13980659 | prizepicks | Jacoby Brissett | Pass Yards | over | 0.0398193962425021 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14390026 | prizepicks | Rashid Shaheed | Rush+Rec Yds | over | 0.0396205839330759 | 2026-09-05T21:10:18Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|12528884 | prizepicks | Maxx Crosby | Sacks | under | 0.0394394916116143 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306951 | prizepicks | Ja'Marr Chase | Recs | over | 0.0394323386781751 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14479750 | prizepicks | Devaughn Vele | Rec Yards | under | 0.039346782120772 | 2026-09-05T23:49:54Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12337205 | prizepicks | Geno Smith | Pass Yards | under | 0.0393068474091861 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14129381 | prizepicks | Cam Skattebo | Recs | over | 0.0392665700471598 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472236 | prizepicks | Deebo Samuel Sr. | Rec Yards | under | 0.0392374844447425 | 2026-09-03T22:31:12Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14365657 | prizepicks | Dalton Schultz | Rec Yards | over | 0.0390866555806989 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498748 | prizepicks | Chris Godwin Jr. | Recs | under | 0.0390326759856584 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14358024 | prizepicks | Trey McBride | Rec Yards | over | 0.0390194787729727 | 2026-09-02T21:15:45Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472429 | prizepicks | Trey McBride | Rec Yards | over | 0.0390194787729727 | 2026-09-03T22:31:12Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14266934 | prizepicks | Dalton Kincaid | Rec Yards | over | 0.0389970447646501 | 2026-08-31T18:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14545025 | prizepicks | Jared Goff | Pass Yards | under | 0.0389744773172894 | 2026-09-06T09:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12396202 | prizepicks | Trey McBride | Player TDs | over | 0.0388892491115 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14687740 | prizepicks | Jaylin Noel | Rec Yards | under | 0.0388650131607779 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14338576 | prizepicks | Omarion Hampton | Recs | over | 0.038798324414674 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14559717 | prizepicks | Davante Adams | Rec Targets | over | 0.0384916029558093 | 2026-09-06T16:58:08Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14559714 | prizepicks | Tyler Warren | Rec Targets | under | 0.0384717310458295 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14532810 | prizepicks | Byron Young | Sacks | over | 0.0382028599135154 | 2026-09-06T04:29:20Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14697523 | prizepicks | Josh Oliver | Recs | under | 0.0384493656258108 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14274004 | prizepicks | Dalton Kincaid | Rec Yards | under | 0.0381848921596857 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14475711 | prizepicks | Jaylen Warren | Rush Yards | under | 0.0381103033538464 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977737 | prizepicks | Rashee Rice | Rec Yards | over | 0.0380964079190977 | 2026-09-05T10:30:11Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14316174 | prizepicks | Javonte Williams | Rush Yards | under | 0.0380145545194646 | 2026-08-31T19:38:24Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14559700 | prizepicks | Jahan Dotson | Rec Targets | under | 0.0378056816915647 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|12379454 | prizepicks | Mike Evans | Rec Yards | under | 0.0377728148657361 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14312867 | prizepicks | Dak Prescott | Pass TDs | under | 0.0377305266767444 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13976226 | prizepicks | Malik Nabers | Rec Yards | over | 0.0377293703787922 | 2026-09-04T00:57:06Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|13994998 | prizepicks | Kyle Pitts Sr. | Player TDs | under | 0.0376498772068509 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13988418 | prizepicks | Matt Gay | Kicking Points | over | 0.037404612946625 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14697065 | prizepicks | Mitchell Evans | Recs | under | 0.037349119142701 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14306468 | prizepicks | DJ Moore | Fantasy Score | under | 0.0373466802537396 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14475702 | prizepicks | Jahan Dotson | Rec Yards | under | 0.0373229657301811 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14257653 | prizepicks | Jahan Dotson | Rec Yards | under | 0.0373229657301811 | 2026-08-31T22:38:19Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14472614 | prizepicks | Zay Flowers | Rec Yards | under | 0.0372781397024527 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311399 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.037118713960196 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379073 | prizepicks | Aaron Rodgers | Pass Yards | over | 0.037118713960196 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14173113 | prizepicks | Jaxson Dart | Pass Yards | under | 0.0370458832716624 | 2026-08-31T19:38:24Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14475504 | prizepicks | Jalen Nailor | Rec Yards | under | 0.037008790573678 | 2026-09-04T00:57:06Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14509574 | prizepicks | Jalen McMillan | Rec Yards | over | 0.0369769759525899 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14324341 | prizepicks | Jalen McMillan | Rec Yards | over | 0.0369769759525899 | 2026-09-03T19:46:31Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14509574 | prizepicks | Jalen McMillan | Rec Yards | over | 0.0369769759525899 | 2026-09-07T04:28:26Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14357840 | prizepicks | Kyle Pitts Sr. | Fantasy Score | over | 0.0369091917349631 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393153 | prizepicks | Jalen Coker | Rec Yards | under | 0.0368479649607149 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14359084 | prizepicks | Bijan Robinson | Rec Yards | under | 0.0368361817189374 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474881 | prizepicks | Bijan Robinson | Rec Yards | under | 0.0368361817189374 | 2026-09-07T20:32:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961579 | prizepicks | Sam Darnold | Pass Yards | over | 0.0365902302905571 | 2026-09-04T22:20:14Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14493347 | prizepicks | Travis Etienne Jr. | Rush Yards | under | 0.0365019337628005 | 2026-09-04T16:17:23Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14380199 | prizepicks | Bijan Robinson | Rush+Rec Yds | over | 0.0364882759570684 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14134838 | prizepicks | Chris Olave | Recs | over | 0.0364125227661431 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14474962 | prizepicks | DK Metcalf | Rec Yards | over | 0.03640717092714 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14159991 | prizepicks | Chris Olave | Recs | over | 0.0364125227661431 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095845 | prizepicks | Xavier Worthy | Rec Yards | under | 0.0362480704258763 | 2026-08-31T21:38:20Z | 2026-09-14T20:15:00.000-04:00 |
-| prizepicks|14476360 | prizepicks | Jonathan Taylor | Rec Yards | under | 0.0361547615901783 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14264746 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.0359365316241029 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|12379225 | prizepicks | Jonathan Taylor | Rush Yards | under | 0.0359631050823244 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14615439 | prizepicks | Travis Etienne Jr. | Rec Yards | under | 0.0359365316241029 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14393761 | prizepicks | Ryan Flournoy | Rush+Rec Yds | over | 0.0359125132234792 | 2026-09-05T21:10:18Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14477594 | prizepicks | Caleb Williams | Rush Yards | over | 0.0358543017483312 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306255 | prizepicks | Kyler Murray | Fantasy Score | under | 0.0358036065761422 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14320763 | prizepicks | Tyler Shough | Pass Yards | over | 0.0357377210455349 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13990928 | prizepicks | Deebo Samuel Sr. | Rec Yards | over | 0.0356176554893573 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
+| prizepicks|14164715 | prizepicks | Jaxson Dart | Rush Yards | under | 0.0357010904812492 | 2026-09-11T12:44:21Z | 2026-09-13T20:20:00.000-04:00 |
+| prizepicks|14337057 | prizepicks | Luther Burden III | Rec Yards | under | 0.0356273031639606 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14532848 | prizepicks | Justin Herbert | Pass+Rush Yds | under | 0.0355490744066391 | 2026-09-06T04:29:20Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14134782 | prizepicks | Jacoby Brissett | Pass+Rush Yds | over | 0.0355075771468211 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472205 | prizepicks | Mike Gesicki | Recs | under | 0.0354745073684494 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343353 | prizepicks | CeeDee Lamb | Fantasy Score | over | 0.0354126778949377 | 2026-08-31T21:38:20Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|12379452 | prizepicks | Cooper Kupp | Rec Yards | over | 0.0353798611686283 | 2026-09-02T22:17:03Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14604723 | prizepicks | Kendrick Bourne | Rec Yards | over | 0.0353784547846474 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|13980678 | prizepicks | Sam Darnold | Fantasy Score | under | 0.0353531734804242 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14472751 | prizepicks | Calvin Ridley | Rec Yards | over | 0.0353442676660973 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14095158 | prizepicks | Malik Nabers | Recs | under | 0.0352552017976727 | 2026-08-31T17:39:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|12379231 | prizepicks | Bryce Young | Rush Yards | over | 0.0352421995120704 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14312153 | prizepicks | Amon-Ra St. Brown | Recs | over | 0.0352118319921413 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14294831 | prizepicks | Jauan Jennings | Recs | over | 0.035167752272297 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|12379479 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0351428936475786 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14473753 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0351428936475786 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|12379479 | prizepicks | Harold Fannin Jr. | Rec Yards | over | 0.0351428936475786 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311384 | prizepicks | Josh Allen | Pass Yards | over | 0.0350826951196148 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14311653 | prizepicks | Trevor Lawrence | Pass Yards | over | 0.0350522217616584 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14374554 | prizepicks | Tyjae Spears | Rec Yards | under | 0.0350319937585846 | 2026-09-01T16:14:47Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14717181 | prizepicks | Tyjae Spears | Rec Yards | under | 0.0350319937585846 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12379077 | prizepicks | Josh Allen | Pass Yards | under | 0.0350289021478247 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14353306 | prizepicks | Malik Nabers | Rec Targets | under | 0.0349572568454481 | 2026-09-01T02:38:21Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14346210 | prizepicks | Tre' Harris | Rec Yards | under | 0.0349150503171541 | 2026-08-31T21:38:20Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14524516 | prizepicks | Trevor Lawrence | Pass+Rush Yds | over | 0.0347938692584756 | 2026-09-05T19:00:04Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14341703 | prizepicks | Jerry Jeudy | Fantasy Score | over | 0.0346999524257124 | 2026-09-02T00:04:19Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14645344 | prizepicks | Josh Downs | Rec Yards | under | 0.0343429449585136 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14402898 | prizepicks | Rachaad White | Rush+Rec Yds | over | 0.0343414465944552 | 2026-09-05T21:10:18Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14689142 | prizepicks | Ashton Jeanty | Rush Yards | over | 0.0342625777604191 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14215640 | prizepicks | Jaxson Dart | Fantasy Score | under | 0.0342412189093565 | 2026-09-08T14:29:16Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14393586 | prizepicks | David Montgomery | Rec Yards | over | 0.0342039885623164 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14460648 | prizepicks | David Montgomery | Rec Yards | over | 0.0342039885623164 | 2026-09-03T16:21:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311886 | prizepicks | Tyler Shough | Pass Yards | under | 0.0341497088246344 | 2026-09-02T21:15:45Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13992940 | prizepicks | David Njoku | Player TDs | under | 0.0341034518845519 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14319414 | prizepicks | Jaylen Warren | Recs | over | 0.034100506789175 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14352344 | prizepicks | Rhamondre Stevenson | Rec Targets | under | 0.0339456798221818 | 2026-09-01T01:38:22Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14683619 | prizepicks | Chris Brooks | Rush Yards | over | 0.0339484952291964 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14559708 | prizepicks | Javonte Williams | Rec Targets | over | 0.0338433384017486 | 2026-09-06T16:58:08Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|14472318 | prizepicks | Rome Odunze | Rec Yards | over | 0.0338393199162017 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14711308 | prizepicks | Ka'imi Fairbairn | FG Made | under | 0.0338391771991171 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996364 | prizepicks | Rashee Rice | Player TDs | over | 0.03371483662017 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|12379460 | prizepicks | Jameson Williams | Rec Yards | over | 0.0336155120223592 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311276 | prizepicks | Jameson Williams | Rec Yards | over | 0.0336155120223592 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14103713 | prizepicks | DeMario Douglas | Rec Yards | under | 0.0335331881695756 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14568013 | prizepicks | Cam Skattebo | Rush Yards | under | 0.0333587301377498 | 2026-09-08T04:27:30Z | 2026-09-13T20:20:00.000-04:00 |
-| prizepicks|13957599 | prizepicks | Andy Borregales | FG Made | under | 0.0333301165816112 | 2026-09-01T03:38:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14147102 | prizepicks | Justin Jefferson | Rec Yards | over | 0.0332594582906756 | 2026-09-05T05:39:10Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|13955037 | prizepicks | Chase McLaughlin | Kicking Points | under | 0.0331842630886862 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13977046 | prizepicks | Harrison Butker | FG Made | under | 0.0331624448086204 | 2026-08-31T17:39:21Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14688369 | prizepicks | Travis Etienne Jr. | Rec Yards | over | 0.0331009064665051 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14532319 | prizepicks | Tua Tagovailoa | Fantasy Score | under | 0.0330607594245293 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306257 | prizepicks | T.J. Hockenson | Fantasy Score | under | 0.0330455097766038 | 2026-08-31T20:38:20Z | 2026-09-13T16:25:00.000-04:00 |
+| prizepicks|14466351 | prizepicks | David Montgomery | Rush Yards | over | 0.0328712861064623 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487509 | prizepicks | Xavier Hutchinson | Recs | under | 0.0328565449236665 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14513826 | prizepicks | Isaac TeSlaa | Recs | over | 0.0328216727127377 | 2026-09-05T05:39:10Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14343341 | prizepicks | Baker Mayfield | Fantasy Score | under | 0.0326924254448279 | 2026-08-31T20:38:20Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13980686 | prizepicks | Rhamondre Stevenson | Recs | over | 0.0326754292012498 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
-| prizepicks|14468714 | prizepicks | Rhamondre Stevenson | Recs | over | 0.0326754292012498 | 2026-09-03T19:46:31Z | 2026-09-09T20:20:00.000-04:00 |
 | prizepicks|14341269 | prizepicks | Drake London | Fantasy Score | over | 0.0323891895152339 | 2026-09-02T09:32:24Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14329810 | prizepicks | Chase Brown | Rec Yards | under | 0.0323795043260088 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14311288 | prizepicks | Amon-Ra St. Brown | Rec Yards | over | 0.0323016695632276 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|13996261 | prizepicks | Sean Tucker | Player TDs | under | 0.0322396355660982 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472448 | prizepicks | Tyler Shough | Rush Yards | under | 0.0321347033083964 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14339551 | prizepicks | Blake Corum | Recs | over | 0.032106218938838 | 2026-08-31T17:39:21Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14560373 | prizepicks | Daniel Jones | Fantasy Score | under | 0.0320877800697337 | 2026-09-07T16:25:44Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472232 | prizepicks | George Pickens | Rec Yards | under | 0.0319443063520413 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14603963 | prizepicks | Josh Allen | Rush Yards | over | 0.0319234836805086 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4586,19 +4495,19 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14495526 | prizepicks | Caleb Williams | Pass Yards | over | 0.0318176027848295 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14325624 | prizepicks | Caleb Williams | Pass Yards | over | 0.0318176027848295 | 2026-09-06T16:58:08Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14389796 | prizepicks | Rico Dowdle | Fantasy Score | under | 0.0317553385567823 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14472861 | prizepicks | Javonte Williams | Rec Yards | over | 0.031655545040355 | 2026-09-03T22:31:12Z | 2026-09-13T20:20:00.000-04:00 |
 | prizepicks|14433720 | prizepicks | Rico Dowdle | Rush+Rec Yds | under | 0.0316010120828561 | 2026-09-05T21:10:18Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14487274 | prizepicks | Mason Taylor | Rec Yards | under | 0.031576647997181 | 2026-09-04T11:11:02Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14351819 | prizepicks | Tyler Shough | Pass+Rush+Rec TDs | under | 0.0315090560385922 | 2026-09-01T00:38:19Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|12528942 | prizepicks | Jordan Love | INT | over | 0.0315063340142597 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14393689 | prizepicks | Trevor Lawrence | Pass Attempts | over | 0.0315058993452582 | 2026-09-02T04:23:27Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13978583 | prizepicks | Cairo Santos | FG Made | under | 0.0313845256892235 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14498149 | prizepicks | Cairo Santos | FG Made | under | 0.0313845256892235 | 2026-09-04T22:20:14Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14534438 | prizepicks | Mike Gesicki | Fantasy Score | under | 0.0313627084306046 | 2026-09-06T04:29:20Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14255332 | prizepicks | Tyler Shough | Pass+Rush Yds | over | 0.0313375372852752 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14585934 | prizepicks | Noah Gray | Recs | over | 0.0312866409248424 | 2026-09-07T10:11:36Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14686588 | prizepicks | Kirk Cousins | Pass+Rush Yds | over | 0.0312181041128027 | 2026-09-11T12:44:21Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14472536 | prizepicks | Dawson Knox | Rec Yards | under | 0.0310259707141808 | 2026-09-05T13:51:36Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|14311595 | prizepicks | Jacoby Brissett | Pass Yards | under | 0.0309504228295115 | 2026-09-07T23:28:23Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14306710 | prizepicks | Terry McLaurin | Rec Yards | under | 0.0308888995358663 | 2026-08-31T17:39:21Z | 2026-09-13T16:25:00.000-04:00 |
-| prizepicks|14481823 | prizepicks | Brock Purdy | Pass+Rush Yds | under | 0.030844234116809 | 2026-09-04T11:11:02Z | 2026-09-10T20:35:00.000-04:00 |
 | prizepicks|14475348 | prizepicks | Chris Rodriguez Jr. | Recs | under | 0.0308425215252421 | 2026-09-04T00:57:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472924 | prizepicks | Rico Dowdle | Rush Yards | over | 0.030838819611741 | 2026-09-07T23:28:23Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306472 | prizepicks | Nico Collins | Fantasy Score | over | 0.030829841833134 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
@@ -4609,10 +4518,13 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|14472591 | prizepicks | Dawson Knox | Recs | over | 0.0304518503589288 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14540355 | prizepicks | Braelon Allen | Rush Yards | over | 0.030382316917962 | 2026-09-06T23:49:06Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14327430 | prizepicks | James Cook III | Rush Yards | under | 0.0303568403643966 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13971290 | prizepicks | Tyler Loop | FG Made | over | 0.0303466713761679 | 2026-08-31T17:39:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|13996297 | prizepicks | Tyler Loop | FG Made | over | 0.0303466713761679 | 2026-08-31T21:38:20Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14474923 | prizepicks | Brenton Strange | Rec Yards | under | 0.0303410365746286 | 2026-09-05T00:53:35Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14472267 | prizepicks | Chase Brown | Rush Yards | over | 0.0303305915941693 | 2026-09-04T05:48:41Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14306737 | prizepicks | Terry McLaurin | Fantasy Score | over | 0.0303186771572325 | 2026-09-02T09:32:24Z | 2026-09-13T16:25:00.000-04:00 |
 | prizepicks|14357878 | prizepicks | Harold Fannin Jr. | Fantasy Score | over | 0.0302371985349978 | 2026-09-01T03:38:21Z | 2026-09-13T13:00:00.000-04:00 |
+| prizepicks|14551085 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.0301829312635544 | 2026-09-06T13:38:09Z | 2026-09-14T20:15:00.000-04:00 |
 | prizepicks|14418633 | prizepicks | Patrick Mahomes | Pass Attempts | over | 0.0301829312635544 | 2026-09-02T14:24:20Z | 2026-09-14T20:15:00.000-04:00 |
+| prizepicks|14687365 | prizepicks | Jaylin Noel | Fantasy Score | over | 0.0301501251625098 | 2026-09-11T12:44:21Z | 2026-09-13T13:00:00.000-04:00 |
 | prizepicks|14382960 | prizepicks | Daniel Carlson | Kicking Points | over | 0.0300740247142399 | 2026-09-08T14:29:16Z | 2026-09-13T13:00:00.000-04:00 |
-| prizepicks|13961545 | prizepicks | Drake Maye | Pass Yards | over | 0.0300471565358386 | 2026-08-31T17:39:21Z | 2026-09-09T20:20:00.000-04:00 |
+| prizepicks|14473122 | prizepicks | Tyler Shough | Pass Yards | under | 0.0300467535874982 | 2026-09-03T22:31:12Z | 2026-09-13T13:00:00.000-04:00 |
