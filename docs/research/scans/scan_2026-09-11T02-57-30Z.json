@@ -1,0 +1,42 @@
+{
+  "run_timestamp_utc": "2026-09-11T02-57-30Z",
+  "prizepicks": {
+    "total_projections": 34138,
+    "league_counts": {
+      "SOCCER": 9729,
+      "TT": 60,
+      "CS2": 175,
+      "BAD": 43,
+      "LoL": 132,
+      "EUROGOLF": 20,
+      "NPB": 11,
+      "KBO": 59,
+      "TENNIS": 252,
+      "AFL": 19,
+      "R6": 50,
+      "CFB": 4499,
+      "MLB": 4485,
+      "CFB1H": 165,
+      "APEX": 53,
+      "EPL": 3505,
+      "F1": 30,
+      "CFL": 10,
+      "UFC": 71,
+      "BOXING": 12,
+      "CRICKET": 11,
+      "NFLSZN": 1143,
+      "NFL": 7163,
+      "NFL1H": 1352,
+      "NFL1Q": 580,
+      "NASCAR": 14,
+      "DARTS": 63,
+      "LAX": 6,
+      "NHLSZN": 143,
+      "NBA": 194,
+      "NBASZN": 89
+    }
+  },
+  "underdog": {
+    "error": "426 Client Error: Upgrade Required for url: https://api.underdogfantasy.com/beta/v3/over_under_lines"
+  }
+}
