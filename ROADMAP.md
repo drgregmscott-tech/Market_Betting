@@ -3480,21 +3480,28 @@ check) and should be re-verified, not assumed still accurate, before a
 future session leans on it for real sizing/suppression logic. See
 `ingest_politics_markets.py`'s module docstring and SESSION_LOG.md's
 Session 5.1 entry for the full evidence trail.
-23. **New, opened Session 3.3:** `EXECUTION_RISK_BUFFER = 0.85` in
-`sizing_engine.py` is a named placeholder, sanity-checked but not
-fully validated against real data this session. Real live Kalshi
-quotes (MO-05, `KXHIGHPHIL`) were pulled twice, roughly 13–30 real
-minutes apart: quoted PRICE was completely unchanged both times, but
-real order-book SIZE at the best price moved as much as 67% in 13
-real minutes on one market. This confirms the buffer targets the
-right kind of risk (size, not price), but a single real before/after
-pair is too thin a sample to confirm 0.85 is the right magnitude —
-the one real data point observed (67% swing) exceeds the 15% haircut
-currently applied. **Action needed:** once Session 3.4's automation
-is producing repeated, regular snapshots, pull a proper sample of
-real size swings over realistic execution-time windows and
-recalibrate `EXECUTION_RISK_BUFFER` against real evidence, the same
-way Session 8.3 is already planned to do for `KELLY_FRACTION`.
+23. **New, opened Session 3.3; revisited 2026-09-11, still NOT
+RESOLVED.** `EXECUTION_RISK_BUFFER = 0.85` in `sizing_engine.py` is a
+named placeholder, sanity-checked but not fully validated against real
+data. Real live Kalshi quotes (MO-05, `KXHIGHPHIL`) were pulled twice,
+roughly 13–30 real minutes apart: quoted PRICE was completely unchanged
+both times, but real order-book SIZE at the best price moved as much as
+67% in 13 real minutes on one market. **Revisited 2026-09-11** once
+Session 3.4's automation had produced 5 real days / 21 snapshot files:
+pulled all of them and found only 2 of 15 distinct flagged pairs were
+ever observed more than once. One (MI-07) showed 0% real size decay
+across three short (10–68 min) gaps; the other (TX-32) showed real
+±86–133% swings, but only across multi-hour gaps too coarse to say
+anything about execution-time risk specifically. These two real
+findings directly conflict, and the arbitrage detector's own ~4–6 hour
+polling cadence (Open Decision #26) is structurally too coarse to
+resolve which one reflects real execution risk — more days of the same
+cadence will not fix this. **Action needed, updated:** a dedicated
+short-interval (minutes-scale) order-book poll against a live flagged
+market, repeated enough times to build a real distribution — the same
+one-off method used for the original 67% finding, not the arbitrage
+pipeline's own snapshot cadence. See SESSION_LOG.md's 2026-09-11 entry
+for the full evidence trail.
 24. **Opened Session 3.3, UPDATED Session 3.4 (2026-09-06):**
 `sizing_engine.py`'s arbitrage sizing has been validated against
 constructed test cases and against real Kalshi order-book numbers

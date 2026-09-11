@@ -9917,3 +9917,71 @@ worth a quick real check (watch the Cloudflare Pages Deployments tab
 after the next hourly run of any of the five pipelines) the next time
 any of them is touched, to confirm the `curl` step behaves the same way
 under a real `schedule`-triggered run as it does conceptually here.
+
+## Session 3.3 continuation — Open Decision #23 real-data recalibration attempt (2026-09-11)
+
+**Context:** Open Decision #23 named `EXECUTION_RISK_BUFFER = 0.85` in
+`sizing_engine.py` as a placeholder pending Session 3.4's automation
+producing "repeated, regular snapshots" to check it against. That
+automation has now run for 5 real days (2026-09-06 through 2026-09-11,
+21 snapshot files in `data/arbitrage/flags/`) — revisited directly rather
+than left open indefinitely.
+
+**What was checked:** Pulled all 21 real snapshot files and grouped rows
+by `(market_a, market_b)` pair to find real, repeated observations of the
+same flagged opportunity over time. Only 2 of 15 distinct pairs were ever
+observed more than once (arbitrage opportunities are largely one-off in
+this real data, not a market this project watches continuously) — a
+real, honest sample-size limit, not a processing error:
+
+- **MI-07 pair** (`HOUSEMI7-26-R`, the same real Michigan race carried
+over from Session 3.4): observed 4 times across 10.4, 68.3, and 289.6-
+minute real gaps. `fillable_size_dollars` (bound by Kalshi's real order-
+book size, per `fillable_size_basis`) stayed **exactly flat at 104.0
+across all four checks** — 0% real decay, including across the two
+genuinely short (10–68 minute) gaps that approximate real execution
+time.
+- **TX-32 pair** (`KXHOUSETX32-26-R`): observed 3 times, but the
+shortest real gap between checks was 362 minutes (~6 hours) — too long
+to say anything about minutes-scale execution risk. Real swings of
++133% and -86% in `fillable_size_dollars` over those multi-hour gaps
+are consistent with the underlying Kalshi order book genuinely moving
+over hours, not with the kind of between-snapshot-and-fill risk
+`EXECUTION_RISK_BUFFER` is meant to haircut.
+
+**Why this does not resolve Open Decision #23:** This real data
+directly conflicts with Session 3.3's own earlier direct order-book
+check (67% size swing observed in 13–30 real minutes on a different
+market, `KXHIGHPHIL`) — and, unlike that check, this dataset cannot
+even distinguish the two, because the arbitrage pipeline's own polling
+cadence (~4–6 hours, per Open Decision #26) is coarser than the
+execution-time window the buffer is supposed to protect against. The
+one pair with genuinely short (10–68 min) real gaps happened to show
+zero movement; the pairs with real movement only have hours-scale gaps.
+Forcing a new number out of this would mean picking between two real
+but contradictory single-market data points, which does not meet this
+project's own bar for a sourced recalibration (see Open Decision #38's
+identical reasoning for politics' liquidity thresholds).
+
+**Decision: `EXECUTION_RISK_BUFFER` stays at 0.85, unchanged.** Not
+because the placeholder was reconfirmed — because the real evidence
+available genuinely cannot support moving it in either direction yet.
+The actual gap this surfaced is a structural one: the arbitrage
+detector's own snapshot cadence is the wrong instrument for measuring
+minutes-scale execution risk, no matter how many more days of the same
+cadence accumulate. Closing this for real needs either (a) a dedicated
+fast-poll check of a real flagged market's raw order book at sub-hour
+intervals (the same one-off method Session 3.3 already used once), run
+enough times to build a real distribution, or (b) accepting the
+placeholder indefinitely as a stated, named judgment call like
+`KELLY_FRACTION`'s original posture.
+
+**Files touched:** `scripts/sizing/sizing_engine.py` (docstring only —
+records this real attempt and why it didn't change the constant),
+`ROADMAP.md` (Open Decision #23 updated in place).
+
+**Open items / deferred validations:** Open Decision #23 remains open.
+If a future session wants to actually resolve it, the next real step is
+a dedicated short-interval order-book poll (minutes, not hours) against
+a live flagged market — not more days of the existing 4–6-hour cadence,
+which this session confirmed cannot answer the question.

@@ -280,6 +280,20 @@ orders, some of that size may already be gone or the price may have
 ticked. Flagged explicitly as a candidate for Session 8.3 recalibration
 once real placed-and-filled arbitrage trades exist to check it against.
 
+RECALIBRATION ATTEMPT, 2026-09-11 (Open Decision #23) -- STILL 0.85,
+NOT MOVED. Pulled all 21 real arbitrage snapshot files accumulated since
+Session 3.4 (2026-09-06 through 2026-09-11) and grouped by (market_a,
+market_b) pair to find real repeated observations. Only 2 of 15 distinct
+pairs were ever seen more than once: one (MI-07) showed 0% real
+fillable-size decay across three short (10-68 minute) gaps; the other
+(TX-32) showed real +133%/-86% swings, but only across multi-hour gaps.
+These two real findings conflict, and the arbitrage pipeline's own
+~4-6 hour snapshot cadence is structurally too coarse to distinguish
+"real execution-time risk" from "the market genuinely moved between
+runs" -- more accumulated days of this same cadence will not resolve
+it. Left at 0.85 rather than moved off either single-market data point.
+See SESSION_LOG.md's 2026-09-11 entry for the full trail.
+
 MAX_ARBITRAGE_POSITION_PCT -- SAME HARD-CAP PATTERN, APPLIED TO COMBINED CAPITAL
 -----------------------------------------------------------------------------------
 MAX_ARBITRAGE_POSITION_PCT = 0.05 caps a single arbitrage position at 5%
