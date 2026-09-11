@@ -9985,3 +9985,88 @@ If a future session wants to actually resolve it, the next real step is
 a dedicated short-interval order-book poll (minutes, not hours) against
 a live flagged market — not more days of the existing 4–6-hour cadence,
 which this session confirmed cannot answer the question.
+
+---
+
+### Session 5.7 continuation — Re-registration fix confirmed unsuccessful (2026-09-11)
+
+**What happened:** Checked `git log --all` for a new `Automated politics
+pipeline run` commit after 2026-09-11 13:43 UTC (the target time for the
+prior continuation entry's cron-minute fix). At 13:55 UTC — 12 minutes
+past the slot — only the same 2 commits from 2026-09-09 exist
+(`fc7b2b4` manual, `d3441b0` scheduled-but-late). The fix commit itself
+(`4616f47`, "5.7 scheduled cron revisit") was confirmed on `main` since
+2026-09-10 15:12 UTC — over 22 hours before this slot, more than enough
+time for GitHub to pick up the change.
+
+**Real finding: the minor re-commit fix did not work**, and this is now a
+worse state than before the fix (one real late fire pre-fix, zero real
+fires post-fix, across the only opportunity tested so far). Also ran
+`python scripts/calibration/politics_sample_report.py --report`:
+416 total flags logged (up 1 from the prior check, reflecting no new
+automated run — this is drift/rounding in the existing set, not new
+data), 0 closed — unchanged and expected, given the ~55+ day real
+resolution timescale.
+
+**Decision made:** Do not attempt a third minor tweak — escalate to the
+two heavier options already named in the prior continuation entry
+(full delete/re-create of the workflow file, or GitHub Support), per
+that entry's own stated escalation plan. Recorded as the next concrete
+action in ROADMAP.md's Session 5.7 card.
+
+**Interim mitigation:** `workflow_dispatch` (manual trigger) has a 2-for-2
+real success record. Until the schedule itself is fixed, the user manually
+running the workflow periodically is a reasonable stopgap to keep real
+politics data accumulating, rather than leaving it fully idle while the
+schedule bug is worked separately.
+
+**Files modified:** `ROADMAP.md` — Session 5.7 card's Open items replaced
+with the escalation plan above.
+
+**Next session:** None yet — Session 5.7 remains open.
+
+---
+
+### Session 5.7 continuation — Delete/re-create fix applied (2026-09-11)
+
+**What happened:** With the minor cron-edit fix confirmed unsuccessful
+(prior continuation entry, same day), applied the escalation option named
+there: deleted `.github/workflows/politics_pipeline.yml` entirely in one
+commit, then re-added it as a brand-new file with identical content
+(same `cron: "43 13 * * *"` UTC schedule) in a separate commit. Both
+commits made and pushed directly to `main` in this sandbox, with the
+user's explicit go-ahead:
+- `1113c0f` — "Session 5.7: delete politics_pipeline.yml to force full
+schedule re-registration"
+- `269026e` — "Session 5.7: re-add politics_pipeline.yml (fresh file,
+full re-registration)"
+
+File content was backed up to a local temp file before deletion and
+restored byte-for-byte (184 lines before, 184 lines after) — no
+unintended content changes, only the delete+re-add history.
+
+**Files modified:** `.github/workflows/politics_pipeline.yml` (deleted,
+then re-added unchanged), `ROADMAP.md` (Session 5.7 card updated with
+this fix and the next real check).
+
+**Decisions made:**
+1. **Delete/re-create (not another edit) chosen** because the minor edit
+already tried and failed — this is the stronger of the two heavier
+options named in the prior continuation entry, tried before escalating
+further to GitHub Support/status-page investigation.
+2. **Pushed directly from this sandbox rather than handing files back for
+GitHub Desktop**, per the user's explicit "go ahead and do the delete/
+re-create fix now" — a deliberate, one-time deviation from this project's
+usual GitHub-Desktop-mediated workflow, justified because the entire
+point of the fix depends on the change actually reaching GitHub (a local-
+only edit proves nothing about schedule re-registration).
+
+**Open items / deferred validations:**
+- **Confirm this fix worked** — check for a new `Automated politics
+pipeline run` commit after 2026-09-12 13:43 UTC passes, landing close to
+that time without manual triggering. Still broken after this escalates to
+GitHub Support/status-page investigation, per the prior entry's plan.
+- Manual `workflow_dispatch` runs remain a reasonable stopgap in the
+meantime (2-for-2 real success rate).
+
+**Next session:** None yet — Session 5.7 remains open.

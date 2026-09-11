@@ -2458,14 +2458,38 @@ re-register a stuck schedule trigger. The minute was deliberately changed
 this fix working, rather than indistinguishable from a lucky on-time
 firing of the old registration.
 
+**Update (2026-09-11):** The re-registration fix did **not** work. The
+cron-minute-change commit (`4616f47`, "5.7 scheduled cron revisit") landed
+on `main` 2026-09-10 15:12 UTC — over 22 hours before the next real
+opportunity (2026-09-11 13:43 UTC). Checked at 2026-09-11 13:55 UTC (12
+minutes past that slot): `git log --all | grep "politics pipeline"` still
+shows only the same 2 runs from 2026-09-09. This is worse than the prior
+state (which had at least one late-but-real fire) — the schedule has now
+missed two consecutive real opportunities in a row since the fix. **A
+minor re-commit is confirmed NOT to be the fix.**
+
+**Update (2026-09-11, later same day) — delete/re-create fix applied:**
+`.github/workflows/politics_pipeline.yml` was deleted in one commit
+(`1113c0f`) and re-added as a brand-new file with identical content in a
+separate commit (`269026e`), both pushed to `main`. This is the stronger
+of the two escalation options named above — a full re-registration, not
+another minor edit. Schedule unchanged (`cron: "43 13 * * *"` UTC).
+
 **Open items / deferred validations:**
-- **Confirm the re-registration fix worked.** After this commit is pushed
-and 2026-09-11 13:43 UTC has passed, check for a new `Automated politics
-pipeline run` commit landing close to :43 (not hours late, not missing).
-If it lands on time, the fix worked — close this item. If it's still late
-or missing, this needs a different approach (e.g., deleting and
-re-creating the workflow file from scratch, or asking GitHub Support,
-since two independent real fixes will have been tried without success).
+- **Confirm the delete/re-create fix worked.** After the next 13:43 UTC
+slot passes (first real opportunity: 2026-09-12), check for a new
+`Automated politics pipeline run` commit landing close to :43 UTC without
+anyone triggering it manually. On time → fix confirmed, close this item.
+Still late or missing → this is no longer explainable as a registration
+quirk; a direct look at GitHub's status/known-issues page, or GitHub
+Support, is the next real step (two independent fixes will have failed by
+then).
+- In the meantime, **`workflow_dispatch` (the manual "Run workflow"
+button) is confirmed reliable** — both real successful runs to date used
+it. Until the schedule is confirmed fixed, manually triggering the
+workflow every day or two is a reasonable stopgap to keep real data
+accumulating toward the sample-size thresholds below, rather than leaving
+this fully idle while the schedule issue is worked.
 - Re-run `python scripts/calibration/politics_sample_report.py --report`
 periodically to track real progress against the interim floor (30) and
 full target (≈892) from `docs/politics_sample_size_methodology.md`.
