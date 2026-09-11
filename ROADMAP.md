@@ -1541,6 +1541,168 @@ whichever source was chosen
 
 ---
 
+### Session 2.18 — Automated Real-Outcome Grading (Pick'em)
+**Status:** Not started
+**Prerequisites:** None new.
+
+**Why this exists — a real, checked-live finding, not a hypothesis:**
+Checked directly, 2026-09-11: `data/pickem/clv_log.csv` has **7,035
+closed flags** and zero real-money outcomes ever recorded anywhere in
+this repo — `data/pickem/outcome_log.csv` (the file
+`outcome_tracker.py`/`weekly_review.py` both require) does not exist.
+The mechanism this project already built for this (Session 2.5,
+`outcome_tracker.py`) requires the user to manually report every single
+graded leg by hand, one at a time, by flag_id — and in practice, across
+however long this pipeline has been running, that has produced zero
+real records. Manual entry is not closing this loop and there's no
+reason to expect it will going forward at the volume this pipeline
+produces (thousands of flags).
+
+**The real fix, not a bigger nudge to self-report:** this project
+already pulls the real, final per-player stat line for every scored NFL
+prop from `nflverse` (`pickem_model.py`'s own data source) — the exact
+number needed to grade a flag (did the player's real final stat clear
+the line) is data this pipeline is already fetching, for a different
+purpose, every single run. Once a flagged prop's `game_start_time` has
+passed and nflverse's weekly stats include that game (real lag: nflverse
+typically posts within a day, not instantly), the real outcome can be
+looked up and graded automatically — no user action required at all for
+the common case. Manual `outcome_tracker.py` reporting stays available
+for anything auto-grading can't reach (a stat nflverse doesn't carry, a
+non-NFL sport before its own plug-in exists — see Sessions 2.13+).
+
+**What gets built:** A new script (or a mode added to an existing one)
+that, on a schedule: finds closed pick'em flags whose `game_start_time`
+has passed, looks up the real final value of `resolved_stat_key` for
+that player from the already-fetched nflverse weekly data, determines
+win/loss against `first_flagged_line`/`flagged_side`, and writes a real
+row to `data/pickem/outcome_log.csv` in the exact shape
+`outcome_tracker.py` already expects (reusing that schema, not inventing
+a second one) — with a clear `graded_by: "auto"` vs `"manual"` marker so
+the two sources stay distinguishable in review.
+
+**Files touched:** New auto-grading script; `docs/pickem_estimation_model_spec.md`
+or `clv_methodology.md` (document the auto-vs-manual split);
+`scripts/calibration/outcome_tracker.py` (only if the schema needs a
+`graded_by` column added — check first before assuming a change is
+needed).
+
+**Validation (required to close session):**
+- [ ] A real, closed, resolved NFL flag from `clv_log.csv` is
+auto-graded correctly — the computed win/loss matches the real
+box-score result, checked by hand against the actual game
+- [ ] `data/pickem/outcome_log.csv` contains real, non-zero graded rows
+after a real run (closing the exact gap found 2026-09-11: zero rows,
+ever)
+- [ ] A flag not yet resolvable (game hasn't happened, or nflverse
+hasn't posted the week yet) is correctly left ungraded, not
+force-graded on stale/missing data
+- [ ] Re-running against the same already-graded flags does not
+duplicate rows (same idempotency standard as every other log in this
+project)
+
+---
+
+### Session 2.19 — Fix the Tautological CLV-at-Close Metric (Pick'em)
+**Status:** Not started
+**Prerequisites:** None new for the diagnosis; benefits from Session
+2.18 existing first, since real outcome grading is the stronger
+replacement signal for the platform (PrizePicks) where CLV can't be
+fixed at all — see below.
+
+**Why this exists — a real, checked-live finding, not a hypothesis:**
+Checked directly, 2026-09-11: every one of the 6,873 closed PrizePicks
+flags in `clv_log.csv` shows `clv_edge_at_close` **exactly equal** to
+`first_flagged_edge` (byte-identical, confirmed programmatically) —
+producing a reported "100% positive-edge rate" across all 7,035 closed
+flags project-wide, which is not real evidence of anything. Root cause:
+`clv_logger.py` computes `clv_edge_at_close` as
+`first_flagged_model_prob − closing_implied_prob`, but
+`closing_implied_prob` for PrizePicks is always
+`PRIZEPICKS_ASSUMED_IMPLIED_PROB` (a flat, constant 0.5) — the same
+number used to compute `first_flagged_edge` in the first place. It never
+moves, because it was never a real market price; it's a fixed
+assumption. A flag can only be created above the 3% edge threshold, so
+every closed PrizePicks flag is mathematically guaranteed to show a
+"positive" CLV at close — this is a tautology, not a validation signal.
+Checked Underdog too (real per-side payout multipliers exist there, so a
+real closing price genuinely could differ): in the current data, only 3
+of 162 closed Underdog flags show any real price movement at all
+(`line_moved=True` count) — the signal exists in principle but has
+essentially never fired in practice, likely because most flags resolve
+or disappear before a second pipeline run ever re-samples their price.
+
+**What this session needs to decide, not just implement:** there may be
+**no fix that makes PrizePicks CLV real**, since PrizePicks does not
+publish a per-side price that could move — the honest options are (a)
+stop reporting `clv_edge_at_close` as a meaningful number for PrizePicks
+rows at all (mark it `None`/"not available," the same "visible gap, not
+a fabricated value" pattern this project already applies elsewhere,
+rather than a tautological one), leaning on Session 2.18's real-outcome
+grading as the actual validation signal for PrizePicks instead; or (b)
+if a genuine per-side signal is ever sourced for PrizePicks (unlikely,
+per Session 2.11's own finding that PrizePicks doesn't publish this),
+wire that in properly. For Underdog, investigate why `line_moved` fires
+so rarely even when it structurally could (pipeline cadence vs. how
+long a line stays live before locking) before concluding the mechanism
+itself is sound.
+
+**Files touched:** `scripts/calibration/clv_logger.py` (the
+`clv_edge_at_close`/`closing_implied_prob` computation and its stated
+assumptions); `frontend/app.js`/`index.html` (the "Average CLV edge" /
+"Positive-edge rate" stats on the Pick'em tab need to stop implying a
+number that isn't real, once the fix lands); `docs/clv_methodology.md`.
+
+**Validation (required to close session):**
+- [ ] Explicit decision recorded on what PrizePicks' `clv_edge_at_close`
+should show going forward (not-available vs. a real alternative signal),
+with the reasoning stated, not silently changed
+- [ ] The frontend's summary stats no longer present a number that is
+tautological by construction as if it were real evidence
+- [ ] Underdog's real closing-movement mechanism re-verified against a
+real, live example where the price is confirmed to have actually moved
+between first-flagged and close (not just that the code path exists)
+
+---
+
+### Session 2.20 — Activate Weekly Recalibration Review (Pick'em)
+**Status:** Not started
+**Prerequisites:** Session 2.18 (real outcome grading) producing real,
+non-trivial volume in `data/pickem/outcome_log.csv` — `weekly_review.py`
+(Session 2.5) is already built to consume that file but has never run
+against real data, since the file has never had real rows in it.
+
+**Why this exists:** `weekly_review.py` already implements the real
+comparison this project needs (model's stated average confidence vs.
+real observed win rate, flagged as a recalibration signal once ≥30
+graded legs exist) — it is not a new build, it is an **activation**.
+Nobody has been running it, because there was nothing for it to read.
+
+**What gets built:** A real, recurring cadence (weekly, per the script's
+own design) actually running `weekly_review.py` — either as a scheduled
+GitHub Actions job (same pattern as `pickem_pipeline.yml`) or a standing
+manual habit, whichever the user prefers — plus a real review of its
+first several outputs to confirm the recalibration checks behave
+sensibly against real (not synthetic) data before trusting them
+unattended.
+
+**Files touched:** Possibly a new `.github/workflows/pickem_weekly_review.yml`;
+`data/pickem/review_log.csv` (starts accumulating real rows for the
+first time).
+
+**Validation (required to close session):**
+- [ ] `weekly_review.py` has run at least once against real graded data
+(≥30 legs, the script's own stated floor) and produced a real,
+non-"insufficient sample" report
+- [ ] Its calibration-gap finding (model's stated confidence vs. real
+win rate) is sanity-checked by hand against the underlying graded legs,
+at least once, before being trusted as a standing signal
+- [ ] A real cadence is running (automated or a committed manual habit)
+and `review_log.csv` shows more than one real entry over time, not a
+single one-off run
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
