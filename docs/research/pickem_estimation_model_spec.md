@@ -321,3 +321,120 @@ still exactly correct; only its file location changed. Future sports
 `pickem_sport_plugins/`, each with its own spec-doc section following this
 same "no unnamed black-box factors" standard, rather than being folded into
 this NFL-specific document.
+
+## Session 2.13 — MLB stat-type coverage, checked against real data
+
+Session 2.12 shipped `pickem_sport_plugins/mlb.py` as a proof case with real
+fetch code but a small, explicitly UNVERIFIED stat map. This session did the
+real verification `mlb.py`'s own docstring said Session 2.13 owed: a live
+production ingestion pull (`scripts/ingestion/ingest_pickem.py`,
+2026-09-11) returned 57,628 real rows, 11,142 of them real MLB props (plus a
+separate 1,428-row `MLBLIVE` category — see below). Every real MLB
+`stat_type` string was counted before any mapping decision was made, then
+each one was checked directly against a real, live MLB Stats API response
+(Aaron Judge's — person id 592450 — real hitting game log; Gerrit Cole's —
+person id 543037 — real pitching game log) before being added.
+
+| Real `stat_type` string (platform) | Count | Outcome |
+|---|---|---|
+| `Hits+Runs+RBIs` (PP) / `Hits + Runs + RBIs` (UD) | 1,436 / 253 | Mapped — composite, sum of `hits`+`runs`+`rbi` |
+| `TB` (PP) / `Total Bases` (UD) | 1,329 / 252 | Mapped — `totalBases` |
+| `Hitter FS` (PP) | 739 | **Mapped** — real PrizePicks formula (see below) |
+| `Hits` | 719 / 250 | Mapped — `hits` |
+| `Hitter Ks` (PP) / `Batter Strikeouts` (UD) | 617 / 71 | Mapped — `strikeOuts` (hitting group) |
+| `RBIs` | 541 / 253 | Mapped — `rbi` |
+| `Runs` | 524 / 251 | Mapped — `runs` |
+| `Singles` (PP) | 366 | **Mapped** — computed, `hits − doubles − triples − homeRuns` (no direct column) |
+| `Home Runs` | 273 / 251 | Mapped — `homeRuns` |
+| `Doubles` | 270 / 71 | Mapped — `doubles` |
+| `Walks` (PP) / `Batter Walks` (UD) | 268 / 227 | Mapped — `baseOnBalls` (hitting group) |
+| `SB` (PP) / `Stolen Bases` (UD) | 219 / 119 | Mapped — `stolenBases` |
+| `Ks` (PP) / `Strikeouts` (UD) | 200 / 28 | Mapped — `p_strikeOuts` (pitching group — confirmed pitcher-side by matching real row counts against other same-batch pitcher stats) |
+| `Hits Allowed` | 155 / 28 | Mapped — `p_hits` |
+| `Earned Runs Allowed` | 143 / 28 | Mapped — `p_earnedRuns` |
+| `Strikes Counted` (PP) | 112 | **Left unsupported** — a batter's own ball/strike split does not exist in MLB Stats API's hitting game log (only a total `numberOfPitches` does) |
+| `Pitches Seen` (PP) | 111 | Mapped — hitting group's `numberOfPitches`, aliased to `numberOfPitchesSeen` to avoid colliding with the pitching side's own pitch-count columns |
+| `Balls Counted` (PP) | 111 | **Left unsupported** — same reason as `Strikes Counted` |
+| `Plate Appearances` (PP) | 108 | Mapped — `plateAppearances` |
+| `Walks Allowed` | 97 / 28 | Mapped — `p_baseOnBalls` |
+| `PO` (PP) / `Pitching Outs` (UD) | 83 / 28 | Mapped — `p_outs` |
+| `Pitcher FS` (PP) | 66 | **Mapped** — real PrizePicks formula (see below) |
+| `Pitches Thrown` (PP) | 54 | Mapped — `p_numberOfPitches` |
+| `Triples` | 27 / — | Mapped — `triples` |
+| `Strikes Thrown` (PP) | 18 | Mapped — `p_strikes` |
+| `Balls Thrown` (PP) | 18 | **Mapped** — computed, `p_numberOfPitches − p_strikes` (no direct column) |
+| `Batters Faced` | 18 / 25 | Mapped — `p_battersFaced` |
+| `Fantasy Points` (UD) | 170 | **Left unsupported** — no official Underdog MLB scoring formula could be sourced (underdogfantasy.com/underdogsports.com's rules pages 301-redirect to a JS app that returns 403 to an unauthenticated fetch); guessing a formula here would present an assumption as a real number |
+| `1st Inn(ing). ___` (both platforms, 9 real variants) | 25 each ×5 (UD) + 7 each ×2 (PP) | **Left unsupported** — per-inning splits do not exist in MLB Stats API's season game log (per-GAME totals only); a real architecture mismatch, not a missing mapping |
+
+10 of the 11 distinct real gaps found are stated, permanent architecture
+limits (no matching MLB Stats API column/split exists at all), not
+mapping oversights. `Fantasy Points` is the one gap that could close later
+if Underdog's real formula becomes sourceable.
+
+**Player-match rate**, checked directly against this same real pull: 29
+`no_player_match` out of 2,931 real MLB rows that reached name matching
+(rows with a resolvable stat type and a scorable odds type) — **99.0%**.
+
+**MLBLIVE — a separate, deliberately unregistered sport label.** Real
+ingested data carries `MLB` (11,142 rows, pre-game props — what this
+plug-in supports) and `MLBLIVE` (1,428 rows) as two different `sport`
+strings. Checked directly: 100% of real MLBLIVE stat_type strings are
+inning-specific (`1st Inn. Pitches Seen`, `1-3 Inn. HRR`, `3rd Inn. Balls
+Counted`, etc.) — the same per-game-number mismatch as the `1st Inn.`
+rows above, for the whole category. `pickem_sport_plugins/mlb.py`'s
+`MLB_SPORT_LABELS` deliberately excludes `"mlblive"`, so these rows keep
+reporting `model_status="unsupported_sport"` — an honest, correct result,
+not a bug to fix later.
+
+### Computed stat types: Hitter FS and Pitcher FS
+
+Both are real PrizePicks scoring formulas, confirmed live (2026-09-11) via
+`prizepicks.com/playbook-article/how-to-play-prizepicks-mlb-fantasy-scoring-system`,
+not guessed:
+
+- **Hitter FS**: Single = 3, Double = 5, Triple = 8, Home Run = 10,
+  Run = 2, RBI = 2, Walk = 2, Hit By Pitch = 2, Stolen Base = 5.
+- **Pitcher FS**: Win = 6, Quality Start = 4, Earned Run = −3,
+  Strikeout = 3, Out = 1. "Win" reads MLB Stats API's own real per-game
+  `wins` field directly (not derived). "Quality Start" (MLB's real rule:
+  ≥6 innings pitched AND ≤3 earned runs) is derived from `p_outs >= 18`
+  (6 full innings, using the real outs count rather than parsing MLB's
+  "X.Y" innings-pitched STRING, where `.1`/`.2` mean partial-inning outs,
+  not decimal tenths) and `p_earnedRuns <= 3`.
+
+**Verification performed before handoff**, same standard as NFL's Kicking
+Points/Fantasy Score: both formulas were independently hand-computed
+outside the model's own code, against a real player's full real season
+game log, and cross-checked against the model's real output.
+- Hitter FS: Aaron Judge's real 2026 hitting log (61 games) hand-summed to
+  a season Hitter FS total of 581; `_compute_hitter_fs()` on the same real
+  data produced 581 — identical. Run independently through
+  `pickem_model.py`'s own `resolve_stat_spec()`/`build_stat_series()` path
+  (not just the standalone function) — same result, 581, confirming the
+  formula is correctly wired into the real pipeline, not just correct in
+  isolation.
+- Pitcher FS: Gerrit Cole's real 2026 pitching log (19 games — 8 wins, 333
+  outs, 42 earned runs, 113 strikeouts, 11 real quality starts) hand-summed
+  to a season Pitcher FS total of 638; `_compute_pitcher_fs()` on the same
+  real data produced 638 — identical.
+
+### Real, live end-to-end proof
+
+A full production run (`python pickem_model.py --season 2026`) against the
+real 57,628-row ingested snapshot produced 2,880 real `estimated` MLB+NFL
+rows (MLB dominant — 2026 NFL season data is still sparse this early).
+Independently re-pulled Framber Valdez's real 2026 pitching game log
+(person id 664285) outside the model's own code: 28 games, mean
+`numberOfPitches` = 89.321429 — matched the model's own `season_avg` for
+his real "Pitches Thrown" prop (line 94.5, `model_mean` 92.18) to the same
+six decimal places, proving the real MLB Stats API data is flowing
+correctly through `fetch_mlb_season_stats()` into the model's scoring math,
+not just producing a plausible-looking number.
+
+Real MLB `model_status` breakdown from that same run (11,142 total real
+MLB rows): `unsupported_odds_type` 7,824 (Demon/Goblin lines — a pre-
+existing, sport-agnostic gap, not this session's scope), `estimated`
+2,880, `unsupported_stat_type` 387 (all of them real, stated gaps from the
+table above — nothing unexpected/unmapped), `no_player_match` 29,
+`no_line_value` 22.

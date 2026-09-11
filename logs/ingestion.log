@@ -9650,3 +9650,7 @@ Call log:
 2026-09-11 17:44:20,922 UTC | INFO | PrizePicks: 2 normalized rows
 2026-09-11 17:44:20,924 UTC | INFO | Underdog: 2 normalized rows
 2026-09-11 17:44:20,925 UTC | INFO | === Ingestion run complete: 4 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-11 18:56:09,519 UTC | INFO | === Ingestion run starting ===
+2026-09-11 18:56:14,533 UTC | INFO | PrizePicks: 43274 normalized rows
+2026-09-11 18:56:16,335 UTC | INFO | Underdog: 14354 normalized rows
+2026-09-11 18:56:17,755 UTC | INFO | === Ingestion run complete: 57628 total rows (PrizePicks OK, Underdog OK) ===

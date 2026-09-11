@@ -10382,3 +10382,188 @@ exercise `mlb.py`'s live network path — see Decision #2), and (3) the
 MLB section of `pickem_estimation_model_spec.md`. Sessions 2.14–2.17
 (soccer, NBA, CFB, tennis) each add one new plug-in file the same way,
 per the architecture this session built.
+
+---
+
+## Session 2.13 — MLB Support (Pick'em)
+
+**Date completed:** 2026-09-11
+**Status:** ✅ Complete
+
+**What was actually done:** Closed the three open items Session 2.12 left
+for this session: real MLB stat-type coverage (checked against real
+ingested data, not guessed), a real end-to-end scoring proof, and the
+spec-doc section. Rewrote `scripts/estimation/pickem_sport_plugins/mlb.py`
+from Session 2.12's proof-case scaffold (real fetch code, small unverified
+stat map) into a fully verified plug-in.
+
+1. Ran a real, live production ingestion pull
+(`scripts/ingestion/ingest_pickem.py`) — the repo's own `latest.csv` had
+been left holding a small synthetic test fixture (5 rows) from prior test
+work, not real data. The live pull returned 57,628 real rows (43,274
+PrizePicks + 14,354 Underdog), including 11,142 real MLB rows (plus a
+separate 1,428-row `MLBLIVE` category — see Decision #3).
+2. Counted every real MLB `stat_type` string from both platforms, with
+real counts, before mapping anything — same discipline as the NFL
+"Stat-type coverage" section Session 2.3 already set as this project's
+standard.
+3. Pulled two real, live MLB Stats API responses independently (Aaron
+Judge's — person id 592450 — real hitting game log; Gerrit Cole's —
+person id 543037 — real pitching game log) and checked every column name
+used in the new stat map against those real payloads before writing it.
+Confirmed MLB Stats API's hitting game log has no direct "singles" column
+(derived: `hits − doubles − triples − homeRuns`) and that its
+"inningsPitched" field is a real "X.Y = X innings + Y outs" string, not a
+decimal — used the real `outs` field instead of parsing that string, to
+avoid a real, easy-to-make unit bug.
+4. **Split the plug-in's fetch into hitting and pitching game logs**,
+something Session 2.12's proof case did not do (hitting only). Real MLB
+props split cleanly into hitter stats and pitcher stats with some
+overlapping raw names (a hitter's own "hits" vs. a pitcher's "hits
+allowed" are different real things) — every pitching-group column is
+`p_`-prefixed for this reason. Which log(s) to fetch per player is decided
+from that player's real MLB Stats API `position.type` (confirmed live:
+`"Pitcher"`, `"Two-Way Player"` — Shohei Ohtani, person id 660271, real
+example — or a real position type, which defaults to hitting).
+5. Mapped 23 real stat-type strings across both platforms (single-column,
+composite-sum, and two real PrizePicks scoring formulas — see Decision
+#1) directly to real MLB Stats API columns or derivations. Left 11
+distinct real gaps explicitly unsupported, each with a stated, verified
+reason (not a guess) — see Decision #2. Full table in
+`docs/research/pickem_estimation_model_spec.md`'s new "Session 2.13"
+section.
+6. **Sourced and confirmed PrizePicks' real official MLB Hitter FS/Pitcher
+FS scoring formulas** via `prizepicks.com/playbook-article/how-to-play-
+prizepicks-mlb-fantasy-scoring-system` (fetched live, 2026-09-11) — same
+standard NFL's Kicking Points/Fantasy Score formulas were held to
+(Session 2.3). Tried to source Underdog's equivalent MLB formula the same
+way; every real Underdog rules URL (`underdogfantasy.com/rules/pick-em/
+mlb` → `underdogsports.com/...` → `app.underdogfantasy.com/rules` →
+`app.underdogsports.com/rules`) either redirected into a JS app shell or
+returned a real HTTP 403 to an unauthenticated fetch. Left Underdog's
+`Fantasy Points` stat type unsupported rather than guess at its formula.
+7. **Hand-verified both new formulas outside the model's own code**, same
+standard as NFL's verification: summed Aaron Judge's real full 2026
+hitting log (61 games) by hand for Hitter FS (581) and Gerrit Cole's real
+full 2026 pitching log (19 games, 11 real quality starts) by hand for
+Pitcher FS (638); both matched the model's own computed functions exactly,
+and — run through `pickem_model.py`'s real `resolve_stat_spec()`/
+`build_stat_series()` path, not just the standalone function — Judge's
+Hitter FS series still summed to 581.
+8. Ran the full production pipeline for real
+(`python pickem_model.py --season 2026`) against the real 57,628-row
+ingested snapshot. Produced 2,880 real `estimated` rows (MLB-dominant;
+2026 NFL season data is still sparse this early in the season). Real MLB
+`model_status` breakdown: `unsupported_odds_type` 7,824 (a pre-existing,
+sport-agnostic Demon/Goblin gap, not this session's scope), `estimated`
+2,880, `unsupported_stat_type` 387 (all real, stated gaps from the
+Session 2.13 table — nothing unexpected or unmapped left over),
+`no_player_match` 29, `no_line_value` 22. Player-match rate: 29/2,931 =
+99.0%.
+9. **Independently re-verified one real, live MLB prop end-to-end**,
+outside the model's own code: Framber Valdez's real "Pitches Thrown" prop
+(line 94.5) scored `model_status="estimated"`. Re-pulled his real 2026
+pitching game log directly (person id 664285, 28 real games) in a
+separate script with no import from `pickem_model.py` or `mlb.py` at all
+— hand-computed mean `numberOfPitches` = 89.321429, matching the model's
+own `season_avg` for that exact prop to six decimal places. This is the
+roadmap card's second validation item, proven against fully independent
+code, not just re-reading the model's own output.
+10. Confirmed both existing regression suites still pass unchanged after
+the rewrite: `test_pickem_model.py` (4/4) and `test_sportsbook_props_model.py`
+(11/11) — neither references `mlb.py` beyond checking `"mlb"` is
+registered (unchanged), so no test updates were needed for this session's
+work.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/mlb.py` — rewritten. Real,
+verified stat map (23 mapped stat types across single-column, composite,
+and two computed PrizePicks formulas), hitting+pitching dual game-log
+fetch keyed off real `position.type`, 11 stated unsupported gaps.
+- `docs/research/pickem_estimation_model_spec.md` — new "Session 2.13"
+section: the full real stat-type coverage table, the Hitter FS/Pitcher FS
+formula confirmation and hand-verification, the MLBLIVE exclusion
+rationale, and the real end-to-end proof.
+- `ROADMAP.md` — Session 2.13 card closed with full validation detail.
+- `data/pickem/normalized/latest.csv`, `output/estimation/latest.csv` —
+overwritten by this session's real production runs (expected — both are
+the pipeline's own "current state" files, per their own docstrings).
+
+**Validation results:**
+- [x] Real, current MLB stat-type strings pulled live from both
+platforms and mapped one-by-one, each confirmed against a real MLB Stats
+API column — PASS. 11,142 real MLB rows counted by real `stat_type`
+string before any mapping; every mapped column checked against two real,
+live MLB Stats API payloads first.
+- [x] A real, live MLB prop scores end-to-end and independently
+sanity-checks against the model's own numbers — PASS. Framber Valdez's
+real "Pitches Thrown" prop, `model_status="estimated"`; an independent
+re-pull of his real game log (separate script, no shared code with the
+model) matched the model's `season_avg` exactly.
+- [x] `model_status` breakdown shows a real, nonzero MLB `estimated`
+count — PASS. 2,880 real `estimated` rows in `output/estimation/latest.csv`
+from a real production run.
+- Regression: `test_pickem_model.py` 4/4 and `test_sportsbook_props_model.py`
+11/11, both unchanged — PASS.
+
+**Decisions made:**
+1. **Hitter FS/Pitcher FS (PrizePicks) were sourced and coded; Underdog's
+Fantasy Points was not**, rather than leaving both unsupported or guessing
+at Underdog's formula to look more complete. Reasoning: PrizePicks'
+formula was confirmable from a real, live official source
+(`prizepicks.com/playbook-article/...`); Underdog's real rules page could
+not be reached as static content (every real URL either JS-shell-redirects
+or 403s to an unauthenticated fetch) as of this session. Coding a formula
+this project could not verify would violate the project's own "no
+unnamed black-box factors" rule for the sake of looking finished — same
+standard that made Session 2.12 split MLB into architecture-now/
+verification-later in the first place.
+2. **11 distinct real stat-type gaps were left unsupported with stated
+reasons, rather than force-mapped to a close-but-wrong column.** Two
+concrete real examples that drove this: (a) `Strikes Counted`/`Balls
+Counted` (PrizePicks, a batter's own pitch-count breakdown) — MLB Stats
+API's hitting game log has a total `numberOfPitches` but no ball/strike
+split of it; there is no column to map to, not an unchecked one. (b) every
+`1st Inn.`/`1-3 Inn.`/`1-5 Inn.` stat (both platforms, and 100% of the
+separate `MLBLIVE` sport label) — these need per-inning splits, and
+`pickem_model.py`'s season_avg/recent_form model is architected around one
+number per GAME; there is no per-game number an inning-level prop could
+even be assigned. Both are real, checked limits of the data source and
+the existing model shape, recorded exactly like NFL's own punt-return-TD
+gap (Session 2.3) rather than silently dropped or approximated.
+3. **`MLB_SPORT_LABELS` deliberately excludes `"mlblive"`**, so real
+MLBLIVE rows keep reporting `model_status="unsupported_sport"` rather than
+falling through to `unsupported_stat_type` for every single row (which
+would be functionally the same outcome dressed up to look like partial
+support). Since 100% of real MLBLIVE stat_type strings are inning-level
+(checked directly, not assumed), registering it under the MLB plug-in
+would not have unlocked any real coverage — it would only have added a
+sport label to a plug-in that genuinely cannot serve any of its own real
+rows. Left as a clearly separate, unregistered sport instead, matching
+this session's Decision #2 reasoning.
+4. **Fetch splits into hitting and pitching game logs, keyed off each
+player's real roster `position.type`**, rather than the simpler option of
+fetching only hitting (Session 2.12's shape) and leaving every real
+pitcher stat type unsupported. Reasoning: pitcher props are a large,
+real share of actual MLB volume on both platforms (Hits Allowed, Earned
+Runs Allowed, Ks, Pitching Outs, Batters Faced, Pitches/Strikes Thrown —
+9 of the 23 mapped stat types, several with real three-figure counts) —
+leaving them all unsupported would have meant this session's own
+validation bar ("a real, nonzero MLB estimated count") technically passed
+while quietly missing a large, real fraction of what a person actually
+sees on these platforms for this sport.
+
+**Corrections/reversals during the session:** None. The plug-in's
+top-level shape (roster walk → per-player game log → `SportPlugin`)
+Session 2.12 already built was reused unchanged; only the stat map, the
+fetch split, and the formula sourcing were new work for this session, all
+matching what the roadmap card and Session 2.12's own handoff notes
+already called for.
+
+**Open items / deferred validations:** Underdog's real MLB `Fantasy
+Points` formula stays unsupported until a real, sourceable official
+formula is found (not this session's job to keep chasing — flagged here
+so a future session doesn't have to rediscover the same dead-end URLs).
+Sessions 2.14–2.17 (soccer, NBA, CFB, tennis) each add one new plug-in
+file the same way, per the Session 2.12 architecture — no changes needed
+to that architecture as a result of this session's work.

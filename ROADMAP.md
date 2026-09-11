@@ -1412,7 +1412,7 @@ module loader (not just direct import), which produced
 ---
 
 ### Session 2.13 — MLB Support (Pick'em)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-11) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.12 (plug-in architecture) complete.
 
 **Why this sport, first:** Per `/docs/research/sport_inventory.md`'s
@@ -1435,16 +1435,26 @@ API's own column names.
 pattern as NFL's).
 
 **Validation (required to close session):**
-- [ ] Real, current MLB stat-type strings pulled live from both
+- [x] Real, current MLB stat-type strings pulled live from both
 platforms' actual ingested rows (not assumed from PrizePicks' own site
 copy) and mapped one-by-one, each confirmed against a real MLB Stats API
-column before being added
-- [ ] A real, live MLB prop scores end-to-end (ingested → `model_status=
+column before being added — a real 2026-09-11 production ingestion pull
+(11,142 real MLB rows) had every real `stat_type` string counted and
+checked directly against a live MLB Stats API response before mapping;
+see `docs/research/pickem_estimation_model_spec.md`'s "Session 2.13"
+section for the full table.
+- [x] A real, live MLB prop scores end-to-end (ingested → `model_status=
 "estimated"` → a real edge number) and the player's own recent game log,
 pulled independently, sanity-checks against the model's `season_avg`/
-`recent_form`
-- [ ] `model_status` breakdown after this session shows a real, nonzero
-MLB `estimated` count in `output/estimation/latest.csv`, not just NFL
+`recent_form` — Framber Valdez's real "Pitches Thrown" prop scored with
+`model_status="estimated"`; his real 2026 pitching log, re-pulled
+independently outside the model's own code, gave a season mean of
+89.321429 pitches, matching the model's own `season_avg` for that same
+prop exactly.
+- [x] `model_status` breakdown after this session shows a real, nonzero
+MLB `estimated` count in `output/estimation/latest.csv`, not just NFL —
+2,880 real `estimated` rows (MLB dominant; 2026 NFL season data is still
+early), `output/estimation/latest.csv`.
 
 ---
 
