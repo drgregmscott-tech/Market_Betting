@@ -10724,3 +10724,46 @@ Sessions 2.14–2.17 (soccer, NBA, CFB, tennis) each add one new plug-in
 file per the Session 2.12 architecture — no
 further changes needed to that architecture as a result of this
 follow-up.
+
+---
+
+### Second same-day follow-up (2026-09-11) — Demon/Goblin scale check, and a new roadmap card
+
+Walking through items 1–3 surfaced that item 3's real scale was larger
+than either the earlier session summary or the "pre-existing, out of
+scope" framing suggested. Re-checked directly before deciding anything:
+of 43,274 real ingested PrizePicks rows (the same 2026-09-11 live pull
+used throughout this session), 36,653 (**84.7%**) carry a real `demon` or
+`goblin` `odds_type`, not `standard` — for MLB specifically, 7,824 of
+8,639 real PrizePicks MLB rows (**90.6%**). This is the large majority of
+real PrizePicks volume across every sport, currently blocked entirely
+from scoring — not the narrow edge case "pre-existing, sport-agnostic
+gap" language on its own implied.
+
+Also checked, before recommending anything: whether PrizePicks' real API
+response secretly already carries a usable per-leg payout number for
+these rows (it does not — inspected a real Demon row's raw `attributes`
+directly, no multiplier/payout field present, confirming the earlier
+architectural read: PrizePicks prices Demon/Goblin only at the entry
+level, via published multi-leg tables this project hasn't sourced, the
+same real gap Session 2.6 already stated and explicitly worked around
+for its own v1 scope).
+
+**Decision (user-approved):** add this as its own new roadmap card
+rather than attempt a fix inside this session — the real work
+(sourcing PrizePicks' actual multi-leg Demon/Goblin payout tables) is a
+genuine research task or its own, not a quick addition. Added **Session
+2.21 — PrizePicks Demon/Goblin Payout Sourcing & Scoring** to
+`ROADMAP.md`, placed after Session 2.20 to keep existing session numbers
+stable (renumbering 2.14–2.20 to insert it earlier was considered and
+rejected — too disruptive for the cross-references it would break, for
+no real benefit over a clear priority note instead). A **PRIORITY NOTE**
+was added to Session 2.13's own card recommending 2.21 run before
+Sessions 2.14–2.17, since it improves every sport's PrizePicks coverage
+at once rather than one sport's ~15% slice — stated as a recommendation,
+not an enforced reordering, since the user may still want a specific
+sport sooner.
+
+**Files modified:** `ROADMAP.md` — new Session 2.21 card (full "why
+gated," "what gets built," files touched, and validation checklist);
+Session 2.13's card gained a "PRIORITY NOTE" pointing to it.

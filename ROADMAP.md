@@ -1461,6 +1461,19 @@ MLB `estimated` count in `output/estimation/latest.csv`, not just NFL —
 2,880 real `estimated` rows (MLB dominant; 2026 NFL season data is still
 early), `output/estimation/latest.csv`.
 
+**PRIORITY NOTE (added during this session's same-day follow-up,
+2026-09-11):** verifying this card's own PrizePicks-odds-type gap
+(`unsupported_odds_type`) surfaced that it is real and large — 84.7% of
+ALL real ingested PrizePicks rows (36,653 of 43,274, every sport, one
+real live pull) and 90.6% of real PrizePicks MLB rows specifically are
+Demon/Goblin and currently unscored, not a niche edge case. **Session
+2.21 (PrizePicks Demon/Goblin Payout Sourcing & Scoring, added below)
+is recommended to run before Sessions 2.14–2.17** — it improves every
+sport's PrizePicks coverage at once (most of each sport's real volume),
+where each remaining sport session only adds coverage for its own ~15%
+slice. This is a recommendation, not an enforced reordering — the user
+can still run 2.14–2.17 first if a specific sport is more urgent.
+
 ---
 
 ### Session 2.14 — Soccer Support (Pick'em): EPL, then everything else
@@ -1746,6 +1759,75 @@ at least once, before being trusted as a standing signal
 - [ ] A real cadence is running (automated or a committed manual habit)
 and `review_log.csv` shows more than one real entry over time, not a
 single one-off run
+
+---
+
+### Session 2.21 — PrizePicks Demon/Goblin Payout Sourcing & Scoring (Pick'em)
+**Status:** Not started
+**Prerequisites:** Session 2.6 (Bankroll & Sizing Logic) complete — this
+session extends, rather than replaces, its entry-level payout logic.
+**Recommended priority:** per Session 2.13's own "PRIORITY NOTE" (added
+2026-09-11), consider running this BEFORE Sessions 2.14–2.17 — it
+improves PrizePicks coverage across every sport at once, not just one.
+
+**Why this exists:** Checked directly during Session 2.13's MLB work: of
+43,274 real ingested PrizePicks rows (one live pull, 2026-09-11), 36,653
+(84.7%) carry `odds_type` = `demon` or `goblin`, not `standard` — for MLB
+specifically, 7,824 of 8,639 real PrizePicks MLB rows (90.6%). Every one
+of these rows is currently blocked from scoring
+(`model_status="unsupported_odds_type"`, a real gate added in Session
+6.2) because `pickem_model.py`'s implied-probability logic assumes a flat
+50% breakeven, which is only defensible for a Standard-odds line — a
+Demon line is deliberately set at an easy bar (so the model's own true-
+probability estimate on it is naturally close to 100%, manufacturing a
+fake edge against a flat 50%) and a Goblin line the opposite. This is not
+a small, forgotten corner case — it is the large majority of real
+PrizePicks volume, across every sport this project supports or will
+support, going completely unscored.
+
+**Why it's gated, not just unimplemented:** unlike Underdog (which prices
+each pick individually via a real, ingested per-side payout multiplier),
+PrizePicks does not price Demon/Goblin per LEG at all — the real payout
+only exists at the ENTRY level (e.g., a real 2-pick entry combining one
+Standard and one Demon leg pays a different multiplier than two Standard
+legs), via published payout tables this project has not sourced yet.
+Session 2.6 already built exactly this shape of entry-level payout logic
+(`sizing_engine.py`), but deliberately scoped to the one real, sourced
+combination available at the time (2-pick, both Standard, 3x) — every
+other combination, Demon/Goblin included, is already explicitly rejected
+there rather than guessed at, per this project's standing "no unnamed
+black-box factors" rule.
+
+**What gets built:** Real research first — source PrizePicks' actual
+published multi-leg payout tables broken out by Standard/Demon/Goblin
+leg combinations (their own site publishes payout charts per entry
+size; the harder part is finding the REAL per-combination breakdown, not
+just the all-Standard baseline Session 2.6 already has). Once sourced,
+extend `pickem_model.py`'s implied-probability logic (replacing the flat
+`PRIZEPICKS_ASSUMED_IMPLIED_PROB` assumption for Demon/Goblin rows with a
+real, sourced number) and `sizing_engine.py`'s accepted-combination list,
+so these rows can move from `unsupported_odds_type` to real `estimated`
+rows with a trustworthy edge number — not just a technically-nonzero one.
+
+**Files touched:** `scripts/estimation/pickem_model.py` (implied-
+probability logic for Demon/Goblin), `scripts/sizing/sizing_engine.py`
+(accepted entry-combination list), `docs/sizing_methodology.md` and
+`docs/research/pickem_estimation_model_spec.md` (both need the real
+sourced payout tables recorded, same standard every other real number in
+this project has been held to).
+
+**Validation (required to close session):**
+- [ ] Real PrizePicks payout tables sourced directly from an official
+PrizePicks source (not a third-party estimate/heuristic) for at least the
+Demon and Goblin variants of the entry sizes Session 2.6 already
+supports, each confirmed before being coded — a rough third-party
+heuristic (e.g. "demons need about a 4-point edge") is not sufficient on
+its own, per this project's standing rule
+- [ ] A real, live Demon or Goblin prop scores end-to-end with a real,
+sourced (not assumed) implied probability and edge number
+- [ ] `model_status` breakdown after this session shows a real, material
+drop in `unsupported_odds_type` for at least one real sport's PrizePicks
+data, with the real before/after counts recorded
 
 ---
 
