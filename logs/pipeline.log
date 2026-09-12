@@ -25,3 +25,12 @@
 2026-09-11 18:22:05,691 UTC | INFO | CLV logging summary: {'track': 'pickem', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260911T182157Z.csv', 'rows_in_estimates': 58974, 'newly_flagged': 43, 'newly_closed': 0, 'still_open': 1304, 'total_logged': 8339, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}
 2026-09-11 18:22:05,815 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\digest_20260911T182128Z.md
 2026-09-11 18:22:05,816 UTC | INFO | === Pipeline run complete ===
+2026-09-12 10:05:43,650 UTC | INFO | === Pipeline run starting at 2026-09-12T10:05:43Z (season=2025) ===
+2026-09-12 10:05:43,651 UTC | INFO | --- Stage 1/3: ingestion ---
+2026-09-12 10:06:05,526 UTC | INFO | Ingestion summary: {'pulled_at': '2026-09-12T10:05:43.829390+00:00', 'prizepicks_rows': 47299, 'underdog_rows': 14273, 'prizepicks_ok': True, 'underdog_ok': True, 'total_rows': 61572, 'snapshot_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\normalized\\pickem_props_20260912T100543Z.csv'}
+2026-09-12 10:06:05,526 UTC | INFO | --- Stage 2/3: estimation (season=2025) ---
+2026-09-12 10:27:15,170 UTC | INFO | Estimation summary: {'rows_in': 61572, 'rows_out': 61572, 'status_counts': {'unsupported_odds_type': 31988, 'unsupported_sport': 16512, 'unsupported_stat_type': 5770, 'estimated': 5141, 'no_player_match': 1840, 'no_line_value': 286, 'insufficient_history': 35}, 'output_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260912T102713Z.csv'}
+2026-09-12 10:27:15,171 UTC | INFO | --- Stage 3/3: CLV logging ---
+2026-09-12 10:27:25,598 UTC | INFO | CLV logging summary: {'track': 'pickem', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260912T102713Z.csv', 'rows_in_estimates': 61572, 'newly_flagged': 1937, 'newly_closed': 0, 'still_open': 3233, 'total_logged': 12779, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}
+2026-09-12 10:27:25,879 UTC | INFO | Wrote digest to C:\Users\gmsco\Desktop\Market_Betting\output\digest\digest_latest.md and C:\Users\gmsco\Desktop\Market_Betting\output\digest\digest_20260912T100543Z.md
+2026-09-12 10:27:25,881 UTC | INFO | === Pipeline run complete ===

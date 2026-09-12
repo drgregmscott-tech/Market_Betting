@@ -167,6 +167,27 @@ log = setup_logging()
 # crashing the whole pipeline.
 # --------------------------------------------------------------------------
 def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
+    """HOTFIX (2026-09-12): a real GitHub Actions run (both manually
+    triggered and scheduled) got a `403 Client Error: Forbidden` from BOTH
+    PrizePicks and Underdog simultaneously, while the exact same request
+    (same URL, same params, same HEADERS below) returned a real `200` with
+    a full real payload when run from a non-GitHub-Actions network moments
+    later -- confirming this is not a stale header or a code bug, it's
+    PrizePicks'/Underdog's bot-protection layer rejecting requests from
+    GitHub's own runner IP ranges specifically (the same real class of
+    block this project already hit and documented for DraftKings/Akamai --
+    see SESSION_LOG.md's Session 6.1 entries). This project has a standing
+    rule against actively bypassing bot detection (no IP rotation, no TLS/
+    fingerprint spoofing, no CAPTCHA solving), so this fix does NOT attempt
+    any of that -- it only makes a real failure easier to diagnose: on a
+    non-2xx response, the real status code and a truncated real response
+    body (which may be a bot-protection vendor's own block page -- e.g. a
+    Cloudflare Ray ID -- rather than a generic error) are now logged,
+    instead of just requests' own summarized exception text. This is
+    diagnostic only; it does not change whether a blocked request
+    succeeds. See ROADMAP.md/SESSION_LOG.md for this incident's real
+    status and the user-facing infrastructure options (e.g. a self-hosted
+    runner on a non-datacenter IP) that would actually resolve it."""
     last_error = None
     for attempt in range(1, MAX_RETRIES + 2):  # e.g. 1 initial + 2 retries
         try:
@@ -177,12 +198,17 @@ def _fetch_with_retries(url: str, params: Optional[dict] = None) -> dict:
             return response.json()
         except requests.exceptions.RequestException as exc:
             last_error = exc
+            body_snippet = ""
+            resp = getattr(exc, "response", None)
+            if resp is not None:
+                body_snippet = f" | status={resp.status_code} body={resp.text[:300]!r}"
             log.warning(
-                "Attempt %d/%d failed for %s: %s",
+                "Attempt %d/%d failed for %s: %s%s",
                 attempt,
                 MAX_RETRIES + 1,
                 url,
                 exc,
+                body_snippet,
             )
             if attempt <= MAX_RETRIES:
                 time.sleep(RETRY_BACKOFF_SECONDS)

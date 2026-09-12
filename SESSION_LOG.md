@@ -10988,3 +10988,283 @@ Demon/Goblin `unsupported_odds_type` gap (Session 2.13's priority note)
 continues to suppress most real PrizePicks soccer/EPL volume from ever
 reaching stat resolution, same as every other sport — Session 2.21 remains
 the recommended next step for closing that gap project-wide.
+
+---
+
+## Session 2.15 — NBA Support (Pick'em): offline half only
+
+**Date completed:** 2026-09-12
+**Status:** ⚠️ Complete with caveats — left open, per ROADMAP.md's rule for
+half-finished sessions. Live validation is genuinely blocked on the season
+starting; this is not a deferred-by-choice item.
+
+**What was actually done:** ROADMAP.md's Session 2.15 card is blocked on
+the NBA regular season starting (mid-October), so there is no live game to
+fetch a real box score from or grade a real prop against yet. Asked the
+user how to use the session rather than assuming; user chose to build the
+offline half now (plug-in code, stat map, registration) and leave live
+validation explicitly open until the season starts, rather than treat the
+whole session as untouchable until October.
+
+1. Confirmed the real season-start date directly, not from the roadmap
+card's estimate: a live production ingestion pull already carries 194 real
+PrizePicks NBA rows, all real season-opener futures (e.g. "BOS @ DET",
+`game_start_time` 2026-10-20T15:10:00-04:00, `status` "pre_game").
+2. Pulled the real, current NBA stat_type strings from that same 194-row
+pull rather than guessing a list in advance (same discipline as every
+prior sport session): Pts+Rebs (30), PRA (29), Points (26), Pts+Asts (25),
+Rebounds (24), 3PTM (22), Assists (20), Rebs+Asts (11), Double-Double (4),
+Blocked Shots (3).
+3. Built `scripts/estimation/pickem_sport_plugins/nba.py` — same
+month-chunked-scoreboard + per-game-summary shape as the soccer plug-in
+(Session 2.14), registered in `pickem_sport_plugins/__init__.py`.
+Deliberately used ESPN's public API instead of `sport_inventory.md`'s
+`nba_api` recommendation — reasoned substitution, stated explicitly in the
+plug-in's own docstring and the spec doc, not a silent swap.
+4. Mapped Points/Rebounds/Assists/3PTM/Blocked Shots plus the four
+composite stats (Pts+Rebs, Pts+Asts, Rebs+Asts, PRA) to ESPN's publicly
+documented box-score field names. Left Double-Double unsupported — it
+needs a derived multi-category condition this plug-in has no real box
+score yet to verify against, same "don't guess" standard as every other
+sport's stated gaps.
+5. **Found and fixed a real bug affecting every plug-in, not just NBA's:**
+`pickem_model.py`'s `build_name_lookup()` crashed with `KeyError:
+'sort_key'` whenever a plug-in's `fetch_stats()` returns zero rows (a real,
+normal pre-season case — NBA's real plug-in correctly returns an empty
+DataFrame right now, since no NBA game has been played) because an empty
+`pd.DataFrame([])` has no columns to sort by. This was a real, previously
+undiscovered gap in the existing multi-sport architecture (Session 2.12),
+surfaced by NBA being the first plug-in to actually hit a truly empty
+season. Fixed with an early empty-lookup return.
+6. Validated the fix two ways: ran `process_props()` against the real
+194-row NBA slice of `latest.csv` — no crash, every row resolves to a
+real, honest `model_status` (`unsupported_odds_type` 156,
+`no_player_match` 38 — no live stat data exists yet, so no NBA prop can
+resolve further than that, which is the correct/honest result, not a
+model deficiency); and re-ran `test_pickem_model.py`'s existing NFL-only
+synthetic suite — unchanged pass, confirming the fix didn't touch any
+sport whose stats are non-empty.
+7. Documented the full stat-type table, the ESPN-vs-nba_api reasoning, the
+Double-Double gap, and the bug fix in
+`docs/research/pickem_estimation_model_spec.md`'s new "Session 2.15"
+section.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/nba.py` — new. ESPN-based NBA
+plug-in, UNVERIFIED against a real payload (no live game exists yet).
+- `scripts/estimation/pickem_sport_plugins/__init__.py` — registered
+`NBA_PLUGIN` in `PLUGINS`.
+- `scripts/estimation/pickem_model.py` — `build_name_lookup()` now returns
+an empty lookup for an empty `stats_df` instead of raising.
+- `docs/research/pickem_estimation_model_spec.md` — new "Session 2.15"
+section.
+- `ROADMAP.md` — Session 2.15 card updated to ⚠️ half-open, not ✅ complete
+(see Rule for sessions left open, Session 3.6).
+
+**Validation results:**
+- [x] `nba` plugin loads and registers correctly (`PLUGINS` includes it;
+`plugin_for_sport("nba")` resolves).
+- [x] `test_pickem_model.py` (NFL-only synthetic suite): unchanged pass,
+exit 0.
+- [x] Real 194-row NBA slice of `latest.csv` processed via
+`process_props()`: no crash; honest `model_status` breakdown
+(`unsupported_odds_type` 156, `no_player_match` 38) — correct given zero
+live NBA stat rows exist pre-season.
+- [ ] `nba_api`/ESPN re-confirmed live against a real, currently-in-progress
+NBA game — **not possible yet, season hasn't started.**
+- [ ] Real, current NBA stat-type strings mapped one-by-one against a real
+in-season pull — **the 10 strings above are real, but only from
+pre-season futures rows; must be re-checked once real in-season volume
+exists.**
+- [ ] A real, live NBA prop scores end-to-end — **not possible yet.**
+
+**Decisions made:**
+1. Build the offline half now rather than wait idle until October —
+user's explicit choice when presented with the blocker, not assumed.
+2. Use ESPN's public API instead of `sport_inventory.md`'s `nba_api`
+recommendation — ESPN is already proven live in this exact codebase
+(soccer, Session 2.14), needs no key/account, and has no documented
+bot-detection headers to work around, unlike stats.nba.com. Stated as a
+reasoned substitution in both the plug-in docstring and the spec doc, not
+a silent deviation from the roadmap card's original plan. `nba_api`
+remains a fallback if ESPN's real box-score data (once checked in October)
+turns out to be missing something needed.
+3. Leave Double-Double unsupported rather than approximate it from
+whatever categories happen to be available — same "no unnamed black-box
+factors" rule this project has applied to every other sport's stated
+gaps (Session 2.3, reaffirmed every session since).
+4. Fix the empty-`stats_df` crash in `pickem_model.py` itself (shared
+code) rather than special-casing it inside `nba.py` — the bug is real for
+ANY plug-in whose season has zero rows so far (a real future case, not
+NBA-specific), so the fix belongs where every plug-in benefits from it.
+
+**Corrections/reversals during the session:** None — the session was
+scoped as "offline half only" from the start (per the user's choice), so
+finding it genuinely can't be closed further isn't a correction, it's the
+expected outcome of that choice.
+
+**Open items / deferred validations:** All three of Session 2.15's
+original validation checkboxes remain open and are **not** transferred to
+this session's closure — they stay owned by Session 2.15's own
+re-opening once the NBA regular season starts (2026-10-20, confirmed).
+Specifically: (1) re-confirm every `NBA_STAT_TYPE_MAP` value against a
+real ESPN summary payload from an actual completed game, (2) re-check the
+real stat_type list against real in-season (not pre-season-futures)
+ingested volume, (3) prove one real, live NBA prop scores end-to-end.
+Per the standing rule from Session 3.6, before that re-opening closes this
+card, it must pull the actual current SESSION_LOG.md/ROADMAP.md from
+GitHub directly (not a stale copy) and check for any session entries
+added between now and then.
+
+---
+
+## Hotfix — Pipeline crash on a single ESPN timeout (2026-09-12)
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete
+
+**What happened:** the real GitHub Actions pipeline failed with an
+unhandled `requests.exceptions.ReadTimeout` from ONE ESPN
+`summary?event=...` call inside `pickem_sport_plugins/soccer.py`'s
+per-match loop (Session 2.14's plug-in walks ~470 real completed matches
+per run). Because that exception propagated straight out of
+`pickem_model.py`'s `process_props()` with no isolation, it aborted the
+ENTIRE pipeline run — every sport's estimation output went unwritten that
+run, not just soccer's, even though ingestion had already succeeded.
+
+**Root cause:** every per-item HTTP fetch this project's sport plug-ins
+make (MLB's per-team-roster and per-player game-log calls, Session 2.13;
+EPL's per-player gameweek-history calls and soccer's per-match calls,
+Session 2.14) called `requests.get()` directly with no retry and no
+fault isolation. With hundreds of real calls per plug-in per run, a single
+transient network hiccup was a real, statistically likely event, and any
+one of them crashing the whole run (not just losing that one item's data)
+is a real structural fragility, not a one-off bad match.
+
+**Fix:** added `scripts/estimation/pickem_sport_plugins/http_utils.py`
+(`get_json_with_retries()` — 3 attempts, linear backoff) and wired it into
+every per-item fetch call in `soccer.py`, `epl.py`, and `mlb.py`. A
+one-off, critical call (FPL's `bootstrap-static/`, needed for the whole
+EPL plug-in to have anything to fetch) is allowed to raise after retries
+are exhausted; a per-item call inside a loop (one match, one player, one
+team) now logs a warning and returns an empty result for that one item
+instead, so the run continues with a slightly smaller real sample rather
+than producing nothing at all.
+
+**Verification:**
+1. Added 4 new regression tests (`test_pickem_model.py`) that force every
+retry attempt to fail (mocking `requests.get` to always raise
+`ReadTimeout`) and confirm each affected function returns an empty result
+instead of raising. Full suite: 35/35 pass (31 prior + 4 new).
+2. Ran the real, live production pipeline end-to-end
+(`python scripts/run_pipeline.py --season 2025`, the exact command the
+failing GitHub Actions job runs) after the fix — completed successfully,
+exit code 0, all four sport plug-ins loaded real data (soccer 99,876 rows,
+MLB 43,834, EPL 1,890, NFL 18,540), estimation and CLV-logging stages both
+completed. This is the same real command that failed before the fix,
+proven working end-to-end after it, not just unit-tested in isolation.
+
+**Files modified:**
+- `scripts/estimation/pickem_sport_plugins/http_utils.py` — new. Shared
+retry helper.
+- `scripts/estimation/pickem_sport_plugins/soccer.py`,
+`scripts/estimation/pickem_sport_plugins/epl.py`,
+`scripts/estimation/pickem_sport_plugins/mlb.py` — every per-item HTTP
+call site now uses the shared retry helper with per-item fault isolation
+(MLB's fix is preventative — it had the identical unprotected shape but
+had not yet hit this specific failure).
+- `scripts/estimation/test_pickem_model.py` — 4 new regression tests.
+
+**Decisions made:**
+1. **A per-item fetch failing after retries returns an empty result and
+logs a warning, rather than being allowed to propagate** — the same "a
+real, stated gap is fine; a silent crash is not" standard this project
+already applies to unmapped stat types (Session 2.3 onward), applied here
+to a network fault instead of a data gap. One missing match or player game
+log shows up as a slightly smaller real sample for that one plug-in run,
+which is honest and recoverable on the next run; a blanked-out estimation
+output for every sport is not.
+2. **MLB's identical unprotected shape was fixed proactively in this same
+hotfix, not deferred until it independently failed** — same discipline as
+Session 2.12's cross-file-breakage check: once the real failure mode was
+understood, the codebase was grepped for every other place with the same
+shape rather than patching only the call site that happened to fail this
+time.
+
+---
+
+## Hotfix — PrizePicks/Underdog 403 from GitHub Actions runner IPs (2026-09-12, open incident)
+
+**Date opened:** 2026-09-12
+**Status:** ⚠️ Open — diagnostics improved, root cause identified, NOT
+resolved by a code change (see below for why)
+
+**What happened:** the user manually triggered the pipeline on GitHub
+Actions and got a real `403 Client Error: Forbidden` from BOTH PrizePicks
+(`partner-api.prizepicks.com/projections`) AND Underdog
+(`api.underdogfantasy.com/v1/over_under_lines`) simultaneously, on every
+one of 3 real attempts each. Since `ingest_pickem.py`'s own existing
+safety check correctly stopped the pipeline before estimation/CLV logging
+when both platforms return 0 rows (the design explicitly exists so "a
+transient outage can never be mistaken for every prop closing" — see this
+file's module docstring), no bad data was written; the pipeline failed
+loudly and safely, exactly as designed.
+
+**Root cause, confirmed directly:** re-ran the EXACT SAME request (same
+URL, same params, same `HEADERS` dict already in the code) from a
+non-GitHub-Actions network immediately after the failure — both endpoints
+returned a real `200` with a full real payload (56.9MB PrizePicks, 37.5MB
+Underdog). This rules out a code bug, a stale header, or an actual platform
+outage: the request itself is fine, and succeeds from elsewhere. The real,
+remaining explanation is that PrizePicks'/Underdog's bot-protection layer
+is rejecting requests specifically from GitHub Actions' own runner IP
+ranges (published, and a common real target for anti-bot IP-reputation
+blocklists) — the same real class of block this project already hit and
+documented for DraftKings/Akamai (Session 6.1).
+
+**Why this was NOT "fixed" by a code change:** this project has a standing
+rule against actively bypassing bot detection (no IP rotation, no TLS/
+fingerprint spoofing, no CAPTCHA solving) — consistent with Session 6.1's
+own DraftKings precedent, which stopped at the Developer-Tools header
+fallback and explicitly did not pursue IP/fingerprint evasion once that
+was confirmed insufficient. A header tweak would not address an IP-range
+block in any case (the current headers already succeed from a
+non-blocked IP). This is being logged as a real, open, honestly-stated
+limitation, not silently worked around.
+
+**What was actually done:** improved `_fetch_with_retries()` in
+`ingest_pickem.py` to log the real HTTP status code and a truncated real
+response body on a failed attempt (previously only `requests`' own
+summarized exception text was logged) — this is diagnostic only, so a
+future occurrence can be told apart from a rate limit, an actual platform
+outage, or a real schema/endpoint change (e.g. a Cloudflare block page's
+Ray ID vs. a generic 403) without guessing. It does not change whether a
+blocked request succeeds.
+
+**Real options for the user to actually resolve this (infrastructure
+decisions, not something this session can or should implement
+unilaterally):**
+1. Run the ingestion stage from a runner with a non-datacenter IP (e.g. a
+self-hosted GitHub Actions runner on a residential/business connection, or
+a small always-on VM the user controls) rather than GitHub's own hosted
+runners.
+2. Wait and re-check — IP-reputation blocklists used by bot-protection
+vendors do change over time, and this may not be permanent.
+3. If available, pursue an official/partner API arrangement with
+PrizePicks/Underdog rather than their undocumented consumer endpoints
+(both were already flagged as undocumented and liable to change or start
+rejecting requests at any time — see this file's own module docstring,
+written back in Session 2.2).
+
+**Files modified:**
+- `scripts/ingestion/ingest_pickem.py` — `_fetch_with_retries()` now logs
+real status code + truncated body on failure (diagnostic only).
+
+**Validation:** `test_ingest_pickem.py` re-run after the change — 5/5
+pass, unchanged. Re-confirmed both endpoints return real `200` responses
+from this session's own network at the time of writing.
+
+**Open items:** this incident stays open until a real GitHub Actions run
+(scheduled or manually triggered) succeeds again. If it does not, per the
+options above, the fix is an infrastructure decision for the user, not
+further code changes in this repo.

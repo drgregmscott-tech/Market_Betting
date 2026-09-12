@@ -294,3 +294,6 @@
 2026-09-11 18:21:59,434 UTC | INFO | [pickem] Loaded 58974 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260911T182157Z.csv
 2026-09-11 18:21:59,503 UTC | INFO | [pickem] Existing CLV log has 8296 rows before this run
 2026-09-11 18:22:05,581 UTC | INFO | [pickem] Wrote 8339 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
+2026-09-12 10:27:15,460 UTC | INFO | [pickem] Loaded 61572 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260912T102713Z.csv
+2026-09-12 10:27:15,582 UTC | INFO | [pickem] Existing CLV log has 10842 rows before this run
+2026-09-12 10:27:25,424 UTC | INFO | [pickem] Wrote 12779 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv

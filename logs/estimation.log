@@ -305,3 +305,23 @@
 2026-09-12 10:05:35,726 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
 2026-09-12 10:06:05,537 UTC | INFO | === Estimation run starting (season=2025) ===
 2026-09-12 10:06:05,747 UTC | INFO | Loaded 61572 ingested props from C:\Users\gmsco\Desktop\Market_Betting\data\pickem\normalized\latest.csv
+2026-09-12 10:20:27,382 UTC | INFO | Loaded 99876 soccer stat rows for season 2025
+2026-09-12 10:21:11,583 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-12 10:21:32,027 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-12 10:23:37,129 UTC | INFO | Loaded 1890 epl stat rows for season 2025
+2026-09-12 10:24:40,695 UTC | INFO | Loaded 19561 soccer stat rows for season 2026
+2026-09-12 10:26:06,921 UTC | INFO | Loaded 1890 epl stat rows for season 2026
+2026-09-12 10:26:43,870 UTC | INFO | Loaded 43834 mlb stat rows for season 2025
+2026-09-12 10:26:49,115 UTC | INFO | Loaded 18540 nfl stat rows for season 2025
+2026-09-12 10:27:13,669 UTC | INFO | Model status breakdown: {'unsupported_odds_type': 31988, 'unsupported_sport': 16512, 'unsupported_stat_type': 5770, 'estimated': 5141, 'no_player_match': 1840, 'no_line_value': 286, 'insufficient_history': 35}
+2026-09-12 10:27:14,391 UTC | INFO | Wrote 61572 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260912T102713Z.csv
+2026-09-12 10:27:15,169 UTC | INFO | Wrote 61572 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv
+2026-09-12 10:28:54,194 UTC | INFO | Loaded 50988 mlb stat rows for season 2026
+2026-09-12 10:28:54,907 UTC | INFO | Loaded 19561 soccer stat rows for season 2026
+2026-09-12 10:28:59,056 UTC | INFO | Loaded 135 nfl stat rows for season 2026
+2026-09-12 10:29:00,221 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-12 10:30:16,627 UTC | INFO | Loaded 1890 epl stat rows for season 2026
+2026-09-12 10:30:55,387 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:32:46,779 UTC | INFO | Loaded 50988 mlb stat rows for season 2026
+2026-09-12 10:32:51,788 UTC | INFO | Loaded 135 nfl stat rows for season 2026
+2026-09-12 10:32:52,932 UTC | INFO | Loaded 0 nba stat rows for season 2026

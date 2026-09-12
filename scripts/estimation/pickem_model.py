@@ -253,7 +253,18 @@ def build_name_lookup(stats_df: pd.DataFrame) -> dict[str, str]:
     `player_display_name`, NOT any abbreviated name column a source might
     also carry (see Session 2.3 notes on nflverse's own `player_name` vs.
     `player_display_name` -- the abbreviated form silently broke almost
-    every match)."""
+    every match).
+
+    Session 2.15 fix: an entirely empty `stats_df` (a plug-in's fetch_stats
+    returning zero rows -- a real, normal case pre-season, e.g. NBA's real
+    plug-in before 2026-10, not an error) has no columns at all
+    (`pd.DataFrame([])`), so `.sort_values("sort_key")` raised a KeyError
+    before this guard. Returns an empty lookup instead -- every prop for
+    that sport correctly falls through to model_status="insufficient_history"
+    downstream, the same real, honest result a lookup miss already produces
+    for one unmatched player, just for all of them."""
+    if stats_df.empty:
+        return {}
     most_recent = (
         stats_df.sort_values("sort_key")
         .groupby("player_id")[["player_display_name"]]

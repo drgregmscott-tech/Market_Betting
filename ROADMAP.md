@@ -1572,12 +1572,12 @@ run (all 4 registered plug-ins) took ~6.5 minutes.
 ---
 
 ### Session 2.15 — NBA Support (Pick'em)
-**Status:** Not started — blocked on season start, not on research.
-**Prerequisites:** Session 2.12 complete; NBA regular season underway
-(starts mid-October) so there's real, live data to validate against —
-`sport_inventory.md` found `nba_api` fully documented and ready but
-couldn't live-check it against a real game during the 2026-09 research
-window since the season hadn't started yet.
+**Status:** ⚠️ Half-open — offline architecture built 2026-09-12; live
+validation still blocked on season start (2026-10-20, confirmed directly
+this session via real season-opener rows already in production ingestion).
+**Prerequisites:** Session 2.12 complete; NBA regular season underway so
+there's a real, played game to validate against — still not true as of
+2026-09-12.
 
 **Why this sport:** Largest betting *audience* of any sport by some
 measures (~40% of US bettors, per the real-popularity ranking in
@@ -1585,16 +1585,36 @@ measures (~40% of US bettors, per the real-popularity ranking in
 during the (off-season) research window — that's a calendar artifact, not
 a real signal about NBA's eventual size once the season is live.
 
-**What gets built:** An NBA plug-in using `nba_api` (official
-`stats.nba.com`/`cdn.nba.com` data, free, no key, MIT-licensed wrapper) —
-same shape as the MLB/soccer plug-ins.
+**What was built 2026-09-12 (offline half, real code, unverified numbers):**
+`scripts/estimation/pickem_sport_plugins/nba.py` — registered in
+`pickem_sport_plugins/__init__.py`'s `PLUGINS` list. Uses ESPN's public
+sports API (a stated deviation from `sport_inventory.md`'s `nba_api`
+recommendation — see the spec doc's Session 2.15 addendum for why), same
+month-chunked-scoreboard + per-game-summary shape as the soccer plug-in.
+Stat map built from 10 real stat_type strings already live in production
+ingestion (194 real PrizePicks NBA season-opener-futures rows, 2026-09-12
+pull) mapped to ESPN's documented box-score field names — **not yet
+confirmed against a real payload**, since no NBA game has been played.
+Double-Double left unsupported (needs a derived multi-category condition
+this plug-in can't yet verify against a real box score). Full detail:
+`docs/research/pickem_estimation_model_spec.md`'s new "Session 2.15"
+section.
 
-**Validation (required to close session):**
-- [ ] `nba_api` re-confirmed live against a real, currently-in-progress
-NBA game (the one check `sport_inventory.md` couldn't do before the
-season started)
-- [ ] Real, current NBA stat-type strings pulled live from both platforms
-and mapped one-by-one, same rule as every other sport session
+**A real bug found and fixed in the process, affecting every plug-in, not
+just NBA's:** `pickem_model.py`'s `build_name_lookup()` crashed
+(`KeyError: 'sort_key'`) whenever a plug-in's `fetch_stats()` returns zero
+rows (a normal pre-season case, not an error) — an empty
+`pd.DataFrame([])` has no columns to sort by. Fixed with an early empty-
+lookup return; confirmed via a real run against the live 194-row NBA slice
+(no crash, honest `model_status` per row) and the existing NFL synthetic
+test suite (`test_pickem_model.py`, unchanged pass).
+
+**Validation (still required to close session — none of these are
+possible until the season starts):**
+- [ ] `nba.py`'s ESPN box-score field-name assumptions re-confirmed
+against a real, live completed NBA game's summary payload
+- [ ] Real, current NBA stat-type strings re-checked once real in-season
+(not pre-season-futures) volume exists, on both platforms
 - [ ] A real, live NBA prop scores end-to-end
 
 ---

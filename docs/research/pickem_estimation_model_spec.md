@@ -681,3 +681,79 @@ production pipeline (all four registered plug-ins, not just soccer):
 approximately 6.5 minutes. This is an accepted, real cost of these data
 sources, same standing as MLB's own per-team-roster HTTP-call cost — there
 is no bulk alternative to fall back to.
+
+## Session 2.15 — NBA plug-in (architecture only; UNVERIFIED, season not
+## started)
+
+**Status: scaffold, not validated.** ROADMAP.md's Session 2.15 card is
+blocked on the NBA regular season starting (2026-10-20, confirmed directly
+— see below); there is no live game yet to fetch a real box score from or
+grade a prop against. This addendum documents what was built this session
+(2026-09-12) and states plainly what remains unverified, the same split
+Session 2.12 used for MLB before Session 2.13's real verification pass.
+
+**Real season-start date, confirmed directly, not assumed:** a live
+production ingestion pull (2026-09-12) carries 194 real PrizePicks NBA
+rows, all real season-opener futures (e.g. matchup "BOS @ DET",
+`game_start_time` 2026-10-20T15:10:00-04:00, `status` "pre_game"). These
+confirm the real season-start date but are pre-game listings, not props
+against a played game — there is no box score behind any of them yet.
+
+**Real, confirmed stat_type strings (from that same 194-row pull):**
+Pts+Rebs (30), PRA (29), Points (26), Pts+Asts (25), Rebounds (24), 3PTM
+(22), Assists (20), Rebs+Asts (11), Double-Double (4), Blocked Shots (3).
+All ten strings are real; only the ones below have a mapped target.
+
+**Data source — a stated deviation from `sport_inventory.md`:** that
+document named `nba_api` (stats.nba.com/cdn.nba.com) as the strong
+candidate, but its own live check was blocked by the off-season, not a
+real problem with the source. This plug-in
+(`scripts/estimation/pickem_sport_plugins/nba.py`) instead uses ESPN's
+public sports API — the same source already proven live in this codebase
+for soccer (Session 2.14) — since it needs no key/account and has no
+documented bot-detection headers to work around, unlike stats.nba.com.
+`nba_api` remains a fallback to reconsider if ESPN's real NBA box score
+data (once checked live in October) is missing something this plug-in
+needs.
+
+**Mapped, UNVERIFIED against a real payload (ESPN's publicly documented
+basketball box-score labels — no live game exists yet to confirm these
+exact strings appear verbatim on this endpoint):**
+- Points → `PTS`, Rebounds → `REB`, Assists → `AST`, 3PTM → `3PM`
+  (parsed from the makes-attempts split, e.g. "3-7" → 3), Blocked Shots →
+  `BLK`
+- Composite (summed): Pts+Rebs, Pts+Asts, Rebs+Asts, PRA
+
+**Left unsupported, stated reason (not guessed at):** Double-Double (4 real
+rows) — depends on which two of points/rebounds/assists/steals/blocks each
+cross 10 in one game, a real derived condition this plug-in has no
+confirmed real box score yet to verify every needed category against.
+Left unsupported rather than assumed, same standard as every other sport
+plug-in's stated gaps (e.g. MLB's per-inning props, Session 2.13).
+
+**A real bug found and fixed this session, affecting every plug-in, not
+just NBA's:** `build_name_lookup()` (`scripts/estimation/pickem_model.py`)
+crashed with `KeyError: 'sort_key'` when a plug-in's `fetch_stats()`
+returns zero rows — a real, normal pre-season case (NBA's real
+`fetch_nba_espn_season_stats()` correctly returns an empty DataFrame right
+now, since no NBA game has been played yet), not an error condition. An
+empty `pd.DataFrame([])` has no columns at all, so
+`.sort_values("sort_key")` raised before reaching any per-prop handling.
+Fixed with an early return of an empty lookup for an empty `stats_df`;
+confirmed by running `process_props()` against the real 194-row NBA slice
+of `latest.csv` — no crash, every row now resolves to a real, honest
+`model_status` (`unsupported_odds_type` or `no_player_match`, not a crash),
+and `test_pickem_model.py`'s existing NFL-only synthetic suite still
+passes unchanged.
+
+**What Session 2.15's own re-opening (once the season starts) must still
+do, per its roadmap card:**
+1. Re-confirm `nba.py`'s ESPN box-score field-name assumptions against a
+   real, live completed NBA game's summary payload — the `NBA_STAT_TYPE_MAP`
+   values above have not been checked against a real response.
+2. Re-confirm the ten real stat_type strings above are still current once
+   real in-season (not pre-season-futures) volume exists, and re-check
+   whether Double-Double can be supported once a real box score is
+   available to verify against.
+3. Prove at least one real, live NBA prop scores end-to-end, the same
+   standard every other sport session met before being marked complete.
