@@ -6,6 +6,15 @@ advance, same rule Session 2.3 followed for NFL"). Everything below the
 "SESSION 2.13" marker is new or rewritten; the module-level shape (fetch
 roster -> per-player game log -> SportPlugin) is unchanged from 2.12.
 
+HOTFIX (2026-09-12): a real GitHub Actions pipeline failure (an unhandled
+timeout from ONE HTTP call inside pickem_sport_plugins/soccer.py's
+per-match loop aborted the entire pipeline run, every sport, not just
+soccer) surfaced that this file's per-team/per-player HTTP calls had the
+identical unprotected shape. Both now retry via http_utils.get_json_
+with_retries() and, on repeated failure, skip just that one team/player
+rather than raising -- see _fetch_active_roster()/_fetch_player_game_log()'s
+own docstrings below.
+
 SESSION 2.13 -- WHAT CHANGED AND WHY
 -------------------------------------
 Session 2.12 shipped real, working fetch code but a deliberately small,
@@ -111,10 +120,14 @@ from __future__ import annotations
 
 from typing import Callable
 
-import requests
+import logging
+
 import pandas as pd
 
 from . import SportPlugin
+from .http_utils import get_json_with_retries
+
+log = logging.getLogger("pickem_model")
 
 MLB_STATS_API_BASE = "https://statsapi.mlb.com/api/v1"
 
@@ -268,20 +281,39 @@ MLB_COMPUTED_REQUIRED_COLUMNS: dict[str, list[str]] = {
 # Fetch
 # ---------------------------------------------------------------------------
 def _fetch_active_roster(team_id: int) -> list[dict]:
+    """HOTFIX (2026-09-12): a per-team call inside fetch_mlb_season_stats()'s
+    30-team loop -- same real fault-isolation standard as
+    pickem_sport_plugins/soccer.py's per-match calls, applied here after
+    that file's own real production incident (an unhandled timeout from
+    one HTTP call aborting the ENTIRE pipeline, every sport) surfaced this
+    file had the identical unprotected shape. If every retry fails, logs a
+    warning and returns no roster for this one team rather than raising."""
     url = f"{MLB_STATS_API_BASE}/teams/{team_id}/roster?rosterType=active"
-    resp = requests.get(url, timeout=15)
-    resp.raise_for_status()
-    return resp.json().get("roster", [])
+    try:
+        payload = get_json_with_retries(url, timeout=15)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Skipping MLB team %s roster after repeated failures: %s", team_id, exc)
+        return []
+    return payload.get("roster", [])
 
 
 def _fetch_player_game_log(person_id: int, season: int, group: str) -> list[dict]:
+    """Same fault-isolation standard as _fetch_active_roster above -- one
+    player's game log failing after retries returns no rows for this one
+    player/group rather than aborting the whole plug-in."""
     url = (
         f"{MLB_STATS_API_BASE}/people/{person_id}/stats"
         f"?stats=gameLog&group={group}&season={season}"
     )
-    resp = requests.get(url, timeout=15)
-    resp.raise_for_status()
-    stats = resp.json().get("stats", [])
+    try:
+        payload = get_json_with_retries(url, timeout=15)
+    except Exception as exc:  # noqa: BLE001
+        log.warning(
+            "Skipping MLB player %s (%s) game log after repeated failures: %s",
+            person_id, group, exc,
+        )
+        return []
+    stats = payload.get("stats", [])
     if not stats:
         return []
     return stats[0].get("splits", [])

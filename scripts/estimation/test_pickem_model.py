@@ -26,16 +26,18 @@ Run: python -m pytest scripts/estimation/test_pickem_model.py -v
 from __future__ import annotations
 
 from pathlib import Path
+from unittest import mock
 
 import pandas as pd
 import pytest
+import requests
 
 from pickem_model import build_stat_series, process_props, resolve_stat_spec
 from pickem_sport_plugins import PLUGINS, plugin_for_sport
-from pickem_sport_plugins.epl import EPL_PLUGIN
-from pickem_sport_plugins.mlb import MLB_PLUGIN
+from pickem_sport_plugins.epl import EPL_PLUGIN, _fetch_player_history
+from pickem_sport_plugins.mlb import MLB_PLUGIN, _fetch_active_roster, _fetch_player_game_log
 from pickem_sport_plugins.nfl import NFL_PLUGIN
-from pickem_sport_plugins.soccer import SOCCER_PLUGIN
+from pickem_sport_plugins.soccer import SOCCER_PLUGIN, _fetch_event_player_rows
 
 GOLDEN_PATH = (
     Path(__file__).resolve().parents[2]
@@ -469,6 +471,51 @@ def test_soccer_tackles_and_outfield_fantasy_score_stay_unsupported():
                  "Attempted Dribbles", "Crosses", "1H Goals", "GA F30 Mins"):
         kind, _, reason = resolve_stat_spec(SOCCER_PLUGIN, stat)
         assert kind is None and reason == "unsupported_stat_type", stat
+
+
+# ---------------------------------------------------------------------------
+# Hotfix (2026-09-12) -- fault isolation for per-item HTTP fetches
+# ---------------------------------------------------------------------------
+# The real GitHub Actions pipeline failed 2026-09-12 when a single ESPN
+# `summary?event=...` call (one match out of ~470 real ones walked per run)
+# timed out and the unhandled exception propagated out of process_props(),
+# silently blanking the estimation output for every sport, not just soccer.
+# Each of these tests forces every retry attempt to fail and confirms the
+# affected per-item fetch function returns an empty result instead of
+# raising -- see pickem_sport_plugins/http_utils.py's module docstring.
+def _always_times_out():
+    return mock.patch(
+        "pickem_sport_plugins.http_utils.requests.get",
+        side_effect=requests.exceptions.ReadTimeout("boom"),
+    )
+
+
+def _no_sleep():
+    return mock.patch("pickem_sport_plugins.http_utils.time.sleep")
+
+
+def test_soccer_event_fetch_skips_instead_of_raising_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        rows = _fetch_event_player_rows("esp.1", "999999", 1)
+    assert rows == []
+
+
+def test_epl_player_history_fetch_skips_instead_of_raising_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        history = _fetch_player_history(999999)
+    assert history == []
+
+
+def test_mlb_roster_fetch_skips_instead_of_raising_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        roster = _fetch_active_roster(999999)
+    assert roster == []
+
+
+def test_mlb_player_game_log_fetch_skips_instead_of_raising_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        log_rows = _fetch_player_game_log(999999, 2026, "hitting")
+    assert log_rows == []
 
 
 if __name__ == "__main__":

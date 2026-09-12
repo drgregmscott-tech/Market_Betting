@@ -5,6 +5,14 @@ Ligue 1, MLS) is handled by pickem_sport_plugins/soccer.py -- see that
 file's docstring for why the split exists and ROADMAP.md's Session 2.14
 card for the "why this sport" background.
 
+HOTFIX (2026-09-12): a real GitHub Actions pipeline failure (an unhandled
+`requests.exceptions.ReadTimeout` from pickem_sport_plugins/soccer.py's
+per-match loop, which silently aborted the whole pipeline run, every
+sport, not just soccer) surfaced that this file's own per-player loop
+(~650 real calls per run) had the identical unprotected shape. Both are
+now fixed the same way -- see http_utils.get_json_with_retries() and
+_fetch_player_history()'s own docstring below.
+
 WHY THE OFFICIAL FANTASY PREMIER LEAGUE API, NOT ESPN, FOR EPL SPECIFICALLY
 -----------------------------------------------------------------------------
 Per docs/research/sport_inventory.md: the Premier League runs its own
@@ -69,10 +77,14 @@ full table) were checked against this exact field list:
 
 from __future__ import annotations
 
-import requests
+import logging
+
 import pandas as pd
 
 from . import SportPlugin
+from .http_utils import get_json_with_retries
+
+log = logging.getLogger("pickem_model")
 
 FPL_BASE = "https://fantasy.premierleague.com/api"
 
@@ -92,15 +104,29 @@ EPL_COMPOSITE_STAT_TYPES: dict[str, list[str]] = {
 
 
 def _fetch_current_players() -> list[dict]:
-    resp = requests.get(f"{FPL_BASE}/bootstrap-static/", timeout=20)
-    resp.raise_for_status()
-    return resp.json().get("elements", [])
+    """One critical, one-off call -- if this still fails after
+    http_utils.get_json_with_retries()'s retries, the whole EPL plug-in
+    genuinely has nothing to fetch this run, so this is allowed to raise
+    (unlike _fetch_player_history below, a per-item call inside a loop --
+    see the HOTFIX note in this module's docstring)."""
+    payload = get_json_with_retries(f"{FPL_BASE}/bootstrap-static/", timeout=20)
+    return payload.get("elements", [])
 
 
 def _fetch_player_history(player_id: int) -> list[dict]:
-    resp = requests.get(f"{FPL_BASE}/element-summary/{player_id}/", timeout=20)
-    resp.raise_for_status()
-    return resp.json().get("history", [])
+    """HOTFIX (2026-09-12): a per-player call inside fetch_epl_season_stats()'s
+    ~650-call loop -- same real fault-isolation standard as
+    pickem_sport_plugins/soccer.py's per-match calls (see that file's
+    module docstring for the real production incident this responds to).
+    If every retry fails, logs a warning and returns no history for this
+    one player rather than aborting the whole plug-in (and, transitively,
+    every other sport's estimation output)."""
+    try:
+        payload = get_json_with_retries(f"{FPL_BASE}/element-summary/{player_id}/", timeout=20)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Skipping FPL player %s after repeated failures: %s", player_id, exc)
+        return []
+    return payload.get("history", [])
 
 
 def fetch_epl_season_stats(season: int) -> pd.DataFrame:

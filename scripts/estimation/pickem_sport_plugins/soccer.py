@@ -4,6 +4,18 @@ multi-sport estimation architecture. EPL specifically is its own plug-in
 (pickem_sport_plugins/epl.py, the official Fantasy Premier League API) -- see
 that file's docstring for why EPL is split out rather than folded in here.
 
+HOTFIX (2026-09-12): the real GitHub Actions pipeline failed with an
+unhandled `requests.exceptions.ReadTimeout` from one real
+`summary?event=...` call inside fetch_soccer_espn_season_stats()'s
+per-match loop (~470 real calls per run) -- and because that exception
+propagated straight out of pickem_model.py's process_props(), it silently
+aborted the ENTIRE pipeline run (every sport, not just soccer), even though
+ingestion had already succeeded. Both HTTP call sites below now retry a
+transient failure via http_utils.get_json_with_retries() and, if every
+retry still fails, log a warning and skip just that one match/month rather
+than raising -- see each function's own docstring for the fault-isolation
+reasoning.
+
 WHY ESPN's PUBLIC SPORTS API
 ------------------------------
 Per docs/research/sport_inventory.md's "Soccer/EPL" section: ESPN runs a
@@ -118,13 +130,16 @@ Fantasy Score, needing components ESPN's real data does not expose, is not.
 from __future__ import annotations
 
 import calendar
+import logging
 from datetime import date
 from typing import Callable
 
-import requests
 import pandas as pd
 
 from . import SportPlugin
+from .http_utils import get_json_with_retries
+
+log = logging.getLogger("pickem_model")
 
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
 
@@ -225,14 +240,29 @@ def _month_ranges(season: int, start_month: int) -> list[tuple[str, str]]:
 def _fetch_completed_events(league_code: str, season: int) -> list[tuple[str, str]]:
     """Returns [(event_id, iso_date), ...] for every real completed match
     this league has played so far this season, deduped across the
-    month-chunked scoreboard calls."""
+    month-chunked scoreboard calls.
+
+    HOTFIX (2026-09-12): one month's scoreboard call failing (after
+    retries -- see http_utils.get_json_with_retries) no longer aborts the
+    whole plug-in; it's logged and skipped, same fault-isolation standard
+    as _fetch_event_player_rows below. That one real month's matches are
+    simply missing from this run's sample rather than the entire soccer
+    plug-in (and, since an unhandled exception here previously propagated
+    all the way out of process_props(), every other sport's estimation
+    output too) going blank."""
     start_month = LEAGUE_SEASON_START_MONTH[league_code]
     seen: dict[str, str] = {}
     for start, end in _month_ranges(season, start_month):
         url = f"{ESPN_BASE}/{league_code}/scoreboard?dates={start}-{end}&limit=1000"
-        resp = requests.get(url, timeout=20)
-        resp.raise_for_status()
-        for event in resp.json().get("events", []):
+        try:
+            payload = get_json_with_retries(url, timeout=20)
+        except Exception as exc:  # noqa: BLE001
+            log.warning(
+                "Skipping %s scoreboard for %s-%s after repeated failures: %s",
+                league_code, start, end, exc,
+            )
+            continue
+        for event in payload.get("events", []):
             event_id = event.get("id")
             status = (event.get("status") or {}).get("type", {}).get("name")
             if event_id and status == "STATUS_FULL_TIME" and event_id not in seen:
@@ -241,11 +271,27 @@ def _fetch_completed_events(league_code: str, season: int) -> list[tuple[str, st
 
 
 def _fetch_event_player_rows(league_code: str, event_id: str, sort_key: int) -> list[dict]:
+    """HOTFIX (2026-09-12): the real GitHub Actions pipeline failed
+    2026-09-12 on an unhandled `requests.exceptions.ReadTimeout` from this
+    exact call (one match, out of ~470 real completed matches walked this
+    run) -- which aborted the ENTIRE pipeline run, not just this one
+    match, because the exception propagated straight out of
+    process_props(). Now retries transient failures (see
+    http_utils.get_json_with_retries) and, if every retry still fails,
+    logs a warning and returns no rows for this one match rather than
+    raising -- the same "a real, stated gap is fine; a silent crash across
+    every other sport is not" standard this project already applies to
+    unmapped stat types, applied here to a network fault instead."""
     url = f"{ESPN_BASE}/{league_code}/summary?event={event_id}"
-    resp = requests.get(url, timeout=20)
-    resp.raise_for_status()
+    try:
+        payload = get_json_with_retries(url, timeout=20)
+    except Exception as exc:  # noqa: BLE001
+        log.warning(
+            "Skipping %s event %s after repeated failures: %s", league_code, event_id, exc,
+        )
+        return []
     rows: list[dict] = []
-    for roster in resp.json().get("rosters", []):
+    for roster in payload.get("rosters", []):
         for player in roster.get("roster", []):
             athlete = player.get("athlete", {})
             player_id = athlete.get("id")
