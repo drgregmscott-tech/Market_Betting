@@ -171,7 +171,7 @@ jobs:
         # 6.1 -- see this file's own header comment above for why that's
         # required) has something real to render into on a display-less
         # Linux runner.
-        run: xvfb-run --auto-servernum python scripts/run_props_pipeline.py --season 2025
+        run: xvfb-run --auto-servernum python scripts/run_props_pipeline.py
 
       - name: Commit and push updated data, estimates, CLV log, and digest
         id: commit

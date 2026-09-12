@@ -181,6 +181,7 @@ from pickem_model import (  # noqa: E402  (path insert must happen first)
 # file is still NFL-only (Track 5 sportsbook props), so it keeps using the
 # NFL plug-in directly rather than the generic plugin_for_sport() dispatch.
 from pickem_sport_plugins.nfl import NFL_PLUGIN, NFL_SPORT_LABELS
+from season_utils import current_pickem_season
 from pickem_sport_plugins.nfl import fetch_nfl_weekly_stats
 from schema_props import (  # noqa: E402
     american_odds_to_implied_probability,
@@ -678,9 +679,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--season",
         type=int,
-        required=True,
-        help="NFL season year to pull nflverse weekly stats for (e.g. 2025).",
+        default=None,
+        help="NFL season year to pull nflverse weekly stats for (e.g. 2025). "
+        "Defaults to the real current season (see season_utils.py) rather "
+        "than a hardcoded year, so this never silently goes stale.",
     )
     args = parser.parse_args()
+    if args.season is None:
+        args.season = current_pickem_season()
     summary = run(args.season)
     print(summary)

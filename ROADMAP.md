@@ -3973,6 +3973,24 @@ open, not decided in advance:** whether to switch cleanly to
 swinging on a tiny early-2026 sample. No evidence yet exists to make that
 call correctly — to be resolved in a future session once real 2026 data
 starts accumulating.
+**Partially resolved 2026-09-12** (Session 2.17 follow-up): the
+mechanical half of this decision — `--season` being hardcoded to `2025`
+in three places (`run_full_pipeline.bat`,
+`.github/workflows/pickem_pipeline.yml`,
+`.github/workflows/props_pipeline.yml`) and never revisited — was found
+to have already gone stale, 5 real days into the 2026 season, with
+nobody having updated any of the three. Fixed by adding
+`scripts/estimation/season_utils.py` (`current_pickem_season()`, an
+August-rollover date calculation) and defaulting `--season` to it
+everywhere instead of a literal year, so this specific staleness cannot
+recur. **The harder half — clean switch vs. blend during a thin early-
+season sample — is still open**, exactly as originally stated: the
+dynamic default now correctly resolves to `2026` today, which happens to
+already answer "clean switch" by default in practice, but no blend logic
+or minimum-sample guard was added. `pickem_model.py` has no equivalent to
+Track 5's Session 6.6 stale-season-stats guard — worth a real look once
+enough 2026 games exist to judge whether NFL/CFB pick'em props are
+scoring off a too-thin sample right now.
 10. ~~New, opened Session 2.4: Cross-platform CLV consensus matching...~~
 **Superseded 2026-09-02 (Session 2.9 continuation):** the "Underdog has
 zero real NFL lines" finding this decision was based on is now stale.

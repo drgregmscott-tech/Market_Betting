@@ -179,6 +179,7 @@ import numpy as np
 import pandas as pd
 
 from pickem_sport_plugins import SportPlugin, plugin_for_sport
+from season_utils import current_pickem_season
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -667,9 +668,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--season",
         type=int,
-        required=True,
-        help="Season year to pull each sport plug-in's stats for (e.g. 2025).",
+        default=None,
+        help="Season year to pull each sport plug-in's stats for (e.g. 2025). "
+        "Defaults to the real current season (see season_utils.py) rather "
+        "than a hardcoded year, so this never silently goes stale.",
     )
     args = parser.parse_args()
-    summary = run(args.season)
+    season = args.season if args.season is not None else current_pickem_season()
+    summary = run(season)
     print(summary)

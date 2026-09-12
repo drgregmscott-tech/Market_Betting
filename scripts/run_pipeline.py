@@ -70,6 +70,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parents[1]
 INGEST_SCRIPT = BASE_DIR / "scripts" / "ingestion" / "ingest_pickem.py"
 MODEL_SCRIPT = BASE_DIR / "scripts" / "estimation" / "pickem_model.py"
+SEASON_UTILS_SCRIPT = BASE_DIR / "scripts" / "estimation" / "season_utils.py"
 CLV_SCRIPT = BASE_DIR / "scripts" / "calibration" / "clv_logger.py"
 CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
 DIGEST_DIR = BASE_DIR / "output" / "digest"
@@ -310,9 +311,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--season",
         type=int,
-        default=2025,
-        help="Passed through to pickem_model.py. Defaults to 2025 -- see "
-        "ROADMAP.md Open Decision #9 for when this should switch to 2026.",
+        default=None,
+        help="Passed through to pickem_model.py. Defaults to the real "
+        "current season (see scripts/estimation/season_utils.py) rather "
+        "than a hardcoded year, so this never silently goes stale -- see "
+        "ROADMAP.md Open Decision #9 for the separate, still-open question "
+        "of when a brand-new season has enough real data to trust.",
     )
     args = parser.parse_args()
-    sys.exit(main(args.season))
+    season = args.season
+    if season is None:
+        season_utils = load_module(SEASON_UTILS_SCRIPT, "season_utils")
+        season = season_utils.current_pickem_season()
+    sys.exit(main(season))

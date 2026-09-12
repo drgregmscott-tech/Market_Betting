@@ -11772,3 +11772,88 @@ mirror's own update cadence is still owed — its snapshot is current
 through roughly June 2026 as of this session; how often it gets
 refreshed going forward is unverified and should be watched the first
 few times this plug-in runs against a genuinely new match.
+
+---
+
+## Session 2.17 (follow-up) — Dynamic `--season` Default
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete
+
+**What was actually done:**
+While closing out Session 2.17 (tennis), flagged that the pipeline's
+`--season` argument was hardcoded to `2025` in three places
+(`run_full_pipeline.bat`, `.github/workflows/pickem_pipeline.yml`,
+`.github/workflows/props_pipeline.yml`) even though the real season is
+now 2026 — a pre-existing, project-wide issue (ROADMAP.md's Open Decision
+#9), not something introduced by tennis. User asked for a dynamic fix so
+it can't go stale the same way again.
+1. Added `scripts/estimation/season_utils.py` — `current_pickem_season()`,
+a single shared function computing the real current NFL/CFB-style season
+year from today's date (August rollover: a calendar year counts as that
+year's season from August onward; before that, it's still the prior
+year's season), rather than a literal.
+2. Wired it in as the default everywhere `--season` is accepted:
+`pickem_model.py` and `sportsbook_props_model.py` (both previously
+`required=True` with no default; now `default=None`, resolved via
+`current_pickem_season()` when omitted), and `run_pipeline.py`/
+`run_props_pipeline.py` (previously `default=2025`; now the same dynamic
+resolution, loaded via each orchestrator's existing `load_module()`
+helper rather than a new import mechanism).
+3. Removed the literal `--season 2025` from all three original call
+sites (`run_full_pipeline.bat`, both GitHub workflow `run:` lines) — the
+default now does the work, so there is no year left to go stale.
+4. Verified all four CLI entry points parse correctly and resolve to
+`2026` today (confirmed directly, not assumed): `pickem_model.py`,
+`sportsbook_props_model.py`, `run_pipeline.py`, `run_props_pipeline.py`.
+
+**Files created/modified:**
+- `scripts/estimation/season_utils.py` (new)
+- `scripts/estimation/pickem_model.py`
+- `scripts/estimation/sportsbook_props_model.py`
+- `scripts/run_pipeline.py`
+- `scripts/run_props_pipeline.py`
+- `run_full_pipeline.bat`
+- `.github/workflows/pickem_pipeline.yml`
+- `.github/workflows/props_pipeline.yml`
+- `ROADMAP.md` (Open Decision #9 updated — mechanical half resolved,
+harder half explicitly still open)
+
+**Validation results:**
+- [x] `current_pickem_season()` checked directly against several dates:
+2026-09-12 → 2026, 2026-08-01 → 2026, 2026-06-01 → 2025 — matches the
+intended NFL/CFB season-year convention.
+- [x] `python scripts/estimation/pickem_model.py` (no `--season` flag)
+logs `season=2026` and runs end-to-end.
+- [x] `--help` output confirmed clean for all four entry points
+(`pickem_model.py`, `sportsbook_props_model.py`, `run_pipeline.py`,
+`run_props_pipeline.py`).
+- [x] `run_pipeline.py`'s own `load_module()`-based resolution of
+`season_utils.py` confirmed directly (not just assumed from the code) —
+returns `2026`.
+- Caught and corrected during verification: running `pickem_model.py`
+directly against the repo's current (small, stale) `data/pickem/normalized/latest.csv`
+overwrote the real 61,603-row `output/estimation/latest.csv` with a
+4-row test result. Restored via `git checkout` immediately, and deleted
+the stray timestamped output file the run also created, before this was
+committed.
+
+**Decisions made:**
+1. August, not September (Week 1) or January (calendar new year), as the
+season rollover month — preseason data starts appearing before Week 1,
+and a plug-in with no real file yet for the new year already returns an
+honest empty result rather than erroring, so an early rollover costs
+nothing.
+2. Deliberately did NOT resolve Open Decision #9's harder question (clean
+switch vs. blend 2025/2026 during a thin early sample) — that still needs
+real evidence about sample-size sufficiency that doesn't exist yet. Named
+explicitly in both `season_utils.py`'s docstring and the ROADMAP update so
+it isn't mistaken for solved.
+
+**Open items / deferred validations:**
+- `pickem_model.py` has no equivalent to Track 5's Session 6.6
+stale-season-stats guard. Now that the default cleanly resolves to 2026,
+NFL/CFB pick'em props are scoring against a real but very thin (~1 week)
+2026 sample with no safeguard. Worth a real look in a future session once
+more 2026 games exist to judge whether this needs the same kind of guard
+Track 5 already has.

@@ -89,7 +89,7 @@ jobs:
           # Add the real key as a repo secret named CFBD_API_KEY once
           # obtained -- see ROADMAP.md's Session 2.16 card.
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
-        run: python scripts/run_pipeline.py --season 2025
+        run: python scripts/run_pipeline.py
 
       - name: Commit and push updated CLV log and digest
         id: commit
