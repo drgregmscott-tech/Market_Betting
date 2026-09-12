@@ -110,7 +110,47 @@ jobs:
             exit 0
           fi
           git commit -m "Automated pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-          git push
+
+          # HOTFIX (2026-09-12): a real run was rejected here with
+          # "! [rejected] main -> main (fetch first)" -- this job's own
+          # `concurrency` group (top of this file) only stops TWO RUNS OF
+          # THIS SAME WORKFLOW from overlapping; it does nothing to stop a
+          # race against a completely separate writer pushing straight to
+          # `main` in between this job's checkout and this step's push
+          # (confirmed real cause that day: a manual, interactive commit
+          # landed on `main` a few minutes before this scheduled run tried
+          # to push). This is Git correctly refusing to silently clobber
+          # that other, real work -- not a bug in the push itself -- so the
+          # fix is to catch up and retry, not to force-push over it.
+          # Rebasing this bot's own commit onto whatever is newly on
+          # origin/main is safe here because this step only ever touches
+          # its own small set of pipeline-output paths (see `git add`
+          # above) -- a genuine conflicting edit to one of those exact
+          # files by something else, in the few seconds this retry window
+          # covers, is exceedingly unlikely; if it ever does happen, the
+          # rebase stops and this step fails loudly instead of guessing,
+          # consistent with this project's standing rule against silently
+          # resolving a real conflict rather than surfacing it.
+          push_ok=false
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              push_ok=true
+              break
+            fi
+            echo "Push attempt $attempt/5 was rejected -- fetching and rebasing onto origin/main before retrying."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "::error::Rebase onto origin/main hit a real conflict -- stopping rather than guessing at a resolution. Manual intervention needed." >&2
+              git rebase --abort
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+
+          if [ "$push_ok" != "true" ]; then
+            echo "::error::Failed to push after 5 retries against a moving origin/main." >&2
+            exit 1
+          fi
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       # Hotfix, 2026-09-11: the commit above is deliberately tagged

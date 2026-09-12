@@ -155,7 +155,37 @@ jobs:
             exit 0
           fi
           git commit -m "Automated weather pipeline run $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-          git push
+
+          # HOTFIX (2026-09-12, applied project-wide -- see pickem_pipeline.yml
+          # for the real incident this responds to): a plain `git push` here
+          # can be correctly rejected if anything else pushes to `main`
+          # between this job's checkout and this step (another pipeline's own
+          # bot commit, or a manual push) -- Git protecting real work, not a
+          # bug. Retries by rebasing this bot's own commit onto the latest
+          # origin/main, which is safe since this step only ever touches its
+          # own narrow set of output paths (see `git add` above); a genuine
+          # conflict stops the rebase and fails this step loudly instead of
+          # guessing at a resolution.
+          push_ok=false
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              push_ok=true
+              break
+            fi
+            echo "Push attempt $attempt/5 was rejected -- fetching and rebasing onto origin/main before retrying."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "::error::Rebase onto origin/main hit a real conflict -- stopping rather than guessing at a resolution. Manual intervention needed." >&2
+              git rebase --abort
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+
+          if [ "$push_ok" != "true" ]; then
+            echo "::error::Failed to push after 5 retries against a moving origin/main." >&2
+            exit 1
+          fi
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       # Hotfix, 2026-09-11: see pickem_pipeline.yml's own comment on this

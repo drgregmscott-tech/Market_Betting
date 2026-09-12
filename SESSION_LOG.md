@@ -11577,3 +11577,89 @@ confirm CFBD's own usage dashboard shows real steady-state monthly call
 volume in line with this session's design math, after a real week of
 hourly GitHub Actions production runs (not just this session's two
 same-day manual runs).
+
+---
+
+## Hotfix — automated pipeline commit rejected by a real push race (2026-09-12)
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete
+
+**What happened:** the Pick'em Pipeline's "Commit and push updated CLV log
+and digest" step failed with a real Git rejection:
+`! [rejected] main -> main (fetch first)`. This is Git correctly refusing
+to push, not a bug in the push command itself — the runner's checkout of
+`main` was stale by the time this step tried to push, because something
+else (a manual, interactive commit landed on `main` a few minutes earlier
+that same session) had already advanced `main` in the meantime.
+
+**Root cause:** this workflow's `concurrency` group only prevents two runs
+of the SAME workflow from overlapping each other — it does nothing to
+protect against a completely different writer (a manual push, or, in
+principle, another pipeline's own bot commit) landing on `main` between
+this job's checkout and its own push, several minutes later, after the
+real pipeline run (ingestion → estimation → CLV logging) had completed.
+Every one of this project's six GitHub Actions pipelines
+(`arbitrage_pipeline.yml`, `pickem_pipeline.yml`, `politics_pipeline.yml`,
+`props_pipeline.yml`, `weather_calibration_pipeline.yml`,
+`weather_pipeline.yml`) had the identical unprotected shape: commit, then
+one plain `git push` with no retry.
+
+**Fix:** each workflow's commit step now retries the push up to 5 times,
+re-fetching and rebasing this bot's own commit onto the latest
+`origin/main` between attempts (with a short increasing backoff) before
+giving up. This is safe here specifically because every one of these
+commit steps only ever touches its own narrow, pipeline-owned set of
+output paths (the exact paths in each step's own `git add` line) — a
+genuine conflicting edit to one of those specific files, in the few-second
+window a retry covers, is exceedingly unlikely. If a rebase ever does hit
+a real conflict, it aborts and the step fails loudly with a clear error
+rather than guessing at a resolution — consistent with this project's
+standing rule against silently resolving something that should be
+surfaced instead.
+
+**Verification:** all six workflow files re-parsed as valid YAML after the
+edit (`yaml.safe_load`), and each embedded commit-step script re-checked
+for bash syntax errors (`bash -n`) — all six pass. This is a real,
+structural fix to a race condition that cannot be reliably reproduced
+on-demand (it depends on a real concurrent write landing in a narrow
+window), so verification here is necessarily syntax/structure-level plus
+the reasoning above, not a live re-trigger of the exact failure — the
+next time this race actually occurs in production, the retry loop is what
+will be tested for real.
+
+**Files modified:** `.github/workflows/arbitrage_pipeline.yml`,
+`.github/workflows/pickem_pipeline.yml`,
+`.github/workflows/politics_pipeline.yml`,
+`.github/workflows/props_pipeline.yml`,
+`.github/workflows/weather_calibration_pipeline.yml`,
+`.github/workflows/weather_pipeline.yml` — each one's commit-and-push step
+gained the same retry-with-rebase loop.
+
+**Decisions made:**
+1. **Rebase-and-retry, not `git push --force`.** A force-push would win
+the race by silently discarding whatever the other writer just pushed —
+exactly the kind of destructive, hard-to-reverse action this project's own
+standing practice avoids by default. Rebasing this bot's own commit onto
+the new tip preserves both sides' work.
+2. **A real rebase conflict aborts and fails the step, rather than
+picking a side automatically** (e.g. `-X ours`/`-X theirs`). These commit
+steps' files are machine-generated snapshots (CLV logs, digests, cache
+files), so a real byte-level conflict between two legitimate writers touching
+the exact same file in the exact same narrow window would be a genuinely
+unusual, worth-a-human-look situation — not something to paper over with
+an automatic strategy that could silently drop real data from one side.
+3. **Applied the same fix to all six pipelines proactively, not just the
+one that actually failed** — same discipline as this project's other
+recent hotfixes (the ESPN/FPL retry fix that also covered MLB's identical
+unprotected shape before it failed independently): once the real failure
+shape is understood, grep the codebase for every other place with the
+same shape rather than patching only the one call site that happened to
+fail this time.
+
+**Open items:** this fix cannot be proven against the exact real failure
+on demand, since it depends on a real race with an external writer. It
+will be exercised for real the next time such a race actually occurs in
+production — if a run's log ever shows a rebase-conflict error from this
+step, that is a genuine, unusual situation worth a human look, not an
+expected outcome.
