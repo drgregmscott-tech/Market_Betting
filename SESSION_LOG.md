@@ -11663,3 +11663,112 @@ will be exercised for real the next time such a race actually occurs in
 production — if a run's log ever shows a rebase-conflict error from this
 step, that is a genuine, unusual situation worth a human look, not an
 expected outcome.
+
+---
+
+## Session 2.17 — Tennis Support (Pick'em)
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete
+
+**What was actually done:**
+Closed the open decision from ROADMAP.md's Session 2.17 card, then built
+the tennis plug-in.
+1. Asked the user to pick between paid live provider, lag-based free
+source, or skipping tennis entirely (the roadmap explicitly required a
+real decision here, not a default). User chose **lag-based free source**.
+2. Before writing code, checked the free source actually named in the
+roadmap (`JeffSackmann/tennis_atp`/`tennis_wta` on GitHub) — found it no
+longer exists (real, live 404 on both repos; the `JeffSackmann` account
+is still active but now has only one public repo,
+`tennis_MatchChartingProject`). This was a genuinely unplanned, mid-session
+finding, not something either the roadmap or the first decision anticipated.
+3. Rather than silently substituting an unverified replacement, stopped
+and re-asked the user: find a vetted fork, switch to paid, or skip. User
+chose **find a vetted fork**.
+4. Searched GitHub directly (not from memory) for a legitimate mirror.
+Rejected several candidates as unsuitable: stale clones last updated in
+2018, and unrelated personal projects of unknown data quality/provenance.
+Found and verified `Aneeshers/tennis-sackmann-archive` — an explicit
+archival mirror (its own README names all three original Sackmann repos,
+preserves his original per-folder README as `UPSTREAM_README.md`, and
+uses the same CC BY-NC-SA 4.0 license he released under). Confirmed live
+by fetching `atp/atp_matches_2026.csv` directly and checking real rows
+(a real "United Cup" Hurkacz/Wawrinka match, tourney_date 20260105).
+5. Built `scripts/estimation/pickem_sport_plugins/tennis.py`: fetches both
+ATP and WTA season archives from that mirror, caches to
+`data/pickem/cache/tennis_archive/` with a 12-hour refetch window,
+flattens each real match into a winner row and a loser row, and derives
+every mapped stat type from the raw `score` string (games won, 1st-set
+games, total sets, tiebreaks) and `bpSaved`/`bpFaced` columns (break
+points won) — real per-match logic, not guessed. Registered as
+`TENNIS_PLUGIN` in `pickem_sport_plugins/__init__.py`.
+6. Ran the real, live plug-in against a real 272-row tennis slice from
+`data/pickem/normalized/pickem_props_20260911T124346Z.csv` through
+`process_props()` end-to-end (season=2026) — see Validation below.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/tennis.py` (new)
+- `scripts/estimation/pickem_sport_plugins/__init__.py` (registered
+`TENNIS_PLUGIN` in `_load_plugins()`)
+- `ROADMAP.md` (Session 2.17 card closed out with the full decision trail)
+
+**Validation results:**
+- [x] Explicit decision recorded — lag-based free source, confirmed twice
+(once before the source-availability gap was found, once after).
+- [x] A real, live tennis prop scores end-to-end: `fetch_tennis_season_stats(2026)`
+returned 5,488 real player-match rows across 598 unique players from a
+real, live HTTP fetch. Running the real 272-row tennis slice above through
+`process_props()` produced: 217 `model_status="estimated"` (e.g. Simona
+Waltert's real "Total Games" line 21.5), 34 `no_player_match` (real
+doubles pairs — Sackmann's archive is singles-only, a genuine and expected
+gap), 20 `unsupported_stat_type` (real "Fantasy Score" rows — no official
+platform formula exists), 1 `no_line_value`.
+
+**Decisions made:**
+1. Lag-based free archive over a paid provider or skipping tennis
+entirely — user's explicit call, made twice (see above).
+2. When the named free source turned out to no longer exist, searched for
+and vetted a specific replacement rather than defaulting to the nearest
+GitHub search result — landed on an explicit, licensed, provenance-labeled
+mirror (`Aneeshers/tennis-sackmann-archive`) instead of an anonymous fork,
+consistent with this project's standing "don't guess, name what's real"
+standard applied to data-source trust, not just stat mappings.
+3. A bracketed match-tiebreak score (`[10-7]`) is counted toward
+`Total Sets`/`Total Tie Breaks` but excluded from `Total Games`/`Total
+Games Won` — its two numbers are tiebreak points, not games, so summing
+them into a games total would silently inflate it. Named explicitly in
+`tennis.py`'s docstring rather than left as an undocumented edge case.
+4. `Fantasy Score` left unsupported (20 real rows) — no official
+PrizePicks/Underdog tennis scoring formula could be sourced, same
+reasoning already applied to CFB's and NFL's own Fantasy Score/Points
+gaps (Sessions 2.3, 2.16).
+
+**Corrections/reversals during the session:**
+The original plan (per the roadmap card, written before this session)
+assumed `JeffSackmann/tennis_atp`/`tennis_wta` would simply be fetched
+directly once the user picked the lag-based path. That source no longer
+existing was discovered only once this session actually went to build
+against it — not foreseeable from the roadmap card alone. Corrected by
+re-opening the decision with the user immediately rather than quietly
+picking a replacement, then vetting a real replacement once given the
+go-ahead.
+
+**Open items / deferred validations:**
+- The pipeline's `--season` argument is currently hardcoded to `2025` in
+`run_full_pipeline.bat`, `.github/workflows/pickem_pipeline.yml`, and
+`.github/workflows/props_pipeline.yml`, even though the real calendar
+year is now 2026. This plug-in was validated directly against
+`season=2026` (matching the real, live 2026 tennis props being graded),
+but if the pipeline itself is still invoking every plug-in with
+`--season 2025` in production, tennis props would be graded against
+2025's now-closed matches instead of the live 2026 season the props
+actually belong to. This is a pre-existing, project-wide pipeline
+argument, not something introduced by this session, and is already the
+subject of the most recent commit ("more pickem pipeline debugging") —
+flagged here explicitly so it isn't mistaken for a tennis-specific gap.
+- Real production monitoring of the `Aneeshers/tennis-sackmann-archive`
+mirror's own update cadence is still owed — its snapshot is current
+through roughly June 2026 as of this session; how often it gets
+refreshed going forward is unverified and should be watched the first
+few times this plug-in runs against a genuinely new match.

@@ -1688,32 +1688,52 @@ line 247.5).
 ---
 
 ### Session 2.17 — Tennis Support (Pick'em)
-**Status:** Not started — open decision required before scoping, not a
-research gap.
-**Prerequisites:** Session 2.12 complete; **a decision from the user**
-(see below) — this session cannot be scoped further until that's made.
+**Status:** ✅ Complete
+**Prerequisites:** Session 2.12 complete.
 
 **Why this one is different:** Per `sport_inventory.md` — real,
 substantial volume confirmed on both platforms (1,179 live PrizePicks
 projections, plus real Underdog volume — tennis is one of only 3 sports
 Underdog's pick'em product offers at all), but **no adequate free,
-real-time, per-match stats source was found**. A free historical archive
-exists (Jeff Sackmann's `tennis_atp`/`tennis_wta` on GitHub) but isn't
-built for fast post-match grading. The real choice is between paying for
-a live provider or accepting a slower, lag-based grading source — a real
-product/cost decision, not something to default silently.
+real-time, per-match stats source was found**. The real choice was
+between paying for a live provider or accepting a slower, lag-based
+grading source. **User decision (2026-09-12): lag-based free source.**
 
-**What this session does:** Once the user decides which path (paid
-provider vs. lag-based free source vs. skip tennis), build the
-corresponding plug-in. Not scoped in detail yet since the two paths
-imply materially different designs (a real-time fetch vs. a
-periodic-archive-sync-and-grade-on-delay pattern).
+**A second, unplanned gap found mid-session:** the archive actually named
+above — `JeffSackmann/tennis_atp`/`tennis_wta` on GitHub — no longer
+exists at that location (confirmed live: both 404; the JeffSackmann
+account now has only one public repo). Found and verified a legitimate
+replacement instead of silently building against an unverified fork —
+see `scripts/estimation/pickem_sport_plugins/tennis.py`'s module
+docstring for the full vetting trail. **User decision (2026-09-12, asked
+again after this was found): still build against a vetted fork** rather
+than switch to paid or skip.
 
-**Validation (required to close session):**
-- [ ] Explicit decision recorded (which data-source path, or a decision
-to leave tennis out of scope entirely)
-- [ ] If building: a real, live tennis prop scores end-to-end against
-whichever source was chosen
+**What was built:** `pickem_sport_plugins/tennis.py`, registered in
+`pickem_sport_plugins/__init__.py`. Pulls both ATP and WTA season match
+archives from `Aneeshers/tennis-sackmann-archive` (an explicit, licensed,
+provenance-preserving mirror of Sackmann's original data, verified live
+against real 2026 matches), caches each to
+`data/pickem/cache/tennis_archive/`, refetches at most every 12 hours
+(`REFRESH_HOURS`), and derives per-player-per-match stats (games won,
+break points won, tiebreaks, etc.) from the raw `score` string and
+`bpSaved`/`bpFaced` columns — real logic, not guessed, including an
+explicit fix for match-tiebreak brackets (`[10-7]`) so they count toward
+sets/tiebreaks but not games.
+
+**Validation (all closed):**
+- [x] Explicit decision recorded — lag-based free source (both times it
+was asked, including after the source-availability gap was found).
+- [x] A real, live tennis prop scores end-to-end: ran the real 272-row
+tennis slice from `data/pickem/normalized/pickem_props_20260911T124346Z.csv`
+through `process_props()` against the real, live-fetched 2026 archive
+(5,488 real player-match rows, 598 unique players). 217 real rows
+resolved to `model_status="estimated"` (e.g. Simona Waltert's real "Total
+Games" line 21.5). The other 55: 34 `no_player_match` (real doubles pairs
+like "Krueger A / Montgomery R" — a genuine, expected gap, Sackmann's
+archive is singles-only) and 20 `unsupported_stat_type` (real "Fantasy
+Score" rows — no official platform formula exists, left unsupported by
+design, same standard as CFB/NFL).
 
 ---
 

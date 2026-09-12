@@ -64,8 +64,9 @@ def _load_plugins() -> list[SportPlugin]:
     from .soccer import SOCCER_PLUGIN
     from .nba import NBA_PLUGIN
     from .cfb import CFB_PLUGIN
+    from .tennis import TENNIS_PLUGIN
 
-    return [NFL_PLUGIN, MLB_PLUGIN, EPL_PLUGIN, SOCCER_PLUGIN, NBA_PLUGIN, CFB_PLUGIN]
+    return [NFL_PLUGIN, MLB_PLUGIN, EPL_PLUGIN, SOCCER_PLUGIN, NBA_PLUGIN, CFB_PLUGIN, TENNIS_PLUGIN]
 
 
 PLUGINS: list[SportPlugin] = _load_plugins()
