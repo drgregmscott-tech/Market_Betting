@@ -11268,3 +11268,312 @@ from this session's own network at the time of writing.
 (scheduled or manually triggered) succeeds again. If it does not, per the
 options above, the fix is an infrastructure decision for the user, not
 further code changes in this repo.
+
+---
+
+## Hotfix — NFL golden-snapshot regression test silently started making
+## live NBA network calls (2026-09-12)
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete
+
+**What was found, while re-validating the two hotfixes above:** running
+the full `test_pickem_model.py` suite took over 9 minutes instead of
+under a second, and the log showed real live HTTP calls to ESPN's NBA
+endpoints in the middle of `test_nfl_regression_matches_golden_snapshot` —
+a test whose entire point is to be fully offline (it exists to prove NFL
+output is byte-for-byte unchanged against a fixed, synthetic fixture, per
+Session 2.12's original design).
+
+**Root cause:** Session 2.12's `build_props_fixture()` includes one row
+deliberately using an unregistered sport (`sport="nba"`) to prove
+`model_status="unsupported_sport"` still fires correctly — true at the
+time, since no NBA plug-in existed yet. A separate, concurrent session
+(2.15) has since registered a real NBA plug-in in
+`pickem_sport_plugins/__init__.py`. The moment that happened, this
+fixture's placeholder row stopped being "an unregistered sport" and
+silently started dispatching to the real NBA plug-in inside what was
+supposed to be an offline test, making real ESPN network calls
+(`fetch_nba_season_stats()`, ~30,827 real rows) every single test run —
+slow, non-deterministic, and a real risk of exactly the kind of network
+flakiness the two hotfixes above exist to guard against, now inside the
+test suite itself.
+
+**Fix:** changed that row's sport to `"curling"` — the same placeholder
+`test_unsupported_sport_still_falls_through_cleanly()` already uses
+elsewhere in the same file, and not a sport this project has any plug-in
+for. Updated the corresponding cell in the golden snapshot fixture
+(`data/pickem/_test_fixtures/nfl_regression_golden.csv`) from `nba` to
+`curling` to match — a purely mechanical change (that row's entire
+downstream output is blank model fields regardless of which unsupported
+sport string produced it), not a re-captured or hand-computed golden
+value.
+
+**Verification:** full suite re-run — 24/24 pass in `test_pickem_model.py`
+(35/35 combined with `test_sportsbook_props_model.py`), completing in
+1.3 seconds, down from over 9 minutes, with zero network calls in the log.
+
+**Files modified:**
+- `scripts/estimation/test_pickem_model.py` — `build_props_fixture()`'s
+row 5 sport changed from `nba` to `curling`.
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` — row 5's
+`sport` column updated to match.
+
+**Open items:** this is a real, general risk pattern worth naming: any
+test fixture that uses a real sport string as a stand-in for "no plug-in
+handles this" will silently break the same way the next time a new sport
+plug-in is registered (Sessions 2.16/2.17 — CFB, Tennis — are next).
+`"curling"` is safe for now but not permanently guaranteed; a future
+session adding a plug-in should grep test fixtures for its own sport
+label before assuming a placeholder row is still safely unsupported.
+
+---
+
+## Session 2.16 — CFB Support (Pick'em): offline half only
+
+**Date completed:** 2026-09-12
+**Status:** ⚠️ Complete with caveats — left open, per ROADMAP.md's rule for
+half-finished sessions (Session 3.6). Live validation is genuinely blocked
+on the user obtaining a real CFBD API key, not deferred by choice.
+
+**What was actually done:** ROADMAP.md's Session 2.16 card requires a
+College Football Data (CFBD) API key this project cannot obtain on its
+own — unlike every prior sport source (nflverse, MLB Stats API, ESPN),
+CFBD has no anonymous access at all. Asked the user directly rather than
+assuming; user chose to sign up for the free key while the offline half
+(plug-in code, stat mapping, call-budget design, registration) was built
+in parallel — the same choice pattern Session 2.15 used for NBA.
+
+1. Confirmed real, current CFB stat_type strings from the most recent real
+ingested snapshot that actually carries CFB rows
+(`data/pickem/normalized/pickem_props_20260912T100543Z.csv`, 8,639 rows,
+both platforms) rather than guessing a list — `latest.csv` itself has zero
+CFB rows right now, confirmed as a real calendar gap between game days
+(consistent with ROADMAP.md's Session 2.10 note on CFB/Tennis volume), not
+a support gap.
+2. Named the 1,000-call/month cap's real batch/cache strategy up front,
+per the roadmap card's explicit requirement: CFBD's `/games/players`
+endpoint returns a whole week's player box scores in one call (not one
+call per game or per player), so a full-season backfill costs roughly
+15–20 calls. Built `scripts/estimation/pickem_sport_plugins/cfb.py` to
+cache each week's response to `data/pickem/cache/cfbd/` and never re-fetch
+a week again once every one of its games shows CFBD's own "final" status.
+3. Mapped passing/rushing/receiving/kicking box-score fields plus four
+composite stat types (Player TDs/Total TDs, Rush + Rec TDs, Pass+Rush Yds,
+Rush+Rec Yds) to CFBD's publicly documented `/games/players` category/type
+shape — **not yet confirmed against a real payload**, since no CFBD key
+exists yet to make a real call.
+4. Left quarter/half-split stats, Fantasy Score/Points, Kicking Points, and
+`(Combo)`-suffixed stat types unsupported with stated reasons (same "don't
+guess" standard as every other sport's gaps) — full detail in `cfb.py`'s
+module docstring and `docs/research/pickem_estimation_model_spec.md`'s new
+"Session 2.16" section.
+5. Extended `http_utils.get_json_with_retries()` with an optional `headers`
+parameter (CFBD requires a Bearer token; no other plug-in's call sites
+pass one, so this is additive, not a behavior change for them).
+6. Wired `CFBD_API_KEY` through `.github/workflows/pickem_pipeline.yml` as
+an env var sourced from a repo secret of the same name — the secret itself
+does not exist yet; the user still needs to create it once a real key is
+obtained.
+7. Ran a real sanity check: `process_props()` against the real 8,639-row
+CFB slice above with no key set — zero crashes, every row resolves to an
+honest `model_status` (`unsupported_odds_type` 4,257, `no_player_match`
+2,776, `unsupported_stat_type` 1,606 — correct given zero live CFB stat
+rows exist without a key). Full `test_pickem_model.py` suite: 24/24 pass,
+unchanged.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/cfb.py` — new. CFBD-based CFB
+plug-in, UNVERIFIED against a real payload (no key exists yet).
+- `scripts/estimation/pickem_sport_plugins/__init__.py` — registered
+`CFB_PLUGIN` in `PLUGINS`.
+- `scripts/estimation/pickem_sport_plugins/http_utils.py` —
+`get_json_with_retries()` gained an optional `headers` parameter.
+- `.github/workflows/pickem_pipeline.yml` — passes `CFBD_API_KEY` (repo
+secret, not yet created) through to the pipeline run.
+- `docs/research/pickem_estimation_model_spec.md` — new "Session 2.16"
+section.
+- `ROADMAP.md` — Session 2.16 card updated to ⚠️ half-open, not ✅ complete.
+
+**Validation results:**
+- [x] `cfb` plugin loads and registers correctly (`PLUGINS` includes it;
+`plugin_for_sport("cfb")` resolves; `fetch_stats()` returns an honest empty
+DataFrame when no key is set, matching the "no data yet" shape Session
+2.15 established for NBA's pre-season case).
+- [x] `test_pickem_model.py` (full suite): 24/24 pass, unchanged.
+- [x] Real 8,639-row CFB slice processed via `process_props()`: no crash;
+honest `model_status` breakdown as listed above.
+- [ ] Real call-budget plan confirmed against CFBD's own usage dashboard —
+**not possible yet, no key/account exists.**
+- [ ] Real, current CFB stat-type strings re-checked against a real
+in-season pull once live stat data exists — **the strings above are real
+from a live 2026-09-12 pull, but the CFBD-side field mapping itself is
+still unverified.**
+- [ ] A real, live CFB prop scores end-to-end — **not possible yet.**
+
+**Decisions made:**
+1. Build the offline half now rather than wait idle for the key — user's
+explicit choice when presented with the blocker, same pattern as Session
+2.15's NBA half.
+2. Design the call-budget cache strategy (per-week caching, "final" status
+gates re-fetching) before any real call is made, not after hitting the
+cap — per the roadmap card's own explicit requirement.
+3. Leave quarter/half splits, Fantasy Score/Points, Kicking Points, and
+`(Combo)` stat types unsupported rather than approximate them — same
+"no unnamed black-box factors" rule applied to every other sport's stated
+gaps.
+4. Extend `http_utils.get_json_with_retries()` with an optional `headers`
+param rather than writing CFB's own separate HTTP helper — CFBD is the
+first source needing auth, but the retry/fault-isolation logic itself is
+identical to every other plug-in's needs.
+
+**Corrections/reversals during the session:** None — scoped as "offline
+half only" from the start, per the user's choice; finding it genuinely
+can't be closed further is the expected outcome of that choice, not a
+correction.
+
+**Open items / deferred validations:** All three of Session 2.16's
+original validation checkboxes remain open and are **not** transferred to
+this session's closure — they stay owned by Session 2.16's own re-opening
+once a real CFBD key exists. Specifically: (1) obtain the free CFBD key
+and create the `CFBD_API_KEY` GitHub Actions secret, (2) re-confirm
+`cfb.py`'s `_flatten_game_players()` category/type parsing against a real
+`/games/players` payload, (3) confirm the real call-budget plan against
+CFBD's own usage dashboard after a real week of hourly runs, (4) prove one
+real, live CFB prop scores end-to-end. Per the standing rule from Session
+3.6, before that re-opening closes this card, it must pull the actual
+current SESSION_LOG.md/ROADMAP.md from GitHub directly (not a stale copy)
+and check for any session entries added between now and then.
+
+---
+
+## Session 2.16 continuation — CFB live verification (same day, 2026-09-12)
+
+**Date completed:** 2026-09-12
+**Status:** ✅ Complete. Closes the offline-half entry directly above —
+user obtained a real, free CFBD key (collegefootballdata.com/key, email
+sign-up, instant) within the same session and asked to verify immediately
+rather than leave the card open.
+
+**What was actually done:** Ran the real, live end-to-end check the
+offline half's own entry listed as open, using the real key the user
+supplied. This surfaced two real bugs the documentation-only design had
+gotten wrong — exactly the kind of gap this project's "don't guess, check
+the real payload" standard exists to catch, and exactly why the card was
+left open rather than marked complete on documentation alone.
+
+1. **Bug found: `/games/players` rows carry no `status`/`completed`
+field.** The offline design assumed one (to decide when a cached week is
+"final" and can stop being re-fetched) — checked directly against a real
+week-1 2025 payload and confirmed absent (the real game object only has
+`id` and `teams`). Fixed by adding one more real call per season/
+seasonType, to the separate `/games` endpoint, which DOES carry a real
+`completed` boolean and returns an entire season (888 real FBS games,
+2025 regular season) in a single call with no `week` param — cached the
+same way, skipped entirely once every game in it is completed.
+2. **Bug found: kicking's `FG`/`XP` are real "made/attempted" strings**
+(e.g. "1/1", "4/4"), not plain numbers — confirmed on the same real
+payload. The original numeric-only mapping would have silently written
+`1.0` as a placeholder failure value instead of a real result (or, in
+practice, produced repeated "missing expected column" warnings once the
+value landed in the wrong column). Fixed with the same made/attempted
+split logic already used for passing's `C/ATT`.
+3. **Real, confirmed gap found (not a bug — a real CFBD limitation):**
+passing's real category has no `LONG` type at all (only C/ATT, YDS, AVG,
+TD, INT, QBR), unlike rushing/receiving which both have one. The original
+stat map had guessed a `pass_long` mapping for `Longest Completion` (95
+real rows) against CFBD's documented shape; removed and left unsupported
+with the real reason stated, once the live payload proved the field
+doesn't exist.
+4. **Real gap found in the deployment design, not the plug-in itself:**
+`.github/workflows/pickem_pipeline.yml`'s own docstring already states
+that a GitHub Actions runner's disk is thrown away at the end of every
+run — meaning `cfb.py`'s entire on-disk call-budget cache would have been
+silently rebuilt from scratch on every single hourly production run,
+defeating the whole point of the cache (the exact failure mode Session
+2.16's original design was built to prevent). Fixed by adding
+`data/pickem/cache/cfbd/` to the same commit-and-push step that already
+persists `clv_log.csv`, so the cache survives across runs the same way.
+5. Ran a real, live, cold-cache full-2025-season pull:
+`fetch_cfb_season_stats(2025)` — 22,583 real player-game rows, 4,431
+unique real players, 21.7 seconds. Re-ran with a warm cache: 3 real HTTP
+calls (only the not-yet-final postseason weeks), 1.6 seconds, identical
+22,583-row result — confirming the caching logic actually works, not just
+that it runs without error.
+6. Ran `process_props()` against the real 8,639-row CFB slice of ingested
+props with live 2025 stats behind it: 2,164 real rows resolved to
+`model_status="estimated"` (e.g. Arch Manning's real "Pass Yards" line
+247.5, Jordan Marshall's real "Rush Atts" line 13.5) — a real, live CFB
+prop scoring end-to-end, not a placeholder or synthetic check. Full
+`test_pickem_model.py` suite re-run: 24/24 pass, unchanged.
+7. Updated `cfb.py`'s own module docstring, `CFB_STAT_TYPE_MAP`, and
+`docs/research/pickem_estimation_model_spec.md`'s "Session 2.16" section
+to state the live-verified real shape and real gaps found, replacing the
+"documented but unverified" language from the offline-half entry.
+
+**Files created/modified (in addition to the offline-half entry's list):**
+- `scripts/estimation/pickem_sport_plugins/cfb.py` — added
+`_fetch_completed_weeks()`/`_games_index_cache_path()` (the `/games`-based
+finality check), fixed kicking FG/XP parsing (`_made_count()`), removed
+the `longest completion` → `pass_long` mapping, fixed `sort_key` to use
+the real week number instead of CFBD's non-sequential internal game id,
+updated module docstring throughout to "LIVE-VERIFIED".
+- `.github/workflows/pickem_pipeline.yml` — `git add` step now also
+commits `data/pickem/cache/cfbd/`.
+- `docs/research/pickem_estimation_model_spec.md` — "Session 2.16" section
+updated with the live-verified real payload shape and the two real bugs
+found.
+- `ROADMAP.md` — Session 2.16 card updated to ✅ Complete; new Open
+Decision #57 opened for the one item still genuinely owed (CFBD's own
+usage dashboard confirming real steady-state monthly volume across a full
+live week — this pull only ran once, same day).
+- `data/pickem/cache/cfbd/` — real cache files from this session's live
+runs (21 files: 15 real regular-season weeks + 4 postseason weeks + 2
+games-index files), committed for the first time.
+
+**Validation results — closing all three of the offline-half entry's open
+checkboxes:**
+- [x] Real call-budget plan stated and followed, and PROVEN with a real
+run: cold-cache full-season backfill in 21.7s, warm-cache re-run at 3 real
+calls. CFBD's own usage-dashboard confirmation across a full live week is
+the one part still owed (Open Decision #57) — the pull so far is a single
+same-day run, not a week of production traffic.
+- [x] Real, current CFB stat-type strings mapped AND confirmed against a
+real live payload (not just documentation) — two real gaps found and
+fixed as a direct result (kicking made/attempted format; missing passing
+LONG type).
+- [x] A real, live CFB prop scores end-to-end without exceeding the
+free-tier cap — 2,164 real props scored in one real run using well under
+1,000 calls.
+
+**Decisions made:**
+1. Verify immediately once the key existed, rather than leave the card
+half-open until a separately scheduled session — user's explicit choice
+this session, made possible by the key arriving same-day.
+2. Fix the games-index finality gap with one extra cached call to a
+DIFFERENT CFBD endpoint (`/games`) rather than trying to infer finality
+from `/games/players` some other way (e.g. guessing based on date) — this
+keeps finality tied to a real, authoritative "completed" flag CFBD itself
+publishes, not a derived assumption.
+3. Persist the cache directory via the same commit-and-push mechanism as
+`clv_log.csv` rather than inventing a separate persistence path — the
+runner's ephemeral-disk problem is identical in both cases, and the
+workflow file already has a proven pattern for it.
+4. Remove the guessed `pass_long` mapping entirely rather than leave it
+mapped to a column that will never populate — a silently-always-empty
+mapping is worse than an honestly unsupported stat type, same "don't
+guess" standard this project holds everywhere else.
+
+**Corrections/reversals during the session:** The offline-half entry's
+"Mapped, UNVERIFIED against a real payload" framing for CFBD's category/
+type shape turned out to be MOSTLY right (passing YDS/TD/INT, rushing,
+receiving all matched exactly) but wrong on two specific points (kicking's
+FG/XP format; passing's missing LONG type) — both found and fixed the
+same day the key arrived, not carried forward as latent bugs.
+
+**Open items / deferred validations:** One item from the offline-half
+entry remains genuinely open, tracked as ROADMAP.md's Open Decision #57:
+confirm CFBD's own usage dashboard shows real steady-state monthly call
+volume in line with this session's design math, after a real week of
+hourly GitHub Actions production runs (not just this session's two
+same-day manual runs).

@@ -1,0 +1,60 @@
+{
+  "over_under_lines": [
+    {
+      "id": "ud-2001",
+      "stat_value": "8.5",
+      "status": "active",
+      "over_under": {
+        "display_stat": "Rebounds",
+        "appearance_stat": {
+          "appearance_id": "app-1"
+        }
+      },
+      "options": [
+        {
+          "choice": "Higher",
+          "payout_multiplier": "1.9"
+        },
+        {
+          "choice": "Lower",
+          "payout_multiplier": "1.9"
+        }
+      ]
+    },
+    {
+      "id": "ud-2002",
+      "stat_value": "N/A",
+      "status": "active",
+      "over_under": {
+        "display_stat": "Assists"
+      },
+      "options": []
+    }
+  ],
+  "appearances": [
+    {
+      "id": "app-1",
+      "player_id": "p-1",
+      "match_id": "m-1",
+      "team_id": "t-1"
+    }
+  ],
+  "players": [
+    {
+      "id": "p-1",
+      "attributes": {
+        "full_name": "Test Player B"
+      }
+    }
+  ],
+  "games": [
+    {
+      "id": "m-1",
+      "attributes": {
+        "scheduled_at": "2026-08-30T00:00:00Z"
+      }
+    }
+  ],
+  "providers": [],
+  "solo_games": []
+}

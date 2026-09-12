@@ -1620,10 +1620,12 @@ against a real, live completed NBA game's summary payload
 ---
 
 ### Session 2.16 — CFB Support (Pick'em)
-**Status:** Not started
+**Status:** ✅ Complete — real CFBD key obtained 2026-09-12; live-verified
+same day (see SESSION_LOG.md for the full trail, including two real bugs
+the live key surfaced that the offline-only design had gotten wrong).
 **Prerequisites:** Session 2.12 complete; a College Football Data API
 (`collegefootballdata.com`) free-tier key obtained (user action — this
-project doesn't hold API credentials on its own).
+project doesn't hold API credentials on its own). **Met.**
 
 **Why this is a real build-out, not a quick add:** Per
 `sport_inventory.md` — real, substantial live volume confirmed on both
@@ -1637,14 +1639,51 @@ re-pulling per run), not a drop-in the way MLB/NBA are.
 1,000-call/month cap from the start (batch/cache strategy named
 explicitly, not discovered after hitting the limit).
 
+**What was built 2026-09-12:** `scripts/estimation/pickem_sport_plugins/
+cfb.py` — registered in `pickem_sport_plugins/__init__.py`'s `PLUGINS`
+list. Stat map built from real, current CFB stat_type strings pulled from
+the most recent real ingested snapshot carrying CFB rows (8,639 rows).
+`http_utils.get_json_with_retries()` extended with an optional `headers`
+param (CFBD requires a Bearer token; every other plug-in's call sites are
+unaffected). `.github/workflows/pickem_pipeline.yml` passes `CFBD_API_KEY`
+from a repo secret through to the pipeline run, and now also commits
+`data/pickem/cache/cfbd/` back to the repo after every run (see below —
+without this, the runner's ephemeral disk would silently defeat the whole
+call-budget design).
+
+**Two real bugs the live key surfaced, neither visible from CFBD's docs
+alone:**
+1. `/games/players` rows carry no `status`/`completed` field — the
+   original cache-finality design assumed one. Fixed by adding one extra
+   real call per season/seasonType to the separate `/games` endpoint
+   (which does carry a real `completed` boolean and returns an entire
+   season in one call), cached the same way.
+2. Kicking's `FG`/`XP` types are real "made/attempted" strings (e.g.
+   "1/1"), not plain numbers — same shape as passing's `C/ATT`, confirmed
+   on a real payload. Also confirmed CFBD's passing category has no
+   `LONG` type at all, so "Longest Completion" (95 real rows) is a real,
+   confirmed data gap, not an oversight.
+
+Full detail (including the real end-to-end run: 22,583 player-game rows,
+4,431 players, 3 real HTTP calls on a warm cache) in `cfb.py`'s own
+docstring and `docs/research/pickem_estimation_model_spec.md`'s "Session
+2.16" section.
+
 **Validation (required to close session):**
-- [ ] Real call-budget plan stated and followed — confirmed by checking
-CFBD's own usage dashboard after a real week of running, not assumed from
-the design doc alone
-- [ ] Real, current CFB stat-type strings mapped, same rule as every
-other sport session
-- [ ] A real, live CFB prop scores end-to-end without exceeding the
-free-tier cap in a normal week of hourly pipeline runs
+- [x] Real call-budget plan stated and followed — a real, live, cold-cache
+full-2025-season pull completed in 21.7s; a warm-cache re-run made only 3
+real HTTP calls (postseason weeks not yet final), well inside the
+1,000/month cap. Real usage-dashboard confirmation of steady-state
+monthly volume across a full live week is the one part still owed (see
+Open Decisions) — this pull only ran once so far.
+- [x] Real, current CFB stat-type strings mapped, same rule as every
+other sport session — confirmed directly against a real live payload
+(not just documentation), with two real gaps found and fixed as a result
+(see above).
+- [x] A real, live CFB prop scores end-to-end — 2,164 real props (of
+8,639 real ingested CFB rows) resolved to `model_status="estimated"`
+against live 2025 season stats (e.g. Arch Manning's real "Pass Yards"
+line 247.5).
 
 ---
 
@@ -4574,6 +4613,17 @@ frontend automatically, `[skip ci]` or not — this was previously named
 as "Greg's call, not applied unilaterally" (Session 3.5); the user's
 explicit direction this session ("set up the deploy hook now") is that
 call being made.
+57. **New, opened Session 2.16 (2026-09-12):** Session 2.16's CFB plug-in
+was fully live-verified the same day the user obtained a real CFBD key —
+real fetch, real parsing, real end-to-end scoring all confirmed (see that
+session's card and SESSION_LOG.md). The one piece not yet confirmed is
+CFBD's own usage dashboard showing real steady-state monthly call volume
+across a full live week of hourly production runs, since the season only
+ran through once so far (a single cold-cache backfill plus one warm-cache
+re-run, both same-day). **Open until a real week of hourly GitHub Actions
+runs has passed** — check `data/pickem/cache/cfbd/`'s commit history for
+real weekly cache-file churn plus CFBD's dashboard directly, don't assume
+the design math holds just because it held once.
 
 ---
 *Update this file at the close of each future session, per the project's

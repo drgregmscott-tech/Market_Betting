@@ -52,6 +52,7 @@ def get_json_with_retries(
     timeout: int = 20,
     max_attempts: int = 3,
     backoff_seconds: float = 2.0,
+    headers: dict[str, str] | None = None,
 ) -> dict:
     """GETs `url` and returns its parsed JSON body, retrying a failed
     attempt (read/connect timeout, connection error, or a non-2xx response)
@@ -59,11 +60,13 @@ def get_json_with_retries(
     the last real exception if every attempt fails -- the
     caller decides whether that means "abort this whole plug-in" (a
     one-off critical call, e.g. FPL's bootstrap-static) or "skip this one
-    item and keep going" (a per-match/per-player call inside a loop)."""
+    item and keep going" (a per-match/per-player call inside a loop).
+    `headers` is optional -- added Session 2.16 for CFBD's required Bearer
+    token; every prior call site (no auth needed) is unaffected."""
     last_exc: Exception | None = None
     for attempt in range(1, max_attempts + 1):
         try:
-            resp = requests.get(url, timeout=timeout)
+            resp = requests.get(url, timeout=timeout, headers=headers)
             resp.raise_for_status()
             return resp.json()
         except requests.exceptions.RequestException as exc:

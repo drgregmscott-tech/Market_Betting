@@ -82,14 +82,28 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run pipeline (ingestion -> estimation -> CLV logging)
+        env:
+          # CFB plug-in (Session 2.16) -- collegefootballdata.com requires a
+          # free API key; without it, cfb.py returns no data (an honest
+          # empty result, not a crash) rather than failing the whole run.
+          # Add the real key as a repo secret named CFBD_API_KEY once
+          # obtained -- see ROADMAP.md's Session 2.16 card.
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
         run: python scripts/run_pipeline.py --season 2025
 
       - name: Commit and push updated CLV log and digest
         id: commit
         run: |
+          # data/pickem/cache/cfbd/ (Session 2.16) MUST be committed here,
+          # same reason as clv_log.csv above: this runner's disk is thrown
+          # away at the end of every run (see this file's own "WHAT THIS
+          # FILE IS" note), so cfb.py's whole call-budget cache -- the
+          # thing keeping this plug-in under CFBD's 1,000-call/month free
+          # cap -- would be silently rebuilt from scratch on every single
+          # hourly run without this, defeating the entire design.
           git config user.name "pickem-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv
+          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv data/pickem/cache/cfbd/
           if git diff --cached --quiet; then
             echo "No changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"

@@ -325,3 +325,184 @@
 2026-09-12 10:32:46,779 UTC | INFO | Loaded 50988 mlb stat rows for season 2026
 2026-09-12 10:32:51,788 UTC | INFO | Loaded 135 nfl stat rows for season 2026
 2026-09-12 10:32:52,932 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-12 10:37:05,979 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401810665: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) -- retrying in 2.0s
+2026-09-12 10:40:02,251 UTC | INFO | Loaded 30827 nba stat rows for season 2025
+2026-09-12 10:40:02,634 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:40:02,634 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:40:02,634 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:40:02,636 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:40:02,636 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:40:02,636 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:40:02,638 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:40:02,638 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:40:02,638 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:40:02,639 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:40:02,640 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:40:02,640 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:42:27,033 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:42:27,185 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:42:27,186 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:42:27,186 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:42:27,188 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:42:27,188 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:42:27,189 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:42:27,191 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:42:27,191 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:42:27,191 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:42:27,194 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:42:27,194 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:42:27,195 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:42:55,961 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:42:56,139 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:42:56,140 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:42:56,140 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:42:56,142 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:42:56,142 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:42:56,143 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:42:56,146 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:42:56,147 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:42:56,147 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:42:56,149 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:42:56,150 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:42:56,150 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:46:30,596 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:46:30,718 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:46:30,718 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:46:30,719 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:46:30,720 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:46:30,721 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:46:30,721 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:46:30,722 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:46:30,723 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:46:30,723 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:46:30,724 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:46:30,725 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:46:30,725 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:46:58,738 UTC | INFO | Loaded 0 cfb stat rows for season 2025
+2026-09-12 10:48:50,655 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:48:50,777 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:48:50,777 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:48:50,778 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:48:50,780 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:48:50,780 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:48:50,780 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:48:50,781 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:48:50,782 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:48:50,782 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:48:50,783 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:48:50,784 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:48:50,784 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:54:04,351 UTC | INFO | Loaded 22583 cfb stat rows for season 2025
+2026-09-12 10:54:04,861 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,005 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,007 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,170 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,173 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,307 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,317 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,424 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,425 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,535 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,657 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,757 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,843 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,845 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:05,984 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,119 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,219 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,221 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,327 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,330 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,464 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,466 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,595 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,597 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,770 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,773 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,910 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:06,916 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,037 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,046 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,157 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,272 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,390 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,477 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,554 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,563 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,696 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:07,971 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:08,060 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:08,121 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:08,174 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:08,184 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:08,301 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,592 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,594 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,595 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,597 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,599 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,600 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,601 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,603 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,604 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,606 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,607 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,608 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,610 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,611 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,613 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,614 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,616 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,617 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,619 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,620 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,621 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,623 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,624 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,626 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,627 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,629 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,631 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,632 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,634 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,635 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,636 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,638 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,640 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,641 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,642 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,644 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,645 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,647 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,648 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,649 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,651 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,652 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:54:09,653 UTC | WARNING | cfb stats data is missing expected column 'pass_long'
+2026-09-12 10:55:25,516 UTC | INFO | Loaded 22583 cfb stat rows for season 2025
+2026-09-12 10:55:41,622 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:55:41,740 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:55:41,740 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:55:41,741 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:55:41,742 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:55:41,742 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:55:41,742 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:55:41,744 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:55:41,744 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:55:41,744 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:55:41,746 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:55:41,747 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:55:41,747 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-12 10:58:05,467 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-12 10:58:05,599 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-12 10:58:05,599 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-12 10:58:05,599 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-12 10:58:05,601 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-12 10:58:05,601 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-12 10:58:05,601 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-12 10:58:05,603 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-12 10:58:05,603 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-12 10:58:05,603 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-12 10:58:05,605 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-12 10:58:05,606 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-12 10:58:05,606 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom

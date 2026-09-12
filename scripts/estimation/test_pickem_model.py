@@ -108,8 +108,20 @@ def build_props_fixture() -> pd.DataFrame:
              sport="nfl", stat_type="Kicking Points", line=8.5, odds_type="standard"),
         dict(platform="prizepicks", source_line_id="4", player_name="Player Four",
              sport="nfl", stat_type="Fantasy Score", line=20.5, odds_type="standard"),
+        # HOTFIX (2026-09-12): this row's job is to be some genuinely
+        # UNREGISTERED sport, so it must always fall through to
+        # model_status="unsupported_sport" without touching the network.
+        # It used "nba" originally (Session 2.12), which was true until a
+        # real NBA plug-in was registered (Session 2.15) -- at that point
+        # this row silently started dispatching to the real NBA plug-in
+        # and making live ESPN network calls inside what is supposed to be
+        # a fast, fully offline regression test (discovered when this test
+        # started taking ~9 minutes instead of under a second). "curling"
+        # is not a registered sport anywhere in this project and is the
+        # same placeholder test_unsupported_sport_still_falls_through_
+        # cleanly() already uses below.
         dict(platform="prizepicks", source_line_id="5", player_name="Someone Irrelevant",
-             sport="nba", stat_type="Points", line=25.5, odds_type="standard"),
+             sport="curling", stat_type="Points", line=25.5, odds_type="standard"),
         dict(platform="prizepicks", source_line_id="6", player_name="Player One",
              sport="nfl", stat_type="Some Unknown Stat", line=1.5, odds_type="standard"),
         dict(platform="prizepicks", source_line_id="7", player_name="Nobody Matches",

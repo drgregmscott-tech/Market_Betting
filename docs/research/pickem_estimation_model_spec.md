@@ -757,3 +757,76 @@ do, per its roadmap card:**
    available to verify against.
 3. Prove at least one real, live NBA prop scores end-to-end, the same
    standard every other sport session met before being marked complete.
+
+---
+
+## Session 2.16 — CFB plug-in (offline half only; UNVERIFIED, no API key
+## exists yet)
+
+**Status: scaffold, not validated.** ROADMAP.md's Session 2.16 card is
+blocked on the user obtaining a free CollegeFootballData.com (CFBD) API
+key — this project doesn't hold API credentials on its own, and CFBD (unlike
+every prior sport's source: nflverse, MLB Stats API, ESPN) has no
+anonymous/keyless access at all. User chose to get the key while this
+offline half was built in parallel, same choice pattern as Session 2.15's
+NBA half.
+
+**Real, confirmed stat_type strings — from the most recent real ingested
+snapshot carrying CFB rows** (`data/pickem/normalized/
+pickem_props_20260912T100543Z.csv`, 8,639 real rows, both platforms —
+`latest.csv` itself is empty of CFB right now, a real calendar gap between
+game days per ROADMAP.md's Session 2.10 note, not a support gap). Full real
+counts are recorded in `cfb.py`'s own module docstring rather than
+duplicated here.
+
+**Data source — real constraint, not a drop-in:** CFBD requires a free key
+AND caps the free tier at 1,000 calls/month. `/games/players` returns every
+game's player box score for one (year, week, seasonType) in a single call,
+so a full season backfill costs roughly 15–20 calls, not one per game
+(~800+ FBS games) or per player. `cfb.py` caches each week's response to
+`data/pickem/cache/cfbd/` and never re-fetches a week once every one of its
+games shows CFBD's own "final" status — see `cfb.py`'s own docstring for
+the full call-budget plan, which is Session 2.16's own required first
+validation item (confirmed against CFBD's real usage dashboard after a real
+week of running, not assumed from this doc).
+
+**Mapped, UNVERIFIED against a real payload** (CFBD's publicly documented
+`/games/players` category/type shape — no live call has been made yet, no
+key exists): passing YDS/TD/INT, C/ATT split into completions+attempts,
+rushing CAR/YDS/TD/LONG, receiving REC/YDS/TD/LONG, kicking FG/XP. Composite
+(summed): Player TDs / Total TDs (pass+rush+rec TDs), Rush + Rec TDs,
+Pass+Rush Yds, Rush+Rec Yds.
+
+**Left unsupported, stated reason (not guessed at):**
+- Every `1Q ___` / `1H ___` stat (quarter/half splits) — CFBD's player-game
+  endpoint is a full-game box score only, same "real architecture mismatch"
+  as MLB's per-inning gap (Session 2.13), not a missing mapping.
+- Fantasy Score / Fantasy Points — no official PrizePicks/Underdog CFB
+  scoring formula could be sourced without a live payload to check field
+  availability against.
+- Kicking Points — CFBD's documented kicking category has no distance-
+  tiered FG breakdown, so NFL's real tiered formula (Session 2.3) can't be
+  ported as-is.
+- `___ (Combo)` stat-type variants — meaning not confirmed against any
+  cross-checkable source; left unsupported rather than guessed.
+
+**Sanity check performed (no crash, honest result):** ran `process_props()`
+against the real 8,639-row CFB slice above with no CFBD key set — zero
+crashes, every row resolves to a real, honest `model_status`
+(`unsupported_odds_type` 4,257, `no_player_match` 2,776,
+`unsupported_stat_type` 1,606 — correct given zero live CFB stat rows exist
+without a key), and `test_pickem_model.py`'s existing synthetic suite
+(24/24) still passes unchanged.
+
+**What Session 2.16's own re-opening (once a real key exists) must still
+do, per its roadmap card:**
+1. Re-confirm `cfb.py`'s `/games/players` category/type parsing
+   (`_flatten_game_players()`) against a real payload — the whole nested
+   shape is currently sourced from CFBD's documentation, not a real
+   response.
+2. Confirm the real call-budget plan against CFBD's own usage dashboard
+   after a real week of hourly pipeline runs.
+3. Re-confirm the real stat_type strings above are still current against a
+   fresh live pull.
+4. Prove at least one real, live CFB prop scores end-to-end without
+   exceeding the free-tier cap.
