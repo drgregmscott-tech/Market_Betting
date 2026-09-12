@@ -491,3 +491,193 @@ his real MLB Stats API season data directly, independently of the ingested
 props pipeline, plus the new synthetic regression test. This should be
 re-confirmed via a real ingested prop the next time a two-way player has
 one live on either platform.
+
+---
+
+## Session 2.14 — Soccer stat-type coverage (EPL via the FPL plug-in,
+## everything else via the ESPN plug-in)
+
+**Real ingested sport labels (2026-09-11 live production pull, 56,841 total
+rows):** unlike every prior sport, soccer arrives under THREE distinct real
+sport strings, not one — `SOCCER` (10,113 rows, PrizePicks), `EPL` (3,512
+rows, PrizePicks — PrizePicks itself already splits EPL out as its own
+category), and `FIFA` (2,581 rows, Underdog). `FIFA` was checked directly
+and is real-life soccer, not the video game — real player names in that
+category include Ousmane Dembele, Erling Haaland, Lamine Yamal, Kylian
+Mbappe, Jude Bellingham, and other real, current top-flight players.
+`pickem_sport_plugins/epl.py`'s `EPL_SPORT_LABELS` covers `EPL` only;
+`pickem_sport_plugins/soccer.py`'s `SOCCER_SPORT_LABELS` covers `SOCCER` and
+`FIFA` (both route to the ESPN-based plug-in, since Underdog's `FIFA` label
+does not distinguish EPL players from any other league's — see that file's
+own docstring). Note also: `SOCCER`-labeled real `game_matchup` values span
+a much wider real set of leagues than the roadmap card's five (La Liga,
+Serie A, Bundesliga, Ligue 1, MLS) — real matchups included Argentine,
+Brazilian, Liga MX, NWSL, and Saudi-league team names. Only the five
+ESPN-confirmed leagues are wired into `fetch_soccer_espn_season_stats()`;
+props for a player from an unmapped league correctly fall through to
+`no_player_match` (an honest result — this plug-in genuinely has no data
+for them — not a bug).
+
+### EPL — real stat-type strings, mapped against real FPL fields
+
+Real per-gameweek FPL fields (`element-summary/{id}/`'s `history`,
+confirmed live 2026-09-11): `minutes, goals_scored, assists, clean_sheets,
+goals_conceded, own_goals, penalties_saved, penalties_missed, yellow_cards,
+red_cards, saves, bonus, bps, tackles, clearances_blocks_interceptions,
+recoveries, starts, expected_goals, expected_assists`.
+
+| Real stat_type string | Real count | Outcome |
+|---|---|---|
+| Shots | 937 | **Unsupported** — no shot-count field in FPL's real per-gameweek data |
+| SOT | 639 | Unsupported — same reason |
+| Goal + Assist | 414 | **Mapped** (composite) → `goals_scored + assists` |
+| Goals | 382 | **Mapped** → `goals_scored` |
+| Assists | 349 | **Mapped** → `assists` |
+| Fouls | 319 | Unsupported — no foul-count field in FPL's real data |
+| Tackles | 318 | **Mapped** → `tackles` (a real FPL field) |
+| Goalie Saves | 105 | **Mapped** → `saves` |
+| Passes Attempted | 16 | Unsupported — no field |
+| Fantasy Score | 14 | Unsupported — PrizePicks' real outfield formula (see below) needs 6 real components FPL's data doesn't carry |
+| Goalie Fantasy Score | 8 | Unsupported — see below |
+| Clearances | 3 | Unsupported — FPL's real `clearances_blocks_interceptions` is a DIFFERENT combined stat (clearances+blocks+interceptions), not pure clearances; mapping it to a stat literally named "Clearances" would misrepresent it |
+| Attempted Dribbles | 3 | Unsupported — no field |
+| Crosses | 2 | Unsupported — no field |
+| Goals Allowed | 2 | **Mapped** → `goals_conceded` |
+| GA F30 Mins | 1 | Unsupported — needs a within-game time split FPL's per-gameweek totals don't carry |
+
+Real, checked result: 1,570 of 3,512 real EPL rows (44.7%) map to a real
+FPL column; the remaining 1,942 (55.3%) are real, stated gaps — a real
+MAJORITY left unsupported, disclosed plainly rather than papered over,
+because FPL's real per-gameweek data structurally does not carry shot
+counts, foul counts, or most of PrizePicks' own outfield Fantasy Score
+inputs. See `pickem_sport_plugins/epl.py`'s own docstring for the full
+reasoning.
+
+### SOCCER / FIFA (non-EPL) — real stat-type strings, mapped against real
+### ESPN fields
+
+Real per-player match fields (`summary?event={id}`'s
+`rosters[].roster[].stats`, confirmed live across La Liga/Serie A/
+Bundesliga/Ligue 1/MLS, 2026-09-11): `appearances, foulsCommitted,
+foulsSuffered, goalAssists, goalsConceded, offsides, ownGoals, redCards,
+saves, shotsFaced, shotsOnTarget, subIns, totalGoals, totalShots,
+yellowCards` — identical field set across all five leagues checked.
+
+| Real stat_type string (platform) | Real count | Outcome |
+|---|---|---|
+| Shots (PP) | 2,605 | **Mapped** → `totalShots` |
+| SOT (PP) | 1,950 | **Mapped** → `shotsOnTarget` |
+| Goals (PP) | 1,304 | **Mapped** → `totalGoals` |
+| Goal + Assist (PP) | 1,138 | **Mapped** (composite) → `totalGoals + goalAssists` |
+| Tackles (PP) | 1,109 | **Unsupported** — no tackles field anywhere in ESPN's real per-player soccer stats, checked directly across all 5 leagues |
+| Assists (PP) | 993 | **Mapped** → `goalAssists` |
+| Fouls (PP) | 677 | **Mapped** → `foulsCommitted` |
+| Goalie Saves (PP) | 174 | **Mapped** → `saves` |
+| Passes Attempted (PP) | 68 | Unsupported — no field |
+| Fantasy Score (PP) | 40 | Unsupported — needs 6 of 11 real formula components (Passes Attempted, Shots Assisted, Clearances, Tackles Attempted, Attempted Dribbles, Crosses) that ESPN's real data doesn't carry |
+| Goalie Fantasy Score (PP) | 17 | **Mapped** (computed) — every component (`starter`, `saves`, `goalsConceded`) IS a real ESPN field |
+| Clearances (PP) | 13 | Unsupported — no field |
+| Attempted Dribbles (PP) | 12 | Unsupported — no field |
+| Shots Assisted (PP) | 9 | Unsupported — no field |
+| Crosses (PP) | 4 | Unsupported — no field |
+| Goals + Assists (UD) | 573 | **Mapped** (composite) → `totalGoals + goalAssists` |
+| Goals (UD) | 430 | **Mapped** → `totalGoals` |
+| Assists (UD) | 392 | **Mapped** → `goalAssists` |
+| Shots on Target (UD) | 374 | **Mapped** → `shotsOnTarget` |
+| Cards (UD) | 282 | **Mapped** (composite) → `yellowCards + redCards` |
+| Shots Attempted (UD) | 251 | **Mapped** → `totalShots` |
+| 1H Goals (UD) | 131 | Unsupported — needs a first-half-only split; same "no per-game-scoped number" mismatch as MLB's per-inning gap (Session 2.13) |
+| Fouls Committed (UD) | 52 | **Mapped** → `foulsCommitted` |
+| Saves (UD) | 51 | **Mapped** → `saves` |
+| Fouls Drawn (UD) | 45 | **Mapped** → `foulsSuffered` |
+
+Real, checked result: 8,858 of 10,113 real SOCCER rows (87.6%) and 2,450 of
+2,581 real FIFA rows (94.9%) map to a real ESPN field or derivation.
+
+### PrizePicks' official Soccer Fantasy Score formulas (sourced, confirmed
+### live 2026-09-11, via prizepicks.com/playbook-article/how-to-play-
+### prizepicks-soccer-fantasy-scoring-system-for-world-cup)
+
+**Outfield Fantasy Score:** Goal Scored=10, Assist=5, Shot=1, Shot on
+Target=1, Passes Attempted=0.05, Shots Assisted=0.5, Clearances=1, Tackles
+Attempted=1, Attempted Dribbles=1, Crosses=0.5, Yellow Card=-1, Red
+Card=-2, Fouls=-0.5. **Not coded** — 6 of these 11 real components
+(Passes Attempted, Shots Assisted, Clearances, Tackles Attempted, Attempted
+Dribbles, Crosses) have no equivalent in either real data source available
+to this project (FPL or ESPN). Computing a partial version from only the 5
+available components would silently misrepresent the real formula — this
+project's "no unnamed black-box factors" rule (Session 2.3 onward) means
+this stays a named, stated gap instead.
+
+**Goalie Fantasy Score:** Starting Score=5 (if started), Saves=2 each,
+Goals Conceded=-2 each, Clean Sheet=+5 (started AND 0 conceded). **Coded**
+in `pickem_sport_plugins/soccer.py` — every component maps to a real ESPN
+field this plug-in already fetches (`starter`, `saves`, `goalsConceded`);
+Clean Sheet is derived (started AND `goalsConceded == 0`), the same way
+MLB's Quality Start (Session 2.13) was derived from real columns rather than
+guessed. Not coded for the FPL/EPL plug-in — FPL's real data doesn't expose
+a per-gameweek `starter` flag or goals-conceded-while-on-pitch distinction
+in the same directly usable shape, and EPL's own real Goalie Fantasy Score
+volume (8 rows) is small; left as a stated gap there (see `epl.py`).
+
+### Real, live, independently re-verified end-to-end proofs
+
+1. **EPL (FPL path):** Alisson Becker's real "Goalie Saves" prop scored
+`model_status="estimated"`, `season_avg=3.0` (3 real gameweeks played:
+saves of 3, 1, 5). Independently re-pulled his real FPL id and per-gameweek
+`saves` history directly (separate script, no import from `epl.py` or
+`pickem_model.py`) — `[3, 1, 5]`, mean `3.0`, matching exactly.
+2. **Non-EPL (ESPN path):** Lamine Yamal's (La Liga, Barcelona) real "Goals"
+prop scored `model_status="estimated"`, `season_avg=1.0` (4 real La Liga
+matches). Independently re-pulled his real match-by-match `totalGoals` from
+ESPN's public API directly (separate script, no import from `soccer.py`) —
+goals of `[0, 0, 2, 2]` across his 4 real completed matches, mean `1.0`,
+matching exactly.
+3. **Real, live props from 4 distinct non-EPL leagues scored end-to-end**
+in the same production run (`output/estimation/latest.csv`, 2026-09-11):
+La Liga (e.g. Vinícius Júnior, Kylian Mbappé, Jude Bellingham — Shots/SOT),
+Serie A (Lorenzo Palmisani — Goalie Saves), Bundesliga (Finn Dahmen, Mark
+Flekken — Goalie Saves and Goalie Fantasy Score), and MLS (Kristijan
+Kahlina, James Pantemis — Goalie Saves) — exceeding the roadmap card's
+"at least 3 distinct non-EPL leagues" bar.
+4. **Bundesliga and Ligue 1 individually confirmed live against ESPN's
+API** (this session, 2026-09-11) — real completed matches found for both
+(`ger.1`: 18 completed events in the season so far; `fra.1`: 27), not
+assumed from the La Liga/Serie A/MLS pattern holding.
+
+### Real `model_status` breakdown after this session (same 2026-09-11
+### production run as the independent proofs above)
+
+Most SOCCER/EPL rows are gated by the pre-existing, sport-agnostic
+Demon/Goblin `unsupported_odds_type` check (Session 2.13's own priority
+note — most real PrizePicks volume across every sport is Demon/Goblin, not
+just MLB) before ever reaching stat resolution — this is why the real
+`estimated` counts below are smaller than the raw stat-type-coverage
+percentages above would suggest, and is not a defect introduced by this
+session. Underdog rows (FIFA) are not subject to that gate.
+
+- `SOCCER` (10,113 rows): `unsupported_odds_type` 9,874, `unsupported_stat_type`
+146, `no_player_match` 56, **`estimated` 32**, `no_line_value` 3,
+`insufficient_history` 2.
+- `EPL` (3,512 rows): `unsupported_odds_type` 3,400, `unsupported_stat_type`
+90, **`estimated` 12**, `no_player_match` 10.
+- `FIFA` (2,581 rows, not gated by the Demon/Goblin check): `no_player_match`
+1,276 (real players from leagues outside this plug-in's five, or unmatched
+naming — see the "real, checked" note above), `no_line_value` 562,
+**`estimated` 548**, `unsupported_stat_type` 131, `insufficient_history` 64.
+
+### Real cost note (same "no bulk alternative" precedent as MLB, Session
+### 2.13, applied here at a larger scale)
+
+Neither the FPL API nor ESPN's public API has a bulk "every player's season
+stat line" endpoint. A full production run of the two new plug-ins makes
+roughly 650+ real HTTP calls to the FPL API (one per current player, for
+each player's own per-gameweek history) and roughly 470+ real calls to
+ESPN's API (one scoreboard call per league per calendar month of the season
+so far, plus one summary call per completed match — 474 completed matches
+found across the five confirmed leagues as of 2026-09-11, MLS alone
+accounting for 358 of them). Total real run time for this session's full
+production pipeline (all four registered plug-ins, not just soccer):
+approximately 6.5 minutes. This is an accepted, real cost of these data
+sources, same standing as MLB's own per-team-roster HTTP-call cost — there
+is no bulk alternative to fall back to.

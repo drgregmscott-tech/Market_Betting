@@ -32,8 +32,10 @@ import pytest
 
 from pickem_model import build_stat_series, process_props, resolve_stat_spec
 from pickem_sport_plugins import PLUGINS, plugin_for_sport
+from pickem_sport_plugins.epl import EPL_PLUGIN
 from pickem_sport_plugins.mlb import MLB_PLUGIN
 from pickem_sport_plugins.nfl import NFL_PLUGIN
+from pickem_sport_plugins.soccer import SOCCER_PLUGIN
 
 GOLDEN_PATH = (
     Path(__file__).resolve().parents[2]
@@ -323,6 +325,150 @@ def test_mlb_plugin_registered_and_sport_labels_exclude_mlblive():
     assert plugin_for_sport("mlblive") is None, (
         "MLBLIVE is deliberately unregistered -- see mlb.py module docstring"
     )
+
+
+# ---------------------------------------------------------------------------
+# Session 2.14 -- Soccer (EPL via the FPL plug-in, everything else via the
+# ESPN plug-in). Offline fixtures shaped like each plug-in's real
+# fetch_stats() output -- no live network calls in this file (the real,
+# live end-to-end proof is in SESSION_LOG.md's Session 2.14 section, per
+# this project's standing "prove it against real data separately, keep unit
+# tests offline" pattern already used for NFL/MLB).
+# ---------------------------------------------------------------------------
+def _epl_row(player_id: str, name: str, sort_key: int, **stats) -> dict:
+    base = {
+        "player_id": player_id, "player_display_name": name, "sort_key": sort_key,
+        "goals_scored": 0, "assists": 0, "tackles": 0, "saves": 0, "goals_conceded": 0,
+    }
+    base.update(stats)
+    return base
+
+
+def build_epl_stats_fixture() -> pd.DataFrame:
+    rows = []
+    # E1 -- attacker: Goals (plain column), Goal + Assist (composite), 4 gws.
+    for sk, (g, a) in enumerate([(1, 0), (0, 1), (2, 1), (0, 0)], start=1):
+        rows.append(_epl_row("e1", "Attacker One", sk, goals_scored=g, assists=a))
+    # E2 -- goalkeeper: Goalie Saves, Goals Allowed, 3 gws.
+    for sk, (sv, gc) in enumerate([(3, 1), (5, 0), (2, 2)], start=1):
+        rows.append(_epl_row("e2", "Keeper Two", sk, saves=sv, goals_conceded=gc))
+    return pd.DataFrame(rows)
+
+
+def test_epl_plugin_registered_sport_label():
+    assert plugin_for_sport("epl") is EPL_PLUGIN
+
+
+def test_epl_plain_column_and_composite_stats():
+    stats = build_epl_stats_fixture()
+    kind, value, _ = resolve_stat_spec(EPL_PLUGIN, "Goals")
+    assert list(build_stat_series(EPL_PLUGIN, stats, "e1", kind, value)) == [1, 0, 2, 0]
+
+    kind, value, _ = resolve_stat_spec(EPL_PLUGIN, "Goal + Assist")
+    assert list(build_stat_series(EPL_PLUGIN, stats, "e1", kind, value)) == [1, 1, 3, 0]
+
+
+def test_epl_goalie_stats():
+    stats = build_epl_stats_fixture()
+    kind, value, _ = resolve_stat_spec(EPL_PLUGIN, "Goalie Saves")
+    assert list(build_stat_series(EPL_PLUGIN, stats, "e2", kind, value)) == [3, 5, 2]
+
+    kind, value, _ = resolve_stat_spec(EPL_PLUGIN, "Goals Allowed")
+    assert list(build_stat_series(EPL_PLUGIN, stats, "e2", kind, value)) == [1, 0, 2]
+
+
+def test_epl_shots_and_fantasy_score_stay_unsupported():
+    """A real, substantial stated gap (see epl.py docstring) -- FPL's real
+    per-gameweek data has no shot/foul counts and can't source PrizePicks'
+    real outfield Fantasy Score formula. Must resolve to None, not a
+    guessed value."""
+    for stat in ("Shots", "SOT", "Fouls", "Fantasy Score", "Goalie Fantasy Score"):
+        kind, _, reason = resolve_stat_spec(EPL_PLUGIN, stat)
+        assert kind is None and reason == "unsupported_stat_type", stat
+
+
+def _soccer_row(player_id: str, name: str, sort_key: int, **stats) -> dict:
+    base = {
+        "player_id": player_id, "player_display_name": name, "sort_key": sort_key,
+        "starter": True, "totalGoals": 0, "goalAssists": 0, "totalShots": 0,
+        "shotsOnTarget": 0, "foulsCommitted": 0, "foulsSuffered": 0,
+        "yellowCards": 0, "redCards": 0, "saves": 0, "goalsConceded": 0,
+    }
+    base.update(stats)
+    return base
+
+
+def build_soccer_stats_fixture() -> pd.DataFrame:
+    rows = []
+    # S1 -- outfield player: Shots/SOT (plain column), Goal + Assist and
+    # Cards (composite), 3 games.
+    for sk, (g, a, sh, sot, yc, rc) in enumerate(
+        [(1, 0, 3, 1, 1, 0), (0, 1, 2, 0, 0, 0), (2, 1, 5, 3, 1, 1)], start=1
+    ):
+        rows.append(_soccer_row(
+            "s1", "Outfield One", sk, totalGoals=g, goalAssists=a, totalShots=sh,
+            shotsOnTarget=sot, yellowCards=yc, redCards=rc,
+        ))
+    # S2 -- goalkeeper: Goalie Saves, Goalie Fantasy Score, across a
+    # started+clean-sheet game, a started+conceded game, and a benched game.
+    for sk, (starter, sv, gc) in enumerate(
+        [(True, 4, 0), (True, 2, 2), (False, 0, 0)], start=1
+    ):
+        rows.append(_soccer_row("s2", "Keeper Two", sk, starter=starter, saves=sv, goalsConceded=gc))
+    return pd.DataFrame(rows)
+
+
+def test_soccer_plugin_registered_sport_labels():
+    assert plugin_for_sport("soccer") is SOCCER_PLUGIN
+    assert plugin_for_sport("fifa") is SOCCER_PLUGIN, (
+        "Underdog's real 'FIFA' sport label is real-life soccer, not the "
+        "video game -- confirmed by real player names (Haaland, Mbappe, "
+        "Bellingham) in the 2026-09-11 production pull -- see soccer.py "
+        "module docstring"
+    )
+    assert plugin_for_sport("epl") is not SOCCER_PLUGIN, (
+        "EPL must route to the FPL plug-in, not the ESPN plug-in"
+    )
+
+
+def test_soccer_plain_column_and_composite_stats():
+    stats = build_soccer_stats_fixture()
+    kind, value, _ = resolve_stat_spec(SOCCER_PLUGIN, "Shots")
+    assert list(build_stat_series(SOCCER_PLUGIN, stats, "s1", kind, value)) == [3, 2, 5]
+
+    kind, value, _ = resolve_stat_spec(SOCCER_PLUGIN, "SOT")
+    assert list(build_stat_series(SOCCER_PLUGIN, stats, "s1", kind, value)) == [1, 0, 3]
+
+    kind, value, _ = resolve_stat_spec(SOCCER_PLUGIN, "Goal + Assist")
+    assert list(build_stat_series(SOCCER_PLUGIN, stats, "s1", kind, value)) == [1, 1, 3]
+
+    kind, value, _ = resolve_stat_spec(SOCCER_PLUGIN, "Cards")  # real Underdog wording
+    assert list(build_stat_series(SOCCER_PLUGIN, stats, "s1", kind, value)) == [1, 0, 2]
+
+
+def test_soccer_computed_goalie_fantasy_score():
+    """PrizePicks' real Goalie Fantasy Score formula (soccer.py docstring):
+    Starting Score=5 (if started), Saves=2 each, Goals Conceded=-2 each,
+    Clean Sheet=+5 (started AND 0 conceded).
+    game1: started, 4 saves, 0 conceded -> 5 + 8 - 0 + 5 = 18
+    game2: started, 2 saves, 2 conceded -> 5 + 4 - 4 + 0 = 5
+    game3: NOT started, 0 saves, 0 conceded -> 0 + 0 - 0 + 0 = 0
+    """
+    stats = build_soccer_stats_fixture()
+    kind, value, _ = resolve_stat_spec(SOCCER_PLUGIN, "Goalie Fantasy Score")
+    series = build_stat_series(SOCCER_PLUGIN, stats, "s2", kind, value)
+    assert list(series) == [18, 5, 0]
+
+
+def test_soccer_tackles_and_outfield_fantasy_score_stay_unsupported():
+    """Real, stated gaps (see soccer.py docstring) -- ESPN's real per-player
+    soccer stats have no tackles field, and outfield Fantasy Score needs 6
+    of PrizePicks' 11 real formula components that ESPN's data doesn't
+    carry. Must resolve to None, not a guessed value."""
+    for stat in ("Tackles", "Passes Attempted", "Fantasy Score", "Clearances",
+                 "Attempted Dribbles", "Crosses", "1H Goals", "GA F30 Mins"):
+        kind, _, reason = resolve_stat_spec(SOCCER_PLUGIN, stat)
+        assert kind is None and reason == "unsupported_stat_type", stat
 
 
 if __name__ == "__main__":

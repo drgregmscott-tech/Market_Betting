@@ -1477,7 +1477,7 @@ can still run 2.14–2.17 first if a specific sport is more urgent.
 ---
 
 ### Session 2.14 — Soccer Support (Pick'em): EPL, then everything else
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-11) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.12 complete.
 
 **Why this sport:** Per `/docs/research/sport_inventory.md` — two real,
@@ -1502,14 +1502,72 @@ which plug-in a given row uses.
 **Files touched:** New soccer plug-in file(s).
 
 **Validation (required to close session):**
-- [ ] Bundesliga and Ligue 1 individually confirmed live against ESPN's
+- [x] Bundesliga and Ligue 1 individually confirmed live against ESPN's
 API (not assumed from the La Liga/EPL/MLS pattern holding) before being
-turned on
-- [ ] EPL scores via the FPL API path, every other confirmed league scores
-via the ESPN path — confirmed by checking `resolved_stat_key`/data-source
-provenance on real output rows, not just that a number appears
-- [ ] Real, live props from at least 3 distinct non-EPL leagues score
-end-to-end
+turned on — confirmed 2026-09-11: real completed matches found for both
+(`ger.1` 18, `fra.1` 27, in-season-so-far), not assumed.
+- [x] EPL scores via the FPL API path, every other confirmed league scores
+via the ESPN path — confirmed structurally (the two plug-ins' stat maps
+use disjoint, source-specific column names — `goals_scored`/`tackles`/etc.
+for FPL vs. `totalGoals`/`goalAssists`/etc. for ESPN — so a row can only
+ever resolve through the plug-in its `sport` label dispatches to) and
+empirically on real output rows (EPL rows' `resolved_stat_key` values are
+FPL columns only; SOCCER/FIFA rows' are ESPN columns only).
+- [x] Real, live props from at least 3 distinct non-EPL leagues score
+end-to-end — 4 confirmed in the same real production run: La Liga,
+Serie A, Bundesliga, MLS (see docs/research/pickem_estimation_model_spec.md's
+Session 2.14 section for the specific real players/props).
+
+**What gets built (actual):** Two plug-ins, per the card:
+`pickem_sport_plugins/epl.py` (official Fantasy Premier League API,
+`fantasy.premierleague.com/api` — one `bootstrap-static/` call for player
+identities plus one `element-summary/{id}/` call per player for real
+per-gameweek history) and `pickem_sport_plugins/soccer.py` (ESPN's public
+API, `site.api.espn.com` — walks each of 5 confirmed-live leagues' completed
+matches month-by-month, then each match's own `summary?event={id}` for real
+per-player stats at `rosters[].roster[].stats`, per `sport_inventory.md`'s
+documented gotcha). Real ingested sport labels turned out to be THREE
+distinct strings, not the two the card assumed — PrizePicks splits `EPL`
+from a broader `SOCCER` category itself, and Underdog's real soccer label is
+`FIFA` (checked directly: real player names, not the video game) — `EPL`
+routes to the FPL plug-in; `SOCCER` and `FIFA` both route to the ESPN
+plug-in, since Underdog's generic label doesn't distinguish EPL players from
+any other league's.
+
+**Real stat-type coverage (both platforms' real ingested strings, checked
+against real API fields before mapping anything — full tables in
+docs/research/pickem_estimation_model_spec.md's Session 2.14 section):**
+EPL/FPL — 1,570 of 3,512 real rows (44.7%) mapped; a real, substantial
+MAJORITY (55.3%) left unsupported because FPL's real per-gameweek data has
+no shot/foul counts and can't source most of PrizePicks' real outfield
+Fantasy Score formula. SOCCER/ESPN — 8,858 of 10,113 (87.6%) mapped.
+FIFA/ESPN — 2,450 of 2,581 (94.9%) mapped. PrizePicks' real Goalie Fantasy
+Score formula (Starting Score=5, Saves=2, Goals Conceded=-2, Clean
+Sheet=+5) was sourced live and coded for the ESPN plug-in (every component
+is a real ESPN field); the real outfield Fantasy Score formula needs 6 of
+11 components neither real data source carries and was left unsupported
+rather than approximated.
+
+**Real, independent end-to-end proofs (outside the model's own code, same
+standard as NFL/MLB):** Alisson Becker's real EPL "Goalie Saves" prop
+(`season_avg=3.0`, 3 real gameweeks) matched an independent re-pull of his
+real FPL `saves` history (`[3, 1, 5]`, mean 3.0) exactly. Lamine Yamal's
+real La Liga "Goals" prop (`season_avg=1.0`, 4 real matches) matched an
+independent re-pull of his real match-by-match ESPN `totalGoals`
+(`[0, 0, 2, 2]`, mean 1.0) exactly.
+
+**Files touched:** `scripts/estimation/pickem_sport_plugins/epl.py` (new),
+`scripts/estimation/pickem_sport_plugins/soccer.py` (new),
+`scripts/estimation/pickem_sport_plugins/__init__.py` (registered both),
+`scripts/estimation/test_pickem_model.py` (8 new offline regression tests),
+`docs/research/pickem_estimation_model_spec.md` (Session 2.14 section).
+
+**Real cost note:** Neither real data source has a bulk season-stats
+endpoint — a full run makes ~650+ real HTTP calls to the FPL API and ~470+
+to ESPN's API (474 real completed matches found across the 5 leagues as of
+2026-09-11, MLS alone accounting for 358). Same "no bulk alternative"
+precedent as MLB (Session 2.13), at a larger scale; full real production
+run (all 4 registered plug-ins) took ~6.5 minutes.
 
 ---
 

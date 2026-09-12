@@ -60,8 +60,10 @@ class SportPlugin:
 def _load_plugins() -> list[SportPlugin]:
     from .nfl import NFL_PLUGIN
     from .mlb import MLB_PLUGIN
+    from .epl import EPL_PLUGIN
+    from .soccer import SOCCER_PLUGIN
 
-    return [NFL_PLUGIN, MLB_PLUGIN]
+    return [NFL_PLUGIN, MLB_PLUGIN, EPL_PLUGIN, SOCCER_PLUGIN]
 
 
 PLUGINS: list[SportPlugin] = _load_plugins()

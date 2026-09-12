@@ -10767,3 +10767,224 @@ sport sooner.
 **Files modified:** `ROADMAP.md` — new Session 2.21 card (full "why
 gated," "what gets built," files touched, and validation checklist);
 Session 2.13's card gained a "PRIORITY NOTE" pointing to it.
+
+---
+
+
+## Session 2.14 — Soccer Support (Pick'em): EPL, then everything else
+
+**Date completed:** 2026-09-11
+**Status:** ✅ Complete
+
+**What was actually done:** Built two new sport plug-ins for
+`pickem_model.py`'s multi-sport estimation architecture (Session 2.12),
+per the roadmap card: one reading the official Fantasy Premier League API
+for EPL specifically, one reading ESPN's public sports API for every other
+confirmed league. Both were built the same way every prior sport session
+required — real ingested stat-type strings counted first, then checked one
+by one against a real, live API response before mapping anything.
+
+1. Ran a fresh, live production ingestion pull
+(`scripts/ingestion/ingest_pickem.py`, 2026-09-11) — 56,841 real rows
+(42,577 PrizePicks + 14,264 Underdog). Found soccer arrives under THREE
+distinct real sport labels, not the two the roadmap card assumed:
+`SOCCER` (10,113 rows, PrizePicks' catch-all for everything outside EPL),
+`EPL` (3,512 rows, PrizePicks splits this out itself), and `FIFA` (2,581
+rows, Underdog's real label for real-life soccer). Confirmed `FIFA` is
+real soccer, not the video game, by checking real player names in that
+category directly — Ousmane Dembele, Erling Haaland, Lamine Yamal, Kylian
+Mbappe, Jude Bellingham, and other real, current top-flight players.
+2. Counted every real stat_type string for all three labels before mapping
+anything (same discipline as every prior sport session). Full tables in
+`docs/research/pickem_estimation_model_spec.md`'s new "Session 2.14"
+section.
+3. **EPL plug-in** (`pickem_sport_plugins/epl.py`) — pulled the FPL API's
+`bootstrap-static/` endpoint live (656 real current players) and one
+player's real `element-summary/{id}/` history endpoint to confirm the real
+per-gameweek field shape: `minutes, goals_scored, assists, clean_sheets,
+goals_conceded, own_goals, penalties_saved, penalties_missed, yellow_cards,
+red_cards, saves, bonus, bps, tackles, clearances_blocks_interceptions,
+recoveries, starts, expected_goals, expected_assists`. Mapped Goals,
+Assists, Tackles, Goalie Saves, Goals Allowed (single-column) and
+Goal + Assist (composite) — 1,570 of 3,512 real EPL rows (44.7%). Left a
+real, SUBSTANTIAL majority (55.3%) unsupported and stated explicitly:
+Shots, SOT, Fouls, Passes Attempted, Clearances (FPL's real
+`clearances_blocks_interceptions` is a different combined stat, not pure
+clearances — mapping it to "Clearances" would misrepresent it), Attempted
+Dribbles, Crosses, Fantasy Score, Goalie Fantasy Score, GA F30 Mins — none
+of these have a real FPL field to map to. This is a real, checked
+limitation of the data source, not a shortcut — see `epl.py`'s own
+docstring for the full reasoning.
+4. **Soccer/ESPN plug-in** (`pickem_sport_plugins/soccer.py`) — confirmed
+`site.api.espn.com`'s real per-player stat shape live, at
+`rosters[].roster[].stats` on the event `summary?event={id}` endpoint (the
+exact gotcha `sport_inventory.md` had already documented — NOT the more
+obvious `boxscore.players`, which only carries team-level totals for
+soccer). Confirmed an identical real field set — `appearances,
+foulsCommitted, foulsSuffered, goalAssists, goalsConceded, offsides,
+ownGoals, redCards, saves, shotsFaced, shotsOnTarget, subIns, totalGoals,
+totalShots, yellowCards` — across all five target leagues: La Liga
+(`esp.1`) and MLS (`usa.1`) were previously confirmed in
+`sport_inventory.md`; **Bundesliga (`ger.1`) and Ligue 1 (`fra.1`) were
+confirmed live for the first time this session** (18 and 27 real
+completed matches respectively, in the season so far) — closing the
+roadmap card's first validation item, which explicitly required this
+rather than assuming the pattern held. Mapped Shots, SOT, Goals, Assists,
+Fouls, Goalie Saves, Goals Allowed (single-column), Goal + Assist / Cards
+(composite), and Goalie Fantasy Score (computed) — 8,858 of 10,113 real
+SOCCER rows (87.6%) and 2,450 of 2,581 real FIFA rows (94.9%). Left a real,
+stated gap: Tackles (1,109 real PrizePicks rows — ESPN's real per-player
+soccer data has no tackles field anywhere, checked directly across all 5
+leagues), Passes Attempted, Clearances, Attempted Dribbles, Shots Assisted,
+Crosses, outfield Fantasy Score, 1H Goals, GA F30 Mins.
+5. **Sourced PrizePicks' real official Soccer Fantasy Score formulas** via
+prizepicks.com/playbook-article/how-to-play-prizepicks-soccer-fantasy-
+scoring-system-for-world-cup (2026-09-11): Outfield Fantasy Score (Goal=10,
+Assist=5, Shot=1, SOT=1, Passes Attempted=0.05, Shots Assisted=0.5,
+Clearances=1, Tackles Attempted=1, Attempted Dribbles=1, Crosses=0.5,
+Yellow Card=-1, Red Card=-2, Fouls=-0.5) and Goalie Fantasy Score (Starting
+Score=5, Saves=2, Goals Conceded=-2, Clean Sheet=+5). Coded ONLY Goalie
+Fantasy Score, for the ESPN plug-in — every one of its components is a
+real ESPN field this plug-in already fetches (including a real `starter`
+boolean per roster entry, confirmed live, and a derived Clean Sheet the
+same way MLB's Quality Start was derived, Session 2.13). Outfield Fantasy
+Score was NOT coded for either plug-in — it needs 6 of its 11 real
+components (Passes Attempted, Shots Assisted, Clearances, Tackles
+Attempted, Attempted Dribbles, Crosses) that neither FPL nor ESPN's real
+data carries; computing a partial version from the other 5 would silently
+misrepresent the real formula, which this project's "no unnamed black-box
+factors" rule (Session 2.3 onward) does not allow.
+6. Ran the full production pipeline for real
+(`python pickem_model.py --season 2026`) against the real 56,841-row
+ingested snapshot — all four registered plug-ins (NFL, MLB, EPL, soccer),
+~6.5 minutes total real run time. Real per-sport `model_status` breakdown:
+`SOCCER` — `unsupported_odds_type` 9,874 (the pre-existing, sport-agnostic
+Demon/Goblin gap, Session 2.13's own priority note — most real PrizePicks
+volume across every sport is Demon/Goblin, not just MLB), `estimated` 32,
+`unsupported_stat_type` 146, `no_player_match` 56, `no_line_value` 3,
+`insufficient_history` 2. `EPL` — `unsupported_odds_type` 3,400,
+`estimated` 12, `unsupported_stat_type` 90, `no_player_match` 10. `FIFA`
+(Underdog, not gated by the odds-type check) — `no_player_match` 1,276
+(real players from leagues outside this plug-in's five confirmed ones, or
+unmatched naming), `no_line_value` 562, `estimated` 548,
+`unsupported_stat_type` 131, `insufficient_history` 64.
+7. **Independently re-verified one real, live prop end-to-end per plug-in**,
+outside the model's own code, same standard as every prior sport session:
+Alisson Becker's real EPL "Goalie Saves" prop scored `model_status=
+"estimated"`, `season_avg=3.0` (3 real gameweeks); a separate script with
+no import from `epl.py`/`pickem_model.py` re-pulled his real FPL id and
+per-gameweek `saves` history directly — `[3, 1, 5]`, mean `3.0`, matching
+exactly. Lamine Yamal's real La Liga "Goals" prop scored `model_status=
+"estimated"`, `season_avg=1.0` (4 real matches); an independent re-pull of
+his real match-by-match ESPN `totalGoals` — `[0, 0, 2, 2]`, mean `1.0` —
+matched exactly.
+8. Confirmed real, live props from 4 distinct non-EPL leagues scored
+end-to-end in the same production run — La Liga (Vinícius Júnior, Kylian
+Mbappé, Jude Bellingham — Shots/SOT), Serie A (Lorenzo Palmisani — Goalie
+Saves), Bundesliga (Finn Dahmen, Mark Flekken — Goalie Saves and Goalie
+Fantasy Score), MLS (Kristijan Kahlina, James Pantemis — Goalie Saves) —
+exceeding the roadmap card's "at least 3 distinct non-EPL leagues" bar.
+9. Added 8 new offline regression tests to `test_pickem_model.py` (no live
+network calls in the test file itself, matching this project's existing
+pattern) covering both plug-ins' registration/dispatch, plain-column and
+composite stat resolution, the Goalie Fantasy Score formula (hand-verified
+against a 3-game synthetic fixture), and confirming the real stated gaps
+(Tackles, Fantasy Score, etc.) correctly resolve to
+`unsupported_stat_type` rather than silently guessing a value. Full suite:
+20/20 pass. Re-ran `test_sportsbook_props_model.py` (NFL-only downstream
+consumer, unaffected) — 11/11 pass, unchanged. Grepped the full `scripts/`
+tree for every symbol these two new files could have collided with — none
+found (same discipline as Session 2.12's own cross-file-breakage check).
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/epl.py` — new. FPL API plug-in.
+- `scripts/estimation/pickem_sport_plugins/soccer.py` — new. ESPN API
+plug-in covering La Liga, Serie A, Bundesliga, Ligue 1, MLS.
+- `scripts/estimation/pickem_sport_plugins/__init__.py` — registered both
+new plug-ins in `PLUGINS`.
+- `scripts/estimation/test_pickem_model.py` — 8 new offline regression
+tests (Decision #3 below).
+- `docs/research/pickem_estimation_model_spec.md` — new "Session 2.14"
+section: full real stat-type coverage tables for both plug-ins, the sourced
+Fantasy Score formulas, the two independent end-to-end proofs, the real
+`model_status` breakdown, and a real cost note.
+- `ROADMAP.md` — Session 2.14 card closed with full validation detail.
+- `data/pickem/normalized/latest.csv`, `output/estimation/latest.csv` —
+overwritten by this session's real production runs (expected — both are
+the pipeline's own "current state" files).
+
+**Validation results:**
+- [x] Bundesliga and Ligue 1 individually confirmed live against ESPN's
+API before being turned on — PASS. 18 and 27 real completed matches found
+respectively, not assumed from the La Liga/EPL/MLS pattern holding.
+- [x] EPL scores via the FPL API path, every other confirmed league scores
+via the ESPN path — PASS, confirmed both structurally (the two plug-ins'
+stat maps use disjoint, source-specific column names, so a row can only
+ever resolve through its own dispatched plug-in) and on real output rows
+(EPL rows' `resolved_stat_key` values are FPL columns only; SOCCER/FIFA
+rows' are ESPN columns only).
+- [x] Real, live props from at least 3 distinct non-EPL leagues score
+end-to-end — PASS, 4 confirmed (La Liga, Serie A, Bundesliga, MLS).
+
+**Decisions made:**
+1. **Underdog's real `FIFA` sport label routes to the ESPN plug-in, not a
+separate one, even though it's real-life soccer, not the video game.**
+Reasoning: `FIFA`-labeled rows carry no per-row league identifier, and its
+real player list (Haaland, Mbappe, Bellingham) spans multiple leagues
+including EPL — there's no reliable way to route a `FIFA` row to the
+correct one of two plug-ins per-row. Routing all of it to the broader,
+multi-league ESPN plug-in (which does real name-matching across its own
+combined player pool) is the closest honest fit; an EPL player appearing
+under `FIFA` who isn't in ESPN's five confirmed leagues correctly falls
+through to `no_player_match` rather than silently guessing.
+2. **PrizePicks' real outfield Soccer Fantasy Score formula was sourced
+but NOT coded, for either plug-in**, rather than approximating it from
+whichever components happen to be available. Reasoning: 6 of its 11 real
+components (Passes Attempted, Shots Assisted, Clearances, Tackles
+Attempted, Attempted Dribbles, Crosses) exist in neither FPL's nor ESPN's
+real data. A partial computation using only the other 5 would present
+itself as "the real Fantasy Score" while silently missing more than half
+its real inputs — this project's "no unnamed black-box factors" rule
+(Session 2.3, reaffirmed by every sport session since, most recently
+MLB's Underdog Fantasy Points gap in Session 2.13) treats a
+can't-fully-verify formula the same as an unverifiable one: left
+unsupported, not guessed. Goalie Fantasy Score, whose real formula's every
+component IS available from ESPN, was coded — the same standard applied
+in both directions.
+3. **Regression tests for the two new plug-ins stay fully offline
+(synthetic fixtures, no live network calls in `test_pickem_model.py`),
+with the real end-to-end proof done separately and recorded in this log
+entry** — the same split every prior sport session already used (NFL's
+golden-snapshot fixture, MLB's synthetic two-way-player fixture). Keeps
+the test suite fast and deterministic while still requiring a real, live,
+independently-verified proof before the session can close.
+4. **`EPL_SPORT_LABELS` and `SOCCER_SPORT_LABELS` are disjoint, non-
+overlapping sets** (`{"epl"}` vs. `{"soccer", "fifa"}`), rather than
+having one plug-in fall back to the other. Reasoning: the roadmap card
+explicitly requires proving "EPL scores via the FPL path, every other
+league via ESPN" as a real, checked validation item, not just as an
+architectural intention — disjoint sport-label sets make this
+structurally impossible to get wrong (a sport label can only ever
+dispatch to exactly one plug-in), rather than relying on run-time
+behavior alone to keep the two paths separate.
+
+**Corrections/reversals during the session:** The roadmap card assumed
+soccer would arrive under essentially one or two real sport labels along
+the "SOCCER vs. EPL" split already documented in `sport_inventory.md`.
+Real ingested data showed a third, real label (Underdog's `FIFA`) not
+anticipated in the card — routed to the ESPN plug-in per Decision #1
+above, discovered and resolved within this session rather than deferred.
+
+**Open items / deferred validations:** EPL's real stat-type coverage
+(44.7%) is a real, substantial gap — Shots/SOT/Fouls, a majority of real
+EPL volume, have no equivalent in FPL's real per-gameweek data. This is a
+genuine limitation of the chosen authoritative EPL source, not something
+this session could close by switching approaches without abandoning the
+roadmap card's explicit instruction to use the FPL API for EPL. A future
+session could investigate whether ESPN's own `eng.1` league code (not
+currently wired into either plug-in) could supplement FPL for EPL rows
+specifically, if that gap is judged worth closing. The pre-existing
+Demon/Goblin `unsupported_odds_type` gap (Session 2.13's priority note)
+continues to suppress most real PrizePicks soccer/EPL volume from ever
+reaching stat resolution, same as every other sport — Session 2.21 remains
+the recommended next step for closing that gap project-wide.
