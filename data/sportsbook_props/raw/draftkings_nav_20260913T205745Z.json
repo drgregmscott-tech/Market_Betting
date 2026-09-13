@@ -1,0 +1,1567 @@
+{
+  "sports": [
+    {
+      "id": "3",
+      "name": "Football",
+      "sortOrder": 56,
+      "seoIdentifier": "Football"
+    }
+  ],
+  "leagues": [
+    {
+      "id": "88808",
+      "name": "NFL",
+      "sportId": "3",
+      "tags": [
+        "Featured"
+      ],
+      "sortOrder": 4847,
+      "seoIdentifier": "NFL",
+      "isTeamSwap": true
+    }
+  ],
+  "events": [
+    {
+      "id": "34118231",
+      "name": "ARI Cardinals @ LA Chargers",
+      "participants": [
+        {
+          "id": "18461",
+          "name": "LA Chargers",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18461",
+            "rosettaTeamName": "Chargers",
+            "shortName": "LAC",
+            "teamColor": "#0080C6",
+            "teamColorSecondary": "#FFC20E",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Chargers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18454",
+          "name": "ARI Cardinals",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18454",
+            "rosettaTeamName": "Cardinals",
+            "shortName": "ARI",
+            "teamColor": "#97233F",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#FFB612"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Cardinals",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "mainScorecard": {
+          "metadata": {
+            "AmericanFootballPosession": "Possession [T1]",
+            "AmericanFootballCurrentDown": "1",
+            "AmericanFootballYardLine": "56",
+            "AmericanFootballYardsToGo": "10"
+          },
+          "intervalName": "T",
+          "intervalNumber": 2147483647,
+          "firstTeamScore": "7",
+          "secondTeamScore": "7",
+          "liveScoreData": {
+            "americanFootballPossession": "Possession [T1]",
+            "americanFootballCurrentDown": "1",
+            "americanFootballYardLine": "56",
+            "americanFootballYardsToGo": "10",
+            "shortName": "LAC"
+          }
+        },
+        "scorecards": [
+          {
+            "intervalName": "Q1",
+            "intervalNumber": 1,
+            "firstTeamScore": "7",
+            "secondTeamScore": "7"
+          },
+          {
+            "intervalName": "Q2",
+            "intervalNumber": 2,
+            "firstTeamScore": "0",
+            "secondTeamScore": "0"
+          },
+          {
+            "intervalName": "Q3",
+            "intervalNumber": 3,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q4",
+            "intervalNumber": 4,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "T",
+            "intervalNumber": 2147483647,
+            "firstTeamScore": "7",
+            "secondTeamScore": "7",
+            "liveScoreData": {
+              "americanFootballPossession": "Possession [T1]",
+              "americanFootballCurrentDown": "1",
+              "americanFootballYardLine": "56",
+              "americanFootballYardsToGo": "10",
+              "shortName": "LAC"
+            }
+          }
+        ],
+        "scorecardComponentId": 1
+      },
+      "status": "STARTED",
+      "liveGameState": {
+        "period": "2nd Quarter",
+        "gameTime": 891,
+        "isClockRunning": false
+      },
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "0bc74eff-24d4-4836-9deb-d89c77f39f1b",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13906238",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "800",
+            "752",
+            "751",
+            "773",
+            "616",
+            "839",
+            "803",
+            "804",
+            "753",
+            "825",
+            "855",
+            "638",
+            "605",
+            "789",
+            "678",
+            "771"
+          ]
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515770",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515770",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515770",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "FeaturedSubcategory",
+        "Flashbet",
+        "LiveBoxScore",
+        "LivePrePack",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-13T20:25:44.0000000Z",
+      "seoIdentifier": "ARI Cardinals @ LA Chargers"
+    },
+    {
+      "id": "34118074",
+      "name": "WAS Commanders @ PHI Eagles",
+      "participants": [
+        {
+          "id": "18448",
+          "name": "PHI Eagles",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18448",
+            "rosettaTeamName": "Eagles",
+            "shortName": "PHI",
+            "teamColor": "#004851",
+            "teamColorSecondary": "#A2AAAD",
+            "teamColorTertiary": "#ACC0C6"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Eagles",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18480",
+          "name": "WAS Commanders",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18480",
+            "rosettaTeamName": "Commanders",
+            "shortName": "WAS",
+            "teamColor": "#5A1414",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Commanders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "mainScorecard": {
+          "metadata": {
+            "AmericanFootballPosession": "Possession [T1]",
+            "AmericanFootballCurrentDown": "2",
+            "AmericanFootballYardLine": "18",
+            "AmericanFootballYardsToGo": "18"
+          },
+          "intervalName": "T",
+          "intervalNumber": 2147483647,
+          "firstTeamScore": "3",
+          "secondTeamScore": "0",
+          "liveScoreData": {
+            "americanFootballPossession": "Possession [T1]",
+            "americanFootballCurrentDown": "2",
+            "americanFootballYardLine": "18",
+            "americanFootballYardsToGo": "18",
+            "shortName": "PHI"
+          }
+        },
+        "scorecards": [
+          {
+            "intervalName": "Q1",
+            "intervalNumber": 1,
+            "firstTeamScore": "3",
+            "secondTeamScore": "0"
+          },
+          {
+            "intervalName": "Q2",
+            "intervalNumber": 2,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q3",
+            "intervalNumber": 3,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q4",
+            "intervalNumber": 4,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "T",
+            "intervalNumber": 2147483647,
+            "firstTeamScore": "3",
+            "secondTeamScore": "0",
+            "liveScoreData": {
+              "americanFootballPossession": "Possession [T1]",
+              "americanFootballCurrentDown": "2",
+              "americanFootballYardLine": "18",
+              "americanFootballYardsToGo": "18",
+              "shortName": "PHI"
+            }
+          }
+        ],
+        "scorecardComponentId": 1
+      },
+      "status": "STARTED",
+      "liveGameState": {
+        "period": "2nd Quarter",
+        "gameTime": 900,
+        "isClockRunning": false
+      },
+      "media": [
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13906241",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "512",
+            "566",
+            "504",
+            "576",
+            "511",
+            "577"
+          ]
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515776",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515776",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515776",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "ce6013cf-6ec6-4c0f-8908-6c4931c68af2",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "FeaturedSubcategory",
+        "Flashbet",
+        "LiveBoxScore",
+        "LivePrePack",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-13T20:25:26.0000000Z",
+      "seoIdentifier": "WAS Commanders @ PHI Eagles"
+    },
+    {
+      "id": "34118152",
+      "name": "GB Packers @ MIN Vikings",
+      "participants": [
+        {
+          "id": "18409",
+          "name": "MIN Vikings",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18409",
+            "rosettaTeamName": "Vikings",
+            "shortName": "MIN",
+            "teamColor": "#4F2683",
+            "teamColorSecondary": "#FFC62F",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Vikings",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18357",
+          "name": "GB Packers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18357",
+            "rosettaTeamName": "Packers",
+            "shortName": "GB",
+            "teamColor": "#203731",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Packers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "mainScorecard": {
+          "metadata": {
+            "AmericanFootballPosession": "Possession [T1]",
+            "AmericanFootballCurrentDown": "4",
+            "AmericanFootballYardLine": "65",
+            "AmericanFootballYardsToGo": "5"
+          },
+          "intervalName": "T",
+          "intervalNumber": 2147483647,
+          "firstTeamScore": "9",
+          "secondTeamScore": "0",
+          "liveScoreData": {
+            "americanFootballPossession": "Possession [T1]",
+            "americanFootballCurrentDown": "4",
+            "americanFootballYardLine": "65",
+            "americanFootballYardsToGo": "5",
+            "shortName": "MIN"
+          }
+        },
+        "scorecards": [
+          {
+            "intervalName": "Q1",
+            "intervalNumber": 1,
+            "firstTeamScore": "9",
+            "secondTeamScore": "0"
+          },
+          {
+            "intervalName": "Q2",
+            "intervalNumber": 2,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q3",
+            "intervalNumber": 3,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q4",
+            "intervalNumber": 4,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "T",
+            "intervalNumber": 2147483647,
+            "firstTeamScore": "9",
+            "secondTeamScore": "0",
+            "liveScoreData": {
+              "americanFootballPossession": "Possession [T1]",
+              "americanFootballCurrentDown": "4",
+              "americanFootballYardLine": "65",
+              "americanFootballYardsToGo": "5",
+              "shortName": "MIN"
+            }
+          }
+        ],
+        "scorecardComponentId": 1
+      },
+      "status": "STARTED",
+      "liveGameState": {
+        "period": "1st Quarter",
+        "gameTime": 367,
+        "isClockRunning": false
+      },
+      "media": [
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13906240",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "662",
+            "525",
+            "532",
+            "790",
+            "644",
+            "583",
+            "634",
+            "524",
+            "520",
+            "635",
+            "512",
+            "537",
+            "716",
+            "692",
+            "821",
+            "756",
+            "746",
+            "502",
+            "630",
+            "559",
+            "757",
+            "506",
+            "736",
+            "514",
+            "523",
+            "754",
+            "767",
+            "637",
+            "648",
+            "519",
+            "564",
+            "517",
+            "584",
+            "575",
+            "759",
+            "602",
+            "868",
+            "515",
+            "598",
+            "510",
+            "546",
+            "604",
+            "522",
+            "535",
+            "673",
+            "600",
+            "623",
+            "682",
+            "542",
+            "679",
+            "505",
+            "606",
+            "676",
+            "765",
+            "565",
+            "516",
+            "801",
+            "802",
+            "649",
+            "724",
+            "513",
+            "866",
+            "571",
+            "670",
+            "509",
+            "592",
+            "798",
+            "563",
+            "755",
+            "658",
+            "518",
+            "545",
+            "567",
+            "647",
+            "636",
+            "566",
+            "569",
+            "533",
+            "710",
+            "766",
+            "618",
+            "691",
+            "758",
+            "527",
+            "718",
+            "639",
+            "561",
+            "574",
+            "734",
+            "603",
+            "557",
+            "702",
+            "582",
+            "642",
+            "643",
+            "551",
+            "749",
+            "541",
+            "558",
+            "722",
+            "693",
+            "529",
+            "651",
+            "503",
+            "669",
+            "737",
+            "553",
+            "813",
+            "640",
+            "711",
+            "528",
+            "617",
+            "613",
+            "687",
+            "762",
+            "686",
+            "628",
+            "828",
+            "698",
+            "570",
+            "659",
+            "622",
+            "501",
+            "544",
+            "740",
+            "633",
+            "650",
+            "652",
+            "534",
+            "631",
+            "632",
+            "656",
+            "597",
+            "675",
+            "504",
+            "508",
+            "820",
+            "500",
+            "552",
+            "521",
+            "717",
+            "560",
+            "764",
+            "811",
+            "556",
+            "573",
+            "538",
+            "611",
+            "610",
+            "862",
+            "576",
+            "770",
+            "661",
+            "641",
+            "807",
+            "507",
+            "819",
+            "657",
+            "612",
+            "624",
+            "725",
+            "588",
+            "881",
+            "619",
+            "543",
+            "609",
+            "555",
+            "530",
+            "539",
+            "581",
+            "547",
+            "540",
+            "531",
+            "671",
+            "760",
+            "709",
+            "526",
+            "626",
+            "625",
+            "511",
+            "549",
+            "705",
+            "548",
+            "554",
+            "627",
+            "577",
+            "550",
+            "810",
+            "536",
+            "596",
+            "743",
+            "745",
+            "747",
+            "744"
+          ]
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515774",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515774",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515774",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "a3acd43c-9b51-4ad9-beab-8b9b631a32d4",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "FeaturedSubcategory",
+        "Flashbet",
+        "LiveBoxScore",
+        "LivePrePack",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-13T20:25:29.0000000Z",
+      "seoIdentifier": "GB Packers @ MIN Vikings"
+    },
+    {
+      "id": "34118243",
+      "name": "MIA Dolphins @ LV Raiders",
+      "participants": [
+        {
+          "id": "18388",
+          "name": "LV Raiders",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18388",
+            "rosettaTeamName": "Raiders",
+            "shortName": "LV",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#A5ACAF",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Raiders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18401",
+          "name": "MIA Dolphins",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "rosettaTeamId": "18401",
+            "rosettaTeamName": "Dolphins",
+            "shortName": "MIA",
+            "teamColor": "#008E97",
+            "teamColorSecondary": "#FC4C02",
+            "teamColorTertiary": "#005778"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Dolphins",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "mainScorecard": {
+          "metadata": {
+            "AmericanFootballPosession": "Possession [T1]",
+            "AmericanFootballCurrentDown": "1",
+            "AmericanFootballYardLine": "67",
+            "AmericanFootballYardsToGo": "10"
+          },
+          "intervalName": "T",
+          "intervalNumber": 2147483647,
+          "firstTeamScore": "0",
+          "secondTeamScore": "7",
+          "liveScoreData": {
+            "americanFootballPossession": "Possession [T1]",
+            "americanFootballCurrentDown": "1",
+            "americanFootballYardLine": "67",
+            "americanFootballYardsToGo": "10",
+            "shortName": "LV"
+          }
+        },
+        "scorecards": [
+          {
+            "intervalName": "Q1",
+            "intervalNumber": 1,
+            "firstTeamScore": "0",
+            "secondTeamScore": "7"
+          },
+          {
+            "intervalName": "Q2",
+            "intervalNumber": 2,
+            "firstTeamScore": "0",
+            "secondTeamScore": "0"
+          },
+          {
+            "intervalName": "Q3",
+            "intervalNumber": 3,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "Q4",
+            "intervalNumber": 4,
+            "firstTeamScore": "",
+            "secondTeamScore": ""
+          },
+          {
+            "intervalName": "T",
+            "intervalNumber": 2147483647,
+            "firstTeamScore": "0",
+            "secondTeamScore": "7",
+            "liveScoreData": {
+              "americanFootballPossession": "Possession [T1]",
+              "americanFootballCurrentDown": "1",
+              "americanFootballYardLine": "67",
+              "americanFootballYardsToGo": "10",
+              "shortName": "LV"
+            }
+          }
+        ],
+        "scorecardComponentId": 1
+      },
+      "status": "STARTED",
+      "liveGameState": {
+        "period": "2nd Quarter",
+        "gameTime": 848,
+        "isClockRunning": false
+      },
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "00695810-d1a5-405b-8861-85747ee26488",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13906239",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "571",
+            "839",
+            "528",
+            "548"
+          ]
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515772",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515772",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515772",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "FeaturedSubcategory",
+        "Flashbet",
+        "LiveBoxScore",
+        "LivePrePack",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-13T20:25:36.0000000Z",
+      "seoIdentifier": "MIA Dolphins @ LV Raiders"
+    },
+    {
+      "id": "34118096",
+      "name": "DAL Cowboys @ NY Giants",
+      "participants": [
+        {
+          "id": "18432",
+          "name": "NY Giants",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "129",
+            "rosettaTeamId": "18432",
+            "rosettaTeamName": "Giants",
+            "shortName": "NYG",
+            "teamColor": "#00338D",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Giants",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18336",
+          "name": "DAL Cowboys",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "128",
+            "rosettaTeamId": "18336",
+            "rosettaTeamName": "Cowboys",
+            "shortName": "DAL",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#B0B7BC",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Cowboys",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13895563",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "662",
+            "525",
+            "532",
+            "790",
+            "644",
+            "583",
+            "634",
+            "524",
+            "520",
+            "635",
+            "800",
+            "512",
+            "537",
+            "716",
+            "692",
+            "821",
+            "756",
+            "746",
+            "502",
+            "630",
+            "559",
+            "757",
+            "506",
+            "736",
+            "514",
+            "523",
+            "754",
+            "767",
+            "637",
+            "648",
+            "519",
+            "564",
+            "517",
+            "584",
+            "575",
+            "759",
+            "602",
+            "868",
+            "515",
+            "598",
+            "510",
+            "752",
+            "546",
+            "604",
+            "522",
+            "535",
+            "673",
+            "600",
+            "623",
+            "682",
+            "542",
+            "751",
+            "679",
+            "505",
+            "606",
+            "676",
+            "765",
+            "565",
+            "516",
+            "801",
+            "802",
+            "649",
+            "724",
+            "513",
+            "866",
+            "571",
+            "670",
+            "509",
+            "592",
+            "798",
+            "773",
+            "563",
+            "755",
+            "658",
+            "518",
+            "545",
+            "567",
+            "647",
+            "636",
+            "566",
+            "569",
+            "533",
+            "710",
+            "766",
+            "618",
+            "691",
+            "758",
+            "527",
+            "718",
+            "639",
+            "561",
+            "574",
+            "734",
+            "603",
+            "616",
+            "557",
+            "702",
+            "582",
+            "642",
+            "643",
+            "551",
+            "749",
+            "839",
+            "541",
+            "558",
+            "722",
+            "693",
+            "803",
+            "529",
+            "651",
+            "503",
+            "669",
+            "737",
+            "553",
+            "813",
+            "640",
+            "711",
+            "528",
+            "617",
+            "613",
+            "687",
+            "762",
+            "686",
+            "628",
+            "828",
+            "698",
+            "570",
+            "659",
+            "622",
+            "501",
+            "544",
+            "740",
+            "633",
+            "650",
+            "652",
+            "534",
+            "631",
+            "632",
+            "804",
+            "656",
+            "597",
+            "675",
+            "504",
+            "753",
+            "508",
+            "820",
+            "500",
+            "552",
+            "521",
+            "717",
+            "560",
+            "764",
+            "811",
+            "556",
+            "573",
+            "538",
+            "611",
+            "610",
+            "862",
+            "576",
+            "770",
+            "661",
+            "641",
+            "825",
+            "807",
+            "855",
+            "507",
+            "819",
+            "657",
+            "612",
+            "624",
+            "725",
+            "588",
+            "881",
+            "619",
+            "543",
+            "638",
+            "609",
+            "555",
+            "530",
+            "539",
+            "581",
+            "547",
+            "605",
+            "540",
+            "531",
+            "789",
+            "671",
+            "760",
+            "709",
+            "526",
+            "626",
+            "625",
+            "511",
+            "549",
+            "705",
+            "548",
+            "554",
+            "627",
+            "678",
+            "577",
+            "550",
+            "810",
+            "536",
+            "771",
+            "596",
+            "743",
+            "745",
+            "747",
+            "744"
+          ]
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71445306",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71445306",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71445306",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "d2509e78-723e-4faa-bd17-da3c61085df7",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-14T00:20:00.0000000Z",
+      "seoIdentifier": "DAL Cowboys @ NY Giants"
+    },
+    {
+      "id": "34118255",
+      "name": "DEN Broncos @ KC Chiefs",
+      "participants": [
+        {
+          "id": "18379",
+          "name": "KC Chiefs",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "131",
+            "rosettaTeamId": "18379",
+            "rosettaTeamName": "Chiefs",
+            "shortName": "KC",
+            "teamColor": "#E31837",
+            "teamColorSecondary": "#FFC208",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Chiefs",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18342",
+          "name": "DEN Broncos",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "130",
+            "rosettaTeamId": "18342",
+            "rosettaTeamName": "Broncos",
+            "shortName": "DEN",
+            "teamColor": "#0A2343",
+            "teamColorSecondary": "#FC4C02",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Broncos",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetGenius",
+          "providerEventId": "13900150",
+          "mediaType": "LiveStreaming",
+          "metadata": {
+            "BetGeniusHls": "Akamai",
+            "BetGeniusLiveStreamId": "704ca8df"
+          },
+          "allowedDmas": [
+            "662",
+            "525",
+            "532",
+            "790",
+            "644",
+            "583",
+            "634",
+            "524",
+            "520",
+            "635",
+            "800",
+            "512",
+            "537",
+            "716",
+            "692",
+            "821",
+            "756",
+            "746",
+            "502",
+            "630",
+            "559",
+            "757",
+            "506",
+            "736",
+            "514",
+            "523",
+            "754",
+            "767",
+            "637",
+            "648",
+            "519",
+            "564",
+            "517",
+            "584",
+            "575",
+            "759",
+            "602",
+            "868",
+            "515",
+            "598",
+            "510",
+            "752",
+            "546",
+            "604",
+            "522",
+            "535",
+            "673",
+            "600",
+            "623",
+            "682",
+            "542",
+            "751",
+            "679",
+            "505",
+            "606",
+            "676",
+            "765",
+            "565",
+            "516",
+            "801",
+            "802",
+            "649",
+            "724",
+            "513",
+            "866",
+            "571",
+            "670",
+            "509",
+            "592",
+            "798",
+            "773",
+            "563",
+            "755",
+            "658",
+            "518",
+            "545",
+            "567",
+            "647",
+            "636",
+            "566",
+            "569",
+            "533",
+            "710",
+            "766",
+            "618",
+            "691",
+            "758",
+            "527",
+            "718",
+            "639",
+            "561",
+            "574",
+            "734",
+            "603",
+            "616",
+            "557",
+            "702",
+            "582",
+            "642",
+            "643",
+            "551",
+            "749",
+            "839",
+            "541",
+            "558",
+            "722",
+            "693",
+            "803",
+            "529",
+            "651",
+            "503",
+            "669",
+            "737",
+            "553",
+            "813",
+            "640",
+            "711",
+            "528",
+            "617",
+            "613",
+            "687",
+            "762",
+            "686",
+            "628",
+            "828",
+            "698",
+            "570",
+            "659",
+            "622",
+            "501",
+            "544",
+            "740",
+            "633",
+            "650",
+            "652",
+            "534",
+            "631",
+            "632",
+            "804",
+            "656",
+            "597",
+            "675",
+            "504",
+            "753",
+            "508",
+            "820",
+            "500",
+            "552",
+            "521",
+            "717",
+            "560",
+            "764",
+            "811",
+            "556",
+            "573",
+            "538",
+            "611",
+            "610",
+            "862",
+            "576",
+            "770",
+            "661",
+            "641",
+            "825",
+            "807",
+            "855",
+            "507",
+            "819",
+            "657",
+            "612",
+            "624",
+            "725",
+            "588",
+            "881",
+            "619",
+            "543",
+            "638",
+            "609",
+            "555",
+            "530",
+            "539",
+            "581",
+            "547",
+            "605",
+            "540",
+            "531",
+            "789",
+            "671",
+            "760",
+            "709",
+            "526",
+            "626",
+            "625",
+            "511",
+            "549",
+            "705",
+            "548",
+            "554",
+            "627",
+            "678",
+            "577",
+            "550",
+            "810",
+            "536",
+            "771",
+            "596",
+            "743",
+            "745",
+            "747",
+            "744"
+          ]
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "16de7bc9-30ec-45ad-a619-02384effce5d",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71474268",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71474268",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71474268",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "LiveStreaming",
+        "MatchTracker",
+        "OSB",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-09-15T00:15:00.0000000Z",
+      "seoIdentifier": "DEN Broncos @ KC Chiefs"
+    }
+  ]
+}
