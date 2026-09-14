@@ -59,13 +59,15 @@ re-verify against the live CLV log directly.
 
 WHAT THIS SCRIPT DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------
-- Does not automatically grade a leg from public final stat results. Every
-  outcome is manually reported by the user, by design (see ROADMAP.md
-  Session 2.5 card, "Handoff notes" -- this system does not place bets, and
-  by the same logic it does not assume it knows a real-money result without
-  being told). Automating grading from public box scores is a real, named
-  candidate for a future session (see sample_size_methodology.md, Section 6,
-  option (c)) -- not built here.
+- Does not itself automatically grade a leg from public final stat
+  results -- every outcome recorded THROUGH THIS SCRIPT is manually
+  reported by the user, by design. Session 2.18 added a separate script,
+  auto_grade_outcomes.py, that DOES auto-grade NFL flags from nflverse's
+  real published results and writes into this same outcome_log.csv (see
+  its module docstring) -- the `graded_by` column ("auto" vs "manual")
+  distinguishes the two sources. Every non-NFL sport still has no
+  auto-grading path and depends entirely on this script's manual
+  `--record` for now.
 - Does not enforce that a flag_id reported here actually exists in
   clv_log.csv as a hard failure -- it WARNS loudly and still records the
   outcome with blank context fields, rather than silently discarding a real
@@ -133,6 +135,7 @@ OUTCOME_LOG_COLUMNS = [
     "net_profit",
     "notes",
     "context_lookup_status",
+    "graded_by",
 ]
 
 VALID_RESULTS = {"win", "loss", "push", "void"}
@@ -227,6 +230,7 @@ def record_outcome(
     stake: Optional[float],
     payout: Optional[float],
     notes: Optional[str],
+    graded_by: str = "manual",
 ) -> dict:
     if result not in VALID_RESULTS:
         raise ValueError(f"--result must be one of {sorted(VALID_RESULTS)}, got '{result}'")
@@ -270,6 +274,7 @@ def record_outcome(
         "net_profit": compute_net_profit(stake, payout, result),
         "notes": notes,
         "context_lookup_status": status,
+        "graded_by": graded_by,
     }
 
     outcome_log = pd.concat([outcome_log, pd.DataFrame([new_row])], ignore_index=True)

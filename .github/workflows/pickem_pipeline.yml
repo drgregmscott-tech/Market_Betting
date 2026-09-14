@@ -91,6 +91,18 @@ jobs:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
         run: python scripts/run_pipeline.py
 
+      - name: Auto-grade closed NFL flags against real nflverse results (Session 2.18)
+        # Runs every hour, same cadence as the pipeline above -- newly
+        # closed flags become gradable as soon as their real game's stats
+        # post to nflverse (typically within a day). Never blocks the
+        # pipeline: a real failure here (e.g. nflverse or the schedule
+        # source is briefly unreachable) should not stop clv_log.csv from
+        # being committed, so this step is allowed to fail without
+        # failing the job (its own log/exit code still show a real
+        # failure on GitHub's Actions tab if that ever happens).
+        continue-on-error: true
+        run: python scripts/calibration/auto_grade_outcomes.py --run
+
       - name: Commit and push updated CLV log and digest
         id: commit
         run: |
@@ -103,7 +115,7 @@ jobs:
           # hourly run without this, defeating the entire design.
           git config user.name "pickem-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv data/pickem/cache/cfbd/
+          git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv data/pickem/cache/cfbd/ data/pickem/outcome_log.csv data/pickem/cache/nfl_schedule/
           if git diff --cached --quiet; then
             echo "No changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"
@@ -179,5 +191,6 @@ jobs:
             logs/ingestion.log
             logs/estimation.log
             logs/clv_logging.log
+            logs/auto_grade_outcomes.log
           retention-days: 14
           if-no-files-found: ignore

@@ -11857,3 +11857,149 @@ NFL/CFB pick'em props are scoring against a real but very thin (~1 week)
 2026 sample with no safeguard. Worth a real look in a future session once
 more 2026 games exist to judge whether this needs the same kind of guard
 Track 5 already has.
+
+---
+
+## Session 2.18 — Automated Real-Outcome Grading (Pick'em)
+
+**Date completed:** 2026-09-14
+**Status:** ✅ Complete
+
+**What was actually done:**
+Closed the real, checked-live gap ROADMAP.md's Session 2.18 card was
+opened against: `data/pickem/clv_log.csv` had 7,035+ closed flags and
+zero real-money outcomes ever recorded, because `outcome_tracker.py`'s
+manual `--record` flow requires a human to type in every single graded
+leg by hand and, in practice, nobody had. Built
+`scripts/calibration/auto_grade_outcomes.py`, which closes the loop
+automatically for NFL (the one sport this project already has a real
+external stats source for):
+1. Reuses `pickem_model.py`'s own `normalize_name()`/`build_name_lookup()`
+directly (same cross-track reuse pattern `sportsbook_props_model.py`
+already established), so a flagged player resolves to the exact same
+nflverse `player_id` the estimation model itself would have matched.
+2. Reads `resolved_stat_key` (Session 2.4's canonical stat name, already
+written on every `clv_log.csv` row) back into either a computed formula
+name (`kicking points`, `fantasy score`) or a list of nflverse columns to
+sum -- reusing the NFL plug-in's own `computed_stat_types`/
+`computed_required_columns` rather than re-deriving the stat maps.
+3. Matches a flag to its real, specific game. `clv_log.csv`'s own
+`game_id` turned out to be each PLATFORM's internal id (PrizePicks' game
+relationship id / Underdog's match id), confirmed live to share no format
+with nflverse's own `"2026_01_NE_SEA"`-style id, so it is not a usable
+join key across sources. Instead, joins the player's own real per-week
+schedule (each nflverse stat row already carries `week`/`team`) against
+nflverse/nfldata's public `games.csv` (season + week + team -> real
+`gameday`) and compares that to the flag's own `game_start_time`.
+4. Writes into `outcome_tracker.py`'s EXISTING `outcome_log.csv` schema
+(not a second log) -- added one new column, `graded_by` ("auto" vs.
+"manual"), and a matching `graded_by` parameter to
+`record_outcome()`, defaulting to `"manual"` so every prior manual-entry
+caller is unaffected.
+5. Wired into `.github/workflows/pickem_pipeline.yml` as a new hourly
+step (`continue-on-error: true`, so a real transient failure here can
+never block `clv_log.csv`'s own commit), satisfying the roadmap card's
+"on a schedule" requirement the same way the rest of this pipeline runs
+unattended.
+
+**Real bugs found and fixed mid-session (not hypothetical, found by
+actually running this against real data):**
+1. **Timezone bug, real and silent until checked:** the first real run
+left 71 real flags as `no_game_match`. Root cause: `game_start_time` is
+NOT consistently reported in Eastern local time across platforms --
+PrizePicks' real rows carry an explicit `-04:00`/`-05:00` offset (already
+Eastern), but Underdog's real rows are plain UTC (`Z`). Naively taking
+the ISO string's own date portion silently misdates any late-window/
+SNF/MNF game one calendar day early for every UTC-reported row. Fixed by
+converting explicitly to `America/New_York` via Python's `zoneinfo`
+(confirmed the real IANA timezone database is available on this machine
+via a real `ZoneInfo("America/New_York")` conversion check, before
+relying on it -- no new dependency needed) before comparing against the
+schedule's own local `gameday`. This reduced the residual from 71 to 2
+real flags.
+2. **Performance bug, real and would have made this unusable at this
+pipeline's real volume:** the first implementation called
+`outcome_tracker.record_outcome()` once per flag. That function
+re-reads and re-writes the ENTIRE csv from disk on every single call --
+a reasonable design for a human typing one `--record` at a time, but
+O(n^2) I/O against 7,600+ real rows. A real run was killed after over
+two minutes with zero rows written. Fixed by building every graded row
+in memory during the loop and writing the whole batch once at the end --
+the real, fixed version graded 7,687 rows in 54 seconds.
+
+**Files created/modified:**
+- `scripts/calibration/auto_grade_outcomes.py` (new)
+- `scripts/calibration/outcome_tracker.py` (added `graded_by` column and
+parameter; updated its own "what this does not do yet" docstring section,
+which had gone stale the moment this script started existing)
+- `.github/workflows/pickem_pipeline.yml` (new hourly auto-grading step;
+`data/pickem/outcome_log.csv` and `data/pickem/cache/nfl_schedule/` now
+committed alongside this workflow's other real output paths)
+- `ROADMAP.md` (Session 2.18 closed out with the full real evidence trail)
+
+**Validation results (all four of the roadmap card's required checks,
+against real data, not synthetic):**
+- [x] Hand-checked two real flags directly against nflverse's own
+published real box score: Drake Maye (real Week 1 line: 178 passing + 47
+rushing yards) and Trevor Lawrence (real Week 1 line: 245 passing / 18
+completions / 23 attempts) -- every one of both players' real flags in
+the output graded correctly against these real numbers.
+- [x] `data/pickem/outcome_log.csv` now contains 7,687 real, non-zero
+graded rows (5,145 wins / 2,446 losses / 27 pushes across the real,
+final run after the timezone fix), closing the exact gap found
+2026-09-11 (zero rows, ever).
+- [x] Confirmed directly that a flag not yet resolvable stays ungraded:
+all 84 real currently-open NFL flags have zero overlap with
+`outcome_log.csv`'s real graded rows.
+- [x] Re-ran the real script twice after its first real write --
+0 duplicate rows both times; the already-graded 7,687 flags were
+correctly excluded from re-consideration entirely, not merely
+re-graded and discarded.
+
+**Decisions made:**
+1. NFL only, matching `pickem_model.py`'s own real scope limit for v1 --
+every other sport's flags are explicitly, visibly left ungraded (a
+stated gap in the new script's own module docstring), not silently
+attempted with guessed per-sport logic. Manual `outcome_tracker.py
+--record` remains the only path for those sports for now.
+2. Join on (player identity, real schedule date) rather than trusting
+either platform's own `game_id` field, once live data confirmed the two
+platforms' ids are not the same id space as nflverse's.
+3. `stake`/`payout`/`net_profit` deliberately stay blank on every
+auto-graded row -- these flags were never confirmed as a real placed
+bet, and inventing a number here would misrepresent this project's own
+standing "flags and sizes, never places bets" rule.
+4. The auto-grading step in the GitHub Actions workflow is allowed to
+fail without failing the whole pipeline run (`continue-on-error: true`)
+-- consistent with this project's existing practice (the CFB plug-in's
+own honest-empty-result-without-a-key behavior) of never letting one
+non-critical stage's real failure block delivery of the stages that
+already succeeded.
+
+**Corrections/reversals during the session:**
+The original plan (calling `outcome_tracker.record_outcome()` directly,
+per its own docstring's stated reuse intent) was reversed once it proved
+too slow to finish in a reasonable time against real volume -- see
+"performance bug" above. Replaced with an in-memory batch write that
+still produces byte-identical row shape/content, just written once
+instead of thousands of times.
+
+**Open items / deferred validations:**
+- 2 real flags (Byron Murphy Jr., Byron Young) remain permanently
+`no_game_match` even after the timezone fix -- their ingested
+`game_start_time` does not correspond to either athlete's real Week 1
+game date at all. This looks like a real, small, upstream
+PrizePicks/Underdog ingestion data-quality issue (not this script's own
+matching logic, which is now verified correct against every other real
+row), but was not investigated further this session -- a genuinely
+small (2 of 8,036) residual, named rather than silently absorbed.
+- Session 2.20 (Activate Weekly Recalibration Review) is now fully
+unblocked -- `weekly_review.py` has real, non-trivial volume
+(7,687 real graded legs, well past its own ≥30-leg floor) to run
+against for the first time.
+- 347 real flags remain `no_player_match` (a player whose name doesn't
+resolve to nflverse's own name lookup) -- not a new gap introduced this
+session, the same real, honest residual `pickem_model.py`'s own
+estimation stage already carries for name-matching misses; not
+specifically investigated here since it was already a named, accepted
+gap elsewhere in this project.
