@@ -7,5 +7,5 @@ prizepicks,5,Someone Irrelevant,curling,Points,25.5,standard,,,,unsupported_spor
 prizepicks,6,Player One,nfl,Some Unknown Stat,1.5,standard,,,,unsupported_stat_type,,,,,,,,,,,
 prizepicks,7,Nobody Matches,nfl,Pass Yards,200.5,standard,,,passing_yards,no_player_match,,,,,,,,,,,
 prizepicks,8,Player Five,nfl,Pass Yards,150.5,standard,,,passing_yards,insufficient_history,,,,,1.0,,,,,,
-prizepicks,9,Player One,nfl,Pass Yards,265.5,demon,,,,unsupported_odds_type,,,,,,,,,,,
+prizepicks,9,Player One,nfl,Pass Yards,265.5,demon,,,passing_yards,estimated,266.0,277.3,271.65,38.47076812334269,5.0,0.5635049657992388,0.4364950342007612,0.5283083598231403,0.4716916401768597,0.0351966059760985,-0.0351966059760985
 underdog,10,Player Two,nfl,Rush+Rec Yards,140.5,,1.9,1.9,rushing_yards+receiving_yards,estimated,108.0,113.25,110.625,15.247950681976906,5.0,0.0250400207980847,0.9749599792019152,0.5,0.5,-0.4749599792019152,0.4749599792019152

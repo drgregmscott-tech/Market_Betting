@@ -223,7 +223,7 @@ def test_manual_kelly_math_sanity_check():
     size_entry()'s own code path -- same verification discipline Session
     2.3 used for the Kicking Points / Fantasy Score formulas."""
     p = 0.70 * 0.70  # = 0.49
-    b = entry_net_odds_b("prizepicks", 2)  # 2.0
+    b = entry_net_odds_b(PICKEM_ENTRY_PAYOUT["prizepicks"][2])  # 2.0
     f_star_expected = (p * (b + 1) - 1) / b  # hand formula
     f_star_actual = raw_kelly_fraction(p, b)
     assert abs(f_star_expected - f_star_actual) < 1e-9, (f_star_expected, f_star_actual)

@@ -280,7 +280,7 @@ CLV_CORE_COLUMNS = [
 # "team" field at all.
 CLV_LOG_COLUMNS_PICKEM = [
     "flag_id", "platform", "source_line_id", "player_name", "game_matchup", "sport",
-    "stat_type", "resolved_stat_key", "game_id", "game_start_time",
+    "stat_type", "resolved_stat_key", "odds_type", "game_id", "game_start_time",
     "flagged_side", "first_flagged_at", "first_flagged_line",
     "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
     "consensus_available", "consensus_platform", "consensus_source_line_id",
@@ -466,7 +466,7 @@ def _is_scorable_pickem_row(row: pd.Series) -> bool:
     """FIX (2026-09-11): mirrors pickem_model.py's own
     is_scorable_prizepicks_odds_type() -- a PrizePicks Demon/Goblin
     alt-line has no real implied probability in this project's data (see
-    that function's docstring) and pickem_model.py now marks it
+    that function's docstring) and pickem_model.py marked it
     model_status="unsupported_odds_type" rather than "estimated". Without
     this check, a Demon/Goblin row that was flagged and logged BEFORE that
     fix would still show up in `present_flag_ids` below (it's still a real,
@@ -477,13 +477,18 @@ def _is_scorable_pickem_row(row: pd.Series) -> bool:
     Receiving Yards at a Demon 19.5 line). Treating a non-scorable row as
     "not present" lets the existing close-on-disappearance logic below
     retire these the same way it would if PrizePicks had stopped returning
-    the line altogether."""
+    the line altogether.
+
+    SESSION 2.21 FIX (2026-09-14): mirrors pickem_model.py's own
+    PRIZEPICKS_SCORABLE_ODDS_TYPES, updated the same session to include
+    "demon" and "goblin" now that a real, sourced implied probability
+    exists for both (see that module's SESSION 2.21 FIX docstring)."""
     if row.get("platform") != "prizepicks":
         return True
     odds_type = row.get("odds_type")
     if not isinstance(odds_type, str) or not odds_type.strip():
         return True
-    return odds_type.strip().lower() == "standard"
+    return odds_type.strip().lower() in {"standard", "demon", "goblin"}
 
 
 def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
@@ -548,6 +553,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "sport": row.get("sport"),
             "stat_type": row.get("stat_type"),
             "resolved_stat_key": row.get("resolved_stat_key"),
+            "odds_type": row.get("odds_type"),
             "game_id": row.get("game_id"),
             "game_start_time": row.get("game_start_time"),
             "flagged_side": side,

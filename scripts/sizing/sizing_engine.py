@@ -731,10 +731,55 @@ PICKEM_ENTRY_PAYOUT = {
 }
 
 
-def entry_net_odds_b(platform: str, leg_count: int) -> float:
-    """b in the Kelly formula (profit per $1 staked on a win) for a given
-    platform's own sourced payout at this leg count."""
-    return PICKEM_ENTRY_PAYOUT[platform][leg_count] - 1.0
+# SESSION 2.21 ADDITION -- PrizePicks mixed Standard/Demon/Goblin entries.
+# PICKEM_ENTRY_PAYOUT above assumes every leg in the entry is Standard.
+# PrizePicks does not publish a static payout table for entries that mix in
+# a Demon or Goblin leg (checked directly -- see pickem_model.py's SESSION
+# 2.21 FIX docstring for the full research trail); the only real numbers
+# available are two live observations from the user's own PrizePicks
+# account (2026-09-14): a real 3-pick Power Play entry (2 Standard legs + 1
+# special leg) paid 4.75x with the special leg as Goblin, and 6.25x with
+# the SAME leg as Demon. Keyed by (leg_count, sorted tuple of each leg's
+# odds_type) so lookup doesn't care which position the special leg is in.
+# Deliberately NOT extrapolated to any other leg count or Standard/special
+# mix -- those are simply not sourced yet.
+PRIZEPICKS_MIXED_ENTRY_PAYOUT = {
+    (3, ("goblin", "standard", "standard")): 4.75,
+    (3, ("demon", "standard", "standard")): 6.25,
+}
+
+
+def _leg_odds_type(leg: dict) -> str:
+    odds_type = leg.get("odds_type")
+    if not isinstance(odds_type, str) or not odds_type.strip():
+        return "standard"
+    return odds_type.strip().lower()
+
+
+def resolve_entry_payout_multiplier(platform: str, legs: list[dict]) -> Optional[float]:
+    """The real payout multiplier for this exact entry, or None if this
+    platform/leg_count/leg-type combination has no sourced number yet.
+    Underdog has no Demon/Goblin concept -- always the flat, all-Standard
+    PICKEM_ENTRY_PAYOUT lookup. PrizePicks entries made entirely of
+    Standard legs use the same flat lookup; a PrizePicks entry containing
+    any Demon/Goblin leg falls back to PRIZEPICKS_MIXED_ENTRY_PAYOUT, which
+    only has the one real, observed combination pattern (see above)."""
+    leg_count = len(legs)
+    payout_table = PICKEM_ENTRY_PAYOUT.get(platform, {})
+
+    if platform != "prizepicks":
+        return payout_table.get(leg_count)
+
+    odds_types = tuple(sorted(_leg_odds_type(leg) for leg in legs))
+    if all(t == "standard" for t in odds_types):
+        return payout_table.get(leg_count)
+    return PRIZEPICKS_MIXED_ENTRY_PAYOUT.get((leg_count, odds_types))
+
+
+def entry_net_odds_b(payout_multiplier: float) -> float:
+    """b in the Kelly formula (profit per $1 staked on a win) for this
+    entry's own sourced payout multiplier."""
+    return payout_multiplier - 1.0
 
 
 def breakeven_win_rate_per_leg(platform: str, leg_count: int) -> float:
@@ -744,7 +789,10 @@ def breakeven_win_rate_per_leg(platform: str, leg_count: int) -> float:
     sample_size_methodology.md (PrizePicks: sqrt(1/3) = 0.5774; Underdog:
     sqrt(1/3.5) = 0.5345) -- computed generally here so it stays correct at
     every other sourced leg count too, rather than hand-deriving one figure
-    per (platform, leg_count) pair."""
+    per (platform, leg_count) pair. Only meaningful for an all-Standard
+    entry (equal per-leg probability); a mixed Demon/Goblin entry has no
+    single per-leg figure, so this is not called for those (see
+    size_entry(), which reports a mixed entry's breakeven as None instead)."""
     multiplier = PICKEM_ENTRY_PAYOUT[platform][leg_count]
     return multiplier ** (-1.0 / leg_count)
 
@@ -1005,21 +1053,32 @@ def size_entry(legs: list[dict], bankroll: float) -> dict:
     platform = legs[0]["platform"]
     payout_table = PICKEM_ENTRY_PAYOUT[platform]
     leg_count = len(legs)
+    odds_types = tuple(sorted(_leg_odds_type(leg) for leg in legs)) if platform == "prizepicks" else None
+    all_standard = odds_types is None or all(t == "standard" for t in odds_types)
 
-    if leg_count not in payout_table:
+    payout_multiplier = resolve_entry_payout_multiplier(platform, legs)
+
+    if payout_multiplier is None:
+        if all_standard:
+            return _rejected(
+                f"sizing_engine v1 only supports {sorted(payout_table)}-leg all-or-nothing "
+                f"({ENTRY_TYPE_NAME[platform]}) entries on {platform} -- received {leg_count} "
+                f"legs. Flex-style entries (which pay out after a miss) are not sized -- "
+                f"see docstring."
+            )
         return _rejected(
-            f"sizing_engine v1 only supports {sorted(payout_table)}-leg all-or-nothing "
-            f"({ENTRY_TYPE_NAME[platform]}) entries on {platform} -- received {leg_count} "
-            f"legs. Flex-style entries (which pay out after a miss) are not sized -- "
-            f"see docstring."
+            f"sizing_engine v1 has no sourced payout multiplier for a {leg_count}-leg "
+            f"{platform} entry with leg types {list(odds_types)} -- only "
+            f"{sorted(PRIZEPICKS_MIXED_ENTRY_PAYOUT.keys())} are sourced so far "
+            f"(see PRIZEPICKS_MIXED_ENTRY_PAYOUT docstring). Not sizing this entry rather "
+            f"than guessing at its real payout."
         )
 
     if bankroll < MIN_BANKROLL:
         return _rejected(f"--bankroll must be at least {MIN_BANKROLL}, got {bankroll}.")
 
-    payout_multiplier = payout_table[leg_count]
-    net_odds_b = entry_net_odds_b(platform, leg_count)
-    breakeven_win_rate = breakeven_win_rate_per_leg(platform, leg_count)
+    net_odds_b = entry_net_odds_b(payout_multiplier)
+    breakeven_win_rate = breakeven_win_rate_per_leg(platform, leg_count) if all_standard else None
 
     p_combined = combined_entry_probability(legs)
     f_raw = raw_kelly_fraction(p_combined, net_odds_b)

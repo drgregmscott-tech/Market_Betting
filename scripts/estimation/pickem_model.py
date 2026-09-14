@@ -467,12 +467,50 @@ PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5  # stated, unverified assumption -- see do
 # is deliberately set at an easy bar, so the model's own true-probability
 # estimate on it is naturally close to 100%, which manufactures an edge that
 # caps out just under 50% regardless of whether the line is really mispriced.
-# These rows get an explicit, named gap (model_status="unsupported_odds_type")
+# These rows got an explicit, named gap (model_status="unsupported_odds_type")
 # instead -- consistent with this project's "no unnamed black-box factors"
 # rule -- rather than a fabricated edge that outranks real Standard-line
-# flags. Re-enabling scoring for these requires PrizePicks' real per-type
-# payout multipliers, which are not in this response.
-PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard"}
+# flags.
+#
+# SESSION 2.21 FIX (2026-09-14, real finding): PrizePicks does not publish a
+# static Demon/Goblin payout table anywhere (checked prizepicks.com's own
+# payout page, its help center, and the raw ingestion API response itself --
+# none carry a per-leg multiplier or implied probability for Demon/Goblin;
+# PrizePicks' own help center confirms the multiplier is computed live,
+# per-lineup, inside the app's entry builder, not published in advance). The
+# only real number available is a live observation from the user's own
+# PrizePicks account (2026-09-14): a real 3-pick Power Play entry made of 2
+# Standard legs + 1 special leg paid 4.75x with that leg as Goblin, and 6.25x
+# with the SAME leg as Demon (the all-Standard 3-pick baseline is the
+# existing, separately-sourced 6.0x in sizing_engine.py's
+# PICKEM_ENTRY_PAYOUT).
+#
+# Treating each leg's contribution to the entry multiplier as independent
+# (the same equal-leg assumption sizing_engine.py's breakeven_win_rate_per_leg
+# already uses for all-Standard entries), the two Standard legs' own per-leg
+# breakeven is 6.0 ** (-1/3) = 0.550321. Solving M = 1 / (p_std**2 * p_special)
+# for p_special at each observed M gives:
+#   p_goblin = 1 / (4.75 * 0.550321**2) = 0.695143
+#   p_demon  = 1 / (6.25 * 0.550321**2) = 0.528308
+# (p_demon < p_std < p_goblin, matching the real-world direction: a Demon
+# line needs to hit LESS often to break even, since it pays more; a Goblin
+# line needs to hit MORE often, since it pays less -- see
+# docs/sizing_methodology.md for the full derivation.)
+#
+# This rests on exactly ONE observed combination pattern (3-pick, 2 Standard
+# + 1 special leg) -- it has not been confirmed to hold at other leg counts
+# or other Standard/special mixes, so sizing_engine.py's entry-level payout
+# table is extended ONLY for that exact pattern (see
+# PRIZEPICKS_MIXED_ENTRY_PAYOUT there), not generalized further. The per-leg
+# implied probabilities below are used here for individual-row scoring
+# (edge/ranking), which is a coarser question than exact entry sizing and is
+# reasonable to unblock on this evidence.
+PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB = {
+    "demon": 0.5283083598231403,
+    "goblin": 0.6951425787146582,
+}
+
+PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard", "demon", "goblin"}
 
 
 def is_scorable_prizepicks_odds_type(row: dict) -> bool:
@@ -482,6 +520,16 @@ def is_scorable_prizepicks_odds_type(row: dict) -> bool:
     if not isinstance(odds_type, str) or not odds_type.strip():
         return True  # missing odds_type -- treat as Standard, matching pre-fix behavior
     return odds_type.strip().lower() in PRIZEPICKS_SCORABLE_ODDS_TYPES
+
+
+def prizepicks_implied_prob_over(row: dict) -> float:
+    """PrizePicks implied probability for the Over/More side, by odds_type.
+    Standard keeps the existing flat 50% assumption; Demon/Goblin use the
+    real, sourced-from-live-account numbers in
+    PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB (see SESSION 2.21 FIX above)."""
+    odds_type = row.get("odds_type")
+    key = odds_type.strip().lower() if isinstance(odds_type, str) else ""
+    return PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB.get(key, PRIZEPICKS_ASSUMED_IMPLIED_PROB)
 
 
 # ---------------------------------------------------------------------------
@@ -571,7 +619,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
                 row.get("over_payout_multiplier"), row.get("under_payout_multiplier")
             )
         elif row.get("platform") == "prizepicks":
-            implied_over = PRIZEPICKS_ASSUMED_IMPLIED_PROB
+            implied_over = prizepicks_implied_prob_over(row)
         else:
             implied_over = None
 

@@ -2018,7 +2018,11 @@ removed afterward, same pattern Session 2.19 used).
 ---
 
 ### Session 2.21 — PrizePicks Demon/Goblin Payout Sourcing & Scoring (Pick'em)
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-14) — see SESSION_LOG.md for
+full detail. No static PrizePicks Demon/Goblin payout table exists anywhere
+to source (confirmed directly — see below); real numbers instead came from
+the user checking their own live PrizePicks account. Covers exactly one
+observed combination pattern.
 **Prerequisites:** Session 2.6 (Bankroll & Sizing Logic) complete — this
 session extends, rather than replaces, its entry-level payout logic.
 **Recommended priority:** per Session 2.13's own "PRIORITY NOTE" (added
@@ -2072,17 +2076,59 @@ sourced payout tables recorded, same standard every other real number in
 this project has been held to).
 
 **Validation (required to close session):**
-- [ ] Real PrizePicks payout tables sourced directly from an official
+- [x] Real PrizePicks payout tables sourced directly from an official
 PrizePicks source (not a third-party estimate/heuristic) for at least the
 Demon and Goblin variants of the entry sizes Session 2.6 already
 supports, each confirmed before being coded — a rough third-party
 heuristic (e.g. "demons need about a 4-point edge") is not sufficient on
-its own, per this project's standing rule
-- [ ] A real, live Demon or Goblin prop scores end-to-end with a real,
-sourced (not assumed) implied probability and edge number
-- [ ] `model_status` breakdown after this session shows a real, material
+its own, per this project's standing rule — **caveat:** no such static
+table exists anywhere to source (checked PrizePicks' own payout page, help
+center, and raw ingestion API directly this session — none carry
+Demon/Goblin numbers; PrizePicks computes the multiplier live, per-lineup,
+inside the app's own entry builder). The real numbers used instead are two
+live observations the user reported from their own PrizePicks account
+(2026-09-14): a real 3-pick entry (2 Standard + 1 special leg) paid 4.75x
+as Goblin, 6.25x as Demon — as real and "official" as this number gets,
+since PrizePicks itself has no other form of publishing it.
+- [x] A real, live Demon or Goblin prop scores end-to-end with a real,
+sourced (not assumed) implied probability and edge number — confirmed
+against real PrizePicks NFL data (2026-09-12 pull): Caleb Williams
+Pass+Rush Yds, Demon line 379.5, `implied_prob_over=0.528308`,
+`edge_over=-0.517` (correctly flagged as a bad line, not a fabricated
+edge).
+- [x] `model_status` breakdown after this session shows a real, material
 drop in `unsupported_odds_type` for at least one real sport's PrizePicks
-data, with the real before/after counts recorded
+data, with the real before/after counts recorded — real PrizePicks NFL
+data (2026-09-12 pull, 8,163 rows, 6,433 Demon/Goblin): before, all 6,433
+were `unsupported_odds_type` (100%, by construction of the old gate).
+After: `unsupported_odds_type` no longer occurs at all for these rows —
+4,040 now resolve to `estimated`, the rest fall through to the same honest
+statuses a Standard row can also get (`unsupported_stat_type` 1,937,
+`no_player_match` 359, `no_line_value` 97).
+
+**Open items / deferred validations:**
+- This covers exactly ONE observed combination pattern (3-pick, 2 Standard
++ 1 special leg). Per-row scoring applies the derived implied
+probabilities generally to any Demon/Goblin row, but `sizing_engine.py`'s
+entry-level sizing (`PRIZEPICKS_MIXED_ENTRY_PAYOUT`) only accepts that
+exact pattern — every other real leg count or Standard/special mix is
+rejected with a stated reason until it, too, is observed live. A natural
+next step for a future session: capture a few more real entries from the
+user's account (different leg counts, e.g. 2-pick or 4-pick; different
+special-leg counts, e.g. 2 Demon + 1 Standard) to test whether the derived
+per-leg probabilities hold across leg counts, and extend
+`PRIZEPICKS_MIXED_ENTRY_PAYOUT` accordingly.
+- One unrelated real finding surfaced during this session's research,
+checked and resolved rather than left open: PrizePicks retired its
+fixed-multiplier, against-the-house product nationwide on 2025-08-22 in
+favor of "Arena," a peer-to-peer pool format. Confirmed this does NOT
+invalidate this project's existing Kelly sizing logic — Arena still pays
+the full fixed multiplier for a perfect (all-legs-hit) lineup, only
+pool-splitting payouts on tied non-perfect results, which
+`sizing_engine.py` already excludes by design (Power Play/all-or-nothing
+only; Flex-style entries explicitly out of scope). No code change needed
+for this finding — recorded here so a future session doesn't have to
+re-discover and re-verify it.
 
 ---
 

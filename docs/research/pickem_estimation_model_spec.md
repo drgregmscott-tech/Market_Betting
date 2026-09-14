@@ -830,3 +830,76 @@ do, per its roadmap card:**
    fresh live pull.
 4. Prove at least one real, live CFB prop scores end-to-end without
    exceeding the free-tier cap.
+
+## Session 2.21 — PrizePicks Demon/Goblin implied probability (closes the
+## `unsupported_odds_type` gap named at the top of this section)
+
+The "Implied probability" section above states PrizePicks' flat 50%
+assumption applies "on both sides" without distinguishing odds_type. That
+was already wrong for Demon/Goblin lines by the time it was written, and
+Session 2.13 formalized the gap explicitly: every PrizePicks row with
+`odds_type` of `demon` or `goblin` got `model_status="unsupported_odds_type"`
+rather than scored against the flat 50%, since a Demon line's true
+probability estimate naturally clusters near 100% against a 50% bar (it's
+deliberately an easy line), manufacturing a fake edge, not a real one.
+
+**Real research, done this session (2026-09-14), found PrizePicks does not
+publish a Demon/Goblin payout table anywhere** — not on
+`prizepicks.com/resources/prizepicks-payouts` (their own official payout
+page — states Demon/Goblin entries "carry altered standard payout rates"
+with no numbers given), not in their help center or official social
+accounts (both confirm the multiplier is computed live, per-lineup, inside
+the app's own entry builder — "you will see how it affects your potential
+payout before you lock in" — never published in advance), and not in the
+raw PrizePicks projections API this project already ingests from (checked
+directly against a real ingested Demon row's attributes — no multiplier or
+probability field exists on the projection object itself). This is a real
+architectural fact about how PrizePicks prices Demon/Goblin — at the entry
+level, dynamically, per PrizePicks' own architecture — not a research gap
+that more searching would have closed.
+
+**The real number that exists** came from the user directly checking their
+own PrizePicks account (2026-09-14): a real 3-pick Power Play entry (2
+Standard legs + 1 special leg) paid **4.75x** with the special leg as
+Goblin, and **6.25x** with the same leg as Demon (the existing all-Standard
+3-pick baseline, sourced Session 2.11, is 6.0x). Treating each leg's
+contribution as independent (the same equal-leg assumption already used
+for the all-Standard breakeven table), this derives real implied
+probabilities of `p_demon = 0.528308` and `p_goblin = 0.695143` — see
+`docs/sizing_methodology.md` Section 1.5 for the full algebra.
+
+**What changed in code:**
+- `pickem_model.py`: `PRIZEPICKS_SCORABLE_ODDS_TYPES` now includes `demon`
+  and `goblin`; `prizepicks_implied_prob_over()` picks the odds-type-specific
+  implied probability above (Standard keeps the pre-existing flat 50%,
+  unchanged).
+- `clv_logger.py`: `_is_scorable_pickem_row()` updated to match (mirrors
+  `pickem_model.py`, same as it always has); `odds_type` added to
+  `CLV_LOG_COLUMNS_PICKEM` so it survives into `clv_log.csv` and is
+  available to `sizing_engine.py`.
+- `sizing_engine.py`: `PRIZEPICKS_MIXED_ENTRY_PAYOUT` added, keyed by
+  `(leg_count, sorted odds_types)`, containing exactly the two real
+  observed combinations above. `size_entry()` resolves an entry's real
+  payout multiplier through this table when any leg is Demon/Goblin, and
+  rejects any other real combination outright (not sourced yet) rather
+  than guessing.
+
+**Real, live validation (2026-09-14, real PrizePicks NFL data, 2026-09-12
+pull, 8,163 rows):** before this session, all 6,433 Demon/Goblin rows in
+that real pull were `unsupported_odds_type` (100%, by construction of the
+old gate). After: `unsupported_odds_type` no longer occurs at all for these
+rows — 4,040 now resolve to `estimated`, the rest fall through to the same
+honest statuses a Standard row can also get (`unsupported_stat_type` 1,937,
+`no_player_match` 359, `no_line_value` 97), exactly as intended. One
+concrete example: a real Caleb Williams Pass+Rush Yds Demon line at 379.5
+scored end-to-end with `implied_prob_over=0.528308` (the real, sourced
+number) and `edge_over=-0.517` (correctly flagged as a bad line, not a
+fabricated edge).
+
+**What this does NOT cover yet:** the derived probabilities rest on exactly
+ONE observed combination pattern (3-pick, 2 Standard + 1 special leg).
+Per-row scoring (above) applies them generally, since that's a coarser
+question reasonable to unblock on this evidence — but entry-level *sizing*
+in `sizing_engine.py` only accepts that exact sourced pattern; every other
+real leg count or Standard/special mix is rejected with a stated reason
+until it, too, is observed live and added.

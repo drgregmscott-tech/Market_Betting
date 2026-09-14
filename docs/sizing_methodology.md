@@ -63,6 +63,72 @@ this project's research/code. Extending coverage further is a named
 candidate for a future session, not a gap this session tried to paper
 over.
 
+## 1.5. Session 2.21 — PrizePicks Demon/Goblin: no published table exists, so this is a live observation, not a lookup
+
+Sections 1's table above covers PrizePicks entries where every leg is
+**Standard**. PrizePicks also lets a leg be a **Demon** (harder line,
+bigger payout) or **Goblin** (easier line, smaller payout), and 84.7% of
+real PrizePicks volume (43,274-row live pull, 2026-09-11) is one of these,
+not Standard — so this is not a small corner case.
+
+Unlike the Section 1 table, **PrizePicks does not publish a Demon/Goblin
+payout table anywhere** — checked directly this session: their own payout
+page (`prizepicks.com/resources/prizepicks-payouts`) states Demon/Goblin
+lineups "carry altered standard payout rates" with no numbers; their help
+center and official X/Twitter account both state the multiplier is
+computed live, per-lineup, inside the app's entry builder, only shown
+"before you lock in"; and the raw PrizePicks projections API this project
+already ingests from carries no multiplier or implied-probability field on
+a Demon/Goblin projection object at all (checked directly against a real
+ingested row). This is a real architectural fact about PrizePicks' product,
+not a research shortfall — there is no static table to find.
+
+**The only real numbers available are two live observations reported
+directly from the user's own PrizePicks account (2026-09-14):** a real
+3-pick Power Play entry made of 2 Standard legs + 1 special leg paid
+
+| Special leg type | Real entry payout (2 Standard + 1 special, 3-pick) |
+|---|---|
+| Goblin | 4.75x |
+| Demon | 6.25x |
+
+(compare the all-Standard 3-pick baseline from Section 1: 6.0x)
+
+**Deriving a per-leg implied probability from this.** Treating each leg's
+contribution to the entry multiplier as independent — the same equal-leg
+assumption Section 2 below already uses for an all-Standard entry — the two
+Standard legs' own per-leg breakeven at this entry size is
+`6.0 ** (-1/3) = 0.550321`. Solving `M = 1 / (p_std² × p_special)` for
+`p_special` at each observed `M`:
+
+```
+p_goblin = 1 / (4.75 × 0.550321²) = 0.695143
+p_demon  = 1 / (6.25 × 0.550321²) = 0.528308
+```
+
+This lines up with the real-world direction: a Demon leg needs to hit
+*less* often to break even (`0.528 < 0.550`), since it pays more; a Goblin
+leg needs to hit *more* often (`0.695 > 0.550`), since it pays less. These
+two numbers are now `pickem_model.py`'s implied probability for scoring any
+Demon or Goblin row (`PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB`), replacing the
+prior flat gate that blocked every Demon/Goblin row from scoring at all
+(`model_status="unsupported_odds_type"`).
+
+**What this does NOT cover yet.** This rests on exactly ONE observed
+combination pattern — a 3-pick entry, 2 Standard + 1 special leg. It has
+not been confirmed to hold at any other leg count, or for a mix with more
+than one special leg (e.g. 1 Standard + 2 Demon, or all-Demon). Per-row
+*scoring* (the edge/ranking number above) uses the derived probabilities
+generally, since that's a coarser question reasonable to unblock on this
+evidence — but `sizing_engine.py`'s entry-level payout table
+(`PRIZEPICKS_MIXED_ENTRY_PAYOUT`) is extended ONLY for the exact sourced
+pattern (3-pick, sorted leg types `("demon","standard","standard")` or
+`("goblin","standard","standard")`); any other real Demon/Goblin
+combination is rejected outright with a stated reason, same posture as
+Section 1's unsourced leg counts. More live observations (different leg
+counts, different mixes) would let this table grow the same way Section
+1's did across Sessions 2.5 and 2.11.
+
 ## 2. The sizing formula — Kelly criterion
 
 For an all-or-nothing bet with win probability `p` and net odds `b` (the

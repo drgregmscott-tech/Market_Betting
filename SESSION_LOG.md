@@ -12316,3 +12316,175 @@ recommendations" design principle -- nobody has yet acted on the real
 6.3-point overconfidence finding by revisiting `pickem_model.py`'s blend
 weights. Left as a real, named next decision for the user, not
 auto-applied here.
+
+---
+
+## Session 2.21 -- PrizePicks Demon/Goblin Payout Sourcing & Scoring (Pick'em)
+
+**Date completed:** 2026-09-14
+**Status:** ⚠️ Complete with caveats
+
+**What was actually done:**
+Set out to close ROADMAP.md's Session 2.21 card: PrizePicks Demon/Goblin
+rows (84.7% of real PrizePicks volume, per Session 2.13's finding) were
+blocked from scoring entirely (`model_status="unsupported_odds_type"`)
+because `pickem_model.py` had no real implied probability for them. The
+card called for sourcing PrizePicks' real published payout tables for
+Demon/Goblin leg combinations.
+
+Real research first, before touching any code:
+1. Checked `prizepicks.com/resources/prizepicks-payouts` (PrizePicks' own
+official payout page) directly -- confirms the all-Standard table already
+in `sizing_engine.py` (Session 2.11) but states Demon/Goblin lineups
+"carry altered standard payout rates" with no numbers.
+2. Checked PrizePicks' help center and official X/Twitter account --
+both confirm the Demon/Goblin multiplier is computed live, per-lineup,
+inside the app's own entry builder, and shown only "before you lock in."
+No static table has ever been published.
+3. Checked the raw PrizePicks projections API this project already
+ingests from directly (`scripts/ingestion/snapshots/prizepicks_20260828T235006Z.json`)
+-- a real Demon row's attributes carry no multiplier or probability field
+at all, confirming Session 2.13's own architectural read.
+4. Surfaced an unrelated but real finding along the way: PrizePicks
+retired its fixed-multiplier, against-the-house product nationwide on
+2025-08-22 in favor of "Arena," a peer-to-peer pool format. Checked
+whether this invalidates the existing Kelly sizing logic -- it does not:
+Arena still pays the full fixed multiplier on a perfect (all-legs-hit)
+lineup, only pool-splitting payouts on tied non-perfect results, which
+`sizing_engine.py` already excludes by design (Power Play only, Flex
+explicitly out of scope). No code change needed for this; recorded in
+ROADMAP.md so it isn't re-discovered later.
+5. Attempted to reach PrizePicks' live app directly (browser tool, then a
+direct API probe) to observe a real payout calculation myself -- both
+blocked (the browser tool refuses all prizepicks.com domains as a
+real-money gambling site; the API hits DataDome bot-detection). Reported
+all of this to the user rather than proceeding on a guess, per this
+project's standing "no unnamed black-box factors" rule and this card's own
+explicit validation bar ("not a third-party estimate/heuristic").
+6. User checked their own live PrizePicks account and reported two real
+numbers: a 3-pick Power Play entry (2 Standard legs + 1 special leg) paid
+4.75x with the special leg as Goblin, 6.25x with the same leg as Demon.
+7. Derived per-leg implied probabilities from these two real numbers,
+using the same equal-leg-breakeven assumption `sizing_engine.py` already
+used for all-Standard entries: `p_demon = 0.528308`, `p_goblin =
+0.695143` (full algebra in `docs/sizing_methodology.md` Section 1.5).
+8. Wired these into `pickem_model.py` (new `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB`
+and `prizepicks_implied_prob_over()`, replacing the flat-50%-or-blocked
+logic for Demon/Goblin rows only -- Standard is unchanged).
+9. Extended `sizing_engine.py` with `PRIZEPICKS_MIXED_ENTRY_PAYOUT`, keyed
+by `(leg_count, sorted odds_types)`, containing only the two real observed
+combinations; `size_entry()` now resolves payout through this table when
+any leg is Demon/Goblin, and rejects every other real combination outright
+with a stated reason (`resolve_entry_payout_multiplier()`).
+10. `clv_logger.py`: added `odds_type` to `CLV_LOG_COLUMNS_PICKEM` so it
+survives into `clv_log.csv` and reaches `sizing_engine.py` (it did not
+before -- `fetch_legs()` would otherwise never see a leg's odds_type at
+all); updated `_is_scorable_pickem_row()` to match `pickem_model.py`'s
+widened scorable set.
+11. Updated `docs/sizing_methodology.md` (new Section 1.5) and
+`docs/research/pickem_estimation_model_spec.md` (new Session 2.21
+addendum) with the full real research trail and derivation, matching the
+documentation standard every other sourced number in this project has
+been held to.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_model.py` (widened `PRIZEPICKS_SCORABLE_ODDS_TYPES`;
+new `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB`, `prizepicks_implied_prob_over()`)
+- `scripts/sizing/sizing_engine.py` (new `PRIZEPICKS_MIXED_ENTRY_PAYOUT`,
+`_leg_odds_type()`, `resolve_entry_payout_multiplier()`; `entry_net_odds_b()`
+signature changed from `(platform, leg_count)` to `(payout_multiplier)`;
+`size_entry()` updated to resolve payout via the new function)
+- `scripts/calibration/clv_logger.py` (added `odds_type` to
+`CLV_LOG_COLUMNS_PICKEM`; widened `_is_scorable_pickem_row()`)
+- `scripts/sizing/test_sizing_engine.py` (updated one test to the new
+`entry_net_odds_b()` signature)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (one row's
+expected output updated -- a synthetic Demon row that was previously
+correctly `unsupported_odds_type` is now correctly `estimated`)
+- `docs/sizing_methodology.md` (new Section 1.5)
+- `docs/research/pickem_estimation_model_spec.md` (new Session 2.21
+addendum)
+- `ROADMAP.md` (Session 2.21 closed out with full real evidence trail)
+
+**Validation results:**
+- [x] Real PrizePicks payout numbers sourced -- caveat: not from a
+published table (none exists; verified directly, see above) but from two
+live observations in the user's own PrizePicks account (2026-09-14, 3-pick
+entry, 2 Standard + 1 special leg: 4.75x Goblin / 6.25x Demon), confirmed
+before being coded, same standard as every other sourced number in this
+project.
+- [x] A real, live Demon or Goblin prop scores end-to-end with a real,
+sourced implied probability and edge -- confirmed against real PrizePicks
+NFL data (2026-09-12 pull): Caleb Williams Pass+Rush Yds, Demon line
+379.5, `implied_prob_over=0.528308`, `edge_over=-0.517`.
+- [x] `model_status` breakdown shows a real, material drop in
+`unsupported_odds_type` -- real PrizePicks NFL data (2026-09-12 pull,
+8,163 rows, 6,433 Demon/Goblin): before, 6,433/6,433 (100%)
+`unsupported_odds_type`. After: 0 -- 4,040 now `estimated`, the rest
+`unsupported_stat_type` (1,937), `no_player_match` (359), `no_line_value`
+(97), same honest statuses a Standard row can get.
+- [x] `python -m pytest scripts/sizing/test_sizing_engine.py -q` -- 27/27
+pass.
+- [x] `python -m pytest scripts/estimation/test_pickem_model.py -q` --
+24/24 pass (after updating the one golden-fixture row affected by the
+fix, verified via a real CSV round-trip of the current code's own output,
+not hand-typed).
+- [x] `python scripts/calibration/test_clv_logger.py` -- 13/13 scenarios
+pass (this file is a manual scenario harness, not a pytest suite -- run
+directly).
+- [x] Manual `size_entry()` check: a synthetic 3-pick entry (2 Standard +
+1 Demon leg) sizes correctly through the new mixed-payout path
+(`entry_payout_multiplier=6.25`); a synthetic 2-pick all-Demon entry (not
+a sourced combination) is rejected with a clear, specific reason naming
+the unsupported leg types.
+
+**Decisions made:**
+1. When the card's own validation bar ("sourced directly from an official
+PrizePicks source, not a third-party heuristic") turned out to be
+unsatisfiable as literally stated -- no such source exists, PrizePicks
+computes Demon/Goblin multipliers live and never publishes them -- the
+right move was to stop and report this to the user rather than either (a)
+quietly substituting a third-party heuristic, or (b) declaring the session
+blocked without exhausting real options. Presented the finding and three
+concrete paths (user checks the live app; defer the session; find a live
+payout-calculator endpoint); user picked the endpoint route, which turned
+out to be blocked at the tooling level (browser safety restriction, API
+bot-detection), at which point the user's own account became the only
+real path and they used it directly.
+2. Derived per-leg implied probabilities from the two real entry-level
+numbers using the SAME equal-leg-breakeven algebra `sizing_engine.py`
+already trusted for all-Standard entries, rather than inventing a new
+method -- this is a direct algebraic solve from two real, sourced numbers,
+not a third-party heuristic, and is documented with the full derivation
+in `docs/sizing_methodology.md`.
+3. Deliberately did NOT generalize the two real leg-count-3 observations
+to other leg counts or other Standard/special mixes in
+`sizing_engine.py`'s entry-level sizing -- every other real combination is
+explicitly rejected with a stated reason rather than assumed to follow the
+same pattern. Per-row *scoring* (a coarser question) does apply the
+derived probabilities generally to any Demon/Goblin row regardless of what
+entry it ends up in, mirroring how Standard's flat 50% already works the
+same way.
+4. Did not touch Standard's existing flat-50%-implied-probability
+assumption (`PRIZEPICKS_ASSUMED_IMPLIED_PROB`) -- out of this session's
+scope, and changing it would need its own real research/validation, not a
+side effect of the Demon/Goblin fix.
+
+**Corrections/reversals during the session:**
+- None. The path taken (research first, hit a real wall, ask the user,
+user supplied real data, code the real data) was the originally-presented
+plan the user selected, carried through as stated.
+
+**Open items / deferred validations:**
+- See ROADMAP.md's Session 2.21 card for the full "what this does NOT
+cover yet" statement: exactly one combination pattern (3-pick, 2 Standard
++ 1 special leg) is sourced for entry-level sizing. More live observations
+from the user's account (other leg counts, other Standard/special mixes)
+would let `PRIZEPICKS_MIXED_ENTRY_PAYOUT` grow the same way the
+all-Standard table did across Sessions 2.5 and 2.11 -- a natural candidate
+for a short follow-up session, not a full new one.
+- The PrizePicks Arena/peer-to-peer finding (see item 4 above) did not
+require a code change this session, but is worth a deliberate re-check if
+this project ever extends sizing to non-perfect (Flex-style) outcomes,
+since that is exactly the case where Arena's pool-splitting behavior would
+matter and the current fixed-multiplier assumption would not hold.
