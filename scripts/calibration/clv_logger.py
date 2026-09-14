@@ -1,7 +1,26 @@
 """
 Session 2.4 (pick'em) / Session 4.3 (weather) / Session 5.3 (politics) /
-Session 6.3 (sportsbook props)
+Session 6.3 (sportsbook props) / Session 2.19 (pick'em CLV-at-close fix)
 -- CLV-Equivalent Calibration Logging, Generalized Across Tracks
+
+SESSION 2.19 FIX -- THE TAUTOLOGICAL PICK'EM CLV-AT-CLOSE METRIC
+-----------------------------------------------------------------------
+Checked live, 2026-09-14: every one of PrizePicks' closed flags in
+data/pickem/clv_log.csv showed clv_edge_at_close byte-identical to
+first_flagged_edge, because closing_implied_prob for PrizePicks is
+always PRIZEPICKS_ASSUMED_IMPLIED_PROB -- a flat, unverified constant
+(0.5) that pickem_model.py assigns to every PrizePicks row regardless of
+the real line, not something derived from a real, moving market price.
+A flag can only be created above the flag-edge threshold in the first
+place, so every closed PrizePicks flag was mathematically guaranteed to
+show a "positive" CLV at close. That is a tautology, not evidence the
+model is any good. PrizePicks does not publish a per-side price that
+could move, so there is no fix that makes this number real -- Session
+2.19's decision is to report it as not-available (None) for PrizePicks
+going forward, leaning on Session 2.18's real-outcome grading as this
+platform's real validation signal instead. See process_run_pickem()
+below for the exact fix and the second, independent bug found alongside
+it (line_moved was comparing the wrong field for Underdog).
 
 SESSION 6.3 ADDITION -- SPORTSBOOK PLAYER PROPS (DK/FD)
 -----------------------------------------------------------------------
@@ -564,20 +583,54 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
         for flag_id in log_df.loc[dropped_mask, "flag_id"]:
             closing_line = log_df.loc[flag_id, "last_seen_line"]
             closing_implied = log_df.loc[flag_id, "last_seen_implied_prob"]
-            first_line = log_df.loc[flag_id, "first_flagged_line"]
+            first_implied = log_df.loc[flag_id, "first_flagged_implied_prob"]
             first_model_prob = log_df.loc[flag_id, "first_flagged_model_prob"]
+            platform = log_df.loc[flag_id, "platform"]
             log_df.loc[flag_id, "status"] = "closed"
             log_df.loc[flag_id, "closing_line"] = closing_line
             log_df.loc[flag_id, "closing_implied_prob"] = closing_implied
             log_df.loc[flag_id, "closing_pulled_at"] = log_df.loc[flag_id, "last_seen_at"]
-            log_df.loc[flag_id, "line_moved"] = (
-                bool(pd.notna(closing_line) and pd.notna(first_line) and closing_line != first_line)
-            )
-            log_df.loc[flag_id, "clv_edge_at_close"] = (
-                (first_model_prob - closing_implied)
-                if (pd.notna(first_model_prob) and pd.notna(closing_implied))
-                else None
-            )
+
+            # SESSION 2.19 FIX -- see module docstring section "SESSION 2.19"
+            # below for the full finding. Two independent bugs lived here:
+            #
+            # 1. PrizePicks' closing_implied_prob is always
+            #    PRIZEPICKS_ASSUMED_IMPLIED_PROB (a flat, constant 0.5 --
+            #    pickem_model.py never derives it from a real market price).
+            #    That is the SAME constant used to compute first_flagged_edge
+            #    in the first place, so clv_edge_at_close for PrizePicks was
+            #    mathematically guaranteed to equal first_flagged_edge on
+            #    every closed row -- a tautology, not a real validation
+            #    signal. There is no fix that makes this number real (
+            #    PrizePicks does not publish a per-side price that could
+            #    move), so it is reported as not-available (None) instead.
+            #    Session 2.18's real-outcome grading is the real validation
+            #    signal for this platform going forward.
+            # 2. `line_moved` compared closing_line vs first_flagged_line --
+            #    the point stat threshold (e.g. "74.5 yards"), which platforms
+            #    essentially never revise once posted. The real price signal
+            #    that clv_edge_at_close is actually computed from is the
+            #    IMPLIED PROBABILITY (Underdog: derived from its real,
+            #    independently-moving per-side payout multipliers), not the
+            #    line. Comparing the wrong field made Underdog's real price
+            #    movement look almost nonexistent (0 of 9,885 closed flags
+            #    showed line_moved=True, confirmed live 2026-09-14) even
+            #    though 1,379 of those same 9,885 rows have a
+            #    closing_implied_prob that genuinely differs from
+            #    first_flagged_implied_prob. Fixed to compare implied
+            #    probability, the field the CLV math actually uses.
+            if platform == "prizepicks":
+                log_df.loc[flag_id, "line_moved"] = None
+                log_df.loc[flag_id, "clv_edge_at_close"] = None
+            else:
+                log_df.loc[flag_id, "line_moved"] = (
+                    bool(pd.notna(closing_implied) and pd.notna(first_implied) and closing_implied != first_implied)
+                )
+                log_df.loc[flag_id, "clv_edge_at_close"] = (
+                    (first_model_prob - closing_implied)
+                    if (pd.notna(first_model_prob) and pd.notna(closing_implied))
+                    else None
+                )
 
     return log_df.reset_index(drop=True)[CLV_LOG_COLUMNS_PICKEM]
 

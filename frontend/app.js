@@ -302,7 +302,16 @@ function escapeHtml(s) {
 
 function renderStats(rows) {
   const open = rows.filter((r) => r.status === "open");
-  const closed = rows.filter((r) => r.status === "closed" && toNum(r.clv_edge_at_close) !== null);
+  // SESSION 2.19 FIX: "closed" (all closed flags, both platforms) is kept
+  // separate from "closed" filtered to a real clv_edge_at_close, because
+  // PrizePicks flags now correctly report clv_edge_at_close as
+  // not-available (null) -- see docs/clv_methodology.md's Session 2.19
+  // section. clv_edge_at_close for PrizePicks used to be a tautological
+  // number that was always "positive" by construction, not real evidence;
+  // it is not fabricated here, it is dropped from the average/hit-rate
+  // instead, leaving only Underdog's real signal in those two stats.
+  const closedAll = rows.filter((r) => r.status === "closed");
+  const closed = closedAll.filter((r) => toNum(r.clv_edge_at_close) !== null);
 
   const avgEdge = closed.length
     ? closed.reduce((sum, r) => sum + toNum(r.clv_edge_at_close), 0) / closed.length
@@ -311,7 +320,7 @@ function renderStats(rows) {
   const hitRate = closed.length ? (positive / closed.length) * 100 : null;
 
   setText("statOpen", String(open.length));
-  setText("statClosed", String(closed.length));
+  setText("statClosed", String(closedAll.length));
 
   const cumEl = document.getElementById("statCumEdge");
   if (cumEl) {
@@ -321,7 +330,7 @@ function renderStats(rows) {
 
   setText("statHitRate", hitRate === null ? "—" : hitRate.toFixed(0) + "%");
 
-  return { open, closed };
+  return { open, closed, closedAll };
 }
 
 function renderChart(closed) {

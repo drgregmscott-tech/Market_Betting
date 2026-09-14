@@ -125,13 +125,68 @@ threshold and updated on every later run while still open:
 | `last_seen_*` | Updated every run the prop is still present — the most current line/probability while open |
 | `status` | `open` while still appearing in ingestion runs, `closed` once it stops appearing |
 | `closing_*` | Frozen from `last_seen_*` at the moment `status` flips to `closed` |
-| `line_moved` | Whether `closing_line` differs from `first_flagged_line` |
-| `clv_edge_at_close` | `first_flagged_model_prob − closing_implied_prob` — the literal pick'em-analog CLV number |
+| `line_moved` | **(Session 2.19 fix — see that section below.)** Whether `closing_implied_prob` differs from `first_flagged_implied_prob` — i.e. whether the real PRICE signal moved, not whether the point line (`closing_line` vs `first_flagged_line`) did. `None` for PrizePicks rows (not applicable — see below). |
+| `clv_edge_at_close` | `first_flagged_model_prob − closing_implied_prob` for Underdog. **`None` for PrizePicks** (Session 2.19 fix — see below; this used to be a tautological, always-"positive" number, not real evidence) |
 
 A parallel, timestamped snapshot is also written to
 `data/pickem/clv_snapshots/` on every run, matching Session 2.2's
 snapshot-plus-latest pattern, so the log's state at any past run can be
 recovered even after later runs overwrite `clv_log.csv`.
+
+## Session 2.19 — fixing the tautological PrizePicks CLV-at-close metric
+
+**The real finding, checked live 2026-09-14.** Every one of PrizePicks'
+10,750 closed flags in `data/pickem/clv_log.csv` showed `clv_edge_at_close`
+byte-identical to `first_flagged_edge`, producing a reported "100%
+positive-edge rate" that is not real evidence of anything. Root cause:
+`closing_implied_prob` for a PrizePicks row is always
+`PRIZEPICKS_ASSUMED_IMPLIED_PROB` — a flat, constant 0.5 defined in
+`pickem_model.py` (see "What 'the platform's own implied probability' means
+for PrizePicks," above). It is not derived from a real, moving market price
+at all; it is the **same** constant already used to compute
+`first_flagged_edge`. Since a flag can only be created once its edge already
+clears the 3% threshold, every closed PrizePicks flag was mathematically
+guaranteed to show a "positive" CLV at close, regardless of whether the
+model was actually any good. This is a tautology, not a validation signal.
+
+**The decision (not just a code change).** There is no fix that makes this
+number real — PrizePicks does not publish a per-side price that could move,
+so there is nothing for `closing_implied_prob` to differ from. Going
+forward, `clv_edge_at_close` and `line_moved` are reported as **not
+available** (`None`) for every closed PrizePicks flag, rather than a
+fabricated or misleadingly "real-looking" number. Session 2.18's real-outcome
+grading (`data/pickem/outcome_log.csv`) is PrizePicks' real validation
+signal now — CLV was never meant to be the last word, only a pre-outcome
+stand-in until real graded outcomes existed.
+
+**The second, independent bug this surfaced: Underdog's `line_moved` was
+comparing the wrong field.** It compared `closing_line` to
+`first_flagged_line` — the point stat threshold (e.g. "74.5 receiving
+yards"), which a platform essentially never revises once posted. But the
+real price signal `clv_edge_at_close` is actually computed from is the
+**implied probability**, derived from Underdog's real, independently-moving
+per-side payout multipliers. Checked live: comparing the wrong field made it
+look like Underdog's line almost never moved (0 of 9,885 closed flags showed
+`line_moved=True`). Comparing the right field (`closing_implied_prob` vs
+`first_flagged_implied_prob`) found the real number: **672 of 9,885 closed
+Underdog flags (≈6.8%) show a genuine implied-probability move between
+first-flag and close.** That is a real, if modest, rate of real price
+movement — the mechanism is sound, it was just measuring the wrong thing.
+`data/pickem/clv_log.csv` was backfilled once, in place, to correct both
+bugs on every already-closed historical row (10,750 PrizePicks rows'
+`clv_edge_at_close`/`line_moved` set to `None`; 9,178 Underdog rows'
+`line_moved` recomputed against the real implied-probability field) — not
+just fixed going forward, since the frontend reads this file directly and
+old rows would otherwise keep showing the old, wrong numbers indefinitely.
+
+**Frontend impact.** The Pick'em tab's "Average CLV edge" and "Positive-edge
+rate" stats (`frontend/app.js`) already filter to rows where
+`clv_edge_at_close` is not null before averaging — so once PrizePicks rows
+report `None`, they silently and correctly drop out of those two stats on
+their own, leaving only Underdog's real signal. The "Closed & graded" count
+was decoupled from that same filtered set so it still shows the true total
+closed-flag count across both platforms, with a caption clarifying that the
+CLV average/hit-rate reflect Underdog only.
 
 ## What this script does not do yet (stated gap, not silent)
 

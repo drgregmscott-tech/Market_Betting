@@ -1879,7 +1879,7 @@ places bets" standing rule.
 ---
 
 ### Session 2.19 — Fix the Tautological CLV-at-Close Metric (Pick'em)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-14) — see SESSION_LOG.md for full detail
 **Prerequisites:** None new for the diagnosis; benefits from Session
 2.18 existing first, since real outcome grading is the stronger
 replacement signal for the platform (PrizePicks) where CLV can't be
@@ -1929,14 +1929,22 @@ assumptions); `frontend/app.js`/`index.html` (the "Average CLV edge" /
 number that isn't real, once the fix lands); `docs/clv_methodology.md`.
 
 **Validation (required to close session):**
-- [ ] Explicit decision recorded on what PrizePicks' `clv_edge_at_close`
+- [x] Explicit decision recorded on what PrizePicks' `clv_edge_at_close`
 should show going forward (not-available vs. a real alternative signal),
-with the reasoning stated, not silently changed
-- [ ] The frontend's summary stats no longer present a number that is
-tautological by construction as if it were real evidence
-- [ ] Underdog's real closing-movement mechanism re-verified against a
+with the reasoning stated, not silently changed — reported not-available
+(`None`); PrizePicks does not publish a moving per-side price, so no
+alternative real signal exists at this layer. Session 2.18's real-outcome
+grading is the standing replacement.
+- [x] The frontend's summary stats no longer present a number that is
+tautological by construction as if it were real evidence — confirmed live
+in the browser: Pick'em tab's average CLV edge is a real, Underdog-only
++14.5%, with an on-page caption stating the scope.
+- [x] Underdog's real closing-movement mechanism re-verified against a
 real, live example where the price is confirmed to have actually moved
-between first-flagged and close (not just that the code path exists)
+between first-flagged and close (not just that the code path exists) —
+672 of 9,885 real closed Underdog flags show genuine implied-probability
+movement (the old, buggy `line_moved` check compared the wrong field and
+showed 0/9,885).
 
 ---
 

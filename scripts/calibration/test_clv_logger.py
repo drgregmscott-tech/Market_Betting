@@ -147,13 +147,32 @@ def scenario_4_refresh_open_flag_line_moves():
 
 
 def scenario_5_flag_closes_when_prop_disappears():
-    pp_row_run1 = _base_row(source_line_id="pp_close_me", line=275.5, prob_over=0.60)
-    estimates_run1 = pd.DataFrame([pp_row_run1])
+    """SESSION 2.19 UPDATE: this scenario now uses Underdog, not PrizePicks
+    -- PrizePicks' clv_edge_at_close/line_moved are always None at close
+    per the Session 2.19 fix (see scenario_5b below), so they can no
+    longer prove a real "the price moved and CLV was computed from that
+    real movement" case. Underdog's real per-side payout multipliers
+    (over_payout_multiplier/under_payout_multiplier) are what actually
+    move -- the point line (`line`) itself is not the signal
+    clv_edge_at_close is computed from (that was Session 2.19's second
+    bug: line_moved used to compare the wrong field)."""
+    ud_row_run1 = _base_row(
+        platform="underdog", source_line_id="ud_close_me", line=275.5, prob_over=0.60,
+        over_payout_multiplier=1.9, under_payout_multiplier=1.9,
+        implied_prob_over=0.50, implied_prob_under=0.50,
+    )
+    estimates_run1 = pd.DataFrame([ud_row_run1])
     log_after_run1 = clv_logger.process_run_pickem(estimates_run1, _empty_pickem_log(), "2026-09-01T10:00:00Z")
 
-    # Run 2: line moves while still open.
-    pp_row_run2 = _base_row(source_line_id="pp_close_me", line=277.0, prob_over=0.60)
-    estimates_run2 = pd.DataFrame([pp_row_run2])
+    # Run 2: still open, but the platform's real payout multipliers move
+    # (its implied probability shifts from 0.50 to ~0.5645) -- the point
+    # line itself stays 275.5, unchanged.
+    ud_row_run2 = _base_row(
+        platform="underdog", source_line_id="ud_close_me", line=275.5, prob_over=0.60,
+        over_payout_multiplier=1.55, under_payout_multiplier=2.0,
+        implied_prob_over=0.5634, implied_prob_under=0.4366,
+    )
+    estimates_run2 = pd.DataFrame([ud_row_run2])
     log_after_run2 = clv_logger.process_run_pickem(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
 
     # Run 3: prop is gone (empty estimates for this flag_id -- game locked).
@@ -161,14 +180,45 @@ def scenario_5_flag_closes_when_prop_disappears():
     estimates_run3 = pd.DataFrame([other_row])
     log_after_run3 = clv_logger.process_run_pickem(estimates_run3, log_after_run2, "2026-09-01T12:00:00Z")
 
-    closed = log_after_run3[log_after_run3["flag_id"] == "prizepicks|pp_close_me"].iloc[0]
+    closed = log_after_run3[log_after_run3["flag_id"] == "underdog|ud_close_me"].iloc[0]
     assert closed["status"] == "closed"
-    assert closed["closing_line"] == 277.0
+    assert closed["closing_line"] == 275.5, "the point line never moved -- only the implied price did"
     assert closed["closing_pulled_at"] == "2026-09-01T11:00:00Z"
-    assert closed["line_moved"] == True  # noqa: E712 -- 277.0 != 275.5
+    assert abs(closed["closing_implied_prob"] - 0.5634) < 1e-9
+    assert closed["line_moved"] == True, (  # noqa: E712
+        "line_moved must reflect the real IMPLIED-PROBABILITY move (0.50 -> "
+        "0.5634), not the unchanged point line -- this is Session 2.19's "
+        "second bug fix"
+    )
     expected_clv_edge = 0.60 - closed["closing_implied_prob"]
     assert abs(closed["clv_edge_at_close"] - expected_clv_edge) < 1e-9
     print("PASS: scenario_5_flag_closes_when_prop_disappears")
+
+
+def scenario_5b_prizepicks_clv_not_available_at_close():
+    """SESSION 2.19: PrizePicks' closing_implied_prob is always the flat,
+    constant PRIZEPICKS_ASSUMED_IMPLIED_PROB (0.5) -- the same number used
+    to compute first_flagged_edge -- so clv_edge_at_close would always be
+    mathematically guaranteed to equal first_flagged_edge (a tautology,
+    not real evidence). Locks in the fix: both clv_edge_at_close and
+    line_moved must be reported as not-available (None) for PrizePicks at
+    close, not a fabricated "real" number."""
+    pp_row_run1 = _base_row(source_line_id="pp_no_clv", line=275.5, prob_over=0.60)
+    estimates_run1 = pd.DataFrame([pp_row_run1])
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, _empty_pickem_log(), "2026-09-01T10:00:00Z")
+
+    # Prop disappears next run -- game locked.
+    other_row = _base_row(source_line_id="pp_unrelated", game_id="game_other")
+    estimates_run2 = pd.DataFrame([other_row])
+    log_after_run2 = clv_logger.process_run_pickem(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
+
+    closed = log_after_run2[log_after_run2["flag_id"] == "prizepicks|pp_no_clv"].iloc[0]
+    assert closed["status"] == "closed"
+    assert closed["closing_line"] == 275.5, "closing_line/closing_implied_prob are still recorded for reference"
+    assert pd.isna(closed["closing_implied_prob"]) is False  # the raw value is still logged...
+    assert closed["line_moved"] is None, "must be reported not-available, never a fabricated real/false value"
+    assert closed["clv_edge_at_close"] is None, "must be reported not-available -- this was the tautology bug"
+    print("PASS: scenario_5b_prizepicks_clv_not_available_at_close")
 
 
 def scenario_6_idempotent_same_file_twice():
@@ -379,6 +429,7 @@ def run_all():
     scenario_3_below_threshold_not_flagged()
     scenario_4_refresh_open_flag_line_moves()
     scenario_5_flag_closes_when_prop_disappears()
+    scenario_5b_prizepicks_clv_not_available_at_close()
     scenario_6_idempotent_same_file_twice()
     scenario_7_props_new_flag_with_consensus()
     scenario_8_props_new_flag_without_consensus()
@@ -388,7 +439,7 @@ def run_all():
     scenario_12_props_betmgm_selection_id_collision()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 12 scenarios passed.")
+    print("\nAll 13 scenarios passed.")
 
 
 if __name__ == "__main__":

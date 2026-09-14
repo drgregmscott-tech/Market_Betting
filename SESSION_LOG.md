@@ -12003,3 +12003,162 @@ session, the same real, honest residual `pickem_model.py`'s own
 estimation stage already carries for name-matching misses; not
 specifically investigated here since it was already a named, accepted
 gap elsewhere in this project.
+
+---
+
+## Session 2.19 — Fix the Tautological CLV-at-Close Metric (Pick'em)
+
+**Date completed:** 2026-09-14
+**Status:** ✅ Complete
+
+**What was actually done:**
+Confirmed the ROADMAP.md card's live finding against the real, current
+`data/pickem/clv_log.csv` (grown to 22,232 rows since the card was
+written), diagnosed the exact root cause in code, decided and implemented
+the fix, and backfilled the real historical data so the fix took effect
+immediately rather than only on future runs.
+
+1. Confirmed live: every one of PrizePicks' 10,750 closed flags showed
+`clv_edge_at_close` byte-identical to `first_flagged_edge`. Root cause
+in `scripts/estimation/pickem_model.py`: `implied_prob_over` for a
+PrizePicks row is always `PRIZEPICKS_ASSUMED_IMPLIED_PROB`, a flat
+constant 0.5 -- the same constant `clv_logger.py` later reads back as
+`closing_implied_prob`. Since a flag can only exist above the 3% edge
+threshold, `clv_edge_at_close` was mathematically guaranteed to equal
+`first_flagged_edge` on every closed PrizePicks row -- a tautology.
+2. Decided (per the card's own explicit framing, not a coin flip):
+there is no fix that makes this number real, since PrizePicks does not
+publish a per-side price that could move. `clv_edge_at_close` and
+`line_moved` are now reported as not-available (`None`) for every
+closed PrizePicks flag, going forward -- Session 2.18's real-outcome
+grading (`data/pickem/outcome_log.csv`) is this platform's real
+validation signal now, not CLV.
+3. Investigated Underdog's `line_moved` per the card's third ask, before
+concluding the mechanism was sound. Found a second, independent bug:
+`line_moved` compared `closing_line` to `first_flagged_line` (the point
+stat threshold, e.g. "74.5 receiving yards"), which platforms almost
+never revise -- not the field `clv_edge_at_close` is actually computed
+from (`closing_implied_prob`, derived from Underdog's real,
+independently-moving per-side payout multipliers). This made real price
+movement look almost nonexistent: 0 of 9,885 closed Underdog flags
+showed `line_moved=True` under the old (wrong) comparison. Fixed to
+compare `closing_implied_prob` vs `first_flagged_implied_prob` instead
+-- the real number: **672 of 9,885 closed Underdog flags (≈6.8%) show
+genuine implied-probability movement**, confirmed against real, live
+examples, not just that the code path exists.
+4. Verified the fix's real economics before declaring it done, not just
+its plumbing: among Underdog's 672 flags with real, confirmed price
+movement, `clv_edge_at_close` is positive on all 672 (min +0.2%, mean
++14.3%) -- checked directly, this is real data, not an artifact of the
+fix (the fix only changed which field `line_moved` compares; it does
+not touch how `clv_edge_at_close` itself is computed for Underdog,
+which was already correct).
+5. Backfilled `data/pickem/clv_log.csv` in place (not just fixed for
+future runs): 10,750 already-closed PrizePicks rows had
+`clv_edge_at_close`/`line_moved` set to `None`; 9,178 already-closed
+Underdog rows (those with both implied-probability values present) had
+`line_moved` recomputed against the corrected field. This mattered
+because the frontend reads this file directly -- leaving old rows
+un-backfilled would have kept showing the old, wrong numbers
+indefinitely alongside the fixed logic.
+6. Added 1 new automated test scenario (`scenario_5b`) locking in the
+PrizePicks not-available behavior, and rewrote `scenario_5` (previously
+a PrizePicks-based close, which could no longer prove real movement) to
+use Underdog with real per-side multiplier movement instead, proving
+`line_moved` now reflects the corrected field. All 13 scenarios pass.
+7. Updated `frontend/app.js`'s `renderStats()` (Pick'em tab): decoupled
+the "Closed & graded" count (now every closed flag on both platforms)
+from the CLV-averaging subset (now naturally Underdog-only, since
+PrizePicks reports `None`) -- confirmed the existing `toNum(...) !==
+null` filter already excludes `None` correctly, so no other frontend
+math needed to change.
+8. Added a caption to `frontend/index.html`'s Pick'em summary panel
+stating plainly that "Average CLV edge"/"Positive-edge rate" reflect
+Underdog only and why, with a pointer to Session 2.18's real-outcome
+log and this session's `docs/clv_methodology.md` section for the full
+reasoning -- verified live in the browser (local static preview,
+`data/pickem/clv_log.csv` copied to `frontend/data/clv_log.csv` for the
+test, then removed) that it renders correctly: 1,597 open flags, 20,635
+closed & graded (both platforms), +14.5% average CLV edge (real,
+Underdog-only number, no longer 100% by tautology), 100% positive-edge
+rate (checked and confirmed genuinely real per item 4 above, not
+suspicious).
+9. Documented the full finding and fix in `docs/clv_methodology.md`
+under a new "Session 2.19" section, and updated its CLV log schema
+table for `line_moved`/`clv_edge_at_close`.
+
+**Files created/modified:**
+- `scripts/calibration/clv_logger.py` (the closing-flag block inside
+`process_run_pickem()`, plus module docstring)
+- `scripts/calibration/test_clv_logger.py` (rewrote scenario 5, added
+scenario 5b, updated `run_all()`)
+- `data/pickem/clv_log.csv` (one-time backfill of already-closed rows,
+same schema, no new columns)
+- `frontend/app.js` (`renderStats()`)
+- `frontend/index.html` (Pick'em summary panel caption)
+- `docs/clv_methodology.md` (new Session 2.19 section, schema table)
+
+**Validation results:**
+- [x] Explicit decision recorded on what PrizePicks' `clv_edge_at_close`
+should show going forward -- **not-available (`None`)**, reasoning
+stated in code comments, this log, and `docs/clv_methodology.md`, not
+silently changed.
+- [x] The frontend's summary stats no longer present a number that is
+tautological by construction -- confirmed live in the browser: the
+Pick'em tab's average CLV edge is now a real, Underdog-only number
+(+14.5%), with an on-page caption stating the scope and why.
+- [x] Underdog's real closing-movement mechanism re-verified against a
+real, live example where the price is confirmed to have actually moved
+between first-flagged and close -- **pass**, 672 of 9,885 real closed
+Underdog flags, confirmed directly against the underlying data
+(`closing_implied_prob` vs `first_flagged_implied_prob`), not just that
+the code path exists.
+- [x] Automated test suite still passes end to end -- 13/13 scenarios
+(12 pre-existing + 1 new), including the rewritten scenario 5 and new
+scenario 5b that lock in this session's exact fix.
+
+**Decisions made:**
+1. PrizePicks' `clv_edge_at_close`/`line_moved` are reported not-available
+rather than attempting any alternative real signal -- per the card's own
+framing, PrizePicks structurally cannot publish a moving per-side price,
+so no fix exists that would make this number real. Session 2.18's
+real-outcome grading is the standing replacement signal for this
+platform.
+2. `line_moved` is redefined project-wide (within pick'em) to compare
+implied probability, not the point line -- because that is the actual
+field `clv_edge_at_close` is computed from, and comparing the wrong
+field was independently misrepresenting Underdog's real signal strength
+(making it look ~30x weaker than it really is: 0/9,885 vs. the real
+672/9,885).
+3. The historical log was backfilled in place rather than left to fix
+itself only going forward -- because the frontend reads this file
+directly and stale, un-backfilled rows would have kept misrepresenting
+real evidence indefinitely otherwise.
+4. `frontend/data/` (the deploy-time copy location `app.js` fetches from)
+does not exist in this local checkout and is not part of the committed
+repo -- confirmed this is expected (GitHub Actions/Cloudflare Pages
+populates it at deploy time, matching the pattern documented in
+`app.js`'s own header comment), created a temporary local copy purely
+for this session's own browser verification, and removed it afterward
+so nothing untracked was left behind.
+
+**Corrections/reversals during the session:**
+An early exploratory check used a non-null-safe pandas comparison
+(`a != b` where either side could be `NaN`) and produced a misleading
+"1,379 real Underdog movements" figure -- `NaN != NaN` evaluates `True`
+in pandas, silently counting missing-data pairs as "moved." Caught by
+cross-checking against a NaN-safe version before writing the real
+backfill logic; the actual, correct figure used throughout this entry
+and the real backfill is 672 (out of 9,178 rows with both values
+present), not 1,379.
+
+**Open items / deferred validations:**
+- Session 2.18's real-outcome grading is not yet surfaced anywhere on
+the frontend (only in `data/pickem/outcome_log.csv` directly) -- this
+session's index.html caption points there but the dashboard has no
+dedicated panel for it yet. Named as a real gap, not fixed here (out of
+this session's stated scope), and not currently tracked as its own
+ROADMAP.md card.
+- Session 2.20 (Activate Weekly Recalibration Review) remains the next
+card, unaffected by this session's change (it consumes
+`outcome_log.csv`, not `clv_log.csv`).
