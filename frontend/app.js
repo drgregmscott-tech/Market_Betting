@@ -10,6 +10,11 @@
 //      session. A copy of data/weather/clv_log.csv.
 //   4. data/politics_clv_log.csv       — Track 4 (down-ballot politics),
 //      Session 5.6. A copy of data/politics/clv_log.csv.
+//   5. data/outcome_log.csv            — Track 1 (pick'em) real-outcome
+//      grading, Session 2.18/2.20. A copy of data/pickem/outcome_log.csv.
+//   6. data/review_log.csv             — Track 1 (pick'em) weekly
+//      recalibration review history, Session 2.20. A copy of
+//      data/pickem/review_log.csv.
 //
 //      The Cloudflare Pages build command must be updated to copy this
 //      third file too, same one-time dashboard edit Sessions 3.5/5.6
@@ -31,6 +36,15 @@ const ARB_DATA_URL = "data/arbitrage_flags_latest.csv";
 const WEATHER_DATA_URL = "data/weather_clv_log.csv";
 const POLITICS_DATA_URL = "data/politics_clv_log.csv";
 const PROPS_DATA_URL = "data/props_clv_log.csv";
+// Session 2.20 -- real-outcome grading (Session 2.18) and its weekly
+// recalibration review (Session 2.5, activated Session 2.20). Both are
+// pick'em-specific, same no-track-prefix naming pickem's own clv_log.csv
+// already uses. Loaded independently of DATA_URL: a missing/old copy of
+// either file (e.g. before the Cloudflare Pages build command is updated
+// to copy them -- see this session's handoff notes) degrades this one
+// panel, not the rest of the Pick'em tab.
+const OUTCOME_DATA_URL = "data/outcome_log.csv";
+const REVIEW_DATA_URL = "data/review_log.csv";
 
 // ---------------------------------------------------------------------
 // Sizing constants -- ported exactly from scripts/sizing/sizing_engine.py.
@@ -752,6 +766,75 @@ async function initPickem() {
     const el = document.getElementById("loadError");
     if (el) el.hidden = false;
     console.error("Market_Betting frontend: failed to load pick'em data.", err);
+  }
+}
+
+// =======================================================================
+// Real-outcome grading (Session 2.18) & weekly recalibration review
+// (Session 2.5, activated Session 2.20)
+//
+// outcome_log.csv is NFL-only real box-score grading -- every row here is
+// a graded leg (win/loss/push), independent of clv_log.csv's open/closed
+// CLV lifecycle. The two reference numbers (breakeven win rate, full
+// sample size) are fixed constants from sample_size_methodology.md,
+// mirrored here exactly as weekly_review.py mirrors them -- not
+// recomputed client-side. review_log.csv is the durable history of
+// weekly_review.py's own runs; only the most recent row is shown, since
+// this panel reports the CURRENT recalibration read, not a full history.
+// =======================================================================
+
+const BREAKEVEN_WIN_RATE = 0.5774;
+const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
+
+function renderOutcomeStats(rows) {
+  const graded = rows.filter((r) => r.result === "win" || r.result === "loss");
+  const wins = graded.filter((r) => r.result === "win").length;
+  const winRate = graded.length ? wins / graded.length : null;
+  const pctOfFullSample = graded.length ? (100 * graded.length) / FULL_SAMPLE_SIZE_THRESHOLD : null;
+
+  setText("outcomeStatGraded", String(graded.length));
+  setText("outcomeStatWinRate", winRate === null ? "—" : (winRate * 100).toFixed(1) + "%");
+  setText("outcomeStatBreakeven", (BREAKEVEN_WIN_RATE * 100).toFixed(2) + "%");
+  setText("outcomeStatSample", pctOfFullSample === null ? "—" : pctOfFullSample.toFixed(1) + "%");
+
+  const winRateEl = document.getElementById("outcomeStatWinRate");
+  if (winRateEl && winRate !== null) {
+    winRateEl.className = "stat-value " + (winRate >= BREAKEVEN_WIN_RATE ? "pos" : "neg");
+  }
+}
+
+function renderReviewSummary(reviewRows) {
+  const el = document.getElementById("reviewSummary");
+  if (!el) return;
+  if (!reviewRows.length) {
+    el.textContent = "No weekly recalibration review has run yet.";
+    return;
+  }
+  const latest = reviewRows[reviewRows.length - 1];
+  const runAt = latest.run_at || "unknown date";
+  el.innerHTML =
+    `Latest weekly review (${escapeHtml(runAt)}): <strong>${escapeHtml(latest.recommendation || "no recommendation recorded")}</strong> ` +
+    `Full history in <code>data/pickem/review_log.csv</code>; methodology in <code>docs/clv_methodology.md</code> ` +
+    `and <code>ROADMAP.md</code>'s Session 2.20 card.`;
+}
+
+async function initOutcomeReview() {
+  try {
+    const res = await fetch(OUTCOME_DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = parseCSV(await res.text());
+    renderOutcomeStats(rows);
+  } catch (err) {
+    console.error("Market_Betting frontend: failed to load real-outcome grading data.", err);
+  }
+
+  try {
+    const res = await fetch(REVIEW_DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = parseCSV(await res.text());
+    renderReviewSummary(rows);
+  } catch (err) {
+    console.error("Market_Betting frontend: failed to load weekly review log.", err);
   }
 }
 
@@ -1537,7 +1620,7 @@ async function init() {
 
   // All tracks load independently and in parallel: a failure or an empty
   // result in one must never block or hide another track's real data.
-  await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
+  await Promise.allSettled([initPickem(), initOutcomeReview(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
 
   renderOverview();
 

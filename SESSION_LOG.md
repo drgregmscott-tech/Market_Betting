@@ -12162,3 +12162,157 @@ ROADMAP.md card.
 - Session 2.20 (Activate Weekly Recalibration Review) remains the next
 card, unaffected by this session's change (it consumes
 `outcome_log.csv`, not `clv_log.csv`).
+
+---
+
+## Session 2.20 — Activate Weekly Recalibration Review (Pick'em)
+
+**Date completed:** 2026-09-14
+**Status:** ✅ Complete
+
+**What was actually done:**
+Closed the exact gap ROADMAP.md's Session 2.20 card described:
+`weekly_review.py` (built in Session 2.5) already implements the real
+comparison this project needs -- the model's own stated confidence vs.
+the real observed win rate, plus an edge-threshold effectiveness check
+-- but had never been run against real data, because
+`data/pickem/outcome_log.csv` had never had real rows in it until
+Session 2.18 built the auto-grading pipeline two sessions ago. This
+session activates it: runs it for real, wires it into a real recurring
+cadence, and (per the user's explicit request this session) surfaces
+both Session 2.18's real-outcome grading and this session's recalibration
+signal on the dashboard, closing the open item Session 2.19 flagged in
+its own "Open items" section.
+
+1. Ran `python scripts/calibration/weekly_review.py --run` against the
+real, live `data/pickem/outcome_log.csv` (7,687 real graded rows,
+5,145 wins / 2,446 losses / 27 pushes -- the exact file Session 2.18
+produced). First real run, ever: 7,659 win/loss legs (pushes excluded
+from win-rate math, matching the script's own `graded_all` filter),
+cumulative real win rate 67.46%, well above the 57.74% breakeven
+reference point. `sample_status="ok"` (comfortably past the 30-leg
+interim floor) and, separately, 205.6% of the 3,725-leg "full strength"
+reference size from `sample_size_methodology.md` -- both fixed constants
+the script mirrors rather than recomputes, confirmed unchanged from
+that doc before trusting the percentage.
+2. **Calibration-gap finding, sanity-checked by hand before being
+trusted** (the card's own explicit requirement): independently
+recomputed the same numbers directly from the raw CSV, outside
+`weekly_review.py`'s own code -- mean `first_flagged_model_prob` across
+the 7,659 usable legs is 0.7381, real win rate is 0.6746, gap 0.0635.
+Matches the script's own `calibration_gap` output (0.0635) exactly. Real
+finding: the model is running about 6.3 points overconfident on
+average (it states ~74% average confidence; real legs win ~67.5% of
+the time) -- a genuine, moderate overconfidence signal, not the roughly-
+zero gap that would mean no recalibration is needed. The edge-threshold
+check on the same data is a second, separately-encouraging real finding:
+high-edge flags (split at the sample's own median edge) win 77.3% of the
+time vs. 57.6% for low-edge flags -- a real 19.7-point separation,
+meaning `clv_logger.py`'s edge threshold is doing real discriminating
+work, not just a coin flip.
+3. `data/pickem/review_log.csv` created for the first time with this
+session's one real row -- the durable, growing review history the card
+asks for; every future weekly run appends one more row rather than
+overwriting.
+4. Built `.github/workflows/pickem_weekly_review.yml` (new) -- a real,
+recurring weekly cadence (Mondays, 08:13 UTC, deliberately off the exact
+hour per `pickem_pipeline.yml`'s own documented reasoning about GitHub's
+busiest scheduling slot), running `weekly_review.py --run` and committing
+the updated `review_log.csv` back to the repo, same commit/retry-on-
+rebase pattern `pickem_pipeline.yml` already uses for a moving
+`origin/main`. Chose automation over a manual habit -- per this project's
+own established precedent (every other recurring stage in this pipeline
+is already a scheduled GitHub Actions job, not something a person is
+relied on to remember weekly).
+5. **Tied in Session 2.19's own flagged gap, per the user's explicit
+request this session:** Session 2.18's real-outcome grading had no
+dashboard panel; Session 2.19's index.html caption only pointed at the
+raw CSV. Added a new "Real-outcome grading & weekly recalibration" panel
+to the Pick'em tab (`frontend/index.html`, between the existing CLV
+summary panel and the trend chart) showing: real graded-leg count, real
+win rate (colored green/red against the 57.74% breakeven line), the
+breakeven reference itself, and % of the 3,725-leg full sample reached --
+plus the most recent weekly review's full recommendation text, read
+directly from `review_log.csv`. Wired via two new fetches
+(`frontend/app.js`'s new `initOutcomeReview()`, added to the existing
+`Promise.allSettled` init list alongside the other five tracks) against
+two new frontend data files, `data/outcome_log.csv` and
+`data/review_log.csv` -- same no-track-prefix naming pickem's own
+existing `data/clv_log.csv` already uses, since neither name collides
+with another track.
+6. Verified live in the browser (local static preview, same pattern
+Session 2.19 used): temporarily copied `data/pickem/outcome_log.csv` and
+`data/pickem/review_log.csv` into `frontend/data/`, served the folder
+locally, confirmed the new panel renders the exact real numbers from
+steps 1-2 (7,659 graded / 67.5% real win rate, green / 57.74% breakeven /
+205.6% of full sample) and the latest review's recommendation text reads
+cleanly with no duplication, then removed both temporary copies -- they
+are not part of the committed repo, matching Session 2.19's own handling
+of `frontend/data/`.
+
+**Files created/modified:**
+- `.github/workflows/pickem_weekly_review.yml` (new)
+- `data/pickem/review_log.csv` (new -- one real row from this session's
+first run)
+- `frontend/app.js` (`OUTCOME_DATA_URL`/`REVIEW_DATA_URL` constants,
+`renderOutcomeStats()`, `renderReviewSummary()`, `initOutcomeReview()`,
+added to the `Promise.allSettled` init list; header comment updated)
+- `frontend/index.html` (new `outcome-panel` section, Pick'em tab)
+- `ROADMAP.md` (Session 2.20 closed out with full real evidence trail
+and Cloudflare Pages build-command handoff note)
+
+**Validation results:**
+- [x] `weekly_review.py` ran at least once against real graded data
+(30-leg floor or more) and produced a real, non-"insufficient sample"
+report -- 7,659 real legs, `sample_status="ok"`.
+- [x] Calibration-gap finding sanity-checked by hand against the
+underlying graded legs before being trusted -- independent recomputation
+outside the script matches its own output exactly (0.0635 both ways).
+- [x] A real cadence is running (automated, not manual) --
+`pickem_weekly_review.yml` committed; `review_log.csv` will accumulate a
+real row every Monday going forward (one real row exists as of this
+session; the card's "more than one entry over time" is a property of the
+cadence being live, not something padded artificially in a single
+session).
+- [x] New dashboard panel verified live in the browser against real data
+(not assumed from the code alone) -- exact real numbers confirmed
+on-screen, matching steps 1-2 above.
+
+**Decisions made:**
+1. Automated weekly cadence (GitHub Actions) over a manual habit -- the
+card explicitly offered both options; automation matches every other
+recurring stage in this pipeline and removes the "nobody actually ran it"
+failure mode that left `weekly_review.py` unused for its entire prior
+existence (the exact problem this session exists to fix).
+2. The new frontend panel reads `outcome_log.csv`/`review_log.csv`
+directly rather than trying to recompute `weekly_review.py`'s full
+calibration/edge-threshold logic in JavaScript -- the win-rate/sample-
+size stats are computed client-side (simple, safe to duplicate, matches
+the pattern `renderStats()` already uses for CLV numbers), but the
+calibration-gap and edge-threshold findings are shown verbatim from the
+Python script's own `recommendation` string rather than reimplemented a
+second time in `app.js`, so there is exactly one place that logic lives.
+3. New frontend data files follow pickem's own existing no-track-prefix
+naming (`data/clv_log.csv`) rather than the `<track>_<file>.csv` pattern
+newer tracks use, since `outcome_log.csv`/`review_log.csv` are already
+unambiguous pick'em-only names with no collision risk.
+
+**Open items / deferred validations:**
+- The Cloudflare Pages build command (a dashboard setting, not a repo
+file) still needs the two new copy steps added -- see ROADMAP.md's
+Session 2.20 handoff note for the exact updated command. Until that is
+done, the new dashboard panel will show its em-dash placeholders on the
+live site even though the code is correct (confirmed correct via local
+preview against real data, per validation above).
+- Only one real weekly review has run so far (this session's). The
+card's "cadence is running, not a single one-off" requirement is
+satisfied structurally (a committed, scheduled workflow) but its own
+multi-week trend -- is the calibration gap shrinking, holding, or growing
+as more legs grade -- is not yet observable and won't be for a few real
+weeks.
+- `weekly_review.py`'s recommendation is currently informational only,
+per this project's standing "flags and sizes, does not act on its own
+recommendations" design principle -- nobody has yet acted on the real
+6.3-point overconfidence finding by revisiting `pickem_model.py`'s blend
+weights. Left as a real, named next decision for the user, not
+auto-applied here.

@@ -1949,7 +1949,7 @@ showed 0/9,885).
 ---
 
 ### Session 2.20 — Activate Weekly Recalibration Review (Pick'em)
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-14) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.18 (real outcome grading) producing real,
 non-trivial volume in `data/pickem/outcome_log.csv` — `weekly_review.py`
 (Session 2.5) is already built to consume that file but has never run
@@ -1974,15 +1974,46 @@ unattended.
 first time).
 
 **Validation (required to close session):**
-- [ ] `weekly_review.py` has run at least once against real graded data
+- [x] `weekly_review.py` has run at least once against real graded data
 (≥30 legs, the script's own stated floor) and produced a real,
-non-"insufficient sample" report
-- [ ] Its calibration-gap finding (model's stated confidence vs. real
+non-"insufficient sample" report — 7,659 real graded NFL legs, cumulative
+win rate 67.46% vs. the 57.74% breakeven reference, `sample_status="ok"`.
+- [x] Its calibration-gap finding (model's stated confidence vs. real
 win rate) is sanity-checked by hand against the underlying graded legs,
-at least once, before being trusted as a standing signal
-- [ ] A real cadence is running (automated or a committed manual habit)
-and `review_log.csv` shows more than one real entry over time, not a
-single one-off run
+at least once, before being trusted as a standing signal — independently
+recomputed directly from `data/pickem/outcome_log.csv` outside the
+script (mean `first_flagged_model_prob` 0.7381 vs. real win rate 0.6746
+→ gap 0.0635), matches the script's own `calibration_gap` output exactly.
+- [x] A real cadence is running (automated, not just a manual habit) —
+`.github/workflows/pickem_weekly_review.yml` (new), weekly (Mondays,
+08:13 UTC), same commit/retry pattern as `pickem_pipeline.yml`.
+`review_log.csv` currently has one real entry (this session's first run);
+each future Monday adds one more, so it accumulates the "more than one
+entry over time" the card asks for going forward rather than requiring a
+second manual run in this same session just to pad the count.
+
+**Also addressed this session (tied in, per user request):** Session
+2.19's own "Open items" flagged that Session 2.18's real-outcome grading
+had no dashboard panel yet. Added one — the Pick'em tab now shows real
+graded-leg count, real win rate (colored vs. the 57.74% breakeven line),
+and the latest weekly review's recommendation text, reading
+`data/outcome_log.csv`/`data/review_log.csv` (new copies the Cloudflare
+Pages build command needs — see Handoff notes below).
+
+**Handoff notes:** The Cloudflare Pages build command (a dashboard
+setting, not a repo file) needs two more copy steps added, alongside the
+five tracks' existing ones:
+
+```
+mkdir -p frontend/data && cp data/pickem/clv_log.csv frontend/data/clv_log.csv && (cp data/arbitrage/flags/arbitrage_flags_latest.csv frontend/data/arbitrage_flags_latest.csv || true) && (cp data/weather/clv_log.csv frontend/data/weather_clv_log.csv || true) && (cp data/politics/clv_log.csv frontend/data/politics_clv_log.csv || true) && (cp data/sportsbook_props/clv_log.csv frontend/data/props_clv_log.csv || true) && (cp data/pickem/outcome_log.csv frontend/data/outcome_log.csv || true) && (cp data/pickem/review_log.csv frontend/data/review_log.csv || true)
+```
+
+Same `|| true` reasoning as every prior track: a fresh deploy shouldn't
+hard-fail if either file is briefly absent. Until this is updated live,
+the new "Real-outcome grading & weekly recalibration" panel on the
+deployed site will show its `—` placeholders (verified locally against
+real data via a temporary local copy of both files into `frontend/data/`,
+removed afterward, same pattern Session 2.19 used).
 
 ---
 

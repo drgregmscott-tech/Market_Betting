@@ -1,0 +1,104 @@
+name: Pick'em Weekly Recalibration Review
+
+# WHAT THIS FILE IS
+# ------------------
+# A GitHub Actions workflow (see pickem_pipeline.yml's own header comment
+# for what that term means) that activates Session 2.5's
+# scripts/calibration/weekly_review.py on a real, recurring cadence
+# (Session 2.20). weekly_review.py already implements the comparison this
+# project needs (model's stated average confidence vs. real observed win
+# rate, plus an edge-threshold effectiveness check) against
+# data/pickem/outcome_log.csv (Session 2.18's real auto-graded rows) -- it
+# was simply never being run. This workflow is the activation, not a new
+# build.
+#
+# WHAT IT DOES, IN ORDER
+# -----------------------
+# 1. Checks out the repo and installs dependencies, same pattern as
+#    pickem_pipeline.yml.
+# 2. Runs `python scripts/calibration/weekly_review.py --run`, which reads
+#    data/pickem/outcome_log.csv, appends one summary row to
+#    data/pickem/review_log.csv, and prints its recommendation to the log.
+# 3. Commits and pushes the updated review_log.csv back to this repo, so
+#    the review history is a real, durable, growing record -- same commit
+#    pattern as pickem_pipeline.yml (including its retry/rebase handling
+#    for a moving origin/main), scoped to only this file's own output path.
+
+on:
+  schedule:
+    # Weekly, Monday 08:13 UTC -- deliberately not the exact top of the
+    # hour, for the same reason pickem_pipeline.yml's cron avoids ":00"
+    # (GitHub's documented busiest-slot warning).
+    - cron: "13 8 * * 1"
+  workflow_dispatch: {}
+    # Manual "Run workflow" button on GitHub's Actions tab, for testing
+    # without waiting for the next scheduled Monday.
+
+concurrency:
+  group: pickem-weekly-review
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run-weekly-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly recalibration review
+        run: python scripts/calibration/weekly_review.py --run
+
+      - name: Commit and push updated review log
+        run: |
+          git config user.name "pickem-weekly-review-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/pickem/review_log.csv
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Weekly recalibration review $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+
+          push_ok=false
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              push_ok=true
+              break
+            fi
+            echo "Push attempt $attempt/5 was rejected -- fetching and rebasing onto origin/main before retrying."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "::error::Rebase onto origin/main hit a real conflict -- stopping rather than guessing at a resolution. Manual intervention needed." >&2
+              git rebase --abort
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+
+          if [ "$push_ok" != "true" ]; then
+            echo "::error::Failed to push after 5 retries against a moving origin/main." >&2
+            exit 1
+          fi
+
+      - name: Upload log as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-review-log
+          path: logs/weekly_review.log
+          retention-days: 30
+          if-no-files-found: ignore
