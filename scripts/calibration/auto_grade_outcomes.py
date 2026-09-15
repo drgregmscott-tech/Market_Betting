@@ -62,13 +62,26 @@ sort_key-based pre-game estimation logic, which is unchanged). MLB's
 adapter therefore matches a flag straight to its real game_date, with no
 external schedule file and no extra API calls.
 
+SESSION 2.27 -- SOCCER/EPL ADDED, ONE SHARED ADAPTER FOR BOTH
+-------------------------------------------------------------------
+Confirming Session 2.26's generalization actually paid off: adding
+soccer/EPL took one new column per plug-in (`game_date_utc`, threaded
+through from data both sources already return -- ESPN's scoreboard
+`date`, FPL's `kickoff_time`) and one new find_game_row function in this
+file, not a near-duplicate script. Soccer (ESPN, 5 leagues) and EPL (FPL)
+share one function, find_soccer_or_epl_game_row, because both real
+sources report only a raw UTC instant rather than an already-localized
+civil date -- see that function's own docstring for why this reuses the
+NFL/MLB pipeline's existing Eastern-conversion helper rather than adding
+a third per-league timezone table.
+
 WHAT THIS DOES NOT DO (stated gap, not a silent one)
 -------------------------------------------------------
 - Grades only sports with a registered adapter in ADAPTERS below: NFL,
-  MLB, as of this session. Soccer/EPL, CFB, and tennis are explicitly
-  left ungraded until Sessions 2.27-2.29 register their own adapters --
-  each of those sessions' whole job should be "add one GradingAdapter and
-  its find_game_row logic," not touching this file's shared logic again.
+  MLB, soccer/EPL, as of this session. CFB and tennis are explicitly left
+  ungraded until Sessions 2.28-2.29 register their own adapters -- each of
+  those sessions' whole job should be "add one GradingAdapter and its
+  find_game_row logic," not touching this file's shared logic again.
   NBA has an estimation plug-in but is not scheduled for grading yet
   (ROADMAP.md Session 2.26 card: NBA's season hasn't started, nothing
   real to validate against right now). Manual `outcome_tracker.py
@@ -114,8 +127,10 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "estimation"))
 from pickem_model import build_name_lookup, normalize_name  # noqa: E402
 from pickem_sport_plugins import SportPlugin  # noqa: E402
+from pickem_sport_plugins.epl import EPL_PLUGIN  # noqa: E402
 from pickem_sport_plugins.mlb import MLB_PLUGIN  # noqa: E402
 from pickem_sport_plugins.nfl import NFL_PLUGIN  # noqa: E402
+from pickem_sport_plugins.soccer import SOCCER_PLUGIN  # noqa: E402
 from season_utils import current_pickem_season  # noqa: E402
 
 # Reuse outcome_tracker.py's existing log-loading/schema logic directly --
@@ -269,6 +284,43 @@ def find_mlb_game_row(
     return match.iloc[0]
 
 
+def find_soccer_or_epl_game_row(
+    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date
+) -> Optional[pd.Series]:
+    """Session 2.27: unlike MLB Stats API's gameLog (already a local civil
+    date) or nflverse's schedule file (already the game's own Eastern
+    `gameday`), neither ESPN's soccer scoreboard `date` nor FPL's
+    `kickoff_time` carries a "local calendar date" concept at all -- both
+    are a raw UTC instant on a match played somewhere in Europe/North
+    America, not a date the source itself has already localized (see
+    soccer.py/epl.py's own docstrings for the real field values). Rather
+    than invent a second, competition-specific "local" timezone per league
+    (a real can of worms -- La Liga is Madrid time, MLS is US Eastern/
+    Central/Pacific depending on the home team, EPL is UK time), this
+    reuses the exact same UTC-to-America/New_York conversion
+    (`game_local_date`) already applied to `flag_date` on the other side
+    of this join. Checked live (2026-09-15): every real soccer/EPL
+    kickoff time falls within 11:00-22:00 UK/CET local, i.e. comfortably
+    after 04:00 UTC, so converting to Eastern (UTC-4/-5) never rolls the
+    calendar date backward across a match's own kickoff -- this join is
+    safe in practice, not just consistent in theory. `context` is unused,
+    same as MLB's adapter."""
+    player_rows = stats_df[stats_df["player_id"] == player_id]
+    if player_rows.empty or "game_date_utc" not in player_rows.columns:
+        return None
+    flag_date_str = flag_date.isoformat()
+    for _, prow in player_rows.iterrows():
+        raw = prow.get("game_date_utc")
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        try:
+            if game_local_date(raw).isoformat() == flag_date_str:
+                return prow
+        except ValueError:
+            continue
+    return None
+
+
 @dataclass
 class GradingAdapter:
     """The one real per-sport variable in auto-grading: how to find a
@@ -290,11 +342,17 @@ NFL_ADAPTER = GradingAdapter(
 MLB_ADAPTER = GradingAdapter(
     plugin=MLB_PLUGIN, load_context=lambda: None, find_game_row=find_mlb_game_row
 )
+SOCCER_ADAPTER = GradingAdapter(
+    plugin=SOCCER_PLUGIN, load_context=lambda: None, find_game_row=find_soccer_or_epl_game_row
+)
+EPL_ADAPTER = GradingAdapter(
+    plugin=EPL_PLUGIN, load_context=lambda: None, find_game_row=find_soccer_or_epl_game_row
+)
 
-# Session 2.27-2.29 each add one adapter here (soccer/EPL, CFB, tennis) --
-# that should be the only change this file needs per new sport, per the
-# module docstring's whole point in generalizing this.
-ADAPTERS: list[GradingAdapter] = [NFL_ADAPTER, MLB_ADAPTER]
+# Session 2.28-2.29 each add one adapter here (CFB, tennis) -- that should
+# be the only change this file needs per new sport, per the module
+# docstring's whole point in generalizing this.
+ADAPTERS: list[GradingAdapter] = [NFL_ADAPTER, MLB_ADAPTER, SOCCER_ADAPTER, EPL_ADAPTER]
 
 
 # ---------------------------------------------------------------------------

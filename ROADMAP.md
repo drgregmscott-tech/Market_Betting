@@ -2438,20 +2438,58 @@ recent-form blend doesn't have), present in every sport tested, not a
 single sport's variance parameter.
 
 ### Session 2.27 — Soccer/EPL Real-Outcome Auto-Grading
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-15) — see SESSION_LOG.md for full detail.
 **Prerequisites:** Session 2.26 (generalized auto-grader + `VALIDATED_SPORTS`
 frontend pattern).
 
-**What gets built:** Adds a soccer/EPL adapter to the generalized grader
-from 2.26 (ESPN public API / Fantasy Premier League API — same sources
-`pickem_sport_plugins/soccer.py` and `epl.py` already use for estimation),
-and adds `"SOCCER"`/`"EPL"` to the frontend's `VALIDATED_SPORTS` set once
-live-verified.
+**What got built:** One shared `GradingAdapter` (`find_soccer_or_epl_game_row`)
+registered for both `pickem_sport_plugins/soccer.py` (ESPN, 5 leagues) and
+`epl.py` (FPL) in `auto_grade_outcomes.py` — confirming Session 2.26's
+generalization actually paid off, since neither source needed a new
+per-sport script, just one new `game_date_utc` column threaded through
+each plug-in's existing fetch (ESPN's scoreboard `date`, FPL's
+`kickoff_time` — both a raw UTC instant, unlike MLB Stats API's own
+already-local `game_date`) and one new join function reusing the existing
+Eastern-conversion helper already applied to every platform's
+`game_start_time`. `"SOCCER"`/`"FIFA"`/`"EPL"` (the three distinct real
+`sport` label strings PrizePicks/Underdog actually use for soccer — see
+`pickem_sport_plugins/soccer.py`'s docstring) added to the frontend's
+`VALIDATED_SPORTS` set.
 
 **Validation (required to close session):**
-- [ ] Real sample of closed soccer/EPL flags graded and spot-checked by hand.
-- [ ] Frontend reflects soccer/EPL as validated with no further frontend
-code changes beyond the `VALIDATED_SPORTS` entry.
+- [x] `auto_grade_outcomes.py --run --dry-run` against real live data grades
+552 of 574 real closed soccer/FIFA candidates (467 graded; 76 no_game_match
+— real leagues ESPN's 5 covered codes don't reach, e.g. Saudi/Portuguese
+leagues, and one real MLS scheduling gap, both stated gaps not bugs) and
+all 22 of 22 real closed EPL candidates; spot-checked by hand against live
+ESPN (Mile Svilar, AS Roma @ Torino 2026-09-14, real saves=3 confirmed
+directly via the event summary endpoint) and live FPL (Alisson Becker,
+gameweek 4 kickoff 2026-09-12T14:00Z, real saves=3 confirmed directly via
+element-summary) responses.
+- [x] Ran for real (`--run`) — `data/pickem/outcome_log.csv` now carries
+489 new real graded soccer/FIFA/EPL legs.
+- [x] Frontend reflects soccer/EPL as validated with no further frontend
+code changes beyond the `VALIDATED_SPORTS` entry (verified live in the
+browser: FIFA/SOCCER/EPL show "Validated" in the per-sport table and lose
+the Unvalidated badge, sport-filter dropdown labels update automatically).
+- [x] Existing test suite still passes (69/69, after updating one test's
+call site for `_fetch_event_player_rows`'s new `event_date_utc` parameter).
+
+**Underdog cross-sport check (per Session 2.31 follow-up):** the MLB/NFL
+Underdog pricing gap does **not** replicate in soccer on this real, if
+still modest, sample — Underdog ("FIFA" label) 54.7% real win rate
+(n=254) vs. PrizePicks ("SOCCER") 56.6% (n=198), essentially the same
+number, not the ~10-20pt platform gap MLB/NFL showed. More importantly,
+bucketing Underdog soccer by stated edge shows win rate *rising* with
+edge (0-5%: 44.0%, 5-15%: 53.1%, 15-30%: 52.5%, 30%+: 66.0%) — the
+opposite of Session 2.31's MLB/NFL inversion, not just a smaller version
+of it. EPL has no Underdog flags graded yet (all 21 real closed EPL legs
+are PrizePicks) so this specific comparison isn't possible for EPL yet.
+Both soccer platforms sit below the 57.74% breakeven in aggregate, same
+as MLB/NFL, but for the ordinary reason (small graded sample, real
+variance) rather than the Session 2.31 mechanism — worth re-checking once
+more soccer legs grade in, not yet a second confirmed instance of the
+Underdog-specific problem.
 
 ### Session 2.28 — CFB Real-Outcome Auto-Grading
 **Status:** Not started

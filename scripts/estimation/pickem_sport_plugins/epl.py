@@ -147,6 +147,13 @@ def fetch_epl_season_stats(season: int) -> pd.DataFrame:
                 "player_id": str(player_id),
                 "player_display_name": full_name,
                 "sort_key": gw.get("round"),
+                # Session 2.27: FPL's own per-gameweek history row already
+                # carries the real UTC kickoff instant (`kickoff_time`,
+                # confirmed live 2026-09-15, e.g. "2026-08-21T19:00:00Z") --
+                # carried through as `game_date_utc` so auto_grade_outcomes.py
+                # can match a flag to its real match, same purpose as
+                # soccer.py's identically-named column added this session.
+                "game_date_utc": gw.get("kickoff_time"),
                 "goals_scored": gw.get("goals_scored", 0) or 0,
                 "assists": gw.get("assists", 0) or 0,
                 "tackles": gw.get("tackles", 0) or 0,

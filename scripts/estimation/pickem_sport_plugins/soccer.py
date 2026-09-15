@@ -270,7 +270,9 @@ def _fetch_completed_events(league_code: str, season: int) -> list[tuple[str, st
     return sorted(seen.items(), key=lambda pair: pair[1])
 
 
-def _fetch_event_player_rows(league_code: str, event_id: str, sort_key: int) -> list[dict]:
+def _fetch_event_player_rows(
+    league_code: str, event_id: str, sort_key: int, event_date_utc: str
+) -> list[dict]:
     """HOTFIX (2026-09-12): the real GitHub Actions pipeline failed
     2026-09-12 on an unhandled `requests.exceptions.ReadTimeout` from this
     exact call (one match, out of ~470 real completed matches walked this
@@ -281,7 +283,19 @@ def _fetch_event_player_rows(league_code: str, event_id: str, sort_key: int) -> 
     logs a warning and returns no rows for this one match rather than
     raising -- the same "a real, stated gap is fine; a silent crash across
     every other sport is not" standard this project already applies to
-    unmapped stat types, applied here to a network fault instead."""
+    unmapped stat types, applied here to a network fault instead.
+
+    Session 2.27: `event_date_utc` (the real UTC kickoff instant already
+    returned by _fetch_completed_events, previously discarded after being
+    used only to sort/dedupe events) is now carried through into every
+    stat row as `game_date_utc`, so auto_grade_outcomes.py's soccer/EPL
+    grading adapter can match a flag to its real match with no second
+    fetch -- same purpose as MLB's `game_date` column (Session 2.26), but
+    unlike MLB Stats API's gameLog (which already reports a local civil
+    date), ESPN's scoreboard `date` field is a raw UTC instant, so the
+    conversion to a comparable calendar date happens once, consistently,
+    on the grading side (see auto_grade_outcomes.py's find_soccer_game_row
+    docstring)."""
     url = f"{ESPN_BASE}/{league_code}/summary?event={event_id}"
     try:
         payload = get_json_with_retries(url, timeout=20)
@@ -303,6 +317,7 @@ def _fetch_event_player_rows(league_code: str, event_id: str, sort_key: int) -> 
                 "player_id": str(player_id),
                 "player_display_name": full_name,
                 "sort_key": sort_key,
+                "game_date_utc": event_date_utc,
                 "starter": bool(player.get("starter")),
                 "totalGoals": stat_values.get("totalGoals", 0) or 0,
                 "goalAssists": stat_values.get("goalAssists", 0) or 0,
@@ -328,8 +343,8 @@ def fetch_soccer_espn_season_stats(season: int) -> pd.DataFrame:
     rows: list[dict] = []
     for league_code in LEAGUE_SEASON_START_MONTH:
         events = _fetch_completed_events(league_code, season)
-        for game_index, (event_id, _iso_date) in enumerate(events, start=1):
-            rows.extend(_fetch_event_player_rows(league_code, event_id, game_index))
+        for game_index, (event_id, iso_date) in enumerate(events, start=1):
+            rows.extend(_fetch_event_player_rows(league_code, event_id, game_index, iso_date))
     return pd.DataFrame(rows)
 
 

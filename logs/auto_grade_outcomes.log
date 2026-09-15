@@ -7629,3 +7629,503 @@
 2026-09-14 15:48:44,940 UTC | INFO | Auto-grading run complete: {'candidates': 8036, 'graded': 7687, 'no_player_match': 347, 'no_game_match': 2, 'no_stat_value': 0, 'bad_stat_key': 0, 'dry_run': False}
 2026-09-14 15:49:11,802 UTC | INFO | 349 real closed NFL flag(s) with a resolved stat key are not yet graded; checking each against nflverse's real, published results.
 2026-09-14 15:49:12,339 UTC | INFO | Auto-grading run complete: {'candidates': 349, 'graded': 0, 'no_player_match': 347, 'no_game_match': 2, 'no_stat_value': 0, 'bad_stat_key': 0, 'dry_run': False}
+2026-09-15 17:18:11,886 UTC | INFO | nfl: 379 real closed flag(s) with a resolved stat key are not yet graded; checking each against nfl's real, published results.
+2026-09-15 17:18:12,787 UTC | INFO | mlb: 971 real closed flag(s) with a resolved stat key are not yet graded; checking each against mlb's real, published results.
+2026-09-15 17:20:05,157 UTC | INFO | soccer: 552 real closed flag(s) with a resolved stat key are not yet graded; checking each against soccer's real, published results.
+2026-09-15 17:22:39,265 UTC | INFO | [dry-run] flag_id=prizepicks|14745564 player=Julen Agirrezabala stat=saves line=3.0 side=over actual=7.0 -> win
+2026-09-15 17:22:39,268 UTC | INFO | [dry-run] flag_id=prizepicks|14745582 player=Toni Martínez stat=totalShots line=3.0 side=under actual=1.0 -> win
+2026-09-15 17:22:39,271 UTC | INFO | [dry-run] flag_id=prizepicks|14745585 player=Denis Suárez stat=totalShots line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,274 UTC | INFO | [dry-run] flag_id=prizepicks|14745563 player=Lorenzo Palmisani stat=saves line=3.0 side=over actual=4.0 -> win
+2026-09-15 17:22:39,277 UTC | INFO | [dry-run] flag_id=prizepicks|14745562 player=Justin Bijlow stat=saves line=2.5 side=over actual=5.0 -> win
+2026-09-15 17:22:39,280 UTC | INFO | [dry-run] flag_id=prizepicks|14751894 player=Robin Zentner stat=goalie fantasy score line=9.5 side=under actual=3.0 -> win
+2026-09-15 17:22:39,284 UTC | INFO | [dry-run] flag_id=prizepicks|14751904 player=Noah Atubolu stat=goalie fantasy score line=9.5 side=under actual=11.0 -> loss
+2026-09-15 17:22:39,286 UTC | INFO | [dry-run] flag_id=prizepicks|14751898 player=Noah Atubolu stat=saves line=3.5 side=over actual=4.0 -> win
+2026-09-15 17:22:39,289 UTC | INFO | [dry-run] flag_id=prizepicks|14751892 player=Robin Zentner stat=saves line=3.0 side=under actual=2.0 -> win
+2026-09-15 17:22:39,292 UTC | INFO | [dry-run] flag_id=prizepicks|14752237 player=Phillip Tietz stat=totalShots line=2.5 side=under actual=6.0 -> loss
+2026-09-15 17:22:39,295 UTC | INFO | [dry-run] flag_id=prizepicks|14752239 player=Jonathan Burkardt stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,298 UTC | INFO | [dry-run] flag_id=prizepicks|14752430 player=Sheraldo Becker stat=totalShots line=2.0 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,301 UTC | INFO | [dry-run] flag_id=prizepicks|14758859 player=Moritz Nicolas stat=goalie fantasy score line=11.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:39,304 UTC | INFO | [dry-run] flag_id=prizepicks|14724818 player=Moritz Nicolas stat=saves line=4.0 side=over actual=4.0 -> push
+2026-09-15 17:22:39,306 UTC | INFO | [dry-run] flag_id=prizepicks|14759364 player=Igor Matanovic stat=totalShots line=3.0 side=under actual=3.0 -> push
+2026-09-15 17:22:39,309 UTC | INFO | [dry-run] flag_id=prizepicks|14724828 player=Mio Backhaus stat=saves line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,312 UTC | INFO | [dry-run] flag_id=prizepicks|14759366 player=Yuito Suzuki stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,315 UTC | INFO | [dry-run] flag_id=prizepicks|14751233 player=Gregor Kobel stat=goalie fantasy score line=9.5 side=over actual=10.0 -> win
+2026-09-15 17:22:39,318 UTC | INFO | [dry-run] flag_id=prizepicks|14751336 player=Serhou Guirassy stat=totalShots line=4.0 side=under actual=3.0 -> win
+2026-09-15 17:22:39,321 UTC | INFO | [dry-run] flag_id=prizepicks|14751231 player=Gregor Kobel stat=saves line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,324 UTC | INFO | [dry-run] flag_id=prizepicks|14751421 player=Fábio Silva stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,327 UTC | INFO | [dry-run] flag_id=prizepicks|14751318 player=Serhou Guirassy stat=shotsOnTarget line=2.0 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,330 UTC | INFO | [dry-run] flag_id=prizepicks|14751428 player=Jobe Bellingham stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,333 UTC | INFO | [dry-run] flag_id=prizepicks|14751429 player=Felix Nmecha stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,335 UTC | INFO | [dry-run] flag_id=prizepicks|14751327 player=Felix Nmecha stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,338 UTC | INFO | [dry-run] flag_id=prizepicks|14749214 player=Finn Dahmen stat=goalie fantasy score line=10.5 side=over actual=7.0 -> loss
+2026-09-15 17:22:39,341 UTC | INFO | [dry-run] flag_id=prizepicks|14745569 player=Finn Dahmen stat=saves line=3.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:39,344 UTC | INFO | [dry-run] flag_id=prizepicks|14675937 player=Uchenna Ogundu stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,347 UTC | INFO | [dry-run] flag_id=prizepicks|14749833 player=Oliver Baumann stat=goalie fantasy score line=7.0 side=under actual=11.0 -> loss
+2026-09-15 17:22:39,350 UTC | INFO | [dry-run] flag_id=prizepicks|14745574 player=Oliver Baumann stat=saves line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,352 UTC | INFO | [dry-run] flag_id=prizepicks|14745576 player=Fabian Bredlow stat=saves line=3.5 side=under actual=6.0 -> loss
+2026-09-15 17:22:39,355 UTC | INFO | [dry-run] flag_id=prizepicks|14755581 player=Marko Dmitrovic stat=goalie fantasy score line=9.5 side=over actual=18.0 -> win
+2026-09-15 17:22:39,358 UTC | INFO | [dry-run] flag_id=prizepicks|14755651 player=Ante Budimir stat=totalShots line=3.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,361 UTC | INFO | [dry-run] flag_id=prizepicks|14755483 player=Marko Dmitrovic stat=saves line=3.0 side=over actual=4.0 -> win
+2026-09-15 17:22:39,364 UTC | INFO | [dry-run] flag_id=prizepicks|14755448 player=Sergio Herrera stat=saves line=2.0 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,367 UTC | INFO | [dry-run] flag_id=prizepicks|14755741 player=Leandro Cabrera stat=totalShots line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,370 UTC | INFO | [dry-run] flag_id=prizepicks|14701872 player=Sergio Herrera stat=goalie fantasy score line=9.5 side=under actual=3.0 -> win
+2026-09-15 17:22:39,372 UTC | INFO | [dry-run] flag_id=prizepicks|14752565 player=Mike Maignan stat=goalie fantasy score line=9.5 side=over actual=9.0 -> loss
+2026-09-15 17:22:39,375 UTC | INFO | [dry-run] flag_id=prizepicks|14752956 player=Christos Mandas stat=goalie fantasy score line=9.5 side=under actual=11.0 -> loss
+2026-09-15 17:22:39,378 UTC | INFO | [dry-run] flag_id=prizepicks|14753023 player=Christian Pulisic stat=totalShots line=2.0 side=under actual=1.0 -> win
+2026-09-15 17:22:39,381 UTC | INFO | [dry-run] flag_id=prizepicks|14753034 player=Gustav Isaksen stat=totalShots line=2.0 side=under actual=0.0 -> win
+2026-09-15 17:22:39,384 UTC | INFO | [dry-run] flag_id=prizepicks|14754338 player=Andrea Pinamonti stat=totalShots line=2.0 side=under actual=0.0 -> win
+2026-09-15 17:22:39,387 UTC | INFO | [dry-run] flag_id=prizepicks|14754375 player=Mattia Zaccagni stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,390 UTC | INFO | [dry-run] flag_id=prizepicks|14754261 player=Mattia Zaccagni stat=shotsOnTarget line=0.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,393 UTC | INFO | [dry-run] flag_id=prizepicks|14754270 player=Andrea Pinamonti stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,396 UTC | INFO | [dry-run] flag_id=prizepicks|14754379 player=Nuno Tavares stat=totalShots line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,399 UTC | INFO | [dry-run] flag_id=prizepicks|14752531 player=Christos Mandas stat=saves line=3.0 side=under actual=5.0 -> loss
+2026-09-15 17:22:39,402 UTC | INFO | [dry-run] flag_id=prizepicks|14752530 player=Mike Maignan stat=saves line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:39,404 UTC | INFO | [dry-run] flag_id=prizepicks|14726335 player=Matías Dituro stat=saves line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,407 UTC | INFO | [dry-run] flag_id=prizepicks|14725845 player=Unai Simón stat=saves line=2.0 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,410 UTC | INFO | [dry-run] flag_id=prizepicks|14726339 player=Karl Hein stat=saves line=3.5 side=under actual=5.0 -> loss
+2026-09-15 17:22:39,413 UTC | INFO | [dry-run] flag_id=prizepicks|14726699 player=Marvin Schwäbe stat=saves line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:39,416 UTC | INFO | [dry-run] flag_id=prizepicks|14761676 player=Marco Carnesecchi stat=goalie fantasy score line=10.5 side=over actual=7.0 -> loss
+2026-09-15 17:22:39,419 UTC | INFO | [dry-run] flag_id=prizepicks|14761678 player=Elia Caprile stat=saves line=3.0 side=over actual=3.0 -> push
+2026-09-15 17:22:39,422 UTC | INFO | [dry-run] flag_id=prizepicks|14761674 player=Marco Carnesecchi stat=saves line=2.0 side=over actual=3.0 -> win
+2026-09-15 17:22:39,426 UTC | INFO | [dry-run] flag_id=prizepicks|14747603 player=Vinícius Júnior stat=totalShots line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,429 UTC | INFO | [dry-run] flag_id=prizepicks|14745599 player=Kylian Mbappé stat=totalShots line=5.5 side=over actual=5.0 -> loss
+2026-09-15 17:22:39,432 UTC | INFO | [dry-run] flag_id=prizepicks|14745567 player=Emil Audero stat=saves line=5.0 side=under actual=7.0 -> loss
+2026-09-15 17:22:39,434 UTC | INFO | [dry-run] flag_id=prizepicks|14745601 player=Endrick stat=totalShots line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,439 UTC | INFO | [dry-run] flag_id=prizepicks|14745566 player=Thibaut Courtois stat=saves line=2.0 side=over actual=6.0 -> win
+2026-09-15 17:22:39,446 UTC | INFO | [dry-run] flag_id=prizepicks|14762859 player=Pep Biel stat=totalShots line=2.0 side=under actual=1.0 -> win
+2026-09-15 17:22:39,449 UTC | INFO | [dry-run] flag_id=prizepicks|14755698 player=Lionel Messi stat=totalShots line=5.5 side=over actual=8.0 -> win
+2026-09-15 17:22:39,453 UTC | INFO | [dry-run] flag_id=prizepicks|14755742 player=Hany Mukhtar stat=totalShots line=3.0 side=over actual=3.0 -> push
+2026-09-15 17:22:39,456 UTC | INFO | [dry-run] flag_id=prizepicks|14755700 player=Lionel Messi stat=shotsOnTarget line=2.0 side=over actual=4.0 -> win
+2026-09-15 17:22:39,460 UTC | INFO | [dry-run] flag_id=prizepicks|14757941 player=Lucas Hoyos stat=saves line=3.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,464 UTC | INFO | [dry-run] flag_id=prizepicks|14758025 player=Tai Baribo stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,466 UTC | INFO | [dry-run] flag_id=prizepicks|14758078 player=Breel Embolo stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,470 UTC | INFO | [dry-run] flag_id=prizepicks|14758114 player=Miguel Almirón stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,473 UTC | INFO | [dry-run] flag_id=prizepicks|14758249 player=Luka Gavran stat=saves line=3.5 side=under actual=5.0 -> loss
+2026-09-15 17:22:39,477 UTC | INFO | [dry-run] flag_id=prizepicks|14758709 player=Antoine Griezmann stat=totalShots line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,480 UTC | INFO | [dry-run] flag_id=prizepicks|14758880 player=Martín Ojeda stat=totalShots line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,484 UTC | INFO | [dry-run] flag_id=prizepicks|14758248 player=Maxime Crépeau stat=saves line=3.0 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,487 UTC | INFO | [dry-run] flag_id=prizepicks|14759365 player=Josh Sargent stat=totalShots line=2.5 side=over actual=6.0 -> win
+2026-09-15 17:22:39,491 UTC | INFO | [dry-run] flag_id=prizepicks|14707189 player=Brian Schwake stat=goalie fantasy score line=10.5 side=under actual=7.0 -> win
+2026-09-15 17:22:39,495 UTC | INFO | [dry-run] flag_id=prizepicks|14707223 player=Dayne St. Clair stat=goalie fantasy score line=9.0 side=under actual=3.0 -> win
+2026-09-15 17:22:39,498 UTC | INFO | [dry-run] flag_id=prizepicks|14753672 player=Brian Schwake stat=saves line=3.5 side=under actual=3.0 -> win
+2026-09-15 17:22:39,502 UTC | INFO | [dry-run] flag_id=prizepicks|14753671 player=Dayne St. Clair stat=saves line=3.0 side=under actual=1.0 -> win
+2026-09-15 17:22:39,506 UTC | INFO | [dry-run] flag_id=prizepicks|14707428 player=Lucas Hoyos stat=goalie fantasy score line=9.5 side=under actual=10.0 -> loss
+2026-09-15 17:22:39,509 UTC | INFO | [dry-run] flag_id=prizepicks|14706911 player=Maxime Crépeau stat=goalie fantasy score line=9.5 side=under actual=18.0 -> loss
+2026-09-15 17:22:39,514 UTC | INFO | [dry-run] flag_id=prizepicks|14706948 player=Luka Gavran stat=goalie fantasy score line=9.5 side=under actual=9.0 -> win
+2026-09-15 17:22:39,517 UTC | INFO | [dry-run] flag_id=prizepicks|14707720 player=Ethan Horvath stat=goalie fantasy score line=8.5 side=over actual=16.0 -> win
+2026-09-15 17:22:39,521 UTC | INFO | [dry-run] flag_id=prizepicks|14753674 player=Ethan Horvath stat=saves line=3.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:39,525 UTC | INFO | [dry-run] flag_id=prizepicks|14753673 player=Patrick Schulte stat=saves line=3.0 side=over actual=4.0 -> win
+2026-09-15 17:22:39,528 UTC | INFO | [dry-run] flag_id=prizepicks|14762860 player=Petar Musa stat=totalShots line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,532 UTC | INFO | [dry-run] flag_id=prizepicks|14727171 player=Jonathan Sirois stat=saves line=3.0 side=under actual=0.0 -> win
+2026-09-15 17:22:39,536 UTC | INFO | [dry-run] flag_id=prizepicks|14762922 player=Kristoffer Velde stat=totalShots line=3.0 side=over actual=3.0 -> push
+2026-09-15 17:22:39,539 UTC | INFO | [dry-run] flag_id=prizepicks|14758852 player=Hugo Lloris stat=goalie fantasy score line=10.0 side=over actual=11.0 -> win
+2026-09-15 17:22:39,543 UTC | INFO | [dry-run] flag_id=prizepicks|14759653 player=Drake Callender stat=saves line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,547 UTC | INFO | [dry-run] flag_id=prizepicks|14759652 player=Roman Bürki stat=saves line=3.0 side=under actual=1.0 -> win
+2026-09-15 17:22:39,551 UTC | INFO | [dry-run] flag_id=prizepicks|14760094 player=Kelvin Yeboah stat=totalShots line=2.0 side=over actual=3.0 -> win
+2026-09-15 17:22:39,554 UTC | INFO | [dry-run] flag_id=prizepicks|14753675 player=Stefan Cleveland stat=saves line=3.5 side=under actual=7.0 -> loss
+2026-09-15 17:22:39,558 UTC | INFO | [dry-run] flag_id=prizepicks|14753676 player=Hugo Lloris stat=saves line=2.5 side=over actual=6.0 -> win
+2026-09-15 17:22:39,562 UTC | INFO | [dry-run] flag_id=prizepicks|14708264 player=Drake Callender stat=goalie fantasy score line=9.5 side=under actual=5.0 -> win
+2026-09-15 17:22:39,565 UTC | INFO | [dry-run] flag_id=prizepicks|14708319 player=Roman Bürki stat=goalie fantasy score line=9.5 side=under actual=3.0 -> win
+2026-09-15 17:22:39,572 UTC | INFO | [dry-run] flag_id=prizepicks|14727278 player=Sébastian Breza stat=saves line=3.0 side=under actual=6.0 -> loss
+2026-09-15 17:22:39,576 UTC | INFO | [dry-run] flag_id=prizepicks|14763267 player=Prince Owusu stat=totalShots line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:39,580 UTC | INFO | [dry-run] flag_id=prizepicks|14763010 player=Paxten Aaronson stat=totalShots line=2.0 side=over actual=2.0 -> push
+2026-09-15 17:22:39,584 UTC | INFO | [dry-run] flag_id=prizepicks|14744835 player=Matt Freese stat=goalie fantasy score line=9.5 side=over actual=22.0 -> win
+2026-09-15 17:22:39,588 UTC | INFO | [dry-run] flag_id=prizepicks|14727457 player=Jonathan Bond stat=saves line=3.0 side=under actual=0.0 -> win
+2026-09-15 17:22:39,591 UTC | INFO | [dry-run] flag_id=prizepicks|14763280 player=Mateusz Bogusz stat=totalShots line=3.0 side=over actual=3.0 -> push
+2026-09-15 17:22:39,597 UTC | INFO | [dry-run] flag_id=prizepicks|14760933 player=JT Marcinkowski stat=saves line=3.0 side=over actual=7.0 -> win
+2026-09-15 17:22:39,601 UTC | INFO | [dry-run] flag_id=prizepicks|14761616 player=Albert Rusnák stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,604 UTC | INFO | [dry-run] flag_id=prizepicks|14763282 player=Mathew Ryan stat=saves line=5.0 side=under actual=2.0 -> win
+2026-09-15 17:22:39,607 UTC | INFO | [dry-run] flag_id=prizepicks|14763284 player=Lamine Yamal stat=totalShots line=4.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:39,610 UTC | INFO | [dry-run] flag_id=prizepicks|14763286 player=Raphinha stat=totalShots line=4.0 side=under actual=2.0 -> win
+2026-09-15 17:22:39,612 UTC | INFO | [dry-run] flag_id=prizepicks|14720072 player=Lukasz Skorupski stat=goalie fantasy score line=8.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,616 UTC | INFO | [dry-run] flag_id=prizepicks|14720070 player=Lukasz Skorupski stat=saves line=3.0 side=under actual=0.0 -> win
+2026-09-15 17:22:39,619 UTC | INFO | [dry-run] flag_id=underdog|16644392-9a82-4a59-842d-98c9a4cfef05 player=Lamine Yamal stat=shotsOnTarget line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,623 UTC | INFO | [dry-run] flag_id=underdog|6419f283-5db5-4b87-86a7-685ef20a8d3e player=Lamine Yamal stat=totalShots line=4.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:39,626 UTC | INFO | [dry-run] flag_id=underdog|970c8613-0807-43bc-9353-2c577f3fd942 player=Jude Bellingham stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,630 UTC | INFO | [dry-run] flag_id=underdog|3c300692-c3e9-43bc-b420-91185ae8a2f5 player=Serhou Guirassy stat=totalShots line=3.5 side=under actual=3.0 -> win
+2026-09-15 17:22:39,634 UTC | INFO | [dry-run] flag_id=underdog|53e4110d-f4be-462d-b4a5-f9eacdf5c86f player=Serhou Guirassy stat=shotsOnTarget line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,638 UTC | INFO | [dry-run] flag_id=underdog|669aaeb9-2483-4b57-adbb-25d85b40e62c player=Khvicha Kvaratskhelia stat=totalShots line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,641 UTC | INFO | [dry-run] flag_id=underdog|ac51e1b4-7d3b-46a0-8fcb-76142070340e player=Khvicha Kvaratskhelia stat=shotsOnTarget line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,644 UTC | INFO | [dry-run] flag_id=underdog|c3949835-25da-4798-9df9-28a362075f3a player=Kevin De Bruyne stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,647 UTC | INFO | [dry-run] flag_id=underdog|d183e895-4f3a-43c0-b01a-59a4a58e2ff9 player=Kevin De Bruyne stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,650 UTC | INFO | [dry-run] flag_id=underdog|76c84b93-482c-465f-8241-6599cfa45a61 player=Anthony Gordon stat=totalShots line=3.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,653 UTC | INFO | [dry-run] flag_id=underdog|b2bceb3e-b67e-4ec9-96c1-37e23279db47 player=Anthony Gordon stat=shotsOnTarget line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,656 UTC | INFO | [dry-run] flag_id=underdog|e688ed62-2ee7-48c1-b5ca-02ab33936ffd player=Charles De Ketelaere stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,659 UTC | INFO | [dry-run] flag_id=underdog|9f6b12cc-35dd-456c-a525-26b4ba261876 player=Charles De Ketelaere stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,662 UTC | INFO | [dry-run] flag_id=underdog|3f355d66-ee33-44ca-a2ac-a016dbc069a2 player=Ante Budimir stat=totalShots line=3.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,665 UTC | INFO | [dry-run] flag_id=underdog|bf78e98a-f34d-4f1b-8d38-6a9156155016 player=Ante Budimir stat=shotsOnTarget line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,668 UTC | INFO | [dry-run] flag_id=underdog|6bf7fdbb-25c5-4986-b3ad-2dcffbf33eb6 player=Patrik Schick stat=shotsOnTarget line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,671 UTC | INFO | [dry-run] flag_id=underdog|3d264bbe-a754-42f6-a381-19c6f6f999e6 player=Patrik Schick stat=totalShots line=3.5 side=over actual=4.0 -> win
+2026-09-15 17:22:39,674 UTC | INFO | [dry-run] flag_id=underdog|4f1bfd3e-0c95-4c7a-ac00-da2e487b0ed5 player=Roberto Piccoli stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,677 UTC | INFO | [dry-run] flag_id=underdog|551dc9db-bab2-48c3-a9b5-7c4396a8ed77 player=Roberto Piccoli stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,680 UTC | INFO | [dry-run] flag_id=underdog|fd611494-228b-4e78-96b2-b5575ca9ee0e player=Deniz Undav stat=shotsOnTarget line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,683 UTC | INFO | [dry-run] flag_id=underdog|6ac8e4cf-0655-44fb-b393-76d7de0f8b0a player=Christopher Nkunku stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,686 UTC | INFO | [dry-run] flag_id=underdog|48051564-ae40-4b60-ac71-087059ae9e4d player=Christopher Nkunku stat=shotsOnTarget line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,689 UTC | INFO | [dry-run] flag_id=underdog|f38099da-8579-4223-bfad-3f3007323cb3 player=Gustav Isaksen stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,692 UTC | INFO | [dry-run] flag_id=underdog|e19dba8c-1541-4003-a3f2-1da6e2ef0ac5 player=Gustav Isaksen stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,696 UTC | INFO | [dry-run] flag_id=underdog|c316b0d6-46f9-4f26-afca-f011106712c9 player=Daniel Maldini stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,699 UTC | INFO | [dry-run] flag_id=underdog|371d784c-b733-477d-8dc5-a96601cab344 player=Daniel Maldini stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,701 UTC | INFO | [dry-run] flag_id=underdog|65f539b8-82e6-4981-b7ae-913b52caad12 player=Tim Kleindienst stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,704 UTC | INFO | [dry-run] flag_id=underdog|b2b71ce8-fba2-4093-8f29-85913308910d player=Ermedin Demirovic stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:39,709 UTC | INFO | [dry-run] flag_id=underdog|c891c876-eb71-4983-b69e-bc0c1df011a1 player=Ermedin Demirovic stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,713 UTC | INFO | [dry-run] flag_id=underdog|f6dfb58d-695b-4e14-a908-15d2373ba20b player=Ethan Nwaneri stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,715 UTC | INFO | [dry-run] flag_id=underdog|a4997322-b122-4908-bb0a-13251ee50770 player=Ethan Nwaneri stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:39,718 UTC | INFO | [dry-run] flag_id=underdog|659b5108-5230-4959-9a1b-71f0843f0770 player=Matteo Politano stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,721 UTC | INFO | [dry-run] flag_id=underdog|2ef3216e-ab56-45f2-beab-5302804ba699 player=Andrea Colpani stat=totalShots line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,724 UTC | INFO | [dry-run] flag_id=underdog|6f6f361e-211b-4161-9f7f-a56256697b39 player=Matteo Politano stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,727 UTC | INFO | [dry-run] flag_id=underdog|e594acf1-b739-456d-9967-b67629e49980 player=Andrea Colpani stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,730 UTC | INFO | [dry-run] flag_id=underdog|24ff074f-77fd-49b4-b1eb-01f379ce2d6e player=Federico Bernardeschi stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,733 UTC | INFO | [dry-run] flag_id=underdog|7cd84a1a-423d-4ebf-879c-ae950edb1725 player=Federico Bernardeschi stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,736 UTC | INFO | [dry-run] flag_id=underdog|6c7c4e80-a26a-445a-b604-498459091a9c player=Santiago Pierotti stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,739 UTC | INFO | [dry-run] flag_id=underdog|0d322756-1c9d-4fa3-a108-cf4c84b598b6 player=Santiago Pierotti stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,742 UTC | INFO | [dry-run] flag_id=underdog|cca5264d-2878-4933-b719-11dd21ec9939 player=Mattia Zaccagni stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,745 UTC | INFO | [dry-run] flag_id=underdog|a2e0449e-cc8e-46d6-b36f-4600ccfe46fc player=Mattia Zaccagni stat=shotsOnTarget line=0.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,748 UTC | INFO | [dry-run] flag_id=underdog|687f3b44-0f19-4489-8b7c-783bb320e97c player=Bilal El Khannouss stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,751 UTC | INFO | [dry-run] flag_id=underdog|d6120879-5dd3-4751-95bd-acdeb7a374f4 player=Jonathan Burkardt stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,754 UTC | INFO | [dry-run] flag_id=underdog|0770938b-e04b-42ba-9c08-ccb2f0e6b014 player=Nadiem Amiri stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,757 UTC | INFO | [dry-run] flag_id=underdog|a7fa4bcb-f9a2-4145-a0fc-4a50a3331f34 player=Nadiem Amiri stat=totalShots line=2.5 side=over actual=2.0 -> loss
+2026-09-15 17:22:39,760 UTC | INFO | [dry-run] flag_id=underdog|52caf6c7-1d8d-44a1-a9a1-c41ad39d1b02 player=Jonathan Burkardt stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,763 UTC | INFO | [dry-run] flag_id=underdog|697f1baa-47c4-4294-9e3b-2b30d34542c0 player=Juan Cruz stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,765 UTC | INFO | [dry-run] flag_id=underdog|fa785f5c-85d9-4488-8eaa-78fb27acb040 player=Ritsu Doan stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,768 UTC | INFO | [dry-run] flag_id=underdog|0ae0149d-6fa7-4f1d-a3b7-93d4064a438b player=Ritsu Doan stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,771 UTC | INFO | [dry-run] flag_id=underdog|6c449f38-27e2-4dfe-92b3-b35a79a6b5a5 player=Antonio Nusa stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,774 UTC | INFO | [dry-run] flag_id=underdog|8aaec28a-6363-4e19-bf93-8b93bda65370 player=Antonio Nusa stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,777 UTC | INFO | [dry-run] flag_id=underdog|e39ba6ed-401f-4886-8238-75264078e31c player=Adrien Rabiot stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,780 UTC | INFO | [dry-run] flag_id=underdog|45839bf5-73d8-4f12-b0f5-abc4937bf1d5 player=Corentin Tolisso stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,783 UTC | INFO | [dry-run] flag_id=underdog|10b0bcd2-5654-4a88-888c-08110c009d06 player=Corentin Tolisso stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,786 UTC | INFO | [dry-run] flag_id=underdog|7bd4f01c-08ef-4ac0-a6d3-35039347b2bf player=Lamine Camara stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,789 UTC | INFO | [dry-run] flag_id=underdog|f38fb4d7-e078-4484-a9bb-52b1515b7769 player=Aleksandr Golovin stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,792 UTC | INFO | [dry-run] flag_id=underdog|474de8d4-8717-46f3-8111-47377befbd4b player=Joey Veerman stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,795 UTC | INFO | [dry-run] flag_id=underdog|52f6d76a-b137-4c3f-87ba-834499972a7c player=Lassine Sinayoko stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,798 UTC | INFO | [dry-run] flag_id=underdog|e2f39bd1-4f09-4349-92eb-9836990f0fd8 player=Lassine Sinayoko stat=totalShots line=2.5 side=over actual=2.0 -> loss
+2026-09-15 17:22:39,801 UTC | INFO | [dry-run] flag_id=underdog|2c850731-825b-4dbd-a33a-8d742716c708 player=Patrick Wimmer stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:39,804 UTC | INFO | [dry-run] flag_id=underdog|fa257aaf-cf6b-465f-b73d-6b5a2dfeccbc player=Patrick Wimmer stat=totalShots line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,806 UTC | INFO | [dry-run] flag_id=underdog|0f18fc61-36a3-42aa-a3aa-c2b3cf4ea156 player=Dilane Bakwa stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,809 UTC | INFO | [dry-run] flag_id=underdog|f24c2992-4a94-4383-83b7-e36c6e181351 player=Dilane Bakwa stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,812 UTC | INFO | [dry-run] flag_id=underdog|f79443b9-d9d3-4e26-a476-bd7288485ad1 player=Adam Hlozek stat=totalShots line=2.5 side=under actual=7.0 -> loss
+2026-09-15 17:22:39,815 UTC | INFO | [dry-run] flag_id=underdog|687cbe33-81c5-4e0b-92bc-f3ea0b3fa73f player=Sergio Camello stat=shotsOnTarget line=0.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,818 UTC | INFO | [dry-run] flag_id=underdog|0acc61b2-6db6-4c93-b4dd-893e281080fe player=Sergio Camello stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,821 UTC | INFO | [dry-run] flag_id=underdog|ead7320e-4090-4914-a98a-bb0a07af89f5 player=Franck Honorat stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,824 UTC | INFO | [dry-run] flag_id=underdog|26bf3f2a-aa65-4d1b-9d19-1984eb1aa71d player=Jens Odgaard stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,827 UTC | INFO | [dry-run] flag_id=underdog|dbf70b91-de53-42e8-8083-4c934f95b566 player=Jens Odgaard stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,830 UTC | INFO | [dry-run] flag_id=underdog|78b4614f-c0fb-4237-a781-96893da6a75c player=Sheraldo Becker stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,833 UTC | INFO | [dry-run] flag_id=underdog|87ee907a-4e0b-4076-90a9-8bbfecd1d9ed player=Sheraldo Becker stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,836 UTC | INFO | [dry-run] flag_id=underdog|0f2e088b-5cd6-4647-9a41-ae4e84d141d7 player=Michael Gregoritsch stat=shotsOnTarget line=0.5 side=over actual=3.0 -> win
+2026-09-15 17:22:39,840 UTC | INFO | [dry-run] flag_id=underdog|6c3eef49-05c8-41b9-9279-0119ac8c720e player=Michael Gregoritsch stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,843 UTC | INFO | [dry-run] flag_id=underdog|57538905-4a64-4bb0-8510-22824434fbbb player=Denis Zakaria stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:39,848 UTC | INFO | [dry-run] flag_id=underdog|12776e7c-cf21-4b6f-b427-fbfe26f33ff5 player=Maximilian Eggestein stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,851 UTC | INFO | [dry-run] flag_id=underdog|6d7ca9a4-3f37-49f7-9098-b0bc6584c9ef player=Jean-Victor Makengo stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,854 UTC | INFO | [dry-run] flag_id=underdog|ea6a5b9a-a223-4686-aad0-bf59d6f6c09d player=Branco van den Boomen stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,857 UTC | INFO | [dry-run] flag_id=underdog|b785b75f-3de9-4fec-8156-6988b068a10b player=Amine El Ouazzani stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,859 UTC | INFO | [dry-run] flag_id=underdog|fbb81ca4-cd8e-42b9-a7a6-647575ae25aa player=Ludovic Ajorque stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,862 UTC | INFO | [dry-run] flag_id=underdog|aabf89ea-ec1c-4305-b3ca-5a4abb0c7c7d player=Jacopo Fazzini stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,866 UTC | INFO | [dry-run] flag_id=underdog|c570c8ac-2264-4bf7-9967-bd9051c8a6e2 player=Anthony Bermont stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,869 UTC | INFO | [dry-run] flag_id=underdog|8627fba2-e9e3-4df3-aea5-5a85edd8d20f player=Michael Folorunsho stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,871 UTC | INFO | [dry-run] flag_id=underdog|2fc25b4a-0f23-4872-92f0-57c9d5c08f44 player=Branco van den Boomen stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,874 UTC | INFO | [dry-run] flag_id=underdog|dd56f047-f2eb-4603-9c07-c56ef1e7194c player=Jay Robinson stat=totalShots line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,878 UTC | INFO | [dry-run] flag_id=underdog|bdd9dd43-3018-4c12-b360-ddcd22ce3a55 player=Michael Folorunsho stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,881 UTC | INFO | [dry-run] flag_id=underdog|ff237f6c-fd71-4e61-83df-188d62f2e1fa player=Ilan Kebbal stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,884 UTC | INFO | [dry-run] flag_id=underdog|efb7d1a5-ae4d-4880-90ed-4c42d2dd2158 player=Marvin Pieringer stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,887 UTC | INFO | [dry-run] flag_id=underdog|d0f7bc2b-30e5-4b9b-aa2d-29c0cef0100d player=Williot Swedberg stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,890 UTC | INFO | [dry-run] flag_id=underdog|cf3253e4-b140-47cf-91d6-dd3d1aa4c055 player=Simon Ebonog stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:39,893 UTC | INFO | [dry-run] flag_id=underdog|278d270b-1933-4872-9888-f02537787552 player=Tim Lemperle stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:39,896 UTC | INFO | [dry-run] flag_id=underdog|5cafb41e-27b2-48a4-a365-3578890e2dbb player=Ilan Kebbal stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:39,898 UTC | INFO | [dry-run] flag_id=underdog|84e29add-657d-4dc2-8332-965d8b911228 player=Pablo Pagis stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,901 UTC | INFO | [dry-run] flag_id=underdog|046b2dcc-8826-4c30-a6d1-6ed76b6c0f4a player=Can Uzun stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,904 UTC | INFO | [dry-run] flag_id=underdog|e17518fa-9cc9-4fbe-9bb4-f020ae2abf1f player=Anthony Bermont stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,907 UTC | INFO | [dry-run] flag_id=underdog|c1afa4ed-066e-4b5e-bd0e-123b0cec7df5 player=Ernest Nuamah stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,910 UTC | INFO | [dry-run] flag_id=underdog|a066298b-2751-4bf9-91e7-c0a041c3bfe6 player=Sofiane Diop stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,913 UTC | INFO | [dry-run] flag_id=underdog|5c872a16-87d6-4e3d-bcb0-a6f4a2260a7b player=Remy Labeau Lascary stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,916 UTC | INFO | [dry-run] flag_id=underdog|2e53dec8-b277-49a2-9204-6287fd1fe6ce player=Danny Namaso stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,919 UTC | INFO | [dry-run] flag_id=underdog|06ac4dba-b545-4649-9835-0b31c7d300ff player=Giovanni Reyna stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:39,922 UTC | INFO | [dry-run] flag_id=underdog|732a559e-a484-4d91-869c-a45f2af7dbca player=Elye Wahi stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,925 UTC | INFO | [dry-run] flag_id=underdog|43d60dea-ffca-40ad-8a72-18801da90f70 player=Nikola Stulic stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,928 UTC | INFO | [dry-run] flag_id=underdog|ca408783-fae7-4394-ba4e-bd9d3d0b9c53 player=Said El Mala stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,931 UTC | INFO | [dry-run] flag_id=underdog|41d8028f-43d7-4543-ac44-f687bd807f58 player=Pavel Sulc stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,934 UTC | INFO | [dry-run] flag_id=underdog|ab528d27-0a80-44bf-b70e-ab8259e4c444 player=Elye Wahi stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:39,937 UTC | INFO | [dry-run] flag_id=underdog|f4211723-e548-44ca-b798-e739d2fb44de player=Naouirou Ahamada stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,940 UTC | INFO | [dry-run] flag_id=underdog|45ab9f60-e4cf-4f88-9f00-bc0c9e484d6d player=Pavel Sulc stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,943 UTC | INFO | [dry-run] flag_id=underdog|dd6192f8-4b8d-4925-8cd9-944186c41678 player=Nikola Stulic stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,946 UTC | INFO | [dry-run] flag_id=underdog|7abc9278-2650-4eba-8cd1-3e4e10665f37 player=Ibrahim Maza stat=totalShots line=2.5 side=over actual=5.0 -> win
+2026-09-15 17:22:39,948 UTC | INFO | [dry-run] flag_id=underdog|5bb5d0fb-e3f0-49c3-86f2-1fadedc18b02 player=Marius Wolf stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,951 UTC | INFO | [dry-run] flag_id=underdog|1ab2f923-c67c-4d73-bf6d-10b7c0fc44af player=Tim Lemperle stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:39,954 UTC | INFO | [dry-run] flag_id=underdog|03ef4428-afba-4978-84d3-724ca76c0e23 player=Gessime Yassine stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,957 UTC | INFO | [dry-run] flag_id=underdog|7ef607c2-640e-4439-b590-2fd0dd150692 player=Gianluca Scamacca stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,960 UTC | INFO | [dry-run] flag_id=underdog|2f749c14-aee1-41da-853e-175709bdc9fe player=Lazar Samardzic stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,963 UTC | INFO | [dry-run] flag_id=underdog|d255423c-ea24-4db0-81a1-7a2a8d45d46e player=Naouirou Ahamada stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,966 UTC | INFO | [dry-run] flag_id=underdog|0f4fc7bd-9b70-4922-8f0b-b1324edfdefa player=Gabin Bernardeau stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,969 UTC | INFO | [dry-run] flag_id=underdog|c73a5ab1-1eb4-40ea-ae3f-5f3350fc30f0 player=Ibrahim Maza stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,972 UTC | INFO | [dry-run] flag_id=underdog|13164928-b340-4184-b430-491ff3e7f17b player=Said El Mala stat=totalShots line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,975 UTC | INFO | [dry-run] flag_id=underdog|c3ecf829-6c80-45b9-af57-409a017fef86 player=Antonio Vergara stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,978 UTC | INFO | [dry-run] flag_id=underdog|34fc449c-823c-43e0-a40c-8a5ebde48334 player=Fabian Rieder stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,981 UTC | INFO | [dry-run] flag_id=underdog|3b61906e-562f-4e4d-9f01-f564fa9785f5 player=Rayan Philippe stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,984 UTC | INFO | [dry-run] flag_id=underdog|f97652e4-aa17-4d31-be91-b076a4338a19 player=Marius Wolf stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:39,987 UTC | INFO | [dry-run] flag_id=underdog|ab3d016c-bae2-4dd3-beb1-256c689822ba player=Abde Rebbach stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:39,990 UTC | INFO | [dry-run] flag_id=underdog|4ad86a08-258a-4105-94fc-af9345c85d3a player=Can Uzun stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:39,993 UTC | INFO | [dry-run] flag_id=underdog|3bdfb084-9a5b-4379-932c-b73d0491f07e player=Davide Frattesi stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,995 UTC | INFO | [dry-run] flag_id=underdog|14a294e5-09ac-4cf3-8aee-da58a24d3bde player=Andrea Pinamonti stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:39,998 UTC | INFO | [dry-run] flag_id=underdog|9a07a04a-62ab-4ce0-bafa-c8deeb226078 player=Danny Namaso stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,001 UTC | INFO | [dry-run] flag_id=underdog|e4c9c884-47fb-4b4a-bd80-d5e89c273f49 player=Samuel Chukwueze stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,004 UTC | INFO | [dry-run] flag_id=underdog|9c67b2f2-2139-4612-9639-1e4857f9432f player=Abde Rebbach stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,007 UTC | INFO | [dry-run] flag_id=underdog|3699d2be-ff08-456c-829f-e1ac3ee38c8b player=Terem Moffi stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,010 UTC | INFO | [dry-run] flag_id=underdog|e0639c06-48df-444c-a749-5c3bc77fc1b7 player=David Larrubia stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,013 UTC | INFO | [dry-run] flag_id=underdog|40f3f75c-8906-4751-8077-170d78c9441e player=Igor Matanovic stat=totalShots line=3.5 side=under actual=3.0 -> win
+2026-09-15 17:22:40,016 UTC | INFO | [dry-run] flag_id=underdog|775f3545-a4e2-4ea1-bd96-2cbcacf4810b player=Yuito Suzuki stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,019 UTC | INFO | [dry-run] flag_id=underdog|6b17e114-921a-4eab-b313-432f679f0e9c player=Igor Matanovic stat=shotsOnTarget line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,023 UTC | INFO | [dry-run] flag_id=underdog|fed0d9f3-81f3-4041-8eca-430da02f02cf player=Hugo Bolin stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,025 UTC | INFO | [dry-run] flag_id=underdog|302257ed-8651-4222-bae2-2085132042a9 player=Yuito Suzuki stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,028 UTC | INFO | [dry-run] flag_id=underdog|02bd8699-1bc8-4f32-8df2-24a2e66b490d player=Hugo Bolin stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,031 UTC | INFO | [dry-run] flag_id=underdog|4e182381-98ea-413d-8e01-fa26e2d2eb57 player=Antonio Vergara stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,034 UTC | INFO | [dry-run] flag_id=underdog|04c952c0-b7db-4fd0-99a5-5c06b04d9598 player=Terem Moffi stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,037 UTC | INFO | [dry-run] flag_id=underdog|bb53beff-1190-4ccb-9441-7faa5d638a67 player=Neil El Aynaoui stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,040 UTC | INFO | [dry-run] flag_id=underdog|cf5bd36b-8d43-425a-a3dd-85b09d548784 player=Ivan Ilic stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,043 UTC | INFO | [dry-run] flag_id=underdog|dfda8ae9-b2b6-481e-9e9b-a0c16aea2d81 player=Wouter Burger stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,046 UTC | INFO | [dry-run] flag_id=underdog|ddf2a94c-54e6-44a1-8fce-f501c35fa47c player=Hugo Gonzalez stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,049 UTC | INFO | [dry-run] flag_id=underdog|b3794bbb-c6fc-4734-9676-c9d601491125 player=Osame Sahraoui stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,052 UTC | INFO | [dry-run] flag_id=underdog|ae80dc6f-819e-49e5-945f-ade13fe6071c player=Younes Ebnoutalib stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,055 UTC | INFO | [dry-run] flag_id=underdog|924667ed-04de-46c2-b147-7c541c53b9e1 player=Noa Lang stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,058 UTC | INFO | [dry-run] flag_id=underdog|b27aeafa-98ef-4c68-b83b-9bae016d3a04 player=Adam Daghim stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,061 UTC | INFO | [dry-run] flag_id=underdog|3dc5d458-f503-4761-8832-2ae1df4ba430 player=David Larrubia stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,064 UTC | INFO | [dry-run] flag_id=underdog|1dfba34d-e3ad-461e-b8d5-bcbcc6a30f5a player=Davide Frattesi stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,067 UTC | INFO | [dry-run] flag_id=underdog|f0e498b1-f139-47eb-ba8d-065829e5faf0 player=Hugo Gonzalez stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,070 UTC | INFO | [dry-run] flag_id=underdog|c120a713-a0b1-43e7-8522-bb2ad246ceba player=Lee Jae-sung stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,073 UTC | INFO | [dry-run] flag_id=underdog|a0976c84-ba30-4f31-a655-305d35c5518e player=Phillip Tietz stat=shotsOnTarget line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,076 UTC | INFO | [dry-run] flag_id=underdog|ac012356-db8d-46f9-a25f-a5c2e7dba7fd player=Josh Maja stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,079 UTC | INFO | [dry-run] flag_id=underdog|8a492a36-bd76-45b3-9f79-60837ab0f755 player=Nabil Bentaleb stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,082 UTC | INFO | [dry-run] flag_id=underdog|4fa6a45c-22ba-4b51-97c4-0a82c4bdc690 player=Sergio Canales stat=totalShots line=2.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,084 UTC | INFO | [dry-run] flag_id=underdog|797ed8b9-13bb-4441-8f30-a5b75d38a0c2 player=Lee Jae-sung stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,087 UTC | INFO | [dry-run] flag_id=underdog|bac2b1d1-ad25-4d1c-bc8d-df952f1b29b2 player=Paris Brunner stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,090 UTC | INFO | [dry-run] flag_id=underdog|2b45dd44-5ce5-4751-a94d-5f4b9845abcf player=Gabin Bernardeau stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,093 UTC | INFO | [dry-run] flag_id=underdog|2606f7a7-1619-4e61-9429-0470ea7cc7e3 player=Ludovic Ajorque stat=totalShots line=1.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,096 UTC | INFO | [dry-run] flag_id=underdog|ac6eeeab-8b8f-472e-b686-a9e30c639d2a player=Jacen Russell-Rowe stat=totalShots line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,099 UTC | INFO | [dry-run] flag_id=underdog|7d803f4c-0c70-4135-8867-3c3bd56db73f player=Renaud Ripart stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,102 UTC | INFO | [dry-run] flag_id=underdog|ce9ec21c-1b51-4ca7-91ee-e2010cf46744 player=Paul Mendy stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,105 UTC | INFO | [dry-run] flag_id=underdog|a941f86c-d2f7-4419-942d-92416b211a11 player=Ilyas Azizi stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,108 UTC | INFO | [dry-run] flag_id=underdog|296f4402-e1bb-488f-b4ae-7f4d11caa9eb player=Ezechiel Banzuzi stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,111 UTC | INFO | [dry-run] flag_id=underdog|921fc17f-7275-4c09-b263-fcfc18fbd320 player=Ilyas Azizi stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,114 UTC | INFO | [dry-run] flag_id=underdog|d3c54a69-9412-41a4-944a-226647373a82 player=Jacen Russell-Rowe stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,117 UTC | INFO | [dry-run] flag_id=underdog|a079a9e4-9d30-48f4-9aa3-cd500a8c83a1 player=Ezechiel Banzuzi stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,120 UTC | INFO | [dry-run] flag_id=underdog|c48b5a67-4b96-43e5-8b16-854ab2113f70 player=Fabio Vieira stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,123 UTC | INFO | [dry-run] flag_id=underdog|5939430d-60dd-44d5-b55d-fc3858480794 player=Jonathan Dubasin stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,125 UTC | INFO | [dry-run] flag_id=underdog|0053ab6f-1420-4fb6-8fce-ba492e5cd834 player=Fabio Vieira stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,128 UTC | INFO | [dry-run] flag_id=underdog|e6e11d4d-9dbe-4fcc-b9d3-932f4413d110 player=Jonathan Dubasin stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,131 UTC | INFO | [dry-run] flag_id=underdog|a48600dc-5a22-4ceb-85d9-96f3a34d4521 player=Neil El Aynaoui stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,134 UTC | INFO | [dry-run] flag_id=underdog|95868b23-47e5-4102-a602-b82bf895a05a player=Phillip Tietz stat=totalShots line=3.5 side=under actual=6.0 -> loss
+2026-09-15 17:22:40,137 UTC | INFO | [dry-run] flag_id=underdog|0213923f-13dd-4257-b9d4-5ce76a8698d0 player=Tyrhys Dolan stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,140 UTC | INFO | [dry-run] flag_id=underdog|f8cb609c-fdc6-4306-8be6-bd287fd4e9b8 player=Noa Lang stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,143 UTC | INFO | [dry-run] flag_id=underdog|3f101d65-1479-4a6f-b2a6-cf109e1cd348 player=Renaud Ripart stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,146 UTC | INFO | [dry-run] flag_id=underdog|1fa638f2-acbf-4452-9e00-de22eb673cd0 player=Paris Brunner stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,149 UTC | INFO | [dry-run] flag_id=underdog|9658a54a-fd2e-479f-b860-fa5672401e25 player=Williot Swedberg stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,152 UTC | INFO | [dry-run] flag_id=underdog|b72ad5c3-6028-48cd-acb2-e572fe36b556 player=Lazar Samardzic stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,155 UTC | INFO | [dry-run] flag_id=underdog|beb18dc9-ccd9-4980-b00f-183dc16c21d8 player=Osame Sahraoui stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,158 UTC | INFO | [dry-run] flag_id=underdog|be5508ba-fd1b-4977-b436-3fa9364c7c79 player=Giovanni Reyna stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,161 UTC | INFO | [dry-run] flag_id=underdog|a3852a33-0141-46c2-86df-5653471bd47e player=Gessime Yassine stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,164 UTC | INFO | [dry-run] flag_id=underdog|bc905e66-1d47-4783-b4e4-b5ee54734420 player=Nabil Bentaleb stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,168 UTC | INFO | [dry-run] flag_id=underdog|1f26ca3f-f74e-4106-906e-50ed0764dd09 player=Gianluca Scamacca stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,171 UTC | INFO | [dry-run] flag_id=underdog|46567bbf-2a80-48f3-bdf0-c02e28dc4a2e player=Giacomo Raspadori stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,175 UTC | INFO | [dry-run] flag_id=underdog|161dce22-b0c3-44e1-bebb-c671d3a8c1c4 player=Yunus Musah stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,179 UTC | INFO | [dry-run] flag_id=underdog|e701b46a-78dd-416d-b245-4ded2530d59e player=Samuel Chukwueze stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,182 UTC | INFO | [dry-run] flag_id=underdog|2de64008-7284-40d5-a814-b2046693eb40 player=Jacopo Fazzini stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,184 UTC | INFO | [dry-run] flag_id=underdog|2d7337d4-df28-4287-9d95-102c87383428 player=Michal Skoras stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,188 UTC | INFO | [dry-run] flag_id=underdog|6663ec9c-073b-42fb-833f-127aa2eb6417 player=Abdallah Sima stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,191 UTC | INFO | [dry-run] flag_id=underdog|dc7eca54-d9bf-4651-a2f0-56764b98149d player=Florian Thauvin stat=totalShots line=2.5 side=under actual=7.0 -> loss
+2026-09-15 17:22:40,193 UTC | INFO | [dry-run] flag_id=underdog|da4dfd6c-4bef-4ec2-9db1-e99214052d92 player=Adam Daghim stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,196 UTC | INFO | [dry-run] flag_id=underdog|6eb9a6c4-98e8-4ef9-8789-950399efd7ef player=Abdallah Sima stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,199 UTC | INFO | [dry-run] flag_id=underdog|d55ff6c2-7638-445a-b879-8245fc090130 player=Florian Thauvin stat=shotsOnTarget line=0.5 side=over actual=3.0 -> win
+2026-09-15 17:22:40,202 UTC | INFO | [dry-run] flag_id=underdog|02a61e17-2cb8-48c0-a19c-671ff38022a6 player=Andrija Bulatovic stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,205 UTC | INFO | [dry-run] flag_id=underdog|e9922adc-b28e-4ec3-a2a0-76dc2fc525ea player=Thorgan Hazard stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,208 UTC | INFO | [dry-run] flag_id=underdog|b77f6b1a-9031-48e5-b44c-f5dd09aa9a08 player=Giacomo Raspadori stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,211 UTC | INFO | [dry-run] flag_id=underdog|9fb1ca52-4321-4f02-9261-a387e6d23155 player=Panos Katseris stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,214 UTC | INFO | [dry-run] flag_id=underdog|9ecc7041-35b1-4ee4-a90e-c3d9287b6482 player=Ragnar Ache stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,217 UTC | INFO | [dry-run] flag_id=underdog|f5f7449d-db5a-4726-8b43-1ced42c7f585 player=Ragnar Ache stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,221 UTC | INFO | [dry-run] flag_id=underdog|b3887395-df0c-4f31-a638-b05979b6fa08 player=Eren Dinkci stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,224 UTC | INFO | [dry-run] flag_id=underdog|0db655f8-cdd2-4fc2-ab62-7cc4bd8a48fa player=Kevin De Bruyne stat=totalShots line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,227 UTC | INFO | [dry-run] flag_id=underdog|4a063468-736b-4c85-b37b-48fcf5b58b6a player=Noa Lang stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,230 UTC | INFO | [dry-run] flag_id=prizepicks|14623324 player=Charles De Ketelaere stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,233 UTC | INFO | [dry-run] flag_id=prizepicks|14585091 player=Giacomo Raspadori stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,236 UTC | INFO | [dry-run] flag_id=prizepicks|14745606 player=Kylian Mbappé stat=shotsOnTarget line=3.0 side=over actual=3.0 -> push
+2026-09-15 17:22:40,239 UTC | INFO | [dry-run] flag_id=prizepicks|14745600 player=Jude Bellingham stat=totalShots line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,243 UTC | INFO | [dry-run] flag_id=prizepicks|14727141 player=Roman Celentano stat=saves line=3.0 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,247 UTC | INFO | [dry-run] flag_id=prizepicks|14707976 player=Kristijan Kahlina stat=goalie fantasy score line=9.5 side=over actual=13.0 -> win
+2026-09-15 17:22:40,251 UTC | INFO | [dry-run] flag_id=prizepicks|14727192 player=James Pantemis stat=saves line=3.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:40,255 UTC | INFO | [dry-run] flag_id=prizepicks|14753678 player=Matt Freese stat=saves line=3.5 side=over actual=6.0 -> win
+2026-09-15 17:22:40,258 UTC | INFO | [dry-run] flag_id=prizepicks|14760934 player=JT Marcinkowski stat=goalie fantasy score line=9.5 side=over actual=17.0 -> win
+2026-09-15 17:22:40,262 UTC | INFO | [dry-run] flag_id=prizepicks|14761065 player=Hirving Lozano stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,265 UTC | INFO | [dry-run] flag_id=prizepicks|14763283 player=Joan García stat=saves line=2.0 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,268 UTC | INFO | [dry-run] flag_id=prizepicks|14763285 player=Lamine Yamal stat=shotsOnTarget line=2.0 side=over actual=2.0 -> push
+2026-09-15 17:22:40,271 UTC | INFO | [dry-run] flag_id=prizepicks|14775815 player=Egil Selvik stat=saves line=4.5 side=under actual=6.0 -> loss
+2026-09-15 17:22:40,274 UTC | INFO | [dry-run] flag_id=prizepicks|14776053 player=Ousmane Dembélé stat=totalShots line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,277 UTC | INFO | [dry-run] flag_id=prizepicks|14776056 player=Khvicha Kvaratskhelia stat=totalShots line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,280 UTC | INFO | [dry-run] flag_id=prizepicks|14776226 player=Ferran Torres stat=totalShots line=3.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,283 UTC | INFO | [dry-run] flag_id=prizepicks|14776228 player=Mika Godts stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,286 UTC | INFO | [dry-run] flag_id=prizepicks|14775821 player=Ferran Torres stat=shotsOnTarget line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,289 UTC | INFO | [dry-run] flag_id=prizepicks|14776231 player=Ludovic Ajorque stat=totalShots line=1.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,292 UTC | INFO | [dry-run] flag_id=prizepicks|14776238 player=Pathé Mboup stat=totalShots line=1.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,295 UTC | INFO | [dry-run] flag_id=prizepicks|14776008 player=Ludovic Ajorque stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,298 UTC | INFO | [dry-run] flag_id=prizepicks|14671036 player=Egil Selvik stat=goalie fantasy score line=8.5 side=under actual=15.0 -> loss
+2026-09-15 17:22:40,301 UTC | INFO | [dry-run] flag_id=prizepicks|14712295 player=Ousmane Dembélé stat=shotsOnTarget line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,303 UTC | INFO | [dry-run] flag_id=prizepicks|14746808 player=Khvicha Kvaratskhelia stat=shotsOnTarget line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,306 UTC | INFO | [dry-run] flag_id=underdog|f19ed162-8a36-4a9d-9bd4-a8f6432764df player=Lamine Yamal stat=shotsOnTarget line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,309 UTC | INFO | [dry-run] flag_id=underdog|fd760fb8-6747-4c68-bd24-5a75baadbc6f player=Jude Bellingham stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,313 UTC | INFO | [dry-run] flag_id=underdog|b2e25fb9-67d2-498a-8ded-6711c44abda3 player=Jude Bellingham stat=totalShots line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,315 UTC | INFO | [dry-run] flag_id=underdog|3569c523-dc04-424e-8130-9fced016ec70 player=Pablo Pagis stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,318 UTC | INFO | [dry-run] flag_id=underdog|dd976073-b88d-447a-898a-5bc0e2a186b3 player=Luca Koleosho stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,321 UTC | INFO | [dry-run] flag_id=underdog|bb45fbec-2cc6-4dfc-b652-f7435357701b player=Luca Koleosho stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,324 UTC | INFO | [dry-run] flag_id=underdog|fa55c88b-45b8-41c1-b17a-5243aeae8c48 player=Ernest Nuamah stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,327 UTC | INFO | [dry-run] flag_id=underdog|38330227-54d0-4320-a63c-7a67025e9b76 player=Paul Mendy stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,330 UTC | INFO | [dry-run] flag_id=underdog|a0cd2b33-1467-4bdd-8a35-f8c50b0edc8e player=Jean-Victor Makengo stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,333 UTC | INFO | [dry-run] flag_id=underdog|47e69698-67a9-4b86-a305-c8785be06ad7 player=Remy Labeau Lascary stat=totalShots line=2.5 side=over actual=2.0 -> loss
+2026-09-15 17:22:40,336 UTC | INFO | [dry-run] flag_id=underdog|eb2bd7ea-c2a4-45c5-b699-63f5052a3cd3 player=Andrija Bulatovic stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,340 UTC | INFO | [dry-run] flag_id=prizepicks|14709064 player=Jonathan Sirois stat=goalie fantasy score line=9.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,343 UTC | INFO | [dry-run] flag_id=prizepicks|14710188 player=Sébastian Breza stat=goalie fantasy score line=9.5 side=under actual=15.0 -> loss
+2026-09-15 17:22:40,346 UTC | INFO | [dry-run] flag_id=prizepicks|14710622 player=Angus Gunn stat=goalie fantasy score line=9.5 side=under actual=22.0 -> loss
+2026-09-15 17:22:40,349 UTC | INFO | [dry-run] flag_id=prizepicks|14777479 player=Alfonso Herrero stat=saves line=3.0 side=over actual=4.0 -> win
+2026-09-15 17:22:40,352 UTC | INFO | [dry-run] flag_id=prizepicks|14777961 player=Ferran Jutglà stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,356 UTC | INFO | [dry-run] flag_id=prizepicks|14777706 player=Williot Swedberg stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,358 UTC | INFO | [dry-run] flag_id=prizepicks|14777760 player=David Larrubia stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,363 UTC | INFO | [dry-run] flag_id=prizepicks|14777862 player=Pablo Martínez stat=totalShots line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,366 UTC | INFO | [dry-run] flag_id=prizepicks|14704317 player=Alfonso Herrero stat=goalie fantasy score line=9.5 side=over actual=11.0 -> win
+2026-09-15 17:22:40,369 UTC | INFO | [dry-run] flag_id=prizepicks|14779573 player=Berke Özer stat=saves line=2.0 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,372 UTC | INFO | [dry-run] flag_id=prizepicks|14776940 player=Nikola Stulic stat=totalShots line=2.0 side=under actual=0.0 -> win
+2026-09-15 17:22:40,375 UTC | INFO | [dry-run] flag_id=prizepicks|14776946 player=Jay Robinson stat=totalShots line=2.0 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,378 UTC | INFO | [dry-run] flag_id=prizepicks|14776952 player=Patrick Cutrone stat=totalShots line=2.0 side=under actual=2.0 -> push
+2026-09-15 17:22:40,381 UTC | INFO | [dry-run] flag_id=prizepicks|14776901 player=Jay Robinson stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,383 UTC | INFO | [dry-run] flag_id=prizepicks|14776903 player=Nikola Stulic stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,386 UTC | INFO | [dry-run] flag_id=prizepicks|14776879 player=Demba Thiam stat=goalie fantasy score line=9.5 side=under actual=-1.0 -> win
+2026-09-15 17:22:40,389 UTC | INFO | [dry-run] flag_id=prizepicks|14776882 player=Wladimiro Falcone stat=goalie fantasy score line=9.5 side=over actual=17.0 -> win
+2026-09-15 17:22:40,392 UTC | INFO | [dry-run] flag_id=prizepicks|14776876 player=Wladimiro Falcone stat=saves line=2.5 side=over actual=8.0 -> win
+2026-09-15 17:22:40,395 UTC | INFO | [dry-run] flag_id=prizepicks|14776877 player=Demba Thiam stat=saves line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,398 UTC | INFO | [dry-run] flag_id=prizepicks|14779679 player=Maarten Vandevoordt stat=saves line=2.0 side=over actual=4.0 -> win
+2026-09-15 17:22:40,401 UTC | INFO | [dry-run] flag_id=prizepicks|14777865 player=Ewan Hatfout stat=saves line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,404 UTC | INFO | [dry-run] flag_id=prizepicks|14777866 player=Robin Risser stat=saves line=2.5 side=over actual=3.0 -> win
+2026-09-15 17:22:40,407 UTC | INFO | [dry-run] flag_id=prizepicks|14778460 player=Nicolas Kristof stat=saves line=5.0 side=under actual=3.0 -> win
+2026-09-15 17:22:40,411 UTC | INFO | [dry-run] flag_id=prizepicks|14778444 player=Harry Kane stat=totalShots line=5.5 side=under actual=6.0 -> loss
+2026-09-15 17:22:40,414 UTC | INFO | [dry-run] flag_id=prizepicks|14778445 player=Ismael Saibari stat=totalShots line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,417 UTC | INFO | [dry-run] flag_id=prizepicks|14778447 player=Harry Kane stat=shotsOnTarget line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,420 UTC | INFO | [dry-run] flag_id=prizepicks|14777864 player=Leo Román stat=saves line=2.5 side=over actual=3.0 -> win
+2026-09-15 17:22:40,423 UTC | INFO | [dry-run] flag_id=prizepicks|14777902 player=Pierre-Emerick Aubameyang stat=totalShots line=2.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,426 UTC | INFO | [dry-run] flag_id=prizepicks|14777863 player=David Soria stat=saves line=2.0 side=over actual=2.0 -> push
+2026-09-15 17:22:40,429 UTC | INFO | [dry-run] flag_id=prizepicks|14777903 player=Yeremay Hernández stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,433 UTC | INFO | [dry-run] flag_id=prizepicks|14778249 player=Enes Ünal stat=shotsOnTarget line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,436 UTC | INFO | [dry-run] flag_id=prizepicks|14778438 player=Unai Marrero stat=goalie fantasy score line=9.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,439 UTC | INFO | [dry-run] flag_id=prizepicks|14778437 player=Unai Marrero stat=saves line=3.0 side=under actual=0.0 -> win
+2026-09-15 17:22:40,442 UTC | INFO | [dry-run] flag_id=prizepicks|14778449 player=Mikel Oyarzabal stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,446 UTC | INFO | [dry-run] flag_id=prizepicks|14779399 player=Luka Sucic stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,449 UTC | INFO | [dry-run] flag_id=prizepicks|14779401 player=Gonçalo Guedes stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,452 UTC | INFO | [dry-run] flag_id=prizepicks|14779408 player=Lee Kang-In stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,455 UTC | INFO | [dry-run] flag_id=prizepicks|14779412 player=Álex Baena stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,458 UTC | INFO | [dry-run] flag_id=prizepicks|14705439 player=Jan Oblak stat=goalie fantasy score line=9.5 side=under actual=16.0 -> loss
+2026-09-15 17:22:40,462 UTC | INFO | [dry-run] flag_id=prizepicks|14777872 player=Matt Turner stat=saves line=4.0 side=under actual=5.0 -> loss
+2026-09-15 17:22:40,465 UTC | INFO | [dry-run] flag_id=prizepicks|14777871 player=Chris Brady stat=saves line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,469 UTC | INFO | [dry-run] flag_id=prizepicks|14779682 player=Andre Blake stat=saves line=3.0 side=under actual=5.0 -> loss
+2026-09-15 17:22:40,473 UTC | INFO | [dry-run] flag_id=prizepicks|14779683 player=Duran Ferree stat=saves line=3.0 side=under actual=1.0 -> win
+2026-09-15 17:22:40,477 UTC | INFO | [dry-run] flag_id=underdog|12ac5b5d-ca0e-4ce4-b365-ffcf1063da86 player=Juan Cruz stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,480 UTC | INFO | [dry-run] flag_id=underdog|21f8961e-b11b-4c7b-8a32-8b9f0d850ba1 player=Thorgan Hazard stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,483 UTC | INFO | [dry-run] flag_id=underdog|66a9ffc1-cce3-4770-8148-221a03830519 player=Osame Sahraoui stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,486 UTC | INFO | [dry-run] flag_id=underdog|738f0fb7-b0c6-4442-8233-16bfea75ac91 player=Jay Robinson stat=shotsOnTarget line=0.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,489 UTC | INFO | [dry-run] flag_id=prizepicks|14785389 player=Robin Risser stat=goalie fantasy score line=9.5 side=under actual=7.0 -> win
+2026-09-15 17:22:40,491 UTC | INFO | [dry-run] flag_id=prizepicks|14785343 player=Ewan Hatfout stat=goalie fantasy score line=9.0 side=under actual=9.0 -> push
+2026-09-15 17:22:40,494 UTC | INFO | [dry-run] flag_id=prizepicks|14785405 player=Manuel Neuer stat=goalie fantasy score line=11.0 side=under actual=0.0 -> win
+2026-09-15 17:22:40,497 UTC | INFO | [dry-run] flag_id=prizepicks|14777868 player=Arijanet Muric stat=saves line=4.0 side=under actual=6.0 -> loss
+2026-09-15 17:22:40,500 UTC | INFO | [dry-run] flag_id=prizepicks|14777867 player=Guglielmo Vicario stat=saves line=2.0 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,504 UTC | INFO | [dry-run] flag_id=prizepicks|14784739 player=Brad Stuver stat=saves line=5.0 side=under actual=5.0 -> push
+2026-09-15 17:22:40,507 UTC | INFO | [dry-run] flag_id=prizepicks|14785593 player=Ryan Gauld stat=totalShots line=3.0 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,511 UTC | INFO | [dry-run] flag_id=prizepicks|14784737 player=Yohei Takaoka stat=saves line=2.0 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,514 UTC | INFO | [dry-run] flag_id=prizepicks|14785802 player=Brandon Vázquez stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,518 UTC | INFO | [dry-run] flag_id=prizepicks|14716622 player=Yohei Takaoka stat=goalie fantasy score line=9.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,521 UTC | INFO | [dry-run] flag_id=prizepicks|14716628 player=Brad Stuver stat=goalie fantasy score line=8.5 side=over actual=13.0 -> win
+2026-09-15 17:22:40,524 UTC | INFO | [dry-run] flag_id=prizepicks|14654819 player=Berke Özer stat=goalie fantasy score line=10.5 side=over actual=12.0 -> win
+2026-09-15 17:22:40,528 UTC | INFO | [dry-run] flag_id=prizepicks|14790717 player=Christopher Nkunku stat=totalShots line=2.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,531 UTC | INFO | [dry-run] flag_id=prizepicks|14790856 player=Antonio Nusa stat=totalShots line=2.5 side=over actual=2.0 -> loss
+2026-09-15 17:22:40,534 UTC | INFO | [dry-run] flag_id=underdog|f5164e0f-4fe6-4855-8305-369bc072a765 player=Lamine Yamal stat=shotsOnTarget line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,537 UTC | INFO | [dry-run] flag_id=prizepicks|14805556 player=Arijanet Muric stat=goalie fantasy score line=9.5 side=under actual=13.0 -> loss
+2026-09-15 17:22:40,541 UTC | INFO | [dry-run] flag_id=prizepicks|14715689 player=Matt Turner stat=goalie fantasy score line=9.5 side=over actual=13.0 -> win
+2026-09-15 17:22:40,544 UTC | INFO | [dry-run] flag_id=underdog|7aa4b4ac-15df-4ae6-889f-362e985225f1 player=Kevin De Bruyne stat=totalShots line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,547 UTC | INFO | [dry-run] flag_id=underdog|88919eca-21eb-4fcd-bd43-3645ba788399 player=Anthony Gordon stat=totalShots line=3.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,549 UTC | INFO | [dry-run] flag_id=underdog|0097d25a-180f-436c-89f0-71091a366726 player=Antonio Nusa stat=shotsOnTarget line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,552 UTC | INFO | [dry-run] flag_id=underdog|3d29c6b5-838e-4ef5-9903-4674c3f4e5a0 player=Amadou Haidara stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,555 UTC | INFO | [dry-run] flag_id=underdog|9e0fa8b7-b86f-4d96-a130-78030cad4d0b player=Nikola Stulic stat=totalShots line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,558 UTC | INFO | [dry-run] flag_id=underdog|2707488c-2d79-4df4-98b7-ac846acb1e63 player=Noa Lang stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,561 UTC | INFO | [dry-run] flag_id=prizepicks|14813162 player=Donyell Malen stat=totalShots line=4.0 side=over actual=4.0 -> push
+2026-09-15 17:22:40,564 UTC | INFO | [dry-run] flag_id=prizepicks|14813827 player=Paulo Dybala stat=totalShots line=3.0 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,567 UTC | INFO | [dry-run] flag_id=prizepicks|14812931 player=Mile Svilar stat=saves line=2.0 side=over actual=3.0 -> win
+2026-09-15 17:22:40,570 UTC | INFO | [dry-run] flag_id=prizepicks|14824228 player=Lucas da Cunha stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,573 UTC | INFO | [dry-run] flag_id=prizepicks|14824236 player=Trevoh Chalobah stat=totalShots line=0.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,576 UTC | INFO | [dry-run] flag_id=prizepicks|14824172 player=Jean Butez stat=goalie fantasy score line=9.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,579 UTC | INFO | [dry-run] flag_id=prizepicks|14824175 player=Edoardo Corvi stat=goalie fantasy score line=8.5 side=over actual=11.0 -> win
+2026-09-15 17:22:40,582 UTC | INFO | [dry-run] flag_id=prizepicks|14824170 player=Jean Butez stat=saves line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,585 UTC | INFO | [dry-run] flag_id=prizepicks|14824438 player=Lautaro Martínez stat=totalShots line=4.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,590 UTC | INFO | [dry-run] flag_id=prizepicks|14824522 player=Federico Dimarco stat=totalShots line=2.0 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,595 UTC | INFO | [dry-run] flag_id=prizepicks|14824524 player=Keinan Davis stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,598 UTC | INFO | [dry-run] flag_id=prizepicks|14824527 player=Nicolò Barella stat=totalShots line=1.5 side=over actual=3.0 -> win
+2026-09-15 17:22:40,602 UTC | INFO | [dry-run] flag_id=prizepicks|14824440 player=Nicolò Barella stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,605 UTC | INFO | [dry-run] flag_id=prizepicks|14824442 player=Keinan Davis stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,608 UTC | INFO | [dry-run] flag_id=prizepicks|14824443 player=Federico Dimarco stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,610 UTC | INFO | [dry-run] flag_id=prizepicks|14824432 player=Josep Martínez stat=goalie fantasy score line=9.5 side=over actual=3.0 -> loss
+2026-09-15 17:22:40,613 UTC | INFO | [dry-run] flag_id=prizepicks|14824433 player=Maduka Okoye stat=goalie fantasy score line=8.5 side=over actual=9.0 -> win
+2026-09-15 17:22:40,616 UTC | INFO | [dry-run] flag_id=prizepicks|14824429 player=Josep Martínez stat=saves line=2.0 side=over actual=2.0 -> push
+2026-09-15 17:22:40,619 UTC | INFO | [dry-run] flag_id=underdog|c98f557e-c169-4ed5-b594-47591ab6026b player=Marcus Thuram stat=shotsOnTarget line=1.5 side=under actual=3.0 -> loss
+2026-09-15 17:22:40,622 UTC | INFO | [dry-run] flag_id=underdog|91591d54-6395-43c3-bc7b-a8649489df17 player=Moise Kean stat=shotsOnTarget line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,625 UTC | INFO | [dry-run] flag_id=underdog|559e324c-371d-42b4-b1d7-f1192675d0d5 player=Moise Kean stat=totalShots line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,628 UTC | INFO | [dry-run] flag_id=underdog|8f444fb8-78bf-4a84-9c35-c034cc939266 player=Nico Paz stat=totalShots line=4.5 side=under actual=5.0 -> loss
+2026-09-15 17:22:40,631 UTC | INFO | [dry-run] flag_id=underdog|bc7c4107-24a1-487b-a139-ac97bd476e29 player=Nico Paz stat=shotsOnTarget line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,634 UTC | INFO | [dry-run] flag_id=underdog|1a783bab-7761-40c4-8356-a84f232b85ee player=Lucas Da Cunha stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,637 UTC | INFO | [dry-run] flag_id=underdog|f55420b9-f49a-47f8-83fe-899f87c7b1d7 player=Donyell Malen stat=totalShots line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,641 UTC | INFO | [dry-run] flag_id=underdog|56b9076f-10cb-4c5c-9b76-a6d63aec4da3 player=Donyell Malen stat=shotsOnTarget line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,644 UTC | INFO | [dry-run] flag_id=underdog|83070d78-1ba6-446e-b1c7-9cf187529ca4 player=Rolando Mandragora stat=shotsOnTarget line=0.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,647 UTC | INFO | [dry-run] flag_id=underdog|62096635-8fee-4b5d-853d-b961d278421b player=Andy Diouf stat=totalShots line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,650 UTC | INFO | [dry-run] flag_id=underdog|a8f8d53c-ba64-42d2-8584-c393de420638 player=Andy Diouf stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,653 UTC | INFO | [dry-run] flag_id=underdog|afba6f17-3225-4f0a-9949-342899cc3dc7 player=Jurgen Ekkelenkamp stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,655 UTC | INFO | [dry-run] flag_id=underdog|d9d42a92-53fd-4e0a-88af-4bca9b184a1f player=Rodrigo Mora stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,658 UTC | INFO | [dry-run] flag_id=underdog|b5631a9d-6e56-4f40-b6e4-686d56f3be3e player=Martin Baturina stat=totalShots line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:22:40,661 UTC | INFO | [dry-run] flag_id=underdog|f5975d2a-830c-437c-ac91-bf30af6338dd player=Martin Baturina stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,664 UTC | INFO | [dry-run] flag_id=underdog|1038e033-d0a1-4fb2-9c05-730ec3190191 player=Keinan Davis stat=totalShots line=1.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,667 UTC | INFO | [dry-run] flag_id=underdog|532397da-255c-4a96-b931-c3746d99bef2 player=Bryan Cristante stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,670 UTC | INFO | [dry-run] flag_id=underdog|7545bcfe-7e56-4182-af22-f76af92e7f94 player=Nikola Vlasic stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,673 UTC | INFO | [dry-run] flag_id=underdog|991bbd0d-e809-456c-b598-01cfcf2a365d player=Rodrigo Mora stat=totalShots line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,676 UTC | INFO | [dry-run] flag_id=underdog|43b87a96-8031-4dd4-a712-f4590af3dcbc player=Bryan Cristante stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:40,679 UTC | INFO | [dry-run] flag_id=underdog|0139a00f-efc3-45d4-ac37-9c67ecb6c7db player=Keinan Davis stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,682 UTC | INFO | [dry-run] flag_id=underdog|84b93223-100b-4079-901a-1636c293f23b player=El Bilal Toure stat=shotsOnTarget line=0.5 side=over actual=1.0 -> win
+2026-09-15 17:22:40,685 UTC | INFO | [dry-run] flag_id=prizepicks|14825537 player=Álvaro Valles stat=saves line=3.0 side=over actual=7.0 -> win
+2026-09-15 17:22:40,687 UTC | INFO | [dry-run] flag_id=prizepicks|14825552 player=Georges Mikautadze stat=totalShots line=3.0 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,690 UTC | INFO | [dry-run] flag_id=prizepicks|14825545 player=Troy Parrott stat=totalShots line=2.5 side=under actual=0.0 -> win
+2026-09-15 17:22:40,696 UTC | INFO | [dry-run] flag_id=prizepicks|14825550 player=Cucho Hernández stat=totalShots line=2.0 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,699 UTC | INFO | [dry-run] flag_id=prizepicks|14705933 player=Álvaro Valles stat=goalie fantasy score line=9.5 side=over actual=17.0 -> win
+2026-09-15 17:22:40,702 UTC | INFO | [dry-run] flag_id=underdog|c3586624-e1c6-482a-acc0-bef2a9e83460 player=Marcus Thuram stat=totalShots line=3.5 side=under actual=4.0 -> loss
+2026-09-15 17:22:40,705 UTC | INFO | [dry-run] flag_id=underdog|83302ecf-fa08-4839-9947-f6006bb52749 player=Alberto Moleiro stat=totalShots line=1.5 side=under actual=2.0 -> loss
+2026-09-15 17:22:40,708 UTC | INFO | [dry-run] flag_id=underdog|6dbe802c-f11c-4742-8c50-f0a25cf8c962 player=Alberto Moleiro stat=shotsOnTarget line=0.5 side=over actual=0.0 -> loss
+2026-09-15 17:22:40,711 UTC | INFO | [dry-run] flag_id=underdog|dd8ac364-e2e3-48af-bb63-93a25eeb0717 player=Gerard Moreno stat=totalShots line=2.5 side=under actual=1.0 -> win
+2026-09-15 17:22:40,713 UTC | INFO | [dry-run] flag_id=underdog|59f5cad3-7d53-45c4-a215-119035b125b2 player=Gerard Moreno stat=shotsOnTarget line=0.5 side=under actual=1.0 -> loss
+2026-09-15 17:22:40,716 UTC | INFO | [dry-run] flag_id=underdog|f4e22d1f-bfcb-4260-8efd-03e4dcd9b5d1 player=Donyell Malen stat=totalShots line=2.5 side=over actual=4.0 -> win
+2026-09-15 17:22:40,719 UTC | INFO | [dry-run] flag_id=underdog|188903dc-c701-4ce9-a50b-82f81afadd17 player=Nikola Vlasic stat=totalShots line=1.5 side=over actual=1.0 -> loss
+2026-09-15 17:22:40,722 UTC | INFO | [dry-run] flag_id=underdog|35693baf-3c08-4daf-b9f3-947cf91d6a85 player=Jurgen Ekkelenkamp stat=totalShots line=1.5 side=over actual=2.0 -> win
+2026-09-15 17:22:41,027 UTC | INFO | epl: 22 real closed flag(s) with a resolved stat key are not yet graded; checking each against epl's real, published results.
+2026-09-15 17:25:10,889 UTC | INFO | [dry-run] flag_id=prizepicks|14746364 player=Konstantinos Tzolakis stat=saves line=4.5 side=under actual=5.0 -> loss
+2026-09-15 17:25:10,892 UTC | INFO | [dry-run] flag_id=prizepicks|14723469 player=Caoimhín Kelleher stat=saves line=3.0 side=under actual=8.0 -> loss
+2026-09-15 17:25:10,895 UTC | INFO | [dry-run] flag_id=prizepicks|14760141 player=Adrien Truffert stat=tackles line=2.5 side=under actual=8.0 -> loss
+2026-09-15 17:25:10,898 UTC | INFO | [dry-run] flag_id=prizepicks|14760785 player=Michael Kayode stat=tackles line=1.5 side=under actual=0.0 -> win
+2026-09-15 17:25:10,900 UTC | INFO | [dry-run] flag_id=prizepicks|14723472 player=Bernd Leno stat=saves line=3.5 side=under actual=3.0 -> win
+2026-09-15 17:25:10,903 UTC | INFO | [dry-run] flag_id=prizepicks|14723471 player=Alisson Becker stat=saves line=2.5 side=over actual=3.0 -> win
+2026-09-15 17:25:10,906 UTC | INFO | [dry-run] flag_id=prizepicks|14761809 player=Alexis Mac Allister stat=tackles line=2.5 side=over actual=1.0 -> loss
+2026-09-15 17:25:10,909 UTC | INFO | [dry-run] flag_id=prizepicks|14762252 player=Antonee Robinson stat=tackles line=2.5 side=over actual=2.0 -> loss
+2026-09-15 17:25:10,912 UTC | INFO | [dry-run] flag_id=prizepicks|14761813 player=Jeremie Frimpong stat=tackles line=1.5 side=under actual=1.0 -> win
+2026-09-15 17:25:10,915 UTC | INFO | [dry-run] flag_id=prizepicks|14745317 player=Matz Sels stat=saves line=3.0 side=under actual=5.0 -> loss
+2026-09-15 17:25:10,919 UTC | INFO | [dry-run] flag_id=prizepicks|14745316 player=Zion Suzuki stat=saves line=2.5 side=under actual=5.0 -> loss
+2026-09-15 17:25:10,923 UTC | INFO | [dry-run] flag_id=prizepicks|14745315 player=Kjell Scherpen stat=saves line=3.5 side=over actual=2.0 -> loss
+2026-09-15 17:25:10,926 UTC | INFO | [dry-run] flag_id=prizepicks|14745314 player=Dean Henderson stat=saves line=2.5 side=over actual=0.0 -> loss
+2026-09-15 17:25:10,929 UTC | INFO | [dry-run] flag_id=prizepicks|14746800 player=Jordan Pickford stat=saves line=3.0 side=under actual=2.0 -> win
+2026-09-15 17:25:10,933 UTC | INFO | [dry-run] flag_id=prizepicks|14750821 player=Vitalii Mykolenko stat=tackles line=2.5 side=under actual=7.0 -> loss
+2026-09-15 17:25:10,936 UTC | INFO | [dry-run] flag_id=prizepicks|14725419 player=Senne Lammens stat=saves line=3.5 side=under actual=1.0 -> win
+2026-09-15 17:25:10,941 UTC | INFO | [dry-run] flag_id=prizepicks|14725379 player=Gianluigi Donnarumma stat=saves line=3.0 side=under actual=3.0 -> push
+2026-09-15 17:25:10,944 UTC | INFO | [dry-run] flag_id=prizepicks|14775346 player=Carl Rushworth stat=saves line=3.5 side=under actual=2.0 -> win
+2026-09-15 17:25:10,948 UTC | INFO | [dry-run] flag_id=prizepicks|14775345 player=Bart Verbruggen stat=saves line=2.5 side=under actual=6.0 -> loss
+2026-09-15 17:25:10,953 UTC | INFO | [dry-run] flag_id=prizepicks|14762657 player=Elliot Anderson stat=tackles line=2.5 side=under actual=3.0 -> loss
+2026-09-15 17:25:10,959 UTC | INFO | [dry-run] flag_id=prizepicks|14808621 player=James Trafford stat=saves line=3.0 side=under actual=4.0 -> loss
+2026-09-15 17:25:10,965 UTC | INFO | [dry-run] flag_id=prizepicks|14812049 player=Anton Stach stat=tackles line=2.5 side=under actual=2.0 -> win
+2026-09-15 17:25:10,966 UTC | INFO | Auto-grading run complete: {'dry_run': True, 'total_graded': 489, 'by_sport': [{'sport': 'nfl', 'candidates': 379, 'graded': 0, 'no_player_match': 376, 'no_game_match': 3, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'mlb', 'candidates': 971, 'graded': 0, 'no_player_match': 96, 'no_game_match': 875, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'soccer', 'candidates': 552, 'graded': 467, 'no_player_match': 9, 'no_game_match': 76, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'epl', 'candidates': 22, 'graded': 22, 'no_player_match': 0, 'no_game_match': 0, 'no_stat_value': 0, 'bad_stat_key': 0}]}
+2026-09-15 17:28:52,780 UTC | INFO | nfl: 379 real closed flag(s) with a resolved stat key are not yet graded; checking each against nfl's real, published results.
+2026-09-15 17:28:53,605 UTC | INFO | mlb: 971 real closed flag(s) with a resolved stat key are not yet graded; checking each against mlb's real, published results.
+2026-09-15 17:30:37,605 UTC | INFO | soccer: 552 real closed flag(s) with a resolved stat key are not yet graded; checking each against soccer's real, published results.
+2026-09-15 17:33:06,943 UTC | INFO | epl: 22 real closed flag(s) with a resolved stat key are not yet graded; checking each against epl's real, published results.
+2026-09-15 17:34:05,596 UTC | INFO | Wrote 489 new auto-graded row(s) to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\outcome_log.csv.
+2026-09-15 17:34:05,596 UTC | INFO | Auto-grading run complete: {'dry_run': False, 'total_graded': 489, 'by_sport': [{'sport': 'nfl', 'candidates': 379, 'graded': 0, 'no_player_match': 376, 'no_game_match': 3, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'mlb', 'candidates': 971, 'graded': 0, 'no_player_match': 96, 'no_game_match': 875, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'soccer', 'candidates': 552, 'graded': 467, 'no_player_match': 9, 'no_game_match': 76, 'no_stat_value': 0, 'bad_stat_key': 0}, {'sport': 'epl', 'candidates': 22, 'graded': 22, 'no_player_match': 0, 'no_game_match': 0, 'no_stat_value': 0, 'bad_stat_key': 0}]}

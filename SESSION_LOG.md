@@ -13126,6 +13126,99 @@ all before this session, not just an unsurfaced one.
   evidence-backed recommendation is: trust PrizePicks flags, distrust Underdog flags, in every sport,
   not just MLB.
 
+## Session 2.27 — Soccer/EPL Real-Outcome Auto-Grading
+
+**Date:** 2026-09-15 **Status:** ✅ Complete — real `--run` executed, all validation checks pass.
+
+**Why this exists:** Session 2.26 generalized `auto_grade_outcomes.py` to a per-sport
+`GradingAdapter` design specifically so soccer/EPL, CFB, and tennis could each be added in one small
+session rather than a near-duplicate script. This session is the first real test of whether that
+generalization actually paid off.
+
+**What got built:**
+1. `scripts/estimation/pickem_sport_plugins/soccer.py` — `_fetch_event_player_rows()` now takes the
+   real event UTC kickoff instant (already fetched by `_fetch_completed_events()` to sort/dedupe
+   events, previously discarded afterward) and carries it through into every stat row as
+   `game_date_utc`.
+2. `scripts/estimation/pickem_sport_plugins/epl.py` — same idea: FPL's own per-gameweek `history` row
+   already carries `kickoff_time` (confirmed live, e.g. `"2026-08-21T19:00:00Z"`), added as
+   `game_date_utc`.
+3. `scripts/calibration/auto_grade_outcomes.py` — one shared `find_soccer_or_epl_game_row()` function
+   registered for both `SOCCER_ADAPTER` and `EPL_ADAPTER`. Unlike MLB Stats API's `gameLog` (already a
+   local civil date, Session 2.26) or nflverse's schedule file (already the game's own Eastern
+   `gameday`), neither ESPN's scoreboard `date` nor FPL's `kickoff_time` carries a "local calendar
+   date" concept — both are a raw UTC instant for a match played somewhere in Europe or North America.
+   Rather than build a third, per-league timezone table (Madrid time for La Liga, UK time for EPL, a
+   US timezone that varies by home team for MLS), this reuses the exact same UTC-to-America/New_York
+   conversion (`game_local_date`) already applied to every platform's own `game_start_time` on the
+   other side of the join — checked live that every real soccer/EPL kickoff falls within 11:00-22:00
+   UK/CET local (comfortably after 04:00 UTC), so this conversion never rolls the calendar date
+   backward across a real kickoff. `ADAPTERS` grew from `[NFL_ADAPTER, MLB_ADAPTER]` to include
+   `SOCCER_ADAPTER, EPL_ADAPTER` — no other change to this file's shared logic.
+4. `frontend/app.js` — `VALIDATED_SPORTS` grew from `{nfl, mlb}` to `{nfl, mlb, soccer, fifa, epl}`.
+   All three real `sport` label strings are needed (not just `"soccer"`/`"epl"`) because Underdog uses
+   `"FIFA"` for real-life soccer props (confirmed by real player names — Haaland, Mbappe — not the
+   video game; see `pickem_sport_plugins/soccer.py`'s own docstring), even though one shared adapter
+   grades `"soccer"` and `"fifa"` together on the Python side.
+5. `frontend/index.html` — updated the real-outcome-grading panel's static explanatory text (previously
+   hardcoded to "Session 2.18 (NFL) and Session 2.26 (MLB)... soccer, tennis, NBA, CFB has no
+   real-outcome grading yet") to reflect soccer/EPL now being graded.
+
+**Files touched:** `ROADMAP.md`, `scripts/estimation/pickem_sport_plugins/soccer.py`,
+`scripts/estimation/pickem_sport_plugins/epl.py`, `scripts/estimation/test_pickem_model.py` (updated
+one test's call site for `_fetch_event_player_rows()`'s new parameter), `scripts/calibration/
+auto_grade_outcomes.py`, `frontend/app.js`, `frontend/index.html`.
+
+**Validation:**
+- [x] `--run --dry-run` against real live data: soccer/FIFA grades 467 of 552 real closed-flag
+  candidates (9 no_player_match — real players in leagues outside ESPN's 5 covered codes, e.g. Saudi
+  or Portuguese leagues; 76 no_game_match — same non-covered-league players plus one real MLS
+  scheduling gap, ESPN's `usa.1` scoreboard returning zero events for the entire Aug 1 - Sep 16, 2026
+  window checked directly, a real, stated data-availability gap rather than a bug); EPL grades all 22
+  of 22 real closed candidates.
+- [x] Spot-checked two real graded rows by hand directly against the live source APIs (not just
+  trusted the script's own output): Mile Svilar (AS Roma @ Torino, ESPN event 401874950,
+  2026-09-14T16:30Z kickoff = 12:30 ET, matching the flag's own `game_start_time`) — ESPN's summary
+  endpoint shows real `saves: 3.0`, matching the script's `actual=3.0 -> win` (Over 2.0). Alisson
+  Becker (FPL gameweek 4, kickoff `2026-09-12T14:00:00Z` = 10:00 ET, matching the flag) — FPL's own
+  `element-summary` shows real `saves: 3`, matching `actual=3.0 -> win` (Over 2.5).
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` — 69/69 pass (after fixing the one test broken
+  by the new `event_date_utc` parameter — a real, expected consequence of the additive change, not a
+  regression).
+- [x] **Ran for real:** `--run` wrote 489 new rows to `data/pickem/outcome_log.csv` (467 soccer/FIFA +
+  22 EPL).
+- [x] Frontend re-verified live in-browser (temporary local copy of `clv_log.csv`/`outcome_log.csv`
+  into `frontend/data/`, removed after — the real deploy step does this automatically): per-sport
+  outcome table now shows `FIFA — Validated — underperforming (54.7%)`, `SOCCER — Validated —
+  underperforming (56.6%)`, `EPL — Validated — underperforming (38.1%)`; sport-filter dropdown labels
+  updated automatically with no code change beyond the `VALIDATED_SPORTS` entry, confirming Session
+  2.26's generalization claim.
+
+**Underdog cross-sport check (requested follow-up to Session 2.31):** the user specifically asked
+whether Session 2.31's Underdog underperformance shows up again here. **It does not, on this real
+sample.** Underdog (`FIFA`) 54.7% real win rate (n=254) vs. PrizePicks (`SOCCER`) 56.6% (n=198) — a
+2-point gap, not the 10-20-point MLB/NFL gap. More tellingly, bucketing Underdog soccer by the model's
+own stated edge shows win rate *rising* with edge (0-5%: 44.0% n=25, 5-15%: 53.1% n=96, 15-30%: 52.5%
+n=80, 30%+: 66.0% n=53) — the opposite of Session 2.31's MLB/NFL inversion (win rate *falling* as edge
+rises), not merely a weaker version of the same problem. Both soccer platforms sit below the 57.74%
+breakeven in aggregate, same as MLB/NFL, but that reads as ordinary small-sample variance here, not a
+second confirmed instance of the Session 2.31 mechanism. EPL has no Underdog flags graded yet (all 21
+real closed EPL legs are PrizePicks-only), so this comparison isn't possible for EPL specifically —
+worth revisiting once EPL/Underdog volume exists.
+
+**Open items / deferred validations:**
+- Soccer's real 76-row `no_game_match` gap (leagues outside ESPN's 5 covered codes, and MLS's real
+  Aug-Sep 2026 scoreboard gap) is a pre-existing estimation-side limitation (soccer.py already
+  documents ESPN's 5-league coverage as a stated boundary) surfacing on the grading side too — not new
+  to this session and not fixed here, consistent with 2.27's scope being "add the adapter," not "add
+  new league coverage."
+- NFL/MLB's own `--dry-run` numbers this session (0 newly graded for both) reflect flags already
+  graded by prior sessions plus pre-existing no_player_match/no_game_match candidates — unrelated to
+  this session's soccer/EPL-only changes (confirmed neither adapter's code was touched).
+- The Underdog soccer finding above is a real, but still modest-n (254), sample — not yet enough to
+  say Underdog soccer is safe the way Session 2.31 said Underdog MLB/NFL isn't. Re-check as more
+  soccer/EPL legs close.
+
 ## Session 2.31 — Underdog Cross-Sport Pricing Gap Investigation
 
 **Date completed:** 2026-09-15

@@ -524,7 +524,7 @@ def _no_sleep():
 
 def test_soccer_event_fetch_skips_instead_of_raising_on_repeated_failure():
     with _always_times_out(), _no_sleep():
-        rows = _fetch_event_player_rows("esp.1", "999999", 1)
+        rows = _fetch_event_player_rows("esp.1", "999999", 1, "2026-09-01T12:00Z")
     assert rows == []
 
 

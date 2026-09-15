@@ -154,8 +154,15 @@ function isTrueField(v) {
 // future grading session (2.27 soccer/EPL, 2.28 CFB, 2.29 tennis) with
 // no other frontend change required -- see auto_grade_outcomes.py's
 // ADAPTERS list, which this should always match.
+//
+// Session 2.27: "soccer"/"fifa"/"epl" all added -- three distinct real
+// `sport` label strings in clv_log.csv/outcome_log.csv (PrizePicks uses
+// "SOCCER" for non-EPL leagues and "EPL" for the Premier League; Underdog
+// uses "FIFA" for real-life soccer props -- see
+// pickem_sport_plugins/soccer.py's docstring), even though one shared
+// GradingAdapter grades "soccer"+"fifa" together on the Python side.
 // ---------------------------------------------------------------------
-const VALIDATED_SPORTS = new Set(["nfl", "mlb"]);
+const VALIDATED_SPORTS = new Set(["nfl", "mlb", "soccer", "fifa", "epl"]);
 
 function isValidatedSport(sport) {
   return VALIDATED_SPORTS.has(String(sport || "").trim().toLowerCase());
