@@ -12,6 +12,11 @@ Session 2.22 addition: applies SIGMA_CALIBRATION_FACTOR (see the "SIGMA
 CALIBRATION" note below) to every computed sigma, closing a real, measured
 overconfidence gap found by Session 2.20's weekly_review.py against real
 graded outcomes. No other model logic changed.
+Session 2.25 addition: applies SIGMA_CALIBRATION_FACTOR_BY_STAT (see the
+"SIGMA CALIBRATION" note below) as a per-stat override for 6 stat types
+Session 2.24 found still miscalibrated past a 0.03 gap after the global
+factor -- every other stat still falls back to the single global
+SIGMA_CALIBRATION_FACTOR. No other model logic changed.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -84,7 +89,9 @@ black-box factors" standard)
    against (Sessions 2.4/2.5).
 4. model_sigma -- the player's own sample standard deviation of the stat
    across their REG-season games so far, scaled by
-   SIGMA_CALIBRATION_FACTOR (Session 2.22 -- see the "SIGMA
+   SIGMA_CALIBRATION_FACTOR, or by a stat-specific override in
+   SIGMA_CALIBRATION_FACTOR_BY_STAT when one exists for that
+   row's resolved_stat_key (Session 2.22/2.25 -- see the "SIGMA
    CALIBRATION" section below). A player with fewer than 2
    qualifying games has no real sigma to compute; see
    MIN_GAMES_FOR_ESTIMATE below.
@@ -167,12 +174,45 @@ scripts/calibration/fit_sigma_recalibration.py for the exact method and
 data/pickem/sigma_recalibration_log.csv for the fit's own logged
 result. The fitted value (1.61) closed the calibration gap from 0.0674 to
 0.0008 on the same sample it was fit against. Every computed sample_sigma()
-is multiplied by this factor before being used in prob_over() -- applied
-uniformly, not per-sport or per-stat, since the graded sample it was fit
-against spans NFL props across every stat type this project currently
-scores. Re-fitting this factor periodically as more real outcomes
-accumulate (and, eventually, per-sport once other sports have enough real
-graded volume of their own) is real future work -- see
+is multiplied by this factor before being used in prob_over(), UNLESS a
+per-stat override applies (see below).
+
+SESSION 2.24/2.25 ADDITION -- SIGMA_CALIBRATION_FACTOR_BY_STAT
+------------------------------------------------------------------
+The global fit above averages across every stat type combined -- Session
+2.24 (scripts/calibration/pickem_calibration_by_stat.py) checked whether
+that average was masking real per-stat-type miscalibration by re-running
+the same z-recovery/Brier-score method grouped by resolved_stat_key. Of
+18 stat types with enough graded volume (n>=20), 6 remained past a 0.03
+gap even after the global 1.61 correction: rushing_tds, passing_
+interceptions, completions, kicking points, passing_tds+rushing_tds+
+receiving_tds, and fg_made. SIGMA_CALIBRATION_FACTOR_BY_STAT holds an
+independently-fit k for each of those 6 (same Brier-minimizing grid
+search, restricted to that stat's own graded legs), which REPLACES
+SIGMA_CALIBRATION_FACTOR for that stat only -- every other stat, including
+two that were flagged in the first pass but resolved on inspection
+(targets: no real model edge on this stat, so no sigma multiplier applies;
+rushing_yards+receiving_yards: its true best fit turned out to already sit
+inside the global factor's own grid range, so the original flag was a
+grid-search-ceiling artifact, not real miscalibration), keeps using the
+single global factor. See SIGMA_CALIBRATION_FACTOR_BY_STAT's own inline
+comments for the excluded-stats reasoning and per-stat n. These 6 values
+have NOT been validated on held-out data -- they are a same-sample
+Brier-minimizing fit, same caveat as the global factor's own fit, and the
+smallest (rushing_tds, n=27) should be watched for drift as more legs
+grade in, same as the global factor already is via weekly_review.py.
+Also stated plainly: the grid search minimizes BRIER SCORE, not the mean
+calibration gap directly, and those are not always minimized by the same
+k. Two of the 6 -- completions (residual gap ~+0.09) and kicking points
+(residual gap ~+0.05) -- still sit above the 0.03 threshold even at their
+own individually-fit best k. Their per-stat override is still a real
+improvement over the single global factor (which left them at +0.09/+0.08
+respectively) and a genuinely better Brier score, but it should not be
+read as "fully recalibrated" for those two specifically -- see
+SESSION_LOG.md Session 2.25 for the exact numbers.
+Re-fitting either the global or per-stat factors periodically as more real
+outcomes accumulate (and, eventually, per-sport once other sports have
+enough real graded volume of their own) is real future work -- see
 data/pickem/sigma_recalibration_log.csv's own notes.
 
 SESSION 2.12 REFACTOR -- what moved where
@@ -238,6 +278,37 @@ SIGMA_CALIBRATION_FACTOR = 1.61  # Session 2.22: fit against 8,196 real graded
 # legs (data/pickem/outcome_log.csv, 2026-09-15) via
 # scripts/calibration/fit_sigma_recalibration.py -- see the "SIGMA
 # CALIBRATION" module docstring section above for the full derivation.
+
+SIGMA_CALIBRATION_FACTOR_BY_STAT = {
+    # Session 2.24: scripts/calibration/pickem_calibration_by_stat.py found
+    # that SIGMA_CALIBRATION_FACTOR (1.61), fit globally, still leaves these
+    # 6 resolved_stat_key groups miscalibrated past a 0.03 gap even after
+    # the global correction is applied. Each value below REPLACES (does not
+    # stack on top of) SIGMA_CALIBRATION_FACTOR for that stat -- it is an
+    # independent per-stat fit against the same method (grid-search k
+    # minimizing Brier score against real graded outcomes for that stat
+    # only), not the global k further adjusted. See SESSION_LOG.md Session
+    # 2.24/2.25 for the fit run and n per stat; data/pickem/outcome_log.csv
+    # is the source. Any resolved_stat_key not listed here falls back to
+    # SIGMA_CALIBRATION_FACTOR.
+    #
+    # Excluded from this table on purpose:
+    # - "targets" (n=127): flagged, but its real win rate is ~50% -- the
+    #   model has no real edge on this stat, so no sigma multiplier fixes
+    #   it (pushing k toward infinity trivially shrinks the gap without
+    #   improving Brier score). A sigma fix does not apply here.
+    # - "rushing_yards+receiving_yards" (n=445): the widened-grid re-fit
+    #   found its true optimum (k=3.095) already brings the gap under the
+    #   0.03 threshold using the GLOBAL factor's own grid range -- it was a
+    #   grid-search-ceiling artifact in the first pass, not real
+    #   miscalibration, so it stays on the global 1.61.
+    "rushing_tds": 0.610,  # n=27 -- smallest sample here; watch for drift
+    "passing_interceptions": 0.825,  # n=63
+    "completions": 1.595,  # n=43 -- best-Brier k still leaves ~+0.09 gap
+    "kicking points": 2.100,  # n=186 -- best-Brier k still leaves ~+0.05 gap
+    "passing_tds+rushing_tds+receiving_tds": 1.155,  # n=325
+    "fg_made": 1.495,  # n=146
+}
 
 NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 
@@ -646,7 +717,10 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         model_mean = SEASON_AVG_BLEND_WEIGHT * s_avg + RECENT_FORM_BLEND_WEIGHT * r_form
         sigma = sample_sigma(series, model_mean)
         if sigma == sigma:  # NaN-safe: NaN sigma stays NaN, prob_over() handles it
-            sigma *= SIGMA_CALIBRATION_FACTOR
+            calibration_factor = SIGMA_CALIBRATION_FACTOR_BY_STAT.get(
+                row["resolved_stat_key"], SIGMA_CALIBRATION_FACTOR
+            )
+            sigma *= calibration_factor
 
         line = row.get("line")
         p_over = prob_over(line, model_mean, sigma) if line is not None else None

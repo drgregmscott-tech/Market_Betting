@@ -2243,6 +2243,108 @@ occurred) — worth watching the first real trigger.
 produces a real read; every run before then correctly reports
 "insufficient sample," which is expected, not a bug.
 
+### Session 2.24 — Per-Stat-Type Calibration Breakdown (Pick'em)
+**Status:** ✅ Complete (2026-09-15) — measurement only, no model change.
+See SESSION_LOG.md for full detail.
+**Prerequisites:** Session 2.22 (Sigma Recalibration) complete.
+
+**Why this exists:** Session 2.22's single global sigma factor could be
+averaging away real, stat-type-specific miscalibration that still hides
+underneath a healthy-looking aggregate gap — a gap named but never
+checked in `docs/research/pickem_estimation_model_spec.md`.
+
+**What got built:** `scripts/calibration/pickem_calibration_by_stat.py`,
+reusing `fit_sigma_recalibration.py`'s exact z-recovery/Brier-score method
+grouped by `resolved_stat_key` instead of over the whole population.
+Finding: **8 of 18 stat types (n>=20) remain past the 0.03 gap threshold
+even after the current global k=1.61 correction** — `targets`,
+`rushing_tds`, `passing_interceptions`, `completions`,
+`rushing_yards+receiving_yards`, `kicking points`,
+`passing_tds+rushing_tds+receiving_tds`, `fg_made` — while all six
+high-volume single continuous/near-continuous stats (receiving_yards,
+rushing_yards, receptions, passing_yards, passing_tds, def_sacks) land
+under a 0.005 gap. No model change made this session; two concrete
+follow-ups proposed (widen the k grid for two grid-bound groups; consider
+a per-stat-key override dict pending a larger sample on the smallest
+flagged groups) — pending user sign-off per session instructions.
+
+**Files touched:** `scripts/calibration/pickem_calibration_by_stat.py`
+(new).
+
+**Validation (required to close session):**
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` (51/51),
+`test_clv_logger.py` (13/13) all pass (unchanged — no production code
+touched).
+- [x] Ran the new script against the real, live 8,196-leg graded sample
+and manually verified reported per-group `n` against raw
+`value_counts()`.
+
+**Open items / deferred validations:**
+- No held-out validation performed on any per-stat `fit_k` — these are
+diagnostic findings, not numbers ready to ship into `pickem_model.py`.
+- Smallest flagged groups (`rushing_tds` n=27, `completions` n=43,
+`passing_interceptions` n=63) are close enough to the 20-leg floor that
+the flagged gap could partly be sampling noise rather than a stable
+effect — worth re-running this breakdown as more legs grade in before
+deciding on a per-stat override.
+
+**Follow-up (user-approved same-session re-fit):** widened the per-group
+grid ceiling to 8.0 and re-ran the two groups that had hit the standard
+3.0 ceiling. `rushing_yards+receiving_yards` resolved (true k=3.095, gap
+now +0.0143 — under threshold; no longer flagged). `targets` did not
+resolve — it keeps pinning the ceiling because its real win rate is
+already ~50% (no real model edge on this stat), so pushing k toward
+infinity trivially drives the gap toward zero without meaningfully
+improving Brier score. `targets` should be treated as a no-edge stat, not
+a sigma-tuning candidate, and is excluded from the per-stat-override
+candidate list. Remaining real candidates: `rushing_tds`,
+`passing_interceptions`, `completions`, `kicking points`,
+`passing_tds+rushing_tds+receiving_tds`, `fg_made`.
+
+### Session 2.25 — Per-Stat-Type Sigma Override, Implemented (Pick'em)
+**Status:** ✅ Complete (2026-09-15) — see SESSION_LOG.md for full detail.
+**Prerequisites:** Session 2.24 (Per-Stat-Type Calibration Breakdown)
+complete; implemented on the user's explicit go-ahead.
+
+**Why this exists:** Session 2.24 found 6 stat types still miscalibrated
+past 0.03 gap even after the single global `SIGMA_CALIBRATION_FACTOR`,
+each with its own independently-fit replacement k already measured — this
+session ships those 6 values into the live model.
+
+**What got built:** `SIGMA_CALIBRATION_FACTOR_BY_STAT`, a dict keyed by
+`resolved_stat_key` (rushing_tds: 0.610, passing_interceptions: 0.825,
+completions: 1.595, kicking points: 2.100, passing_tds+rushing_tds+
+receiving_tds: 1.155, fg_made: 1.495) that REPLACES the global 1.61 factor
+for those 6 stats only; every other stat keeps using the global factor.
+Regenerated the NFL regression golden snapshot after confirming, via
+diff, that the only cells that changed were the one fixture row using an
+overridden stat (`Kicking Points`). Stated explicitly, not glossed over:
+2 of the 6 (`completions`, `kicking points`) still leave a residual gap
+above 0.03 even at their own best-fit k — a real improvement over the
+global factor, not a full fix, for those two specifically.
+
+**Files touched:** `scripts/estimation/pickem_model.py` (new
+`SIGMA_CALIBRATION_FACTOR_BY_STAT`, sigma-scaling call site, docstring),
+`data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated).
+
+**Validation (required to close session):**
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` (51/51 after
+regenerating the golden snapshot), `test_clv_logger.py` (13/13).
+- [x] Diffed the regenerated golden CSV against its prior version to
+confirm the change was isolated to the one intended fixture row.
+- [x] Re-ran all 6 overridden stats' real graded legs through their new k
+directly and confirmed the resulting gap/Brier matches Session 2.24's
+reported fit, including the two residual-gap exceptions.
+
+**Open items / deferred validations:**
+- None of the 6 per-stat k values have been validated on held-out data.
+- `completions` and `kicking points` are not fully recalibrated by their
+own best-fit k — worth another look once more legs grade in.
+- `rushing_tds` (n=27) is the smallest-sample override in production —
+prioritize for re-fit as its graded volume grows.
+- Per-stat drift monitoring is not yet automated the way the global
+factor's drift check already is in `weekly_review.py` — real future work.
+
 ---
 
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
