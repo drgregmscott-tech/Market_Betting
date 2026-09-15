@@ -32,10 +32,26 @@ import pandas as pd
 import pytest
 import requests
 
-from pickem_model import build_stat_series, process_props, resolve_stat_spec
+from pickem_model import (
+    MLB_STARTER_STATUS_CONFIRMED,
+    MLB_STARTER_STATUS_DIFFERENT,
+    MLB_STARTER_STATUS_NOT_YET_CONFIRMED,
+    build_stat_series,
+    compute_mlb_starter_status,
+    process_props,
+    resolve_stat_spec,
+)
 from pickem_sport_plugins import PLUGINS, plugin_for_sport
 from pickem_sport_plugins.epl import EPL_PLUGIN, _fetch_player_history
-from pickem_sport_plugins.mlb import MLB_PLUGIN, _fetch_active_roster, _fetch_player_game_log
+from pickem_sport_plugins.mlb import (
+    MLB_PLUGIN,
+    _fetch_active_roster,
+    _fetch_player_game_log,
+    fetch_confirmed_lineup,
+    fetch_probable_pitchers,
+    fetch_schedule_games,
+    find_scheduled_game,
+)
 from pickem_sport_plugins.nfl import NFL_PLUGIN
 from pickem_sport_plugins.soccer import SOCCER_PLUGIN, _fetch_event_player_rows
 
@@ -528,6 +544,267 @@ def test_mlb_player_game_log_fetch_skips_instead_of_raising_on_repeated_failure(
     with _always_times_out(), _no_sleep():
         log_rows = _fetch_player_game_log(999999, 2026, "hitting")
     assert log_rows == []
+
+
+# ---------------------------------------------------------------------------
+# SESSION 2.32 -- MLB starter/lineup confirmation signal (Underdog gate).
+# Fixture payload shapes below mirror the REAL MLB Stats API responses
+# confirmed live 2026-09-15 (see ROADMAP.md Session 2.32 / SESSION_LOG.md
+# for the real, live-captured output this mirrors): schedule?hydrate=
+# probablePitcher's teams.{away,home}.{team,probablePitcher} shape, and
+# v1.1/game/{pk}/feed/live's liveData.boxscore.teams.{away,home}.
+# {battingOrder,pitchers} shape.
+# ---------------------------------------------------------------------------
+def _schedule_payload(games: list[dict]) -> dict:
+    return {"dates": [{"games": games}]}
+
+
+def _schedule_game(
+    game_pk, away_id, away_name, away_pitcher, home_id, home_name, home_pitcher
+) -> dict:
+    return {
+        "gamePk": game_pk,
+        "teams": {
+            "away": {
+                "team": {"id": away_id, "name": away_name},
+                "probablePitcher": away_pitcher,
+            },
+            "home": {
+                "team": {"id": home_id, "name": home_name},
+                "probablePitcher": home_pitcher,
+            },
+        },
+    }
+
+
+def test_mlb_schedule_fetch_skips_instead_of_raising_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        games = fetch_schedule_games("2026-09-15")
+    assert games == []
+
+
+def test_mlb_confirmed_lineup_fetch_returns_none_on_repeated_failure():
+    with _always_times_out(), _no_sleep():
+        lineup = fetch_confirmed_lineup(999999)
+    assert lineup is None
+
+
+def test_mlb_fetch_schedule_games_reads_real_shape():
+    payload = _schedule_payload([
+        _schedule_game(
+            824466, 119, "Los Angeles Dodgers",
+            {"id": 808967, "fullName": "Yoshinobu Yamamoto"},
+            113, "Cincinnati Reds",
+            {"id": 695076, "fullName": "Rhett Lowder"},
+        ),
+    ])
+    with mock.patch("pickem_sport_plugins.mlb.get_json_with_retries", return_value=payload):
+        games = fetch_schedule_games("2026-09-15")
+    assert len(games) == 1
+    g = games[0]
+    assert g["gamePk"] == 824466
+    assert g["away_team_nickname"] == "Dodgers"
+    assert g["home_team_nickname"] == "Reds"
+    assert g["away_probable_pitcher_id"] == 808967
+    assert g["home_probable_pitcher_id"] == 695076
+
+
+def test_mlb_fetch_schedule_games_handles_missing_probable_pitcher():
+    """A real, honest case: MLB hasn't announced one side's probable
+    starter yet for a real scheduled game."""
+    payload = _schedule_payload([
+        _schedule_game(111, 119, "Los Angeles Dodgers", None, 113, "Cincinnati Reds", None),
+    ])
+    with mock.patch("pickem_sport_plugins.mlb.get_json_with_retries", return_value=payload):
+        games = fetch_schedule_games("2026-09-15")
+    assert games[0]["away_probable_pitcher_id"] is None
+    assert games[0]["home_probable_pitcher_id"] is None
+
+
+def test_mlb_fetch_probable_pitchers_builds_team_id_map():
+    payload = _schedule_payload([
+        _schedule_game(
+            824466, 119, "Los Angeles Dodgers", {"id": 808967, "fullName": "X"},
+            113, "Cincinnati Reds", {"id": 695076, "fullName": "Y"},
+        ),
+    ])
+    with mock.patch("pickem_sport_plugins.mlb.get_json_with_retries", return_value=payload):
+        pitchers = fetch_probable_pitchers("2026-09-15")
+    assert pitchers == {119: 808967, 113: 695076}
+
+
+def test_mlb_fetch_confirmed_lineup_returns_none_when_not_posted():
+    """Confirmed live 2026-09-15: every game still hours from first pitch
+    returns an empty battingOrder/pitchers on both sides."""
+    payload = {"liveData": {"boxscore": {"teams": {
+        "away": {"battingOrder": [], "pitchers": []},
+        "home": {"battingOrder": [], "pitchers": []},
+    }}}}
+    with mock.patch("pickem_sport_plugins.mlb.get_json_with_retries", return_value=payload):
+        lineup = fetch_confirmed_lineup(824466)
+    assert lineup is None
+
+
+def test_mlb_fetch_confirmed_lineup_returns_real_shape_when_posted():
+    payload = {"liveData": {"boxscore": {"teams": {
+        "away": {"battingOrder": [660271, 605141], "pitchers": [669373, 681911]},
+        "home": {"battingOrder": [543760, 592663], "pitchers": [666157]},
+    }}}}
+    with mock.patch("pickem_sport_plugins.mlb.get_json_with_retries", return_value=payload):
+        lineup = fetch_confirmed_lineup(824465)
+    assert lineup == {
+        "away": {"batting_order": [660271, 605141], "pitchers": [669373, 681911]},
+        "home": {"batting_order": [543760, 592663], "pitchers": [666157]},
+    }
+
+
+def test_mlb_fetch_confirmed_lineup_returns_none_for_missing_game_pk():
+    assert fetch_confirmed_lineup(None) is None
+
+
+def test_find_scheduled_game_matches_nickname_with_punctuation_variants():
+    """Real case: MLB Stats API's own teamName is "D-backs"; Underdog's
+    real wording (confirmed live against data/pickem/clv_log.csv) is
+    "D'Backs" -- different punctuation, same real team."""
+    games = [{
+        "gamePk": 825030,
+        "away_team_nickname": "Marlins",
+        "home_team_nickname": "D-backs",
+    }]
+    found = find_scheduled_game(games, "Marlins", "D'Backs")
+    assert found is not None
+    assert found["gamePk"] == 825030
+
+
+def test_find_scheduled_game_returns_none_when_no_match():
+    games = [{"gamePk": 1, "away_team_nickname": "Mets", "home_team_nickname": "Yankees"}]
+    assert find_scheduled_game(games, "Reds", "Dodgers") is None
+
+
+# --- compute_mlb_starter_status (pickem_model.py) ---------------------------
+
+def _underdog_mlb_row(matchup="Marlins @ D'Backs", start="2026-09-15T22:40:00.000-04:00"):
+    return {"game_matchup": matchup, "game_start_time": start, "platform": "underdog", "sport": "mlb"}
+
+
+def test_compute_mlb_starter_status_returns_none_for_unparseable_matchup():
+    row = _underdog_mlb_row(matchup=None)
+    assert compute_mlb_starter_status(row, "660271", {}, {}) is None
+
+
+def test_compute_mlb_starter_status_returns_none_when_no_schedule_match():
+    row = _underdog_mlb_row()
+    with mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=[]):
+        assert compute_mlb_starter_status(row, "660271", {}, {}) is None
+
+
+def test_compute_mlb_starter_status_not_yet_confirmed_when_no_lineup_posted():
+    row = _underdog_mlb_row()
+    games = [{
+        "gamePk": 825030, "away_team_nickname": "Marlins", "home_team_nickname": "D-backs",
+        "away_probable_pitcher_id": 111, "home_probable_pitcher_id": 222,
+    }]
+    with (
+        mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=games),
+        mock.patch("pickem_model.mlb_plugin_module.fetch_confirmed_lineup", return_value=None),
+    ):
+        status = compute_mlb_starter_status(row, "660271", {}, {})
+    assert status == MLB_STARTER_STATUS_NOT_YET_CONFIRMED
+
+
+def test_compute_mlb_starter_status_confirmed_for_batter_in_lineup():
+    row = _underdog_mlb_row()
+    games = [{
+        "gamePk": 825030, "away_team_nickname": "Marlins", "home_team_nickname": "D-backs",
+        "away_probable_pitcher_id": 111, "home_probable_pitcher_id": 222,
+    }]
+    lineup = {
+        "away": {"batting_order": [660271, 605141], "pitchers": [111]},
+        "home": {"batting_order": [543760], "pitchers": [222]},
+    }
+    with (
+        mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=games),
+        mock.patch("pickem_model.mlb_plugin_module.fetch_confirmed_lineup", return_value=lineup),
+    ):
+        status = compute_mlb_starter_status(row, "660271", {}, {})
+    assert status == MLB_STARTER_STATUS_CONFIRMED
+
+
+def test_compute_mlb_starter_status_different_for_scratched_batter():
+    """The real 'Underdog had news, here it is' case: a confirmed lineup
+    exists for this game, but this prop's player is NOT in it."""
+    row = _underdog_mlb_row()
+    games = [{
+        "gamePk": 825030, "away_team_nickname": "Marlins", "home_team_nickname": "D-backs",
+        "away_probable_pitcher_id": 111, "home_probable_pitcher_id": 222,
+    }]
+    lineup = {
+        "away": {"batting_order": [605141], "pitchers": [111]},  # 660271 scratched
+        "home": {"batting_order": [543760], "pitchers": [222]},
+    }
+    with (
+        mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=games),
+        mock.patch("pickem_model.mlb_plugin_module.fetch_confirmed_lineup", return_value=lineup),
+    ):
+        status = compute_mlb_starter_status(row, "660271", {}, {})
+    assert status == MLB_STARTER_STATUS_DIFFERENT
+
+
+def test_compute_mlb_starter_status_confirmed_pitcher_matches_probable():
+    row = _underdog_mlb_row()
+    games = [{
+        "gamePk": 825030, "away_team_nickname": "Marlins", "home_team_nickname": "D-backs",
+        "away_probable_pitcher_id": 111, "home_probable_pitcher_id": 222,
+    }]
+    lineup = {
+        "away": {"batting_order": [], "pitchers": [111]},
+        "home": {"batting_order": [], "pitchers": [222]},
+    }
+    with (
+        mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=games),
+        mock.patch("pickem_model.mlb_plugin_module.fetch_confirmed_lineup", return_value=lineup),
+    ):
+        status = compute_mlb_starter_status(row, "111", {}, {})
+    assert status == MLB_STARTER_STATUS_CONFIRMED
+
+
+def test_compute_mlb_starter_status_different_when_confirmed_pitcher_differs_from_probable():
+    row = _underdog_mlb_row()
+    games = [{
+        "gamePk": 825030, "away_team_nickname": "Marlins", "home_team_nickname": "D-backs",
+        "away_probable_pitcher_id": 111, "home_probable_pitcher_id": 222,
+    }]
+    # MLB's real confirmed starter for the home side (999) differs from the
+    # schedule's own probable pitcher (222) -- a real rotation change.
+    lineup = {
+        "away": {"batting_order": [], "pitchers": [111]},
+        "home": {"batting_order": [], "pitchers": [999]},
+    }
+    with (
+        mock.patch("pickem_model.mlb_plugin_module.fetch_schedule_games", return_value=games),
+        mock.patch("pickem_model.mlb_plugin_module.fetch_confirmed_lineup", return_value=lineup),
+    ):
+        status = compute_mlb_starter_status(row, "222", {}, {})
+    assert status == MLB_STARTER_STATUS_DIFFERENT
+
+
+def test_process_props_leaves_mlb_starter_status_blank_for_non_underdog_rows():
+    """Additive-only scope check: a non-MLB, non-Underdog row (this
+    project's existing NFL fixture) must never get a non-None
+    mlb_starter_status."""
+    weekly_fixture = build_nfl_weekly_fixture()
+    props_fixture = build_props_fixture()
+
+    def fake_fetch(season):
+        return weekly_fixture
+
+    original_fetch = NFL_PLUGIN.fetch_stats
+    NFL_PLUGIN.fetch_stats = fake_fetch
+    try:
+        result = process_props(props_fixture, season=2025)
+    finally:
+        NFL_PLUGIN.fetch_stats = original_fetch
+    assert result["mlb_starter_status"].isna().all()
 
 
 if __name__ == "__main__":

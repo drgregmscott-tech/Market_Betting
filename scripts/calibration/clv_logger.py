@@ -280,7 +280,14 @@ CLV_CORE_COLUMNS = [
 # "team" field at all.
 CLV_LOG_COLUMNS_PICKEM = [
     "flag_id", "platform", "source_line_id", "player_name", "game_matchup", "sport",
-    "stat_type", "resolved_stat_key", "odds_type", "game_id", "game_start_time",
+    "stat_type", "resolved_stat_key",
+    # SESSION 2.32 -- real-time MLB starter/lineup confirmation signal
+    # (see pickem_model.py's compute_mlb_starter_status() and ROADMAP.md
+    # Session 2.32). Carried straight through from the estimates file, same
+    # as resolved_stat_key -- this file does not compute it. Always None
+    # for every non-MLB or non-Underdog row (additive only, no other
+    # column's meaning changed).
+    "mlb_starter_status", "odds_type", "game_id", "game_start_time",
     "flagged_side", "first_flagged_at", "first_flagged_line",
     "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
     "consensus_available", "consensus_platform", "consensus_source_line_id",
@@ -517,6 +524,12 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
                 side_for_update = log_df.loc[flag_id, "flagged_side"]
                 log_df.loc[flag_id, "last_seen_implied_prob"] = implied_prob_same_side_pickem(row, side_for_update)
                 log_df.loc[flag_id, "status"] = "open"
+                # SESSION 2.32 -- refresh on every run, not just at first
+                # flag: a real lineup can go from "not_yet_confirmed" to
+                # "confirmed"/"different_than_expected" as MLB posts it
+                # closer to first pitch, and an open flag should show the
+                # latest real state, not a stale first-seen snapshot.
+                log_df.loc[flag_id, "mlb_starter_status"] = row.get("mlb_starter_status")
             # else: leave it alone -- it's not in present_flag_ids, so the
             # close-on-disappearance pass below will retire it correctly.
             continue
@@ -553,6 +566,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "sport": row.get("sport"),
             "stat_type": row.get("stat_type"),
             "resolved_stat_key": row.get("resolved_stat_key"),
+            "mlb_starter_status": row.get("mlb_starter_status"),  # Session 2.32
             "odds_type": row.get("odds_type"),
             "game_id": row.get("game_id"),
             "game_start_time": row.get("game_start_time"),

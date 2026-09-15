@@ -212,6 +212,35 @@ function rowCautionBadgeHtml(sport) {
   return `<span class="status-badge-neg" title="${escapeAttr(sport)}'s real win rate (${(winRate * 100).toFixed(1)}%) is BELOW the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample -- real grading exists, but the real result says don't bet this sport yet.">Below breakeven</span>`;
 }
 
+// ---------------------------------------------------------------------
+// Session 2.32 -- real-time MLB starter/lineup confirmation signal
+// (Underdog gate). See docs/research/underdog_pricing_gap_investigation.md
+// (Session 2.31): Underdog's own price on skewed lines reflects real
+// lineup/starting-pitcher/injury information this project's model does
+// not have. pickem_model.py's compute_mlb_starter_status() (Session 2.32)
+// attaches `mlb_starter_status` to every MLB Underdog row (null for every
+// other row). This badge is PURELY INFORMATIONAL -- it does not mean
+// "bet this"/"don't bet this" the way rowCautionBadgeHtml does. No real
+// graded evidence yet exists on whether this predicts a win or a loss
+// (that is Session 2.33's open live-validation window) -- this badge
+// exists so a human can SEE the real signal today, not to make a call for
+// them.
+// ---------------------------------------------------------------------
+function mlbStarterStatusBadgeHtml(r) {
+  const status = r.mlb_starter_status;
+  if (!status) return "";
+  if (status === "confirmed") {
+    return `<span class="starter-status-badge confirmed" title="MLB's real confirmed lineup/starting pitcher for this game agrees with what the model assumed. No real graded evidence yet on whether this predicts a win -- see the Session 2.32 write-up.">Lineup confirmed</span>`;
+  }
+  if (status === "different_than_expected") {
+    return `<span class="starter-status-badge different" title="MLB's real confirmed lineup/starting pitcher for this game is DIFFERENT than what the model assumed (a scratch or a rotation change) -- the real 'Underdog had news' case this signal exists to surface. No real graded evidence yet on whether this predicts a loss -- see the Session 2.32 write-up.">Lineup differs</span>`;
+  }
+  if (status === "not_yet_confirmed") {
+    return `<span class="starter-status-badge pending" title="MLB has not posted a real confirmed lineup for this game yet -- an honest 'not known yet' state, not the same as confirmed clean.">Lineup TBD</span>`;
+  }
+  return "";
+}
+
 function blockedCheck(track, r) {
   const reasons = [];
 
@@ -598,7 +627,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${escapeHtml(r.player_name) || "—"}</td>
+          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${mlbStarterStatusBadgeHtml(r)}${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.game_matchup) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>

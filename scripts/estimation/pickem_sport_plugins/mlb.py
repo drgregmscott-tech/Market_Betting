@@ -118,7 +118,8 @@ MLB Stats API's own stable numeric team IDs.
 
 from __future__ import annotations
 
-from typing import Callable
+import re
+from typing import Callable, Optional
 
 import logging
 
@@ -130,6 +131,7 @@ from .http_utils import get_json_with_retries
 log = logging.getLogger("pickem_model")
 
 MLB_STATS_API_BASE = "https://statsapi.mlb.com/api/v1"
+MLB_STATS_API_BASE_V1_1 = "https://statsapi.mlb.com/api/v1.1"
 
 # Deliberately excludes "mlblive" -- see module docstring's "MLBLIVE" note.
 MLB_SPORT_LABELS = frozenset({"mlb", "baseball"})
@@ -140,6 +142,27 @@ MLB_TEAM_IDS = [
     133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
     147, 158,
 ]
+
+# SESSION 2.32 -- real team_id -> real "teamName" (MLB Stats API's own
+# nickname field, e.g. "Yankees", NOT the abbreviation and NOT the full
+# "New York Yankees" name), confirmed live 2026-09-15 via a real
+# GET /v1/teams?sportId=1 pull. The schedule endpoint's own
+# teams.{away,home}.team object does not carry this field directly (only
+# id/name/link), so it is hardcoded here rather than re-fetched on every
+# schedule call -- same "stable, official, hardcode it" standard MLB_TEAM_
+# IDS above already uses. Used by find_scheduled_game() below to match
+# Underdog's real "Away @ Home" nickname wording (e.g. "Mets @ Yankees",
+# "Rangers @ D'Backs") against a real scheduled game.
+MLB_TEAM_ID_TO_NICKNAME: dict[int, str] = {
+    133: "Athletics", 134: "Pirates", 135: "Padres", 136: "Mariners",
+    137: "Giants", 138: "Cardinals", 139: "Rays", 140: "Rangers",
+    141: "Blue Jays", 142: "Twins", 143: "Phillies", 144: "Braves",
+    145: "White Sox", 146: "Marlins", 147: "Yankees", 158: "Brewers",
+    108: "Angels", 109: "D-backs", 110: "Orioles", 111: "Red Sox",
+    112: "Cubs", 113: "Reds", 114: "Guardians", 115: "Rockies",
+    116: "Tigers", 117: "Astros", 118: "Royals", 119: "Dodgers",
+    120: "Nationals", 121: "Mets",
+}
 
 # ---------------------------------------------------------------------------
 # Stat-type map -- confirmed 2026-09-11 against real ingested PrizePicks/
@@ -403,6 +426,166 @@ def fetch_mlb_season_stats(season: int) -> pd.DataFrame:
             else:
                 rows.extend(_hitting_rows(person_id, full_name, season))
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# SESSION 2.32 -- real-time starter/lineup confirmation signal (Underdog
+# gate, MLB only). See docs/research/underdog_pricing_gap_investigation.md
+# (Session 2.31): Underdog's own per-side price on skewed ("chalk") lines
+# reflects real, current lineup/starting-pitcher/injury information this
+# project's season-average + recent-form blend does not have. The two
+# functions below give this project access to the SAME real-time signal --
+# MLB Stats API's own probable-pitcher and confirmed-lineup data -- so a
+# later stage can compare what the model assumed against what MLB has
+# actually confirmed. This module does NOT decide what to do with that
+# comparison (no filtering/gating here) -- pickem_model.py's
+# compute_mlb_starter_status() (Session 2.32) reads these and attaches a
+# new, purely informational column, per the roadmap card's explicit "no
+# hard-coded filtering yet" scope.
+#
+# Confirmed live, 2026-09-15, against real MLB Stats API responses (see
+# ROADMAP.md Session 2.32 / SESSION_LOG.md for the real output):
+#   1. GET /v1/schedule?sportId=1&date=YYYY-MM-DD&hydrate=probablePitcher
+#      -- each game's teams.{away,home}.probablePitcher (id + fullName),
+#      MLB's own real, current probable-starter signal.
+#   2. GET /v1.1/game/{gamePk}/feed/live -- once MLB posts a real lineup,
+#      liveData.boxscore.teams.{away,home}.battingOrder (real player ids)
+#      and .pitchers (real player ids, in real usage order). Confirmed
+#      live: EMPTY for a game still hours from first pitch, POPULATED once
+#      MLB posts the real lineup (typically ~1-2h before first pitch,
+#      sometimes later) -- a real, honest data gap when unavailable, not a
+#      bug to fake around.
+# ---------------------------------------------------------------------------
+def fetch_schedule_games(date: str) -> list[dict]:
+    """Real per-game MLB schedule for `date` (YYYY-MM-DD), hydrated with
+    each team's real probable starting pitcher. Returns one dict per real
+    scheduled game: gamePk, away_team_id, away_team_name, home_team_id,
+    home_team_name, away_probable_pitcher_id, away_probable_pitcher_name,
+    home_probable_pitcher_id, home_probable_pitcher_name -- the pitcher
+    fields are None when MLB has not posted a probable starter for that
+    team/game yet (a real, honest gap, never fabricated). Returns [] (not
+    an exception) if the whole schedule call fails after retries -- same
+    fault-isolation standard as _fetch_active_roster/_fetch_player_game_log
+    above."""
+    url = f"{MLB_STATS_API_BASE}/schedule?sportId=1&date={date}&hydrate=probablePitcher"
+    try:
+        payload = get_json_with_retries(url, timeout=15)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Could not fetch MLB schedule for %s: %s", date, exc)
+        return []
+    games: list[dict] = []
+    for date_entry in payload.get("dates", []):
+        for g in date_entry.get("games", []):
+            teams = g.get("teams", {}) or {}
+            away = teams.get("away", {}) or {}
+            home = teams.get("home", {}) or {}
+            away_team = away.get("team", {}) or {}
+            home_team = home.get("team", {}) or {}
+            away_pp = away.get("probablePitcher") or {}
+            home_pp = home.get("probablePitcher") or {}
+            away_team_id = away_team.get("id")
+            home_team_id = home_team.get("id")
+            games.append({
+                "gamePk": g.get("gamePk"),
+                "away_team_id": away_team_id,
+                "away_team_name": away_team.get("name"),
+                "away_team_nickname": MLB_TEAM_ID_TO_NICKNAME.get(away_team_id),
+                "home_team_id": home_team_id,
+                "home_team_name": home_team.get("name"),
+                "home_team_nickname": MLB_TEAM_ID_TO_NICKNAME.get(home_team_id),
+                "away_probable_pitcher_id": away_pp.get("id"),
+                "away_probable_pitcher_name": away_pp.get("fullName"),
+                "home_probable_pitcher_id": home_pp.get("id"),
+                "home_probable_pitcher_name": home_pp.get("fullName"),
+            })
+    return games
+
+
+def fetch_probable_pitchers(date: str) -> dict:
+    """Real per-game map of {team_id: probable_pitcher_id} for every team
+    scheduled to play on `date` (YYYY-MM-DD), built from
+    fetch_schedule_games() above. A team with no real probable pitcher
+    posted yet for that date is simply absent from the returned dict --
+    callers must treat a missing key as "not yet known", not as any other
+    value. Returns {} if the schedule call itself failed (see
+    fetch_schedule_games's own fault-isolation)."""
+    pitchers: dict[int, int] = {}
+    for g in fetch_schedule_games(date):
+        away_id, away_pitcher = g["away_team_id"], g["away_probable_pitcher_id"]
+        if away_id is not None and away_pitcher is not None:
+            pitchers[away_id] = away_pitcher
+        home_id, home_pitcher = g["home_team_id"], g["home_probable_pitcher_id"]
+        if home_id is not None and home_pitcher is not None:
+            pitchers[home_id] = home_pitcher
+    return pitchers
+
+
+def fetch_confirmed_lineup(game_pk) -> Optional[dict]:
+    """Real confirmed starting lineup + pitcher-usage for one real MLB
+    game, from MLB Stats API's live game feed (v1.1). Returns None (never
+    an exception, never a fabricated value) when MLB has not posted a real
+    lineup for this game yet -- confirmed live, 2026-09-15:
+    liveData.boxscore.teams.{away,home}.battingOrder is an empty list for
+    a game still hours from first pitch, and populates with real MLB
+    player ids once MLB posts the real lineup. When a lineup IS posted,
+    returns:
+        {"away": {"batting_order": [player_id, ...], "pitchers": [player_id, ...]},
+         "home": {"batting_order": [...], "pitchers": [...]}}
+    `pitchers` is MLB's own real, ordered list of pitcher ids who have
+    actually appeared/been announced for that side -- the first entry is
+    that side's real starter once available."""
+    if game_pk is None:
+        return None
+    url = f"{MLB_STATS_API_BASE_V1_1}/game/{game_pk}/feed/live"
+    try:
+        payload = get_json_with_retries(url, timeout=15)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Could not fetch MLB confirmed lineup for game %s: %s", game_pk, exc)
+        return None
+    boxscore_teams = ((payload.get("liveData") or {}).get("boxscore") or {}).get("teams", {}) or {}
+    away = boxscore_teams.get("away", {}) or {}
+    home = boxscore_teams.get("home", {}) or {}
+    away_order = away.get("battingOrder") or []
+    home_order = home.get("battingOrder") or []
+    away_pitchers = away.get("pitchers") or []
+    home_pitchers = home.get("pitchers") or []
+    if not away_order and not home_order and not away_pitchers and not home_pitchers:
+        # Real, honest "not posted yet" case -- see docstring above.
+        return None
+    return {
+        "away": {"batting_order": away_order, "pitchers": away_pitchers},
+        "home": {"batting_order": home_order, "pitchers": home_pitchers},
+    }
+
+
+def _normalize_team_token(name: Optional[str]) -> str:
+    """Strips everything but lowercase letters/digits, so real team-name
+    spellings that differ only in punctuation match -- e.g. MLB Stats
+    API's own "D-backs" (Diamondbacks' real teamName) and Underdog's real
+    "D'Backs" wording both normalize to "dbacks"."""
+    return re.sub(r"[^a-z0-9]", "", (name or "").lower())
+
+
+def find_scheduled_game(games: list[dict], away_label: str, home_label: str) -> Optional[dict]:
+    """Matches a platform's own real 'Away @ Home' matchup labels (this is
+    written for Underdog's real wording -- full team nicknames, e.g.
+    "Mets @ Yankees", confirmed live 2026-09-15 against a real
+    data/pickem/clv_log.csv sample) against fetch_schedule_games()'s real
+    away_team_name/home_team_name (MLB Stats API's own `teamName` field),
+    using the normalized-token match above. Returns None if no real
+    scheduled game matches both labels -- an honest "couldn't resolve this
+    prop to a real game" result, never a guess."""
+    away_norm = _normalize_team_token(away_label)
+    home_norm = _normalize_team_token(home_label)
+    if not away_norm or not home_norm:
+        return None
+    for g in games:
+        if (
+            _normalize_team_token(g.get("away_team_nickname")) == away_norm
+            and _normalize_team_token(g.get("home_team_nickname")) == home_norm
+        ):
+            return g
+    return None
 
 
 MLB_PLUGIN = SportPlugin(

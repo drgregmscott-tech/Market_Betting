@@ -250,6 +250,7 @@ import numpy as np
 import pandas as pd
 
 from pickem_sport_plugins import SportPlugin, plugin_for_sport
+from pickem_sport_plugins import mlb as mlb_plugin_module
 from season_utils import current_pickem_season
 
 # ---------------------------------------------------------------------------
@@ -639,6 +640,110 @@ def prizepicks_implied_prob_over(row: dict) -> float:
 
 
 # ---------------------------------------------------------------------------
+# SESSION 2.32 -- real-time MLB starter/lineup confirmation signal
+# (Underdog gate, MLB only). See docs/research/underdog_pricing_gap_
+# investigation.md (Session 2.31): Underdog's own per-side price on
+# skewed ("chalk") lines reflects real, current lineup/starting-pitcher/
+# injury information this model's season-average + recent-form blend does
+# not have. This does NOT change edge_over/edge_under/prob_over for any
+# row -- it attaches a new, purely informational column
+# (`mlb_starter_status`) to MLB Underdog rows so a human (or a later,
+# separate session, once real graded evidence exists) can see whether
+# MLB's own confirmed lineup agrees with what the model assumed. No
+# filtering or down-weighting happens here, per the roadmap card's
+# explicit scope.
+# ---------------------------------------------------------------------------
+MLB_STARTER_STATUS_CONFIRMED = "confirmed"
+MLB_STARTER_STATUS_DIFFERENT = "different_than_expected"
+MLB_STARTER_STATUS_NOT_YET_CONFIRMED = "not_yet_confirmed"
+
+
+def compute_mlb_starter_status(
+    row: dict,
+    player_id: str,
+    schedule_cache: dict[str, list[dict]],
+    lineup_cache: dict[object, Optional[dict]],
+) -> Optional[str]:
+    """Session 2.32. Compares one MLB Underdog prop's player against MLB
+    Stats API's real, current probable-pitcher + confirmed-lineup data for
+    their real scheduled game. Returns one of:
+      - MLB_STARTER_STATUS_CONFIRMED: the player IS in the real confirmed
+        batting order (a hitter prop), or IS the real confirmed starting
+        pitcher matching MLB's own probable-pitcher signal (a pitcher
+        prop, first entry of that side's real `pitchers` usage list).
+      - MLB_STARTER_STATUS_DIFFERENT: a real confirmed lineup exists for
+        this game, but this player is NOT in it (a real scratch) or the
+        real confirmed starter differs from the schedule's probable
+        pitcher -- the real "Underdog had news, here it is" case this
+        session exists to surface.
+      - MLB_STARTER_STATUS_NOT_YET_CONFIRMED: MLB has not posted a real
+        lineup for this game yet at estimation time -- an honest "we
+        don't know yet" state, never conflated with "confirmed clean".
+      - None: this prop could not be resolved to a real scheduled MLB
+        game at all (unparseable game_start_time/game_matchup, or no
+        schedule match found) -- a real, separate gap, not a verdict.
+    `schedule_cache`/`lineup_cache` are the caller's per-run caches (see
+    process_props()) so a run with many props on the same date/game only
+    fetches each real schedule/lineup once.
+    """
+    matchup = row.get("game_matchup")
+    start_time = row.get("game_start_time")
+    if not isinstance(matchup, str) or "@" not in matchup:
+        return None
+    if not isinstance(start_time, str) or len(start_time) < 10:
+        return None
+    game_date = start_time[:10]  # ISO date prefix, e.g. "2026-09-15"
+    away_label, _, home_label = matchup.partition("@")
+    away_label, home_label = away_label.strip(), home_label.strip()
+    if not away_label or not home_label:
+        return None
+
+    try:
+        pid = int(player_id)
+    except (TypeError, ValueError):
+        return None
+
+    if game_date not in schedule_cache:
+        schedule_cache[game_date] = mlb_plugin_module.fetch_schedule_games(game_date)
+    games = schedule_cache[game_date]
+
+    game = mlb_plugin_module.find_scheduled_game(games, away_label, home_label)
+    if game is None:
+        return None
+
+    game_pk = game.get("gamePk")
+    if game_pk not in lineup_cache:
+        lineup_cache[game_pk] = mlb_plugin_module.fetch_confirmed_lineup(game_pk)
+    lineup = lineup_cache[game_pk]
+
+    if lineup is None:
+        return MLB_STARTER_STATUS_NOT_YET_CONFIRMED
+
+    for side_key in ("away", "home"):
+        if pid in lineup[side_key]["batting_order"]:
+            return MLB_STARTER_STATUS_CONFIRMED
+
+    for side_key, probable_key in (
+        ("away", "away_probable_pitcher_id"),
+        ("home", "home_probable_pitcher_id"),
+    ):
+        if game.get(probable_key) == pid:
+            confirmed_pitchers = lineup[side_key]["pitchers"]
+            if not confirmed_pitchers:
+                return MLB_STARTER_STATUS_NOT_YET_CONFIRMED
+            return (
+                MLB_STARTER_STATUS_CONFIRMED
+                if confirmed_pitchers[0] == pid
+                else MLB_STARTER_STATUS_DIFFERENT
+            )
+
+    # A confirmed lineup exists for this game, but this specific player is
+    # in neither side's real confirmed batting order nor is either side's
+    # real probable pitcher -- a real scratch/bench/unconfirmed-role case.
+    return MLB_STARTER_STATUS_DIFFERENT
+
+
+# ---------------------------------------------------------------------------
 # Main per-row processing
 # ---------------------------------------------------------------------------
 def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
@@ -648,6 +753,12 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     run only fetches stats for sports actually present in props_df."""
     stats_cache: dict[str, pd.DataFrame] = {}
     lookup_cache: dict[str, dict[str, str]] = {}
+    # SESSION 2.32 -- per-run caches for the MLB starter/lineup confirmation
+    # signal (see compute_mlb_starter_status() above), keyed by real
+    # calendar date / real gamePk so a run with many MLB Underdog props on
+    # the same date/game only fetches each real schedule/lineup once.
+    mlb_schedule_cache: dict[str, list[dict]] = {}
+    mlb_lineup_cache: dict[object, Optional[dict]] = {}
 
     def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
         if plugin.name not in stats_cache:
@@ -662,6 +773,12 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     out_rows = []
     for _, prop in props_df.iterrows():
         row = prop.to_dict()
+        # SESSION 2.32 -- default for every row; only ever overwritten below
+        # for an MLB Underdog row with a resolved player_id (see "no
+        # unnamed black-box factors" / "leave blank, not fabricated" rule
+        # applied the same way _blank_model_fields() already does for the
+        # existing model columns).
+        row["mlb_starter_status"] = None
         sport = str(row.get("sport") or "").strip().lower()
         plugin = plugin_for_sport(sport)
 
@@ -703,6 +820,17 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
             row.update(_blank_model_fields())
             out_rows.append(row)
             continue
+
+        # SESSION 2.32 -- computed here, independent of downstream model
+        # math, so it's present regardless of whether this row ends up
+        # "estimated", "insufficient_history", or "no_line_value" below.
+        # Scoped to MLB Underdog rows only, per the roadmap card -- every
+        # other row keeps the row["mlb_starter_status"] = None default set
+        # above.
+        if plugin.name == "mlb" and row.get("platform") == "underdog":
+            row["mlb_starter_status"] = compute_mlb_starter_status(
+                row, player_id, mlb_schedule_cache, mlb_lineup_cache
+            )
 
         series = build_stat_series(plugin, stats_df, player_id, kind, value)
         if len(series) < MIN_GAMES_FOR_ESTIMATE:

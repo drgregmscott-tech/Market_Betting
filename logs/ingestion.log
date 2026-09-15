@@ -9803,3 +9803,7 @@ Call log:
 2026-09-14 15:51:47,215 UTC | INFO | Skipped non-player-prop market: Worst Regular Season Record 2026-27
 2026-09-14 15:51:47,216 UTC | INFO | Skipped non-player-prop market: Kansas City Chiefs - Regular Season Wins 2026-27
 2026-09-14 15:51:47,216 UTC | ERROR | FanDuel response missing expected top-level 'attachments' key — schema may differ from the documented pattern this script assumed. Skipping this platform for this run.
+2026-09-15 15:32:05,599 UTC | INFO | === Ingestion run starting ===
+2026-09-15 15:32:08,877 UTC | INFO | PrizePicks: 27033 normalized rows
+2026-09-15 15:32:10,137 UTC | INFO | Underdog: 6628 normalized rows
+2026-09-15 15:32:10,920 UTC | INFO | === Ingestion run complete: 33661 total rows (PrizePicks OK, Underdog OK) ===

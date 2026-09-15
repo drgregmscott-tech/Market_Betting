@@ -315,6 +315,47 @@ main {
   margin-right: 6px;
 }
 
+/* Session 2.32 — MLB starter/lineup confirmation signal badge (Underdog
+   gate, see docs/research/underdog_pricing_gap_investigation.md and
+   ROADMAP.md Session 2.32). Purely informational -- this badge does not
+   mean "bet this" or "don't bet this" the way status-badge-pos/neg do; it
+   shows whether MLB's own real confirmed lineup agrees with what the
+   model assumed, differs, or isn't knowable yet. Same base shape as the
+   other inline badges above, three color variants matching the three real
+   states (confirmed clean = pos green, different-than-expected = neg red
+   since it's the real "Underdog had news" case, not-yet-confirmed = the
+   same neutral risk-orange .unvalidated-badge already uses for "we don't
+   know yet"). */
+.starter-status-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: help;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+.starter-status-badge.confirmed {
+  color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.12);
+  border: 1px solid rgba(79, 209, 139, 0.35);
+}
+
+.starter-status-badge.different {
+  color: var(--accent-neg);
+  background: rgba(226, 104, 91, 0.12);
+  border: 1px solid rgba(226, 104, 91, 0.35);
+}
+
+.starter-status-badge.pending {
+  color: var(--risk-badge);
+  background: var(--risk-badge-bg);
+  border: 1px solid rgba(217, 138, 79, 0.35);
+}
+
 /* Session 2.26 — sport/platform filter controls above a track's open-flags
    table. Same input styling language as .sizing-input-row's bankroll
    field, just laid out as a row of selects instead of one number input. */

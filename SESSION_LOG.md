@@ -13219,3 +13219,149 @@ breakeven in every sport tested, and falls further as the model's stated edge ri
 - The 43 real Underdog rows with a negative computed lead time (flag logged after game start) were
   excluded from this investigation as out of scope, not explained — a real, separate data-quality
   question worth a future look.
+
+## Session 2.32 — MLB Starter/Lineup Confirmation Signal (Underdog Gate, Build)
+
+**Date completed:** 2026-09-15
+
+**What was actually done:**
+Session 2.31 root-caused Underdog's below-breakeven real win rate (every sport tested) to a genuine
+platform-level informational gap: on lines Underdog has moved away from a coin flip ("chalk" lines),
+Underdog's own price reflects real, current lineup/starting-pitcher/injury information this project's
+season-average + recent-form model does not have. This session gives the model access to the SAME
+real-time signal MLB Stats API publishes, so a human can see whether MLB's own confirmed lineup agrees
+with what the model assumed on a given Underdog MLB prop — MLB only (9,499 graded Underdog legs vs.
+NFL's 924, per Session 2.31), no filtering/gating shipped (no real graded evidence yet exists on
+whether this signal predicts a win or loss).
+
+1. `scripts/estimation/pickem_sport_plugins/mlb.py`: added `fetch_schedule_games(date)` (real
+   per-game schedule + probable pitchers via `GET /v1/schedule?sportId=1&date=...
+   &hydrate=probablePitcher`), `fetch_probable_pitchers(date)` (built from the above),
+   `fetch_confirmed_lineup(game_pk)` (real confirmed batting order + pitcher-usage via
+   `GET /v1.1/game/{gamePk}/feed/live`, returns `None` — never fabricated — when MLB hasn't posted a
+   lineup yet), `find_scheduled_game()` (matches Underdog's real nickname wording, e.g. "Marlins @
+   D'Backs", against a real schedule pull via a punctuation-normalized match), and a hardcoded,
+   live-confirmed `MLB_TEAM_ID_TO_NICKNAME` map (the schedule endpoint's own team object does not
+   carry MLB Stats API's `teamName` field directly — confirmed by a real `GET /v1/teams?sportId=1`
+   pull). All four follow the file's existing `get_json_with_retries` fault-isolation standard.
+2. `scripts/estimation/pickem_model.py`: added `compute_mlb_starter_status()` — for MLB Underdog rows
+   only, resolves the prop's already-matched `player_id` against the real confirmed lineup/pitcher
+   data and returns `"confirmed"`, `"different_than_expected"` (real scratch or rotation change —
+   Underdog's real "had news" case), `"not_yet_confirmed"` (honest "don't know yet"), or `None`
+   (couldn't resolve the prop to a real scheduled game). Wired into `process_props()`'s per-row loop
+   right after player-name resolution, independent of downstream `model_status` (`estimated`,
+   `insufficient_history`, etc. all still get the column). New `mlb_starter_status` output column,
+   `None` for every non-MLB or non-Underdog row. Does not touch `edge_over`/`edge_under`/`prob_over`/
+   `implied_prob_over` for any row.
+3. `scripts/calibration/clv_logger.py`: `mlb_starter_status` added to `CLV_LOG_COLUMNS_PICKEM`
+   (carried straight through from the estimates file, same as `resolved_stat_key`), and refreshed on
+   every run for an already-open flag (not just at first flag) — a real lineup can go from
+   `not_yet_confirmed` to `confirmed`/`different_than_expected` as MLB posts it closer to first pitch.
+4. `frontend/app.js` / `frontend/style.css`: new `mlbStarterStatusBadgeHtml()` — "Lineup confirmed" /
+   "Lineup differs" / "Lineup TBD" badge on the Pick'em open-flags table, MLB Underdog rows only,
+   deliberately styled and worded as purely informational (not the same red/green bet/don't-bet
+   language `rowCautionBadgeHtml()` already uses) — its tooltips say plainly that no real graded
+   evidence yet exists on whether this predicts a win or a loss.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_sport_plugins/mlb.py` — 4 new functions
+  (`fetch_schedule_games`/`fetch_probable_pitchers`/`fetch_confirmed_lineup`/`find_scheduled_game`) +
+  `MLB_TEAM_ID_TO_NICKNAME` + `_normalize_team_token`; no existing function changed.
+- `scripts/estimation/pickem_model.py` — `compute_mlb_starter_status()` + 3 new status constants
+  (`MLB_STARTER_STATUS_CONFIRMED`/`_DIFFERENT`/`_NOT_YET_CONFIRMED`), `mlb_starter_status` wired into
+  `process_props()`'s loop and per-run schedule/lineup caches.
+- `scripts/estimation/test_pickem_model.py` — 18 new tests: fetch-function fault-isolation (mirrors
+  the existing MLB roster/game-log skip-on-failure pattern), real-shaped-payload parsing for all 4 new
+  fetch functions (payload shapes mirror the real API responses captured live this session), a
+  nickname punctuation-variant match test, 7 `compute_mlb_starter_status()` unit tests (unparseable
+  matchup, no schedule match, not-yet-confirmed, confirmed batter, scratched batter, confirmed pitcher,
+  pitcher differs from probable), and one `process_props()`-level check that a non-MLB row's
+  `mlb_starter_status` stays `None`.
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` — regenerated (Session 2.25's precedent):
+  diffed against the pre-session version first and confirmed the only change was the new
+  `mlb_starter_status` column, all `None` (this fixture has no MLB/Underdog rows).
+- `scripts/calibration/clv_logger.py` — `mlb_starter_status` added to `CLV_LOG_COLUMNS_PICKEM` and to
+  both `process_run_pickem()` code paths (new flag, refresh of an open flag).
+- `frontend/app.js` — `mlbStarterStatusBadgeHtml()`, wired into the open-flags table's name cell.
+- `frontend/style.css` — `.starter-status-badge` (+ `.confirmed`/`.different`/`.pending` variants).
+- `ROADMAP.md` — new Session 2.32 card (this session, status "⚠️ Complete with caveats") and new
+  Session 2.33 card (live validation window, not started).
+
+**Validation results:**
+- Real fetch functions confirmed live against real MLB data, 2026-09-15 (~15:28–15:30 UTC):
+  `fetch_schedule_games('2026-09-15')` returned 15 real scheduled games, 29/30 teams with a real
+  probable pitcher already posted (example: gamePk 824466, Dodgers @ Reds, away probable pitcher
+  Yoshinobu Yamamoto id 808967, home probable pitcher Rhett Lowder id 695076).
+  `fetch_confirmed_lineup()` confirmed BOTH real cases live: every one of today's 15 games (all 7+
+  hours from first pitch) returned `None` (`not_yet_confirmed`); a real completed game from
+  2026-09-14 (gamePk 824465, Dodgers @ Reds) returned a real, non-empty confirmed lineup — 9 real
+  batter ids in the away batting order, real pitcher-usage lists on both sides (away
+  `[669373, 681911, 623465, ...]`, home `[666157, 682825, 663574, ...]`).
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 69/69 pass (51 pre-existing + 18 new; 0 failures).
+- Ran the real pipeline end to end against real current data:
+  - `python scripts/ingestion/ingest_pickem.py` (2026-09-15T15:32:05Z) — 27,033 PrizePicks + 6,628
+    Underdog = 33,661 real normalized rows, both platforms OK. 2,671 of those are real MLB Underdog
+    rows.
+  - `python scripts/estimation/pickem_model.py --season 2026` (completed 2026-09-15T15:38:03Z,
+    `output/estimation/pickem_estimates_20260915T153803Z.csv`, 33,661 rows). Real per-bucket
+    `mlb_starter_status` counts on the 2,671 MLB Underdog rows:
+    - `not_yet_confirmed`: **2,329**
+    - blank/`None`: **342** (327 `unsupported_stat_type` + 15 `no_player_match`, both resolved before
+      this session's code ever runs — 327+15=342, exact match, confirming no row silently fell through
+      a different path)
+    - `confirmed`: **0**
+    - `different_than_expected`: **0**
+  - The 0/0 split on the two "resolved" buckets is the real, expected result for today specifically:
+    every one of the 15 real MLB games on today's slate was still 7+ hours from first pitch at run
+    time (earliest first pitch 22:40 UTC vs. run time ~15:38 UTC), so MLB genuinely had not posted a
+    real confirmed lineup for any of them yet — matches the live fetch-function check above exactly.
+  - Schedule-matching resolved every row that reached the compute step to a real game (2,329
+    `not_yet_confirmed`, 0 additional unresolvable rows) — better coverage than the UTC-date-slicing
+    caveat below predicted might be needed, at least on today's real slate.
+
+**Decisions made:**
+1. **No filtering or gating shipped this session, on purpose.** Session 2.31's decision #4 explicitly
+   scoped "test whether gating Underdog edges by this kind of signal recovers a usable segment" as a
+   separate, later session once real evidence exists (Session 2.33) — this session is the signal's
+   plumbing, not its verdict. Confirmed by design: `mlb_starter_status` never appears in
+   `edge_over`/`edge_under`/`prob_over`/`implied_prob_over`'s computation anywhere in
+   `process_props()`.
+2. **Team-nickname matching needed real, live confirmation before writing — not guessed.** Checked
+   Underdog's actual `game_matchup` wording against real MLB Stats API team names before writing
+   `find_scheduled_game()` (e.g. "D'Backs" vs. MLB's own "D-backs" for the Diamondbacks) — same
+   "confirm the real ingested strings directly, don't guess" standard Session 2.13 already used for
+   MLB's stat-type map.
+3. **The pitcher-side check only reads the FIRST entry of a confirmed side's real `pitchers` list**,
+   and only for that side's actual probable pitcher — not any reliever who might later appear in that
+   same list. This is a real, stated scope boundary (pre-game starter confirmation), not an attempt to
+   track in-game pitching changes.
+
+**Corrections/reversals during the session:**
+- Initial `fetch_schedule_games()` design read the schedule's own `team.name` field ("New York
+  Yankees") for matching against Underdog's nickname wording ("Yankees") — checked directly against a
+  real API response and found no `teamName` field on the schedule endpoint's team object, unlike a
+  direct `GET /v1/teams?sportId=1` pull. Fixed by adding the hardcoded `MLB_TEAM_ID_TO_NICKNAME` map
+  (confirmed live against the real 30-team list) before this was ever tested against real data, not
+  after a false negative was found downstream.
+
+**Open items / deferred validations:**
+- **The core open question — does `mlb_starter_status` actually predict which Underdog flags win or
+  lose — is entirely unanswered here and is Session 2.33's job.** This project has never captured
+  historical "probable pitcher/lineup at flag time" data, so no backtest is possible; this is a
+  genuinely new real-time signal with zero held-out or historical evidence behind it. Explicitly not
+  fabricating a validation number for this — see ROADMAP.md Session 2.33.
+- **Date resolution is a UTC-slice of `game_start_time`, not MLB's own local `officialDate`.**
+  `compute_mlb_starter_status()` uses `game_start_time[:10]` as the schedule lookup date. For a late
+  West Coast game, this can in principle differ from MLB's own real local game date, causing a real,
+  silent `None` (unresolvable) result rather than a wrong one for that prop — safe, but a real,
+  unquantified coverage loss. Today's real run showed 0 such cases (100% resolution for every row that
+  reached the compute step), but that is one day's real data, not proof this never happens — worth a
+  real fix (a proper MLB Stats API date lookup, or a fixed UTC-to-local offset mirroring
+  `auto_grade_outcomes.py`'s existing NFL Eastern-conversion rule) once confirmed to matter at volume.
+- **No in-game pitching-change tracking** (see Decisions #3) — a real, stated limitation.
+- **`MLB_TEAM_ID_TO_NICKNAME` is hardcoded from a live 2026-09-15 pull of the 30 current MLB
+  franchises** — a mid-season relocation/rebrand would silently break that one team's match until the
+  map is updated by hand; real but extremely low-probability risk, same category as `MLB_TEAM_IDS`
+  above it already accepts.
+- Live validation window explicitly OPEN, not closed — see new ROADMAP.md Session 2.33 card.
