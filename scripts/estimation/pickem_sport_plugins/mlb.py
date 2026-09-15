@@ -329,6 +329,13 @@ def _hitting_rows(person_id: int, full_name: str, season: int) -> list[dict]:
             "player_id": str(person_id),
             "player_display_name": full_name,
             "sort_key": game_index,
+            # Session 2.26: MLB Stats API's own gameLog split already reports
+            # this game's real calendar date directly (unlike NFL, which has
+            # no such field and needs a separate schedule-file join to find
+            # it -- see auto_grade_outcomes.py's GradingAdapter for MLB vs
+            # NFL). Carried through here so grading can match a flag to its
+            # real game by date alone, with no extra fetch.
+            "game_date": split.get("date"),
             "hits": stat.get("hits", 0),
             "homeRuns": stat.get("homeRuns", 0),
             "runs": stat.get("runs", 0),
@@ -356,6 +363,7 @@ def _pitching_rows(person_id: int, full_name: str, season: int) -> list[dict]:
             "player_id": str(person_id),
             "player_display_name": full_name,
             "sort_key": game_index,
+            "game_date": split.get("date"),
             "p_hits": stat.get("hits", 0),
             "p_earnedRuns": stat.get("earnedRuns", 0),
             "p_baseOnBalls": stat.get("baseOnBalls", 0),

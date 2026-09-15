@@ -294,6 +294,122 @@ main {
   margin-right: 6px;
 }
 
+/* Session 2.26 — marks a row whose sport has no real-outcome grading yet
+   (not in VALIDATED_SPORTS in app.js), so a large edge number on an
+   unvalidated sport can never be mistaken for the same kind of evidence
+   as a validated one. Reuses the props track's "risk" badge color
+   deliberately — this is the same kind of warning (real caution, not a
+   hard blocker the way ⛔ Blocked is), not a new color language. */
+.unvalidated-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--risk-badge);
+  background: var(--risk-badge-bg);
+  border: 1px solid rgba(217, 138, 79, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: help;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+/* Session 2.26 — sport/platform filter controls above a track's open-flags
+   table. Same input styling language as .sizing-input-row's bankroll
+   field, just laid out as a row of selects instead of one number input. */
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.filter-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.filter-field select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 12.5px;
+  font-family: var(--sans);
+}
+
+.filter-field label {
+  white-space: nowrap;
+}
+
+.filter-count-note {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* Session 2.26 follow-up — a sport can have real grading AND still be a
+   real "don't bet this yet" (MLB's own first graded result: 55.2% real
+   win rate vs. a 57.74% breakeven, found the moment real grading landed).
+   "Validated" alone would read as a green light either way, so the
+   per-sport table needs three visually distinct states, not two. */
+.status-badge-pos {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.12);
+  border: 1px solid rgba(79, 209, 139, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.status-badge-neg {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--accent-neg);
+  background: rgba(226, 104, 91, 0.12);
+  border: 1px solid rgba(226, 104, 91, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  cursor: help;
+}
+
+/* Session 2.26 — per-sport real-outcome-grading breakdown table (Pick'em
+   outcome panel), replacing the old NFL-only assumption now that MLB has
+   its own graded rows too. */
+.per-sport-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-top: 12px;
+}
+
+.per-sport-table th, .per-sport-table td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.per-sport-table th {
+  color: var(--text-faint);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 /* ---------- track headings (new, Session 3.5) ---------- */
 /* Marks the start of each track's section on the page so the two tracks
    are clearly distinguished, per Session 3.5's validation requirement,

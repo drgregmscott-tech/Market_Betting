@@ -13021,3 +13021,107 @@ Session 2.24's follow-up.
   those stat shapes.
 - `rushing_tds` (n=27) remains the smallest-sample override in production
   — worth prioritizing for re-fit once its graded volume grows.
+
+## Session 2.26 — MLB Real-Outcome Auto-Grading + Multi-Sport Validation Visibility (Frontend)
+
+**Date:** 2026-09-15 **Status:** ✅ Complete — real `--run` executed, all validation checks pass.
+**The real finding this session exists to surface:** MLB's real win rate, once graded, is **55.2%
+(n=16,656) — BELOW the 57.74% breakeven.** NFL is 67.2%. MLB's median 26% flagged edge is not
+evidence the model is right for MLB; it's the opposite. See "Open Decision" below and this session's
+ROADMAP.md card.
+
+**Why this exists:** The user found live on the frontend that 9,810 open Pick'em flags were being
+shown with no indication that 9,801 of them (MLB/soccer/tennis/NBA) have never been checked against a
+real outcome — only NFL had that loop closed (Session 2.18). MLB alone is 7,827 of those (80%), median
+flagged edge 26%, with zero real evidence behind it. Investigated first, not assumed: confirmed
+`consensus_available` is 0% across every sport (the CLV cross-platform benchmark never actually fires),
+and that MLB's own `clv_edge_at_close` average is mostly tautological (only 6.8% of Underdog lines
+ever move, per Session 2.19's own finding) — so MLB genuinely had no independent validation signal at
+all before this session, not just an unsurfaced one.
+
+**What got built:**
+1. `scripts/estimation/pickem_sport_plugins/mlb.py` — added `game_date` to every hitting/pitching row
+   (MLB Stats API's own `gameLog` split already reports it; just wasn't read through before). This let
+   MLB grading skip NFL's whole schedule-file join entirely — direct date match against the flag's own
+   `game_start_time` is enough.
+2. `scripts/calibration/auto_grade_outcomes.py` — generalized from NFL-hardcoded to a
+   `GradingAdapter`-per-sport design (`ADAPTERS = [NFL_ADAPTER, MLB_ADAPTER]`), reusing
+   `pickem_model.py`'s existing sport-agnostic `build_name_lookup()`/`resolved_stat_key_for()`. NFL's
+   adapter reproduces its pre-refactor behavior exactly (schedule-join logic moved, not changed) — a
+   `--dry-run` before/after the refactor produced byte-identical NFL numbers (379 candidates, 0 graded,
+   376 no_player_match, 3 no_game_match — confirmed via `git stash` A/B, not assumed). CLI flags
+   (`--run`, `--dry-run`) unchanged, so the existing GitHub Actions step
+   (`.github/workflows/pickem_pipeline.yml`) needs no edit.
+3. **Real bug found and fixed during this refactor**, not carried forward: `resolve_stat_key()`
+   lowercased `resolved_stat_key` before using it as a column name. Harmless for NFL (nflverse's own
+   columns are already lowercase) but silently broke every MLB flag keyed on a camelCase column
+   (`baseOnBalls`, `homeRuns`, ...) — caught live in the first MLB dry run (`mlb data missing expected
+   column(s): ['baseonballs']`). Fixed by only lowercasing the `computed_stat_types` lookup, not the
+   column-name split.
+4. Frontend (`frontend/app.js`, `index.html`, `style.css`) — added `VALIDATED_SPORTS` (`{nfl, mlb}`,
+   the single source of truth Sessions 2.27–2.29 each extend by one entry), an `Unvalidated` badge on
+   every Pick'em row (open table, Overview's per-track table, and the cross-track Focus panel) from a
+   sport not in that set, sport/platform/validation filter dropdowns on the Pick'em open table, and a
+   generalized per-sport breakdown table replacing the old NFL-only assumption in the outcome-grading
+   panel.
+
+5. **Follow-up fix, same session, triggered by the real `--run` result below:** the frontend's
+   `VALIDATED_SPORTS`/`Unvalidated` badge (point 4) only encoded "has real grading," which stopped
+   being sufficient the moment MLB's real win rate came back below breakeven — a plain "Validated"
+   badge next to that number would have read as a green light. Replaced the binary badge with
+   `classifySportStatus()` (`unvalidated` / `small_sample` / `profitable` / `underperforming`), backed
+   by a shared `sportPerformance` map populated from the real `outcome_log.csv` data. `init()`
+   re-sequenced so `initOutcomeReview()` resolves before `initPickem()`/`renderOverview()` — this map
+   has to exist before any row-level badge reads it, not just eventually. Every Pick'em row, the
+   Overview/Focus panels, the open-table filter dropdown, and the per-sport outcome table all read
+   this one classification now instead of three separate ad-hoc checks. Added a fourth open-table
+   filter option (`Real-outcome status`: profitable / underperforming / building sample / unvalidated)
+   so "show me only what's actually safe to consider" is one filter away, not an inference the user has
+   to make by cross-referencing two panels.
+
+**Files touched:** `ROADMAP.md` (new Sessions 2.26–2.30), `scripts/estimation/pickem_sport_plugins/mlb.py`,
+`scripts/calibration/auto_grade_outcomes.py`, `frontend/app.js`, `frontend/index.html`, `frontend/style.css`.
+
+**Validation:**
+- [x] `--run --dry-run` against real live data: MLB grades 16,689 of 17,660 real closed-flag candidates
+  (96 no_player_match, 875 no_game_match, 0 no_stat_value after the casing fix).
+- [x] Spot-checked one real graded row by hand directly against MLB Stats API (not just trusted the
+  script's own output): J.P. Crawford, Over 0.5 Batter Walks, 2026-09-14 vs. Angels — API's own
+  `gameLog` shows `baseOnBalls: 0` for that date, matching the script's `actual=0.0 -> loss`.
+- [x] NFL behavior confirmed unchanged via `git stash` A/B (see point 2 above).
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` — 51/51 pass.
+- [x] **Ran for real:** `--run` (not `--dry-run`) wrote 16,689 new rows to
+  `data/pickem/outcome_log.csv` (16,656 win/loss, 33 push). Real result: **MLB win rate 55.2%,
+  below the 57.74% breakeven** (NFL: 67.2%). Confirmed idempotency with a fresh `--dry-run`
+  immediately after: MLB's remaining ungraded candidates dropped from 17,660 to 971 (exactly the
+  96 no_player_match + 875 no_game_match that genuinely couldn't be graded either time), 0 newly
+  graded on the second pass — no double-grading, no flags silently skipped.
+- [x] Frontend re-verified live in-browser against the real post-`--run` data: per-sport outcome
+  table shows `NFL — Validated — profitable (67.2%)` and `MLB — Validated — underperforming (55.2%)`;
+  every visible MLB open-table row now carries a real `Below breakeven` badge (25/25 checked); NFL
+  rows carry no badge (0/9); the new "Profitable" filter correctly narrows all 9,810 flags down to
+  exactly the 9 real NFL rows that currently clear both bars.
+
+**Open items / deferred validations:**
+- `test_clv_logger.py` did not run under plain pytest invocation in this environment (returns "no tests
+  collected") — pre-existing test-runner quirk, unrelated to this session's changes (file untouched).
+- NBA has an estimation plug-in but was deliberately left out of `VALIDATED_SPORTS`/`ADAPTERS` — its
+  season hasn't started (2026-09-15), nothing real to grade against yet.
+- **MLB's real underperformance is not yet fixed, only surfaced** — and this entry's own first-pass
+  diagnosis (below) was itself wrong, corrected the same day. Originally recorded here: "recalibrate
+  MLB's `SIGMA_CALIBRATION_FACTOR` specifically, mirroring Sessions 2.22/2.24/2.25's NFL-only work."
+  **That was wrong.** The user asked directly, "is this intrinsic to MLB, or a model deficiency?" — a
+  real platform-split investigation followed and found the 55.2% MLB number is entirely a
+  PrizePicks/Underdog mix effect: PrizePicks 66.9% (MLB) / 69.4% (NFL), both well over breakeven;
+  Underdog 46.4% (MLB) / 49.5% (NFL), both below a coin flip. NFL's own aggregate (67.2%) only looked
+  clean because NFL's real grading mix is 89% PrizePicks, diluting its own equally-bad Underdog number
+  away — the sport was never the variable. Worse, Underdog's real win rate FALLS as the model's stated
+  edge RISES (edge~0%: 48.5%; edge~50%: 30.0%) — a uniform sigma rescale corrects overconfidence
+  (same-direction, wrong magnitude), not an inverted relationship. Ruled out before settling on "real
+  model deficiency": a sign/side flip in `implied_prob_over_underdog()` (formula checked directly, no
+  flip) and stale pricing at flag time (Underdog flags are caught with a SHORTER median lead time, 7.3h,
+  than PrizePicks' 13.7h — the opposite of what staleness would predict). Real next step is
+  ROADMAP.md's new Session 2.31 (Underdog Cross-Sport Pricing Gap Investigation), not a sigma refit.
+  Until that lands, the frontend's "Below breakeven" badge remains the honest stopgap, and the real,
+  evidence-backed recommendation is: trust PrizePicks flags, distrust Underdog flags, in every sport,
+  not just MLB.

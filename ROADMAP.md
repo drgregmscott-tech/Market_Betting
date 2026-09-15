@@ -2345,6 +2345,245 @@ prioritize for re-fit as its graded volume grows.
 - Per-stat drift monitoring is not yet automated the way the global
 factor's drift check already is in `weekly_review.py` — real future work.
 
+### Session 2.26 — MLB Real-Outcome Auto-Grading + Multi-Sport Validation Visibility (Frontend)
+**Status:** ✅ Complete (2026-09-15) — see SESSION_LOG.md for full detail. **Real, unplanned finding:**
+MLB's real win rate (55.2%, n=16,656) is BELOW the 57.74% breakeven — worse than a coin flip after
+vig, despite a 26% median flagged edge. NFL is 67.2%. MLB should not be bet with real money on the
+current model until it gets its own sigma recalibration (see Open Decision below) — grading alone
+does not mean profitable, and the frontend was extended mid-session to say so explicitly rather than
+show a plain "Validated" badge that would have implied otherwise.
+**Prerequisites:** Session 2.18 (NFL auto-grading, the pattern this reuses);
+Session 2.13 (MLB plug-in).
+
+**Why this exists:** The user found, live on the frontend, that 9,810 open
+Pick'em flags were being presented with no indication that 9,801 of them
+(MLB/soccer/tennis/NBA combined) have never been checked against a real
+outcome — only NFL has (`data/pickem/outcome_log.csv` is NFL-only, per
+Session 2.18's own scope note). MLB alone is 7,827 of those open flags
+(80%) with a median flagged edge of 26%, which is a real overconfidence
+red flag in the absence of any real win/loss evidence for that sport. This
+session closes that gap for MLB specifically (the largest, most urgent
+slice) and makes the validated/unvalidated distinction visible on the
+frontend for every sport, present and future, so this can't happen again
+silently as more sports get graded later.
+
+**What this builds:**
+1. Extends `pickem_sport_plugins/mlb.py`'s `fetch_stats` to carry each
+   game's real calendar date (already present in MLB Stats API's own
+   `gameLog` response, just not currently read through) — MLB doesn't need
+   an external schedule-file join the way NFL's auto-grader does, since the
+   stats source already reports the real per-game date directly.
+2. Generalizes `auto_grade_outcomes.py`'s matching/grading logic to run
+   per-`SportPlugin` instead of hardcoding NFL, reusing
+   `pickem_model.py`'s already-sport-generic `build_name_lookup()` /
+   `resolved_stat_key_for()`. NFL's existing schedule-join path is kept
+   unchanged as one supported matching strategy; MLB uses the simpler
+   direct-date-match strategy. This generalization is what lets Sessions
+   2.27–2.29 add their own sport with a small adapter instead of a
+   near-duplicate script each time.
+3. Frontend: replaces the NFL-hardcoded outcome-grading panel with a
+   sport-aware one, driven by a single `VALIDATED_SPORTS` set (starts as
+   `{"NFL", "MLB"}`, grows by one entry per future grading session — no
+   further frontend rework needed as 2.27–2.29 land). Every open-flags
+   table gains a visible "unvalidated" indicator on rows from a sport not
+   in that set, and sport/platform filters are added to the Pick'em tab so
+   the 9,810-row table can actually be narrowed down.
+
+**Files touched:** `scripts/estimation/pickem_sport_plugins/mlb.py`,
+`scripts/calibration/auto_grade_outcomes.py`, `frontend/app.js`,
+`frontend/index.html`, `frontend/style.css`.
+
+**Validation (required to close session):**
+- [x] `auto_grade_outcomes.py --run --dry-run` against real live data grades
+a real sample of closed MLB flags (16,689 of 17,660 candidates); spot-checked
+by hand against a live MLB Stats API response for one real player/date.
+- [x] NFL grading behavior unchanged after the refactor — confirmed via
+`git stash` A/B, byte-identical summary before/after.
+- [x] Frontend sport/platform/real-outcome-status filters and caution badges
+verified live in the browser against the real current data files.
+- [x] Existing test suites still pass (51/51).
+- [x] Ran for real (`--run`, not `--dry-run`) — `data/pickem/outcome_log.csv`
+now carries 16,656 real graded MLB legs (33 of the 16,689 written landed as
+`push`, not `win`/`loss`).
+
+**Open Decision — CORRECTED same day (2026-09-15), see Session 2.31:** this
+card originally recommended an MLB-specific sigma recalibration here (the
+same fix Session 2.22 used for NFL's overconfidence gap). That diagnosis
+was wrong, caught by the user asking "is this intrinsic to MLB, or a model
+deficiency?" and a real platform-split investigation that followed:
+
+- Split by platform, MLB's 55.2% aggregate is entirely a PrizePicks/Underdog
+  mix effect, not a sport effect — PrizePicks 66.9% (n=7,157), Underdog
+  46.4% (n=9,499). **NFL shows the identical split** (PrizePicks 69.4%
+  n=7,272, Underdog 49.5% n=924) — NFL's aggregate only looked clean because
+  NFL's real grading mix is 89% PrizePicks, diluting its own bad Underdog
+  number away. MLB's mix happens to be Underdog-heavier, so the same
+  Underdog problem dominates MLB's blended number instead. The sport was
+  never the variable.
+- A uniform sigma rescale (Session 2.22's fix) corrects *overconfidence* —
+  same-direction, wrong magnitude. It cannot fix what Underdog actually
+  shows: real win rate **falls** as stated edge **rises** (edge~0%: 48.5%
+  real win rate; edge~50%: 30.0%) — an inverted relationship, not merely an
+  overstated one. Rescaling sigma would not touch this.
+- Ruled out (not just assumed away) two cheaper explanations before landing
+  on "real model deficiency": `implied_prob_over_underdog()`'s no-vig
+  formula has no sign/side inversion; Underdog flags are caught with a
+  *shorter* median lead time before game start (7.3h) than PrizePicks
+  (13.7h), so this isn't stale-price-at-flag-time either.
+
+Real next step is Session 2.31 (below), not a sigma refit — this is a
+platform-level information gap (Underdog's real per-side price likely
+reflects lineup/pitcher/injury information the model's season-average +
+recent-form blend doesn't have), present in every sport tested, not a
+single sport's variance parameter.
+
+### Session 2.27 — Soccer/EPL Real-Outcome Auto-Grading
+**Status:** Not started
+**Prerequisites:** Session 2.26 (generalized auto-grader + `VALIDATED_SPORTS`
+frontend pattern).
+
+**What gets built:** Adds a soccer/EPL adapter to the generalized grader
+from 2.26 (ESPN public API / Fantasy Premier League API — same sources
+`pickem_sport_plugins/soccer.py` and `epl.py` already use for estimation),
+and adds `"SOCCER"`/`"EPL"` to the frontend's `VALIDATED_SPORTS` set once
+live-verified.
+
+**Validation (required to close session):**
+- [ ] Real sample of closed soccer/EPL flags graded and spot-checked by hand.
+- [ ] Frontend reflects soccer/EPL as validated with no further frontend
+code changes beyond the `VALIDATED_SPORTS` entry.
+
+### Session 2.28 — CFB Real-Outcome Auto-Grading
+**Status:** Not started
+**Prerequisites:** Session 2.26 (generalized auto-grader).
+
+**What gets built:** Adds a CFB adapter to the generalized grader
+(CollegeFootballData.com — same source `pickem_sport_plugins/cfb.py`
+already uses), reusing the existing weekly-cache pattern so grading rides
+the same cached pulls ingestion already makes rather than adding new API
+calls against CFBD's 1,000-call/month free-tier cap. Adds `"CFB"` to
+`VALIDATED_SPORTS`.
+
+**Validation (required to close session):**
+- [ ] Real sample of closed CFB flags graded and spot-checked by hand.
+- [ ] Confirmed no net-new CFBD API calls beyond what ingestion/estimation
+already budgets for.
+
+### Session 2.29 — Tennis Real-Outcome Auto-Grading
+**Status:** Not started
+**Prerequisites:** Session 2.26 (generalized auto-grader).
+
+**What gets built:** Adds a tennis adapter to the generalized grader,
+reusing the `Aneeshers/tennis-sackmann-archive` source
+`pickem_sport_plugins/tennis.py` already pulls. This archive is
+lag-based (updates with a real delay behind actual match completion,
+per that plug-in's own docstring), so grading will trail real results —
+the frontend should surface a "graded through" date for tennis rather
+than implying same-day grading the way NFL/MLB can.
+
+**Validation (required to close session):**
+- [ ] Real sample of closed tennis flags graded and spot-checked by hand.
+- [ ] Frontend shows the real lag (last successfully graded date) for
+tennis specifically, not a blanket "validated" badge that overstates
+freshness.
+
+### Session 2.30 — NHL Go/No-Go Checkpoint
+**Status:** Not started
+**Prerequisites:** None (can run independently of 2.27–2.29).
+
+**Why this is its own, different kind of session:** Unlike MLB/soccer/
+tennis/CFB, NHL has no plug-in at all today — no ingestion, no
+estimation, nothing. This is not "add grading to an existing sport," it's
+"should Pick'em grow a 6th sport track before the first 5 are fully
+validated." Mirrors Session 7.0's go/no-go pattern rather than committing
+to a full build up front.
+
+**What this session does:** Evaluates whether NHL pick'em volume/edge
+opportunity (on PrizePicks/Underdog) justifies the real cost of a new
+ingestion + estimation + grading build, given Sessions 2.26–2.29 will have
+just shown how much work full validation takes per sport already in the
+pipeline. Records an explicit build/skip decision.
+
+**Validation (required to close session):**
+- [ ] Explicit decision recorded: build NHL support or defer indefinitely
+- [ ] If building: scoped into its own Sessions 2.32+ (2.31 is now the
+Underdog investigation below) following the Session 2.12–2.18 pattern
+(architecture, then per-sport support, then grading) rather than one
+monolithic session
+- [ ] If deferring: stated here as an explicit, documented decision, not a
+silent gap
+
+### Session 2.31 — Underdog Cross-Sport Pricing Gap Investigation
+**Status:** Not started
+**Prerequisites:** Session 2.26 (the real graded sample this investigation
+runs against already exists — `data/pickem/outcome_log.csv`, 16,656 MLB +
+8,196 NFL real graded legs).
+
+**Why this exists:** Session 2.26's real MLB grading run surfaced a finding
+that turned out not to be about MLB at all. Split by platform: PrizePicks
+66.9% (MLB) / 69.4% (NFL) real win rate — both comfortably over the 57.74%
+breakeven, in both sports tested. Underdog: 46.4% (MLB) / 49.5% (NFL) — both
+below a coin flip, in both sports tested. Worse, Underdog's real win rate
+falls as the model's stated edge rises (edge~0%: 48.5% real win rate;
+edge~50%: 30.0%) — an inverted relationship a uniform overconfidence
+correction (Session 2.22's sigma fix) cannot address, because it isn't an
+overconfidence problem: the model's biggest Underdog disagreements are its
+worst picks, not just its most overstated ones. This is the single most
+consequential number on the page right now, more than any per-sport
+question — it says "don't trust Underdog flags, any sport" until this is
+understood, while "trust PrizePicks flags" holds up under real evidence in
+every sport checked so far.
+
+**What got ruled out already (Session 2.26, stated here so this session
+doesn't re-derive it):** a sign/side inversion in
+`implied_prob_over_underdog()` (checked the formula directly — standard
+no-vig normalization, no flip); stale pricing at flag time (Underdog flags
+are actually caught with a SHORTER median lead time before game start,
+7.3h, than PrizePicks' 13.7h — the opposite of what a staleness story would
+predict).
+
+**What this session should investigate, roughly in order of cost:**
+1. **Data/matching integrity first, cheapest to rule out or confirm:** is
+   `last_seen_implied_prob`/the multiplier pair actually the real,
+   current-at-flag-time Underdog price, or could ingestion be reading a
+   cached/delayed value for Underdog specifically (unlike PrizePicks)? Any
+   possibility a `source_line_id`/`flag_id` match is picking up the wrong
+   real prop on Underdog specifically (e.g. a same-player multi-line mixup
+   the way PrizePicks' Demon/Goblin gap turned out to be real, per
+   `pickem_model.py`'s docstring)?
+2. **Real information gap, if (1) comes back clean:** does Underdog's real
+   per-side price move on real news (lineup changes, starting pitcher,
+   injury designations) faster or more completely than the model's
+   season-average + recent-form blend can react to? If so, that's this
+   project's own "market structure, not sport, determines efficiency"
+   thesis (Track Reference table) showing up a level lower than expected —
+   at the PLATFORM level within one track, not just across tracks. Worth
+   checking whether restricting to props flagged with `game_start_time`
+   very close to lock (little time for such news to move a soft PrizePicks
+   line but plenty of time for a sharp Underdog line to have already
+   absorbed it) changes the picture.
+3. **If real edge genuinely doesn't exist against Underdog:** this project
+   should stop counting Underdog flags as flags at all (not just badge them
+   "Below breakeven" on the frontend) — a standing decision, not a
+   per-session judgment call each time.
+
+**Files likely touched:** new investigation script under
+`scripts/calibration/` (does not need to ship a model change — Session
+2.24's "measurement only, no model change" pattern is the right template);
+`docs/research/` writeup of the finding; `ROADMAP.md`/`SESSION_LOG.md` with
+whatever real decision comes out of it (fix the model, restrict Underdog
+usage, or both).
+
+**Validation (required to close session):**
+- [ ] Root cause investigated with real evidence (not assumed) — data
+integrity checked first, informational-gap theory checked second
+- [ ] Explicit decision recorded: is Underdog usable for any sport right
+now, and if not, does the project stop flagging it entirely or keep the
+"Below breakeven" frontend warning as sufficient
+- [ ] If a real fix is identified (e.g. faster/more sources of the same
+late-breaking information Underdog's price reflects), scoped into its own
+follow-up session rather than attempted inside this investigation session
+
 ---
 
 # PHASE 3 — Track 2: Cross-Venue Arbitrage

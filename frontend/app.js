@@ -144,6 +144,74 @@ function isTrueField(v) {
   return String(v).trim().toLowerCase() === "true";
 }
 
+// ---------------------------------------------------------------------
+// Session 2.26 -- which sports have real-outcome grading behind them.
+// The user found live (2026-09-15) that 9,801 of 9,810 open Pick'em
+// flags (MLB/soccer/tennis/NBA combined) carried no indication their
+// edge numbers have never been checked against a real result -- only
+// NFL had that loop closed (Session 2.18). This is the single source of
+// truth for that distinction on the frontend: grows by one entry per
+// future grading session (2.27 soccer/EPL, 2.28 CFB, 2.29 tennis) with
+// no other frontend change required -- see auto_grade_outcomes.py's
+// ADAPTERS list, which this should always match.
+// ---------------------------------------------------------------------
+const VALIDATED_SPORTS = new Set(["nfl", "mlb"]);
+
+function isValidatedSport(sport) {
+  return VALIDATED_SPORTS.has(String(sport || "").trim().toLowerCase());
+}
+
+function unvalidatedBadgeHtml(sport) {
+  if (isValidatedSport(sport)) return "";
+  return `<span class="unvalidated-badge" title="No real-outcome grading exists yet for ${escapeAttr(sport || "this sport")} -- this row's edge is model output only, not evidence the model is right for this sport. See the Real-outcome grading panel below.">Unvalidated</span>`;
+}
+
+// ---------------------------------------------------------------------
+// Session 2.26 follow-up -- "has real grading" and "is actually worth
+// betting" turned out to be two different questions the moment MLB's
+// real numbers landed: MLB has real grading (16,656 graded legs) AND a
+// real win rate (55.2%) BELOW the 57.74% breakeven -- worse than NFL's
+// 67.2%. A plain "Validated" badge would have read as a green light
+// either way. sportPerformance is populated by renderOutcomeStats() from
+// the real outcome_log.csv data (init() sequences initOutcomeReview()
+// BEFORE initPickem()/renderOverview() specifically so this is always
+// populated before anything reads it -- see init()'s own comment).
+// classifySportStatus() is the one place this four-way distinction is
+// decided; every badge (open table, Overview, the per-sport outcome
+// table) reads it rather than each re-deriving its own version.
+// ---------------------------------------------------------------------
+const sportPerformance = new Map(); // lowercase sport -> { wins, total }
+const PER_SPORT_MIN_SAMPLE = 20; // same n>=20 floor Session 2.24 already uses for a meaningful group
+
+function classifySportStatus(sport) {
+  if (!isValidatedSport(sport)) return "unvalidated";
+  const perf = sportPerformance.get(String(sport || "").trim().toLowerCase());
+  const total = perf ? perf.total : 0;
+  if (total < PER_SPORT_MIN_SAMPLE) return "small_sample";
+  const winRate = perf.wins / perf.total;
+  return winRate >= BREAKEVEN_WIN_RATE ? "profitable" : "underperforming";
+}
+
+// Row-level badge for the open-flags table and Overview -- shows nothing
+// only when a sport has cleared the full bar (validated AND profitable on
+// a real sample). Every other state gets a visible caution, same
+// standard as the ⛔ Blocked badge: a real reason to hesitate is never
+// hidden just because the row also has a big edge number.
+function rowCautionBadgeHtml(sport) {
+  const status = classifySportStatus(sport);
+  if (status === "profitable") return "";
+  if (status === "unvalidated") return unvalidatedBadgeHtml(sport);
+
+  const perf = sportPerformance.get(String(sport || "").trim().toLowerCase());
+  const total = perf ? perf.total : 0;
+  if (status === "small_sample") {
+    const detail = total === 0 ? "no graded legs yet" : `only ${total} graded leg(s) so far`;
+    return `<span class="unvalidated-badge" title="${escapeAttr(sport)} has real-outcome grading, but ${detail} -- too small a sample to trust yet.">Building sample</span>`;
+  }
+  const winRate = perf.wins / perf.total;
+  return `<span class="status-badge-neg" title="${escapeAttr(sport)}'s real win rate (${(winRate * 100).toFixed(1)}%) is BELOW the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample -- real grading exists, but the real result says don't bet this sport yet.">Below breakeven</span>`;
+}
+
 function blockedCheck(track, r) {
   const reasons = [];
 
@@ -415,18 +483,89 @@ function renderChart(closed) {
 const OPEN_TABLE_DEFAULT_LIMIT = 25;
 let openTableShowAll = false;
 
+// Session 2.26 -- sport/platform/validation filters for the open-flags
+// table, per the user's 2026-09-15 request ("not a good way to sift thru
+// or filter any of the data out"). Filter state lives here rather than
+// being re-read from the DOM on every render so renderOpenTable() can be
+// called from multiple places (initial load, a filter change, the
+// show-all toggle) without needing to know which one triggered it.
+const openTableFilters = { sport: "", platform: "", validated: "" };
+
+function populateOpenTableFilterOptions(open) {
+  const sportSelect = document.getElementById("openSportFilter");
+  const platformSelect = document.getElementById("openPlatformFilter");
+  if (!sportSelect || !platformSelect) return;
+
+  const sports = Array.from(new Set(open.map((r) => r.sport).filter(Boolean))).sort();
+  const platforms = Array.from(new Set(open.map((r) => r.platform).filter(Boolean))).sort();
+
+  sportSelect.innerHTML =
+    `<option value="">All</option>` +
+    sports
+      .map((s) => {
+        const status = classifySportStatus(s);
+        const suffix = status === "profitable" ? "" : ` (${status.replace("_", " ")})`;
+        return `<option value="${escapeAttr(s)}">${escapeHtml(s)}${suffix}</option>`;
+      })
+      .join("");
+  platformSelect.innerHTML =
+    `<option value="">All</option>` +
+    platforms.map((p) => `<option value="${escapeAttr(p)}">${escapeHtml(p)}</option>`).join("");
+}
+
+function applyOpenTableFilters(open) {
+  return open.filter((r) => {
+    if (openTableFilters.sport && r.sport !== openTableFilters.sport) return false;
+    if (openTableFilters.platform && r.platform !== openTableFilters.platform) return false;
+    if (openTableFilters.validated && classifySportStatus(r.sport) !== openTableFilters.validated) return false;
+    return true;
+  });
+}
+
+function initOpenTableFilters(open) {
+  populateOpenTableFilterOptions(open);
+  const sportSelect = document.getElementById("openSportFilter");
+  const platformSelect = document.getElementById("openPlatformFilter");
+  const validatedSelect = document.getElementById("openValidatedFilter");
+  [
+    [sportSelect, "sport"],
+    [platformSelect, "platform"],
+    [validatedSelect, "validated"],
+  ].forEach(([el, key]) => {
+    if (!el) return;
+    el.value = openTableFilters[key];
+    el.addEventListener("change", () => {
+      openTableFilters[key] = el.value;
+      openTableShowAll = false;
+      renderOpenTable(open);
+    });
+  });
+}
+
 function renderOpenTable(open) {
   const tbody = document.getElementById("openTableBody");
   const emptyNote = document.getElementById("openEmpty");
   const showAllBtn = document.getElementById("openShowAllBtn");
+  const countNote = document.getElementById("openFilterCountNote");
   if (!tbody || !emptyNote) return;
 
-  const sorted = open
+  const filtered = applyOpenTableFilters(open);
+  const sorted = filtered
     .slice()
     .sort((a, b) => (toNum(b.first_flagged_edge) || -1) - (toNum(a.first_flagged_edge) || -1));
 
+  if (countNote) {
+    const filtersActive = openTableFilters.sport || openTableFilters.platform || openTableFilters.validated;
+    countNote.textContent = filtersActive
+      ? `${sorted.length} of ${open.length} flags match the current filters.`
+      : `${open.length} flags total.`;
+  }
+
   if (!sorted.length) {
     emptyNote.hidden = false;
+    emptyNote.textContent = filtered.length === 0 && open.length > 0
+      ? "No open flags match the current filters."
+      : "No open flags right now.";
     tbody.innerHTML = "";
     if (showAllBtn) showAllBtn.hidden = true;
     return;
@@ -459,7 +598,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${escapeHtml(r.player_name) || "—"}</td>
+          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.game_matchup) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
@@ -753,6 +892,7 @@ async function initPickem() {
 
     const { open, closed } = renderStats(rows);
     renderChart(closed);
+    initOpenTableFilters(open);
     renderOpenTable(open);
     renderClosedTable(closed);
     renderSelectedLegs();
@@ -786,8 +926,19 @@ async function initPickem() {
 const BREAKEVEN_WIN_RATE = 0.5774;
 const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
 
+// Session 2.26 -- generalized from NFL-only to every sport with real
+// graded rows in outcome_log.csv. The four top-line stats (Graded legs /
+// Real win rate / Breakeven / % of full sample) are computed ONLY from
+// validated sports (VALIDATED_SPORTS) -- a manually-recorded outcome for
+// an unvalidated sport should not silently inflate the headline "real
+// win rate" the same way an auto-graded NFL/MLB row does, since it isn't
+// backed by the same systematic grading. The new per-sport table below
+// shows every sport's own real numbers separately, whether validated or
+// not, so nothing is hidden -- just not blended into one number that
+// implies more than it should.
 function renderOutcomeStats(rows) {
-  const graded = rows.filter((r) => r.result === "win" || r.result === "loss");
+  const allGraded = rows.filter((r) => r.result === "win" || r.result === "loss");
+  const graded = allGraded.filter((r) => isValidatedSport(r.sport));
   const wins = graded.filter((r) => r.result === "win").length;
   const winRate = graded.length ? wins / graded.length : null;
   const pctOfFullSample = graded.length ? (100 * graded.length) / FULL_SAMPLE_SIZE_THRESHOLD : null;
@@ -801,6 +952,82 @@ function renderOutcomeStats(rows) {
   if (winRateEl && winRate !== null) {
     winRateEl.className = "stat-value " + (winRate >= BREAKEVEN_WIN_RATE ? "pos" : "neg");
   }
+
+  // Populates the shared sportPerformance map that classifySportStatus()
+  // (and every badge derived from it, across every tab) reads -- this
+  // MUST run before renderOpenTable()/renderOverview() do, which is why
+  // init() now awaits initOutcomeReview() before initPickem() instead of
+  // running both in parallel (see init()'s own comment).
+  sportPerformance.clear();
+  allGraded.forEach((r) => {
+    const sport = String(r.sport || "").trim().toLowerCase();
+    if (!sport) return;
+    if (!sportPerformance.has(sport)) sportPerformance.set(sport, { wins: 0, total: 0 });
+    const entry = sportPerformance.get(sport);
+    entry.total += 1;
+    if (r.result === "win") entry.wins += 1;
+  });
+
+  renderPerSportOutcomeTable();
+}
+
+function renderPerSportOutcomeTable() {
+  const tbody = document.getElementById("perSportOutcomeTableBody");
+  if (!tbody) return;
+
+  // Show every validated sport even if it has zero graded rows yet (e.g.
+  // MLB the moment auto-grading ships but before a run has closed out any
+  // flags), plus every sport that actually has graded rows (a manually-
+  // recorded outcome for an unvalidated sport shouldn't be hidden either)
+  // -- so "the table is empty" always means "no data at all," never "no
+  // data for sports we bothered to list."
+  const sportsToShow = new Set(VALIDATED_SPORTS);
+  sportPerformance.forEach((_, sport) => sportsToShow.add(sport));
+
+  const rows = Array.from(sportsToShow).map((sport) => {
+    const perf = sportPerformance.get(sport) || { wins: 0, total: 0 };
+    return [sport.toUpperCase(), perf];
+  });
+  rows.sort((a, b) => b[1].total - a[1].total);
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="4">No graded legs yet, for any sport.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows
+    .map(([sport, { wins, total }]) => {
+      const winRate = total ? wins / total : null;
+      return `
+        <tr>
+          <td>${escapeHtml(sport)}</td>
+          <td>${sportStatusBadgeHtml(sport)}</td>
+          <td>${total}</td>
+          <td>${winRate === null ? "—" : (winRate * 100).toFixed(1) + "%"}</td>
+        </tr>`;
+    })
+    .join("");
+}
+
+// Full descriptive version of classifySportStatus()'s four states, for
+// the per-sport outcome table (which always shows a status, including
+// the good one) -- rowCautionBadgeHtml() (above) is the compact sibling
+// used everywhere a blank cell is the right answer when things are fine.
+function sportStatusBadgeHtml(sport) {
+  const status = classifySportStatus(sport);
+  if (status === "unvalidated") return unvalidatedBadgeHtml(sport);
+
+  const perf = sportPerformance.get(String(sport || "").trim().toLowerCase());
+  const total = perf ? perf.total : 0;
+  if (status === "small_sample") {
+    const detail = total === 0 ? "no flags have graded yet" : `only ${total} graded leg(s) so far`;
+    return `<span class="unvalidated-badge" title="Real-outcome grading exists for ${escapeAttr(sport)}, but ${detail} -- too small a sample to trust yet.">Validated — building sample</span>`;
+  }
+  const winRate = perf.wins / perf.total;
+  if (status === "profitable") {
+    return `<span class="status-badge-pos" title="Real win rate (${(winRate * 100).toFixed(1)}%) clears the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample.">Validated — profitable</span>`;
+  }
+  return `<span class="status-badge-neg" title="Real win rate (${(winRate * 100).toFixed(1)}%) is BELOW the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample -- real grading exists, but the real result says don't bet this yet.">Validated — underperforming</span>`;
 }
 
 function renderReviewSummary(reviewRows) {
@@ -1399,6 +1626,10 @@ function mapPickemForOverview(r) {
     timing: fmtDate(r.game_start_time),
     longDated: false,
     blocked: blockedCheck("pickem", r).blocked,
+    // Session 2.26 -- only Pick'em currently has a validated/unvalidated
+    // sport distinction (VALIDATED_SPORTS); every other track's mapper
+    // below sets this false, since that track has no such split yet.
+    cautionBadge: rowCautionBadgeHtml(r.sport),
   };
 }
 
@@ -1415,6 +1646,7 @@ function mapArbForOverview(r) {
     timing: "Live snapshot",
     longDated: false,
     blocked: blockedCheck("arb", r).blocked,
+    cautionBadge: "",
   };
 }
 
@@ -1430,6 +1662,7 @@ function mapWeatherForOverview(r) {
     timing: r.lead_days ? r.lead_days + "d out" : "—",
     longDated: false,
     blocked: blockedCheck("weather", r).blocked,
+    cautionBadge: "",
   };
 }
 
@@ -1449,6 +1682,7 @@ function mapPoliticsForOverview(r) {
     timing: fmtHoursToResolution(hours),
     longDated: hours !== null && hours > 24 * 60,
     blocked: blockedCheck("politics", r).blocked,
+    cautionBadge: "",
   };
 }
 
@@ -1464,6 +1698,7 @@ function mapPropsForOverview(r) {
     timing: fmtDate(r.game_start_time),
     longDated: false,
     blocked: blockedCheck("props", r).blocked,
+    cautionBadge: "",
   };
 }
 
@@ -1508,7 +1743,7 @@ function renderOverviewTrackTable(track, mapped) {
     .map(
       (r) => `
         <tr>
-          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${r.blocked ? '<span class="blocked-badge" title="Cannot be acted on right now.">⛔</span> ' : ""}${escapeHtml(r.opportunity)}${
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${r.blocked ? '<span class="blocked-badge" title="Cannot be acted on right now.">⛔</span> ' : ""}${r.cautionBadge ? r.cautionBadge + " " : ""}${escapeHtml(r.opportunity)}${
             r.longDated ? '<span class="long-dated-badge">Long-dated</span>' : ""
           }</td>
           <td>${escapeHtml(r.side)}</td>
@@ -1545,7 +1780,7 @@ function renderFocusPicks(allMapped) {
       return `
         <tr>
           <td><span class="track-tag ${meta.tagClass}">${escapeHtml(meta.label)}</span></td>
-          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${escapeHtml(r.opportunity)}</td>
+          <td class="name-cell" title="${escapeAttr(r.opportunity)}">${r.cautionBadge ? r.cautionBadge + " " : ""}${escapeHtml(r.opportunity)}</td>
           <td>${escapeHtml(r.side)}</td>
           <td>${escapeHtml(r.venue)}</td>
           <td class="${edgeClass(r.edge)}">${r.edgeDisplay}</td>
@@ -1618,9 +1853,19 @@ async function init() {
   initTabs();
   initSelectionMiniBar();
 
-  // All tracks load independently and in parallel: a failure or an empty
-  // result in one must never block or hide another track's real data.
-  await Promise.allSettled([initPickem(), initOutcomeReview(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
+  // Session 2.26 follow-up -- initOutcomeReview() must resolve BEFORE
+  // initPickem() renders the open-flags table: the row-level caution
+  // badge now depends on real per-sport win-rate data (sportPerformance,
+  // populated by renderOutcomeStats()), not just VALIDATED_SPORTS
+  // membership. Running them in parallel risked the open table rendering
+  // before that data existed and never refreshing its badges once it did
+  // -- found and fixed this session, the moment MLB's own real numbers
+  // (55.2% win rate, below breakeven) showed this distinction actually
+  // matters, not just in theory. Every other track still loads in
+  // parallel; a failure or empty result in any of them must never block
+  // or hide another track's real data.
+  await initOutcomeReview();
+  await Promise.allSettled([initPickem(), initArbitrage(), initWeather(), initPolitics(), initProps()]);
 
   renderOverview();
 

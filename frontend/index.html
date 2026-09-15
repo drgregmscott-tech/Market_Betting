@@ -78,8 +78,12 @@ real methodology behind its numbers.</p>
 <p class="panel-note">The largest-edge rows across all five tracks right now, largest first. The only rows
 left out are ones that literally cannot be placed anymore (game already started, contract already
 resolving, not fillable, or a legal restriction) &mdash; marked <span class="blocked-badge">⛔ Blocked</span>
-elsewhere on this page. Everything else here is ranked purely by edge size: if you trust the model, start
-at the top.</p>
+elsewhere on this page. Everything else here is ranked purely by edge size &mdash; but a Pick&rsquo;em row
+carrying <span class="unvalidated-badge">Unvalidated</span>, <span class="unvalidated-badge">Building
+sample</span>, or <span class="status-badge-neg">Below breakeven</span> means its sport's real win rate
+either doesn't exist yet or doesn't clear breakeven &mdash; a large edge there is not the same kind of
+evidence as a row with no badge. See the Pick&rsquo;em tab's Real-outcome grading panel for the real
+numbers behind each sport.</p>
 </div>
 <div class="table-wrap">
 <table id="focusTable">
@@ -198,12 +202,12 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <section class="panel" id="outcome-panel">
 <div class="panel-head">
 <h2>Real-outcome grading &amp; weekly recalibration</h2>
-<p class="panel-note">Session 2.18 grades every closed NFL flag against real, final box-score results &mdash; not a price move &mdash; the project's real validation signal for platforms like PrizePicks where CLV can't be computed (see panel above). Session 2.20 activates a weekly automated check comparing the model's own stated confidence against this real win rate. See <code>docs/clv_methodology.md</code> and <code>ROADMAP.md</code>'s Session 2.20 card for the full methodology.</p>
+<p class="panel-note">Session 2.18 (NFL) and Session 2.26 (MLB) grade every closed flag from a <strong>validated sport</strong> against real, final results &mdash; not a price move &mdash; the project's real validation signal for platforms like PrizePicks where CLV can't be computed (see panel above). Every other sport currently open on this page (soccer, tennis, NBA, CFB) has <strong>no real-outcome grading yet</strong> &mdash; its flagged edge numbers are model output only, not evidence the model is right for that sport. See the per-sport breakdown below, and <code>ROADMAP.md</code>'s Sessions 2.26&ndash;2.29 cards for what's planned next. Session 2.20 activates a weekly automated check comparing the model's own stated confidence against the combined real win rate below.</p>
 </div>
 <div class="stat-row" id="outcomeStatRow">
 <div class="stat">
 <span class="stat-value" id="outcomeStatGraded">—</span>
-<span class="stat-label">Graded legs (NFL, real outcomes)</span>
+<span class="stat-label">Graded legs (validated sports, real outcomes)</span>
 </div>
 <div class="stat">
 <span class="stat-value" id="outcomeStatWinRate">—</span>
@@ -217,6 +221,12 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <span class="stat-value" id="outcomeStatSample">—</span>
 <span class="stat-label">% of full sample (3,725 legs)</span>
 </div>
+</div>
+<div class="table-wrap">
+<table class="per-sport-table" id="perSportOutcomeTable">
+<thead><tr><th>Sport</th><th>Status</th><th>Graded legs</th><th>Real win rate</th></tr></thead>
+<tbody id="perSportOutcomeTableBody"></tbody>
+</table>
 </div>
 <p class="panel-note" id="reviewSummary">No weekly recalibration review has run yet.</p>
 </section>
@@ -235,7 +245,28 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <section class="panel" id="open-panel">
 <div class="panel-head">
 <h2>Currently flagged opportunities</h2>
-<p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. Check exactly two PrizePicks flags to size them as a 2-pick Power Play entry below.</p>
+<p class="panel-note">Open lines from the live hourly pipeline, sorted by model edge. Check exactly two PrizePicks flags to size them as a 2-pick Power Play entry below. A row with no badge is from a sport with a real win rate clearing breakeven on a real sample; <span class="unvalidated-badge">Unvalidated</span> means no real-outcome grading exists for that sport yet, <span class="unvalidated-badge">Building sample</span> means grading exists but there isn't enough graded volume yet, and <span class="status-badge-neg">Below breakeven</span> means real grading shows this sport currently losing to breakeven &mdash; see the Real-outcome grading panel above for the numbers behind each.</p>
+</div>
+<div class="filter-row" id="openTableFilters">
+<div class="filter-field">
+<label for="openSportFilter">Sport</label>
+<select id="openSportFilter"><option value="">All</option></select>
+</div>
+<div class="filter-field">
+<label for="openPlatformFilter">Platform</label>
+<select id="openPlatformFilter"><option value="">All</option></select>
+</div>
+<div class="filter-field">
+<label for="openValidatedFilter">Real-outcome status</label>
+<select id="openValidatedFilter">
+<option value="">All</option>
+<option value="profitable">Profitable (real win rate clears breakeven)</option>
+<option value="underperforming">Below breakeven (real grading, losing)</option>
+<option value="small_sample">Building sample (graded, too small to trust)</option>
+<option value="unvalidated">Unvalidated (no real grading yet)</option>
+</select>
+</div>
+<span class="filter-count-note" id="openFilterCountNote"></span>
 </div>
 <div class="table-wrap">
 <table id="openTable">

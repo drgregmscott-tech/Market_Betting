@@ -676,3 +676,68 @@
 2026-09-15 13:15:54,626 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
 2026-09-15 13:15:54,626 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
 2026-09-15 13:15:54,626 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-15 13:30:53,601 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-15 13:30:53,731 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-15 13:30:53,731 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-15 13:30:53,732 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-15 13:30:53,733 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-15 13:30:53,733 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-15 13:30:53,734 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-15 13:30:53,736 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-15 13:30:53,736 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-15 13:30:53,736 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-15 13:30:53,738 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-15 13:30:53,738 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-15 13:30:53,738 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-15 14:26:15,840 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-15 14:26:15,968 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-15 14:26:15,969 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-15 14:26:15,969 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-15 14:26:15,970 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-15 14:26:15,971 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-15 14:26:15,971 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-15 14:26:15,972 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-15 14:26:15,972 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-15 14:26:15,972 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-15 14:26:15,974 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-15 14:26:15,974 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-15 14:26:15,975 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-15 14:31:58,409 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-15 14:31:58,533 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-15 14:31:58,534 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-15 14:31:58,534 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-15 14:31:58,536 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-15 14:31:58,536 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-15 14:31:58,536 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-15 14:31:58,538 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-15 14:31:58,538 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-15 14:31:58,538 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-15 14:31:58,540 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-15 14:31:58,540 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-15 14:31:58,540 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-15 14:43:27,931 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-15 14:43:28,055 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-15 14:43:28,056 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-15 14:43:28,056 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-15 14:43:28,057 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-15 14:43:28,058 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-15 14:43:28,058 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-15 14:43:28,059 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-15 14:43:28,060 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-15 14:43:28,060 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-15 14:43:28,061 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-15 14:43:28,061 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-15 14:43:28,062 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-15 14:47:41,909 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-15 14:47:42,040 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-15 14:47:42,041 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-15 14:47:42,041 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-15 14:47:42,042 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-15 14:47:42,043 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-15 14:47:42,043 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-15 14:47:42,045 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-15 14:47:42,045 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-15 14:47:42,045 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-15 14:47:42,047 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-15 14:47:42,047 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-15 14:47:42,047 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
