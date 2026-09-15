@@ -164,7 +164,7 @@ scalar multiplier, SIGMA_CALIBRATION_FACTOR, against the full real graded
 sample (8,196 usable win/loss legs, 2026-09-15) by minimizing Brier score
 between recalibrated probabilities and real outcomes -- see
 scripts/calibration/fit_sigma_recalibration.py for the exact method and
-docs/calibration/sigma_recalibration_log.md for the fit's own logged
+data/pickem/sigma_recalibration_log.csv for the fit's own logged
 result. The fitted value (1.61) closed the calibration gap from 0.0674 to
 0.0008 on the same sample it was fit against. Every computed sample_sigma()
 is multiplied by this factor before being used in prob_over() -- applied
@@ -173,7 +173,7 @@ against spans NFL props across every stat type this project currently
 scores. Re-fitting this factor periodically as more real outcomes
 accumulate (and, eventually, per-sport once other sports have enough real
 graded volume of their own) is real future work -- see
-docs/calibration/sigma_recalibration_log.md's own notes.
+data/pickem/sigma_recalibration_log.csv's own notes.
 
 SESSION 2.12 REFACTOR -- what moved where
 ------------------------------------------

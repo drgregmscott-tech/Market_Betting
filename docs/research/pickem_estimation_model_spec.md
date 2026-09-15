@@ -936,7 +936,7 @@ against 8,196 usable graded legs (2026-09-15): `k = 1.61` — the model's raw
 sample sigma was, on average, about 62% too small. This closed the
 calibration gap from 0.0674 to 0.0008 on the same sample, and improved
 Brier score from 0.2106 to 0.2052. Full fit output logged in
-`docs/calibration/sigma_recalibration_log.md`.
+`data/pickem/sigma_recalibration_log.csv`.
 
 **What changed:** `pickem_model.py`'s new `SIGMA_CALIBRATION_FACTOR = 1.61`
 multiplies every computed `sample_sigma()` before it reaches `prob_over()`.

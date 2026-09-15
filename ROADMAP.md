@@ -2163,7 +2163,7 @@ the full reasoning on why sigma (not `SEASON_AVG_BLEND_WEIGHT`/
 `RECENT_FORM_BLEND_WEIGHT`) was the correct target.
 
 **Files touched:** `scripts/calibration/fit_sigma_recalibration.py` (new),
-`docs/calibration/sigma_recalibration_log.md` (new),
+`data/pickem/sigma_recalibration_log.csv` (new),
 `scripts/estimation/pickem_model.py` (new `SIGMA_CALIBRATION_FACTOR`),
 `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated —
 `model_sigma` only), `docs/research/pickem_estimation_model_spec.md` (new
@@ -2190,6 +2190,58 @@ sports accumulate their own real graded data.
 - Whether `weekly_review.py`'s next real run (against outcomes graded
 after this fix went live) actually shows a smaller ongoing gap is a real,
 observable check that depends on future data, not verifiable yet.
+
+---
+
+### Session 2.23 — Recalibration Drift Monitoring (Pick'em)
+**Status:** ✅ Complete (2026-09-15) — see SESSION_LOG.md for full detail.
+Closes Session 2.22's two open items, at the user's explicit request
+("I would forget to come back and assess this").
+**Prerequisites:** Session 2.22 (Sigma Recalibration) complete.
+
+**Why this exists:** Session 2.22's fit is a one-time snapshot; nothing
+previously would notice or flag it if real drift reopened the calibration
+gap later, and the user named forgetting to check as their real concern.
+
+**What got built:** Migrated the fit log to a queryable CSV
+(`data/pickem/sigma_recalibration_log.csv`, replacing a markdown file), so
+`weekly_review.py` can read when sigma was last fit. Added a second,
+narrower calibration check restricted to legs graded since that fit (as
+opposed to the existing all-time gap, which stays misleadingly stale for a
+while after any fit since most graded legs predate it) — once that subset
+reaches 20+ legs, a gap past `RECALIBRATION_GAP_THRESHOLD` (0.03, chosen as
+roughly half the original ~0.067 gap) sets a new `recalibration_suggested`
+column and an explicit, actionable recommendation message. Wired
+`pickem_weekly_review.yml` (the existing Monday automation from Session
+2.20) to open a labeled GitHub Issue when that flag is true, update it on
+repeat weeks, and auto-close it once the gap returns within threshold — a
+persistent, notification-generating signal instead of one that depends on
+remembering to check a CSV or the dashboard.
+
+**Files touched:** `scripts/calibration/fit_sigma_recalibration.py`
+(CSV log format), `data/pickem/sigma_recalibration_log.csv` (new),
+`scripts/calibration/weekly_review.py` (post-fit check, threshold,
+recommendation logic), `.github/workflows/pickem_weekly_review.yml`
+(issue-flagging step, `issues: write` permission).
+
+**Validation (required to close session):**
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` (51/51),
+`test_clv_logger.py` (13/13) all pass post-change.
+- [x] `weekly_review.py --run` against real, live data correctly reports
+"insufficient post-fit sample" (zero legs graded since today's fit) rather
+than a false all-clear or false alarm.
+- [x] `weekly_review.py --history` runs cleanly across old-format and
+new-format `review_log.csv` rows mixed in the same file.
+- [x] Workflow YAML validated as syntactically correct; issue-flagging
+step's parsing logic manually traced against the real CSV's actual
+serialized boolean text before trusting it.
+
+**Open items / deferred validations:**
+- The GitHub Issue step has not yet fired for a real `True` case (none has
+occurred) — worth watching the first real trigger.
+- The post-fit sample needs 20+ graded legs before the drift check
+produces a real read; every run before then correctly reports
+"insufficient sample," which is expected, not a bug.
 
 ---
 

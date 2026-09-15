@@ -12522,7 +12522,7 @@ win/loss) is a large enough real sample to trust.
 3. Ran the fit against the real, full graded sample: 8,196 usable legs
    (2026-09-15 pull) → `k = 1.61`. Closed the calibration gap from 0.0674 to
    0.0008 on the same sample; Brier score improved from 0.2106 to 0.2052.
-   Logged to `docs/calibration/sigma_recalibration_log.md` (new, append-only,
+   Logged to `data/pickem/sigma_recalibration_log.csv` (new, append-only,
    so future re-fits accumulate a real history rather than overwriting).
 4. Wired `SIGMA_CALIBRATION_FACTOR = 1.61` into `pickem_model.py`: every
    computed `sample_sigma()` is multiplied by this factor before reaching
@@ -12546,7 +12546,7 @@ win/loss) is a large enough real sample to trust.
 
 **Files created/modified:**
 - `scripts/calibration/fit_sigma_recalibration.py` (new)
-- `docs/calibration/sigma_recalibration_log.md` (new — one real fit row)
+- `data/pickem/sigma_recalibration_log.csv` (new — one real fit row)
 - `scripts/estimation/pickem_model.py` (new `SIGMA_CALIBRATION_FACTOR`
   constant; applied to `sigma` before `prob_over()`; docstring additions)
 - `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated —
@@ -12616,3 +12616,136 @@ win/loss) is a large enough real sample to trust.
   this session's fix ships) actually shows a materially smaller ongoing
   calibration gap is a real, observable check this session could not make
   yet — it depends on future real outcomes, not on anything computable now.
+
+---
+
+## Session 2.23 — Recalibration Drift Monitoring (Pick'em)
+
+**Date completed:** 2026-09-15
+**Status:** ✅ Complete
+
+**What was actually done:**
+Session 2.22 fixed the real overconfidence gap but left two open items: the
+fit is a one-time snapshot, and re-checking it depends on someone
+remembering to periodically re-run `fit_sigma_recalibration.py` by hand.
+The user raised this directly as a real concern ("I would forget to come
+back and assess this"). This session closes that gap by making the check
+self-triggering and self-surfacing, rather than relying on memory.
+
+1. Migrated the Session 2.22 fit log from a prose markdown file
+   (`docs/calibration/sigma_recalibration_log.md`) to a real, queryable CSV
+   (`data/pickem/sigma_recalibration_log.csv`), matching this project's own
+   established log pattern (`review_log.csv`, `clv_log.csv`) — needed so
+   `weekly_review.py` can programmatically read "when was sigma last fit,"
+   not just a human reading prose. Updated every reference to the old path
+   (`pickem_model.py`, `pickem_estimation_model_spec.md`, ROADMAP.md,
+   SESSION_LOG.md) and carried the one real fit row over unchanged.
+2. Added a second, narrower calibration check to `weekly_review.py`,
+   `check_post_fit_calibration_gap()` — restricted to legs whose
+   `reported_at` falls on or after the most recent sigma fit, i.e. only
+   legs actually scored under the CURRENT `SIGMA_CALIBRATION_FACTOR`. This
+   is deliberately separate from the existing all-time `calibration_gap`
+   metric, which will keep reading close to the old ~6.7% gap for a while
+   after any fit purely because most graded legs were flagged before it
+   shipped — a real, explained distinction, not a discarded old metric.
+3. Added `RECALIBRATION_GAP_THRESHOLD = 0.03` (roughly half the original
+   pre-fit gap) and a `recalibration_suggested` boolean, computed from the
+   post-fit check once it has 20+ legs (same interim floor this script
+   already uses elsewhere) and written to a new `review_log.csv` column
+   every run — a structured, filterable flag, not just prose a person has
+   to parse.
+4. Updated `build_recommendation()`'s text: the old wording ("consider
+   revisiting pickem_model.py's blend weights") was the same stale
+   diagnosis Session 2.22 corrected — replaced with an explicit
+   `RECALIBRATION SUGGESTED:` message naming the exact command to run,
+   only fired off the new post-fit check, not the all-time one.
+5. Extended `.github/workflows/pickem_weekly_review.yml` (already a live,
+   scheduled Monday job since Session 2.20) with a new step that reads the
+   just-written `recalibration_suggested` flag and opens a labeled GitHub
+   Issue (`recalibration-suggested`) when true, updates it on repeat weeks,
+   and closes it automatically once the gap is back within threshold — a
+   persistent, notification-generating signal that does not depend on
+   anyone opening `review_log.csv` or the dashboard, directly answering the
+   user's stated worry about forgetting. Added `issues: write` to the
+   workflow's permissions.
+6. Verified `weekly_review.py --run` against the real, current 8,196-leg
+   graded sample: correctly reports `post_fit_check_status="insufficient
+   post-fit sample (n=0, ...)"` and `recalibration_suggested=False` (not a
+   false all-clear or false alarm) — expected, since no legs have graded
+   yet since the fit shipped today. Also ran `--history`, confirming the
+   old-format row (pre-Session-2.23) and the new-format row coexist in the
+   same CSV without breaking (missing new columns render blank).
+7. Confirmed the frontend's existing `renderReviewSummary()` needs no
+   change — it already reads `latest.recommendation` generically by key, so
+   the new columns pass through automatically.
+
+**Files created/modified:**
+- `scripts/calibration/fit_sigma_recalibration.py` (log path/format changed
+  from markdown to CSV; `load_fit_log()`/`append_fit_log()` rewritten)
+- `data/pickem/sigma_recalibration_log.csv` (new — carries over the one
+  real fit row from Session 2.22)
+- `docs/calibration/sigma_recalibration_log.md` (deleted — superseded)
+- `scripts/calibration/weekly_review.py` (new `SIGMA_FIT_LOG_PATH`,
+  `RECALIBRATION_GAP_THRESHOLD`; new `last_sigma_fit_at()`,
+  `check_post_fit_calibration_gap()`; `build_recommendation()` signature
+  and logic changed; new `review_log.csv` columns; module docstring
+  addition)
+- `.github/workflows/pickem_weekly_review.yml` (new "Flag or clear
+  recalibration-needed issue" step; `issues: write` permission added)
+- `scripts/estimation/pickem_model.py`, `docs/research/
+  pickem_estimation_model_spec.md`, `ROADMAP.md`, `SESSION_LOG.md` (path
+  references updated from the old markdown log to the new CSV path)
+
+**Validation results:**
+- [x] `python -m pytest scripts/estimation/test_pickem_model.py
+  scripts/sizing/test_sizing_engine.py -q` — 51/51 pass.
+- [x] `python scripts/calibration/test_clv_logger.py` — 13/13 scenarios
+  pass.
+- [x] `weekly_review.py --run` against real, live data produces the
+  expected `insufficient post-fit sample` status (not a false positive or
+  false negative) given zero legs graded since today's fit.
+- [x] `weekly_review.py --history` runs cleanly across a mix of
+  old-format and new-format `review_log.csv` rows.
+- [x] `python -c "import yaml; yaml.safe_load(...)"` confirms the updated
+  workflow YAML is syntactically valid.
+- [x] Manually traced the workflow's issue-flagging step's parsing logic
+  (`str(last.get(...)).strip().lower() == "true"`) against the real CSV's
+  actual serialized boolean text (`True`/`False`) to confirm it reads
+  correctly before trusting it un-run.
+
+**Decisions made:**
+1. Migrated the fit log to CSV rather than keeping markdown and having
+   `weekly_review.py` parse prose — matches this project's own log-format
+   convention and avoids fragile markdown-table parsing.
+2. Kept the all-time `calibration_gap` metric alongside the new post-fit
+   one rather than replacing it — the all-time figure still has real value
+   as a lifetime trend line; only the recalibration *decision* should be
+   driven by the post-fit-only number.
+3. Surfaced the nudge via an auto-managed GitHub Issue rather than only a
+   CSV column or a `::warning::` annotation — the user's stated concern was
+   specifically about forgetting to check, and an issue is a persistent,
+   notification-generating artifact that doesn't require remembering to
+   look at Actions runs or the dashboard, unlike a warning annotation
+   (visible only if someone opens that specific run) or a CSV column alone.
+4. Auto-close the issue when the gap returns within threshold, rather than
+   leaving it open indefinitely once created — keeps the signal meaningful
+   (an open issue always means "real, current action needed") rather than
+   becoming stale noise.
+5. Threshold set at 0.03, chosen as roughly half the original ~0.067
+   pre-fit gap — documented as a judgment call, not a derived/researched
+   number, consistent with this project's honesty standard about which
+   numbers are fitted-from-data versus chosen-as-reasonable.
+
+**Corrections/reversals during the session:**
+- None.
+
+**Open items / deferred validations:**
+- The GitHub Issue-creation step has not yet actually fired for a real
+  `recalibration_suggested=True` case (none has occurred yet) — its
+  gh-CLI command syntax was validated by direct reasoning and by checking
+  the YAML parses, not by observing a real triggered run. Worth watching
+  the first time it actually fires.
+- The post-fit sample needs to reach 20+ legs before the drift check
+  produces a real number at all — until then, every weekly run will
+  correctly report "insufficient post-fit sample," which is itself the
+  correct, honest behavior, not a bug to fix.

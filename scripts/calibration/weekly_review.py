@@ -80,6 +80,32 @@ Intended to be run manually once a week, matching the current state of the
 rest of Track 1's pipeline (per outcome_tracker.py and clv_logger.py's own
 docstrings -- none of Track 1 is wired into scheduled automation yet; that
 is Session 2.7's job).
+
+SESSION 2.23 ADDITION -- POST-FIT DRIFT CHECK AND RECALIBRATION NUDGE
+------------------------------------------------------------------------
+Session 2.22 fit and shipped a real sigma-calibration factor
+(pickem_model.py's SIGMA_CALIBRATION_FACTOR) against the graded sample as
+of 2026-09-15, closing the calibration gap this script found from 0.0674 to
+0.0008 on that sample. But `calibration_gap` above is computed over ALL
+cumulative graded legs, most of which were flagged BEFORE that fit shipped
+(using the old, uncalibrated sigma) -- so it will keep reading close to the
+old ~0.067 gap for a while after the fix, purely because old legs are still
+rolling through grading, not because the fix failed. Comparing that number
+against a threshold would either never fire (if the threshold is loose) or
+fire immediately and permanently for the wrong reason (if it's tight).
+
+This addition adds a SECOND, narrower calibration check --
+`post_fit_calibration_gap` -- restricted to legs whose `reported_at` falls
+on or after the most recent row in data/pickem/sigma_recalibration_log.csv
+(i.e., only legs actually scored under the CURRENT sigma factor). Once that
+subset reaches MIN_GROUP_SIZE_FOR_CHECK legs, if its calibration gap exceeds
+RECALIBRATION_GAP_THRESHOLD, the recommendation explicitly and
+unmissably flags that a re-fit is warranted (`recalibration_suggested=True`
+in review_log.csv), rather than relying on a person remembering to
+periodically re-check this by hand. Session 2.23's own
+pickem_weekly_review.yml addition surfaces this flag as a GitHub Issue --
+see that workflow file's header comment -- so it does not depend on anyone
+opening review_log.csv or the dashboard to notice.
 """
 
 from __future__ import annotations
@@ -99,6 +125,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parents[2]
 OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
 REVIEW_LOG_PATH = BASE_DIR / "data" / "pickem" / "review_log.csv"
+SIGMA_FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "sigma_recalibration_log.csv"
 LOG_PATH = BASE_DIR / "logs" / "weekly_review.log"
 
 # Fixed reference points from sample_size_methodology.md -- not recomputed
@@ -111,6 +138,15 @@ INTERIM_REPORTING_FLOOR = 30         # Section 6
 # Minimum legs required in EACH group before a recalibration check is run
 # on that comparison -- see module docstring, "Recalibration checks."
 MIN_GROUP_SIZE_FOR_CHECK = 20
+
+# Session 2.23: how far the POST-FIT calibration gap (see module docstring
+# addition) is allowed to drift before this script explicitly recommends
+# re-running fit_sigma_recalibration.py, rather than leaving that judgment
+# to someone remembering to check. Chosen as roughly half of the real,
+# pre-fit gap Session 2.20 first measured (0.0674) -- large enough that a
+# few noisy weeks of a modest sample won't false-trigger it, small enough
+# to catch real drift well before it re-approaches the original problem.
+RECALIBRATION_GAP_THRESHOLD = 0.03
 
 REVIEW_LOG_COLUMNS = [
     "review_id",
@@ -128,6 +164,9 @@ REVIEW_LOG_COLUMNS = [
     "sample_status",
     "calibration_gap",
     "calibration_check_status",
+    "post_fit_calibration_gap",
+    "post_fit_check_status",
+    "recalibration_suggested",
     "edge_threshold_effectiveness",
     "edge_check_status",
     "recommendation",
@@ -186,6 +225,18 @@ def last_period_end() -> Optional[pd.Timestamp]:
     return pd.to_datetime(review_log["period_end"]).max()
 
 
+def last_sigma_fit_at() -> Optional[pd.Timestamp]:
+    """Session 2.23: most recent run_at in sigma_recalibration_log.csv, i.e.
+    when the sigma factor currently live in pickem_model.py was fit. None if
+    fit_sigma_recalibration.py has never been run."""
+    if not SIGMA_FIT_LOG_PATH.exists():
+        return None
+    fit_log = pd.read_csv(SIGMA_FIT_LOG_PATH, parse_dates=["run_at"])
+    if fit_log.empty:
+        return None
+    return fit_log["run_at"].max()
+
+
 # ---------------------------------------------------------------------------
 # Recalibration checks
 # ---------------------------------------------------------------------------
@@ -197,6 +248,31 @@ def check_calibration_gap(graded: pd.DataFrame) -> tuple[Optional[float], str]:
     usable = graded.dropna(subset=["first_flagged_model_prob"])
     if len(usable) < MIN_GROUP_SIZE_FOR_CHECK:
         return None, f"insufficient sample (n={len(usable)}, need {MIN_GROUP_SIZE_FOR_CHECK}+)"
+    avg_stated_confidence = usable["first_flagged_model_prob"].mean()
+    real_win_rate = (usable["result"] == "win").mean()
+    gap = round(avg_stated_confidence - real_win_rate, 4)
+    return gap, "ok"
+
+
+def check_post_fit_calibration_gap(
+    graded: pd.DataFrame, fit_at: Optional[pd.Timestamp]
+) -> tuple[Optional[float], str]:
+    """Session 2.23: same comparison as check_calibration_gap, but restricted
+    to legs flagged on or after the most recent sigma fit (fit_at) -- i.e.
+    only legs actually scored under the sigma factor currently live in
+    pickem_model.py. This is the number that should stay near zero on an
+    ongoing basis; check_calibration_gap's all-time figure will keep
+    reflecting a mix of pre- and post-fit legs for a while after any fit."""
+    if fit_at is None:
+        return None, "no sigma fit on record yet -- run fit_sigma_recalibration.py first"
+    usable = graded.dropna(subset=["first_flagged_model_prob"])
+    usable = usable.loc[usable["reported_at"] >= fit_at]
+    if len(usable) < MIN_GROUP_SIZE_FOR_CHECK:
+        return None, (
+            f"insufficient post-fit sample (n={len(usable)}, need "
+            f"{MIN_GROUP_SIZE_FOR_CHECK}+ legs graded since the last fit at "
+            f"{fit_at.strftime('%Y-%m-%d')})"
+        )
     avg_stated_confidence = usable["first_flagged_model_prob"].mean()
     real_win_rate = (usable["result"] == "win").mean()
     gap = round(avg_stated_confidence - real_win_rate, 4)
@@ -239,28 +315,54 @@ def build_recommendation(
     sample_status: str,
     calibration_gap: Optional[float],
     calibration_status: str,
+    post_fit_gap: Optional[float],
+    post_fit_status: str,
     edge_result: Optional[dict],
     edge_status: str,
-) -> str:
+) -> tuple[str, bool]:
+    """Returns (recommendation_text, recalibration_suggested)."""
     if sample_status != "ok":
         return (
             f"Sample below the {INTERIM_REPORTING_FLOOR}-leg interim reporting "
-            f"floor -- no recalibration recommendation this cycle. Keep grading."
+            f"floor -- no recalibration recommendation this cycle. Keep grading.",
+            False,
         )
 
     notes = []
+    recalibration_suggested = False
+
     if calibration_status == "ok" and calibration_gap is not None:
         if abs(calibration_gap) >= 0.05:
             direction = "overconfident" if calibration_gap > 0 else "underconfident"
             notes.append(
-                f"Model looks {direction} by {abs(calibration_gap):.1%} on average "
-                f"(stated confidence vs. real win rate) -- consider revisiting "
-                f"pickem_model.py's blend weights."
+                f"All-time model confidence looks {direction} by {abs(calibration_gap):.1%} "
+                f"on average (stated confidence vs. real win rate, across every graded leg "
+                f"ever, including ones flagged before the last sigma fit -- see the post-fit "
+                f"figure below for the number that actually matters right now)."
             )
         else:
-            notes.append("Model's stated confidence tracks real win rate reasonably well so far.")
+            notes.append("All-time stated confidence tracks real win rate reasonably well.")
     else:
-        notes.append(f"Calibration check: {calibration_status}.")
+        notes.append(f"All-time calibration check: {calibration_status}.")
+
+    if post_fit_status == "ok" and post_fit_gap is not None:
+        if abs(post_fit_gap) >= RECALIBRATION_GAP_THRESHOLD:
+            direction = "overconfident" if post_fit_gap > 0 else "underconfident"
+            notes.append(
+                f"RECALIBRATION SUGGESTED: since the last sigma fit, real legs show the "
+                f"model is {direction} by {abs(post_fit_gap):.1%} on average -- above the "
+                f"{RECALIBRATION_GAP_THRESHOLD:.0%} threshold. Run "
+                f"`python scripts/calibration/fit_sigma_recalibration.py` to refit "
+                f"SIGMA_CALIBRATION_FACTOR against current data."
+            )
+            recalibration_suggested = True
+        else:
+            notes.append(
+                f"Post-fit calibration gap ({post_fit_gap:+.1%}) is within the "
+                f"{RECALIBRATION_GAP_THRESHOLD:.0%} threshold -- no re-fit needed yet."
+            )
+    else:
+        notes.append(f"Post-fit calibration check: {post_fit_status}.")
 
     if edge_status == "ok" and edge_result is not None:
         if edge_result["high_minus_low"] <= 0.02:
@@ -278,7 +380,7 @@ def build_recommendation(
     else:
         notes.append(f"Edge-threshold check: {edge_status}.")
 
-    return " ".join(notes)
+    return " ".join(notes), recalibration_suggested
 
 
 # ---------------------------------------------------------------------------
@@ -308,10 +410,18 @@ def run_review() -> dict:
     sample_status = "ok" if n_cumulative >= INTERIM_REPORTING_FLOOR else "insufficient_sample"
 
     calibration_gap, calibration_status = check_calibration_gap(graded_all)
+    fit_at = last_sigma_fit_at()
+    post_fit_gap, post_fit_status = check_post_fit_calibration_gap(graded_all, fit_at)
     edge_result, edge_status = check_edge_threshold_effectiveness(graded_all)
 
-    recommendation = build_recommendation(
-        sample_status, calibration_gap, calibration_status, edge_result, edge_status
+    recommendation, recalibration_suggested = build_recommendation(
+        sample_status,
+        calibration_gap,
+        calibration_status,
+        post_fit_gap,
+        post_fit_status,
+        edge_result,
+        edge_status,
     )
 
     review_log = load_review_log()
@@ -332,6 +442,9 @@ def run_review() -> dict:
         "sample_status": sample_status,
         "calibration_gap": calibration_gap,
         "calibration_check_status": calibration_status,
+        "post_fit_calibration_gap": post_fit_gap,
+        "post_fit_check_status": post_fit_status,
+        "recalibration_suggested": recalibration_suggested,
         "edge_threshold_effectiveness": edge_result,
         "edge_check_status": edge_status,
         "recommendation": recommendation,

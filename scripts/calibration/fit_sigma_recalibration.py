@@ -60,10 +60,12 @@ USAGE
 -----
 python scripts/calibration/fit_sigma_recalibration.py
     Loads data/pickem/outcome_log.csv, fits k, prints the before/after
-    calibration gap and Brier score, and writes a dated record to
-    docs/calibration/sigma_recalibration_log.md (append-only, so the fit
-    history itself is a durable record, matching this project's log
-    standard elsewhere).
+    calibration gap and Brier score, and appends a dated row to
+    data/pickem/sigma_recalibration_log.csv -- a durable, queryable record
+    (CSV, not prose, matching review_log.csv/clv_log.csv's own pattern in
+    this project) that Session 2.23's weekly_review.py reads directly, to
+    know when the sigma factor currently in pickem_model.py was last fit
+    and restrict its own post-fit drift check to legs flagged since then.
 """
 
 from __future__ import annotations
@@ -80,7 +82,20 @@ from pickem_model import normal_cdf  # noqa: E402
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
-FIT_LOG_PATH = BASE_DIR / "docs" / "calibration" / "sigma_recalibration_log.md"
+FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "sigma_recalibration_log.csv"
+
+FIT_LOG_COLUMNS = [
+    "run_at",
+    "n_legs",
+    "real_win_rate",
+    "baseline_avg_confidence",
+    "baseline_calibration_gap",
+    "baseline_brier",
+    "fitted_k",
+    "fitted_avg_confidence",
+    "fitted_calibration_gap",
+    "fitted_brier",
+]
 
 # Grid search range for k (sigma multiplier). 1.0 = no change. Real-data
 # fits so far land well inside this range; widen only if a future fit hits
@@ -155,35 +170,33 @@ def fit_k(graded: pd.DataFrame) -> dict:
     }
 
 
+def load_fit_log() -> pd.DataFrame:
+    if FIT_LOG_PATH.exists():
+        df = pd.read_csv(FIT_LOG_PATH)
+        for col in FIT_LOG_COLUMNS:
+            if col not in df.columns:
+                df[col] = None
+        return df[FIT_LOG_COLUMNS]
+    return pd.DataFrame(columns=FIT_LOG_COLUMNS)
+
+
 def append_fit_log(result: dict) -> None:
+    fit_log = load_fit_log()
+    new_row = {
+        "run_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "n_legs": result["n_legs"],
+        "real_win_rate": result["real_win_rate"],
+        "baseline_avg_confidence": result["baseline_avg_confidence"],
+        "baseline_calibration_gap": result["baseline_calibration_gap"],
+        "baseline_brier": result["baseline_brier"],
+        "fitted_k": result["fitted_k"],
+        "fitted_avg_confidence": result["fitted_avg_confidence"],
+        "fitted_calibration_gap": result["fitted_calibration_gap"],
+        "fitted_brier": result["fitted_brier"],
+    }
+    fit_log = pd.concat([fit_log, pd.DataFrame([new_row])], ignore_index=True)
     FIT_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    is_new = not FIT_LOG_PATH.exists()
-    with open(FIT_LOG_PATH, "a", encoding="utf-8") as f:
-        if is_new:
-            f.write("# Sigma Recalibration Fit Log\n\n")
-            f.write(
-                "Append-only record of every fit_sigma_recalibration.py run. "
-                "Each row is a real fit against the graded sample available at "
-                "that time -- see scripts/calibration/fit_sigma_recalibration.py "
-                "for method.\n\n"
-            )
-            f.write(
-                "| run_at | n_legs | real_win_rate | baseline_avg_conf | "
-                "baseline_gap | baseline_brier | fitted_k | fitted_avg_conf | "
-                "fitted_gap | fitted_brier |\n"
-            )
-            f.write("|---|---|---|---|---|---|---|---|---|---|\n")
-        f.write(
-            f"| {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} | "
-            f"{result['n_legs']} | {result['real_win_rate']:.4f} | "
-            f"{result['baseline_avg_confidence']:.4f} | "
-            f"{result['baseline_calibration_gap']:.4f} | "
-            f"{result['baseline_brier']:.4f} | "
-            f"{result['fitted_k']:.3f} | "
-            f"{result['fitted_avg_confidence']:.4f} | "
-            f"{result['fitted_calibration_gap']:.4f} | "
-            f"{result['fitted_brier']:.4f} |\n"
-        )
+    fit_log.to_csv(FIT_LOG_PATH, index=False)
 
 
 if __name__ == "__main__":

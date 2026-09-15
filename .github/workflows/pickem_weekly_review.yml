@@ -23,6 +23,13 @@ name: Pick'em Weekly Recalibration Review
 #    the review history is a real, durable, growing record -- same commit
 #    pattern as pickem_pipeline.yml (including its retry/rebase handling
 #    for a moving origin/main), scoped to only this file's own output path.
+# 4. (Session 2.23) Reads this run's `recalibration_suggested` flag from
+#    review_log.csv and opens (or keeps open) a labeled GitHub Issue when
+#    true, and closes it when false -- so a real recalibration need
+#    surfaces as a persistent, notification-generating repo item instead
+#    of depending on anyone remembering to open review_log.csv or the
+#    dashboard. See weekly_review.py's own "SESSION 2.23 ADDITION" module
+#    docstring section for why this check exists and what it measures.
 
 on:
   schedule:
@@ -40,6 +47,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   run-weekly-review:
@@ -92,6 +100,53 @@ jobs:
           if [ "$push_ok" != "true" ]; then
             echo "::error::Failed to push after 5 retries against a moving origin/main." >&2
             exit 1
+          fi
+
+      - name: Flag or clear recalibration-needed issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import pandas as pd
+
+          df = pd.read_csv("data/pickem/review_log.csv")
+          last = df.iloc[-1]
+          suggested = str(last.get("recalibration_suggested", "")).strip().lower() == "true"
+
+          with open("recalibration_flag.txt", "w", encoding="utf-8") as f:
+              f.write("true" if suggested else "false")
+          with open("recalibration_body.txt", "w", encoding="utf-8") as f:
+              f.write(
+                  f"**Review:** {last['review_id']} ({last['run_at']})\n\n"
+                  f"**Post-fit calibration gap:** {last.get('post_fit_calibration_gap', 'n/a')}\n\n"
+                  f"{last.get('recommendation', '')}\n\n"
+                  f"Full detail: `data/pickem/review_log.csv` (this row) and "
+                  f"`data/pickem/sigma_recalibration_log.csv` (fit history)."
+              )
+          PY
+
+          TITLE="Pick'em model recalibration suggested (sigma drift)"
+          LABEL="recalibration-suggested"
+
+          # Idempotent -- fails silently if the label already exists.
+          gh label create "$LABEL" --color FBCA04 \
+            --description "weekly_review.py detected real sigma drift past its threshold" \
+            2>/dev/null || true
+
+          EXISTING=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number // empty')
+
+          if [ "$(cat recalibration_flag.txt)" = "true" ]; then
+            if [ -n "$EXISTING" ]; then
+              gh issue comment "$EXISTING" --body-file recalibration_body.txt
+              echo "::warning::Recalibration still suggested this week -- updated issue #$EXISTING."
+            else
+              gh issue create --title "$TITLE" --label "$LABEL" --body-file recalibration_body.txt
+              echo "::warning::Recalibration suggested -- opened a new tracking issue."
+            fi
+          elif [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" \
+              --body "This week's post-fit calibration gap is back within threshold -- closing. See \`data/pickem/review_log.csv\` for this run's numbers."
+            gh issue close "$EXISTING"
           fi
 
       - name: Upload log as a build artifact

@@ -1,0 +1,2 @@
+run_at,n_legs,real_win_rate,baseline_avg_confidence,baseline_calibration_gap,baseline_brier,fitted_k,fitted_avg_confidence,fitted_calibration_gap,fitted_brier
+2026-09-15T12:17:06Z,8196,0.6715470961444607,0.7389514527131766,0.0674043565687159,0.21061950103286475,1.61,0.6723619858035257,0.0008148896590649546,0.20516449965849576
