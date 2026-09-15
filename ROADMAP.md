@@ -2506,8 +2506,9 @@ pipeline. Records an explicit build/skip decision.
 
 **Validation (required to close session):**
 - [ ] Explicit decision recorded: build NHL support or defer indefinitely
-- [ ] If building: scoped into its own Sessions 2.32+ (2.31 is now the
-Underdog investigation below) following the Session 2.12–2.18 pattern
+- [ ] If building: scoped into its own future sessions (2.31–2.33 are the
+Underdog investigation/fix below, not NHL — pick the next free session
+number when this is taken up) following the Session 2.12–2.18 pattern
 (architecture, then per-sport support, then grading) rather than one
 monolithic session
 - [ ] If deferring: stated here as an explicit, documented decision, not a
