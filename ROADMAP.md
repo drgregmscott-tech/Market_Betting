@@ -2514,7 +2514,9 @@ monolithic session
 silent gap
 
 ### Session 2.31 — Underdog Cross-Sport Pricing Gap Investigation
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-15) — measurement only, no model change.
+See SESSION_LOG.md and `docs/research/underdog_pricing_gap_investigation.md`
+for full detail.
 **Prerequisites:** Session 2.26 (the real graded sample this investigation
 runs against already exists — `data/pickem/outcome_log.csv`, 16,656 MLB +
 8,196 NFL real graded legs).
@@ -2575,14 +2577,34 @@ whatever real decision comes out of it (fix the model, restrict Underdog
 usage, or both).
 
 **Validation (required to close session):**
-- [ ] Root cause investigated with real evidence (not assumed) — data
-integrity checked first, informational-gap theory checked second
-- [ ] Explicit decision recorded: is Underdog usable for any sport right
-now, and if not, does the project stop flagging it entirely or keep the
-"Below breakeven" frontend warning as sufficient
-- [ ] If a real fix is identified (e.g. faster/more sources of the same
-late-breaking information Underdog's price reflects), scoped into its own
-follow-up session rather than attempted inside this investigation session
+- [x] Root cause investigated with real evidence (not assumed) — data
+integrity checked first (id-stability across 4 real full Underdog pulls,
+8,339 real ids common to all 4, zero reused for a different real prop
+over ~17 hours — clean), informational-gap theory checked second (real
+join of `clv_log.csv` to `outcome_log.csv`, 10,380 real graded Underdog
+legs). Conclusion: genuine platform-level informational gap concentrated
+on skewed/"chalk" Underdog lines (implied_prob far from 0.5), not a data
+bug and not explained by lead time — the edge/win-rate inversion persists
+even at the shortest lead-time bucket (0–3h), ruling out stale-price
+staleness as the mechanism. Restricting to near-coinflip Underdog lines
+(\|implied_prob−0.5\|<0.05) removes most of the inversion (win rate flat
+50–56% across edge buckets there) but every such cell still sits under
+the 57.74% breakeven. RBIs platform comparison (PrizePicks 76.0% n=341 vs.
+Underdog 33.1% n=1,706 on the same stat) additionally rules out a
+stat-specific model bug — the gap is Underdog's own pricing, not the
+model's RBIs estimate.
+- [x] Explicit decision recorded: Underdog is not usable as a blanket flag
+source in any sport right now (MLB 46.4%, NFL 49.5%, both below
+breakeven, both well past the 20-leg floor). No segment currently clears
+breakeven with a trustworthy sample — near-coinflip lines are the one
+lead worth tracking as more legs grade in, not yet an actionable segment.
+The existing Session 2.26 "Below breakeven" frontend badge
+(`classifySportStatus()`) is judged sufficient as-is; no frontend change
+made this session.
+- [x] Real fix identified (gate/down-weight Underdog edges by
+`|implied_prob−0.5|` skew) but explicitly NOT implemented here — scoped
+as a candidate follow-up session, pending more near-coinflip legs grading
+in to make that segment's sample trustworthy.
 
 ---
 

@@ -13125,3 +13125,97 @@ all before this session, not just an unsurfaced one.
   Until that lands, the frontend's "Below breakeven" badge remains the honest stopgap, and the real,
   evidence-backed recommendation is: trust PrizePicks flags, distrust Underdog flags, in every sport,
   not just MLB.
+
+## Session 2.31 — Underdog Cross-Sport Pricing Gap Investigation
+
+**Date completed:** 2026-09-15
+**Status:** ✅ Complete — measurement only, no model change (per the card's explicit scope).
+
+**What was actually done:**
+Investigated the root cause of Session 2.26's finding (Underdog's real win rate falls below
+breakeven in every sport tested, and falls further as the model's stated edge rises). Two parts:
+
+1. **Part A — id-stability check.** Loaded 4 real, full Underdog production pulls
+   (`data/pickem/raw/underdog_20260911T172815Z.json` through `underdog_20260912T100543Z.json`,
+   ~14,300 `over_under_lines` rows each, spanning ~17 real hours). 8,339 real `source_line_id`s were
+   present in all 4 snapshots; zero had a changed (appearance_id, stat, stat_value) across any
+   snapshot. Underdog's ids are stable over a flag's real lifetime — rules out a
+   flag_id/source_line_id mismatch as a cause.
+2. **Part B — real information-gap analysis.** Joined `data/pickem/clv_log.csv` (real per-flag price/
+   timing: `first_flagged_at`, `game_start_time`, `first_flagged_edge`, `first_flagged_implied_prob`)
+   to `data/pickem/outcome_log.csv` (real graded `result`) on `flag_id`, restricted to Underdog
+   win/loss rows: 10,380 real graded legs (MLB 9,456 / NFL 924) with usable edge+timing data (43 rows
+   with a negative computed lead time were dropped, a real but separate data-quality question not in
+   scope here). Reproduced Session 2.26's edge-bucket inversion directly from this join (0.00–0.10
+   edge: 47.9% win, n=4,187 down to 0.40+ edge: 33.3% win, n=183) before testing hypotheses against it.
+   Tested lead-time-crossed-with-edge (the roadmap card's key test): the inversion persists at every
+   lead-time bucket including the shortest (0–3h: 50.1%→29.7% across edge buckets, n=955→n=37),
+   ruling out stale-pricing-at-flag-time as the mechanism. Tested implied-probability skew: bucketing
+   by \|implied_prob−0.5\| shows the inversion is concentrated on skewed ("chalk") Underdog lines
+   (37.2% win, n=2,975) — restricting to near-coinflip lines only (\|implied_prob−0.5\|<0.05, n=2,582)
+   makes the edge-bucket inversion mostly disappear (50.4%→56.1%, flat-to-rising, though every cell
+   still sits under the 57.74% breakeven). Additionally checked whether Underdog's worst stat type
+   (RBIs, 33.2% win, n=1,697) reflected a general model weakness on that stat: PrizePicks RBIs is
+   75.95% (n=341) on the same stat — rules out a stat-specific model bug, confirms the gap is
+   Underdog's own pricing specifically.
+
+**Files created/modified:**
+- `scripts/calibration/investigate_underdog_pricing_gap.py` (new) — reproducible investigation
+  script, Part A (id-stability) + Part B (edge/lead-time/skew/stat-type breakdowns), measurement
+  only, same "no model change" template as Session 2.24's `pickem_calibration_by_stat.py`.
+- `docs/research/underdog_pricing_gap_investigation.md` (new) — full findings writeup with real
+  numbers and the decision below.
+- `ROADMAP.md` — Session 2.31 card status updated to Complete, all three validation checkboxes
+  checked with real evidence cited inline.
+
+**Validation results:**
+- [x] Root cause investigated with real evidence — data integrity checked first (id-stability, clean,
+  see above), informational-gap theory checked second (real 10,380-leg join, see above). Conclusion:
+  genuine platform-level informational gap concentrated on skewed/chalk Underdog lines, not a data
+  bug, not explained by lead time.
+- [x] Explicit decision recorded (see Decisions below).
+- [x] Real fix candidate identified (gate/down-weight Underdog edges by implied-probability skew) but
+  explicitly not implemented — scoped as a candidate follow-up session per the card's own instruction.
+- [x] `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py`
+  — 51/51 pass (no production code touched this session; run to confirm, not because a change was
+  expected to affect it).
+
+**Decisions made:**
+1. **Root cause is a genuine informational gap, not a data bug.** Every cheap data-integrity
+   explanation (sign/side inversion — Session 2.26; stale pricing at flag time — Session 2.26;
+   id reuse — this session's Part A; a broken/wrong price field — this session's earlier
+   `payout_multiplier` vs. `decimal_price` cross-check) is now ruled out with direct evidence.
+   Underdog's own per-side price on lines it has already moved away from a coin flip reflects real
+   information this project's season-average + recent-form blend does not have, regardless of how
+   much lead time separates flag and game start.
+2. **Underdog is not usable as a blanket flag source in any sport right now** — MLB 46.4% / NFL 49.5%
+   aggregate, both below breakeven, both on samples well past the 20-leg floor. No segment currently
+   clears breakeven with a trustworthy sample; near-coinflip lines are the closest candidate (50–56%
+   across edge buckets, n≥121 per cell except the thin top cell at n=41) but remain under breakeven
+   everywhere and are not yet an actionable segment.
+3. **The existing Session 2.26 "Below breakeven" frontend badge (`classifySportStatus()`) is judged
+   sufficient as-is.** Nothing in this investigation's findings changes what the frontend should tell
+   a user today; no frontend change made, matching this session's explicit measurement-only scope.
+4. **A real, scopeable fix is identified but deliberately not implemented here:** gating or
+   down-weighting Underdog edges by `|implied_prob−0.5|` skew (favoring/trusting only near-coinflip
+   Underdog lines, or applying a skew-dependent discount to Underdog's stated edge). This is a model
+   change and belongs in its own follow-up session — the roadmap card explicitly instructed this
+   investigation session not to attempt a fix, and the near-coinflip segment's current sample (n=2,582,
+   thinning further per edge bucket) isn't yet large enough to ship a fix against with confidence.
+
+**Corrections/reversals during the session:**
+- None.
+
+**Open items / deferred validations:**
+- The near-coinflip segment (Part B3d) is this document's most actionable finding but is itself only
+  ~2,582 legs, thinning further once split by edge bucket (down to n=41 at the top edge bucket) — worth
+  re-running `investigate_underdog_pricing_gap.py`'s B3d cut specifically as more Underdog legs grade
+  in before treating it as a real, tradeable segment.
+- NFL-only reads throughout this investigation are on thin samples (924 total, individual cells down
+  to n=38–56) — directionally consistent with MLB's much larger sample but not independent proof on
+  their own; worth re-checking once NFL's own Underdog volume grows.
+- No held-out validation exists for the proposed skew-gating fix — it is a candidate for a follow-up
+  session, not a number ready to ship into `pickem_model.py` or `sizing_engine.py`.
+- The 43 real Underdog rows with a negative computed lead time (flag logged after game start) were
+  excluded from this investigation as out of scope, not explained — a real, separate data-quality
+  question worth a future look.
