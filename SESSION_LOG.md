@@ -12488,3 +12488,131 @@ require a code change this session, but is worth a deliberate re-check if
 this project ever extends sizing to non-perfect (Flex-style) outcomes,
 since that is exactly the case where Arena's pool-splitting behavior would
 matter and the current fixed-multiplier assumption would not hold.
+
+---
+
+## Session 2.22 — Sigma Recalibration (Pick'em)
+
+**Date completed:** 2026-09-15
+**Status:** ✅ Complete
+
+**What was actually done:**
+Session 2.20's `weekly_review.py` flagged a real, persistent overconfidence
+gap (model states ~74% average confidence, real legs win ~67–68% of the
+time) but, by this project's "flags and sizes, does not act on its own
+recommendations" design, never touched the model itself. This session acts
+on that finding, pulled forward from its original home (Session 8.3,
+Ongoing Recalibration Cadence) at the user's explicit request, on the
+grounds that ~28,000 cumulative pick'em props analyzed (8,225+ graded
+win/loss) is a large enough real sample to trust.
+
+1. Diagnosed the gap as a sigma problem, not a blend-weight problem (the
+   generic pointer in `weekly_review.py`'s own recommendation text):
+   `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` control which mean
+   feeds the model, not how extreme the resulting probability is —
+   `sample_sigma()` controls that, and a uniformly-too-small sigma produces
+   exactly the flat, side-agnostic overconfidence signal actually measured.
+2. Built `scripts/calibration/fit_sigma_recalibration.py`: recovers each
+   graded leg's original z-score from its logged `first_flagged_model_prob`
+   via the exact inverse of `pickem_model.py`'s own `normal_cdf()`, then
+   grid-searches a single scalar sigma multiplier `k` minimizing Brier score
+   between recalibrated probability and real win/loss outcome. No new
+   dependency added (no scipy), matching `pickem_model.py`'s own existing
+   posture on that question.
+3. Ran the fit against the real, full graded sample: 8,196 usable legs
+   (2026-09-15 pull) → `k = 1.61`. Closed the calibration gap from 0.0674 to
+   0.0008 on the same sample; Brier score improved from 0.2106 to 0.2052.
+   Logged to `docs/calibration/sigma_recalibration_log.md` (new, append-only,
+   so future re-fits accumulate a real history rather than overwriting).
+4. Wired `SIGMA_CALIBRATION_FACTOR = 1.61` into `pickem_model.py`: every
+   computed `sample_sigma()` is multiplied by this factor before reaching
+   `prob_over()`. Applied uniformly across sports (the fit sample is
+   NFL-only, since NFL is the only sport with real graded volume so far) —
+   stated as a gap, not silent, in both the module docstring and
+   `pickem_estimation_model_spec.md`.
+5. Regenerated `data/pickem/_test_fixtures/nfl_regression_golden.csv`
+   against the current (post-calibration) code — the only column that
+   changed is `model_sigma` (scaled by exactly 1.61x on every row with a
+   real sigma, confirmed by hand on the first three rows before trusting
+   the regeneration), matching the intended, isolated effect of this
+   session's one-line change.
+6. Updated `pickem_model.py`'s module docstring (new "SIGMA CALIBRATION"
+   section) and `docs/research/pickem_estimation_model_spec.md` (new
+   Session 2.22 addendum) with the full derivation, matching this project's
+   standard for every other sourced/fitted number.
+7. Re-ran `pickem_model.py --season 2025` against real, live normalized
+   pick'em data to confirm the recalibrated model still runs end-to-end
+   against production data, not just the synthetic test fixture.
+
+**Files created/modified:**
+- `scripts/calibration/fit_sigma_recalibration.py` (new)
+- `docs/calibration/sigma_recalibration_log.md` (new — one real fit row)
+- `scripts/estimation/pickem_model.py` (new `SIGMA_CALIBRATION_FACTOR`
+  constant; applied to `sigma` before `prob_over()`; docstring additions)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated —
+  `model_sigma` column only, scaled by 1.61x)
+- `docs/research/pickem_estimation_model_spec.md` (new Session 2.22
+  addendum)
+
+**Validation results:**
+- [x] Fit ran against a real sample well above the 30-leg interim floor
+  this project uses elsewhere (`weekly_review.py`) — 8,196 usable legs.
+- [x] Fitted `k` measurably closes the real calibration gap on the sample
+  it was fit against: 0.0674 → 0.0008 (not exactly zero, since it was fit
+  by minimizing Brier score, not the average-gap metric directly — Brier
+  jointly checks calibration and discrimination, a stricter bar).
+- [x] Brier score improved (0.2106 → 0.2052), confirming the recalibrated
+  probabilities are not just "less confident on average" but genuinely
+  better-fit to real outcomes.
+- [x] `python -m pytest scripts/estimation/test_pickem_model.py -q` —
+  24/24 pass (after regenerating the golden fixture; failure before
+  regeneration was isolated to `model_sigma`, confirmed by hand to be
+  exactly the intended 1.61x scaling before accepting the new snapshot).
+- [x] `python -m pytest scripts/sizing/test_sizing_engine.py -q` — 27/27
+  pass (unaffected — sigma calibration is upstream of sizing).
+- [x] `python scripts/calibration/test_clv_logger.py` — 13/13 scenarios
+  pass (unaffected).
+- [x] `pickem_model.py --season 2025` ran successfully against real, live
+  normalized data (not just the synthetic fixture).
+
+**Decisions made:**
+1. Pulled this work forward from Session 8.3 to now, per the user's
+   explicit instruction, on the grounds that the real graded sample
+   (8,225+ legs) is large enough to trust a fit against — a judgment call
+   the user made directly, not derived from a pre-stated sample-size rule
+   in this project's docs (unlike, e.g., the 3,725-leg "full strength"
+   threshold for the pick'em track's own live-validation question, which
+   is a different, stricter bar for a different purpose — deciding whether
+   the *track* has proven itself, not whether a *recalibration fit* has
+   enough data to be worth trying).
+2. Fixed sigma, not the season_avg/recent_form blend weight — see
+   "What was actually done" item 1 above for the full reasoning. Left
+   `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` at 50/50, unchanged.
+3. Minimized Brier score, not just matched average confidence to average
+   win rate — a mean-matching fit could satisfy the calibration-gap metric
+   while leaving individual probabilities poorly ordered; Brier score
+   penalizes that too.
+4. Applied one factor uniformly across all sports rather than fitting
+   per-sport, since only NFL currently has real graded volume — stated
+   explicitly as future work once other sports accumulate their own,
+   rather than silently assumed to generalize.
+5. No scipy dependency added — reused `pickem_model.py`'s own erf-based
+   `normal_cdf()` and implemented its inverse via bisection, matching that
+   file's own stated reasoning for avoiding scipy.
+
+**Corrections/reversals during the session:**
+- None.
+
+**Open items / deferred validations:**
+- This is one fit against one snapshot of real data (2026-09-15), not a
+  live-updating loop. Re-running `fit_sigma_recalibration.py` periodically
+  as more graded outcomes accumulate remains open, real future work —
+  natural to tie to `weekly_review.py`'s own weekly cadence, or to a
+  dedicated future session, rather than assumed to stay valid forever.
+- Per-sport sigma calibration (rather than one NFL-fit factor applied to
+  every sport) is deferred until non-NFL sports have real graded volume of
+  their own — currently a stated gap, not a silent one.
+- Whether `weekly_review.py`'s next real run (against data graded after
+  this session's fix ships) actually shows a materially smaller ongoing
+  calibration gap is a real, observable check this session could not make
+  yet — it depends on future real outcomes, not on anything computable now.

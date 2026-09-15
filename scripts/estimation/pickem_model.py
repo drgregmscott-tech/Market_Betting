@@ -8,6 +8,10 @@ and stat-type-map logic into a per-sport plug-in shape (see
 pickem_sport_plugins/__init__.py). NFL scoring behavior is unchanged --
 proven byte-for-byte via test_pickem_model.py's regression fixture, not just
 re-derived. See the "SESSION 2.12 REFACTOR" note below for what moved where.
+Session 2.22 addition: applies SIGMA_CALIBRATION_FACTOR (see the "SIGMA
+CALIBRATION" note below) to every computed sigma, closing a real, measured
+overconfidence gap found by Session 2.20's weekly_review.py against real
+graded outcomes. No other model logic changed.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -79,9 +83,11 @@ black-box factors" standard)
    to do later, once real CLV/outcome data exists to tune
    against (Sessions 2.4/2.5).
 4. model_sigma -- the player's own sample standard deviation of the stat
-   across their REG-season games so far. A player with
-   fewer than 2 qualifying games has no real sigma to
-   compute; see MIN_GAMES_FOR_ESTIMATE below.
+   across their REG-season games so far, scaled by
+   SIGMA_CALIBRATION_FACTOR (Session 2.22 -- see the "SIGMA
+   CALIBRATION" section below). A player with fewer than 2
+   qualifying games has no real sigma to compute; see
+   MIN_GAMES_FOR_ESTIMATE below.
 
 WHAT THIS MODEL DOES NOT DO YET (stated gap, not a silent one)
 -----------------------------------------------------------------
@@ -144,6 +150,31 @@ error in it. No code in this file changed as a result of this
 clarification -- it exists solely to prevent this same confusion from
 recurring in a future session.
 
+SIGMA CALIBRATION (Session 2.22)
+---------------------------------
+Session 2.20's weekly_review.py, run against real graded outcomes
+(data/pickem/outcome_log.csv), found a persistent calibration gap: the
+model's stated confidence averaged ~74% while real legs won ~67% of the
+time -- a real, moderate overconfidence signal, not noise (see
+SESSION_LOG.md Session 2.20 and 2.22 for the full evidence trail). This is
+a sigma problem, not a blend-weight problem: sigma controls how extreme a
+probability the normal CDF produces from a given z-score, independent of
+which mean (season_avg vs recent_form) fed it. Session 2.22 fit a single
+scalar multiplier, SIGMA_CALIBRATION_FACTOR, against the full real graded
+sample (8,196 usable win/loss legs, 2026-09-15) by minimizing Brier score
+between recalibrated probabilities and real outcomes -- see
+scripts/calibration/fit_sigma_recalibration.py for the exact method and
+docs/calibration/sigma_recalibration_log.md for the fit's own logged
+result. The fitted value (1.61) closed the calibration gap from 0.0674 to
+0.0008 on the same sample it was fit against. Every computed sample_sigma()
+is multiplied by this factor before being used in prob_over() -- applied
+uniformly, not per-sport or per-stat, since the graded sample it was fit
+against spans NFL props across every stat type this project currently
+scores. Re-fitting this factor periodically as more real outcomes
+accumulate (and, eventually, per-sport once other sports have enough real
+graded volume of their own) is real future work -- see
+docs/calibration/sigma_recalibration_log.md's own notes.
+
 SESSION 2.12 REFACTOR -- what moved where
 ------------------------------------------
 Everything that was NFL-specific (the nflverse fetch, NFL_STAT_TYPE_MAP,
@@ -203,6 +234,10 @@ SIGMA_FLOOR_FRACTION = 0.15  # sigma floor, as a fraction of the mean, used
 # only when a player has exactly MIN_GAMES_FOR_ESTIMATE games and their
 # observed sample sigma is implausibly small (near-zero) -- prevents a
 # probability estimate of ~100%/~0% off two coincidentally similar games.
+SIGMA_CALIBRATION_FACTOR = 1.61  # Session 2.22: fit against 8,196 real graded
+# legs (data/pickem/outcome_log.csv, 2026-09-15) via
+# scripts/calibration/fit_sigma_recalibration.py -- see the "SIGMA
+# CALIBRATION" module docstring section above for the full derivation.
 
 NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 
@@ -610,6 +645,8 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         r_form = recent_form(series)
         model_mean = SEASON_AVG_BLEND_WEIGHT * s_avg + RECENT_FORM_BLEND_WEIGHT * r_form
         sigma = sample_sigma(series, model_mean)
+        if sigma == sigma:  # NaN-safe: NaN sigma stays NaN, prob_over() handles it
+            sigma *= SIGMA_CALIBRATION_FACTOR
 
         line = row.get("line")
         p_over = prob_over(line, model_mean, sigma) if line is not None else None

@@ -903,3 +903,56 @@ question reasonable to unblock on this evidence — but entry-level *sizing*
 in `sizing_engine.py` only accepts that exact sourced pattern; every other
 real leg count or Standard/special mix is rejected with a stated reason
 until it, too, is observed live and added.
+
+## Session 2.22 — Sigma recalibration (closes a real, measured overconfidence gap)
+
+Session 2.20 activated `weekly_review.py` against real graded outcomes
+(`data/pickem/outcome_log.csv`) and found a persistent calibration gap: the
+model's stated confidence averaged ~74% while real legs won ~67–68% of the
+time — a real ~6–7 point overconfidence signal, not noise (confirmed twice,
+at 7,659 and again at 8,225 graded legs). The user judged the accumulated
+sample (~28,000 pick'em props analyzed cumulatively, 8,225+ graded win/loss)
+large enough to act on now, rather than waiting for Session 8.3 (Ongoing
+Recalibration Cadence), which is where this project originally deferred
+blend/model tuning until at least two tracks were live.
+
+**Why this is a sigma fix, not the blend-weight fix `weekly_review.py`'s
+generic recommendation text points at:** the season_avg/recent_form blend
+weight (immediately above) controls which *mean* feeds the model — it does
+not control how extreme the resulting probability is. `sample_sigma()` does:
+a systematically too-small sigma inflates every z-score regardless of which
+mean produced it, which is exactly the flat, direction-agnostic
+overconfidence `weekly_review.py` measured (a single average gap across the
+whole population, not a side-specific miscalibration, which is what a bad
+blend weight would look like instead).
+
+**Method:** `scripts/calibration/fit_sigma_recalibration.py` recovers each
+graded leg's original z-score from its logged `first_flagged_model_prob`
+(via the exact inverse of `pickem_model.py`'s own `normal_cdf()`, not
+scipy's, so the round-trip is exact) and grid-searches a single scalar
+multiplier `k` on sigma, minimizing Brier score between the recalibrated
+probability and the real win/loss outcome across all graded legs. Fit
+against 8,196 usable graded legs (2026-09-15): `k = 1.61` — the model's raw
+sample sigma was, on average, about 62% too small. This closed the
+calibration gap from 0.0674 to 0.0008 on the same sample, and improved
+Brier score from 0.2106 to 0.2052. Full fit output logged in
+`docs/calibration/sigma_recalibration_log.md`.
+
+**What changed:** `pickem_model.py`'s new `SIGMA_CALIBRATION_FACTOR = 1.61`
+multiplies every computed `sample_sigma()` before it reaches `prob_over()`.
+Applied uniformly across all sports/stats (the graded sample it was fit
+against is NFL-only, since NFL is this project's only sport with enough
+graded volume so far) — a stated gap, not a silent one; other sports should
+get their own fit once they have real graded volume of their own. No change
+to `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` (still 50/50,
+unchanged) or to any sizing/edge-threshold logic — this session touches only
+how extreme a probability the model states, not which side it favors or how
+edges are sized.
+
+**What this does NOT cover yet:** this is one fit against one snapshot of
+real data, not a live-updating recalibration loop — re-running
+`fit_sigma_recalibration.py` periodically as more graded outcomes
+accumulate, and eventually splitting the fit per sport once non-NFL sports
+have real graded volume, remains real future work (Session 8.3's original
+territory, now with a concrete script and log format to extend rather than
+build from scratch).
