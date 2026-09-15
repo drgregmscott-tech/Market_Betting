@@ -13458,3 +13458,101 @@ whether this signal predicts a win or loss).
   map is updated by hand; real but extremely low-probability risk, same category as `MLB_TEAM_IDS`
   above it already accepts.
 - Live validation window explicitly OPEN, not closed — see new ROADMAP.md Session 2.33 card.
+
+---
+
+## Session 2.28 — CFB Real-Outcome Auto-Grading
+
+**Date completed:** 2026-09-15
+
+**What was actually done:**
+Added a CFB adapter to `auto_grade_outcomes.py` (Session 2.26's generalized grader), the fourth sport
+after NFL/MLB/soccer-EPL, so real closed CFB Pick'em flags can be checked automatically against CFBD's
+real final box scores instead of staying ungraded forever (same motivation as every prior sport in this
+series).
+
+1. **Diagnosed the one real gap before writing any join logic**: `pickem_sport_plugins/cfb.py`'s
+   `/games/players` payload (the endpoint that carries real per-player stats) has no date field of its
+   own -- confirmed directly in Session 2.16's own docstring (`id`/`teams` only). The separate `/games`
+   endpoint DOES carry a real per-game `startDate`, and this plug-in already calls it once per season/
+   seasonType to check week-finality -- so no new API call was needed, just capturing a field the
+   existing call already returns and was previously discarding.
+2. `pickem_sport_plugins/cfb.py`: renamed `_fetch_completed_weeks()` to `_fetch_games_index()`, now
+   returning `(completed_weeks, game_dates)` -- `game_dates` is `{str(game_id): startDate}`, cached
+   alongside the existing `completed_weeks`/`_all_completed` fields (a cache file written before this
+   session, missing the new `game_dates` key, triggers one real one-time re-fetch to backfill it, not a
+   silent permanent empty). `_flatten_game_players()` now attaches `game_date_utc` to every row from
+   this map, `None` (not a crash) when a game id has no entry -- same column name/shape Session 2.27
+   used for soccer/EPL.
+3. `scripts/calibration/auto_grade_outcomes.py`: registered `CFB_ADAPTER`, reusing
+   `find_soccer_or_epl_game_row` completely unchanged -- CFB's real dates arrive in the same raw-UTC-
+   instant shape ESPN/FPL already used, so no new join function was needed, only the CFB-specific
+   caveat documented in that function's own docstring (a very late Hawaii/Pacific kickoff could in
+   principle roll the Eastern-converted date forward a day; unconfirmed either way, no real key
+   available this session to check against a live payload).
+4. `frontend/app.js`: added `"cfb"` to `VALIDATED_SPORTS` -- confirmed live against `clv_log.csv` that
+   `"cfb"` (lowercase, one label) is the real string both PrizePicks and Underdog use, not "CFB"/
+   "NCAAF" as the original ROADMAP.md card guessed.
+5. Added 4 new unit tests to `test_pickem_model.py` (`test_cfb_plugin_registered_sport_labels`,
+   `test_cfb_plain_column_stat`, `test_cfb_flatten_attaches_game_date_utc`,
+   `test_cfb_flatten_game_date_utc_none_when_missing`), built against CFBD's real, live-verified
+   `/games/players` payload shape (Session 2.16), not a guessed structure.
+
+**A real, pre-existing problem found while validating this session's work (not caused by this session):**
+`output/estimation/latest.csv`'s real CFB rows are 100% `no_player_match` (1,441/1,626) or
+`unsupported_stat_type` (185/1,626) -- zero `estimated`. `data/pickem/cache/cfbd/` has not been touched
+by any automated commit since Session 2.16's original 2025-season test (2026-09-12), despite the real
+2026 CFB season starting 2026-09-07 (`season_utils.py`) and hourly pipeline runs continuing every day
+since (most recent automated commit at the top of this file, 2026-09-15T18:16:47Z). This is strong, if
+indirect, evidence the `CFBD_API_KEY` GitHub Actions secret is missing or has stopped working for the
+current season -- CFB pricing, not just this session's grading, is running blind right now. Running
+this session's new `CFB_ADAPTER` against the real, live pipeline confirmed the mechanism this session
+built is wired correctly (found all 1,265 real closed CFB flags, correctly matched on sport label and
+resolved stat key) but graded 0 of them -- 100% `no_player_match`, because `fetch_cfb_season_stats(2026)`
+returns an empty DataFrame with no working key, exactly the same "no data yet" shape this plug-in
+already returns honestly rather than guessing. This session has no access to GitHub Actions secrets and
+cannot fix or diagnose the key itself further; flagged directly to the user and left as a new, unclosed
+line item on ROADMAP.md's Session 2.28 card rather than declared complete.
+
+**Real commands run:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q` --
+  73/73 pass (69 pre-existing + 4 new; 0 failures).
+- `python scripts/calibration/auto_grade_outcomes.py --run --dry-run` (2026-09-15T19:53:00Z) against
+  real live `data/pickem/clv_log.csv` -- real summary: nfl 379 candidates/0 graded (376
+  no_player_match, 3 no_game_match); mlb 971/0 (96 no_player_match, 875 no_game_match); soccer 403/0
+  (9 no_player_match, 394 no_game_match -- this run landed between two hourly ingests, most already
+  graded by a concurrent real run); epl 0/0 (already fully graded); cfb 1265/0 (1265 no_player_match,
+  the real external issue above).
+
+**Decisions made:**
+1. **Reused Session 2.27's soccer/EPL join function for CFB unchanged, rather than writing a fourth
+   near-duplicate**, since CFBD's real `startDate` is the same raw-UTC-instant shape (no built-in local
+   calendar date) ESPN/FPL already required this same treatment for. Confirmed by design: zero new
+   `find_game_row` logic was needed, only a new plug-in-side column.
+2. **Did not attempt to diagnose or fix the CFBD_API_KEY outage this session** -- it requires GitHub
+   repo secret access this session does not have, and is a materially different problem (real-time CFB
+   pricing) from this session's stated scope (adding a grading adapter). Surfaced directly instead of
+   silently working around it or fabricating a "graded" number that doesn't exist.
+3. **Did not mark ROADMAP.md's Session 2.28 validation checklist fully complete** -- the adapter's own
+   mechanism is proven (real candidate selection, real sport-label/stat-key resolution, real unit tests
+   against CFBD's live-verified payload shape), but "a real sample of closed CFB flags actually graded
+   and spot-checked by hand" is explicitly NOT met yet, honestly, per this project's standing rule
+   against declaring a validation checkbox done without real evidence behind it.
+
+**Open items / deferred validations:**
+- **The CFBD_API_KEY outage is the real blocker for actually closing this session's own card.** Once
+  the key is fixed (in GitHub Actions, outside this session's reach) and a real pipeline run
+  successfully pulls 2026 CFB data, re-running `auto_grade_outcomes.py --run` should grade real CFB
+  flags immediately -- no further code change expected, per the design confirmed above.
+- **This also blocks the user's other ask this session** (whether Session 2.31's Underdog
+  cross-sport pricing-gap finding replicates in CFB, the way Session 2.27 checked for soccer) -- there
+  is no real graded CFB outcome data to check yet, Underdog or otherwise. Deferred until the key issue
+  is fixed and enough real CFB flags have graded to form a sample, same standard Session 2.27 held
+  itself to for soccer/EPL.
+- **CFB's Eastern-date-conversion assumption (a very late Hawaii/Pacific kickoff) is unconfirmed**,
+  same category of open, low-probability item as several prior sessions' own late-game edge cases --
+  worth a real check once real 2026 CFB games/flags exist to check it against.
+- **CFBD's real `startDate` field name is NOT YET LIVE-VERIFIED** against an actual payload this
+  session (no working key available) -- taken directly from CFBD's own published `/games` schema, same
+  "offline-first, live-verify next" precedent Session 2.16 itself used before its own real key existed.
+  Should be confirmed the next time a real key successfully makes this call.

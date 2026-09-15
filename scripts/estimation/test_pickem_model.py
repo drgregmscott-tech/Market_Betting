@@ -42,6 +42,7 @@ from pickem_model import (
     resolve_stat_spec,
 )
 from pickem_sport_plugins import PLUGINS, plugin_for_sport
+from pickem_sport_plugins.cfb import CFB_PLUGIN, _flatten_game_players
 from pickem_sport_plugins.epl import EPL_PLUGIN, _fetch_player_history
 from pickem_sport_plugins.mlb import (
     MLB_PLUGIN,
@@ -805,6 +806,69 @@ def test_process_props_leaves_mlb_starter_status_blank_for_non_underdog_rows():
     finally:
         NFL_PLUGIN.fetch_stats = original_fetch
     assert result["mlb_starter_status"].isna().all()
+
+
+# ---------------------------------------------------------------------------
+# Session 2.28 -- CFB grading-adapter plumbing (`game_date_utc`)
+# ---------------------------------------------------------------------------
+def _cfb_game(game_id: int, athlete_id: str, athlete_name: str, pass_yds: str) -> dict:
+    """Minimal real-shape CFBD `/games/players` game dict -- trimmed to one
+    stat (passing YDS) from the real payload structure confirmed live in
+    Session 2.16 (see cfb.py's data/pickem/cache/cfbd/2025_regular_wk1.json
+    for the full real shape this mirrors)."""
+    return {
+        "id": game_id,
+        "teams": [{
+            "team": "Test Team",
+            "categories": [{
+                "name": "passing",
+                "types": [{
+                    "name": "YDS",
+                    "athletes": [{"id": athlete_id, "name": athlete_name, "stat": pass_yds}],
+                }],
+            }],
+        }],
+    }
+
+
+def test_cfb_plugin_registered_sport_labels():
+    assert plugin_for_sport("cfb") is CFB_PLUGIN, (
+        "'cfb' is the real sport label both platforms use in "
+        "data/pickem/clv_log.csv, confirmed live 2026-09-15"
+    )
+
+
+def test_cfb_plain_column_stat():
+    games = [_cfb_game(1, "9001", "Test QB", "247")]
+    rows = _flatten_game_players(games)
+    kind, value, _ = resolve_stat_spec(CFB_PLUGIN, "Pass Yards")
+    stats_df = pd.DataFrame(rows)
+    series = build_stat_series(CFB_PLUGIN, stats_df, "9001", kind, value)
+    assert list(series) == [247.0]
+
+
+def test_cfb_flatten_attaches_game_date_utc():
+    """Session 2.28: CFBD's `/games/players` payload itself never carries a
+    date (real, confirmed gap -- see cfb.py's `_fetch_games_index`
+    docstring); the real date has to come in from the separate `/games`
+    endpoint's `game_dates` map, keyed by game id as a string. This is the
+    one real per-row plumbing change auto_grade_outcomes.py's CFB adapter
+    depends on (reusing find_soccer_or_epl_game_row, which reads
+    `game_date_utc` directly)."""
+    games = [_cfb_game(555, "9001", "Test QB", "300")]
+    rows = _flatten_game_players(games, game_dates={"555": "2026-09-06T19:30:00.000Z"})
+    assert len(rows) == 1
+    assert rows[0]["game_date_utc"] == "2026-09-06T19:30:00.000Z"
+
+
+def test_cfb_flatten_game_date_utc_none_when_missing():
+    """Honest-empty shape (same pattern as every other 'no data yet' case
+    in this plug-in) -- a game id with no entry in `game_dates` (e.g. the
+    `/games` index call failed or no CFBD_API_KEY was set) must not crash
+    the join, just leave the date unresolved for that row."""
+    games = [_cfb_game(999, "9002", "Test RB", "88")]
+    rows = _flatten_game_players(games, game_dates={})
+    assert rows[0]["game_date_utc"] is None
 
 
 if __name__ == "__main__":

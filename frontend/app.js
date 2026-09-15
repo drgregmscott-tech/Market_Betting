@@ -161,8 +161,13 @@ function isTrueField(v) {
 // uses "FIFA" for real-life soccer props -- see
 // pickem_sport_plugins/soccer.py's docstring), even though one shared
 // GradingAdapter grades "soccer"+"fifa" together on the Python side.
+//
+// Session 2.28: "cfb" added -- the one real `sport` label string both
+// platforms use for college football (confirmed live against
+// data/pickem/clv_log.csv), graded by auto_grade_outcomes.py's new
+// CFB_ADAPTER.
 // ---------------------------------------------------------------------
-const VALIDATED_SPORTS = new Set(["nfl", "mlb", "soccer", "fifa", "epl"]);
+const VALIDATED_SPORTS = new Set(["nfl", "mlb", "soccer", "fifa", "epl", "cfb"]);
 
 function isValidatedSport(sport) {
   return VALIDATED_SPORTS.has(String(sport || "").trim().toLowerCase());

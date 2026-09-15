@@ -226,7 +226,7 @@ def _games_index_cache_path(season: int, season_type: str) -> Path:
     return CACHE_DIR / f"{season}_{season_type}_games_index.json"
 
 
-def _fetch_completed_weeks(season: int, season_type: str) -> set[int]:
+def _fetch_games_index(season: int, season_type: str) -> tuple[set[int], dict[str, str]]:
     """LIVE-VERIFIED 2026-09-12 (real key): `/games/players` rows carry NO
     `status`/`completed` field of their own -- the original design here
     assumed one, which would have silently disabled the whole caching
@@ -238,39 +238,68 @@ def _fetch_completed_weeks(season: int, season_type: str) -> set[int]:
     This function is that one extra call, cached the same way as a
     player-stats week: skipped entirely once every game in the cached
     index is already completed, so a full season costs exactly one of
-    these calls total once finished, not one per week."""
+    these calls total once finished, not one per week.
+
+    Session 2.28 addition: also carries each real game's own `startDate`
+    (a UTC ISO instant per CFBD's published `/games` schema) back to the
+    caller, keyed by game id as a string -- auto_grade_outcomes.py's CFB
+    adapter needs a real calendar date per game to join a closed flag to
+    the game that actually produced its final stat line, the same way
+    Session 2.27 threaded `game_date_utc` through soccer.py/epl.py.
+    `/games/players` (the endpoint `_fetch_week_player_stats` calls) never
+    carries a date at all -- confirmed on the real week-1 2025 payload
+    checked in Session 2.16 (only `id`/`teams`) -- so this second endpoint,
+    already being called for `completed`, is the one real place a date can
+    come from without a third API call. NOT YET LIVE-VERIFIED against a
+    real payload that `startDate` is the exact real field name CFBD
+    returns (this session has no working CFBD_API_KEY available to check
+    it against a live response -- see this session's SESSION_LOG.md entry)
+    -- taken directly from CFBD's own published `/games` schema, same
+    "offline-first, live-verify next" precedent Session 2.16 itself used
+    before its own real key existed. `game_dates` values are int-keyed by
+    `str(g["id"])` to match the string player_id/game_id types used
+    elsewhere in this plug-in.
+    """
     path = _games_index_cache_path(season, season_type)
     if path.exists():
         try:
             cached = json.loads(path.read_text())
-            if cached.get("_all_completed"):
-                return set(cached["completed_weeks"])
+            # A cache file written before this session added `game_dates`
+            # won't have it -- fall through to a real re-fetch rather than
+            # silently returning an empty date map forever (one-time cost
+            # per season/seasonType the first time this runs).
+            if cached.get("_all_completed") and "game_dates" in cached:
+                return set(cached["completed_weeks"]), dict(cached["game_dates"])
         except (json.JSONDecodeError, OSError) as exc:
             log.warning("Discarding unreadable CFBD games-index cache %s: %s", path, exc)
 
     headers = _cfbd_headers()
     if headers is None:
-        return set()
+        return set(), {}
 
     url = f"{CFBD_API_BASE}/games?year={season}&seasonType={season_type}&classification=fbs"
     try:
         games = get_json_with_retries(url, headers=headers, timeout=20)
     except Exception as exc:  # noqa: BLE001
         log.warning("Could not fetch CFBD games index for %s %s: %s", season, season_type, exc)
-        return set()
+        return set(), {}
 
     weeks_seen = sorted({g["week"] for g in games})
     completed_weeks = {
         w for w in weeks_seen
         if all(g["completed"] for g in games if g["week"] == w)
     }
+    game_dates = {
+        str(g["id"]): g["startDate"] for g in games if g.get("startDate")
+    }
     all_completed = bool(games) and all(g["completed"] for g in games)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({
         "_all_completed": all_completed,
         "completed_weeks": sorted(completed_weeks),
+        "game_dates": game_dates,
     }))
-    return completed_weeks
+    return completed_weeks, game_dates
 
 
 def _load_cached_week(season: int, season_type: str, week: int) -> list[dict] | None:
@@ -354,7 +383,7 @@ def _made_count(made_over_attempted: str) -> float:
     return _stat_value(made_str)
 
 
-def _flatten_game_players(games: list[dict]) -> list[dict]:
+def _flatten_game_players(games: list[dict], game_dates: dict[str, str] | None = None) -> list[dict]:
     """Reshapes CFBD's nested game -> team -> category -> type -> athletes
     payload into one flat row per (player, game). LIVE-VERIFIED 2026-09-12
     against a real week-1 2025 `/games/players` payload (real key) -- see
@@ -362,10 +391,22 @@ def _flatten_game_players(games: list[dict]) -> list[dict]:
     `game` dict is expected to carry an injected `_sort_key` (the calling
     week number, see fetch_cfb_season_stats() below) so a player's rows
     sort chronologically by week, not by CFBD's non-sequential internal
-    game id."""
+    game id.
+
+    Session 2.28 addition: `game_dates` (game id -> real UTC `startDate`,
+    from `_fetch_games_index()`, the SEPARATE `/games` endpoint -- see that
+    function's docstring for why `/games/players` itself never carries a
+    date) is threaded onto each row as `game_date_utc`, same column name
+    Session 2.27 used for soccer/EPL, so auto_grade_outcomes.py's CFB
+    adapter can reuse that same date-join function unchanged rather than
+    writing a fourth near-duplicate. `None` (not a missing-key crash) if a
+    game's real id has no entry -- e.g. `game_dates` came back empty
+    because no CFBD_API_KEY was set for this call, matching every other
+    "no data yet" honest-empty shape in this plug-in."""
     # player_id -> row dict, keyed per game via a composite key so the same
     # player's rows across different games never collide.
     rows_by_key: dict[tuple, dict] = {}
+    game_dates = game_dates or {}
 
     category_type_column = {
         ("passing", "YDS"): "pass_yds",
@@ -418,6 +459,7 @@ def _flatten_game_players(games: list[dict]) -> list[dict]:
                                 "player_id": str(player_id),
                                 "player_display_name": full_name,
                                 "sort_key": sort_key,
+                                "game_date_utc": game_dates.get(str(game_id)),
                             })
                             row[made_col] = _stat_value(made_str)
                             if att_col is not None:
@@ -437,6 +479,7 @@ def _flatten_game_players(games: list[dict]) -> list[dict]:
                             "player_id": str(player_id),
                             "player_display_name": full_name,
                             "sort_key": sort_key,
+                            "game_date_utc": game_dates.get(str(game_id)),
                         })
                         row[column] = _stat_value(athlete.get("stat"))
 
@@ -452,7 +495,7 @@ def fetch_cfb_season_stats(season: int) -> pd.DataFrame:
     if _cfbd_headers() is None:
         return pd.DataFrame([])
 
-    completed_weeks = _fetch_completed_weeks(season, "regular")
+    completed_weeks, game_dates = _fetch_games_index(season, "regular")
     all_games: list[dict] = []
     for week in range(1, REGULAR_SEASON_WEEKS + 1):
         for game in _fetch_week_player_stats(season, "regular", week, completed_weeks):
@@ -460,13 +503,13 @@ def fetch_cfb_season_stats(season: int) -> pd.DataFrame:
             all_games.append(game)
     # Postseason (bowls + CFP) spans a handful of weeks -- finality tracked
     # separately since it is a distinct CFBD seasonType from "regular".
-    postseason_completed = _fetch_completed_weeks(season, "postseason")
+    postseason_completed, postseason_game_dates = _fetch_games_index(season, "postseason")
     for week in range(1, 5):
         for game in _fetch_week_player_stats(season, "postseason", week, postseason_completed):
             game["_sort_key"] = REGULAR_SEASON_WEEKS + week
             all_games.append(game)
 
-    rows = _flatten_game_players(all_games)
+    rows = _flatten_game_players(all_games, {**game_dates, **postseason_game_dates})
     return pd.DataFrame(rows)
 
 

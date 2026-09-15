@@ -75,13 +75,26 @@ civil date -- see that function's own docstring for why this reuses the
 NFL/MLB pipeline's existing Eastern-conversion helper rather than adding
 a third per-league timezone table.
 
+SESSION 2.28 -- CFB ADDED, REUSING SOCCER/EPL'S ADAPTER AS-IS
+-------------------------------------------------------------------
+`pickem_sport_plugins/cfb.py` now threads a real `game_date_utc` column
+through from CFBD's `/games` endpoint (`startDate`), the same shape
+Session 2.27 established for soccer/EPL -- so CFB needed zero new
+find_game_row logic, just a new column in the plug-in and one new
+GradingAdapter registration (CFB_ADAPTER, reusing
+find_soccer_or_epl_game_row directly). See that function's own docstring
+for the one CFB-specific caveat (a very late Hawaii/Pacific kickoff could
+in principle roll the Eastern-converted date forward a day -- unconfirmed
+either way, since this session had no working CFBD_API_KEY to check a
+real payload against).
+
 WHAT THIS DOES NOT DO (stated gap, not a silent one)
 -------------------------------------------------------
 - Grades only sports with a registered adapter in ADAPTERS below: NFL,
-  MLB, soccer/EPL, as of this session. CFB and tennis are explicitly left
-  ungraded until Sessions 2.28-2.29 register their own adapters -- each of
-  those sessions' whole job should be "add one GradingAdapter and its
-  find_game_row logic," not touching this file's shared logic again.
+  MLB, soccer/EPL, CFB, as of this session. Tennis is explicitly left
+  ungraded until Session 2.29 registers its own adapter -- that session's
+  whole job should be "add one GradingAdapter and its find_game_row
+  logic," not touching this file's shared logic again.
   NBA has an estimation plug-in but is not scheduled for grading yet
   (ROADMAP.md Session 2.26 card: NBA's season hasn't started, nothing
   real to validate against right now). Manual `outcome_tracker.py
@@ -127,6 +140,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "estimation"))
 from pickem_model import build_name_lookup, normalize_name  # noqa: E402
 from pickem_sport_plugins import SportPlugin  # noqa: E402
+from pickem_sport_plugins.cfb import CFB_PLUGIN  # noqa: E402
 from pickem_sport_plugins.epl import EPL_PLUGIN  # noqa: E402
 from pickem_sport_plugins.mlb import MLB_PLUGIN  # noqa: E402
 from pickem_sport_plugins.nfl import NFL_PLUGIN  # noqa: E402
@@ -304,7 +318,22 @@ def find_soccer_or_epl_game_row(
     after 04:00 UTC, so converting to Eastern (UTC-4/-5) never rolls the
     calendar date backward across a match's own kickoff -- this join is
     safe in practice, not just consistent in theory. `context` is unused,
-    same as MLB's adapter."""
+    same as MLB's adapter.
+
+    Session 2.28: also reused as-is for CFB. `pickem_sport_plugins/cfb.py`
+    now threads a real `game_date_utc` per row from CFBD's `/games`
+    endpoint (`startDate`), the same column name/shape this function
+    already expects -- no CFB-specific join logic needed. CFB games are
+    played coast-to-coast on US soil (same as NFL/MLB, not a single
+    country/timezone the way soccer/EPL are), so the Eastern-conversion
+    rule here is the SAME simplification NFL/MLB already accept project-
+    wide (module docstring above), not a new one -- a very late Hawaii/
+    Pacific kickoff could in principle roll the converted Eastern date
+    forward a day versus the platform's own reported local date; no real
+    case of this has been checked yet (this session had no working
+    CFBD_API_KEY available to pull real 2026 CFB games -- see
+    SESSION_LOG.md), left as an open item rather than assumed safe the
+    way Session 2.27 confirmed for soccer's UK/CET kickoff-time window."""
     player_rows = stats_df[stats_df["player_id"] == player_id]
     if player_rows.empty or "game_date_utc" not in player_rows.columns:
         return None
@@ -348,11 +377,16 @@ SOCCER_ADAPTER = GradingAdapter(
 EPL_ADAPTER = GradingAdapter(
     plugin=EPL_PLUGIN, load_context=lambda: None, find_game_row=find_soccer_or_epl_game_row
 )
+CFB_ADAPTER = GradingAdapter(
+    plugin=CFB_PLUGIN, load_context=lambda: None, find_game_row=find_soccer_or_epl_game_row
+)
 
-# Session 2.28-2.29 each add one adapter here (CFB, tennis) -- that should
-# be the only change this file needs per new sport, per the module
-# docstring's whole point in generalizing this.
-ADAPTERS: list[GradingAdapter] = [NFL_ADAPTER, MLB_ADAPTER, SOCCER_ADAPTER, EPL_ADAPTER]
+# Session 2.29 adds one adapter here (tennis) -- that should be the only
+# change this file needs per new sport, per the module docstring's whole
+# point in generalizing this.
+ADAPTERS: list[GradingAdapter] = [
+    NFL_ADAPTER, MLB_ADAPTER, SOCCER_ADAPTER, EPL_ADAPTER, CFB_ADAPTER,
+]
 
 
 # ---------------------------------------------------------------------------

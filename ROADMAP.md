@@ -2492,20 +2492,56 @@ more soccer legs grade in, not yet a second confirmed instance of the
 Underdog-specific problem.
 
 ### Session 2.28 — CFB Real-Outcome Auto-Grading
-**Status:** Not started
+**Status:** ⚠️ Adapter built and tested (2026-09-15); live grading blocked
+by a separate, pre-existing real-data outage — see below. Not closing this
+card's checkbox until a real CFB flag has actually been graded, per this
+project's own "don't fabricate a validation" standard.
 **Prerequisites:** Session 2.26 (generalized auto-grader).
 
-**What gets built:** Adds a CFB adapter to the generalized grader
-(CollegeFootballData.com — same source `pickem_sport_plugins/cfb.py`
-already uses), reusing the existing weekly-cache pattern so grading rides
-the same cached pulls ingestion already makes rather than adding new API
-calls against CFBD's 1,000-call/month free-tier cap. Adds `"CFB"` to
-`VALIDATED_SPORTS`.
+**What got built:** `CFB_ADAPTER` registered in `auto_grade_outcomes.py`,
+reusing Session 2.27's `find_soccer_or_epl_game_row` unchanged (CFB's real
+dates arrive in the same raw-UTC shape ESPN/FPL already used). The one
+real per-sport change: `pickem_sport_plugins/cfb.py`'s `/games/players`
+payload never carries a date of its own (confirmed live, Session 2.16) —
+`_fetch_games_index()` (renamed from `_fetch_completed_weeks()`) now also
+captures each real game's `startDate` from the SAME `/games` call already
+being made to check week-finality, at zero net-new API calls, and threads
+it onto every player-stat row as `game_date_utc`. `"cfb"` added to
+`VALIDATED_SPORTS` (frontend/app.js) — the one real `sport` label string
+both platforms use (confirmed live against clv_log.csv), not "CFB"/
+"NCAAF" as the card originally guessed.
+
+**A real, pre-existing problem found while validating this (not caused by
+this session, but directly blocks it):** `output/estimation/latest.csv`
+shows 100% of real CFB rows (1,626) resolving to `no_player_match` or
+`unsupported_stat_type` — zero `estimated`. `data/pickem/cache/cfbd/`
+has not been touched since Session 2.16's original 2025-season test
+(2026-09-12), despite the 2026 CFB season starting 2026-09-07 and hourly
+pipeline runs continuing since. This points to the `CFBD_API_KEY` GitHub
+Actions secret being missing or broken for the current season — CFB
+pricing, not just grading, is currently running blind. Confirmed live:
+running this session's new adapter against the real pipeline found all
+1,265 real closed CFB flags correctly (candidate selection, sport-label
+match, and stat-key resolution all wired right), but 0/1,265 graded —
+100% `no_player_match`, because `fetch_cfb_season_stats(2026)` returns
+empty with no real key available. This needs its own fix (re-issuing/
+re-adding the secret) before either this card or a real Underdog-CFB
+pricing check (the user's other ask this session) can close.
 
 **Validation (required to close session):**
-- [ ] Real sample of closed CFB flags graded and spot-checked by hand.
-- [ ] Confirmed no net-new CFBD API calls beyond what ingestion/estimation
-already budgets for.
+- [x] Adapter code exercised against real, live `clv_log.csv` — correctly
+found and attempted all 1,265 real closed CFB candidates; 0 graded, for
+the real, external reason stated above, not a bug in this session's code.
+- [x] `game_date_utc` join logic proven against CFBD's real, confirmed
+payload shape (4 new unit tests in `test_pickem_model.py`, using the same
+real `/games/players` structure Session 2.16 live-verified) — full suite
+73/73 passing.
+- [ ] **Not yet met:** a real sample of closed CFB flags actually graded
+and spot-checked by hand against CFBD's real results — blocked on the
+CFBD key issue above, not on anything in this session's code.
+- [x] Confirmed no net-new CFBD API calls: `game_dates` reuses the
+existing `/games` call `_fetch_games_index()` already made for
+week-finality; nothing new added.
 
 ### Session 2.29 — Tennis Real-Outcome Auto-Grading
 **Status:** Not started
