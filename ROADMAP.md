@@ -2492,10 +2492,12 @@ more soccer legs grade in, not yet a second confirmed instance of the
 Underdog-specific problem.
 
 ### Session 2.28 — CFB Real-Outcome Auto-Grading
-**Status:** ⚠️ Adapter built and tested (2026-09-15); live grading blocked
-by a separate, pre-existing real-data outage — see below. Not closing this
-card's checkbox until a real CFB flag has actually been graded, per this
-project's own "don't fabricate a validation" standard.
+**Status:** ⚠️ Adapter built and tested (2026-09-15); `CFBD_API_KEY` outage
+diagnosed and fixed by the user (2026-09-16); live grading still blocked,
+now for a narrower, real, external reason (CFBD hasn't posted week 3 box
+scores yet) — see below. Not closing this card's checkbox until a real CFB
+flag has actually been graded, per this project's own "don't fabricate a
+validation" standard.
 **Prerequisites:** Session 2.26 (generalized auto-grader).
 
 **What got built:** `CFB_ADAPTER` registered in `auto_grade_outcomes.py`,
@@ -2512,36 +2514,71 @@ both platforms use (confirmed live against clv_log.csv), not "CFB"/
 "NCAAF" as the card originally guessed.
 
 **A real, pre-existing problem found while validating this (not caused by
-this session, but directly blocks it):** `output/estimation/latest.csv`
-shows 100% of real CFB rows (1,626) resolving to `no_player_match` or
+this session, but directly blocked it):** `output/estimation/latest.csv`
+showed 100% of real CFB rows resolving to `no_player_match` or
 `unsupported_stat_type` — zero `estimated`. `data/pickem/cache/cfbd/`
-has not been touched since Session 2.16's original 2025-season test
-(2026-09-12), despite the 2026 CFB season starting 2026-09-07 and hourly
-pipeline runs continuing since. This points to the `CFBD_API_KEY` GitHub
-Actions secret being missing or broken for the current season — CFB
-pricing, not just grading, is currently running blind. Confirmed live:
-running this session's new adapter against the real pipeline found all
-1,265 real closed CFB flags correctly (candidate selection, sport-label
-match, and stat-key resolution all wired right), but 0/1,265 graded —
-100% `no_player_match`, because `fetch_cfb_season_stats(2026)` returns
-empty with no real key available. This needs its own fix (re-issuing/
-re-adding the secret) before either this card or a real Underdog-CFB
-pricing check (the user's other ask this session) can close.
+had not been touched since Session 2.16's original 2025-season test,
+despite the 2026 CFB season starting 2026-09-07. **Root cause, found by
+reading the real GitHub Actions job log directly:** every real CFBD call
+was failing with `Invalid leading whitespace, reserved character(s), or
+return character(s) in header value` — the `CFBD_API_KEY` secret's stored
+value contained a stray character (most likely a trailing newline from
+how it was originally pasted), which broke the `Authorization: Bearer
+<key>` header on every single request, for every week, both season types.
+This was a bad secret value, not a missing one, and not a bug in
+`cfb.py`'s own code.
+
+**Fix and re-verification (2026-09-16):** the user re-entered the secret
+value on GitHub. A second real, manually-triggered pipeline run
+(`Pick'em Pipeline #104`) confirmed the fix directly from the raw job
+log: **5,022 real CFB player-game rows loaded for the 2026 season**
+(previously 0), alongside real 2026 data for MLB (52,858 rows), EPL
+(2,549), tennis (5,488), and NFL (1,118) — the key is now genuinely
+working, and real `data/pickem/cache/cfbd/2026_*.json` files exist in the
+repo for the first time.
+
+**Remaining gap, found immediately after the key fix — narrower and
+purely external:** grading is still 0/1,265, but for a completely
+different, confirmed reason now. Every one of the 1,265 flagged CFB props
+is from games played 2026-09-12 (CFBD's real "week 3"). Checked directly:
+CFBD's `/games` endpoint confirms 71 real games were played that day, but
+its separate `/games/players` endpoint (the one with real per-player box
+scores) returned zero games for week 3, even though weeks 1 and 2
+(same run, same key) returned 99 and 86 real games respectively. This
+means CFBD itself has not yet published week 3's player-level stats, four
+days after those games — a real, external data-availability gap, not a
+key problem or a code bug. No further code change is needed: the
+existing cache design already treats an unfinished week as "not final"
+and will keep re-checking it automatically on every future hourly
+pipeline run, so these 1,265 flags should grade on their own once CFBD
+posts the data.
 
 **Validation (required to close session):**
-- [x] Adapter code exercised against real, live `clv_log.csv` — correctly
-found and attempted all 1,265 real closed CFB candidates; 0 graded, for
-the real, external reason stated above, not a bug in this session's code.
+- [x] Adapter code exercised against real, live `clv_log.csv`, twice —
+correctly found and attempted all 1,265 real closed CFB candidates both
+times; 0 graded, for the two real, external reasons traced above (bad key
+value, then CFBD's own week-3 data lag), not a bug in this session's code.
 - [x] `game_date_utc` join logic proven against CFBD's real, confirmed
 payload shape (4 new unit tests in `test_pickem_model.py`, using the same
 real `/games/players` structure Session 2.16 live-verified) — full suite
-73/73 passing.
-- [ ] **Not yet met:** a real sample of closed CFB flags actually graded
-and spot-checked by hand against CFBD's real results — blocked on the
-CFBD key issue above, not on anything in this session's code.
+73/73 passing. The real `startDate` field name assumption was also
+confirmed correct against the real, working key's response (888 real
+game dates captured for the 2026 regular season).
+- [ ] **Still not met:** a real sample of closed CFB flags actually graded
+and spot-checked by hand — blocked purely on CFBD publishing week 3's
+box scores, expected to resolve on its own via the existing hourly
+pipeline; re-check `data/pickem/cache/cfbd/2026_regular_wk3.json`'s
+`games` count in a future session/run.
 - [x] Confirmed no net-new CFBD API calls: `game_dates` reuses the
 existing `/games` call `_fetch_games_index()` already made for
 week-finality; nothing new added.
+
+**Unrelated issue noticed in passing (2026-09-16), not investigated or
+fixed this session:** the same pipeline run's soccer plug-in failed every
+single ESPN scoreboard call with a real `400 Client Error: Bad Request`
+(all leagues, all date ranges) — a new, separate regression from whatever
+Session 2.27 last verified working. Flagged here for a future session;
+out of this card's scope.
 
 ### Session 2.29 — Tennis Real-Outcome Auto-Grading
 **Status:** Not started

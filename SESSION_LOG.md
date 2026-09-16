@@ -13556,3 +13556,77 @@ line item on ROADMAP.md's Session 2.28 card rather than declared complete.
   session (no working key available) -- taken directly from CFBD's own published `/games` schema, same
   "offline-first, live-verify next" precedent Session 2.16 itself used before its own real key existed.
   Should be confirmed the next time a real key successfully makes this call.
+
+---
+
+## Session 2.28 follow-up -- CFBD_API_KEY diagnosed and fixed (2026-09-16)
+
+**What was actually done:** Diagnosed the real cause of the CFBD outage flagged at the end of the main
+Session 2.28 entry above, entirely by reading real GitHub Actions job logs directly (not guessed), then
+verified the user's fix with a second live pipeline run.
+
+1. **User asked to check the `CFBD_API_KEY` GitHub Actions secret.** Neither `gh` CLI nor a
+   GitHub-authenticated built-in browser session was available, so used Claude in Chrome (the user's
+   real, logged-in browser) to navigate to the workflow's Actions page directly.
+2. **Manually triggered a real pipeline run** (`Run workflow` on `pickem_pipeline.yml`, dispatching
+   `Pick'em Pipeline #100`) rather than waiting for the next hourly schedule, and read its real raw job
+   log (found via the run's "View raw logs" link, then fetched directly with `curl` against the signed
+   Azure blob URL GitHub issues for that link -- avoids the accessibility tree's virtualized-log
+   truncation entirely).
+3. **Found the real, exact root cause in the log**: every single CFBD call failed identically with
+   `Invalid leading whitespace, reserved character(s), or return character(s) in header value: '***'`
+   -- a Python `requests` error meaning the secret's stored value contained a character (almost
+   certainly a trailing newline from how it was originally pasted) that broke the `Authorization:
+   Bearer <key>` header. This affected every week/season-type call identically -- confirmed this was
+   the secret's value, not a per-endpoint bug.
+4. **Explicitly declined the user's offer to paste the raw key into chat** to debug it further --
+   unnecessary once the real error was already found from the log, and the safer path regardless (the
+   key would otherwise sit in this conversation's saved history for no benefit).
+5. **User re-entered the secret value on GitHub** (with email re-verification) and asked for a second
+   real test.
+6. **Triggered a second real pipeline run** (`Pick'em Pipeline #104`) and read its raw log the same way.
+   Confirmed directly: **5,022 real CFB player-game rows loaded for the 2026 season** (was 0), alongside
+   healthy real 2026 loads for MLB (52,858 rows), EPL (2,549), tennis (5,488), NFL (1,118) -- the key
+   fix worked. Real `data/pickem/cache/cfbd/2026_*.json` cache files (15 regular-season weeks + 4
+   postseason weeks + both games-index files) were created and committed for the first time.
+7. **Investigated why CFB grading was still 0/1,265 even with the key now working**, rather than
+   assuming the job was done. Pulled the newly-committed real cache locally and found: every one of the
+   1,265 flagged CFB props is from games played 2026-09-12 (CFBD's real "week 3"). Directly confirmed
+   `data/pickem/cache/cfbd/2026_regular_wk3.json` has `"games": []` even after the successful run, while
+   the separate `/games` endpoint's real data (also freshly fetched, same run) confirms 71 real games
+   were actually played that day. Weeks 1 and 2, fetched in the exact same run with the exact same key,
+   returned 99 and 86 real games respectively.
+8. **Conclusion: CFBD itself has not yet published week 3's player-level box scores**, four days after
+   the games -- a real, external data-availability gap on CFBD's side, not a bug in this
+   session's code or a remaining key problem. No further code change needed: the existing cache design
+   (this session's own `_fetch_games_index()`, extended from Session 2.16's original) already re-checks
+   any week not yet marked final on every future hourly run, so these 1,265 flags are expected to grade
+   automatically once CFBD posts the data -- no manual re-run required.
+
+**Real commands / evidence used (not assumed):**
+- Read the real raw GitHub Actions job logs for both triggered runs directly via their signed blob
+  URLs (`curl` against the `productionresultssa*.blob.core.windows.net` link from each run's "View raw
+  logs" menu item) -- necessary because the in-browser accessibility tree only exposes a truncated,
+  virtualized view of long logs.
+- `python -c "..."` locally against the newly-pulled real `data/pickem/cache/cfbd/2026_regular_wk3.json`
+  and `2026_regular_games_index.json` to confirm the real `games: []` count and the real 71-game count
+  from the separate index, respectively.
+
+**Decisions made:**
+1. **Did not accept the user's offer to share the raw secret value in chat.** The real error was already
+   identified from the log without it, and putting a credential (even a low-value free API key) into
+   the conversation transcript has no offsetting benefit once the diagnosis is already in hand.
+2. **Did not attempt any further code change for the week-3 gap** -- confirmed this is a real, external
+   CFBD data-publishing lag, not something `cfb.py`'s fetch/cache logic could work around, and the
+   existing "not final -> re-check next run" design already handles it correctly without intervention.
+
+**Open items / deferred validations:**
+- **Re-check `data/pickem/cache/cfbd/2026_regular_wk3.json` in a future session or the next real
+  pipeline run** -- once its real `games` count is non-zero, `auto_grade_outcomes.py --run` should grade
+  the 1,265 waiting CFB flags immediately, closing out Session 2.28's remaining validation checkbox.
+- **The Underdog-CFB cross-sport question (this session's other original ask, carried over from the
+  main Session 2.28 entry) remains unanswered** -- still no real graded CFB outcome data to check.
+- **A new, separate, real issue was spotted in passing, not investigated**: the same `Pick'em Pipeline
+  #104` run's soccer plug-in failed every single real ESPN scoreboard call with `400 Client Error: Bad
+  Request` (every league, every date range) -- a real regression from whatever Session 2.27 last
+  verified working. Not fixed or diagnosed further this session; flagged for a future session.
