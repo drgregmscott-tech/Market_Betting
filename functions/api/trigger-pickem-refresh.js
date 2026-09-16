@@ -1,5 +1,15 @@
 // Cloudflare Pages Function — Session 6.11.
 //
+// Lives at repo-root functions/, NOT frontend/functions/ -- confirmed the
+// hard way (real 405s in production) that Cloudflare Pages Functions must
+// sit alongside the build command's own working directory, which for this
+// project's Pages build command (`mkdir -p frontend/data && cp ...`,
+// referencing "frontend/data" as a relative path) is the repo root, even
+// though "frontend" is the configured build OUTPUT directory. Moving this
+// file into frontend/functions/ put it inside the output dir instead of
+// the project root, so Cloudflare fell back to normal static routing and
+// 405'd every POST instead of ever running this code.
+//
 // Backs the Pick'em tab's "Force new pull" button. A static page cannot
 // safely call GitHub's Actions API itself (that would mean embedding a
 // GitHub token in client-side JS, readable by anyone), so this function
