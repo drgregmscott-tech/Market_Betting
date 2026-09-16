@@ -13830,3 +13830,72 @@ start grading for real.
   `tennis.py` (singles-only archive) before this session and remain so — `opponent_name`/tie-break logic
   added this session does not change that; a doubles flag still falls through to `no_player_match` before
   ever reaching `find_tennis_game_row()`.
+
+## Session 2.30 — NHL Go/No-Go Checkpoint
+
+**Date completed:** 2026-09-16
+**Status:** ✅ Complete — decision recorded: **defer NHL pick'em support indefinitely** (not "never,"
+re-evaluate at the two named trigger conditions below). No code changed this session — decision-only,
+per this card's own "mirrors Session 7.0" framing.
+
+**What this session evaluated:**
+Whether NHL pick'em (PrizePicks/Underdog) volume/edge opportunity justifies the real cost of a 6th
+sport's full build — ingestion + estimation + grading — given what Sessions 2.26–2.29 and 2.31 just
+showed about how expensive full validation is per sport, and what state the 5 already-in-pipeline
+sports are actually in today.
+
+**Real evidence weighed (all already on record from prior sessions, re-read directly, not re-derived):**
+1. **Underdog is not currently usable as a flag source in ANY sport.** Session 2.31's real finding:
+   Underdog's real win rate is below the 57.74% breakeven in both sports checked (MLB 46.4%, NFL
+   49.5%) and *falls* as the model's stated edge rises — a genuine platform-level informational gap
+   (Underdog's price reflects real lineup/injury news the model doesn't have yet), not a data bug.
+   Session 2.32 built a starter/lineup-confirmation signal to address this, MLB-only, but its real
+   predictive value is explicitly still open pending Session 2.33's live validation window. Adding a
+   6th sport today means adding it on a platform where roughly half of PrizePicks/Underdog's real
+   volume (Underdog's share) is already known to be untrustworthy, with the fix unproven.
+2. **Per-sport build cost has been real and non-trivial, not incremental.** CFB (Session 2.28) needed
+   its own real join-key fix work; tennis (Session 2.29) needed an entirely new join key (no per-match
+   date field exists in the free archive) and caught two real silent-wrong-grade bugs along the way,
+   and even after a full session of work returned 0 real graded legs because the free archive itself
+   (`Aneeshers/tennis-sackmann-archive`) is ~4 months stale. Each new sport has cost a full session and
+   surfaced a real, sport-specific gap that could only be found by hand-checking real output — this is
+   not a shape that scales cheaply to a 6th sport.
+3. **The mechanism itself is sport-agnostic, which argues against urgency, not against eventually
+   building.** Session 2.31's own conclusion was that the Underdog problem is a platform-level pricing
+   gap, not a per-sport one — consistent with this project's general Track Reference thesis ("market
+   structure, not sport, determines efficiency"). That means NHL would not unlock a *different* kind of
+   edge than MLB/NFL/soccer already validate on PrizePicks — it would just add real flag *volume* on an
+   already-understood mechanism. Volume has value, but it doesn't carry the same urgency as unlocking a
+   new edge source would.
+4. **No real NHL pick'em volume exists to build against right now.** As of this session's real date
+   (2026-09-16), the NHL regular season has not started (opens ~2026-10-07); PrizePicks/Underdog carry
+   little to no real NHL prop volume during preseason. Building ingestion now would mean shipping a
+   plug-in with nothing real to validate it against for roughly three more weeks — the same
+   "don't validate on hope" standard this project already applies to every other track.
+
+**Decision:** **Defer.** Do not scope NHL sessions now. Two explicit trigger conditions for revisiting,
+so this isn't a silent indefinite shelf:
+- **Trigger 1:** Session 2.33's live validation window closes with a real verdict on whether the
+  starter/lineup-confirmation gate actually predicts trustworthy Underdog flags. If it does, Underdog's
+  real usable volume across all sports goes up, making a 6th sport's incremental volume worth more per
+  session of build cost than it is today.
+- **Trigger 2:** The NHL regular season starts (~2026-10-07) AND PrizePicks/Underdog are confirmed to
+  carry real, non-trivial NHL prop volume at that point (a five-minute live check next time this card
+  is revisited, not an assumption).
+Both conditions should hold, not just one, before scoping a real NHL build session — building on NHL
+volume alone, with Underdog still unresolved, would repeat the same "don't build without a real
+validated mechanism" mistake this checkpoint pattern exists to prevent (see Session 7.0's identical
+framing for the flagship-sportsbook track).
+
+**Files touched:** None (decision-only session, per this card's own scope).
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- Re-run this go/no-go check once both trigger conditions above are checked directly against real,
+  current data — do not treat this session's reasoning as still valid without re-verification, since
+  both triggers are time-dependent (Session 2.33's outcome, the NHL season's actual start).
+- If/when a future session decides "go," it should follow the Session 2.12–2.18 pattern (architecture,
+  then per-sport support, then grading) across its own new session numbers, matching Session 2.28/2.29's
+  precedent for what a new sport's real build cost looks like (a dedicated join-key investigation should
+  be expected up front, not assumed to be a copy-paste of an existing plug-in).

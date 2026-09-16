@@ -2610,7 +2610,10 @@ and today's honest "(graded through — no legs graded yet)" otherwise --
 never a blanket "Validated" that would overstate freshness.
 
 ### Session 2.30 — NHL Go/No-Go Checkpoint
-**Status:** Not started
+**Status:** ✅ Complete (2026-09-16) — decision: **defer indefinitely**, not a permanent retirement.
+Two explicit trigger conditions recorded for revisiting (Session 2.33's live-validation verdict on the
+Underdog starter/lineup gate, AND a confirmed real NHL prop volume check once the season starts
+~2026-10-07). See SESSION_LOG.md for full reasoning.
 **Prerequisites:** None (can run independently of 2.27–2.29).
 
 **Why this is its own, different kind of session:** Unlike MLB/soccer/
@@ -2627,14 +2630,23 @@ just shown how much work full validation takes per sport already in the
 pipeline. Records an explicit build/skip decision.
 
 **Validation (required to close session):**
-- [ ] Explicit decision recorded: build NHL support or defer indefinitely
+- [x] Explicit decision recorded: build NHL support or defer indefinitely —
+**defer**, per real evidence weighed in SESSION_LOG.md: Underdog is not
+currently usable as a flag source in any sport (Session 2.31), the
+starter/lineup-gate fix's real predictive value is still open (Session 2.33
+not yet run), each new sport has cost a full session with its own
+sport-specific join/data gap (Sessions 2.28/2.29), and no real NHL prop
+volume exists yet this early in the offseason (season opens ~2026-10-07).
 - [ ] If building: scoped into its own future sessions (2.31–2.33 are the
 Underdog investigation/fix below, not NHL — pick the next free session
 number when this is taken up) following the Session 2.12–2.18 pattern
 (architecture, then per-sport support, then grading) rather than one
-monolithic session
-- [ ] If deferring: stated here as an explicit, documented decision, not a
-silent gap
+monolithic session — **N/A this session, deferred.**
+- [x] If deferring: stated here as an explicit, documented decision, not a
+silent gap — two explicit trigger conditions recorded (Session 2.33's
+verdict on the Underdog gate; a confirmed real NHL volume check once the
+season starts) for when to re-open this checkpoint, rather than an
+unconditional indefinite shelf.
 
 ### Session 2.31 — Underdog Cross-Sport Pricing Gap Investigation
 **Status:** ✅ Complete (2026-09-15) — measurement only, no model change.
