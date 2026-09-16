@@ -1,0 +1,66 @@
+{
+  "data": [
+    {
+      "type": "projection",
+      "id": "pp-1001",
+      "attributes": {
+        "stat_display_name": "Points",
+        "stat_type": "Points",
+        "line_score": 27.5,
+        "status": "pre_game",
+        "start_time": "2026-08-30T00:00:00Z"
+      },
+      "relationships": {
+        "new_player": {
+          "data": {
+            "type": "new_player",
+            "id": "player-1"
+          }
+        },
+        "league": {
+          "data": {
+            "type": "league",
+            "id": "league-1"
+          }
+        },
+        "game": {
+          "data": {
+            "type": "game",
+            "id": "game-1"
+          }
+        }
+      }
+    },
+    {
+      "type": "projection",
+      "id": "pp-1002",
+      "relationships": {}
+    }
+  ],
+  "included": [
+    {
+      "type": "new_player",
+      "id": "player-1",
+      "attributes": {
+        "display_name": "Test Player A",
+        "team_name": "Test Team"
+      }
+    },
+    {
+      "type": "league",
+      "id": "league-1",
+      "attributes": {
+        "name": "NBA"
+      }
+    },
+    {
+      "type": "game",
+      "id": "game-1",
+      "attributes": {
+        "start_time": "2026-08-30T00:00:00Z"
+      }
+    }
+  ],
+  "links": {},
+  "meta": {}
+}
