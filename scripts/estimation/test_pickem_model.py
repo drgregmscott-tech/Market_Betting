@@ -55,6 +55,7 @@ from pickem_sport_plugins.mlb import (
 )
 from pickem_sport_plugins.nfl import NFL_PLUGIN
 from pickem_sport_plugins.soccer import SOCCER_PLUGIN, _fetch_event_player_rows
+from pickem_sport_plugins.tennis import TENNIS_PLUGIN, _flatten_matches
 
 GOLDEN_PATH = (
     Path(__file__).resolve().parents[2]
@@ -869,6 +870,33 @@ def test_cfb_flatten_game_date_utc_none_when_missing():
     games = [_cfb_game(999, "9002", "Test RB", "88")]
     rows = _flatten_game_players(games, game_dates={})
     assert rows[0]["game_date_utc"] is None
+
+
+def test_tennis_plugin_registered_sport_label():
+    assert plugin_for_sport("tennis") is TENNIS_PLUGIN
+
+
+def test_tennis_flatten_attaches_opponent_name_and_tourney_date():
+    """Session 2.29: unlike every other sport, tennis's own `tourney_date`
+    is the TOURNAMENT's start date, shared by every match in a multi-round
+    event, not this individual match's real date (confirmed live against
+    the real 2026 archive -- see _flatten_matches()' own comment). This
+    plug-in therefore carries `opponent_name` on every row so
+    auto_grade_outcomes.py's TENNIS_ADAPTER can join on the flag's real
+    opponent (from game_matchup) instead of on date."""
+    matches = pd.DataFrame([{
+        "winner_id": 100, "winner_name": "Player A",
+        "loser_id": 200, "loser_name": "Player B",
+        "tourney_date": 20260601, "match_num": 1,
+        "score": "6-3 6-4",
+        "w_ace": 5, "w_df": 1, "l_ace": 2, "l_df": 3,
+        "w_bpFaced": 4, "w_bpSaved": 2, "l_bpFaced": 3, "l_bpSaved": 1,
+    }])
+    rows = {r["player_id"]: r for r in _flatten_matches(matches, "atp")}
+    assert rows["atp_100"]["opponent_name"] == "Player B"
+    assert rows["atp_100"]["tourney_date"] == 20260601
+    assert rows["atp_200"]["opponent_name"] == "Player A"
+    assert rows["atp_200"]["tourney_date"] == 20260601
 
 
 if __name__ == "__main__":

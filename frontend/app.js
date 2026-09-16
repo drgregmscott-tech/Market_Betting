@@ -166,8 +166,23 @@ function isTrueField(v) {
 // platforms use for college football (confirmed live against
 // data/pickem/clv_log.csv), graded by auto_grade_outcomes.py's new
 // CFB_ADAPTER.
+//
+// Session 2.29: "tennis" added -- graded by the new TENNIS_ADAPTER, which
+// (unlike every other adapter) joins on real opponent name, not date,
+// because the free archive it reads is lag-based (see
+// pickem_sport_plugins/tennis.py's own docstring and
+// auto_grade_outcomes.py's find_tennis_game_row). sportStatusBadgeHtml()
+// below appends tennis's own real "graded through" date to its badge so
+// this lag is visible on the page, not implied away by a plain
+// "Validated" label the way same-day sports can use safely.
 // ---------------------------------------------------------------------
-const VALIDATED_SPORTS = new Set(["nfl", "mlb", "soccer", "fifa", "epl", "cfb"]);
+const VALIDATED_SPORTS = new Set(["nfl", "mlb", "soccer", "fifa", "epl", "cfb", "tennis"]);
+
+// Session 2.29: sport (lowercase) -> latest real game_start_time (ISO
+// date string) among that sport's GRADED legs, joined from clv_log.csv by
+// flag_id inside renderOutcomeStats(). Used only to show tennis's real
+// grading lag on its status badge -- see VALIDATED_SPORTS comment above.
+const sportGradedThroughDate = new Map();
 
 function isValidatedSport(sport) {
   return VALIDATED_SPORTS.has(String(sport || "").trim().toLowerCase());
@@ -977,7 +992,7 @@ const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
 // shows every sport's own real numbers separately, whether validated or
 // not, so nothing is hidden -- just not blended into one number that
 // implies more than it should.
-function renderOutcomeStats(rows) {
+function renderOutcomeStats(rows, gameStartByFlagId) {
   const allGraded = rows.filter((r) => r.result === "win" || r.result === "loss");
   const graded = allGraded.filter((r) => isValidatedSport(r.sport));
   const wins = graded.filter((r) => r.result === "win").length;
@@ -1000,6 +1015,7 @@ function renderOutcomeStats(rows) {
   // init() now awaits initOutcomeReview() before initPickem() instead of
   // running both in parallel (see init()'s own comment).
   sportPerformance.clear();
+  sportGradedThroughDate.clear();
   allGraded.forEach((r) => {
     const sport = String(r.sport || "").trim().toLowerCase();
     if (!sport) return;
@@ -1007,6 +1023,16 @@ function renderOutcomeStats(rows) {
     const entry = sportPerformance.get(sport);
     entry.total += 1;
     if (r.result === "win") entry.wins += 1;
+
+    // Session 2.29: real "graded through" date, used only for tennis's
+    // badge (see VALIDATED_SPORTS comment) -- tracked for every sport at
+    // no extra cost, in case another lag-based source needs it later.
+    const gameStart = gameStartByFlagId && gameStartByFlagId.get(r.flag_id);
+    if (gameStart) {
+      const gameDate = gameStart.slice(0, 10);
+      const prevDate = sportGradedThroughDate.get(sport);
+      if (!prevDate || gameDate > prevDate) sportGradedThroughDate.set(sport, gameDate);
+    }
   });
 
   renderPerSportOutcomeTable();
@@ -1054,21 +1080,37 @@ function renderPerSportOutcomeTable() {
 // the per-sport outcome table (which always shows a status, including
 // the good one) -- rowCautionBadgeHtml() (above) is the compact sibling
 // used everywhere a blank cell is the right answer when things are fine.
+// Session 2.29: tennis's real archive is lag-based (see VALIDATED_SPORTS
+// comment) -- appended to every one of this badge's four real outcomes
+// for tennis specifically, so the badge never implies same-day grading
+// the way it correctly can for NFL/MLB/soccer/EPL/CFB.
+function gradingLagSuffix(sport) {
+  const normSport = String(sport || "").trim().toLowerCase();
+  if (normSport !== "tennis") return { text: "", title: "" };
+  const throughDate = sportGradedThroughDate.get(normSport);
+  const text = throughDate ? ` (graded through ${throughDate})` : " (graded through — no legs graded yet)";
+  const title = throughDate
+    ? ` Tennis grading reads a free, lag-based archive that updates well behind real match completion (see docs) -- the most recent real match graded here started ${throughDate}, not today.`
+    : " Tennis grading reads a free, lag-based archive that updates well behind real match completion -- no real match has graded here yet.";
+  return { text, title };
+}
+
 function sportStatusBadgeHtml(sport) {
   const status = classifySportStatus(sport);
   if (status === "unvalidated") return unvalidatedBadgeHtml(sport);
 
+  const lag = gradingLagSuffix(sport);
   const perf = sportPerformance.get(String(sport || "").trim().toLowerCase());
   const total = perf ? perf.total : 0;
   if (status === "small_sample") {
     const detail = total === 0 ? "no flags have graded yet" : `only ${total} graded leg(s) so far`;
-    return `<span class="unvalidated-badge" title="Real-outcome grading exists for ${escapeAttr(sport)}, but ${detail} -- too small a sample to trust yet.">Validated — building sample</span>`;
+    return `<span class="unvalidated-badge" title="Real-outcome grading exists for ${escapeAttr(sport)}, but ${detail} -- too small a sample to trust yet.${escapeAttr(lag.title)}">Validated — building sample${escapeHtml(lag.text)}</span>`;
   }
   const winRate = perf.wins / perf.total;
   if (status === "profitable") {
-    return `<span class="status-badge-pos" title="Real win rate (${(winRate * 100).toFixed(1)}%) clears the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample.">Validated — profitable</span>`;
+    return `<span class="status-badge-pos" title="Real win rate (${(winRate * 100).toFixed(1)}%) clears the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample.${escapeAttr(lag.title)}">Validated — profitable${escapeHtml(lag.text)}</span>`;
   }
-  return `<span class="status-badge-neg" title="Real win rate (${(winRate * 100).toFixed(1)}%) is BELOW the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample -- real grading exists, but the real result says don't bet this yet.">Validated — underperforming</span>`;
+  return `<span class="status-badge-neg" title="Real win rate (${(winRate * 100).toFixed(1)}%) is BELOW the ${(BREAKEVEN_WIN_RATE * 100).toFixed(2)}% breakeven on a real ${total}-leg sample -- real grading exists, but the real result says don't bet this yet.${escapeAttr(lag.title)}">Validated — underperforming${escapeHtml(lag.text)}</span>`;
 }
 
 function renderReviewSummary(reviewRows) {
@@ -1087,11 +1129,32 @@ function renderReviewSummary(reviewRows) {
 }
 
 async function initOutcomeReview() {
+  // Session 2.29: outcome_log.csv rows don't carry game_start_time (see
+  // outcome_tracker.py's OUTCOME_LOG_COLUMNS), so a real "graded through"
+  // date for tennis (see VALIDATED_SPORTS comment) needs a join back to
+  // clv_log.csv by flag_id. A small, self-contained extra fetch here --
+  // deliberately not reusing initPickem()'s own DATA_URL fetch, since
+  // init() awaits this function BEFORE initPickem() runs (see init()'s
+  // own comment) and this must not create an ordering dependency between
+  // the two.
+  let gameStartByFlagId = new Map();
+  try {
+    const res = await fetch(DATA_URL, { cache: "no-store" });
+    if (res.ok) {
+      const clvRows = parseCSV(await res.text());
+      clvRows.forEach((r) => {
+        if (r.flag_id && r.game_start_time) gameStartByFlagId.set(r.flag_id, r.game_start_time);
+      });
+    }
+  } catch (err) {
+    console.error("Market_Betting frontend: failed to load clv_log.csv for grading-lag lookup.", err);
+  }
+
   try {
     const res = await fetch(OUTCOME_DATA_URL, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const rows = parseCSV(await res.text());
-    renderOutcomeStats(rows);
+    renderOutcomeStats(rows, gameStartByFlagId);
   } catch (err) {
     console.error("Market_Betting frontend: failed to load real-outcome grading data.", err);
   }

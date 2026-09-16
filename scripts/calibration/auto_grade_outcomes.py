@@ -88,13 +88,24 @@ in principle roll the Eastern-converted date forward a day -- unconfirmed
 either way, since this session had no working CFBD_API_KEY to check a
 real payload against).
 
+SESSION 2.29 -- TENNIS ADDED, THE FIRST ADAPTER THAT ISN'T DATE-BASED
+-------------------------------------------------------------------
+Every prior adapter joins on (player, real calendar date). Tennis can't:
+`pickem_sport_plugins/tennis.py`'s own `tourney_date` is the TOURNAMENT's
+start date, shared by every match in a multi-round event, not the
+individual match's date -- confirmed live against the real archive (see
+that plug-in's own comment). `find_game_row`'s contract therefore grew a
+5th argument, the full flag row, so tennis's adapter (the only one that
+needs it) can join on `game_matchup`'s real opponent name instead -- see
+`find_tennis_game_row`'s own docstring. This is also the adapter where
+"lag-based" (the archive updates well behind real match completion,
+tennis.py's own docstring) becomes directly visible: a match not yet in
+the archive produces no row at all, not a wrong guess.
+
 WHAT THIS DOES NOT DO (stated gap, not a silent one)
 -------------------------------------------------------
 - Grades only sports with a registered adapter in ADAPTERS below: NFL,
-  MLB, soccer/EPL, CFB, as of this session. Tennis is explicitly left
-  ungraded until Session 2.29 registers its own adapter -- that session's
-  whole job should be "add one GradingAdapter and its find_game_row
-  logic," not touching this file's shared logic again.
+  MLB, soccer/EPL, CFB, tennis, as of this session.
   NBA has an estimation plug-in but is not scheduled for grading yet
   (ROADMAP.md Session 2.26 card: NBA's season hasn't started, nothing
   real to validate against right now). Manual `outcome_tracker.py
@@ -145,6 +156,7 @@ from pickem_sport_plugins.epl import EPL_PLUGIN  # noqa: E402
 from pickem_sport_plugins.mlb import MLB_PLUGIN  # noqa: E402
 from pickem_sport_plugins.nfl import NFL_PLUGIN  # noqa: E402
 from pickem_sport_plugins.soccer import SOCCER_PLUGIN  # noqa: E402
+from pickem_sport_plugins.tennis import TENNIS_PLUGIN  # noqa: E402
 from season_utils import current_pickem_season  # noqa: E402
 
 # Reuse outcome_tracker.py's existing log-loading/schema logic directly --
@@ -254,7 +266,8 @@ def load_nfl_schedule() -> pd.DataFrame:
 
 
 def find_nfl_game_row(
-    stats_df: pd.DataFrame, schedule_df: pd.DataFrame, player_id: str, flag_date: date
+    stats_df: pd.DataFrame, schedule_df: pd.DataFrame, player_id: str, flag_date: date,
+    flag_row: pd.Series,
 ) -> Optional[pd.Series]:
     """Among this player's own real game rows this season (one per week
     they played), finds the one whose scheduled date matches the flag's
@@ -283,7 +296,8 @@ def find_nfl_game_row(
 
 
 def find_mlb_game_row(
-    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date
+    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date,
+    flag_row: pd.Series,
 ) -> Optional[pd.Series]:
     """MLB Stats API's gameLog already reports each game's real calendar
     date directly (mlb.py's fetch_stats() carries it through as
@@ -299,7 +313,8 @@ def find_mlb_game_row(
 
 
 def find_soccer_or_epl_game_row(
-    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date
+    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date,
+    flag_row: pd.Series,
 ) -> Optional[pd.Series]:
     """Session 2.27: unlike MLB Stats API's gameLog (already a local civil
     date) or nflverse's schedule file (already the game's own Eastern
@@ -350,6 +365,131 @@ def find_soccer_or_epl_game_row(
     return None
 
 
+# Session 2.29: see find_tennis_game_row's "fix #2" comment. 21 days
+# generously covers even a 2-week Slam plus a few real slack days for the
+# archive to post a just-finished match.
+TENNIS_MAX_LAG_DAYS = 21
+
+
+def find_tennis_game_row(
+    stats_df: pd.DataFrame, context: object, player_id: str, flag_date: date,
+    flag_row: pd.Series,
+) -> Optional[pd.Series]:
+    """Session 2.29: unlike every other sport's adapter, this one does NOT
+    match on date at all. `pickem_sport_plugins/tennis.py`'s own
+    `tourney_date` is the TOURNAMENT's start date, shared by every match
+    in a (possibly multi-week) event, not the individual match's real
+    calendar date -- confirmed live against the real 2026 archive (see
+    that plug-in's `_flatten_matches()` comment). Matching this flag's
+    `flag_date` against `tourney_date` would silently accept the WRONG
+    match for any player who played more than one match in the same
+    event (the normal case past round 1), not a rare edge case.
+
+    Instead, this matches on the one real, always-present signal the flag
+    itself carries: `game_matchup` (e.g. "Ena Koike @ Sara Sorribes
+    Tormo"), a real opponent name for this specific match, sourced from
+    PrizePicks/Underdog's own listing -- checked live, 2026-09-12, against
+    `data/pickem/clv_log.csv`'s real tennis rows. `player_id`'s own player
+    is one side; the other name in `game_matchup` is the real opponent.
+    Every flattened row here carries `opponent_name` (added this session)
+    for exactly this join. If a player faced the same real opponent more
+    than once this season (checked live: real, not just theoretical --
+    e.g. Sabalenka/Rybakina played 3 times in early 2026 alone), this is
+    genuinely ambiguous and declined (returns None) rather than guessed
+    at -- see the comment below the candidate-count check for the real
+    wrong-grade this caught before shipping.
+
+    This IS the real, stated reason tennis grading trails real match
+    completion (the module/ROADMAP.md's "lag-based" note): a match that
+    hasn't reached Sackmann's archive yet simply produces no row here at
+    all, correctly falling through to no_game_match rather than a wrong
+    date-based guess."""
+    player_rows = stats_df[stats_df["player_id"] == player_id]
+    if player_rows.empty or "opponent_name" not in player_rows.columns:
+        return None
+
+    matchup = flag_row.get("game_matchup")
+    player_name = flag_row.get("player_name")
+    if not isinstance(matchup, str) or "@" not in matchup or not isinstance(player_name, str):
+        return None
+    side_a, _, side_b = matchup.partition("@")
+    side_a, side_b = side_a.strip(), side_b.strip()
+    player_norm = normalize_name(player_name)
+    if normalize_name(side_a) == player_norm:
+        opponent_label = side_b
+    elif normalize_name(side_b) == player_norm:
+        opponent_label = side_a
+    else:
+        return None
+    opponent_norm = normalize_name(opponent_label)
+    if not opponent_norm:
+        return None
+
+    candidates = player_rows[
+        player_rows["opponent_name"].apply(lambda n: normalize_name(n) == opponent_norm)
+    ]
+    if candidates.empty:
+        return None
+
+    # Session 2.29 fix #2, found by a SECOND real hand spot-check: even
+    # with exactly one archived match against this real opponent, nothing
+    # yet confirms that match IS the one the flag is about -- two players
+    # can face each other more than once across a season, and this
+    # archive is checked live to run through 2026-05-25 only, ~4 real
+    # months behind a real 2026-09-14 flag. Without a date guard, a
+    # months-old match against the same opponent would be accepted as
+    # this flag's real result just because it happens to be the only one
+    # cached so far -- the same silent-wrong-grade failure mode as fix #1
+    # below, just requiring 1 candidate instead of 2+ to trigger. A real
+    # match's `tourney_date` is the tournament's START (see module
+    # docstring), and a flag's `game_start_time` is the match's actual
+    # day, so a genuine match should have tourney_date at or shortly
+    # before flag_date -- never after, and not many weeks before either
+    # (the longest real events, the Slams, run ~2 weeks). TENNIS_MAX_LAG_DAYS
+    # below is a deliberately generous bound (allows the flag's game to
+    # fall on the LAST day of a 3-week event) -- outside it, this is
+    # treated as "not in the archive yet" (no_game_match) rather than
+    # guessed.
+    try:
+        flag_ordinal = flag_date.toordinal()
+
+        def _within_window(row: pd.Series) -> bool:
+            td = row.get("tourney_date")
+            try:
+                td_int = int(td)
+                td_date = date(td_int // 10000, (td_int // 100) % 100, td_int % 100)
+            except (TypeError, ValueError):
+                return False
+            lag_days = flag_ordinal - td_date.toordinal()
+            return 0 <= lag_days <= TENNIS_MAX_LAG_DAYS
+
+        candidates = candidates[candidates.apply(_within_window, axis=1)]
+    except (TypeError, ValueError):
+        return None
+    if candidates.empty:
+        return None
+    if len(candidates) == 1:
+        return candidates.iloc[0]
+
+    # Session 2.29 fix #1, found by a real hand spot-check before this was
+    # ever shipped: an EARLIER version of this function picked the
+    # candidate whose tourney_date was numerically closest to flag_date
+    # as an approximate tie-break. Checked live against a real flag
+    # (Elena Rybakina @ Aryna Sabalenka, 2026-09-12, games_total under
+    # 23.0): the real September match is not in the archive yet (its real
+    # lag -- see module docstring), but Sabalenka and Rybakina had ALSO
+    # played each other three times earlier in 2026 (Australian Open,
+    # Indian Wells, Miami) -- "closest date" silently matched the flag to
+    # the March Miami match (actual=19, a real but WRONG result) instead
+    # of honestly reporting no_game_match. That is exactly the kind of
+    # silent wrong-answer this project's "don't guess" standard exists to
+    # prevent (same reasoning as every unsupported-stat-type gap elsewhere
+    # in this codebase) -- a false grade is worse than an ungraded flag.
+    # Same real opponent more than once this season is therefore treated
+    # as genuinely ambiguous and declined, not guessed at.
+    return None
+
+
 @dataclass
 class GradingAdapter:
     """The one real per-sport variable in auto-grading: how to find a
@@ -362,7 +502,12 @@ class GradingAdapter:
     # schedule file. Returns whatever `find_game_row` needs as `context`;
     # sports with no such dependency (MLB) just return None.
     load_context: Callable[[], object]
-    find_game_row: Callable[[pd.DataFrame, object, str, date], Optional[pd.Series]]
+    # Session 2.29: gained a 5th arg (the full flag row) so tennis's
+    # adapter can match on `game_matchup` -- see find_tennis_game_row's
+    # docstring for why date alone (every other sport's join key) doesn't
+    # work for tennis. Every adapter receives the same 5 args now; sports
+    # that don't need the row (NFL/MLB/soccer/EPL/CFB) simply ignore it.
+    find_game_row: Callable[[pd.DataFrame, object, str, date, pd.Series], Optional[pd.Series]]
 
 
 NFL_ADAPTER = GradingAdapter(
@@ -380,12 +525,12 @@ EPL_ADAPTER = GradingAdapter(
 CFB_ADAPTER = GradingAdapter(
     plugin=CFB_PLUGIN, load_context=lambda: None, find_game_row=find_soccer_or_epl_game_row
 )
+TENNIS_ADAPTER = GradingAdapter(
+    plugin=TENNIS_PLUGIN, load_context=lambda: None, find_game_row=find_tennis_game_row
+)
 
-# Session 2.29 adds one adapter here (tennis) -- that should be the only
-# change this file needs per new sport, per the module docstring's whole
-# point in generalizing this.
 ADAPTERS: list[GradingAdapter] = [
-    NFL_ADAPTER, MLB_ADAPTER, SOCCER_ADAPTER, EPL_ADAPTER, CFB_ADAPTER,
+    NFL_ADAPTER, MLB_ADAPTER, SOCCER_ADAPTER, EPL_ADAPTER, CFB_ADAPTER, TENNIS_ADAPTER,
 ]
 
 
@@ -562,7 +707,7 @@ def _run_adapter(
             continue
         kind, columns = parsed
 
-        game_row = adapter.find_game_row(stats_df, context, player_id, flag_date)
+        game_row = adapter.find_game_row(stats_df, context, player_id, flag_date, row)
         if game_row is None:
             no_game_match += 1
             continue

@@ -293,10 +293,29 @@ def _flatten_matches(matches: pd.DataFrame, tour_prefix: str) -> list[dict]:
         loser_bp_won = _safe_num(m.get("w_bpFaced")) - _safe_num(m.get("w_bpSaved"))
 
         sort_key = _sort_key(m)
+        # Session 2.29: `tourney_date` is the TOURNAMENT's own start date,
+        # shared by every match in a (possibly multi-week) event -- not
+        # this individual match's real calendar date. Confirmed live
+        # against the real 2026 archive (e.g. the "United Cup" tourney_id
+        # 2026-9900 carries the identical tourney_date 20260105 across 20
+        # different real matches). That rules out date-based grading the
+        # way every other sport's adapter uses it (auto_grade_outcomes.py
+        # docstring) -- this plug-in instead carries `opponent_name` on
+        # every row so the grader can match a flag to its real match by
+        # (player, real opponent) from the flag's own `game_matchup`
+        # field, not by date. `tourney_date` is kept too, only as an
+        # approximate tie-breaker if a player faces the same real opponent
+        # more than once in a season (rare, e.g. a tour-then-rematch).
+        try:
+            tourney_date = int(m.get("tourney_date"))
+        except (TypeError, ValueError):
+            tourney_date = None
 
         rows.append({
             "player_id": f"{tour_prefix}_{int(winner_id)}",
             "player_display_name": winner_name,
+            "opponent_name": loser_name,
+            "tourney_date": tourney_date,
             "sort_key": sort_key,
             "ace": _safe_num(m.get("w_ace")),
             "df": _safe_num(m.get("w_df")),
@@ -311,6 +330,8 @@ def _flatten_matches(matches: pd.DataFrame, tour_prefix: str) -> list[dict]:
         rows.append({
             "player_id": f"{tour_prefix}_{int(loser_id)}",
             "player_display_name": loser_name,
+            "opponent_name": winner_name,
+            "tourney_date": tourney_date,
             "sort_key": sort_key,
             "ace": _safe_num(m.get("l_ace")),
             "df": _safe_num(m.get("l_df")),

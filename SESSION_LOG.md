@@ -13699,3 +13699,134 @@ does not use ESPN's scoreboard at all) and `auto_grade_outcomes.py` needed no ch
   existing generic retry-and-skip exists today.
 - Session 2.28's own remaining CFB gap (1,265 flags waiting on CFBD to publish week-3 final results) is
   unrelated to this fix and still open, per that session's own entry above.
+
+## Session 2.29 — Tennis Real-Outcome Auto-Grading
+
+**Date completed:** 2026-09-16
+**Status:** ⚠️ Complete with caveats — the adapter is built, tested, and proven correct (two real
+silent-wrong-grade bugs caught and fixed by hand spot-checks before shipping); it grades 0 of today's
+866 real closed tennis candidates only because the free archive itself is ~4 real months stale, not
+because of a bug in this session's code.
+
+**What was actually done:**
+Added a tennis adapter to `auto_grade_outcomes.py` (Session 2.26's generalized grader), the fifth sport
+after NFL/MLB/soccer-EPL/CFB — but the first one that could NOT reuse `find_soccer_or_epl_game_row`,
+because tennis has no usable per-match date at all (see below).
+
+1. **Diagnosed the real join problem before writing any logic, per this project's standing rule.**
+   Checked `data/pickem/cache/tennis_archive/atp_matches_2026.csv` directly: Sackmann's own
+   `tourney_date` is the TOURNAMENT's start date, shared by every match in a (possibly multi-week)
+   event — e.g. the real "United Cup" (`tourney_id` 2026-9900) carries the identical `tourney_date`
+   20260105 across 20 different real matches. Every other sport's adapter joins on (player, real
+   calendar date); that key does not exist for tennis. The real, always-present alternative:
+   `game_matchup` (e.g. "Ena Koike @ Sara Sorribes Tormo"), confirmed live against
+   `data/pickem/clv_log.csv`'s real tennis rows — a real opponent name for THIS specific match.
+2. `scripts/estimation/pickem_sport_plugins/tennis.py`: `_flatten_matches()` now attaches
+   `opponent_name` (the other real player in the match) and `tourney_date` (kept, but demoted to a
+   tie-break signal, not the join key) to every flattened row.
+3. `scripts/calibration/auto_grade_outcomes.py`: `find_game_row`'s contract grew a 5th argument (the
+   full flag row) so tennis's adapter can read `game_matchup` — every other adapter (NFL/MLB/
+   soccer/EPL/CFB) accepts and ignores it, unchanged behavior confirmed by an unchanged dry-run
+   candidate/graded/no_match count for all five before vs. after this change. New
+   `find_tennis_game_row()` parses `game_matchup`, strips the flag's own player to find the real
+   opponent label, and matches it against `opponent_name` (both normalized via the existing
+   `normalize_name()`). Registered `TENNIS_ADAPTER`, added to `ADAPTERS`.
+4. `frontend/app.js`: `"tennis"` added to `VALIDATED_SPORTS`. New `sportGradedThroughDate` map + a
+   second, self-contained `clv_log.csv` fetch inside `initOutcomeReview()` (joins `outcome_log.csv`
+   rows back to their real `game_start_time` by `flag_id`, since `outcome_log.csv` itself doesn't carry
+   that column) so `sportStatusBadgeHtml()` can append a real `(graded through YYYY-MM-DD)` — or an
+   honest `(graded through — no legs graded yet)` — to tennis's badge specifically, per the roadmap
+   card's explicit requirement not to imply same-day grading.
+5. `frontend/index.html`: real-outcome-grading panel's static text updated to name Sessions 2.18/2.26/
+   2.27/2.28/2.29 and explain tennis's lag directly (previous text was already one session stale, still
+   only naming 2.18/2.26/2.27 despite Session 2.28 having shipped CFB grading).
+6. `scripts/estimation/test_pickem_model.py`: 2 new tests (`test_tennis_plugin_registered_sport_label`,
+   `test_tennis_flatten_attaches_opponent_name_and_tourney_date`).
+
+**TWO real bugs caught by hand-spot-checking real output before shipping, not found any other way:**
+1. **Bug #1 — an early version tie-broke "same opponent more than once" by nearest `tourney_date`.**
+   Spot-checking a real graded row (`prizepicks|14735053`, Elena Rybakina @ Aryna Sabalenka,
+   `games_total` under 23.0, flagged 2026-09-12) found it graded `actual=19.0 -> win` — but the real
+   September match isn't in the archive at all yet (the real lag). Sabalenka and Rybakina had ALSO
+   played 3 times earlier in 2026 (Australian Open, Indian Wells, Miami); "nearest date" silently picked
+   the March Miami result (a real match, but the WRONG one) instead of honestly declining. Fixed: any
+   flag whose player faced the same real opponent more than once this season is now treated as
+   genuinely ambiguous and returns `None` (falls through to `no_game_match`) — no guessing, same
+   standard as every other "don't guess" gap in this codebase.
+2. **Bug #2 — found immediately after fixing #1, by spot-checking what was STILL graded.** A real row
+   (`prizepicks|14798465`/`14813094`, Kaitlin Quevedo @ Leolia Jeanjean, flagged 2026-09-14) still
+   graded, this time correctly matching arithmetic (games_total 26, set1 13 — hand-verified against the
+   real Roland Garros score `7-6(5) 7-6(2)`) but against a match whose real `tourney_date` is
+   2026-05-25 — 4 real months before the flag. With only ONE archived match against that opponent, the
+   "len(candidates) == 1 -> just use it" path had no date sanity check at all, so ANY single stale match
+   would have been silently accepted as this month's real result. Fixed: added `TENNIS_MAX_LAG_DAYS`
+   (21 days — generously covers a 2-week Slam plus a few real slack days) — a candidate's `tourney_date`
+   must fall within `[flag_date - 21, flag_date]` to be accepted at all, checked BEFORE the
+   1-vs-many-candidates branching, not after.
+
+**Real commands run:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q` —
+  75/75 pass (73 pre-existing + 2 new; 0 failures).
+- Isolated real run of just `TENNIS_ADAPTER` against real `data/pickem/clv_log.csv` (2026-09-16,
+  ~13:11 UTC, after both fixes): 866 real closed tennis candidates, 0 `no_player_match`, 0 graded, 866
+  `no_game_match` — the honest result given the real archive's staleness (confirmed directly:
+  `atp_matches_2026.csv`/`wta_matches_2026.csv`'s real max `tourney_date` is 20260525).
+- Direct unit-level check of `find_tennis_game_row()` with a synthetic in-window match alongside a
+  synthetic stale one confirmed the real mechanism (not just "always returns None"): correctly picks
+  the in-window real match and ignores the stale one when both exist; correctly declines when only the
+  stale one exists.
+- Frontend verified live in-browser (temporary local copy of `clv_log.csv`/`outcome_log.csv`/
+  `review_log.csv` into `frontend/data/`, removed after, same as Session 2.27): real per-sport table
+  shows `TENNIS — Validated — building sample (graded through — no legs graded yet)`, tooltip confirms
+  the lag explanation text; `unvalidated-badge` class (not a plain "Validated" claim) still used
+  correctly for the small-sample case.
+
+**Decisions made:**
+1. **Tennis needed its own real join key (opponent name), not a copy of `find_soccer_or_epl_game_row`
+   with a tweaked date rule** — confirmed directly against the real archive that `tourney_date` cannot
+   serve as a per-match date for tennis the way every other sport's own date field can, unlike CFB
+   (Session 2.28), which needed zero new join logic. This is why `find_game_row`'s contract itself had
+   to grow a 5th argument, not just a new registration.
+2. **Same-opponent-more-than-once and single-candidate-too-stale are both treated as "no data," never
+   guessed** — two real, live-caught bugs proved this project's general "don't guess" standard applies
+   here just as much as an unsupported stat type or a missing player match; a false grade actively
+   poisons `outcome_log.csv`'s real numbers (and any future recalibration built on them), which is worse
+   than an honestly ungraded flag.
+3. **`TENNIS_MAX_LAG_DAYS = 21` is a deliberate, generous bound**, not tuned against real evidence (no
+   real in-window match has been observed yet to check it against) — chosen to comfortably cover the
+   longest real events (2-week Slams) plus slack for the archive to post a just-finished match. Worth
+   revisiting once the archive catches up and real in-window matches start actually grading.
+4. **Did not mark this session fully "Complete" without caveats** — the validation checklist's first box
+   (a real sample of closed tennis flags "graded and spot-checked by hand") is technically unmet in the
+   sense that the honest final number is 0 real grades, not because the mechanism is unproven, but
+   because the free archive is currently too far behind. Recorded exactly that distinction on the
+   ROADMAP.md card rather than either overclaiming completion or leaving the gap unexplained.
+
+**Underdog cross-sport check (requested follow-up to Session 2.31):** not possible this session — same
+situation Session 2.28 hit for CFB. Zero real tennis outcomes exist in `outcome_log.csv` (the archive's
+staleness affects Underdog and PrizePicks tennis flags identically), so there is no real graded sample
+to check Underdog's win rate against for tennis. Deferred until the archive catches up and tennis legs
+start grading for real.
+
+**Corrections/reversals during the session:**
+- Both bugs above (nearest-date tie-break; missing staleness bound on the single-candidate path) were
+  found and fixed within this same session, before any real write to `outcome_log.csv` — no bad data
+  was ever written (confirmed: `data/pickem/outcome_log.csv` has 0 tennis rows from any run before or
+  during this session).
+
+**Open items / deferred validations:**
+- **The core remaining gap is the archive's real staleness, not this session's code.** Once
+  `Aneeshers/tennis-sackmann-archive` posts real data past 2026-05-25 (it refreshes its cache file every
+  `REFRESH_HOURS=12`, per that plug-in's existing design — no code change needed here), re-running
+  `auto_grade_outcomes.py --run` should start grading real tennis flags automatically, closing this
+  session's remaining checkbox with real evidence. This is a genuinely open, external question (is the
+  upstream mirror still maintained at all?) that a future session should check directly rather than
+  assume.
+- `TENNIS_MAX_LAG_DAYS`'s 21-day bound is unvalidated against any real in-window match (see Decision
+  #3) — re-check once real tennis grading volume exists.
+- The Underdog-tennis cross-sport question (this session's other original ask) remains unanswered for
+  the same reason as CFB in Session 2.28 — no real graded tennis data to check yet.
+- Doubles props (`player_name` like "Krueger A / Montgomery R") were already a known, stated gap in
+  `tennis.py` (singles-only archive) before this session and remain so — `opponent_name`/tie-break logic
+  added this session does not change that; a doubles flag still falls through to `no_player_match` before
+  ever reaching `find_tennis_game_row()`.

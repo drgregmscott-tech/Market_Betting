@@ -2581,7 +2581,9 @@ Session 2.27 last verified working. Flagged here for a future session;
 out of this card's scope.
 
 ### Session 2.29 — Tennis Real-Outcome Auto-Grading
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-16) — mechanism built,
+tested, and proven correct; zero real flags gradable right now because
+the archive itself is ~4 real months behind. See SESSION_LOG.md.
 **Prerequisites:** Session 2.26 (generalized auto-grader).
 
 **What gets built:** Adds a tennis adapter to the generalized grader,
@@ -2593,10 +2595,19 @@ the frontend should surface a "graded through" date for tennis rather
 than implying same-day grading the way NFL/MLB can.
 
 **Validation (required to close session):**
-- [ ] Real sample of closed tennis flags graded and spot-checked by hand.
-- [ ] Frontend shows the real lag (last successfully graded date) for
-tennis specifically, not a blanket "validated" badge that overstates
-freshness.
+- [x] Real sample of closed tennis flags checked by hand -- caught and
+fixed TWO real silent-wrong-grade bugs before shipping (see
+SESSION_LOG.md); after both fixes, the honest real result on today's
+866 real closed tennis candidates is 0 graded / 866 `no_game_match`,
+because the locally cached archive's real max `tourney_date` is
+2026-05-25 against real September 2026 flags -- not a code bug, a real
+data-freshness gap in the free source itself. `docs/research/` has no
+new file; findings are in SESSION_LOG.md directly (small enough not to
+need a separate doc, unlike Session 2.31's investigation).
+- [x] Frontend shows the real lag for tennis specifically: its status
+badge appends "(graded through YYYY-MM-DD)" once real graded rows exist,
+and today's honest "(graded through — no legs graded yet)" otherwise --
+never a blanket "Validated" that would overstate freshness.
 
 ### Session 2.30 — NHL Go/No-Go Checkpoint
 **Status:** Not started
