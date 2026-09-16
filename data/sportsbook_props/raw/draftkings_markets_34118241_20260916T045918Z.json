@@ -1,0 +1,249 @@
+{
+  "markets": [
+    {
+      "id": "369874192",
+      "eventId": "34118241",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-658261842",
+      "sortOrder": 1192,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118241|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA369874192#2284829734_13L88808Q11750821948Q20",
+      "marketId": "369874192",
+      "label": "Saquon Barkley",
+      "displayOdds": {
+        "american": "\u2212115",
+        "decimal": "1.86",
+        "fractional": "20/23",
+        "percentage": "53.4%"
+      },
+      "trueOdds": 1.86956522,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "18972",
+          "name": "Saquon Barkley",
+          "type": "Player",
+          "seoIdentifier": "Saquon Barkley",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "55021"
+          }
+        }
+      ],
+      "sortOrder": 3001860,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA369874192#2284829736_13L88808Q1-879129836Q20",
+      "marketId": "369874192",
+      "label": "Jalen Hurts",
+      "displayOdds": {
+        "american": "+145",
+        "decimal": "2.45",
+        "fractional": "29/20",
+        "percentage": "40.8%"
+      },
+      "trueOdds": 2.45,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "479300",
+          "name": "Jalen Hurts",
+          "type": "Player",
+          "seoIdentifier": "Jalen Hurts",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "99830"
+          }
+        }
+      ],
+      "sortOrder": 3002450,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA369874192#2284829735_13L88808Q1-911882280Q20",
+      "marketId": "369874192",
+      "label": "DeVonta Smith",
+      "displayOdds": {
+        "american": "+180",
+        "decimal": "2.80",
+        "fractional": "9/5",
+        "percentage": "35.7%"
+      },
+      "trueOdds": 2.8,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "545016",
+          "name": "DeVonta Smith",
+          "type": "Player",
+          "seoIdentifier": "DeVonta Smith",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100621"
+          }
+        }
+      ],
+      "sortOrder": 3002800,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA369874192#2284829721_13L88808Q1410823711Q20",
+      "marketId": "369874192",
+      "label": "Tony Pollard",
+      "displayOdds": {
+        "american": "+195",
+        "decimal": "2.95",
+        "fractional": "39/20",
+        "percentage": "33.8%"
+      },
+      "trueOdds": 2.95,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "18062",
+          "name": "Tony Pollard",
+          "type": "Player",
+          "seoIdentifier": "Tony Pollard",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54916"
+          }
+        }
+      ],
+      "sortOrder": 3002950,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA369874192#2284829737_13L88808Q1-1879851941Q20",
+      "marketId": "369874192",
+      "label": "Dallas Goedert",
+      "displayOdds": {
+        "american": "+195",
+        "decimal": "2.95",
+        "fractional": "39/20",
+        "percentage": "33.8%"
+      },
+      "trueOdds": 2.95,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "17055",
+          "name": "Dallas Goedert",
+          "type": "Player",
+          "seoIdentifier": "Dallas Goedert",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "59924"
+          }
+        }
+      ],
+      "sortOrder": 3002950,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-658261842": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118241' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
