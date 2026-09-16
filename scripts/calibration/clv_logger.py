@@ -498,6 +498,35 @@ def _is_scorable_pickem_row(row: pd.Series) -> bool:
     return odds_type.strip().lower() in {"standard", "demon", "goblin"}
 
 
+def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
+    """SESSION 2.36 FIX (2026-09-16, real finding): mirrors pickem_model.py's
+    own prizepicks_side_is_buyable(). Found live: 4 real, currently-open
+    Christian Pulisic Shots flags (Demon 7.5/3.5, Goblin 2.5/1.5) were all
+    showing flagged_side="under", even though PrizePicks' own real
+    allowed_wager_types="over" on every one of those rows -- the Under
+    side of a PrizePicks Demon/Goblin line usually does not exist to buy
+    at all. These 4 flags were created 2026-09-15, one day BEFORE the
+    Session 2.33 fix (which stops a NEW flag from picking a disallowed
+    side) landed -- that fix has no retroactive effect on a flag already
+    open, since process_run_pickem only ever refreshes an existing flag's
+    last_seen_*/mlb_starter_status fields, never its flagged_side. Without
+    this, a flag mis-flagged before the fix keeps showing "open" and the
+    wrong side forever, since its own source_line_id genuinely is still
+    live on PrizePicks -- it would never hit the close-on-disappearance
+    path below on that basis alone."""
+    if row.get("platform") != "prizepicks":
+        return True
+    raw = row.get("allowed_wager_types")
+    if not isinstance(raw, str) or not raw.strip():
+        return True
+    restriction = raw.strip().lower()
+    if restriction == "over":
+        return side == "over"
+    if restriction == "under":
+        return side == "under"
+    return True  # "under_or_over" or any other stated value -- both sides buyable
+
+
 def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
     log_df = existing_log.copy()
     log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
@@ -507,7 +536,28 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
     estimates_df = estimates_df.copy()
     estimates_df["_flag_id"] = estimates_df["platform"].astype(str) + "|" + estimates_df["source_line_id"].astype(str)
     scorable_mask = estimates_df.apply(_is_scorable_pickem_row, axis=1)
-    present_flag_ids = set(estimates_df.loc[scorable_mask, "_flag_id"])
+
+    # SESSION 2.36 -- an existing flag's own recorded flagged_side can be
+    # ruled out by allowed_wager_types even though its source_line_id is
+    # still live (see _side_is_buyable_pickem() above). Folding this into
+    # present_flag_ids means such a flag is simply not "present" this run
+    # -- the same trick _is_scorable_pickem_row already uses -- so the
+    # existing close-on-disappearance pass below retires it with no
+    # separate closing code path needed. A flag_id with no existing
+    # record yet (first time seen) always passes here; its side gets
+    # decided fresh by determine_flagged_side_pickem()/prizepicks_side_is_
+    # buyable() further down (pickem_model.py), not by this check.
+    def _existing_side_still_buyable(row: pd.Series) -> bool:
+        flag_id = row["_flag_id"]
+        if log_df.empty or flag_id not in log_df.index:
+            return True
+        existing_side = log_df.loc[flag_id, "flagged_side"]
+        if not isinstance(existing_side, str) or not existing_side.strip():
+            return True
+        return _side_is_buyable_pickem(row, existing_side)
+
+    buyable_mask = estimates_df.apply(_existing_side_still_buyable, axis=1)
+    present_flag_ids = set(estimates_df.loc[scorable_mask & buyable_mask, "_flag_id"])
 
     new_rows = []
     existing_flag_ids = set(log_df["flag_id"]) if not log_df.empty else set()
@@ -518,7 +568,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
         scorable = _is_scorable_pickem_row(row)
 
         if flag_id in existing_flag_ids:
-            if scorable:
+            if scorable and flag_id in present_flag_ids:
                 log_df.loc[flag_id, "last_seen_at"] = run_pulled_at
                 log_df.loc[flag_id, "last_seen_line"] = row.get("line")
                 side_for_update = log_df.loc[flag_id, "flagged_side"]
@@ -530,8 +580,10 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
                 # closer to first pitch, and an open flag should show the
                 # latest real state, not a stale first-seen snapshot.
                 log_df.loc[flag_id, "mlb_starter_status"] = row.get("mlb_starter_status")
-            # else: leave it alone -- it's not in present_flag_ids, so the
-            # close-on-disappearance pass below will retire it correctly.
+            # else: leave it alone -- it's not in present_flag_ids (either
+            # unsupported_odds_type, or SESSION 2.36's own recorded side
+            # is no longer buyable), so the close-on-disappearance pass
+            # below will retire it correctly.
             continue
 
         if side is None or not scorable:

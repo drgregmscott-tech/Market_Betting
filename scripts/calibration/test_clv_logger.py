@@ -234,6 +234,53 @@ def scenario_6_idempotent_same_file_twice():
     print("PASS: scenario_6_idempotent_same_file_twice")
 
 
+def scenario_6b_existing_flag_closes_when_side_becomes_unbuyable():
+    """SESSION 2.36 -- real finding (2026-09-16): 4 real, live Christian
+    Pulisic Shots flags (PrizePicks Demon/Goblin) were stuck open with
+    flagged_side="under" even though PrizePicks' own allowed_wager_types
+    said "over" on every one of them -- these flags were created BEFORE
+    the Session 2.33 fix landed, and that fix only stops a NEW flag from
+    picking a disallowed side; it never revisits an existing one. This
+    locks in the retroactive fix: an existing OPEN flag whose own
+    recorded side is ruled out by the row's CURRENT allowed_wager_types
+    must close, even though its source_line_id is still live on the
+    platform (i.e. it must not simply keep refreshing as "open" forever)."""
+    pp_row_run1 = _base_row(
+        source_line_id="pp_side_flip", line=7.5, prob_over=0.45, prob_under=0.55,
+        implied_prob_over=0.528308, implied_prob_under=0.471692,
+        edge_over=-0.078308, edge_under=0.078308,
+        allowed_wager_types=None,  # not yet ingested when this flag was first flagged
+    )
+    estimates_run1 = pd.DataFrame([pp_row_run1])
+    log_after_run1 = clv_logger.process_run_pickem(estimates_run1, _empty_pickem_log(), "2026-09-01T10:00:00Z")
+    opened = log_after_run1.iloc[0]
+    assert opened["status"] == "open"
+    assert opened["flagged_side"] == "under", "reproduces the real pre-fix bug: under wins on edge_under alone"
+
+    # Run 2: same live source_line_id, but allowed_wager_types is now known
+    # and rules "under" out entirely -- the real PrizePicks state.
+    pp_row_run2 = _base_row(
+        source_line_id="pp_side_flip", line=7.5, prob_over=0.45, prob_under=0.55,
+        implied_prob_over=0.528308, implied_prob_under=0.471692,
+        edge_over=-0.078308, edge_under=None,  # pickem_model.py's Session 2.33 gate
+        allowed_wager_types="over",
+    )
+    estimates_run2 = pd.DataFrame([pp_row_run2])
+    log_after_run2 = clv_logger.process_run_pickem(estimates_run2, log_after_run1, "2026-09-01T11:00:00Z")
+
+    closed = log_after_run2[log_after_run2["flag_id"] == "prizepicks|pp_side_flip"].iloc[0]
+    assert closed["status"] == "closed", (
+        "flag must close, not keep refreshing as open, once its own recorded "
+        "side is ruled out by the platform's real allowed_wager_types"
+    )
+    # closing_pulled_at freezes at the flag's last real last_seen_at (run
+    # 1's timestamp) -- run 2 never refreshes it, since the whole point is
+    # that this flag is no longer treated as "present" once its side is
+    # unbuyable, same as the existing close-on-disappearance mechanic.
+    assert closed["closing_pulled_at"] == "2026-09-01T10:00:00Z"
+    print("PASS: scenario_6b_existing_flag_closes_when_side_becomes_unbuyable")
+
+
 def _props_base_row(**overrides):
     row = {
         "platform": "draftkings",
@@ -431,6 +478,7 @@ def run_all():
     scenario_5_flag_closes_when_prop_disappears()
     scenario_5b_prizepicks_clv_not_available_at_close()
     scenario_6_idempotent_same_file_twice()
+    scenario_6b_existing_flag_closes_when_side_becomes_unbuyable()
     scenario_7_props_new_flag_with_consensus()
     scenario_8_props_new_flag_without_consensus()
     scenario_9_props_below_threshold_not_flagged()
@@ -439,7 +487,7 @@ def run_all():
     scenario_12_props_betmgm_selection_id_collision()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 13 scenarios passed.")
+    print("\nAll 14 scenarios passed.")
 
 
 if __name__ == "__main__":
