@@ -297,3 +297,8 @@
 2026-09-12 10:27:15,460 UTC | INFO | [pickem] Loaded 61572 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260912T102713Z.csv
 2026-09-12 10:27:15,582 UTC | INFO | [pickem] Existing CLV log has 10842 rows before this run
 2026-09-12 10:27:25,424 UTC | INFO | [pickem] Wrote 12779 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
+2026-09-16 18:00:39,506 UTC | INFO | === CLV logging run starting (track=pickem) ===
+2026-09-16 18:00:39,757 UTC | INFO | [pickem] Loaded 41292 estimate rows from C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260916T180031Z.csv
+2026-09-16 18:00:40,229 UTC | INFO | [pickem] Existing CLV log has 59060 rows before this run
+2026-09-16 18:01:17,838 UTC | INFO | [pickem] Wrote 59309 total rows to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\clv_log.csv
+2026-09-16 18:01:18,579 UTC | INFO | Run summary: {'track': 'pickem', 'estimates_file': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\output\\estimation\\pickem_estimates_20260916T180031Z.csv', 'rows_in_estimates': 41292, 'newly_flagged': 249, 'newly_closed': 0, 'still_open': 8385, 'total_logged': 59309, 'log_path': 'C:\\Users\\gmsco\\Desktop\\Market_Betting\\data\\pickem\\clv_log.csv'}
