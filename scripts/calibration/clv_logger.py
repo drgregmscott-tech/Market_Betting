@@ -287,7 +287,7 @@ CLV_LOG_COLUMNS_PICKEM = [
     # as resolved_stat_key -- this file does not compute it. Always None
     # for every non-MLB or non-Underdog row (additive only, no other
     # column's meaning changed).
-    "mlb_starter_status", "odds_type", "game_id", "game_start_time",
+    "mlb_starter_status", "odds_type", "allowed_wager_types", "game_id", "game_start_time",
     "flagged_side", "first_flagged_at", "first_flagged_line",
     "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
     "consensus_available", "consensus_platform", "consensus_source_line_id",
@@ -568,6 +568,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "resolved_stat_key": row.get("resolved_stat_key"),
             "mlb_starter_status": row.get("mlb_starter_status"),  # Session 2.32
             "odds_type": row.get("odds_type"),
+            "allowed_wager_types": row.get("allowed_wager_types"),
             "game_id": row.get("game_id"),
             "game_start_time": row.get("game_start_time"),
             "flagged_side": side,

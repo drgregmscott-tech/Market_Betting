@@ -639,6 +639,39 @@ def prizepicks_implied_prob_over(row: dict) -> float:
     return PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB.get(key, PRIZEPICKS_ASSUMED_IMPLIED_PROB)
 
 
+# SESSION 2.33 FIX (2026-09-16, real finding): PrizePicks' own
+# attributes.allowed_wager_types on a projection states which side is
+# actually buyable in the app -- observed real values "over" (Over/More
+# only), "under_or_over" (both sides), or missing (no restriction stated).
+# This is independent of odds_type: real Standard rows carry "over" too,
+# not only Demon/Goblin. Before this, edge_over/edge_under were computed
+# and flaggable on BOTH sides of every row regardless of this field, so
+# the model could (and, confirmed live, did) surface "under" as the
+# flagged side on a real over-only row -- a recommendation for a side
+# that cannot be purchased on PrizePicks. Missing/None is treated as
+# unrestricted (matches pre-fix behavior) since the API not stating a
+# restriction is not evidence one exists.
+PRIZEPICKS_OVER_ONLY_WAGER_TYPE = "over"
+PRIZEPICKS_UNDER_ONLY_WAGER_TYPE = "under"
+
+
+def prizepicks_side_is_buyable(row: dict, side: str) -> bool:
+    """True unless PrizePicks' own allowed_wager_types explicitly rules
+    `side` ("over" or "under") out for this row. Always True for
+    non-PrizePicks rows and for rows with no stated restriction."""
+    if row.get("platform") != "prizepicks":
+        return True
+    raw = row.get("allowed_wager_types")
+    if not isinstance(raw, str) or not raw.strip():
+        return True
+    restriction = raw.strip().lower()
+    if restriction == PRIZEPICKS_OVER_ONLY_WAGER_TYPE:
+        return side == "over"
+    if restriction == PRIZEPICKS_UNDER_ONLY_WAGER_TYPE:
+        return side == "under"
+    return True  # "under_or_over" or any other stated value -- both sides buyable
+
+
 # ---------------------------------------------------------------------------
 # SESSION 2.32 -- real-time MLB starter/lineup confirmation signal
 # (Underdog gate, MLB only). See docs/research/underdog_pricing_gap_
@@ -872,10 +905,18 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["prob_under"] = (1.0 - p_over) if p_over is not None else None
         row["implied_prob_over"] = implied_over
         row["implied_prob_under"] = (1.0 - implied_over) if implied_over is not None else None
-        row["edge_over"] = (p_over - implied_over) if (p_over is not None and implied_over is not None) else None
+        row["edge_over"] = (
+            (p_over - implied_over)
+            if (p_over is not None and implied_over is not None and prizepicks_side_is_buyable(row, "over"))
+            else None
+        )
         row["edge_under"] = (
             (row["prob_under"] - row["implied_prob_under"])
-            if (row["prob_under"] is not None and row["implied_prob_under"] is not None)
+            if (
+                row["prob_under"] is not None
+                and row["implied_prob_under"] is not None
+                and prizepicks_side_is_buyable(row, "under")
+            )
             else None
         )
         out_rows.append(row)

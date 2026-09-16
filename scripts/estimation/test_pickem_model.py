@@ -39,6 +39,7 @@ from pickem_model import (
     build_stat_series,
     compute_mlb_starter_status,
     process_props,
+    prizepicks_side_is_buyable,
     resolve_stat_spec,
 )
 from pickem_sport_plugins import PLUGINS, plugin_for_sport
@@ -175,6 +176,59 @@ def test_unsupported_sport_still_falls_through_cleanly():
     result = process_props(props, season=2025)
     assert result.iloc[0]["model_status"] == "unsupported_sport"
     assert pd.isna(result.iloc[0]["resolved_stat_key"]) or result.iloc[0]["resolved_stat_key"] is None
+
+
+def test_prizepicks_side_is_buyable_respects_allowed_wager_types():
+    over_only = dict(platform="prizepicks", allowed_wager_types="over")
+    assert prizepicks_side_is_buyable(over_only, "over") is True
+    assert prizepicks_side_is_buyable(over_only, "under") is False
+
+    under_only = dict(platform="prizepicks", allowed_wager_types="under")
+    assert prizepicks_side_is_buyable(under_only, "under") is True
+    assert prizepicks_side_is_buyable(under_only, "over") is False
+
+    both_sides = dict(platform="prizepicks", allowed_wager_types="under_or_over")
+    assert prizepicks_side_is_buyable(both_sides, "over") is True
+    assert prizepicks_side_is_buyable(both_sides, "under") is True
+
+    unstated = dict(platform="prizepicks", allowed_wager_types=None)
+    assert prizepicks_side_is_buyable(unstated, "over") is True
+    assert prizepicks_side_is_buyable(unstated, "under") is True
+
+    non_prizepicks = dict(platform="underdog", allowed_wager_types="over")
+    assert prizepicks_side_is_buyable(non_prizepicks, "under") is True
+
+
+def test_process_props_blanks_edge_under_for_over_only_prizepicks_row():
+    """Real finding (2026-09-16): PrizePicks' own allowed_wager_types="over"
+    means the Under/Less side of this row cannot actually be bought in the
+    app. edge_under must come back None so nothing downstream (clv_logger's
+    flagging, a human skimming the CSV) treats it as a real opportunity,
+    even though prob_under/implied_prob_under stay populated as honest
+    model output."""
+    props = pd.DataFrame([dict(
+        platform="prizepicks", source_line_id="1", player_name="Player One",
+        sport="nfl", stat_type="Pass Yards", line=265.5, odds_type="standard",
+        allowed_wager_types="over",
+    )])
+    weekly_fixture = build_nfl_weekly_fixture()
+
+    def fake_fetch(season: int) -> pd.DataFrame:
+        return weekly_fixture
+
+    original_fetch = NFL_PLUGIN.fetch_stats
+    NFL_PLUGIN.fetch_stats = fake_fetch
+    try:
+        result = process_props(props, season=2025)
+    finally:
+        NFL_PLUGIN.fetch_stats = original_fetch
+
+    row = result.iloc[0]
+    assert row["model_status"] == "estimated"
+    assert pd.isna(row["edge_under"])
+    assert not pd.isna(row["edge_over"])
+    assert not pd.isna(row["prob_under"])
+    assert not pd.isna(row["implied_prob_under"])
 
 
 def test_nfl_regression_matches_golden_snapshot():

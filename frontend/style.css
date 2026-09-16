@@ -356,6 +356,86 @@ main {
   border: 1px solid rgba(217, 138, 79, 0.35);
 }
 
+/* Session 2.34 — PrizePicks odds_type (Demon/Goblin) badge, plus a
+   wager-side badge for a row PrizePicks restricts to one buyable side
+   (allowed_wager_types). Purely informational, same shape/cursor as
+   .starter-status-badge above. Demon = neg red (deliberately harder
+   bar, real risk signal worth a glance), Goblin = pos green (easier
+   bar). The wager-side badge reuses the neutral risk-orange language
+   -- not a warning that the row is wrong, just a "heads up, only one
+   side of this exists" note. */
+.odds-type-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: help;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+.odds-type-badge.demon {
+  color: var(--accent-neg);
+  background: rgba(226, 104, 91, 0.12);
+  border: 1px solid rgba(226, 104, 91, 0.35);
+}
+
+.odds-type-badge.goblin {
+  color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.12);
+  border: 1px solid rgba(79, 209, 139, 0.35);
+}
+
+.wager-side-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--risk-badge);
+  background: var(--risk-badge-bg);
+  border: 1px solid rgba(217, 138, 79, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: help;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+/* Session 2.35 — visual clustering for same player/stat/game rows in the
+   Pick'em open-flags table (see pickemGroupKey()/groupPickemRows() in
+   app.js). Purely a display grouping -- alternates a faint background
+   tint per group so a real 17-row alt-line ladder reads as "one player,
+   several tiers" at a glance, and .group-start adds a slightly stronger
+   top border so a new group is visible even mid-scroll. */
+.group-shade-a {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.group-shade-b {
+  background: transparent;
+}
+
+.group-start td {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.line-count-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-dim);
+  background: rgba(143, 163, 154, 0.12);
+  border: 1px solid rgba(143, 163, 154, 0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: help;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
 /* Session 2.26 — sport/platform filter controls above a track's open-flags
    table. Same input styling language as .sizing-input-row's bankroll
    field, just laid out as a row of selects instead of one number input. */

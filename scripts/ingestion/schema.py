@@ -66,6 +66,18 @@ FIELD NOTES (traced back to Session 2.1's real captured field names)
   surfacing the wrong line as "the" flagged opportunity. None otherwise
   (including for every Underdog row -- Underdog has no equivalent
   concept in this project's ingested data).
+- allowed_wager_types: PrizePicks-only (attributes.allowed_wager_types).
+  Found real 2026-09-16: PrizePicks restricts some projections -- not only
+  Demon/Goblin, Standard rows can carry this too -- to a single buyable
+  side. Observed real values: "over" (only the Over/More side can actually
+  be picked in the app), "under_or_over" (both sides buyable, same as the
+  unrestricted default), or missing/None (no restriction stated by the
+  API; treated as unrestricted, matching pre-existing behavior). Before
+  this field was ingested, pickem_model.py scored and clv_logger.py could
+  flag an "under" edge on a real over-only row -- a recommendation for a
+  side that does not exist to bet on PrizePicks. None for every Underdog
+  row (Underdog has no equivalent concept in this project's ingested
+  data).
 """
 
 from dataclasses import dataclass, asdict
@@ -88,6 +100,7 @@ NORMALIZED_COLUMNS = [
     "game_start_time",
     "status",
     "odds_type",
+    "allowed_wager_types",
     "pulled_at",
 ]
 
@@ -110,6 +123,7 @@ class NormalizedProp:
     game_start_time: Optional[str]
     status: Optional[str]
     odds_type: Optional[str]
+    allowed_wager_types: Optional[str]
     pulled_at: str
 
     def as_row(self) -> dict:

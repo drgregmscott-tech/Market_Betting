@@ -268,6 +268,35 @@ function mlbStarterStatusBadgeHtml(r) {
   return "";
 }
 
+// ---------------------------------------------------------------------
+// Session 2.34 -- surface odds_type (Standard/Demon/Goblin) and, for a
+// row PrizePicks restricts to one side, which side is actually buyable.
+// Prompted by a real user report (2026-09-16): the open-flags table gave
+// no visual signal that a flagged row was a Demon/Goblin alt-line, or
+// that PrizePicks' own allowed_wager_types had ruled a side out --
+// pickem_model.py already blanks edge_over/edge_under for a blocked side
+// (see SESSION 2.33 FIX there), but a human skimming this table had no
+// way to SEE why a row they expected to see (e.g. the Under side of a
+// line they were used to) was simply absent. Purely informational, same
+// as mlbStarterStatusBadgeHtml above -- does not change which rows are
+// flagged, only what a human sees about a row already flagged.
+function pickemOddsTypeBadgeHtml(r) {
+  const oddsType = String(r.odds_type || "").trim().toLowerCase();
+  if (oddsType !== "demon" && oddsType !== "goblin") return "";
+  const label = oddsType === "demon" ? "Demon" : "Goblin";
+  const title = oddsType === "demon"
+    ? "PrizePicks Demon alt-line -- a deliberately HARDER bar than the Standard line, priced with PrizePicks' own real Demon payout multiplier, not the flat 50% assumption used for Standard."
+    : "PrizePicks Goblin alt-line -- a deliberately EASIER bar than the Standard line, priced with PrizePicks' own real Goblin payout multiplier, not the flat 50% assumption used for Standard.";
+  return `<span class="odds-type-badge ${oddsType}" title="${escapeAttr(title)}">${label}</span>`;
+}
+
+function pickemWagerSideBadgeHtml(r) {
+  const restriction = String(r.allowed_wager_types || "").trim().toLowerCase();
+  if (restriction !== "over" && restriction !== "under") return "";
+  const buyableSide = restriction === "over" ? "Over/More" : "Under/Less";
+  return `<span class="wager-side-badge" title="PrizePicks' own allowed_wager_types states only the ${buyableSide} side of this line can actually be bought in the app -- the other side does not exist as a real bet, and this model never flags an edge on it.">${buyableSide} only</span>`;
+}
+
 function blockedCheck(track, r) {
   const reasons = [];
 
@@ -598,6 +627,41 @@ function initOpenTableFilters(open) {
   });
 }
 
+// Session 2.35 -- group same player/stat/game/segment rows together.
+// Prompted by a real user question (2026-09-16): a live PrizePicks pull
+// showed 40% of player/stat/game combos carry MULTIPLE real, simultaneous
+// lines (a full Demon/Goblin alt-line ladder, not just one Standard line
+// -- e.g. one real player had 17 separate Rec Yards lines live at once).
+// Confirmed these are genuinely distinct, separately-priced bets, not
+// duplicates -- removing any would hide a real opportunity. What WAS
+// missing was any visual grouping: 17 same-player rows scattered by edge
+// value read as noise, not as "one player, several tiers." This clusters
+// them by (player_name, sport, stat_type, game_id) -- the same key that
+// distinguishes a full-game market from a same-game "1st Half"/"1st
+// Quarter" segment market sharing the same real game_id -- while keeping
+// every row's own checkbox/edge/line fully intact (grouping is a display
+// concern only, never a filter).
+function pickemGroupKey(r) {
+  return [r.player_name, r.sport, r.stat_type, r.game_id]
+    .map((v) => (v === null || v === undefined ? "" : String(v)))
+    .join("|");
+}
+
+// `rows` must already be sorted (globally) by whatever order the caller
+// wants preserved -- grouping a sorted array preserves each group's
+// relative order (a subsequence of a sorted sequence stays sorted), and a
+// group's own position is fixed by its FIRST member's position, i.e. its
+// best-ranked row. No re-sorting happens here.
+function groupPickemRows(rows) {
+  const groups = new Map();
+  for (const r of rows) {
+    const key = pickemGroupKey(r);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+  return Array.from(groups.values());
+}
+
 function renderOpenTable(open) {
   const tbody = document.getElementById("openTableBody");
   const emptyNote = document.getElementById("openEmpty");
@@ -628,14 +692,20 @@ function renderOpenTable(open) {
   }
   emptyNote.hidden = true;
 
-  const visible = openTableShowAll ? sorted : sorted.slice(0, OPEN_TABLE_DEFAULT_LIMIT);
+  // The default/"show all" limit now caps GROUPS (distinct player/stat/
+  // game clusters), not raw rows -- otherwise a single 17-line alt-line
+  // ladder could eat the entire default-25 view on its own, pushing every
+  // other player off the page.
+  const allGroups = groupPickemRows(sorted);
+  const visibleGroups = openTableShowAll ? allGroups : allGroups.slice(0, OPEN_TABLE_DEFAULT_LIMIT);
+  const visible = visibleGroups.flat();
 
   if (showAllBtn) {
-    if (sorted.length > OPEN_TABLE_DEFAULT_LIMIT) {
+    if (allGroups.length > OPEN_TABLE_DEFAULT_LIMIT) {
       showAllBtn.hidden = false;
       showAllBtn.textContent = openTableShowAll
         ? "Show top 25 only"
-        : `Show all ${sorted.length} flags`;
+        : `Show all ${sorted.length} flags (${allGroups.length} players/stats)`;
       showAllBtn.onclick = () => {
         openTableShowAll = !openTableShowAll;
         renderOpenTable(open);
@@ -645,16 +715,24 @@ function renderOpenTable(open) {
     }
   }
 
-  tbody.innerHTML = visible
-    .map((r) => {
-      const edge = toNum(r.first_flagged_edge);
-      const checked = selectedLegs.has(r.flag_id) ? "checked" : "";
-      return `
-        <tr>
+  tbody.innerHTML = visibleGroups
+    .map((group, groupIndex) => {
+      const groupShade = groupIndex % 2 === 0 ? "group-shade-a" : "group-shade-b";
+      return group
+        .map((r, i) => {
+          const edge = toNum(r.first_flagged_edge);
+          const checked = selectedLegs.has(r.flag_id) ? "checked" : "";
+          const isGroupStart = i === 0;
+          const rowClasses = [groupShade, isGroupStart ? "group-start" : ""].filter(Boolean).join(" ");
+          const lineCountBadge = isGroupStart && group.length > 1
+            ? `<span class="line-count-badge" title="PrizePicks has ${group.length} separate real lines open right now for this player/stat/game -- a real alt-line ladder (Standard/Demon/Goblin at different thresholds), not a duplicate. Each row below is its own distinct, separately-priced bet.">${group.length} lines</span>`
+            : "";
+          return `
+        <tr class="${rowClasses}">
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${mlbStarterStatusBadgeHtml(r)}${escapeHtml(r.player_name) || "—"}</td>
+          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${mlbStarterStatusBadgeHtml(r)}${pickemOddsTypeBadgeHtml(r)}${pickemWagerSideBadgeHtml(r)}${lineCountBadge}${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.game_matchup) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
@@ -663,6 +741,8 @@ function renderOpenTable(open) {
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
           <td>${fmtDate(r.game_start_time)}</td>
         </tr>`;
+        })
+        .join("");
     })
     .join("");
 
@@ -740,7 +820,7 @@ function renderSelectedLegs() {
       (r) => `
       <div class="leg-chip">
         <div class="leg-chip-info">
-          <span class="leg-chip-name">${escapeHtml(r.player_name) || "—"} &mdash; ${escapeHtml(r.stat_type) || "—"} ${escapeHtml(r.flagged_side) || ""}</span>
+          <span class="leg-chip-name">${pickemOddsTypeBadgeHtml(r)}${escapeHtml(r.player_name) || "—"} &mdash; ${escapeHtml(r.stat_type) || "—"} ${escapeHtml(r.flagged_side) || ""}</span>
           <span class="leg-chip-detail">${escapeHtml(r.platform) || "—"} · line ${escapeHtml(r.last_seen_line || r.first_flagged_line) || "—"} · model prob ${
             toNum(r.first_flagged_model_prob) !== null ? (toNum(r.first_flagged_model_prob) * 100).toFixed(1) + "%" : "—"
           }</span>
