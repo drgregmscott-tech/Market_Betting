@@ -178,6 +178,15 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 </div>
 
 <section class="panel" id="summary-panel">
+<div class="freshness-bar" id="pickemFreshnessBar">
+<span class="freshness-label">Pick&rsquo;em data last pulled:</span>
+<span id="pickemFreshnessValue" class="freshness-value">—</span>
+<button id="pickemRefreshBtn" class="refresh-btn" type="button">↻ Refresh now</button>
+</div>
+<p class="panel-note" id="pickemFreshnessNote">This is when the underlying line data was last pulled from the
+platforms &mdash; not when you loaded this page. The pipeline pulls hourly; if this is showing more than
+~90 minutes old, treat every line below as unverified until you refresh, and re-check the actual price on
+PrizePicks/Underdog before placing anything.</p>
 <div class="stat-row" id="statRow">
 <div class="stat">
 <span class="stat-value" id="statOpen">—</span>

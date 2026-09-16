@@ -939,6 +939,46 @@ function renderClosedTable(closed) {
     .join("");
 }
 
+// Session 6.10 -- real pull-time freshness, replacing the page-load
+// timestamp the old global "asOf" header showed (misleading: it read "just
+// now" even when the underlying CSV was hours stale). last_seen_at is
+// stamped by the pipeline on every row it touches on every run, including
+// still-open rows, so its max across the whole file is the real time of
+// the most recent successful pull -- not a proxy for it.
+const PICKEM_FRESH_MINUTES = 90;   // pipeline cadence is hourly; buffer for a slow run
+const PICKEM_AGING_MINUTES = 150;  // beyond this, treat data as stale, not just late
+
+function renderPickemFreshness(rows) {
+  const el = document.getElementById("pickemFreshnessValue");
+  if (!el) return;
+
+  let latest = 0;
+  for (const r of rows) {
+    const t = new Date(r.last_seen_at || r.closing_pulled_at || r.first_flagged_at || 0).getTime();
+    if (Number.isFinite(t) && t > latest) latest = t;
+  }
+
+  if (!latest) {
+    el.textContent = "unknown";
+    el.className = "freshness-value stale";
+    return;
+  }
+
+  const ageMinutes = (Date.now() - latest) / 60000;
+  const stamp = new Date(latest).toLocaleString(undefined, {
+    month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+  });
+  const ageLabel = ageMinutes < 60
+    ? Math.round(ageMinutes) + " min ago"
+    : (ageMinutes / 60).toFixed(1) + " hr ago";
+  el.textContent = `${stamp} (${ageLabel})`;
+
+  el.className = "freshness-value " + (
+    ageMinutes <= PICKEM_FRESH_MINUTES ? "fresh" :
+    ageMinutes <= PICKEM_AGING_MINUTES ? "aging" : "stale"
+  );
+}
+
 async function initPickem() {
   try {
     const res = await fetch(DATA_URL, { cache: "no-store" });
@@ -946,6 +986,7 @@ async function initPickem() {
     const text = await res.text();
     const rows = parseCSV(text);
 
+    renderPickemFreshness(rows);
     const { open, closed } = renderStats(rows);
     renderChart(closed);
     initOpenTableFilters(open);
@@ -1953,9 +1994,26 @@ function initTabs() {
   });
 }
 
+// Session 6.10 -- forces a real refetch of every data file (they're all
+// already fetched with cache: "no-store", so a plain reload is enough --
+// no query-string cache-busting needed) rather than just re-rendering
+// whatever is already in memory. Disabled immediately on click so a
+// slow connection doesn't invite repeat clicks while the reload is in
+// flight.
+function initPickemRefreshButton() {
+  const btn = document.getElementById("pickemRefreshBtn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    btn.disabled = true;
+    btn.textContent = "Refreshing…";
+    window.location.reload();
+  });
+}
+
 async function init() {
   initTabs();
   initSelectionMiniBar();
+  initPickemRefreshButton();
 
   // Session 2.26 follow-up -- initOutcomeReview() must resolve BEFORE
   // initPickem() renders the open-flags table: the row-level caution

@@ -672,6 +672,71 @@ td.edge-neg { color: var(--accent-neg); }
 
 /* ---------- show-all toggle (long flagged-opportunities table) ---------- */
 
+/* Pick'em real-data-freshness bar (Session 6.10) — reports when the
+   underlying line data was actually last pulled by the pipeline, not
+   when the browser loaded this page. See app.js's renderPickemFreshness()
+   for the three staleness tiers this drives. */
+.freshness-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.freshness-label {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.freshness-value {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+}
+
+.freshness-value.fresh {
+  color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.12);
+  border-color: rgba(79, 209, 139, 0.35);
+}
+
+.freshness-value.aging {
+  color: #ecb44f;
+  background: rgba(236, 180, 79, 0.12);
+  border-color: rgba(236, 180, 79, 0.35);
+}
+
+.freshness-value.stale {
+  color: var(--accent-neg);
+  background: rgba(226, 104, 91, 0.12);
+  border-color: rgba(226, 104, 91, 0.35);
+}
+
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+.refresh-btn:hover {
+  color: var(--text);
+  border-color: var(--accent-pos);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .show-all-btn {
   margin-top: 12px;
   background: none;
