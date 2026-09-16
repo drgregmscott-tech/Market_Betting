@@ -181,12 +181,18 @@ None of the five tracks' data files could be loaded. Check each track's own tab 
 <div class="freshness-bar" id="pickemFreshnessBar">
 <span class="freshness-label">Pick&rsquo;em data last pulled:</span>
 <span id="pickemFreshnessValue" class="freshness-value">—</span>
-<button id="pickemRefreshBtn" class="refresh-btn" type="button">↻ Refresh now</button>
+<button id="pickemRefreshBtn" class="refresh-btn" type="button">↻ Refresh page</button>
+<button id="pickemForceRefreshBtn" class="refresh-btn refresh-btn-force" type="button">⚡ Force new pull</button>
 </div>
 <p class="panel-note" id="pickemFreshnessNote">This is when the underlying line data was last pulled from the
-platforms &mdash; not when you loaded this page. The pipeline pulls hourly; if this is showing more than
-~90 minutes old, treat every line below as unverified until you refresh, and re-check the actual price on
-PrizePicks/Underdog before placing anything.</p>
+platforms &mdash; not when you loaded this page. The scheduled pipeline is <em>supposed</em> to run hourly,
+but GitHub has been confirmed to run it several hours apart in practice, not hourly &mdash; so don&rsquo;t
+assume it's recent. &ldquo;Refresh page&rdquo; only re-checks whatever the last pipeline run already
+produced. &ldquo;Force new pull&rdquo; kicks off a brand-new pipeline run on GitHub right now &mdash; it
+takes roughly 10&ndash;15 minutes to finish; re-check this panel (or click Refresh page) after that before
+you trust it. Always verify the exact line on PrizePicks/Underdog itself before placing anything &mdash;
+this page is a screening tool, not a live odds feed.</p>
+<p id="pickemForceRefreshStatus" class="freshness-status-msg" hidden></p>
 <div class="stat-row" id="statRow">
 <div class="stat">
 <span class="stat-value" id="statOpen">—</span>

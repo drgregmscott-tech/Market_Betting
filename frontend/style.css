@@ -737,6 +737,44 @@ td.edge-neg { color: var(--accent-neg); }
   cursor: default;
 }
 
+.refresh-btn-force {
+  border-color: rgba(79, 209, 139, 0.4);
+  color: var(--accent-pos);
+}
+
+.refresh-btn-force:hover {
+  border-color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.1);
+}
+
+.freshness-status-msg {
+  font-size: 12.5px;
+  margin: -4px 0 12px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  color: var(--text-dim);
+  max-width: 560px;
+}
+
+.freshness-status-msg.ok {
+  color: var(--accent-pos);
+  background: rgba(79, 209, 139, 0.08);
+  border-color: rgba(79, 209, 139, 0.3);
+}
+
+.freshness-status-msg.warn {
+  color: #ecb44f;
+  background: rgba(236, 180, 79, 0.08);
+  border-color: rgba(236, 180, 79, 0.3);
+}
+
+.freshness-status-msg.err {
+  color: var(--accent-neg);
+  background: rgba(226, 104, 91, 0.08);
+  border-color: rgba(226, 104, 91, 0.3);
+}
+
 .show-all-btn {
   margin-top: 12px;
   background: none;

@@ -2010,10 +2010,75 @@ function initPickemRefreshButton() {
   });
 }
 
+// Session 6.11 -- "Force new pull" hits /api/trigger-pickem-refresh, a
+// Cloudflare Pages Function that holds the real GitHub token server-side
+// (see that file's own header comment) and either finds a run already in
+// flight or starts a brand-new one. This button only ever STARTS a run;
+// it does not wait for it to finish (that takes ~10-15 min) or auto-
+// reload -- the user re-checks with "Refresh page" once it's done.
+function setForceRefreshStatus(text, tone) {
+  const el = document.getElementById("pickemForceRefreshStatus");
+  if (!el) return;
+  el.textContent = text;
+  el.className = "freshness-status-msg" + (tone ? " " + tone : "");
+  el.hidden = !text;
+}
+
+function initPickemForceRefreshButton() {
+  const btn = document.getElementById("pickemForceRefreshBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", async () => {
+    const proceed = window.confirm(
+      "This starts a brand-new pick'em pipeline run on GitHub right now (real API calls to the " +
+      "platforms, not a page refresh). It takes roughly 10-15 minutes. Continue?"
+    );
+    if (!proceed) return;
+
+    btn.disabled = true;
+    const originalLabel = btn.textContent;
+    btn.textContent = "Triggering…";
+    setForceRefreshStatus("Contacting GitHub…", "");
+
+    try {
+      const res = await fetch("/api/trigger-pickem-refresh", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+
+      if (data.ok) {
+        setForceRefreshStatus(
+          "New pull triggered — takes roughly 10-15 minutes. Click \"Refresh page\" after that to see it.",
+          "ok"
+        );
+      } else if (data.reason === "already_running") {
+        setForceRefreshStatus(
+          "A pull is already running" + (data.run_url ? " — " + data.run_url : "") + ". No need to trigger another.",
+          "warn"
+        );
+      } else if (data.reason === "not_configured") {
+        setForceRefreshStatus(
+          "Force-refresh isn't set up yet on this deploy (missing GH_ACTIONS_TOKEN secret). Use \"Refresh page\" for now.",
+          "err"
+        );
+      } else {
+        setForceRefreshStatus(
+          "Couldn't trigger a new pull (" + (data.message || ("HTTP " + res.status)) + "). Use \"Refresh page\" for now.",
+          "err"
+        );
+      }
+    } catch (err) {
+      setForceRefreshStatus("Couldn't reach the refresh endpoint: " + err.message, "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  });
+}
+
 async function init() {
   initTabs();
   initSelectionMiniBar();
   initPickemRefreshButton();
+  initPickemForceRefreshButton();
 
   // Session 2.26 follow-up -- initOutcomeReview() must resolve BEFORE
   // initPickem() renders the open-flags table: the row-level caution
