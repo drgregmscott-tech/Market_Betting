@@ -41,18 +41,27 @@ Unlike nflverse's single parquet file or MLB Stats API's per-player season
 game log, ESPN's public API has no single "every player's season stat line"
 endpoint for soccer. Building a per-game series (the shape build_stat_series()
 needs -- see pickem_sport_plugins/__init__.py's fetch_stats contract) means:
-  1. Walking each league's SCOREBOARD across the season so far, month by
-     month (a single wide date range was tried and silently returned FEWER
-     events than two narrower calls covering the same span -- e.g. usa.1
-     returned 25 events for a Feb-Sep range but 29 for just Sep 1-11 alone,
-     an undocumented real quirk, not a coding mistake -- so this plug-in
-     chunks by calendar month and dedupes by event id instead of trusting
-     one wide-range call).
+  1. Walking each league's SCOREBOARD across the season so far, ONE REAL
+     CALENDAR DAY AT A TIME as of the 2026-09-16 hotfix (see
+     _season_dates()' own docstring) -- a dashed date-range query
+     (`dates={start}-{end}`) originally chunked by month here, but ESPN's
+     scoreboard endpoint stopped accepting that syntax at all sometime
+     between 2026-09-11 and 2026-09-16 (confirmed live: a real, repeatable
+     400 on every range query, any league, even ESPN's own NFL
+     scoreboard -- an external API contract change, not a bug in this
+     plug-in). Two alternate multi-date syntaxes were checked and rejected
+     as unsafe (both return 200 but silently substitute "today" for
+     whatever range was actually requested -- see _season_dates()'s
+     docstring for the direct checks). Single-date `dates=YYYYMMDD` is the
+     only syntax confirmed to still return real, correct per-day data, so
+     this plug-in now walks one real day at a time and dedupes by event id.
   2. Pulling each completed match's own SUMMARY endpoint for the real
      per-player stat rows.
-This means hundreds of real HTTP calls per production run across five
-leagues and a partial season -- an accepted, real cost of this data source,
-same precedent as Session 2.13's MLB plug-in (no bulk alternative exists).
+This means hundreds to low thousands of real HTTP calls per production run
+across five leagues and a partial season (up from hundreds pre-2026-09-16,
+since scoreboard discovery is now per-day instead of per-month) -- an
+accepted, real cost of this data source, same precedent as Session 2.13's
+MLB plug-in (no bulk alternative exists).
 
 LEAGUE CODES AND SEASON-START MONTHS (real, checked)
 -------------------------------------------------------
@@ -218,48 +227,83 @@ SOCCER_COMPUTED_REQUIRED_COLUMNS: dict[str, list[str]] = {
 # ---------------------------------------------------------------------------
 # Fetch
 # ---------------------------------------------------------------------------
-def _month_ranges(season: int, start_month: int) -> list[tuple[str, str]]:
-    """Yields (YYYYMMDD, YYYYMMDD) covering each real calendar month from
-    the league's own season-start month through today -- see module
-    docstring's "NO SEASON-AGGREGATE ENDPOINT" note for why this chunks by
-    month instead of trusting one wide date range."""
+def _season_dates(season: int, start_month: int) -> list[str]:
+    """Yields every real calendar date (YYYYMMDD) from the league's own
+    season-start month through today.
+
+    HOTFIX (2026-09-16): this used to chunk by calendar MONTH and pass each
+    chunk as a single `dates={start}-{end}` range query (see this
+    function's pre-2026-09-16 docstring, kept below for the record). That
+    range syntax stopped working sometime between 2026-09-11 (last
+    confirmed live) and 2026-09-16 -- checked directly, repeated 4x to rule
+    out a transient blip: ESPN's scoreboard endpoint now returns a real,
+    consistent `400 {"code":400,"message":"Failed to get events
+    endpoint."}` for ANY dashed date range, even a single same-day range
+    (`dates=20260901-20260901`), across every league code and even ESPN's
+    own NFL scoreboard -- this is an external API contract change, not a
+    soccer-specific or transient issue. Two alternate multi-date syntaxes
+    were tried and rejected, not just assumed broken: `startDate`/`endDate`
+    query params return `200` but silently ignore both and always return
+    TODAY's scoreboard regardless of the dates requested (checked directly:
+    four different real start/end pairs spanning Aug-Sep 2026 all returned
+    the identical 4 events, all dated the real current day) -- worse than
+    the loud 400, since a silent wrong-date response could poison a season
+    stat series without any error ever being logged. `dates[]=a&dates[]=b`
+    (PHP-style array param) has the identical silent-ignore behavior.
+    Single-date `dates=YYYYMMDD` (no range) is the only syntax confirmed to
+    still return real, correct per-day data (checked directly against 4
+    known real dates, including one with zero real matches, and it
+    correctly returned 0 events rather than falling back to "today"). This
+    function now yields one date per real day since season start instead
+    of one chunk per month -- day-by-day is the safe, verified-correct
+    fallback now, not a chosen precedent to chunk more coarsely again if
+    this future-proofs it -- see _fetch_completed_events below for the
+    call-site change this requires.
+
+    PRE-2026-09-16 DOCSTRING (kept for history): "Yields (YYYYMMDD,
+    YYYYMMDD) covering each real calendar month from the league's own
+    season-start month through today -- see module docstring's 'NO
+    SEASON-AGGREGATE ENDPOINT' note for why this chunks by month instead of
+    trusting one wide date range.\""""
     today = date.today()
-    ranges: list[tuple[str, str]] = []
+    dates: list[str] = []
     year, month = season, start_month
     while (year, month) <= (today.year, today.month):
         last_day = calendar.monthrange(year, month)[1]
         end_day = today.day if (year, month) == (today.year, today.month) else last_day
-        ranges.append((f"{year}{month:02d}01", f"{year}{month:02d}{end_day:02d}"))
+        for day in range(1, end_day + 1):
+            dates.append(f"{year}{month:02d}{day:02d}")
         month += 1
         if month > 12:
             month = 1
             year += 1
-    return ranges
+    return dates
 
 
 def _fetch_completed_events(league_code: str, season: int) -> list[tuple[str, str]]:
     """Returns [(event_id, iso_date), ...] for every real completed match
     this league has played so far this season, deduped across the
-    month-chunked scoreboard calls.
+    day-by-day scoreboard calls (see _season_dates' HOTFIX docstring for
+    why this is per-day, not per-month-range, as of 2026-09-16).
 
-    HOTFIX (2026-09-12): one month's scoreboard call failing (after
-    retries -- see http_utils.get_json_with_retries) no longer aborts the
-    whole plug-in; it's logged and skipped, same fault-isolation standard
-    as _fetch_event_player_rows below. That one real month's matches are
-    simply missing from this run's sample rather than the entire soccer
-    plug-in (and, since an unhandled exception here previously propagated
-    all the way out of process_props(), every other sport's estimation
-    output too) going blank."""
+    HOTFIX (2026-09-12): one day's scoreboard call failing (after retries
+    -- see http_utils.get_json_with_retries) no longer aborts the whole
+    plug-in; it's logged and skipped, same fault-isolation standard as
+    _fetch_event_player_rows below. That one real day's matches are simply
+    missing from this run's sample rather than the entire soccer plug-in
+    (and, since an unhandled exception here previously propagated all the
+    way out of process_props(), every other sport's estimation output too)
+    going blank."""
     start_month = LEAGUE_SEASON_START_MONTH[league_code]
     seen: dict[str, str] = {}
-    for start, end in _month_ranges(season, start_month):
-        url = f"{ESPN_BASE}/{league_code}/scoreboard?dates={start}-{end}&limit=1000"
+    for day in _season_dates(season, start_month):
+        url = f"{ESPN_BASE}/{league_code}/scoreboard?dates={day}&limit=1000"
         try:
             payload = get_json_with_retries(url, timeout=20)
         except Exception as exc:  # noqa: BLE001
             log.warning(
-                "Skipping %s scoreboard for %s-%s after repeated failures: %s",
-                league_code, start, end, exc,
+                "Skipping %s scoreboard for %s after repeated failures: %s",
+                league_code, day, exc,
             )
             continue
         for event in payload.get("events", []):

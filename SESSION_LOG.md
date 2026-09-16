@@ -13630,3 +13630,72 @@ verified the user's fix with a second live pipeline run.
   #104` run's soccer plug-in failed every single real ESPN scoreboard call with `400 Client Error: Bad
   Request` (every league, every date range) -- a real regression from whatever Session 2.27 last
   verified working. Not fixed or diagnosed further this session; flagged for a future session.
+
+## Hotfix — Soccer/ESPN scoreboard `400` (ESPN broke dashed date-range queries) (2026-09-16)
+
+**Date completed:** 2026-09-16
+**Status:** ✅ Complete
+
+**What happened:** Session 2.28 flagged (but did not investigate) that `Pick'em Pipeline #104`'s soccer
+plug-in failed every single real ESPN scoreboard call with a `400`, across every league and date range.
+Reproduced directly this session: `GET .../soccer/esp.1/scoreboard?dates=20260901-20260910` returns a
+real, consistent `{"code":400,"message":"Failed to get events endpoint."}` — repeated 4x to rule out a
+transient blip, and checked across every one of this plug-in's 5 league codes plus, as a control,
+ESPN's own NFL scoreboard endpoint with the identical range syntax. All failed the same way. This is a
+real, external ESPN API contract change (dashed `dates={start}-{end}` range queries no longer accepted
+at all), not a soccer-specific bug, a key/auth issue, or a transient outage — it broke sometime between
+2026-09-11 (last confirmed live, per `soccer.py`'s own docstring) and 2026-09-15/16 (Session 2.28's
+run).
+
+**What was checked before landing on the fix (not guessed at):**
+- `startDate=`/`endDate=` query params: return `200`, but checked directly against 4 different real
+  date-range pairs spanning Aug-Sep 2026 — all four returned the identical events, all dated the actual
+  current day. ESPN silently ignores both params and always serves today's scoreboard regardless of
+  what range was requested. Rejected: this would have "fixed" the loud 400 by replacing it with a
+  silent wrong-date response, poisoning the season stat series with no error ever logged — strictly
+  worse than the visible failure it would have replaced.
+- `dates[]=a&dates[]=b` (PHP-style array param): same silent-ignore-and-return-today behavior, checked
+  the same way. Also rejected.
+- Single-date `dates=YYYYMMDD` (no range): checked against 4 known real dates, including one with zero
+  real matches — correctly returned that exact day's real events every time, including a correct empty
+  result for the no-match day rather than falling back to "today." This is the only syntax confirmed
+  both to still work and to return correct data.
+
+**Fix:** `scripts/estimation/pickem_sport_plugins/soccer.py` — replaced `_month_ranges()` (yielded one
+`(start, end)` chunk per calendar month) with `_season_dates()` (yields one single date per real
+calendar day since season start), and `_fetch_completed_events()` now calls the scoreboard endpoint
+once per day (`dates={day}&limit=1000`) instead of once per month-range. This roughly multiplies
+scoreboard-discovery call volume by the average days-per-month (~30x for that portion of the plug-in's
+real HTTP traffic) — an accepted, real cost increase given the alternative (silently wrong data) is
+disqualified and there is no other bulk endpoint, same "no bulk alternative exists" precedent already
+applied to per-match/per-player calls in this same file. A day's scoreboard call failing after retries
+still just logs and skips that one day (unchanged fault-isolation behavior from the 2026-09-12 hotfix),
+so one bad day no longer means the whole plug-in returns zero data the way the systemic range-400 did.
+
+**Files touched:** `scripts/estimation/pickem_sport_plugins/soccer.py` only — `epl.py` (FPL, unaffected;
+does not use ESPN's scoreboard at all) and `auto_grade_outcomes.py` needed no change.
+
+**Validation:**
+- [x] Reproduced the real `400` directly (4 repeats, 5 league codes, plus NFL as a control) before
+  writing any fix.
+- [x] Ran `fetch_soccer_espn_season_stats(2026)` end-to-end against live ESPN data after the fix: 21,776
+  real per-player-game rows returned (previously 0, since every scoreboard call failed). Elapsed ~280s
+  for the full 5-league, day-by-day walk — slower than the pre-break month-chunked version but produces
+  real data, unlike a fast call that returns nothing.
+- [x] `auto_grade_outcomes.py --run --dry-run`: soccer candidates went from the pre-fix 0-recoverable
+  state back to 533 of 635 real closed candidates gradable (matching Session 2.27's original working
+  ratio; the other 93 no_game_match / 9 no_player_match are the same real, stated ESPN-league-coverage
+  gap Session 2.27 already documented, not a new problem).
+- [x] `test_pickem_model.py` + `test_sizing_engine.py` — 73/73 pass.
+- [x] **Ran for real:** `--run` wrote 533 new real graded soccer rows to `data/pickem/outcome_log.csv`.
+
+**Open items / deferred validations:**
+- No GitHub Actions workflow change was needed — `pickem_pipeline.yml` already calls this plug-in
+  through the existing `fetch_stats()` contract with no hardcoded call shape, so the fix takes effect on
+  the next scheduled run automatically.
+- The real per-run HTTP call volume for soccer discovery is now meaningfully higher (day-by-day instead
+  of month-chunked). Not yet a measured problem (the live run above completed in under 5 minutes), but
+  worth watching if ESPN ever rate-limits this plug-in specifically — no rate-limit handling beyond the
+  existing generic retry-and-skip exists today.
+- Session 2.28's own remaining CFB gap (1,265 flags waiting on CFBD to publish week-3 final results) is
+  unrelated to this fix and still open, per that session's own entry above.
