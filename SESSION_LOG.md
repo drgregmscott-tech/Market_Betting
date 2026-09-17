@@ -15115,3 +15115,139 @@ via the GitHub releases API before use.
   validated first, wired in second.
 - The `receiving_tds` standout correlation (+0.428, n=19) is too small and zero-inflated a
   sample to act on alone; worth re-checking once more receiving-TD legs grade in.
+
+---
+
+## Session 2.44 — Target Share / Usage Role as a Predictive Input
+
+**Date completed:** 2026-09-17
+
+**Status:** ✅ Complete, real modest-but-consistent signal found — NOT wired into
+`pickem_model.py`, for a stated STRUCTURAL reason (not a weak-signal reason): every real
+graded NFL leg so far is Week 1 2026, which by definition has zero prior-2026-game history
+for any player, so this trend feature cannot yet be computed for, or evaluated against,
+this project's own real legs.
+
+**What was actually done:**
+1. **Confirmed directly (not assumed) what usage/role columns nflverse's weekly stats
+   already carry**: fetched `stats_player_week_2026.parquet` live and listed every column.
+   It already includes `target_share` (player's targets / team's total targets that
+   game), `air_yards_share`, `wopr` ("weighted opportunity rating",
+   1.5*target_share + 0.7*air_yards_share, an nflverse-published composite), and `carries`
+   (raw rush-attempt count) — all non-null on every row, at zero extra fetch cost (same
+   file `pickem_sport_plugins/nfl.py` already pulls).
+2. **Confirmed the real gap by grepping this project's own `scripts/` directory**:
+   `target_share`/`air_yards_share`/`wopr`/`racr`/`carries` are referenced NOWHERE outside
+   the new research script. `targets` IS already used, but only as a scored OUTCOME stat
+   when a prop directly asks for "rec targets" — never read as a LEADING INDICATOR for a
+   different prop (e.g. `receiving_yards`). A real, confirmed gap, not a guessed one.
+3. **Designed a trend feature distinct from `recent_form`**: `usage_trend()` — the OLS
+   slope of `target_share` (receiving side) or raw `carries` (rushing side) against game
+   order, over up to the last 5 real games STRICTLY BEFORE the game being predicted
+   (matches `RECENCY_WEIGHTS`' own 5-game window). `usage_level()` (plain mean over the
+   same window) computed alongside, purely so trend's INCREMENTAL value beyond level could
+   be isolated via partial correlation, not just restated.
+4. **Carries limitation stated plainly**: no team-normalized "carry share" column exists
+   in this file (unlike `target_share`, which nflverse already computes team-normalized).
+   `carries` is tested here as a raw per-game count trend, a real, named approximation for
+   the rushing side.
+5. **Chose full 2025 REG season over 2026 Week 1 graded legs, and said why**: Sessions
+   2.41/2.43 were both structurally limited to Week 1 2026 (this project's only graded NFL
+   legs so far), forcing a prior-SEASON baseline across a real offseason roster/scheme gap
+   — the likely reason both found weak signals. A role-TREND feature needs several PRIOR
+   GAMES WITHIN THE SAME SEASON to even be computable, so Week 1 cannot test this
+   hypothesis at all (checked directly: still 1,972 real graded NFL legs, all dated
+   2026-09-10 through 2026-09-15, unchanged since Session 2.43). Using the full, real 2025
+   season instead (18 weeks, no offseason gap inside the window) sidesteps this limitation
+   rather than inheriting it, and gives a much larger real sample (13,008 usable
+   player-weeks vs. hundreds of graded legs).
+6. **`scripts/calibration/research_target_share_usage_trend.py`** (new) — for every real
+   2025 player-week with >= 3 real prior games, computes `usage_trend`/`usage_level` from
+   strictly earlier weeks only (no future data ever enters the window), pairs each with
+   that week's REAL outcome, and reports `corr(trend, actual)`, `corr(level, actual)`, and
+   the partial correlation of trend controlling for level — on the full season, then on an
+   explicit temporal split (weeks 1-12 vs. 13-18 held-out), same discipline as
+   `fit_shrinkage.py`'s train/held-out split.
+7. **Real result (2025 REG season, 13,008 usable player-weeks)**: the partial correlation
+   of `usage_trend` beyond `usage_level` was small but POSITIVE and CONSISTENT across both
+   the full season and the held-out split (unlike Sessions 2.41/2.43's inconsistent-sign
+   results) for `receiving_yards` (full +0.041, weeks 1-12 +0.023, weeks 13-18 +0.066),
+   `receptions` (+0.067 / +0.044 / +0.098), `targets` (+0.062 / +0.039 / +0.094), and
+   `rushing_yards` (+0.073 / +0.091 / +0.040). `receiving_tds` (+0.014 / +0.004 / +0.027)
+   and `rushing_tds` (+0.003 / -0.022 / +0.040, sign-inconsistent) were weak — the same
+   zero-inflated-TD caveat Session 2.41 raised — and are excluded from any future wiring.
+   Plain `usage_level` alone was very strongly correlated with same-week outcomes
+   (+0.73 to +0.85), confirming the general usage-columns-matter premise, but that is
+   `season_avg`/`recent_form`-shaped information already captured by other means; the
+   partial correlation isolates what TREND specifically adds.
+8. **Decision: did NOT wire this into `pickem_model.py`, for a structural reason, not a
+   weak-signal one.** Unlike Session 2.41 (matchup_factor) and Session 2.43 (Vegas implied
+   total), where the decision not to wire in was because the correlation itself was too
+   weak, this feature's held-out signal was real, modest, and consistent — closer to
+   Session 2.42's "real but modest, worth wiring in" shrinkage result. The blocker here is
+   different and more fundamental: `usage_trend()` requires >= 3 real games STRICTLY
+   BEFORE the predicted game, and every one of this project's 1,972 real graded NFL legs is
+   Week 1 2026 — zero prior 2026 games exist for any player yet, so the feature is
+   literally uncomputable for 100% of this project's own real legs today (and will remain
+   so through Week 3, since even Week 4 only gives exactly 3 prior games). Wiring in an
+   adjustment that cannot be evaluated against this project's own real graded legs, and
+   would be a no-op for every real leg anyway until Week 4+, was judged not worth doing
+   this session — revisit once real Week 4+ 2026 legs exist (see Open items).
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass, unchanged (research-only script, no production code touched).
+- Real column presence confirmed live against `stats_player_week_2026.parquet` (item 1
+  above) and the "not currently used" gap confirmed via a real grep of `scripts/` (item 2).
+- Real, held-out temporal split (weeks 1-12 vs. 13-18, 2025 REG season) showed a
+  consistent-sign partial correlation for `receiving_yards`/`receptions`/`targets`/
+  `rushing_yards` — see item 7 above.
+- Confirmed live (2026-09-17) that all 1,972 real graded NFL legs remain Week 1
+  (2026-09-10 through 2026-09-15), same as Session 2.43 — the structural blocker in
+  decision item 8 is a currently-real, checked fact, not an assumption.
+
+**Files touched:**
+- `scripts/calibration/research_target_share_usage_trend.py` (new)
+- `ROADMAP.md` (Session 2.44 card closed out, all three validation items checked)
+
+**Decisions made:**
+1. Used the full 2025 REG season, not 2026 Week 1 graded legs, as the validation sample —
+   the ONLY real data that can test a within-season trend hypothesis at all right now,
+   stated explicitly rather than silently reusing 2.41/2.43's Week-1-only, offseason-gapped
+   approach.
+2. Tested `target_share` (receiving) and raw `carries` (rushing) as the two named usage
+   signals from the roadmap card; did not build a team-normalized "carry share" (would
+   need a new per-game team-total-rushes join, a real, larger effort explicitly deferred).
+3. Excluded `receiving_tds`/`rushing_tds` from the positive-result set given
+   sign-inconsistent partial correlations across the temporal split — the same
+   zero-inflated-TD standard Session 2.41 already established for this project.
+4. Did not wire the feature into `pickem_model.py` this session — not because the signal
+   was too weak (it wasn't), but because it is currently a no-op for 100% of this
+   project's real graded NFL legs (all Week 1, zero prior-2026-game history to compute a
+   trend from) and cannot be evaluated on real production legs yet either. Wiring in an
+   unevaluatable adjustment would violate this project's own "validate on real data before
+   wiring in" standard just as much as wiring in a weak one would.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- Re-run `research_target_share_usage_trend.py`'s logic against real 2026 legs once real
+  Week 4+ games exist (the earliest point any 2026 leg can have >= 3 real prior games) —
+  at that point, a real leg-level Brier-based fit (mirroring `fit_shrinkage.py`'s
+  methodology: join retained snapshots' `player_name`/`game_start_time` to a live-computed
+  `usage_trend`, grid-search a real adjustment strength, held-out-validate) becomes
+  possible for the first time, and is the right next step before any production wiring.
+- If that future real-leg fit confirms a genuine held-out Brier improvement, wire
+  `usage_trend` into `pickem_model.py` as a mean-side adjustment for
+  `receiving_yards`/`receptions`/`targets`/`rushing_yards` only (TDs excluded per this
+  session's finding), gated by `MIN_GAMES_FOR_TREND` the same way shrinkage is gated by
+  `MIN_GAMES_FOR_ESTIMATE`.
+- No team-normalized "carry share" column exists in nflverse's weekly file; computing one
+  (summing each team's total rush attempts per game) is a real, larger join deferred here
+  — worth doing later if `carries`' raw-count trend continues to hold up, to test whether a
+  properly share-normalized version is even stronger.
+- This session's 2025-season validation, while real and held-out, is still a general
+  within-season check, not a check against THIS project's own model_mean/sigma/probability
+  pipeline (unlike Session 2.42's shrinkage fit, which used real retained snapshots and
+  real graded-leg Brier scoring throughout) — the leg-level fit above is what closes that
+  gap once real Week 4+ data exists.

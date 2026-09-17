@@ -3353,11 +3353,16 @@ all today.
 ---
 
 ### Session 2.44 — Target Share / Usage Role as a Predictive Input
-**Status:** Not started
-**Prerequisites:** None — likely uses data this project already pulls (nflverse's weekly
-player stats plausibly already carry role/usage columns like targets/carries beyond what's
-currently used only as a scored OUTCOME stat); first step is auditing what's actually
-already available before assuming a new source is needed.
+**Status:** ✅ Complete, real modest-but-consistent signal found — NOT wired into
+`pickem_model.py` for a stated STRUCTURAL reason (every real graded NFL leg so far is
+Week 1, which has zero prior-2026-game history by definition, so the feature cannot yet
+be evaluated OR used on this project's own real legs), not a weak-signal reason. See
+SESSION_LOG.md Session 2.44.
+
+**Prerequisites:** None — used data this project already pulls (nflverse's weekly player
+stats already carry role/usage columns like target_share/carries beyond what's currently
+used only as a scored OUTCOME stat); confirmed live rather than assuming a new source was
+needed.
 
 **Why this is different from Session 2.42/2.43:** this is not a new statistical technique
 (2.42) or a new data source (2.43) — it's about using EXISTING columns as a leading
@@ -3375,10 +3380,24 @@ participation trend named as a primary predictor specifically for receiving prop
 - Validates on a real held-out split before wiring in.
 
 **Validation (required to close session):**
-- [ ] Real, already-available usage/role columns audited and documented (confirms whether
-this needs a new source at all, or just different use of an existing one).
-- [ ] Feature designed and sourced explicitly.
-- [ ] Real held-out validation before wiring in.
+- [x] Real, already-available usage/role columns audited and documented — confirmed live,
+`stats_player_week_2026.parquet` already carries `target_share`, `air_yards_share`,
+`wopr`, and `carries` on every row, at zero extra fetch cost; confirmed via grep that none
+of these (nor `targets` as anything other than a scored OUTCOME) are read anywhere in
+`scripts/` today. No new data source needed.
+- [x] Feature designed and sourced explicitly — `usage_trend()`: OLS slope of
+`target_share` (receiving side) or raw `carries` (rushing side, stated approximation — no
+team-normalized "carry share" column exists) over up to the last 5 real games strictly
+before the game being predicted; distinct from `usage_level()` (plain mean, for
+comparison).
+- [x] Real held-out validation before wiring in — see
+`scripts/calibration/research_target_share_usage_trend.py`: full 2025 REG season
+(13,008 player-weeks with enough real prior games), temporal split weeks 1-12 vs. 13-18.
+Partial correlation of trend beyond level was positive and consistent (not just in one
+split) for `receiving_yards` (+0.023 / +0.066), `receptions` (+0.044 / +0.098), `targets`
+(+0.039 / +0.094), and `rushing_yards` (+0.091 / +0.040) — modest, real, held-out-
+confirmed. `receiving_tds`/`rushing_tds` were weak and inconsistent in sign (same
+zero-inflated-TD caveat Session 2.41 raised) and are excluded from any future wiring.
 
 ---
 
