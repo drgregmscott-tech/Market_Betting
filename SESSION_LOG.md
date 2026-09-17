@@ -14087,3 +14087,74 @@ should go, which is what this session was scoped to produce.
   (Section 3, `docs/sample_size_methodology.md`) for any single cell — even the largest
   qualifying cells (MLB demon `under`, n=10,814) are large only because they pool many
   different stats together, which Finding #1 already disqualifies from a clean read.
+
+## Session 2.38 — NFL Grading-Path Audit (Follow-Up to 2.37 Finding #4)
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — the grading mechanism itself is verified correct; the large
+apparent NFL edge is real data, but not real evidence of a repeatable edge. It is one
+statistical-clustering illusion, not a code bug.
+
+**What was actually done:**
+1. Checked `closing_line` coverage/movement for NFL: 8,607 of 8,613 real NFL clv_log.csv
+   rows carry a closing snapshot (well-populated), and 27% of those moved from
+   `first_flagged_line` before close — the 2026-09-17 closing-line fix materially changes
+   NFL grading, not a no-op.
+2. Checked for a stuck-join artifact (the classic failure mode a schedule-date join could
+   produce — same actual_value repeated across unrelated flags): none found. Hand-read 30
+   real graded NFL rows directly; all values look like real, distinct, plausible box-score
+   numbers.
+3. **Verified two real graded NFL rows against real, live external box scores (WebSearch,
+   not just internal plausibility):**
+   - Patrick Mahomes, `attempts`, flagged over 31.5, game 2026-09-14 (Chiefs @ Broncos,
+     Week 1): this project's `actual_value` = 27.0. Real box score (ESPN/Fox
+     Sports/Bleacher Report, cross-confirmed): 27 attempts. **Exact match.**
+   - Jaylen Waddle, `receiving_yards`, flagged under 53.5, same date: this project's
+     `actual_value` = 2.0. Real box score: 1 catch for 2 yards. **Exact match** — including
+     correctly attributing Waddle to his real 2026 team (traded Dolphins→Broncos,
+     2026-03-17) rather than a stale roster snapshot, which a real schedule-join bug could
+     plausibly have gotten wrong.
+   Two-for-two real, external, exact-match spot-checks is strong evidence Session 2.18's
+   NFL schedule-join grading path (untouched by the 2026-09-17 dedup/closing-line fix) is
+   computing the right number for the right player/game.
+4. **Found the real explanation instead: every NFL flag in `clv_log.csv` (8,613 of 8,613,
+   minus 9 stray future rows) has a real `game_start_time` between 2026-09-10 and
+   2026-09-15 — Week 1 of the 2026 season, in its entirety.** The 1,972 graded NFL legs
+   this audit's Finding #4 called "n>650 per side" trace back to only **30 distinct real
+   `game_id`s** (confirmed by joining `outcome_log.csv` to `clv_log.csv`'s `game_id`). Per-
+   game win rate is unusually *consistent* (most games 65–80%), not a couple of outlier
+   blowouts skewing an average — a real, broad Week 1 pattern, not one lucky game.
+
+**Why this matters — the real diagnosis:**
+Session 2.37's Wilson-CI method (like the sample-size methodology docs it's built on)
+treats every graded leg as an independent Bernoulli trial. That assumption is badly
+violated here: many legs share the same real game, so a systematic Week 1 effect (new
+coaching schemes, personnel/trades not yet reflected in either the model's season-average
+prior or the platform's own line-setting, roster uncertainty) can make an entire game's
+worth of props hit together, in the same direction, for a shared reason that has nothing
+to do with per-leg predictive skill. A test built for independent trials will report a
+tight, "highly significant" confidence interval on what is really only ~30 correlated
+data points, not ~2,000 independent ones. This is a real, generalizable methodology gap,
+not NFL-specific — it just shows up most starkly here because NFL's real games-per-week
+count (16) is far smaller than MLB's (~15/day), so one week is a much bigger share of
+NFL's total sample than one day is of MLB's.
+
+**Verdict on Finding #4 (revised):** Not a measurement bug in the grading pipeline (ruled
+out directly). Not yet usable as evidence of a real, repeatable edge either — it is one
+correlated week, not sixteen independent ones. **Re-open and re-check once NFL flags span
+at least 4-6 distinct weeks**, and when re-checking, cluster the significance test by
+`game_id` (or `week`), not by individual leg, so within-game correlation cannot manufacture
+false confidence the way it did here.
+
+**Files touched:** None (investigation-only; no code changed — the grading path was
+audited and passed, so there was nothing to fix).
+
+**Open items / deferred validations:**
+- **Cluster-aware significance testing** is now a known gap in this project's own
+  evaluation methodology (`docs/sample_size_methodology.md`, `pickem_model_validity_audit.py`),
+  not just an NFL footnote — worth a real fix once enough multi-week data exists to make it
+  checkable (a clustered SE correction needs multiple clusters to estimate from).
+- Re-run the NFL cut of `pickem_model_validity_audit.py` after Week 2+ closes; if the
+  effect shrinks toward a believable few-point edge (or flips), that confirms this was a
+  Week 1 clustering artifact; if it stays this large across multiple independent weeks,
+  that would be a genuinely remarkable, worth-escalating finding.

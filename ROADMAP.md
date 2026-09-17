@@ -2993,6 +2993,26 @@ SESSION_LOG.md for full reasoning, including a correction to Session 2.31's Unde
 
 ---
 
+### Session 2.38 — NFL Grading-Path Audit (Follow-Up to 2.37 Finding #4)
+**Status:** ✅ Complete (2026-09-17) — grading mechanism verified correct (2 real
+external box-score spot-checks, exact match, including a mid-season trade handled
+correctly); the large NFL "edge" is not a pipeline bug — it's a statistical-clustering
+illusion. All 1,972 graded NFL legs trace back to only 30 real games, all in the 2026
+season's Week 1 (the entirety of NFL data ingested so far). A leg-level proportion test
+overstates confidence when that many legs share a handful of correlated real games. See
+SESSION_LOG.md for the full investigation.
+**Prerequisites:** Session 2.37 (this follows directly from its Finding #4).
+
+**Validation (required to close session):**
+- [x] Grading mechanism checked against real, external, live box scores (not just
+internal plausibility) — 2/2 exact matches.
+- [x] Real root cause identified for the outsized apparent edge: n=1,972 legs is really
+n=30 correlated games (Week 1 only), not 1,972 independent trials.
+- [x] Explicit re-open condition recorded: re-check once NFL flags span 4-6+ distinct
+weeks, using a game/week-clustered significance test, not a per-leg one.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
