@@ -3080,6 +3080,167 @@ schedule — the join mechanism itself is proven; the null result is about the s
 weak-to-negative result reported plainly, not massaged into a positive-looking summary.
 - [x] Explicit go/no-go: NOT wired into production. Re-check condition recorded: once
 real in-season (not prior-season) defense-allowed data exists for multiple weeks.
+- [x] Same-day follow-up (2026-09-17 chat): opponent EPA-allowed (the industry-standard,
+stronger metric per real research) tested too — also weak-to-negative on this same prior-
+season-only, Week-1-only sample. Strengthens, doesn't weaken, the "not enough real
+in-season data yet" conclusion. See SESSION_LOG.md's same-day addendum, including a real,
+sourced reframe of Session 2.38's finding (Week 1 lines being unusually soft is a
+documented, active industry phenomenon, not only a candidate bug explanation).
+
+---
+
+### Session 2.42 — Shrinkage Estimation for Thin-Sample Players
+**Status:** Not started
+**Prerequisites:** None (uses data already fetched by every sport plug-in). Reuses Session
+2.40's validation method (real temporal held-out split, not in-sample Brier).
+
+**Why this is the highest-priority model change identified so far:** a 2026-09-17 chat
+conversation researched what real, professional sports-projection systems do differently
+from this model and confirmed shrinkage/regression-to-the-mean toward a league or
+positional prior, weighted by real sample size, is standard practice specifically because
+raw small-sample averages are known to be unreliable estimates of true talent (real,
+sourced finding — see that conversation). This model currently has NONE: `MIN_GAMES_FOR_
+ESTIMATE = 2` (`pickem_model.py`) means a player with exactly 2 games gets their raw
+sample mean/sigma trusted exactly as much as a player with 15. This is very likely a real
+contributor to the Week 1 anomaly Sessions 2.37/2.38 found (Week 1 is precisely when
+current-season sample sizes are thinnest project-wide, not NFL-specific), and unlike a new
+matchup-adjustment feature (Session 2.41's real negative result), needs no new data source
+— every input already exists in data this project already pulls.
+
+**What this session does:**
+- Computes a real league/positional average per `resolved_stat_key` (aggregated across
+  all players at that position from the same already-fetched weekly stats) as the
+  shrinkage target.
+- Designs a sample-size-weighted shrinkage formula (e.g. `shrunk_mean = (n/(n+k)) *
+  player_mean + (k/(n+k)) * league_avg`), with the prior-strength constant `k` FIT against
+  real graded outcomes (same Brier-minimizing grid-search method `fit_sigma_recalibration.py`
+  already established for `SIGMA_CALIBRATION_FACTOR`), not guessed.
+- Validates on a real temporal held-out split (Session 2.40's method), checking
+  specifically whether the improvement concentrates in thin-sample (early-season) legs, as
+  the hypothesis predicts, or is flat/uniform (which would argue against the Week-1-link
+  theory even if shrinkage helps overall).
+- Wires in only the validated version, gated the same way Session 2.40's isotonic fix was
+  (a visible column showing whether/how much shrinkage was applied, clean fallback to the
+  raw mean when unvalidated or n is already large).
+
+**Validation (required to close session):**
+- [ ] League/positional baseline computed and sourced (not a guessed constant).
+- [ ] Shrinkage strength `k` fit against real data via a stated, reproducible method.
+- [ ] Real temporal held-out validation (not in-sample) shows a real Brier/calibration
+improvement, with an explicit check of whether the improvement concentrates in thin-sample
+legs.
+- [ ] Wired into `pickem_model.py` only if validated, with a visible new column
+transparently showing the shrinkage applied per row.
+
+---
+
+### Session 2.43 — Vegas Game Environment (Implied Team Total / Pace) as a Model Input
+**Status:** Not started
+**Prerequisites:** None directly, but this is a genuinely NEW data source, unlike Session
+2.42 — confirmed directly (2026-09-17) that this project does not currently ingest
+full-game Vegas odds (spread/total/moneyline) anywhere; Track 5's sportsbook-props
+ingestion only pulls player PROP odds, not game lines.
+
+**Why this matters:** real research (2026-09-17 chat conversation) found Vegas-implied
+game environment (blowout/shootout/grind/competitive, driven by the game's real point
+total and spread) described as one of the top drivers of player prop outcomes in
+professional models — a high-total, close game means more plays and more passing for
+both teams; a lopsided game changes usage patterns (garbage-time volume for the losing
+team, run-heavy clock-killing for the winner). This model has no game-context signal at
+all today.
+
+**What this session does:**
+- Researches and confirms a real, free (or already-affordable) source of full-game NFL
+  odds (candidates to check live, not assume: the same feed/API already used for Track 5's
+  player props if it also carries game lines; a free odds aggregator; ESPN's own odds
+  display). Must be checked directly, per this project's own standard, not assumed to
+  exist just because player-prop odds do.
+- Computes each team's real implied point total per game (`game_total/2 ± spread/2`) and
+  sanity-checks it against a few known real games by hand before trusting it further.
+- Designs a stated, explicit scaling adjustment (e.g. player's volume-based stats scaled
+  by `team's implied total / team's real season-average point total`) — a standard,
+  named DFS-industry technique, not a guessed formula.
+- Validates on a real held-out split before wiring in, same discipline as every prior
+  model-change session this cycle.
+
+**Validation (required to close session):**
+- [ ] A real, working, sourced full-game odds feed confirmed live (not assumed).
+- [ ] Implied team total computed and spot-checked against real known games.
+- [ ] Adjustment formula stated explicitly and sourced (not a guessed multiplier).
+- [ ] Real held-out validation before any production wiring.
+
+---
+
+### Session 2.44 — Target Share / Usage Role as a Predictive Input
+**Status:** Not started
+**Prerequisites:** None — likely uses data this project already pulls (nflverse's weekly
+player stats plausibly already carry role/usage columns like targets/carries beyond what's
+currently used only as a scored OUTCOME stat); first step is auditing what's actually
+already available before assuming a new source is needed.
+
+**Why this is different from Session 2.42/2.43:** this is not a new statistical technique
+(2.42) or a new data source (2.43) — it's about using EXISTING columns as a leading
+indicator (is this player's role trending up or down over their last few games) rather
+than only as the thing being predicted. Real research found target share / route
+participation trend named as a primary predictor specifically for receiving props.
+
+**What this session does:**
+- Audits `stats_player_week`'s real, already-fetched columns for usage/role signals
+  (targets, carries, snap-adjacent fields if present) not currently used as predictive
+  inputs.
+- Designs a trend feature (e.g. a role-share slope over the last N games), distinct from
+  `recent_form`'s own recency-weighted average, since a trend captures direction, not just
+  level.
+- Validates on a real held-out split before wiring in.
+
+**Validation (required to close session):**
+- [ ] Real, already-available usage/role columns audited and documented (confirms whether
+this needs a new source at all, or just different use of an existing one).
+- [ ] Feature designed and sourced explicitly.
+- [ ] Real held-out validation before wiring in.
+
+---
+
+### Session 2.45 — Injury/Role Confirmation Beyond MLB (NFL and Other Sports)
+**Status:** Not started — lower priority than Sessions 2.42-2.44 (per the user's own
+prioritization, 2026-09-17).
+**Prerequisites:** Sessions 2.32/2.33 (MLB's starter/lineup-confirmation gate) as the
+existing precedent to extend, including Session 2.33's live-validation-window pattern
+(measure real win-rate-by-bucket over time before gating on it, not just build and trust).
+
+**What this session does:** researches and confirms a real, free NFL injury-report/
+inactive-list data source (e.g. a public injury-report feed — checked live, not assumed),
+and builds a confirmation gate for NFL mirroring Session 2.32's MLB pattern (a named
+status: confirmed / different-than-expected / not-yet-confirmed), then opens a live
+validation window (Session 2.33's pattern) rather than gating on it immediately.
+
+**Validation (required to close session):**
+- [ ] Real, free, sourced NFL injury/inactive data feed confirmed live.
+- [ ] Confirmation-status gate built, mirroring the MLB pattern's naming/shape.
+- [ ] Live validation window explicitly opened, not closed in this same session (matching
+Session 2.33's own "measurement first, gating second" discipline).
+
+---
+
+### Session 2.46 — Weather as a Model Input (Outdoor Games)
+**Status:** Not started — lower priority than Sessions 2.42-2.44 (per the user's own
+prioritization, 2026-09-17; real research also places weather below EPA/pace/usage as a
+predictive driver).
+**Prerequisites:** None.
+
+**What this session does:** sources a real, free weather data API keyed to stadium
+location and real game time; correctly distinguishes dome/indoor games (where weather is
+irrelevant) from real outdoor games; checks real correlation between wind/precipitation/
+temperature and wind-sensitive stats specifically (passing yards, field-goal accuracy) on
+real graded legs; wires in only if a real, held-out-validated effect is found.
+
+**Validation (required to close session):**
+- [ ] Real, free, sourced weather data feed confirmed live.
+- [ ] Dome vs. outdoor games correctly distinguished (a wrong dome list would silently
+apply a real-weather adjustment to a game weather can't affect).
+- [ ] Real correlation/held-out check against wind-sensitive stats specifically, not a
+blanket assumption that weather matters uniformly.
+- [ ] Wired in only if validated.
 
 ---
 

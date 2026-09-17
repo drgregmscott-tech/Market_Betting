@@ -14436,6 +14436,48 @@ model's single biggest stated gap versus what a real sharp props model typically
 **Corrections/reversals during the session:** None — this session's own finding is itself
 the outcome (a real negative result), not a correction of a mistake made along the way.
 
+**SAME-DAY FOLLOW-UP (2026-09-17 chat conversation, after this session closed) — EPA
+tested too, same negative result.** The user asked what a successful model would look
+like compared to this one; research turned up that professional NFL prop models use
+opponent EPA (Expected Points Added) per play, not raw yards allowed, as their standard
+matchup-adjustment signal (EPA already reflects scoring value, not just yardage, and is
+described as one of the strongest predictors in the field — see
+`scripts/calibration/research_nfl_matchup_adjustment.py`'s own docstring for the search
+finding). `stats_team_week_2025.parquet` (already pulled by this session) carries
+`passing_epa`/`rushing_epa`/`receiving_epa` columns that were not tested. Re-ran the same
+real correlation check using opponent EPA-allowed instead of raw yards-allowed: **also
+weak-to-negative for all 10 stats** (attempts -0.220, completions -0.089, passing_tds
+-0.203, passing_yards -0.259, receiving_tds +0.053, receiving_yards -0.054, receptions
+-0.007, rushing_tds +0.179, rushing_yards -0.074, targets -0.069). This strengthens, not
+weakens, this session's core finding: the problem isn't that raw yards-allowed is a weak
+metric (though it is, per the research) — a genuinely stronger, industry-standard metric
+(EPA) shows the same null result on the same real data. This is further real evidence that
+the limiting factor is the PRIOR-SEASON-ONLY data available for Week 1, not the specific
+metric chosen. Not written into `research_nfl_matchup_adjustment.py` as a second code path
+(the finding is recorded here since it did not change this session's go/no-go decision),
+but should inform the design of a future in-season matchup-adjustment session: prefer EPA
+over raw yards-allowed once real in-season data exists to test it against, since the
+industry evidence for EPA is real even though this specific test (prior-season, Week 1
+only) could not confirm it.
+
+**ALSO SAME-DAY — a real, sourced reframe of Session 2.38's finding, not a reversal.**
+Research (WebSearch, 2026-09-17) found that Week 1 NFL prop lines being softer/more
+beatable than mid-season lines is a real, currently-documented, active phenomenon in the
+sports-betting industry (sportsbooks have not yet adjusted to real roster/scheme/usage
+changes from the offseason) — e.g. a real, dated example found live: Trevor Lawrence's
+passing-yards line moved from 225.5 to 234.5 in one week as sharp money hit it, a large
+in-week move that signals a line starting further from fair value than usual (source:
+sportsbettingdime.com, 2026 Week 1 coverage). This does not prove Session 2.38's 12-25
+percentage-point NFL edges are real at that exact size — that magnitude is still large
+relative to what sharp-bettor communities typically describe even for "soft Week 1" lines
+— but it means the honest set of explanations for that finding now includes "Week 1 lines
+really are unusually soft, industry-wide" as a real, evidenced possibility, alongside
+(not instead of) "residual measurement issue, not yet found" and "real but Week-1-specific
+effect that may not persist once lines sharpen in Weeks 3+." Session 2.38's own re-open
+condition (re-check once NFL flags span multiple weeks) already covers testing this
+directly; this note just makes sure the range of honest explanations being tested against
+is not narrower than the real evidence supports.
+
 **Open items / deferred validations:**
 - **The real, honest caveat on this negative result**: it doesn't prove opponent quality
   never matters — it shows a specific, weak proxy (prior-season average, applied only to
