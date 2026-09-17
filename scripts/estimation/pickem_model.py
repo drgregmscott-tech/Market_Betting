@@ -381,22 +381,72 @@ SIGMA_CALIBRATION_FACTOR_BY_STAT = {
     # is the source. Any resolved_stat_key not listed here falls back to
     # SIGMA_CALIBRATION_FACTOR.
     #
-    # Excluded from this table on purpose:
-    # - "targets" (n=127): flagged, but its real win rate is ~50% -- the
-    #   model has no real edge on this stat, so no sigma multiplier fixes
-    #   it (pushing k toward infinity trivially shrinks the gap without
-    #   improving Brier score). A sigma fix does not apply here.
-    # - "rushing_yards+receiving_yards" (n=445): the widened-grid re-fit
-    #   found its true optimum (k=3.095) already brings the gap under the
-    #   0.03 threshold using the GLOBAL factor's own grid range -- it was a
-    #   grid-search-ceiling artifact in the first pass, not real
-    #   miscalibration, so it stays on the global 1.61.
+    # Excluded from this table on purpose (Session 2.24, still holds under
+    # the Session 2.41c global factor -- re-checked, not re-derived, since
+    # "no real edge" is a property of the stat's real win rate, not of
+    # which global factor happens to be current):
+    # - "targets": flagged, but its real win rate is ~50% -- the model has
+    #   no real edge on this stat, so no sigma multiplier fixes it (pushing
+    #   k toward infinity trivially shrinks the gap without improving Brier
+    #   score). A sigma fix does not apply here.
     "rushing_tds": 0.610,  # n=27 -- smallest sample here; watch for drift
     "passing_interceptions": 0.825,  # n=63
     "completions": 1.595,  # n=43 -- best-Brier k still leaves ~+0.09 gap
     "kicking points": 2.100,  # n=186 -- best-Brier k still leaves ~+0.05 gap
     "passing_tds+rushing_tds+receiving_tds": 1.155,  # n=325
     "fg_made": 1.495,  # n=146
+
+    # SESSION 2.41d -- expanded under the new 2.681 global factor.
+    # scripts/calibration/pickem_calibration_by_stat.py, re-run after
+    # Session 2.41c's global refit, flagged 20 more stats past the 0.03 gap
+    # threshold (up from the 6 above) -- the new global factor closes the
+    # AGGREGATE gap but leaves individual stats over/under-corrected. Same
+    # method as the 6 above (independent per-stat grid search, Brier-
+    # minimizing, against that stat's own graded legs only); same caveat
+    # (a same-sample fit, not held-out validated -- see SESSION_LOG.md
+    # Session 2.41d for exact numbers and the full 20-stat breakdown).
+    "hits": 1.280,  # n=2798
+    "singles": 1.385,  # n=1219
+    "receiving_yards": 1.530,  # n=317
+    "plateAppearances": 1.575,  # n=309
+    "p_numberOfPitches": 1.200,  # n=160
+    "foulsCommitted": 0.600,  # n=149 -- best-Brier k still leaves ~+0.03 gap;
+    # real win rate 87.9% is unusually high for this stat, a real, large
+    # improvement (Brier 0.1357->0.0957) but watch for drift, not "fully
+    # recalibrated"
+    "triples": 1.065,  # n=93 -- rare/zero-inflated discrete stat (like the
+    # Session 2.40 isotonic-covered stats); a per-stat sigma fit is "best
+    # normal fit available," not a true count-data model -- same caveat this
+    # script's own docstring already states for stats like this
+    "p_strikes": 0.925,  # n=90
+    "totalGoals+goalAssists": 0.805,  # n=81 -- best-Brier k still leaves
+    # ~-0.06 gap; real, large improvement (Brier 0.2060->0.1810), not fully
+    # recalibrated
+    "passing_yards": 1.210,  # n=55
+    "goalie fantasy score": 2.285,  # n=51
+    "totalGoals": 0.795,  # n=50
+    "passing_tds": 1.920,  # n=47
+    "goalAssists": 0.755,  # n=39
+    "passing_yards+rushing_yards": 1.970,  # n=31 -- smallest sample in this
+    # table; best-Brier k barely improves Brier (0.2317->0.2306) and still
+    # leaves a ~-0.10 gap -- a real but low-confidence fit, included per this
+    # table's existing precedent (rushing_tds, n=27) of watching small
+    # groups for drift rather than excluding them outright, but weaker
+    # evidence than every other entry here
+
+    # Excluded from the Session 2.41d expansion on purpose, same "no real
+    # edge" or "degenerate fit" reasoning as "targets" above:
+    # - "numberOfPitchesSeen" (n=396): real win rate 50.3% -- no real edge;
+    #   best-Brier k hit the widened 8.0 grid ceiling (k pushed toward
+    #   infinity chasing noise, not a real fix).
+    # - "saves" (n=108): real win rate 55.6%, not clearly distinguishable
+    #   from 50% at this sample size, AND best-Brier k hit the widened 8.0
+    #   ceiling -- a degenerate fit, not a trustworthy per-stat multiplier.
+    # - "p_battersFaced" (n=63): real win rate 47.6% -- no real edge (below
+    #   50%); also hit the widened 8.0 ceiling.
+    # - "rushing_yards+receiving_yards" (n=95, re-checked under the new
+    #   global factor): real win rate 51.6% -- no real edge, same
+    #   reasoning as "targets".
 }
 
 NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}

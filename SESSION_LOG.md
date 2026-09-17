@@ -14712,3 +14712,89 @@ weight had never been fit at all.
   value is what shipped, matching this session's stated scope (global-level recalibration);
   a `BLEND_WEIGHT_BY_SPORT` mechanism, mirroring `SIGMA_CALIBRATION_FACTOR_BY_STAT`'s
   existing pattern, is a reasonable future refinement, not built here.
+
+## Session 2.41d — Expand SIGMA_CALIBRATION_FACTOR_BY_STAT Under the New Global Factor
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — 15 new per-stat overrides added, real judgment applied per stat
+(not a blind copy of the diagnostic table), and the 5 stats with no real fix available are
+named and left flagged on purpose, not silently dropped.
+
+**What was actually done:**
+Direct follow-up to Session 2.41c's own open item: the new 2.681 global `SIGMA_CALIBRATION_FACTOR`
+closed the aggregate calibration gap but left 20 individual stat types flagged past the 0.03
+threshold (`pickem_calibration_by_stat.py`, re-run after 2.41c).
+1. Reviewed all 20 flagged stats' real win rate, best-Brier per-stat `k`, and whether that
+   `k` actually closed the gap or hit the diagnostic script's widened 8.0 grid ceiling (a
+   sign of a degenerate fit chasing noise, not a real correction) — same judgment framework
+   Session 2.24/2.25 established for the original 6-stat table, applied fresh rather than
+   assumed to transfer.
+2. **15 of the 20 got a real, added per-stat override**: `hits` (1.280), `singles` (1.385),
+   `receiving_yards` (1.530), `plateAppearances` (1.575), `p_numberOfPitches` (1.200),
+   `foulsCommitted` (0.600), `triples` (1.065), `p_strikes` (0.925),
+   `totalGoals+goalAssists` (0.805), `passing_yards` (1.210), `goalie fantasy score` (2.285),
+   `totalGoals` (0.795), `passing_tds` (1.920), `goalAssists` (0.755), and
+   `passing_yards+rushing_yards` (1.970, real but low-confidence — smallest n=31 in the
+   table, and its own best-Brier fit barely moves Brier score at all, included per this
+   table's existing "watch small groups for drift" precedent rather than excluded outright).
+3. **5 of the 20 deliberately EXCLUDED, same reasoning `SIGMA_CALIBRATION_FACTOR_BY_STAT`'s
+   own docstring already uses for `targets`**: `numberOfPitchesSeen` (real win rate 50.3% --
+   no real edge), `p_battersFaced` (47.6% -- no real edge, below 50%), `saves` (55.6%, not
+   clearly distinguishable from 50% at n=108, AND hit the widened 8.0 ceiling), and
+   `rushing_yards+receiving_yards` (re-checked under the new global factor -- real win rate
+   51.6%, no real edge, same conclusion as before, restated rather than assumed to still
+   hold). `targets` itself re-confirmed still-excluded, same reasoning as originally found.
+4. Two stats with a real per-stat fit that still leaves a residual gap past 0.03 even at
+   their own best `k` (`foulsCommitted`, residual ~+0.03; `totalGoals+goalAssists`, residual
+   ~-0.06) were still added, matching Session 2.25's own precedent for `completions`/
+   `kicking points` (a real, large Brier improvement is still worth shipping even when it
+   doesn't fully close the mean gap) -- documented as such, not presented as "fully fixed."
+5. Regenerated `data/pickem/_test_fixtures/nfl_regression_golden.csv` a second time this
+   cycle -- several of the newly-added stats (`passing_yards`, `passing_tds`,
+   `passing_yards+rushing_yards`) are ones the NFL regression fixture exercises directly.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_model.py` (`SIGMA_CALIBRATION_FACTOR_BY_STAT` expanded from 6
+  to 21 entries; inline comments document each addition/exclusion's n, real win rate, and
+  reasoning)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated)
+
+**Validation results:**
+- [x] Each newly-added per-stat override checked against real win rate (not just gap
+  magnitude) and whether the fit hit the diagnostic script's grid ceiling, not blindly
+  copied from the table -- 5 of 20 candidates rejected on exactly this basis.
+- [x] Re-ran `pickem_calibration_by_stat.py` after the update: **5 of the original 20
+  flagged stats remain flagged** (`numberOfPitchesSeen`, `targets`, `saves`,
+  `rushing_yards+receiving_yards`, `p_battersFaced`) -- reported plainly, not claimed as
+  fully resolved. All 5 remain flagged because they have no real sigma-fixable edge, not
+  because the fix was skipped.
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass after regenerating the golden fixture.
+- Live check: `SIGMA_CALIBRATION_FACTOR_BY_STAT` loads with 21 entries in production.
+
+**Decisions made:**
+1. Applied the same "real edge vs. no edge vs. degenerate fit" judgment framework fresh to
+   each of the 20 candidates rather than accepting the diagnostic script's `per_stat_k`
+   column at face value -- the script itself only flags a gap, it does not judge whether a
+   sigma fix is the right tool (same design intent as its own docstring states).
+2. Kept two low-confidence-but-real additions (`foulsCommitted`, `totalGoals+goalAssists`,
+   plus the small-n `passing_yards+rushing_yards`) rather than excluding everything that
+   isn't a clean win, matching this project's existing precedent (`completions`/
+   `kicking points` in the original 6) of shipping a real, large, partial improvement instead
+   of waiting for a perfect one.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- None of the 21 per-stat overrides (6 original + 15 new) are held-out validated -- all are
+  same-sample Brier-minimizing fits, the same caveat the original 6 and Session 2.41c's
+  global refit both carry. A future session applying Session 2.40's held-out-validation
+  method to this whole table would be a real strengthening, not yet done.
+- The 5 deliberately-excluded stats (no real edge or a degenerate fit) will continue to show
+  up as "flagged" in every future `pickem_calibration_by_stat.py` run -- expected and
+  correct, not a bug to chase; a future session should not re-litigate these without new
+  evidence (e.g. a real edge emerging as more legs grade in).
+- `receiving_tds` (n=19) and `tackles` (n=8) remain below the 20-leg floor this diagnostic
+  uses -- not evaluated this session, revisit once more legs grade in.
+- Re-run this whole diagnostic/expansion cycle periodically as more real outcomes
+  accumulate, same cadence as the global sigma and blend-weight fits.

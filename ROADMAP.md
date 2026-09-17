@@ -3200,7 +3200,13 @@ SESSION_LOG.md Session 2.41c.
 ---
 
 ### Session 2.41d — Expand SIGMA_CALIBRATION_FACTOR_BY_STAT Under the New Global Factor
-**Status:** Not started — real, necessary follow-up surfaced by Session 2.41c, not yet run.
+**Status:** ✅ Complete (2026-09-17) — see SESSION_LOG.md for full derivation.
+`SIGMA_CALIBRATION_FACTOR_BY_STAT` expanded from 6 to 21 entries. Of the 20 stats flagged
+after Session 2.41c's global refit, 15 got a real, validated-against-real-outcomes per-stat
+override; 5 (`numberOfPitchesSeen`, `targets`, `saves`, `rushing_yards+receiving_yards`,
+`p_battersFaced`) were deliberately left unfixed because they have no real model edge or
+only a degenerate fit (grid-ceiling artifact) is available — named and documented, not
+silently dropped.
 **Prerequisites:** Session 2.41c (done).
 
 **Why this is a real, separate gap:** Session 2.41c's new global `SIGMA_CALIBRATION_FACTOR`
@@ -3225,13 +3231,13 @@ reinvented, against the new baseline.
   re-check finds they've drifted.
 
 **Validation (required to close session):**
-- [ ] Each newly-added per-stat override is checked against the same 20-leg floor and
+- [x] Each newly-added per-stat override is checked against the same 20-leg floor and
 Brier-vs-gap distinction Session 2.24/2.25 used, not blindly copied from the diagnostic
-table.
-- [ ] Re-run `pickem_calibration_by_stat.py` after the update; report how many of the 25
+table. 5 of 20 candidates rejected on exactly this basis.
+- [x] Re-run `pickem_calibration_by_stat.py` after the update; report how many of the 25
 originally-flagged stats remain flagged, plainly (even if the honest answer is "not all of
-them").
-- [ ] Full test suite still passes; golden fixture regenerated if constants changed.
+them"). Result: 5 of 20 remain flagged, all for real, named "no fix available" reasons.
+- [x] Full test suite still passes; golden fixture regenerated. 79/79 pass.
 
 ---
 
