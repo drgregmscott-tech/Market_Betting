@@ -48,6 +48,28 @@ interval around the real win rate vs. that cell's own mean real breakeven
 the interval's lower bound clears breakeven, not just that the point
 estimate does.
 
+SESSION 2.38 ADDITION -- CLUSTER-ROBUST SIGNIFICANCE, NOT JUST PER-LEG
+------------------------------------------------------------------------
+Session 2.38 (the NFL grading-path follow-up to this script's own Finding
+#4) found a real methodology gap in the per-leg Wilson CI above: many
+graded legs share the same real game (multiple players/stats from one
+NFL Sunday, one MLB game, etc.), so they are not independent trials the
+way the Wilson interval assumes. Checked live: NFL's entire graded sample
+(1,972 legs) traces back to only 30 real games -- a per-leg test reported
+a tight, "highly significant" interval on what is really ~30 correlated
+data points, not ~2,000 independent ones. Every cell now also gets a
+cluster-robust CI (clustered on the real `game_id` behind each leg, sandwich/
+linearized variance estimator -- same method underlying `statsmodels`'
+`cov_type="cluster"`, reimplemented directly here with numpy to avoid a
+new dependency) alongside the naive per-leg Wilson interval. A cell's
+FINAL verdict uses the cluster-robust interval, not the per-leg one --
+the per-leg Wilson interval is kept in the output for comparison, so a
+case where the two disagree (like NFL's did) is visible, not hidden.
+Cells backed by fewer than MIN_CLUSTERS distinct games are labeled
+"not_enough_evidence" regardless of leg count, for the same reason a
+30-leg floor exists for uncorrelated data -- 30 correlated legs from 3
+games is not real evidence either.
+
 USAGE
 -----
 python scripts/calibration/pickem_model_validity_audit.py
@@ -72,6 +94,7 @@ OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
 OUT_DIR = BASE_DIR / "data" / "pickem"
 
 MIN_CELL_N = 30  # interim floor, docs/sample_size_methodology.md Section 6
+MIN_CLUSTERS = 8  # interim floor on distinct real games -- see Session 2.38 note above
 ZERO_INFLATION_THRESHOLD = 0.20  # >=20% of real outcomes are exactly 0
 SKEW_THRESHOLD = 1.0  # |skew| > 1.0 treated as materially non-Gaussian
 Z_95 = 1.96
@@ -85,6 +108,32 @@ def wilson_ci(wins: int, n: int, z: float = Z_95) -> tuple[float, float]:
     center = phat + z**2 / (2 * n)
     margin = z * math.sqrt(phat * (1 - phat) / n + z**2 / (4 * n**2))
     return ((center - margin) / denom, (center + margin) / denom)
+
+
+def clustered_ci(y: np.ndarray, clusters: np.ndarray, z: float = Z_95) -> tuple[float, float, int]:
+    """Cluster-robust (sandwich/linearized) CI around a real win rate,
+    clustered on the real game each leg belongs to -- same method
+    underlying statsmodels' cov_type="cluster" for a single-regressor
+    (intercept-only) OLS fit on a 0/1 outcome, reimplemented directly with
+    numpy so this project adds no new dependency. See Session 2.38's
+    module-docstring note for why this exists: many legs share the same
+    real game, so they are not independent trials, and a naive per-leg
+    Wilson interval overstates confidence whenever that correlation is
+    real (confirmed live for NFL -- see SESSION_LOG.md).
+    Returns (lo, hi, n_clusters); (nan, nan, 0) if there's nothing to compute."""
+    n = len(y)
+    if n == 0:
+        return (float("nan"), float("nan"), 0)
+    phat = float(np.mean(y))
+    uniq = pd.unique(clusters)
+    C = len(uniq)
+    if C < 2:
+        return (float("nan"), float("nan"), C)
+    resid = y - phat
+    cluster_sums = pd.Series(resid).groupby(clusters, observed=True).sum().to_numpy()
+    var = (C / (C - 1)) * float(np.sum(cluster_sums**2)) / (n**2)
+    se = math.sqrt(max(var, 0.0))
+    return (phat - z * se, phat + z * se, C)
 
 
 def sample_skew(x: np.ndarray) -> float:
@@ -103,7 +152,7 @@ def load_joined() -> pd.DataFrame:
     oc = pd.read_csv(OUTCOME_LOG_PATH, low_memory=False)
 
     clv_cols = [
-        "flag_id", "odds_type", "allowed_wager_types",
+        "flag_id", "odds_type", "allowed_wager_types", "game_id",
         "closing_implied_prob", "first_flagged_implied_prob",
     ]
     df = oc.merge(clv[clv_cols], on="flag_id", how="left", suffixes=("", "_clv"))
@@ -141,18 +190,33 @@ def cell_stats(group: pd.DataFrame) -> dict:
     breakeven = group["breakeven"].dropna()
     p0 = float(breakeven.mean()) if len(breakeven) else float("nan")
     lo, hi = wilson_ci(wins, n)
-    if n < MIN_CELL_N or math.isnan(p0):
+
+    y = (group["result"] == "win").to_numpy(dtype=float)
+    # Missing game_id (older/legacy rows) must each be their own singleton
+    # cluster, not silently dropped (pandas groupby drops NaN keys) or
+    # silently pooled together as one giant fake cluster -- same
+    # conservative "no stable id -> treat as its own market" convention
+    # auto_grade_outcomes.py's market_key() already uses.
+    game_id = group["game_id"]
+    cluster_key = game_id.astype(str).where(
+        game_id.notna(), "__no_game_id__|" + pd.Series(group.index, index=group.index).astype(str)
+    ).to_numpy()
+    c_lo, c_hi, n_clusters = clustered_ci(y, cluster_key)
+
+    if n < MIN_CELL_N or n_clusters < MIN_CLUSTERS or math.isnan(p0):
         verdict = "not_enough_evidence"
-    elif lo > p0:
+    elif c_lo > p0:
         verdict = "beats_breakeven"
-    elif hi < p0:
+    elif c_hi < p0:
         verdict = "below_breakeven"
     else:
         verdict = "inconclusive"
     return {
-        "n": n, "wins": wins, "win_rate": win_rate,
+        "n": n, "wins": wins, "win_rate": win_rate, "n_clusters": n_clusters,
         "breakeven": p0, "edge": (win_rate - p0) if not math.isnan(p0) else float("nan"),
-        "ci_lo": lo, "ci_hi": hi, "verdict": verdict,
+        "ci_lo": lo, "ci_hi": hi,
+        "cluster_ci_lo": c_lo, "cluster_ci_hi": c_hi,
+        "verdict": verdict,
     }
 
 
@@ -235,13 +299,17 @@ def main() -> None:
     qualified = table.loc[table["verdict"] != "not_enough_evidence"].copy()
     print(f"Cells clearing the {MIN_CELL_N}-leg floor: {len(qualified)} of {len(table)}")
     print()
-    print("Top 25 qualified cells by |edge| (real win rate - real per-row breakeven):")
+    print("Top 25 qualified cells by |edge| (real win rate - real per-row breakeven).")
+    print("cluster_ci is the authoritative interval (clustered on real game_id -- see Session")
+    print("2.38 module note); leg_ci is the naive per-leg Wilson interval, kept for comparison.")
     top = qualified.reindex(qualified["edge"].abs().sort_values(ascending=False).index).head(25)
     for _, r in top.iterrows():
         print(
             f"  {r['sport']:<8} {r['resolved_stat_key']:<28} {r['odds_bucket']:<10} "
-            f"n={r['n']:>5} win={fmt_pct(r['win_rate'])} breakeven={fmt_pct(r['breakeven'])} "
-            f"edge={r['edge']*100:+.2f}pp ci=[{fmt_pct(r['ci_lo'])},{fmt_pct(r['ci_hi'])}] {r['verdict']}"
+            f"n={r['n']:>5} games={r['n_clusters']:>3} win={fmt_pct(r['win_rate'])} "
+            f"breakeven={fmt_pct(r['breakeven'])} edge={r['edge']*100:+.2f}pp "
+            f"leg_ci=[{fmt_pct(r['ci_lo'])},{fmt_pct(r['ci_hi'])}] "
+            f"cluster_ci=[{fmt_pct(r['cluster_ci_lo'])},{fmt_pct(r['cluster_ci_hi'])}] {r['verdict']}"
         )
     print()
 
@@ -263,9 +331,10 @@ def main() -> None:
     direc = directional_check(graded)
     for _, r in direc.iterrows():
         print(
-            f"  {r['sport']:<8} {str(r['flagged_side']):<6} n={r['n']:>5} "
+            f"  {r['sport']:<8} {str(r['flagged_side']):<6} n={r['n']:>5} games={r['n_clusters']:>3} "
             f"win={fmt_pct(r['win_rate'])} breakeven={fmt_pct(r['breakeven'])} "
-            f"edge={r['edge']*100:+.2f}pp {r['verdict']}"
+            f"edge={r['edge']*100:+.2f}pp cluster_ci=[{fmt_pct(r['cluster_ci_lo'])},"
+            f"{fmt_pct(r['cluster_ci_hi'])}] {r['verdict']}"
         )
     print()
 
@@ -274,9 +343,10 @@ def main() -> None:
     plat = platform_check(graded)
     for _, r in plat.iterrows():
         print(
-            f"  {r['sport']:<8} {r['platform']:<11} n={r['n']:>5} "
+            f"  {r['sport']:<8} {r['platform']:<11} n={r['n']:>5} games={r['n_clusters']:>3} "
             f"win={fmt_pct(r['win_rate'])} breakeven={fmt_pct(r['breakeven'])} "
-            f"edge={r['edge']*100:+.2f}pp {r['verdict']}"
+            f"edge={r['edge']*100:+.2f}pp cluster_ci=[{fmt_pct(r['cluster_ci_lo'])},"
+            f"{fmt_pct(r['cluster_ci_hi'])}] {r['verdict']}"
         )
     print()
 
@@ -285,9 +355,11 @@ def main() -> None:
     print("Clean slice -- MLB, PrizePicks, Standard odds_type, Hits/Total Bases only "
           "(deduped, closing-line graded):")
     print(
-        f"  n={cs['n']} win={fmt_pct(cs['win_rate'])} breakeven={fmt_pct(cs['breakeven'])} "
+        f"  n={cs['n']} games={cs['n_clusters']} win={fmt_pct(cs['win_rate'])} "
+        f"breakeven={fmt_pct(cs['breakeven'])} "
         f"edge={cs['edge']*100 if not math.isnan(cs['edge']) else float('nan'):+.2f}pp "
-        f"ci=[{fmt_pct(cs['ci_lo'])},{fmt_pct(cs['ci_hi'])}] verdict={cs['verdict']}"
+        f"cluster_ci=[{fmt_pct(cs['cluster_ci_lo'])},{fmt_pct(cs['cluster_ci_hi'])}] "
+        f"verdict={cs['verdict']}"
     )
 
 

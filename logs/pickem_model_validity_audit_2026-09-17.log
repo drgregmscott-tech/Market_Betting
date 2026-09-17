@@ -3,34 +3,36 @@ Real win/loss graded rows (push/void excluded): 27977
 
 Full 126-cell sport x stat x odds_type table written to C:\Users\gmsco\Desktop\Market_Betting\data\pickem\model_validity_audit_20260917.csv
 
-Cells clearing the 30-leg floor: 98 of 126
+Cells clearing the 30-leg floor: 90 of 126
 
-Top 25 qualified cells by |edge| (real win rate - real per-row breakeven):
-  MLB      triples                      demon      n=   93 win=94.62% breakeven=47.17% edge=+47.45pp ci=[88.03%,97.68%] beats_breakeven
-  MLB      homeRuns                     demon      n=  711 win=89.17% breakeven=47.18% edge=+41.99pp ci=[86.67%,91.25%] beats_breakeven
-  MLB      stolenBases                  demon      n=  540 win=88.33% breakeven=47.17% edge=+41.16pp ci=[85.35%,90.77%] beats_breakeven
-  SOCCER   foulsCommitted               demon      n=  148 win=87.84% breakeven=47.44% edge=+40.40pp ci=[81.59%,92.17%] beats_breakeven
-  MLB      doubles                      demon      n=  731 win=86.73% breakeven=47.18% edge=+39.55pp ci=[84.08%,89.00%] beats_breakeven
-  SOCCER   totalShots                   demon      n=  142 win=83.80% breakeven=47.29% edge=+36.51pp ci=[76.87%,88.96%] beats_breakeven
-  SOCCER   totalGoals+goalAssists       demon      n=   67 win=82.09% breakeven=48.10% edge=+33.99pp ci=[71.25%,89.45%] beats_breakeven
-  SOCCER   shotsOnTarget                demon      n=   90 win=81.11% breakeven=47.70% edge=+33.41pp ci=[71.82%,87.86%] beats_breakeven
-  MLB      hits                         demon      n=  750 win=79.73% breakeven=47.21% edge=+32.52pp ci=[76.71%,82.46%] beats_breakeven
-  SOCCER   totalGoals                   demon      n=   45 win=80.00% breakeven=47.92% edge=+32.08pp ci=[66.18%,89.10%] beats_breakeven
-  MLB      p_numberOfPitches            demon      n=   47 win=78.72% breakeven=47.17% edge=+31.55pp ci=[65.10%,88.01%] beats_breakeven
-  MLB      strikeOuts                   demon      n=  712 win=77.67% breakeven=47.30% edge=+30.36pp ci=[74.47%,80.57%] beats_breakeven
-  NFL      passing_tds                  standard   n=   30 win=80.00% breakeven=50.00% edge=+30.00pp ci=[62.69%,90.50%] beats_breakeven
-  MLB      p_baseOnBalls                demon      n=   77 win=76.62% breakeven=47.46% edge=+29.16pp ci=[66.05%,84.67%] beats_breakeven
-  MLB      p_outs                       demon      n=   70 win=75.71% breakeven=47.33% edge=+28.38pp ci=[64.50%,84.25%] beats_breakeven
-  SOCCER   goalAssists                  demon      n=   39 win=74.36% breakeven=47.90% edge=+26.46pp ci=[58.92%,85.43%] beats_breakeven
-  NFL      passing_tds+rushing_tds+receiving_tds standard   n=  233 win=75.11% breakeven=50.00% edge=+25.11pp ci=[69.18%,80.22%] beats_breakeven
-  NFL      def_sacks                    standard   n=  110 win=74.55% breakeven=50.00% edge=+24.55pp ci=[65.67%,81.76%] beats_breakeven
-  NFL      passing_yards                standard   n=   31 win=74.19% breakeven=50.00% edge=+24.19pp ci=[56.75%,86.30%] beats_breakeven
-  MLB      runs                         demon      n=  752 win=70.88% breakeven=48.04% edge=+22.84pp ci=[67.53%,74.01%] beats_breakeven
-  MLB      rbi                          demon      n=  746 win=70.38% breakeven=48.10% edge=+22.27pp ci=[67.00%,73.54%] beats_breakeven
-  MLB      p_earnedRuns                 demon      n=   77 win=70.13% breakeven=48.05% edge=+22.08pp ci=[59.15%,79.20%] beats_breakeven
-  NFL      receiving_yards              standard   n=  179 win=72.07% breakeven=50.00% edge=+22.07pp ci=[65.08%,78.12%] beats_breakeven
-  MLB      baseOnBalls                  demon      n=  657 win=69.71% breakeven=47.70% edge=+22.01pp ci=[66.09%,73.10%] beats_breakeven
-  MLB      plateAppearances             demon      n=  148 win=68.92% breakeven=47.28% edge=+21.63pp ci=[61.06%,75.82%] beats_breakeven
+Top 25 qualified cells by |edge| (real win rate - real per-row breakeven).
+cluster_ci is the authoritative interval (clustered on real game_id -- see Session
+2.38 module note); leg_ci is the naive per-leg Wilson interval, kept for comparison.
+  MLB      triples                      demon      n=   93 games= 24 win=94.62% breakeven=47.17% edge=+47.45pp leg_ci=[88.03%,97.68%] cluster_ci=[90.28%,98.96%] beats_breakeven
+  MLB      homeRuns                     demon      n=  711 games= 40 win=89.17% breakeven=47.18% edge=+41.99pp leg_ci=[86.67%,91.25%] cluster_ci=[86.91%,91.43%] beats_breakeven
+  MLB      stolenBases                  demon      n=  540 games= 40 win=88.33% breakeven=47.17% edge=+41.16pp leg_ci=[85.35%,90.77%] cluster_ci=[85.83%,90.84%] beats_breakeven
+  MLB      doubles                      demon      n=  731 games= 40 win=86.73% breakeven=47.18% edge=+39.55pp leg_ci=[84.08%,89.00%] cluster_ci=[84.45%,89.01%] beats_breakeven
+  MLB      hits                         demon      n=  750 games= 40 win=79.73% breakeven=47.21% edge=+32.52pp leg_ci=[76.71%,82.46%] cluster_ci=[76.68%,82.79%] beats_breakeven
+  MLB      p_numberOfPitches            demon      n=   47 games= 32 win=78.72% breakeven=47.17% edge=+31.55pp leg_ci=[65.10%,88.01%] cluster_ci=[66.24%,91.20%] beats_breakeven
+  MLB      strikeOuts                   demon      n=  712 games= 40 win=77.67% breakeven=47.30% edge=+30.36pp leg_ci=[74.47%,80.57%] cluster_ci=[75.25%,80.09%] beats_breakeven
+  NFL      passing_tds                  standard   n=   30 games= 16 win=80.00% breakeven=50.00% edge=+30.00pp leg_ci=[62.69%,90.50%] cluster_ci=[66.64%,93.36%] beats_breakeven
+  MLB      p_baseOnBalls                demon      n=   77 games= 40 win=76.62% breakeven=47.46% edge=+29.16pp leg_ci=[66.05%,84.67%] cluster_ci=[66.62%,86.63%] beats_breakeven
+  MLB      p_outs                       demon      n=   70 games= 40 win=75.71% breakeven=47.33% edge=+28.38pp leg_ci=[64.50%,84.25%] cluster_ci=[65.07%,86.36%] beats_breakeven
+  NFL      passing_tds+rushing_tds+receiving_tds standard   n=  233 games= 16 win=75.11% breakeven=50.00% edge=+25.11pp leg_ci=[69.18%,80.22%] cluster_ci=[67.96%,82.25%] beats_breakeven
+  NFL      def_sacks                    standard   n=  110 games= 15 win=74.55% breakeven=50.00% edge=+24.55pp leg_ci=[65.67%,81.76%] cluster_ci=[65.53%,83.56%] beats_breakeven
+  NFL      passing_yards                standard   n=   31 games= 16 win=74.19% breakeven=50.00% edge=+24.19pp leg_ci=[56.75%,86.30%] cluster_ci=[61.46%,86.93%] beats_breakeven
+  MLB      runs                         demon      n=  752 games= 40 win=70.88% breakeven=48.04% edge=+22.84pp leg_ci=[67.53%,74.01%] cluster_ci=[67.45%,74.30%] beats_breakeven
+  MLB      rbi                          demon      n=  746 games= 40 win=70.38% breakeven=48.10% edge=+22.27pp leg_ci=[67.00%,73.54%] cluster_ci=[66.62%,74.13%] beats_breakeven
+  MLB      p_earnedRuns                 demon      n=   77 games= 40 win=70.13% breakeven=48.05% edge=+22.08pp leg_ci=[59.15%,79.20%] cluster_ci=[61.51%,78.75%] beats_breakeven
+  NFL      receiving_yards              standard   n=  179 games= 16 win=72.07% breakeven=50.00% edge=+22.07pp leg_ci=[65.08%,78.12%] cluster_ci=[66.06%,78.08%] beats_breakeven
+  MLB      baseOnBalls                  demon      n=  657 games= 40 win=69.71% breakeven=47.70% edge=+22.01pp leg_ci=[66.09%,73.10%] cluster_ci=[65.53%,73.89%] beats_breakeven
+  MLB      plateAppearances             demon      n=  148 games= 40 win=68.92% breakeven=47.28% edge=+21.63pp leg_ci=[61.06%,75.82%] cluster_ci=[57.65%,80.19%] beats_breakeven
+  MLB      pitcher fs                   demon      n=   64 games= 38 win=68.75% breakeven=47.26% edge=+21.49pp leg_ci=[56.61%,78.77%] cluster_ci=[58.90%,78.60%] beats_breakeven
+  MLB      singles                      demon      n=  661 games= 40 win=68.84% breakeven=47.86% edge=+20.97pp leg_ci=[65.20%,72.25%] cluster_ci=[65.02%,72.65%] beats_breakeven
+  NFL      passing_yards+rushing_yards  standard   n=   31 games= 16 win=70.97% breakeven=50.00% edge=+20.97pp leg_ci=[53.41%,83.90%] cluster_ci=[58.42%,83.51%] beats_breakeven
+  NFL      attempts                     standard   n=   31 games= 16 win=70.97% breakeven=50.00% edge=+20.97pp leg_ci=[53.41%,83.90%] cluster_ci=[55.39%,86.54%] beats_breakeven
+  NFL      rushing_yards                standard   n=   89 games= 16 win=70.79% breakeven=50.00% edge=+20.79pp leg_ci=[60.64%,79.22%] cluster_ci=[63.29%,78.29%] beats_breakeven
+  MLB      hitter fs                    demon      n=  556 games= 40 win=67.99% breakeven=47.60% edge=+20.39pp leg_ci=[64.00%,71.73%] cluster_ci=[64.56%,71.41%] beats_breakeven
 
 Stat/sport cells checked for distribution shape (n>=30): 49
 Flagged non-Gaussian (zero-rate>=20% or |skew|>1.0): 30
@@ -66,25 +68,25 @@ Flagged non-Gaussian (zero-rate>=20% or |skew|>1.0): 30
   SOCCER   goalAssists                  n=   39 zero_rate=87.2% skew=+2.22
 
 Directional check (flagged_side over vs under), per sport:
-  EPL      over   n=    5 win=20.00% breakeven=50.00% edge=-30.00pp not_enough_evidence
-  EPL      under  n=   16 win=43.75% breakeven=50.00% edge=-6.25pp not_enough_evidence
-  FIFA     over   n=  118 win=37.29% breakeven=47.62% edge=-10.33pp below_breakeven
-  FIFA     under  n=  152 win=64.47% breakeven=53.56% edge=+10.92pp beats_breakeven
-  MLB      over   n=10764 win=46.89% breakeven=47.51% edge=-0.62pp inconclusive
-  MLB      under  n=14001 win=66.20% breakeven=45.24% edge=+20.96pp beats_breakeven
-  NFL      over   n=  990 win=57.88% breakeven=49.15% edge=+8.73pp beats_breakeven
-  NFL      under  n=  982 win=70.16% breakeven=50.34% edge=+19.82pp beats_breakeven
-  SOCCER   over   n=  183 win=44.26% breakeven=55.01% edge=-10.74pp below_breakeven
-  SOCCER   under  n=  766 win=77.42% breakeven=44.51% edge=+32.91pp beats_breakeven
+  EPL      over   n=    5 games=  2 win=20.00% breakeven=50.00% edge=-30.00pp cluster_ci=[-11.36%,51.36%] not_enough_evidence
+  EPL      under  n=   16 games=  8 win=43.75% breakeven=50.00% edge=-6.25pp cluster_ci=[23.53%,63.97%] not_enough_evidence
+  FIFA     over   n=  118 games= 33 win=37.29% breakeven=47.62% edge=-10.33pp cluster_ci=[27.43%,47.15%] below_breakeven
+  FIFA     under  n=  152 games= 32 win=64.47% breakeven=53.56% edge=+10.92pp cluster_ci=[55.68%,73.27%] beats_breakeven
+  MLB      over   n=10764 games=168 win=46.89% breakeven=47.51% edge=-0.62pp cluster_ci=[44.92%,48.86%] inconclusive
+  MLB      under  n=14001 games=168 win=66.20% breakeven=45.24% edge=+20.96pp cluster_ci=[64.38%,68.01%] beats_breakeven
+  NFL      over   n=  990 games= 30 win=57.88% breakeven=49.15% edge=+8.73pp cluster_ci=[51.94%,63.82%] beats_breakeven
+  NFL      under  n=  982 games= 30 win=70.16% breakeven=50.34% edge=+19.82pp cluster_ci=[65.35%,74.98%] beats_breakeven
+  SOCCER   over   n=  183 games= 44 win=44.26% breakeven=55.01% edge=-10.74pp cluster_ci=[34.92%,53.60%] below_breakeven
+  SOCCER   under  n=  766 games= 43 win=77.42% breakeven=44.51% edge=+32.91pp cluster_ci=[73.80%,81.03%] beats_breakeven
 
 Platform check (prizepicks vs underdog), per sport:
-  EPL      prizepicks  n=   21 win=38.10% breakeven=50.00% edge=-11.90pp not_enough_evidence
-  FIFA     underdog    n=  270 win=52.59% breakeven=50.96% edge=+1.63pp inconclusive
-  MLB      prizepicks  n=16218 win=64.26% breakeven=46.95% edge=+17.31pp beats_breakeven
-  MLB      underdog    n= 8547 win=45.55% breakeven=44.83% edge=+0.71pp inconclusive
-  NFL      prizepicks  n= 1406 win=69.13% breakeven=50.00% edge=+19.13pp beats_breakeven
-  NFL      underdog    n=  566 win=51.24% breakeven=49.11% edge=+2.13pp inconclusive
-  SOCCER   prizepicks  n=  949 win=71.02% breakeven=46.53% edge=+24.49pp beats_breakeven
+  EPL      prizepicks  n=   21 games=  9 win=38.10% breakeven=50.00% edge=-11.90pp cluster_ci=[21.67%,54.52%] not_enough_evidence
+  FIFA     underdog    n=  270 games= 34 win=52.59% breakeven=50.96% edge=+1.63pp cluster_ci=[47.60%,57.58%] inconclusive
+  MLB      prizepicks  n=16218 games= 84 win=64.26% breakeven=46.95% edge=+17.31pp cluster_ci=[62.82%,65.70%] beats_breakeven
+  MLB      underdog    n= 8547 games= 84 win=45.55% breakeven=44.83% edge=+0.71pp cluster_ci=[43.68%,47.42%] inconclusive
+  NFL      prizepicks  n= 1406 games= 16 win=69.13% breakeven=50.00% edge=+19.13pp cluster_ci=[65.87%,72.40%] beats_breakeven
+  NFL      underdog    n=  566 games= 14 win=51.24% breakeven=49.11% edge=+2.13pp cluster_ci=[46.04%,56.43%] inconclusive
+  SOCCER   prizepicks  n=  949 games= 51 win=71.02% breakeven=46.53% edge=+24.49pp cluster_ci=[67.62%,74.42%] beats_breakeven
 
 Clean slice -- MLB, PrizePicks, Standard odds_type, Hits/Total Bases only (deduped, closing-line graded):
-  n=495 win=51.72% breakeven=50.25% edge=+1.47pp ci=[47.32%,56.09%] verdict=inconclusive
+  n=495 games=84 win=51.72% breakeven=50.25% edge=+1.47pp cluster_ci=[46.86%,56.57%] verdict=inconclusive

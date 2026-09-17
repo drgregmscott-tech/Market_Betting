@@ -14158,3 +14158,100 @@ audited and passed, so there was nothing to fix).
   effect shrinks toward a believable few-point edge (or flips), that confirms this was a
   Week 1 clustering artifact; if it stays this large across multiple independent weeks,
   that would be a genuinely remarkable, worth-escalating finding.
+
+**CORRECTION (same-day, later in this session) — the clustering fix was built and run; it
+does NOT make the "verdict" above correct as originally stated.** This session's own
+recommended fix (game-clustered significance testing) was implemented directly in
+`pickem_model_validity_audit.py` (see that file's own Session 2.38 docstring addition and
+`clustered_ci()`) and re-run against the real data. Result: **clustering on the real
+`game_id` behind each leg does NOT eliminate the NFL edge.** NFL Standard `over`: win
+57.88%, 30-game cluster-robust 95% CI [51.94%, 63.82%] — still clears the 50% breakeven.
+NFL Standard `under`: win 70.16%, cluster CI [65.35%, 74.98%] — still clears it, by a wide
+margin. The original "this is likely a statistical-clustering illusion" conclusion above
+was stated *before* actually building and running the correction it called for — a real
+example of exactly the kind of unverified claim this project's own standard exists to
+catch, caught here by following through and checking rather than leaving the recommendation
+unimplemented. **The corrected, honest read:** the NFL Week 1 edge is statistically real
+*within* this sample, even accounting for within-game correlation — but the sample is still
+all 30 games from a single calendar week (a between-week question, not a within-week one),
+so whether it generalizes to Week 2+ is still completely unproven. This is now a **not
+enough evidence to act on** verdict for a different, more precise reason than originally
+stated (external validity across weeks, not intra-week non-independence) — not a reversal
+back to "trust it," and not the original "probably just an artifact" framing either. See
+Session 2.40 (Distribution-Shape Fix) and the parent 2026-09-17 chat conversation for the
+fuller discussion of what "real for Week 1 only" plausibly means (new coaching schemes,
+trades, roster uncertainty not yet priced by either this model's season-average prior or
+PrizePicks' own line-setting) and why it still needs a second real week to be trusted.
+
+## Session 2.39 — Odds-Type Breakeven Re-Derivation Tooling
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete (tooling) / ⏳ Open (real re-derivation) — the tool to turn more
+real observations into a validated `p_demon`/`p_goblin` exists and is proven correct
+against the one real data point this project has; re-deriving the actual constants for
+real still requires the user to log more real observations over time, which is real-world
+data collection, not something this session can finish by itself.
+
+**What was actually done:**
+Direct follow-up to 2026-09-17's chat discussion: Session 2.37 Finding #1 named
+`PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` (demon 52.83%, goblin 69.51%, `pickem_model.py:615`)
+as resting on exactly one real observed PrizePicks entry (Session 2.21) — MLB's demon/
+goblin flags carry this track's largest apparent edges, and none of them are
+interpretable until that constant is validated against more than one data point. Asked
+the user how to gather more real observations; they chose manual logging (not browser
+automation against their real account, which would need separate, explicit scope
+sign-off).
+1. **`data/pickem/demon_goblin_payout_observations.csv`** (new) — a durable log the user
+   appends a real row to every time they build a real PrizePicks entry (does not need to
+   be placed for real money — the entry builder shows the live multiplier before
+   submission) containing at least one Demon or Goblin leg. Seeded with the two real rows
+   already on record (Session 2.21's single observed entry, re-tagged Demon vs. Goblin).
+2. **`scripts/calibration/fit_odds_type_implied_prob.py`** (new) — generalizes Session
+   2.21's one-off algebra (solve 2 equations for 2 unknowns from one real entry) into a
+   real least-squares fit that keeps working as more real, genuinely different
+   observations (different leg counts, different Standard/special mixes) get logged.
+   Treats each leg's contribution to the entry multiplier as independent (same stated,
+   unproven assumption Session 2.21 already made — not hidden here either) and solves
+   `k_demon*log(p_demon) + k_goblin*log(p_goblin) = -log(M) - k_std*log(p_std)` per real
+   observation, with `p_std` for each leg count already known exactly from
+   `sizing_engine.py`'s sourced `PICKEM_ENTRY_PAYOUT`.
+3. **Caught and fixed a real transcription bug in the seed data before trusting it**: the
+   two seed rows initially had Demon and Goblin's multipliers swapped (6.25x mistakenly
+   logged under Goblin instead of Demon). Caught because the fit script's own sanity
+   check — does it exactly reproduce the already-known Session 2.21 numbers on the exact
+   same 2 observations — failed on the first run (produced 0.6951/0.5283, the two
+   constants swapped) before being fixed and re-verified to reproduce
+   `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` exactly (0.5283/0.6951).
+4. The script explicitly refuses to claim a "trustworthy" fit until at least 3 distinct
+   real combos are logged (currently only 2, both from the same single real entry) —
+   states this plainly rather than reporting a confident-looking number that is really
+   still the one original anecdote. Names the specific next observations that would add
+   the most real information (a different leg count; 2+ special legs in the same entry;
+   an all-special entry) directly in its own docstring.
+
+**Validation:**
+- Fit script run against the seeded (corrected) data: reproduces
+  `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` exactly (p_demon=0.5283, p_goblin=0.6951, 0
+  residual on both) — confirms the least-squares machinery is correct before any new real
+  data is added to it.
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 77/77 pass, unaffected (no production code changed, only new tooling).
+
+**Files touched:**
+- `data/pickem/demon_goblin_payout_observations.csv` (new)
+- `scripts/calibration/fit_odds_type_implied_prob.py` (new)
+
+**Corrections/reversals during the session:** The Demon/Goblin multiplier swap in the
+seed data (item 3 above) — caught by the script's own built-in sanity check, fixed before
+being used for anything.
+
+**Open items / deferred validations:**
+- **This is a real-world data collection task now, not a coding task.** The user needs to
+  log a handful of new real observations (ideally 3+ distinct leg-count/mix combos beyond
+  what's already there) in their own time; re-run `fit_odds_type_implied_prob.py`
+  whenever new rows are added.
+- Once a trustworthy fit exists (3+ distinct combos, small/scattered residuals),
+  `pickem_model.py`'s `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` should be updated BY HAND to the
+  fitted values (deliberately not auto-applied by this script, matching
+  `fit_sigma_recalibration.py`'s own "no silent recalibration" precedent) — and Session
+  2.37's demon/goblin cells should be re-run against the corrected constant.

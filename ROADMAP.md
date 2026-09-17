@@ -2996,20 +2996,44 @@ SESSION_LOG.md for full reasoning, including a correction to Session 2.31's Unde
 ### Session 2.38 — NFL Grading-Path Audit (Follow-Up to 2.37 Finding #4)
 **Status:** ✅ Complete (2026-09-17) — grading mechanism verified correct (2 real
 external box-score spot-checks, exact match, including a mid-season trade handled
-correctly); the large NFL "edge" is not a pipeline bug — it's a statistical-clustering
-illusion. All 1,972 graded NFL legs trace back to only 30 real games, all in the 2026
-season's Week 1 (the entirety of NFL data ingested so far). A leg-level proportion test
-overstates confidence when that many legs share a handful of correlated real games. See
-SESSION_LOG.md for the full investigation.
+correctly). **Corrected same-day:** this card's own recommended fix (game-clustered
+significance testing) was built (`pickem_model_validity_audit.py`'s `clustered_ci()`) and
+re-run — clustering on the real `game_id` behind each leg does NOT make the NFL edge go
+away (still clears a 30-game cluster-robust 95% CI on both `over` and `under`). The
+correct caveat is external validity (all 30 games are Week 1 of one season, not
+statistical non-independence within that week) — see SESSION_LOG.md's same-day correction
+for the full account, including how the original "probably just an artifact" framing was
+caught as unverified by actually building and running the fix it called for.
 **Prerequisites:** Session 2.37 (this follows directly from its Finding #4).
 
 **Validation (required to close session):**
 - [x] Grading mechanism checked against real, external, live box scores (not just
 internal plausibility) — 2/2 exact matches.
-- [x] Real root cause identified for the outsized apparent edge: n=1,972 legs is really
-n=30 correlated games (Week 1 only), not 1,972 independent trials.
-- [x] Explicit re-open condition recorded: re-check once NFL flags span 4-6+ distinct
-weeks, using a game/week-clustered significance test, not a per-leg one.
+- [x] Game-clustered significance testing built and run (not just recommended) — real
+result: the NFL edge survives clustering; the original "clustering illusion" hypothesis
+was itself wrong, corrected same-day once actually checked.
+- [x] Re-open condition recorded: re-check once NFL flags span 4-6+ distinct weeks — now
+specifically to test generalization across weeks, not to re-test clustering (already
+tested and did not explain the effect).
+
+---
+
+### Session 2.39 — Odds-Type Breakeven Re-Derivation Tooling
+**Status:** ✅ Complete, tooling only (2026-09-17) — `scripts/calibration/fit_odds_type_implied_prob.py`
+and `data/pickem/demon_goblin_payout_observations.csv` built and verified (exactly
+reproduces Session 2.21's original constants from the same 2 anecdote observations). The
+actual re-derivation is a real-world data-collection task the user does over time, not a
+one-session code task — re-run the fit script as new real observations get logged.
+**Prerequisites:** Session 2.37 (Finding #1 named this gap).
+
+**Validation (required to close session):**
+- [x] Fit tool built and proven correct (reproduces the known 1-anecdote-derived
+constants exactly before any new data is added).
+- [x] A real transcription bug in the seed data (Demon/Goblin multiplier swap) caught by
+the tool's own sanity check and fixed before use.
+- [ ] Real re-derivation from 3+ distinct real combos — open, pending the user logging
+more observations. Re-run `fit_odds_type_implied_prob.py` whenever new rows are added to
+`data/pickem/demon_goblin_payout_observations.csv`.
 
 ---
 
