@@ -3399,6 +3399,15 @@ split) for `receiving_yards` (+0.023 / +0.066), `receptions` (+0.044 / +0.098), 
 confirmed. `receiving_tds`/`rushing_tds` were weak and inconsistent in sign (same
 zero-inflated-TD caveat Session 2.41 raised) and are excluded from any future wiring.
 
+**Follow-up (2026-09-17, same day):** a real, stronger lead — a player's LAST season's
+own target_share as an early-season prior (e.g. Jefferson/Chase-style established roles)
+correlated with real 2025 weeks-1-4 target_share at +0.81 (same-team) and beat a single
+real Week 1 game's own target_share as a predictor of weeks 2-4 (+0.79 vs. +0.66). NOT
+wired in yet — the team-continuity filter tested is confounded by survivorship bias (see
+SESSION_LOG.md's "Session 2.44 follow-up" entry); needs a sharper continuity signal
+(QB continuity, competing-weapon-added flag) before it can be trusted as a production
+gate.
+
 ---
 
 ### Session 2.45 — Injury/Role Confirmation Beyond MLB (NFL and Other Sports)

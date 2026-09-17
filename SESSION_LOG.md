@@ -15251,3 +15251,95 @@ this project's own real legs.
   pipeline (unlike Session 2.42's shrinkage fit, which used real retained snapshots and
   real graded-leg Brier scoring throughout) — the leg-level fit above is what closes that
   gap once real Week 4+ data exists.
+
+---
+
+## Session 2.44 follow-up — Year-Over-Year Role Continuity as an Early-Season Prior
+
+**Date completed:** 2026-09-17
+
+**Status:** ✅ Complete, real strong positive result found — a genuinely different, more
+promising lead than the in-season `usage_trend` feature above, but NOT wired in yet
+because the one filter tested (same-team vs. changed-team) did not cleanly separate a
+usable prior from an unusable one on real data, for a real, stated reason (survivorship
+bias), not a weak-result reason.
+
+**What was actually done (follow-up to a user question, 2026-09-17 chat):** the user asked
+whether a player's LAST season's own established role (e.g. Justin Jefferson's or Ja'Marr
+Chase's real target share) could stand in as an early-season prior for players whose
+situation didn't change, rather than waiting on Session 2.44's `usage_trend` feature
+(structurally blocked until real Week 4+ 2026 data exists).
+1. **`scripts/calibration/research_year_over_year_role_continuity.py`** (new) — real 2024
+   REG-season `target_share` (players with >= 8 real games and >= 20 real targets, 238
+   qualifying players) joined to their real 2025 weeks-1-4 average `target_share`/
+   `receiving_yards`/`receptions` (187 matched to a real 2025 Week 1 appearance), plus a
+   real team-continuity flag (2024's most-common team vs. real 2025 Week 1 team).
+2. **Real sanity check**: Jefferson (2024 target_share 0.301 -> 2025 wks1-4 0.297), Chase
+   (0.272 -> 0.296), Lamb (0.282 -> 0.303) — all nearly unchanged, matching the intuition
+   the user's question was built on.
+3. **Real result**: 2024 target_share correlated with 2025 weeks-1-4 target_share at
+   +0.809 (same-team, n=151) and receiving_yards/receptions at +0.706/+0.674 -- a real,
+   strong signal, clearly stronger than anything Sessions 2.41/2.43 found.
+4. **Real baseline comparison**: 2024's full-season target_share alone (zero 2025 games)
+   correlated with 2025 weeks 2-4 at +0.794 (n=148) -- HIGHER than a single real 2025 Week
+   1 game's own target_share correlated with weeks 2-4 (+0.661, same 148 players). Last
+   year's role is a better early-season signal than this project's own model currently has
+   available at Week 1/2, where `season_avg`/`recent_form` have at most 1 real game to
+   work with.
+5. **The continuity flag did NOT cleanly separate a usable prior from an unusable one**:
+   changed-team players (n=36) showed an equally strong, even slightly stronger for
+   receiving_yards/receptions, correlation (+0.744/+0.774/+0.686) than same-team players.
+   Diagnosed directly, not glossed over: this is real evidence of SURVIVORSHIP BIAS, not
+   evidence that team-switching doesn't matter -- only team-changers who ACTUALLY KEPT a
+   real role after switching (e.g. a free agent WR signed specifically to be a new team's
+   WR1) can clear the >= 8-games/>= 20-targets 2025-role bar this comparison implicitly
+   requires to even appear in the "changed team" group; a player who switched teams and
+   lost their role simply drops out of the sample rather than showing up as a low
+   correlation. The coarse same-team/different-team flag is confounded by this, and is not
+   yet the right filter for "was this player's SITUATION genuinely preserved."
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass, unchanged (research-only script, no production code touched).
+- Real player_id stability across seasons confirmed directly (Justin Jefferson's
+  `00-0036322` identical in both the 2024 and 2025 files) before relying on it as the join
+  key, rather than name-matching across years.
+- Three real, named players (Jefferson/Chase/Lamb) spot-checked by hand before trusting
+  the aggregate correlation table.
+
+**Files touched:**
+- `scripts/calibration/research_year_over_year_role_continuity.py` (new)
+
+**Decisions made:**
+1. Used 2024->2025 (not 2025->2026) because full 2025 season data plus real 2026 weeks 1-4
+   don't both exist yet -- the methodology transfers directly once they do.
+2. Did not wire a "last year's target_share as a prior" feature into `pickem_model.py` this
+   pass -- the core signal is real and strong, but the one continuity filter tested is
+   confounded by survivorship bias in a way that could silently apply a stale prior to a
+   player whose real situation changed for the worse (e.g. lost a training-camp
+   competition, added competing weapon) just as easily as it correctly applies to a
+   Jefferson/Chase-style unchanged case. Wiring in a confounded filter would violate this
+   project's "no guessed formula" standard.
+
+**Corrections/reversals during the session:** None -- the survivorship-bias finding is a
+real, honestly-reported result, not a mistake to correct.
+
+**Open items / deferred validations:**
+- Design a sharper role-continuity signal before wiring in ANY year-over-year prior --
+  candidates to check directly, not assume: same starting QB in both seasons (a same-team
+  WR whose QB changed is a real situation change the team flag misses), a real
+  "competing-weapon-added" flag (a high-draft-pick or big free-agent signing at the same
+  position group), and the player's own real injury-report history. None built yet.
+- Once a sharper continuity flag exists, re-run this same correlation comparison split by
+  it (rather than the coarse team flag) to see if it actually separates a
+  Jefferson/Chase-reliable case from a genuinely-disrupted one, which the team-only flag
+  here did not cleanly do.
+- If a sharper flag does separate the groups, the natural production design is a Session
+  2.42-style shrinkage: blend the player's current-season `model_mean` toward their real
+  prior-season target_share-implied level, weighted down as real current-season games
+  accumulate (structurally similar to `SHRINKAGE_PRIOR_STRENGTH_K`, but keyed to a
+  player-specific prior rather than a league average) -- gated on the sharper continuity
+  flag, not applied blindly to every player.
+- This full analysis used 2024->2025 as a proxy; re-confirm the same correlations hold for
+  2025->2026 once real 2026 weeks 1-4 fully exist, rather than assuming last year's
+  pattern automatically repeats.
