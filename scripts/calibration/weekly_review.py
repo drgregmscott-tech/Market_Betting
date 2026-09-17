@@ -106,6 +106,24 @@ periodically re-check this by hand. Session 2.23's own
 pickem_weekly_review.yml addition surfaces this flag as a GitHub Issue --
 see that workflow file's header comment -- so it does not depend on anyone
 opening review_log.csv or the dashboard to notice.
+
+SESSION 2.41e FIX -- "only legs actually scored under the CURRENT sigma
+factor" ABOVE WAS NOT ACTUALLY TRUE
+------------------------------------------------------------------------------
+Found directly while checking Session 2.41c/2.41d's re-fit for drift: the
+post-fit filter above used outcome_log.csv's `reported_at` (when a leg
+finished GRADING) instead of clv_log.csv's `first_flagged_at` (when it was
+actually SCORED by pickem_model.py). A leg flagged under the OLD constants
+can easily finish grading well after a same-day recalibration -- so the
+original filter was silently mixing old-model legs into a check whose whole
+point is "does the CURRENT model look calibrated." Checking this directly
+(2026-09-17) found 0 graded legs had actually been FLAGGED since the
+2.41c/2.41d fit, versus 487 that merely finished GRADING since then -- the
+old code was reading those 487 old-model legs as if they validated the new
+one, and reported a reassuring "no re-fit needed" that had not actually been
+tested yet. `_attach_first_flagged_at()` now joins the real flag time from
+clv_log.csv and `check_post_fit_calibration_gap()` filters on that instead --
+see both functions' own docstrings.
 """
 
 from __future__ import annotations
@@ -124,6 +142,7 @@ import pandas as pd
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parents[2]
 OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
+CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
 REVIEW_LOG_PATH = BASE_DIR / "data" / "pickem" / "review_log.csv"
 SIGMA_FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "sigma_recalibration_log.csv"
 LOG_PATH = BASE_DIR / "logs" / "weekly_review.log"
@@ -204,7 +223,31 @@ def load_outcome_log() -> pd.DataFrame:
             f"at least once first (Session 2.5) so there is real graded data "
             f"to review."
         )
-    df = pd.read_csv(OUTCOME_LOG_PATH, parse_dates=["reported_at"])
+    df = pd.read_csv(OUTCOME_LOG_PATH, parse_dates=["reported_at"], low_memory=False)
+    df = _attach_first_flagged_at(df)
+    return df
+
+
+def _attach_first_flagged_at(df: pd.DataFrame) -> pd.DataFrame:
+    """Session 2.41e fix: the post-fit drift check needs to know when each
+    leg was actually SCORED (first_flagged_at, from clv_log.csv), not when
+    it finished grading (reported_at, outcome_log.csv's own column). A leg
+    flagged under the OLD constants can easily finish grading (reported_at)
+    well AFTER a same-day recalibration fit -- filtering on reported_at, as
+    this script originally did, silently mixes old-model legs into what is
+    supposed to be a "scored under the CURRENT constants" check, producing a
+    false-looking-clean drift read for a fit that has not actually been
+    exercised by any real flag yet. Found directly (2026-09-17): re-checking
+    the Session 2.41c/2.41d re-fit this way showed 0 graded legs had
+    actually been FLAGGED since that fit, versus 487 that merely finished
+    GRADING since then -- the original reported_at-based check was reading
+    those 487 old-model legs as if they validated the new constants."""
+    if not CLV_LOG_PATH.exists() or "flag_id" not in df.columns:
+        df["first_flagged_at"] = pd.NaT
+        return df
+    clv = pd.read_csv(CLV_LOG_PATH, usecols=["flag_id", "first_flagged_at"])
+    clv["first_flagged_at"] = pd.to_datetime(clv["first_flagged_at"], utc=True, errors="coerce")
+    df = df.merge(clv, on="flag_id", how="left")
     return df
 
 
@@ -231,9 +274,10 @@ def last_sigma_fit_at() -> Optional[pd.Timestamp]:
     fit_sigma_recalibration.py has never been run."""
     if not SIGMA_FIT_LOG_PATH.exists():
         return None
-    fit_log = pd.read_csv(SIGMA_FIT_LOG_PATH, parse_dates=["run_at"])
+    fit_log = pd.read_csv(SIGMA_FIT_LOG_PATH)
     if fit_log.empty:
         return None
+    fit_log["run_at"] = pd.to_datetime(fit_log["run_at"], utc=True)
     return fit_log["run_at"].max()
 
 
@@ -262,16 +306,23 @@ def check_post_fit_calibration_gap(
     only legs actually scored under the sigma factor currently live in
     pickem_model.py. This is the number that should stay near zero on an
     ongoing basis; check_calibration_gap's all-time figure will keep
-    reflecting a mix of pre- and post-fit legs for a while after any fit."""
+    reflecting a mix of pre- and post-fit legs for a while after any fit.
+
+    SESSION 2.41e FIX: filters on first_flagged_at (when the leg was
+    actually scored), not reported_at (when it finished grading) -- see
+    _attach_first_flagged_at()'s own docstring for why the original
+    reported_at filter let old-model legs silently pass as if they
+    validated a brand new fit."""
     if fit_at is None:
         return None, "no sigma fit on record yet -- run fit_sigma_recalibration.py first"
-    usable = graded.dropna(subset=["first_flagged_model_prob"])
-    usable = usable.loc[usable["reported_at"] >= fit_at]
+    usable = graded.dropna(subset=["first_flagged_model_prob", "first_flagged_at"])
+    usable = usable.loc[usable["first_flagged_at"] >= fit_at]
     if len(usable) < MIN_GROUP_SIZE_FOR_CHECK:
         return None, (
             f"insufficient post-fit sample (n={len(usable)}, need "
-            f"{MIN_GROUP_SIZE_FOR_CHECK}+ legs graded since the last fit at "
-            f"{fit_at.strftime('%Y-%m-%d')})"
+            f"{MIN_GROUP_SIZE_FOR_CHECK}+ legs FLAGGED since the last fit at "
+            f"{fit_at.strftime('%Y-%m-%d %H:%M UTC')} -- grading lag means this "
+            f"can legitimately stay at 0 for a while after a same-day fit)"
         )
     avg_stated_confidence = usable["first_flagged_model_prob"].mean()
     real_win_rate = (usable["result"] == "win").mean()

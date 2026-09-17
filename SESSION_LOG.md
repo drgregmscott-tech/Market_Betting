@@ -14798,3 +14798,85 @@ threshold (`pickem_calibration_by_stat.py`, re-run after 2.41c).
   uses -- not evaluated this session, revisit once more legs grade in.
 - Re-run this whole diagnostic/expansion cycle periodically as more real outcomes
   accumulate, same cadence as the global sigma and blend-weight fits.
+
+## Session 2.41e — weekly_review.py Post-Fit Drift Check: Fixed a Real False-Pass Bug
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — a real, permanent bug in an existing, load-bearing script found and
+fixed while checking Session 2.41c/2.41d's constants against real drift, as requested. Not
+a new feature; a correction to a check this project already depended on.
+
+**What was actually done:**
+The user asked to run `weekly_review.py` to check the new Session 2.41c/2.41d constants
+(`SIGMA_CALIBRATION_FACTOR=2.681`, blend weight 0.95/0.05, 21-entry per-stat table) against
+real drift.
+1. First run (`review_20260917T171200Z`) reported `post_fit_calibration_gap=+0.8%`,
+   `post_fit_check_status=ok`, and "no re-fit needed yet" — a reassuring result, but
+   suspicious this soon (minutes) after a same-day fit.
+2. Checked directly, independent of the script's own output, whether any real graded leg
+   had actually been FLAGGED since the fit: joined `outcome_log.csv` to `clv_log.csv` for
+   real `first_flagged_at` timestamps. Result: **0** graded legs had been flagged since the
+   fit — the 487 legs the script's check actually used were flagged well BEFORE the fit
+   (under the OLD 1.61/50-50 constants) but merely finished GRADING (their `reported_at`)
+   after it. `check_post_fit_calibration_gap()` (Session 2.23) had always filtered on
+   `reported_at`, not `first_flagged_at` -- a real, permanent bug in the check's own stated
+   purpose ("only legs actually scored under the CURRENT sigma factor"), not something
+   specific to this session's fit.
+3. **Fixed at the source, not worked around**: added `_attach_first_flagged_at()` to
+   `weekly_review.py`, joining the real flag time from `clv_log.csv` onto every loaded
+   outcome-log row, and changed `check_post_fit_calibration_gap()` to filter on that instead
+   of `reported_at`. `reported_at` is still used everywhere else in the script (period
+   bucketing for "what got graded this week"), which is a legitimate, different use of that
+   column -- only the post-fit check itself was wrong.
+4. **Second run** (`review_20260917T171341Z`), after the fix: `post_fit_check_status`
+   correctly reports "insufficient post-fit sample (n=0, need 20+ legs FLAGGED since the
+   last fit ... grading lag means this can legitimately stay at 0 for a while after a
+   same-day fit)" -- the honest, correct current state. No real flags have been generated
+   under the new constants yet; a real drift check is not possible until the live pipeline
+   produces new flags under them and those legs grade.
+5. Also fixed a pre-existing `DtypeWarning` (added `low_memory=False` to the outcome-log
+   read) and made `last_sigma_fit_at()`'s timestamp parsing explicitly UTC-aware, so it
+   compares safely against the new `first_flagged_at` join.
+
+**Files created/modified:**
+- `scripts/calibration/weekly_review.py` (new `_attach_first_flagged_at()`;
+  `check_post_fit_calibration_gap()` now filters on `first_flagged_at`; `last_sigma_fit_at()`
+  UTC-aware; module docstring extended with the "SESSION 2.41e FIX" section)
+
+**Validation results:**
+- Confirmed directly (not assumed): 0 graded legs flagged since the 2.41c/2.41d fit versus
+  487 that merely finished grading since then -- the exact gap the fix closes.
+- Confirmed the join preserves row count exactly (52,527 rows in, 52,527 out, 100%
+  non-null `first_flagged_at`) -- no accidental row duplication or drop from the merge.
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass (unaffected; `weekly_review.py` has no existing test file and is not imported
+  by any tested module).
+- Both real review runs (the pre-fix false-pass and the post-fix honest result) are
+  preserved as permanent rows in `data/pickem/review_log.csv` -- not edited or deleted,
+  matching this project's "durable, queryable log" standard; the before/after is itself part
+  of the record.
+
+**Decisions made:**
+1. Fixed the bug at its source rather than working around it for just this check -- this is
+   a shared, recurring script (weekly, per its own docstring, and wired into GitHub Actions
+   per Session 2.23's own note) that will re-run this same flawed comparison on every future
+   constant re-fit if left as-is, not just this one.
+2. Left `reported_at`'s other uses in the script untouched -- period-based reporting ("what
+   got graded this week") is a legitimate, different question from "was this leg scored
+   under the current model," and conflating the fix with an unrelated change was avoided.
+
+**Corrections/reversals during the session:** The bug itself IS the correction -- see "What
+was actually done" above. No separate reversal.
+
+**Open items / deferred validations:**
+- **A real post-fit drift check for Session 2.41c/2.41d's constants is not yet possible** --
+  it requires real legs to be FLAGGED (not just graded) under the new constants, which
+  requires the live ingestion/estimation pipeline to run and produce new flags, and then
+  those legs' games to complete. Re-run `weekly_review.py --run` again once that has had time
+  to happen (at least a few days, per this project's existing weekly cadence) for the first
+  real answer.
+- No dedicated test file exists for `weekly_review.py` (confirmed directly -- none found
+  under `scripts/calibration/`) -- this fix was validated by direct data checks (the 0-vs-487
+  comparison, the row-count-preserved join check) and a live `--run`, not a unit test. Adding
+  a real test file for this script, especially covering `check_post_fit_calibration_gap()`'s
+  filter logic directly, is a reasonable future hardening step, not done here.
