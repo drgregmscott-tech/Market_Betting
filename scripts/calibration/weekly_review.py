@@ -124,6 +124,27 @@ one, and reported a reassuring "no re-fit needed" that had not actually been
 tested yet. `_attach_first_flagged_at()` now joins the real flag time from
 clv_log.csv and `check_post_fit_calibration_gap()` filters on that instead --
 see both functions' own docstrings.
+
+SESSION 2.42 ADDITION -- SAME POST-FIT CHECK, NOW ALSO FOR SHRINKAGE
+------------------------------------------------------------------------
+Session 2.42 added a second constant that changes the model's scored
+probabilities, `SHRINKAGE_PRIOR_STRENGTH_K` (pickem_model.py), fit and
+held-out-validated by the new `scripts/calibration/fit_shrinkage.py`. Before
+this addition, this script's post-fit check only ever looked at
+`sigma_recalibration_log.csv` -- a real drift in the shrinkage constant
+specifically would have been invisible here, silently absorbed into (or
+diluted by) the sigma-fit-scoped check even though the two constants were
+last fit at different times. `check_post_shrinkage_calibration_gap()` mirrors
+`check_post_fit_calibration_gap()` exactly (same calibration-gap definition,
+same `first_flagged_at`-based filter, same `MIN_GROUP_SIZE_FOR_CHECK` floor),
+scoped instead to `shrinkage_recalibration_log.csv`'s own most recent fit
+time. Both checks share the same underlying helper
+(`_check_post_fit_calibration_gap()`) to avoid duplicating that logic twice.
+Confirmed directly (2026-09-17, right after Session 2.42 shipped): 0 real
+legs have been flagged since `SHRINKAGE_PRIOR_STRENGTH_K` went live, so this
+check correctly reports "insufficient post-fit sample" for now -- an honest
+"too soon to tell," not a false green light. It will report a real number
+once enough legs are flagged and graded under the new constant.
 """
 
 from __future__ import annotations
@@ -145,6 +166,7 @@ OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
 CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
 REVIEW_LOG_PATH = BASE_DIR / "data" / "pickem" / "review_log.csv"
 SIGMA_FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "sigma_recalibration_log.csv"
+SHRINKAGE_FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "shrinkage_recalibration_log.csv"
 LOG_PATH = BASE_DIR / "logs" / "weekly_review.log"
 
 # Fixed reference points from sample_size_methodology.md -- not recomputed
@@ -185,6 +207,8 @@ REVIEW_LOG_COLUMNS = [
     "calibration_check_status",
     "post_fit_calibration_gap",
     "post_fit_check_status",
+    "post_shrinkage_calibration_gap",
+    "post_shrinkage_check_status",
     "recalibration_suggested",
     "edge_threshold_effectiveness",
     "edge_check_status",
@@ -281,6 +305,20 @@ def last_sigma_fit_at() -> Optional[pd.Timestamp]:
     return fit_log["run_at"].max()
 
 
+def last_shrinkage_fit_at() -> Optional[pd.Timestamp]:
+    """Session 2.42: most recent run_at in shrinkage_recalibration_log.csv,
+    i.e. when SHRINKAGE_PRIOR_STRENGTH_K currently live in pickem_model.py
+    was fit. None if fit_shrinkage.py has never been run. Mirrors
+    last_sigma_fit_at() exactly -- see that function's own docstring."""
+    if not SHRINKAGE_FIT_LOG_PATH.exists():
+        return None
+    fit_log = pd.read_csv(SHRINKAGE_FIT_LOG_PATH)
+    if fit_log.empty:
+        return None
+    fit_log["run_at"] = pd.to_datetime(fit_log["run_at"], utc=True)
+    return fit_log["run_at"].max()
+
+
 # ---------------------------------------------------------------------------
 # Recalibration checks
 # ---------------------------------------------------------------------------
@@ -298,23 +336,25 @@ def check_calibration_gap(graded: pd.DataFrame) -> tuple[Optional[float], str]:
     return gap, "ok"
 
 
-def check_post_fit_calibration_gap(
-    graded: pd.DataFrame, fit_at: Optional[pd.Timestamp]
+def _check_post_fit_calibration_gap(
+    graded: pd.DataFrame, fit_at: Optional[pd.Timestamp], no_fit_message: str
 ) -> tuple[Optional[float], str]:
-    """Session 2.23: same comparison as check_calibration_gap, but restricted
-    to legs flagged on or after the most recent sigma fit (fit_at) -- i.e.
-    only legs actually scored under the sigma factor currently live in
-    pickem_model.py. This is the number that should stay near zero on an
-    ongoing basis; check_calibration_gap's all-time figure will keep
-    reflecting a mix of pre- and post-fit legs for a while after any fit.
+    """Session 2.23 (sigma), generalized in Session 2.42 to also back
+    check_post_shrinkage_calibration_gap(): same comparison as
+    check_calibration_gap, but restricted to legs flagged on or after the
+    given fit time -- i.e. only legs actually scored under whichever
+    constant currently live in pickem_model.py this call is checking. This
+    is the number that should stay near zero on an ongoing basis;
+    check_calibration_gap's all-time figure will keep reflecting a mix of
+    pre- and post-fit legs for a while after any fit.
 
-    SESSION 2.41e FIX: filters on first_flagged_at (when the leg was
-    actually scored), not reported_at (when it finished grading) -- see
-    _attach_first_flagged_at()'s own docstring for why the original
-    reported_at filter let old-model legs silently pass as if they
-    validated a brand new fit."""
+    SESSION 2.41e FIX (originally sigma-only, applies equally here): filters
+    on first_flagged_at (when the leg was actually scored), not reported_at
+    (when it finished grading) -- see _attach_first_flagged_at()'s own
+    docstring for why the original reported_at filter let old-model legs
+    silently pass as if they validated a brand new fit."""
     if fit_at is None:
-        return None, "no sigma fit on record yet -- run fit_sigma_recalibration.py first"
+        return None, no_fit_message
     usable = graded.dropna(subset=["first_flagged_model_prob", "first_flagged_at"])
     usable = usable.loc[usable["first_flagged_at"] >= fit_at]
     if len(usable) < MIN_GROUP_SIZE_FOR_CHECK:
@@ -328,6 +368,40 @@ def check_post_fit_calibration_gap(
     real_win_rate = (usable["result"] == "win").mean()
     gap = round(avg_stated_confidence - real_win_rate, 4)
     return gap, "ok"
+
+
+def check_post_fit_calibration_gap(
+    graded: pd.DataFrame, fit_at: Optional[pd.Timestamp]
+) -> tuple[Optional[float], str]:
+    """Post-fit calibration gap scoped to the most recent SIGMA_CALIBRATION_
+    FACTOR fit. See _check_post_fit_calibration_gap()'s own docstring for
+    the shared logic."""
+    return _check_post_fit_calibration_gap(
+        graded, fit_at, "no sigma fit on record yet -- run fit_sigma_recalibration.py first"
+    )
+
+
+def check_post_shrinkage_calibration_gap(
+    graded: pd.DataFrame, fit_at: Optional[pd.Timestamp]
+) -> tuple[Optional[float], str]:
+    """Session 2.42: post-fit calibration gap scoped to the most recent
+    SHRINKAGE_PRIOR_STRENGTH_K fit, mirroring check_post_fit_calibration_gap()
+    exactly but keyed off shrinkage_recalibration_log.csv instead of
+    sigma_recalibration_log.csv -- see the module docstring's "SESSION 2.42
+    ADDITION" section for why sigma's own post-fit check could not stand in
+    for this (the two constants are not necessarily fit at the same time,
+    so "legs flagged since the sigma fit" is not the same population as
+    "legs flagged since the shrinkage fit"). Uses the same general
+    calibration-gap definition (stated confidence vs. real win rate) as
+    every other check here, a deliberate, stated design choice -- not the
+    Brier-score-delta-vs-no-shrinkage metric fit_shrinkage.py itself used to
+    validate k=5.0, which needs a counterfactual (unshrunk) probability this
+    script does not have stored per leg. A real drift in EITHER direction
+    (shrinkage making calibration worse, or the general model drifting for
+    an unrelated reason) will still show up here as a real gap."""
+    return _check_post_fit_calibration_gap(
+        graded, fit_at, "no shrinkage fit on record yet -- run fit_shrinkage.py first"
+    )
 
 
 def check_edge_threshold_effectiveness(graded: pd.DataFrame) -> tuple[Optional[dict], str]:
@@ -368,6 +442,8 @@ def build_recommendation(
     calibration_status: str,
     post_fit_gap: Optional[float],
     post_fit_status: str,
+    post_shrinkage_gap: Optional[float],
+    post_shrinkage_status: str,
     edge_result: Optional[dict],
     edge_status: str,
 ) -> tuple[str, bool]:
@@ -414,6 +490,25 @@ def build_recommendation(
             )
     else:
         notes.append(f"Post-fit calibration check: {post_fit_status}.")
+
+    if post_shrinkage_status == "ok" and post_shrinkage_gap is not None:
+        if abs(post_shrinkage_gap) >= RECALIBRATION_GAP_THRESHOLD:
+            direction = "overconfident" if post_shrinkage_gap > 0 else "underconfident"
+            notes.append(
+                f"RECALIBRATION SUGGESTED: since the last shrinkage fit, real legs show "
+                f"the model is {direction} by {abs(post_shrinkage_gap):.1%} on average -- "
+                f"above the {RECALIBRATION_GAP_THRESHOLD:.0%} threshold. Run "
+                f"`python scripts/calibration/fit_shrinkage.py` to refit "
+                f"SHRINKAGE_PRIOR_STRENGTH_K against current data."
+            )
+            recalibration_suggested = True
+        else:
+            notes.append(
+                f"Post-shrinkage-fit calibration gap ({post_shrinkage_gap:+.1%}) is within "
+                f"the {RECALIBRATION_GAP_THRESHOLD:.0%} threshold -- no re-fit needed yet."
+            )
+    else:
+        notes.append(f"Post-shrinkage-fit calibration check: {post_shrinkage_status}.")
 
     if edge_status == "ok" and edge_result is not None:
         if edge_result["high_minus_low"] <= 0.02:
@@ -463,6 +558,10 @@ def run_review() -> dict:
     calibration_gap, calibration_status = check_calibration_gap(graded_all)
     fit_at = last_sigma_fit_at()
     post_fit_gap, post_fit_status = check_post_fit_calibration_gap(graded_all, fit_at)
+    shrinkage_fit_at = last_shrinkage_fit_at()
+    post_shrinkage_gap, post_shrinkage_status = check_post_shrinkage_calibration_gap(
+        graded_all, shrinkage_fit_at
+    )
     edge_result, edge_status = check_edge_threshold_effectiveness(graded_all)
 
     recommendation, recalibration_suggested = build_recommendation(
@@ -471,6 +570,8 @@ def run_review() -> dict:
         calibration_status,
         post_fit_gap,
         post_fit_status,
+        post_shrinkage_gap,
+        post_shrinkage_status,
         edge_result,
         edge_status,
     )
@@ -495,6 +596,8 @@ def run_review() -> dict:
         "calibration_check_status": calibration_status,
         "post_fit_calibration_gap": post_fit_gap,
         "post_fit_check_status": post_fit_status,
+        "post_shrinkage_calibration_gap": post_shrinkage_gap,
+        "post_shrinkage_check_status": post_shrinkage_status,
         "recalibration_suggested": recalibration_suggested,
         "edge_threshold_effectiveness": edge_result,
         "edge_check_status": edge_status,
