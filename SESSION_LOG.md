@@ -15023,3 +15023,95 @@ and wired into production.
 - Re-run `fit_shrinkage.py` periodically as more legs grade in and more post-Session-2.42
   snapshots (with a real per-row `league_avg`) accumulate, same cadence as the sigma/blend
   weight fits.
+
+---
+
+## Session 2.43 — Vegas Game Environment (Implied Team Total) Research
+
+**Date completed:** 2026-09-17
+
+**Status:** ✅ Complete, real weak/inconclusive result — confirmed a real, free, zero-new-
+dependency full-game Vegas odds source, computed and sign-checked real implied team totals,
+and tested a real scaling signal against real graded outcomes. Correlations were weak and
+inconsistent, not a clean positive result. Not wired into `pickem_model.py` — same honest
+"measured, doesn't clear the bar yet" standard as Session 2.41, not a failed session.
+
+**What was actually done:**
+1. **Confirmed directly that this project ingests no full-game Vegas odds anywhere** —
+   Track 5's DK/FD/Rotowire ingestion (`ingest_dk_props.py`, `ingest_fd_props.py`,
+   `ingest_rotowire_betmgm_props.py`) only pulls player PROP odds, never game
+   spread/total/moneyline. This was a genuinely new data source to confirm, unlike Session
+   2.42's shrinkage work.
+2. **Found the real source with zero new dependency risk**: `https://raw.githubusercontent.
+   com/nflverse/nfldata/master/data/games.csv` — the exact schedule URL this project
+   ALREADY relies on (`research_nfl_matchup_adjustment.py`'s `SCHEDULE_URL`, Session 2.41) —
+   carries real `spread_line`/`total_line`/`away_moneyline`/`home_moneyline` columns on
+   every row. Fetched live (2026-09-17): confirmed non-null for 2026 Week 1 (historical
+   closing lines) AND Week 2/3 (current/upcoming lines, as of today). Also checked the
+   nflverse-data release mirror directly — the tag is `schedules`, NOT `games` (an initial
+   wrong guess that 404s live) — same file, confirmed byte-identical on a spot check, but
+   the already-used nfldata URL was kept to introduce no new source.
+3. **Computed and hand-verified the sign convention before trusting it**: `spread_line` is
+   signed from the HOME team's perspective (positive = home favored). Spot-checked on 3 real
+   games against each game's own moneyline favorite (KC_MIA: away moneyline -455 favorite,
+   spread_line -8.5 negative = away favored, consistent; ATL_GB: home moneyline -310
+   favorite, spread_line +6.5 positive = home favored, consistent; BAL_DAL: away moneyline
+   -155 favorite, spread_line -3 negative = away favored, consistent). Formula:
+   `home_implied_total = total_line/2 + spread_line/2`, `away_implied_total = total_line/2 -
+   spread_line/2`. Verified algebraically too: implied totals' difference always equals
+   `|spread_line|` and their sum always equals `total_line`.
+4. **`scripts/calibration/research_nfl_vegas_game_environment.py`** (new) — mirrors Session
+   2.41's research-script pattern exactly. Computes each team's real 2025 season-average
+   points scored (prior-season baseline — same real constraint as Session 2.41: all 1,972
+   real graded NFL legs are still Week 1 of 2026, so there is no in-season baseline yet to
+   scale against). Computes `scaling_factor = 2026 Week 1 implied_total / 2025 season-avg
+   points` per team, joins it to every real graded NFL leg with a volume-shaped stat_key via
+   the player's real Week 1 team (nflverse `stats_player_week_2026.parquet`), and checks the
+   real, direct correlation against `actual_value`, per stat.
+5. **Real result (2026-09-17, all 1,972 legs resolved a real team; 1,128 had both a
+   resolved team and a covered volume stat_key)**: correlations were small and inconsistent
+   across the 10 volume stats — attempts +0.075 (n=52), completions -0.039 (n=25),
+   passing_tds +0.076 (n=47), passing_yards -0.022 (n=55), receiving_tds +0.428 (n=19,
+   small/zero-inflated, unreliable), receiving_yards +0.024 (n=317), receptions +0.059
+   (n=315), rushing_tds +0.041 (n=26), rushing_yards +0.044 (n=149), targets +0.031
+   (n=123). Mostly near-zero, one standout (`receiving_tds`) on too small a sample to trust,
+   same zero-inflated-TD caveat Session 2.41 raised.
+6. **Decision: did NOT wire this into `pickem_model.py`.** The correlations found are too
+   weak and inconsistent to justify a production change — the same "don't validate on hope"
+   standard that stopped Session 2.41's matchup_factor. The most likely real cause (stated,
+   not glossed over): this test can only use a PRIOR-SEASON (2025) points baseline for a
+   CURRENT-WEEK (2026 Week 1) implied total, the same structural mismatch (a full offseason
+   of roster/scheme/usage turnover) that limited Session 2.41's opponent-matchup signal. A
+   genuinely fair test of this signal needs in-season data (current implied total vs. that
+   SAME team's current-season baseline), which does not exist yet at Week 1 for any team —
+   this is a real, stated limitation of what is testable right now, not a verdict on whether
+   Vegas implied totals matter at all once real in-season data exists.
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass, unchanged (research-only script, no production code touched).
+- Real team resolved for all 1,972 real graded NFL legs (100% coverage) — the schedule-join
+  mechanism itself works cleanly; the weak result is about the SIGNAL under this session's
+  only testable baseline, not a data-plumbing failure.
+- Real, live-fetched odds data confirmed non-null for both historical (Week 1) and
+  current/upcoming (Week 2/3) games — the underlying data source itself is solid and ready
+  to use once a fairer (in-season) test is possible.
+
+**Files touched:**
+- `scripts/calibration/research_nfl_vegas_game_environment.py` (new)
+
+**Corrections/reversals during the session:** Corrected an initial wrong guess that the
+nflverse-data release tag was `games` (404s live) — the real tag is `schedules`, confirmed
+via the GitHub releases API before use.
+
+**Open items / deferred validations:**
+- Re-run this research once real in-season 2026 data exists (a team's own current-season
+  average points scored, not a 2025 prior-season proxy) — this removes the structural
+  offseason-turnover mismatch that likely explains this session's weak result, same as the
+  open item Session 2.41 left for its own matchup_factor.
+- If a future in-season re-test still shows a real, consistent positive correlation, revisit
+  wiring implied-team-total scaling into `pickem_model.py` as a mean-side adjustment, gated
+  the same way Session 2.40's isotonic calibration and Session 2.42's shrinkage were —
+  validated first, wired in second.
+- The `receiving_tds` standout correlation (+0.428, n=19) is too small and zero-inflated a
+  sample to act on alone; worth re-checking once more receiving-TD legs grade in.

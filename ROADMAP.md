@@ -3305,7 +3305,13 @@ whether/how much shrinkage was applied to any given row is always inspectable, n
 ---
 
 ### Session 2.43 — Vegas Game Environment (Implied Team Total / Pace) as a Model Input
-**Status:** Not started
+**Status:** ✅ Complete, real weak/inconclusive result (2026-09-17) — a real, free,
+zero-new-dependency full-game odds source was confirmed and implied team totals were
+computed and sign-checked correctly, but the scaling signal's correlation against real
+graded outcomes was weak and inconsistent on the only testable (prior-season-baseline,
+Week-1-only) sample. NOT wired into `pickem_model.py`. See SESSION_LOG.md Session 2.43 for
+the full writeup, including why a fairer in-season re-test is the real next step, not a
+different formula.
 **Prerequisites:** None directly, but this is a genuinely NEW data source, unlike Session
 2.42 — confirmed directly (2026-09-17) that this project does not currently ingest
 full-game Vegas odds (spread/total/moneyline) anywhere; Track 5's sportsbook-props
@@ -3334,10 +3340,15 @@ all today.
   model-change session this cycle.
 
 **Validation (required to close session):**
-- [ ] A real, working, sourced full-game odds feed confirmed live (not assumed).
-- [ ] Implied team total computed and spot-checked against real known games.
-- [ ] Adjustment formula stated explicitly and sourced (not a guessed multiplier).
-- [ ] Real held-out validation before any production wiring.
+- [x] A real, working, sourced full-game odds feed confirmed live (not assumed) — nflverse/
+  nfldata's `games.csv`, already relied upon elsewhere in this project.
+- [x] Implied team total computed and spot-checked against real known games — sign
+  convention verified by hand on 3 real games via each game's own moneyline favorite.
+- [x] Adjustment formula stated explicitly and sourced — `scaling_factor = implied_total /
+  season-avg points scored`, the standard named DFS-industry technique.
+- [x] Real held-out validation before any production wiring — ran; correlation too weak and
+  inconsistent to wire in. Feature NOT wired into production (a real negative/inconclusive
+  result, not a skipped step). See SESSION_LOG.md Session 2.43.
 
 ---
 
