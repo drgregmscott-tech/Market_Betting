@@ -2912,7 +2912,15 @@ sample-size standard), not just whether a difference appears directionally.
 ---
 
 ### Session 2.37 — Pick'em Model Validity Reassessment (Full Audit)
-**Status:** Not started
+**Status:** ⚠️ Complete with caveats (2026-09-17) — full audit produced; verdict is
+genuinely mixed, not a clean go or no-go. No project-wide edge proven; MLB Standard
+`under` shows a real, modest, believable edge (+5.7pp, statistically significant,
+n=1,230); NFL shows a much larger "edge" on both sides that is more likely a residual
+measurement bug than real (flagged for a dedicated follow-up, not trusted); demon/goblin
+lines (most of MLB's flagged volume) are uninterpretable pending a better-sourced payout
+constant; Session 2.31's "Underdog is untrustworthy" finding is corrected — it was a
+breakeven-mismatch artifact. See SESSION_LOG.md for the full per-cell table, all seven
+labeled findings, and open items.
 **Prerequisites:** Sessions 2.18/2.26-2.29 (auto-grading, all sports) complete. Builds directly on a
 2026-09-17 morning-status conversation that found and fixed two real, compounding measurement bugs in
 `auto_grade_outcomes.py` (grading against `first_flagged_line` instead of the closing line, and
@@ -2966,18 +2974,22 @@ unhurried session, not a tacked-on validation checklist item.
   labels (or "not yet enough evidence"), not a blended verdict.
 
 **Validation (required to close session):**
-- [ ] Per-sport × per-stat × per-odds_type calibration table produced, each cell compared against its
-own real breakeven (not the flat 57.74% constant), with real n and an explicit
-enough-sample/not-enough-sample call per cell.
-- [ ] The "clean slice" (MLB standard, Gaussian-appropriate stats, deduped, closing-line) result
-reported on its own, explicitly, as the cleanest available read on whether the core premise holds.
-- [ ] Every stat/sport showing a real, sample-size-qualified gap is labeled as either a measurement
-problem (fixable in the pipeline), a model-reasoning problem (fixable in the estimation logic), or "not
-yet enough evidence" — not left ambiguous.
-- [ ] Explicit go/no-go recorded on the track's foundational premise: does real evidence, honestly
-measured, show this model identifies real +EV opportunities? If not project-wide, does it hold for any
-specific, nameable subset (sport/stat/odds_type) worth continuing to build on while the rest gets
-reworked or dropped?
+- [x] Per-sport × per-stat × per-odds_type calibration table produced (126 cells, 98 past the 30-leg
+floor), each cell compared against its own real breakeven derived from `closing_implied_prob`/
+`first_flagged_implied_prob` (not the flat 57.74% constant), with real n and an explicit
+enough-sample/not-enough-sample (Wilson-CI-based) call per cell. Written to
+`data/pickem/model_validity_audit_20260917.csv`.
+- [x] The "clean slice" (MLB Standard, PrizePicks, Hits + Total Bases, deduped, closing-line) reported
+on its own: n=495, win 51.72% vs. breakeven 50.25%, edge +1.47pp, 95% CI [47.32%, 56.09%] —
+inconclusive, not enough evidence either way.
+- [x] Every finding labeled measurement / model-reasoning / not-enough-evidence — see SESSION_LOG.md's
+7 numbered findings (demon/goblin breakeven = measurement + model-reasoning both, unresolved; MLB
+Standard `under` = model-reasoning, real; NFL both sides = not-enough-evidence despite significance,
+suspected residual measurement bug; distribution shape = model-reasoning, project-wide not MLB-only).
+- [x] Explicit go/no-go recorded: **not proven project-wide.** One modest, believable real signal (MLB
+Standard `under`, +5.7pp, n=1,230, CI clears breakeven); one large signal not trusted pending its own
+audit (NFL); everything else flat, uninterpretable (demon/goblin), or below the evidence floor. See
+SESSION_LOG.md for full reasoning, including a correction to Session 2.31's Underdog finding.
 
 ---
 

@@ -13899,3 +13899,191 @@ framing for the flagship-sportsbook track).
   then per-sport support, then grading) across its own new session numbers, matching Session 2.28/2.29's
   precedent for what a new sport's real build cost looks like (a dedicated join-key investigation should
   be expected up front, not assumed to be a copy-paste of an existing plug-in).
+
+## Session 2.37 — Pick'em Model Validity Reassessment (Full Audit)
+
+**Date completed:** 2026-09-17
+**Status:** ⚠️ Complete with caveats — the audit itself is complete and the required
+tables/labels/go-no-go are all produced against real, clean data. The caveat is the
+verdict itself: no project-wide edge is demonstrated, one sport (NFL) shows a real but
+implausibly large signal that needs a dedicated follow-up session before it can be
+trusted, and one prior session's headline finding (2.31's "Underdog is untrustworthy")
+appears to have been a breakeven-mismatch artifact, not a real finding — a correction
+this entry states plainly rather than quietly reusing the old conclusion.
+
+**What was actually done:**
+1. **Confirmed the 2026-09-17 morning fix was already fully applied before this session
+   started.** `logs/auto_grade_outcomes.log` shows a full `--run` (not `--dry-run`) at
+   2026-09-17 12:42 UTC that wrote 51,846 new auto-graded rows to
+   `data/pickem/outcome_log.csv` using the fixed `grading_line()` (closing line, not
+   first-seen line) and `select_closing_flags()`/`market_key()` (dedupe re-flags of the
+   same real market). Verified directly: 28,078 of those rows are real win/loss/push
+   grades on deduped markets; 23,768 are `void` (superseded re-flags, correctly excluded
+   from win-rate stats). This session did **not** need to re-run the grader — it started
+   from already-clean data, confirmed by cross-checking the log's per-sport summary
+   numbers against the live file's own `notes` column split.
+2. **Built `scripts/calibration/pickem_model_validity_audit.py`** (new file) — joins
+   `clv_log.csv` (odds_type, allowed_wager_types, closing/first_flagged implied prob) onto
+   `outcome_log.csv` on `flag_id`, restricts to real win/loss grades (push/void excluded,
+   matching `outcome_tracker.build_report()`'s own convention), and produces:
+   - A per-(sport × resolved_stat_key × odds_type-bucket) table using each row's own real
+     implied probability as its breakeven (not the flat 57.74% constant) — 126 cells, 98
+     clearing a 30-leg interim floor (`docs/sample_size_methodology.md` Section 6). Written
+     to `data/pickem/model_validity_audit_20260917.csv`.
+   - A Wilson-score-interval significance call per cell (`beats_breakeven` /
+     `below_breakeven` / `inconclusive` / `not_enough_evidence`) instead of an eyeballed
+     point-estimate comparison.
+   - A distribution-shape check (zero-inflation rate + sample skew on each graded leg's
+     real `actual_value`) across every sport/stat with n≥30, not just MLB.
+   - Directional (over/under) and platform (PrizePicks/Underdog) breakdowns per sport.
+   - The "clean slice" named in the roadmap card (MLB, PrizePicks, Standard odds_type,
+     Hits + Total Bases only).
+   Full run captured at `logs/pickem_model_validity_audit_2026-09-17.log`.
+3. **Caught and fixed a real bug in the audit script itself before trusting its output**
+   (per this project's own hand-spot-check standard): the clean-slice filter used
+   `resolved_stat_key == "total_bases"` (snake_case); the real column value is
+   `"totalBases"` (camelCase, matches the MLB Stats API's own field name, same convention
+   `pickem_calibration_by_stat.py`/`mlb.py` already use). This silently dropped every Total
+   Bases row, understating the clean slice's real n by more than half (214 vs. the correct
+   495). Fixed and re-verified by hand against a separate direct pandas query before using
+   the number in any conclusion below.
+
+**Findings (each labeled measurement / model-reasoning / not-enough-evidence, per the
+roadmap card's explicit requirement):**
+
+1. **The headline "40+ percentage point edges" (MLB triples/home runs/stolen bases,
+   Soccer fouls/shots, all on `demon` odds_type) are not trustworthy evidence of real
+   edge — labeled BOTH a measurement problem and a model-reasoning problem, not
+   separable with current data.**
+   - Measurement side: `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` (demon 52.83%, goblin 69.51%,
+     `pickem_model.py:615`) is derived from exactly ONE observed real payout combination
+     (Session 2.21's own docstring says this outright — "has not been confirmed to hold at
+     other leg counts"). Every demon/goblin breakeven in this audit's table rests on that
+     single anecdote. An edge computed against an unvalidated constant is not real evidence
+     either way.
+   - Model-reasoning side: the stats topping the demon list (home runs 89.3% real zero-
+     rate, stolen bases 88.1%, doubles 86.7%, triples 94.6%, RBI 70.7%, walks 70.1% — all
+     confirmed directly from real graded `actual_value`s) are exactly the zero-inflated
+     counting stats `prob_over()`'s plain Gaussian CDF cannot represent, per the roadmap
+     card's Known Problem #2. 86% of MLB demon/goblin flags (10,814 of 12,588) are on the
+     `under` side — consistent with a Gaussian model systematically overstating "under"
+     probability against a low threshold when the real distribution has a huge mass at
+     exactly zero.
+   - **Neither the breakeven constant nor the distribution-shape problem is fixed in this
+     session** (per the card's own scope — this is a measurement/reasoning session, not a
+     recalibration session, mirroring Session 2.30/2.33's precedent). Any demon/goblin cell
+     in the audit table should be read as "not currently interpretable," not "real edge."
+2. **MLB, restricted to Standard odds_type (a defensible ~50% no-vig breakeven, not the
+   shaky demon/goblin constant): `over` is flat (50.9% win vs. 50.2% breakeven, n=2,400,
+   `inconclusive`); `under` shows a real, statistically significant edge (55.6% vs. 49.9%
+   breakeven, n=1,230, 95% CI [52.8%, 58.4%] — the interval clears breakeven).** Labeled
+   **model-reasoning** (the breakeven here is not in question, so the persistent gap points
+   at the mean/sigma estimation itself, not measurement). This is the single most credible
+   "real edge" finding in the whole audit — the effect size (5.7pp) is the right order of
+   magnitude for a real retail-market inefficiency, unlike the demon-line numbers.
+3. **The "clean slice" (MLB, PrizePicks, Standard, Hits + Total Bases, both sides
+   pooled): n=495, win rate 51.72% vs. breakeven 50.25%, edge +1.47pp, 95% CI [47.32%,
+   56.09%] — `inconclusive`.** Labeled **not enough evidence**, not "no edge" — the CI
+   comfortably straddles breakeven, and n=495 is well below the ≈782 this audit's own
+   Wilson-CI-equivalent target would need to detect a 5pp effect at a 50% breakeven with
+   standard 95%/80% power (same method as `docs/sample_size_methodology.md` Section 3,
+   recomputed for p₀=0.50 instead of 0.5774). Splitting this same slice by side reproduces
+   Finding #2's pattern on a smaller sample: `over` n=378 flat (48.9%, inconclusive),
+   `under` n=117 beats breakeven (60.7%, 95% CI [51.6%, 69.1%]).
+4. **NFL, Standard odds_type only: BOTH sides show a real, very large, high-confidence
+   edge — `over` 62.7% vs. 50% breakeven (n=654, 95% CI [58.9%, 66.3%]); `under` 74.7% vs.
+   50% breakeven (n=752, 95% CI [71.5%, 77.7%]).** This does not survive the same sanity
+   check Finding #1 got. Labeled **not enough evidence to act on, despite the sample size
+   and statistical significance** — an edge this large (12–25 percentage points, on both
+   sides of the market, at n>650 each) is not plausible as a genuine, sustainable
+   inefficiency in a liquid retail DFS market; `PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5` for
+   NFL standard lines is itself explicitly flagged in `pickem_model.py` as "stated,
+   unverified" (not derived from a real no-vig calculation the way MLB Stats API data
+   allows); this smells like a residual NFL-specific measurement bug (e.g., in the
+   schedule-join grading path Session 2.18 built, which no later session re-audited the way
+   this session just re-audited the dedup/closing-line bugs) rather than either a real
+   edge or a settled non-finding. **This is this session's single most concrete
+   recommended follow-up** — a dedicated NFL-grading-path audit, not a NHL-style go/no-go,
+   before any NFL number in this project is trusted for sizing.
+5. **Correction to Session 2.31's finding that Underdog is untrustworthy across sports.**
+   Session 2.31 compared Underdog's real win rate against PrizePicks' 57.74% 2-pick-
+   Power-Play breakeven — a number derived from a payout structure Underdog does not use.
+   Re-run here against each row's own real implied probability: **MLB Underdog n=8,547,
+   win 45.55% vs. breakeven 44.83%, edge +0.71pp, `inconclusive`** (not "below breakeven" —
+   Session 2.31 reported 46.4% against 57.74%, which looked damning only because of the
+   wrong comparison point). **NFL Underdog n=566, win 51.24% vs. breakeven 49.11%, edge
+   +2.13pp, `inconclusive`** (Session 2.31 reported 49.5% against 57.74%, same mismatch).
+   Labeled **measurement problem**, fully resolved by this session's per-row breakeven
+   method — Underdog is not shown to be worse than PrizePicks once compared fairly; it is
+   simply unproven either way at current sample size, same as most of this track.
+   **This has real downstream implications** this session does not itself resolve:
+   Session 2.30's NHL-deferral reasoning partly rested on "Underdog is untrustworthy,
+   roughly half of PrizePicks/Underdog volume"; Session 2.32/2.33's starter/lineup-
+   confirmation-gate work was motivated by the same now-corrected premise. Neither prior
+   decision is reversed in this session (2.30's other reasons — build cost, no live NHL
+   volume yet — stand independently; 2.32's signal may still have real value for other
+   reasons), but both should be re-read against this correction next time they come up
+   rather than treated as resting on solid ground.
+6. **Distribution-shape mismatch is confirmed broad, not MLB-specific**, closing the
+   roadmap card's open question. Of 49 sport/stat cells with n≥30, 30 are flagged
+   non-Gaussian (≥20% real zero-rate or |skew|>1.0): every MLB counting stat checked,
+   Soccer/FIFA shots and shots-on-target (47–60% zero-rate), NFL `def_sacks` (77.2% zero)
+   and the NFL TD-total combo stat (66.1% zero), NFL `receiving_yards`/`rushing_yards`
+   (real skew ~1.5 despite low zero-rate — a fat right tail, not zero-inflation, a second
+   distinct shape problem the roadmap card's "zero-inflated OR bounded OR fat-tailed"
+   framing anticipated). Labeled **model-reasoning problem**, project-wide, not a
+   MLB-only gap as Known Problem #2 was originally scoped.
+7. **CFB and Tennis remain at effectively zero real graded evidence** (CFB: 1,264 of
+   1,265 candidates are `no_player_match`; Tennis: all 774 distinct markets are
+   `no_game_match`) — unchanged from Sessions 2.28/2.29's own findings; not re-investigated
+   here since this audit's job is measuring flags that DO grade, not re-diagnosing known,
+   already-explained join gaps.
+
+**Go/no-go on the track's foundational premise (required by the card):**
+**Not proven project-wide.** Most of the track's most eye-catching apparent edges
+(demon/goblin lines, which make up the bulk of MLB's flagged volume) are not currently
+interpretable, being confounded by an unvalidated breakeven constant AND a confirmed
+Gaussian-shape mismatch at the same time. Stripped down to the parts of the data this
+audit can actually trust (a real, defensible breakeven; reviewed stat shape), the honest
+picture is: **no proven edge yet, one modest and believable real signal (MLB Standard
+`under`, +5.7pp, statistically significant but still a small absolute sample), one large
+signal that is more likely a residual bug than a real edge and needs its own audit (NFL,
+both sides), and everything else either flat or still below the evidence floor.** This is
+not a "the model is wrong, stop" verdict and not a "the model works, scale up" verdict —
+it is a genuinely open result that narrows sharply where the next session's attention
+should go, which is what this session was scoped to produce.
+
+**Files touched:**
+- `scripts/calibration/pickem_model_validity_audit.py` (new)
+- `data/pickem/model_validity_audit_20260917.csv` (new — durable per-cell output)
+- `logs/pickem_model_validity_audit_2026-09-17.log` (new — full run capture)
+- `ROADMAP.md` (Session 2.37 card closed out below)
+
+**Corrections/reversals during the session:**
+- This session's own script had the `total_bases`/`totalBases` naming bug described
+  above, caught by hand before any number using it was reported (same standard Session
+  2.29 applied to its own tennis bugs).
+- Session 2.31's Underdog-untrustworthy finding is corrected (Finding #5) — not reversed
+  as "Underdog is good," but the specific number and comparison that made it look bad is
+  shown to have been the wrong comparison, not a real finding.
+
+**Open items / deferred validations:**
+- **NFL grading-path audit (Finding #4)** — the most concrete, actionable next step:
+  re-check Session 2.18's original NFL schedule-join grading logic (not touched by the
+  2026-09-17 dedup/closing-line fix, which was sport-agnostic) for a residual bug that
+  could produce a 12–25pp phantom edge at n>650 per side.
+- **Demon/goblin breakeven constant (Finding #1)** remains sourced from a single real
+  observation (Session 2.21) — re-deriving it from more real observed payouts (multiple
+  leg counts, multiple Standard/special mixes) would let a large fraction of this track's
+  flagged volume (MLB demon/goblin alone is ~12,600 of ~27,000 graded MLB legs) become
+  interpretable for the first time.
+- **Gaussian-shape fix (Finding #6)** — this session only confirms and broadens the
+  diagnosis; no distribution-shape or count-model fix is implemented, matching the card's
+  own "measurement first, fix second" scope discipline.
+- **Session 2.30 (NHL) and Session 2.32/2.33 (Underdog starter-confirmation gate)** should
+  both be re-read against Finding #5's correction next time either is revisited — not
+  reversed here, but their supporting evidence has partly changed.
+- Sample sizes remain thin against this track's own ≈3,725-leg full-strength target
+  (Section 3, `docs/sample_size_methodology.md`) for any single cell — even the largest
+  qualifying cells (MLB demon `under`, n=10,814) are large only because they pool many
+  different stats together, which Finding #1 already disqualifies from a clean read.
