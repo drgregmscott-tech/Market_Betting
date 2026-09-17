@@ -297,6 +297,36 @@ in a future session, same as the sigma factor's own open item. Re-run
 periodically as more snapshots survive and more legs grade in, same cadence
 as the sigma fit.
 
+SHRINKAGE (Session 2.42)
+-------------------------
+MIN_GAMES_FOR_ESTIMATE = 2 means a player with exactly 2 games has their raw
+sample mean/sigma trusted exactly as much as a player with 15 -- real,
+professional sports-projection systems instead shrink a thin-sample player's
+mean toward a league average, weighted by real sample size, because a raw
+small-sample average is known to be an unreliable estimate of true talent
+(2026-09-17 research finding -- see ROADMAP.md Session 2.42). This is a
+mean-side correction, independent of SIGMA_CALIBRATION_FACTOR (which
+controls how extreme the resulting probability is, not which mean feeds it
+-- same distinction the "BLEND WEIGHT" section above draws for
+SEASON_AVG_BLEND_WEIGHT) and independent of isotonic calibration (which
+recalibrates a probability's SHAPE downstream of whatever mean produced it).
+
+compute_league_average() computes, per resolved_stat_key, the mean of every
+qualifying player's own season_average() for that stat (equal weight per
+player), using data every sport plug-in already fetches -- no new data
+source. apply_shrinkage() blends the model's existing blended mean
+(season_avg/recent_form) toward that league average, weighted by the
+player's own games_used via shrunk_mean = (n/(n+k)) * raw_mean + (k/(n+k)) *
+league_avg -- k = SHRINKAGE_PRIOR_STRENGTH_K, fit against real graded
+outcomes by scripts/calibration/fit_shrinkage.py (same Brier-minimizing
+grid-search method as SIGMA_CALIBRATION_FACTOR's own fit), with a real
+temporal held-out validation (Session 2.40's method) before being wired in.
+Every scored row carries model_mean_pre_shrinkage, league_avg, and
+shrinkage_weight -- visible, so it is always possible to see whether/how
+much shrinkage was applied to a given row, never a hidden adjustment. See
+SHRINKAGE_PRIOR_STRENGTH_K's own inline comment and SESSION_LOG.md Session
+2.42 for the fit result and whether it validated.
+
 SESSION 2.12 REFACTOR -- what moved where
 ------------------------------------------
 Everything that was NFL-specific (the nflverse fetch, NFL_STAT_TYPE_MAP,
@@ -659,6 +689,78 @@ def recent_form(series: pd.Series) -> Optional[float]:
     weights = weights / weights.sum()  # renormalize if fewer than 5 games
     values = last_n.values[::-1]
     return float(np.dot(values, weights))
+
+
+def compute_league_average(
+    plugin: SportPlugin, stats_df: pd.DataFrame, kind: str, value: object
+) -> Optional[float]:
+    """Session 2.42 -- the shrinkage target for one resolved_stat_key: the
+    mean of every qualifying player's OWN season_average() for this stat,
+    equal weight per player (not per game -- weighting by game would let a
+    handful of high-volume players dominate "what a typical player
+    averages," which is the wrong target for shrinking one specific
+    player's mean toward). Only players with at least MIN_GAMES_FOR_ESTIMATE
+    games count, matching this model's own sigma-estimability floor.
+    Returns None if stats_df is empty or no player qualifies -- an honest
+    gap (falls back to the unshrunk mean at the call site), never a
+    guessed 0."""
+    if stats_df.empty:
+        return None
+    means = []
+    for pid in stats_df["player_id"].unique():
+        series = build_stat_series(plugin, stats_df, pid, kind, value)
+        if len(series) >= MIN_GAMES_FOR_ESTIMATE:
+            m = season_average(series)
+            if m is not None:
+                means.append(m)
+    if not means:
+        return None
+    return float(np.mean(means))
+
+
+SHRINKAGE_PRIOR_STRENGTH_K = 5.0  # Session 2.42: fit and held-out-validated
+# by scripts/calibration/fit_shrinkage.py -- Brier-minimizing grid search on
+# the earliest 70% (4,606 legs) of 6,581 real graded legs joined to a
+# retained pickem_estimates_*.csv snapshot (13 resolved_stat_keys had a
+# computable league average; see that script's "LEAGUE AVERAGE IS COMPUTED
+# CURRENT, NOT HISTORICAL" docstring note for the one stated approximation
+# in this fit), evaluated on the most recent 30% (1,975 legs), never seen
+# during the fit. Held-out Brier improved from 0.226323 (k=0, no shrinkage)
+# to 0.225768 at k=5.0 -- a real but modest improvement, not a dramatic one.
+# The Session 2.42 hypothesis (thin-sample legs benefit more) held on this
+# split: the below-median-games_used half of the held-out set improved more
+# (delta +0.000783) than the above-median half (delta +0.000318) -- but see
+# the fit run's own log (data/pickem/shrinkage_recalibration_log.csv) for a
+# real, stated caveat: this sample is 88% MLB (same composition as the
+# blend-weight fit), so the held-out set's OWN median games_used was 113 --
+# "thin-sample" here means "fewer games than a typical MLB regular," not
+# literally a 2-game rookie sample; a stat/sport mix with more real
+# thin-sample (NFL early-season, first-year player) legs graded in would be
+# a stronger test of the Week-1-link hypothesis specifically. Re-fit
+# periodically as more legs grade in and more snapshots retain a real
+# per-row league_avg (this fit's own live-current-season approximation
+# becomes unnecessary once enough post-Session-2.42 snapshots exist to join
+# a real historical value instead), same cadence as the sigma/blend fits.
+
+
+def apply_shrinkage(
+    raw_mean: float, n_games: int, league_avg: Optional[float]
+) -> tuple[float, float]:
+    """Session 2.42 -- sample-size-weighted shrinkage of one player's own
+    blended mean toward the league average for this stat:
+    shrunk_mean = (n/(n+k)) * raw_mean + (k/(n+k)) * league_avg, k =
+    SHRINKAGE_PRIOR_STRENGTH_K. As n grows, weight on league_avg shrinks
+    toward 0 automatically -- no separate "n already large" gate is needed,
+    the formula does this by construction. Returns (shrunk_mean,
+    shrinkage_weight); shrinkage_weight is the fraction of the final mean
+    drawn from league_avg, always 0.0 (shrunk_mean == raw_mean exactly)
+    when league_avg is None or SHRINKAGE_PRIOR_STRENGTH_K <= 0 -- clean,
+    visible fallback to the raw mean, never a silent partial application."""
+    if league_avg is None or SHRINKAGE_PRIOR_STRENGTH_K <= 0:
+        return raw_mean, 0.0
+    weight = SHRINKAGE_PRIOR_STRENGTH_K / (n_games + SHRINKAGE_PRIOR_STRENGTH_K)
+    shrunk = (1.0 - weight) * raw_mean + weight * league_avg
+    return shrunk, weight
 
 
 def sample_sigma(series: pd.Series, model_mean: float) -> float:
@@ -1041,6 +1143,10 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     # the same date/game only fetches each real schedule/lineup once.
     mlb_schedule_cache: dict[str, list[dict]] = {}
     mlb_lineup_cache: dict[object, Optional[dict]] = {}
+    # SESSION 2.42 -- per-run cache for compute_league_average(), keyed by
+    # (plugin.name, resolved_stat_key) so a run with many props on the same
+    # stat only computes the league average for it once, not once per row.
+    league_avg_cache: dict[tuple[str, str], Optional[float]] = {}
 
     def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
         if plugin.name not in stats_cache:
@@ -1124,7 +1230,21 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
 
         s_avg = season_average(series)
         r_form = recent_form(series)
-        model_mean = SEASON_AVG_BLEND_WEIGHT * s_avg + RECENT_FORM_BLEND_WEIGHT * r_form
+        raw_model_mean = SEASON_AVG_BLEND_WEIGHT * s_avg + RECENT_FORM_BLEND_WEIGHT * r_form
+
+        # SESSION 2.42 -- shrink the player's own blended mean toward this
+        # stat's league average, weighted by real sample size (games_used).
+        # See the "SHRINKAGE" module docstring section above. A clean
+        # no-op (shrinkage_weight == 0.0, model_mean == raw_model_mean
+        # exactly) whenever SHRINKAGE_PRIOR_STRENGTH_K is 0 (unvalidated,
+        # the current default) or no league average is available for this
+        # stat.
+        cache_key = (plugin.name, row["resolved_stat_key"])
+        if cache_key not in league_avg_cache:
+            league_avg_cache[cache_key] = compute_league_average(plugin, stats_df, kind, value)
+        league_avg = league_avg_cache[cache_key]
+        model_mean, shrinkage_weight = apply_shrinkage(raw_model_mean, len(series), league_avg)
+
         sigma = sample_sigma(series, model_mean)
         if sigma == sigma:  # NaN-safe: NaN sigma stays NaN, prob_over() handles it
             calibration_factor = SIGMA_CALIBRATION_FACTOR_BY_STAT.get(
@@ -1147,6 +1267,9 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["model_status"] = "estimated" if p_over is not None else "no_line_value"
         row["season_avg"] = s_avg
         row["recent_form"] = r_form
+        row["model_mean_pre_shrinkage"] = raw_model_mean
+        row["league_avg"] = league_avg
+        row["shrinkage_weight"] = shrinkage_weight
         row["model_mean"] = model_mean
         row["model_sigma"] = sigma
         row["games_used"] = len(series)
@@ -1194,6 +1317,9 @@ def _blank_model_fields() -> dict:
     return {
         "season_avg": None,
         "recent_form": None,
+        "model_mean_pre_shrinkage": None,
+        "league_avg": None,
+        "shrinkage_weight": None,
         "model_mean": None,
         "model_sigma": None,
         "games_used": None,

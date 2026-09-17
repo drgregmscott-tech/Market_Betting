@@ -1493,3 +1493,89 @@
 2026-09-17 15:51:26,639 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 4.0s
 2026-09-17 15:51:26,639 UTC | WARNING | Could not fetch MLB confirmed lineup for game 999999: boom
 2026-09-17 15:51:26,656 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:23,486 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:23,527 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:23,554 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:23,584 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:23,956 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-17 17:21:23,956 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-17 17:21:23,956 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-17 17:21:23,958 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-17 17:21:23,958 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-17 17:21:23,958 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-17 17:21:23,960 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-17 17:21:23,960 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-17 17:21:23,960 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-17 17:21:23,961 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-17 17:21:23,962 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-17 17:21:23,962 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-17 17:21:23,963 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 2.0s
+2026-09-17 17:21:23,964 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 4.0s
+2026-09-17 17:21:23,964 UTC | WARNING | Could not fetch MLB schedule for 2026-09-15: boom
+2026-09-17 17:21:23,965 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 2.0s
+2026-09-17 17:21:23,965 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 4.0s
+2026-09-17 17:21:23,965 UTC | WARNING | Could not fetch MLB confirmed lineup for game 999999: boom
+2026-09-17 17:21:23,982 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:36,314 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:41,186 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:41,225 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:41,251 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:41,278 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:21:41,473 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-17 17:21:41,474 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-17 17:21:41,474 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-17 17:21:41,476 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-17 17:21:41,476 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-17 17:21:41,476 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-17 17:21:41,478 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-17 17:21:41,478 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-17 17:21:41,478 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-17 17:21:41,480 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-17 17:21:41,480 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-17 17:21:41,480 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-17 17:21:41,482 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 2.0s
+2026-09-17 17:21:41,482 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 4.0s
+2026-09-17 17:21:41,482 UTC | WARNING | Could not fetch MLB schedule for 2026-09-15: boom
+2026-09-17 17:21:41,484 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 2.0s
+2026-09-17 17:21:41,484 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 4.0s
+2026-09-17 17:21:41,484 UTC | WARNING | Could not fetch MLB confirmed lineup for game 999999: boom
+2026-09-17 17:21:41,504 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:20,198 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:25,332 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:25,368 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:25,392 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:25,416 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:25,602 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 2.0s
+2026-09-17 17:34:25,602 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/summary?event=999999: boom -- retrying in 4.0s
+2026-09-17 17:34:25,602 UTC | WARNING | Skipping esp.1 event 999999 after repeated failures: boom
+2026-09-17 17:34:25,604 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 2.0s
+2026-09-17 17:34:25,604 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://fantasy.premierleague.com/api/element-summary/999999/: boom -- retrying in 4.0s
+2026-09-17 17:34:25,604 UTC | WARNING | Skipping FPL player 999999 after repeated failures: boom
+2026-09-17 17:34:25,606 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 2.0s
+2026-09-17 17:34:25,606 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/teams/999999/roster?rosterType=active: boom -- retrying in 4.0s
+2026-09-17 17:34:25,607 UTC | WARNING | Skipping MLB team 999999 roster after repeated failures: boom
+2026-09-17 17:34:25,608 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 2.0s
+2026-09-17 17:34:25,608 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/people/999999/stats?stats=gameLog&group=hitting&season=2026: boom -- retrying in 4.0s
+2026-09-17 17:34:25,608 UTC | WARNING | Skipping MLB player 999999 (hitting) game log after repeated failures: boom
+2026-09-17 17:34:25,610 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 2.0s
+2026-09-17 17:34:25,610 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-15&hydrate=probablePitcher: boom -- retrying in 4.0s
+2026-09-17 17:34:25,610 UTC | WARNING | Could not fetch MLB schedule for 2026-09-15: boom
+2026-09-17 17:34:25,612 UTC | WARNING | HTTP GET failed (attempt 1/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 2.0s
+2026-09-17 17:34:25,612 UTC | WARNING | HTTP GET failed (attempt 2/3) for https://statsapi.mlb.com/api/v1.1/game/999999/feed/live: boom -- retrying in 4.0s
+2026-09-17 17:34:25,612 UTC | WARNING | Could not fetch MLB confirmed lineup for game 999999: boom
+2026-09-17 17:34:25,629 UTC | INFO | Loaded 18 nfl stat rows for season 2025
+2026-09-17 17:34:30,506 UTC | INFO | === Estimation run starting (season=2026) ===
+2026-09-17 17:34:30,664 UTC | INFO | Loaded 41292 ingested props from C:\Users\gmsco\Desktop\Market_Betting\data\pickem\normalized\latest.csv
+2026-09-17 17:34:31,104 UTC | INFO | Loaded 1118 nfl stat rows for season 2026
+2026-09-17 17:36:13,915 UTC | INFO | === Estimation run starting (season=2026) ===
+2026-09-17 17:36:14,060 UTC | INFO | Loaded 41292 ingested props from C:\Users\gmsco\Desktop\Market_Betting\data\pickem\normalized\latest.csv
+2026-09-17 17:36:14,468 UTC | INFO | Loaded 1118 nfl stat rows for season 2026
+2026-09-17 17:37:56,740 UTC | INFO | Loaded 53377 mlb stat rows for season 2026
+2026-09-17 17:38:56,451 UTC | INFO | Loaded 5488 tennis stat rows for season 2026
+2026-09-17 17:43:18,494 UTC | INFO | Loaded 21913 soccer stat rows for season 2026
+2026-09-17 17:45:11,601 UTC | INFO | Loaded 0 cfb stat rows for season 2026
+2026-09-17 17:46:21,602 UTC | INFO | Loaded 2549 epl stat rows for season 2026
+2026-09-17 17:46:42,424 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-17 17:47:03,745 UTC | INFO | Model status breakdown: {'estimated': 11461, 'no_player_match': 10993, 'unsupported_stat_type': 7380, 'unsupported_sport': 6226, 'insufficient_history': 4025, 'no_line_value': 1207}
+2026-09-17 17:47:04,376 UTC | INFO | Wrote 41292 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260917T174703Z.csv
+2026-09-17 17:47:04,996 UTC | INFO | Wrote 41292 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv

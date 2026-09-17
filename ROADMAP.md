@@ -3242,7 +3242,9 @@ them"). Result: 5 of 20 remain flagged, all for real, named "no fix available" r
 ---
 
 ### Session 2.42 — Shrinkage Estimation for Thin-Sample Players
-**Status:** Not started
+**Status:** ✅ Complete — real, held-out-validated improvement found and wired in
+(`SHRINKAGE_PRIOR_STRENGTH_K = 5.0`). See SESSION_LOG.md Session 2.42 for the full
+derivation, numbers, and stated caveats.
 **Prerequisites:** None (uses data already fetched by every sport plug-in). Reuses Session
 2.40's validation method (real temporal held-out split, not in-sample Brier).
 
@@ -3276,13 +3278,29 @@ matchup-adjustment feature (Session 2.41's real negative result), needs no new d
   raw mean when unvalidated or n is already large).
 
 **Validation (required to close session):**
-- [ ] League/positional baseline computed and sourced (not a guessed constant).
-- [ ] Shrinkage strength `k` fit against real data via a stated, reproducible method.
-- [ ] Real temporal held-out validation (not in-sample) shows a real Brier/calibration
-improvement, with an explicit check of whether the improvement concentrates in thin-sample
-legs.
-- [ ] Wired into `pickem_model.py` only if validated, with a visible new column
-transparently showing the shrinkage applied per row.
+- [x] League baseline computed and sourced (not a guessed constant) — `pickem_model.
+compute_league_average()`, mean of every qualifying player's own season average for that
+`resolved_stat_key`, equal weight per player, from data every sport plug-in already
+fetches. **Scope note, stated not silent:** computed as a plain LEAGUE average, not a
+positional one — no plug-in's `fetch_stats()` contract currently returns a position column
+(checked directly, `pickem_sport_plugins/__init__.py`'s FETCH_STATS CONTRACT), so a real
+positional split was not available without a new data source, which this session's roadmap
+card explicitly ruled out ("no new data source"). A future session adding position data
+could tighten this further.
+- [x] Shrinkage strength `k` fit against real data via a stated, reproducible method —
+`scripts/calibration/fit_shrinkage.py`, Brier-minimizing grid search, same method
+`fit_sigma_recalibration.py` established. Result: k=5.0.
+- [x] Real temporal held-out validation (not in-sample): fit on the earliest 70% (4,606
+legs) of 6,581 real graded legs joined to a retained snapshot, scored on the most recent 30%
+(1,975 legs, never seen during the fit). Held-out Brier improved 0.226323 → 0.225768 — a
+real but modest improvement, reported plainly, not oversold. Improvement concentrated in
+below-median-`games_used` legs (delta +0.000783) more than above-median legs (delta
++0.000318), consistent with the thin-sample hypothesis on this split — though the sample's
+own median (113 games, 88% MLB) means "thin" here is relative, not literally 2-game-rookie
+thin; see SESSION_LOG.md for the full caveat.
+- [x] Wired into `pickem_model.py` (`SHRINKAGE_PRIOR_STRENGTH_K = 5.0`) with three new,
+visible columns per row (`model_mean_pre_shrinkage`, `league_avg`, `shrinkage_weight`) so
+whether/how much shrinkage was applied to any given row is always inspectable, never hidden.
 
 ---
 

@@ -14880,3 +14880,146 @@ was actually done" above. No separate reversal.
   comparison, the row-count-preserved join check) and a live `--run`, not a unit test. Adding
   a real test file for this script, especially covering `check_post_fit_calibration_gap()`'s
   filter logic directly, is a reasonable future hardening step, not done here.
+
+## Session 2.42 — Shrinkage Estimation for Thin-Sample Players
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — a real, held-out-validated shrinkage correction, sourced from
+2026-09-17 research into professional sports-projection practice, designed, fit, validated,
+and wired into production.
+
+**What was actually done:**
+1. Added `pickem_model.compute_league_average(plugin, stats_df, kind, value)`: the mean of
+   every qualifying player's OWN season average for a given `resolved_stat_key` (equal
+   weight per player, not per game), using only data every sport plug-in already fetches --
+   no new data source, matching the roadmap card's explicit scope. Position data is not
+   part of any plug-in's `fetch_stats()` contract (checked directly), so this is a plain
+   league average, not a positional one -- a stated scope decision, not a silent gap.
+2. Added `pickem_model.apply_shrinkage(raw_mean, n_games, league_avg)`: `shrunk_mean =
+   (n/(n+k)) * raw_mean + (k/(n+k)) * league_avg`, `k = SHRINKAGE_PRIOR_STRENGTH_K`. Clean,
+   visible no-op (`shrinkage_weight == 0.0`, `shrunk_mean == raw_mean` exactly) whenever
+   `league_avg` is unavailable or `k <= 0` -- no separate "n already large" gate needed, the
+   formula's own `n/(n+k)` term fades the prior out as `n` grows.
+3. Wired both into `process_props()`: every scored row now carries three new, visible
+   columns -- `model_mean_pre_shrinkage` (the old, unshrunk blended mean),
+   `league_avg` (the computed shrinkage target, `None` when unavailable), and
+   `shrinkage_weight` (fraction of the final mean drawn from `league_avg`) -- so whether/how
+   much shrinkage was applied to any row is always inspectable, never hidden. `model_mean`
+   itself is now the (possibly shrunk) value used for scoring, matching every downstream
+   consumer's existing expectation of that column.
+4. `SHRINKAGE_PRIOR_STRENGTH_K` started at `0.0` (a guaranteed no-op) until a real fit
+   validated a specific value -- same "no silent recalibration" precedent
+   `fit_isotonic_calibration.py`/`fit_sigma_recalibration.py` already established.
+5. Built `scripts/calibration/fit_shrinkage.py`, reusing `fit_blend_weight.py`'s
+   snapshot-join method (outcome_log.csv + clv_log.csv joined to whichever retained
+   `output/estimation/pickem_estimates_*.csv` snapshot covers a leg's flag date, at day
+   granularity) plus Session 2.40's real temporal held-out split (earliest 70% train, most
+   recent 30% test, never seen during the fit). Each retained snapshot's own `model_mean`
+   column was used directly as `raw_mean` (every existing snapshot predates this session, so
+   that column already IS the unshrunk blend at whatever blend weight was production then --
+   avoided re-deriving it from `season_avg`/`recent_form` with TODAY's blend weight, which
+   would have silently applied the wrong historical weight to older legs).
+6. **Stated approximation, not hidden:** `fit_shrinkage.py` has no historical per-day
+   `league_avg` to join (no snapshot before this session ever computed or stored one), so it
+   computes each `resolved_stat_key`'s league average ONCE, live, against the CURRENT
+   season's stats, and applies that single current value to every historical leg for that
+   stat regardless of flag date. Stated plainly in that script's own docstring as a real,
+   second-order approximation (a league average is a slow-moving population statistic, same
+   class of approximation `fit_blend_weight.py`'s own "sigma held fixed" note already uses)
+   -- and now self-correcting going forward, since every snapshot from this point on stores
+   its own real `league_avg` per row, so a future re-fit can join the real historical value
+   instead of this live approximation.
+7. Ran the fit: 35 retained snapshot files, 6,581 real graded legs joined, 6,119 of which had
+   a computable `league_avg` (13 `resolved_stat_key`s had enough live-computed coverage in
+   this joined sample). Grid search over k in {0, 0.5, 1.0, ..., 20.0}. **Result: k=5.0**,
+   held-out Brier improved from 0.226323 (k=0, no shrinkage) to 0.225768 on the 1,975-leg
+   test split -- a real but modest improvement, reported as such, not oversold.
+8. **Explicit hypothesis check, not assumed:** split the held-out test set at its own median
+   `games_used` (113). Below-median legs improved more (Brier delta +0.000783, n=1,009) than
+   above-median legs (delta +0.000318, n=966) -- the Session 2.42 hypothesis (thin-sample
+   legs benefit more) held on this split. **Real caveat stated, not glossed over:** this
+   joined sample is 88% MLB (same composition `fit_blend_weight.py`'s own fit already found),
+   so a test-set median of 113 games means "thin-sample" here is relative to a typical MLB
+   regular's season, not literally a 2-game rookie sample -- a genuinely thinner-sample
+   population (NFL early-season, first-year players) would be a stronger test of the
+   Week-1-link theory Sessions 2.37/2.38 originally raised, and is not yet available in
+   large enough graded volume to test directly.
+9. Wired the validated result into production: `SHRINKAGE_PRIOR_STRENGTH_K = 5.0` in
+   `pickem_model.py`, with the full derivation and caveats in that constant's own inline
+   comment. Regenerated `nfl_regression_golden.csv` (model_mean legitimately changes now
+   that shrinkage is active — confirmed the new snapshot's `shrinkage_weight` column matches
+   the formula by hand before accepting it as the new golden baseline).
+10. Ran a full live pipeline execution (`python scripts/estimation/pickem_model.py`,
+    season=2026, 41,292 real ingested props) end-to-end after wiring the fit in: completed
+    cleanly (exit code 0), 11,461 rows scored `estimated`, all 47 `resolved_stat_key`s
+    scored in this run got a real computed `league_avg` (more than the fit's own 13, since
+    live computation only needs the plug-in's current stats, not graded outcome history) and
+    100% of `estimated` rows had `shrinkage_weight > 0`, confirming the feature is live and
+    active in production, not just validated in isolation.
+
+**Files created/modified:**
+- `scripts/estimation/pickem_model.py` (`compute_league_average()`, `apply_shrinkage()`,
+  `SHRINKAGE_PRIOR_STRENGTH_K` new; `process_props()` wired in; `_blank_model_fields()`
+  extended; new "SHRINKAGE (Session 2.42)" module docstring section)
+- `scripts/calibration/fit_shrinkage.py` (new)
+- `data/pickem/shrinkage_recalibration_log.csv` (new, first row from this session's fit)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated -- model_mean now
+  legitimately reflects shrinkage)
+- `ROADMAP.md` (Session 2.42 card closed out, all four validation items checked)
+
+**Validation results:**
+- [x] League baseline computed and sourced, not guessed -- see item 1/6 above; scope
+  limited to a plain league average (not positional) for a stated, checked reason (no
+  plug-in returns position data), not a silent gap.
+- [x] Shrinkage strength `k` fit against real data via a stated, reproducible method --
+  `fit_shrinkage.py`, k=5.0.
+- [x] Real temporal held-out validation shows a real Brier improvement (0.226323 ->
+  0.225768), with an explicit thin-vs-thick-sample concentration check that supports the
+  hypothesis on this split, caveat about sample composition stated plainly.
+- [x] Wired into `pickem_model.py` only after validation, with three new visible columns
+  (not one) showing the shrinkage applied per row.
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  -- 79/79 pass after regenerating the golden fixture.
+- Live end-to-end pipeline run against 41,292 real props completed cleanly -- see item 10
+  above.
+
+**Decisions made:**
+1. League average, not positional -- position data does not exist in any plug-in's
+   `fetch_stats()` contract today, and the roadmap card explicitly ruled out adding a new
+   data source this session. Stated as a real scope limit, not silently narrowed.
+2. Used each retained snapshot's own stored `model_mean` as `raw_mean` in the fit, rather
+   than re-deriving it from `season_avg`/`recent_form` with today's blend weight -- avoids
+   silently applying `SEASON_AVG_BLEND_WEIGHT`'s current value (0.95/0.05) to legs that were
+   actually scored under the old 50/50 weight before Session 2.41c.
+3. Computed the fit's league averages live/current-season rather than leaving the fit
+   blocked on historical data that does not exist -- stated as a real, second-order
+   approximation rather than either skipping the fit entirely or hiding the limitation.
+4. Reported the held-out improvement as "real but modest" rather than overstating it --
+   Brier moved from 0.226323 to 0.225768, a genuine, held-out-validated gain, not a dramatic
+   one, consistent with this project's standard of not oversimplifying a small positive
+   result into more than it is.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- The held-out validation's own "thin-sample" bucket (median 113 games, 88% MLB) is not a
+  strong test of the original Week-1/early-season hypothesis specifically -- that needs a
+  larger graded sample of genuinely thin (e.g. <10 game) legs, which does not exist yet in
+  large volume. Revisit once more early-season/rookie legs grade in, particularly for NFL.
+- `fit_shrinkage.py`'s league averages are computed live against the CURRENT season, not
+  reconstructed per historical flag date -- every snapshot from this point forward stores
+  its own real `league_avg`, so a future re-fit (once enough post-Session-2.42 snapshots
+  exist) can use the real historical value instead of this approximation; noted directly in
+  that script's own docstring.
+- Only a single global `k` was fit (matching `SIGMA_CALIBRATION_FACTOR`'s own global-first
+  precedent, Session 2.22 before Session 2.24/2.25's per-stat expansion) -- a future session
+  could check whether specific stats need their own `k`, the same way
+  `SIGMA_CALIBRATION_FACTOR_BY_STAT` was later added, once enough graded volume per stat
+  exists to check it honestly.
+- No position data exists in this project to compute a true positional average -- adding it
+  to a plug-in's `fetch_stats()` contract (a real, larger effort touching every sport
+  plug-in) is future work if a positional prior is later judged worth the cost over the
+  current league-wide one.
+- Re-run `fit_shrinkage.py` periodically as more legs grade in and more post-Session-2.42
+  snapshots (with a real per-row `league_avg`) accumulate, same cadence as the sigma/blend
+  weight fits.

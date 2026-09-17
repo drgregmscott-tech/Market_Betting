@@ -1,0 +1,2 @@
+run_at,n_legs_total,n_snapshot_files_used,n_train,n_test,held_out_baseline_brier,held_out_fitted_brier,fitted_k,improvement_concentrates_in_thin_sample,thin_sample_median_games_used
+2026-09-17T17:33:49Z,6581,35,4606,1975,0.22632336349098997,0.22576764173130656,5.0,True,113.0
