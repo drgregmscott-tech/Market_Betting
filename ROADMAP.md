@@ -3408,6 +3408,18 @@ SESSION_LOG.md's "Session 2.44 follow-up" entry); needs a sharper continuity sig
 (QB continuity, competing-weapon-added flag) before it can be trusted as a production
 gate.
 
+**Follow-up v2 (2026-09-17, same day):** built the sharper signal — real QB-continuity
+(team's primary passer by attempts, same player both seasons) and a real
+competing-weapon-added flag (a genuinely new pass-catcher with >= 0.15 target_share).
+Confirmed it catches real disruption the coarse team-only flag missed: Jefferson (MIN's
+real QB changed, Darnold->McCarthy) and Chase (CIN's real QB usage shifted, consistent
+with Burrow's real 2025 injury) both correctly flagged NOT reliable despite being on the
+same team both years. The refined "reliable" group (n=48) correlated higher on all three
+outcomes (+0.864/+0.765/+0.701) than either the coarse same-team OR changed-team groups
+from the first follow-up. Still not wired in — needs a real leg-level Brier fit against
+this project's own graded legs, which does not exist yet for NFL beyond Week 1 2026 (see
+SESSION_LOG.md's "Session 2.44 follow-up v2" entry).
+
 ---
 
 ### Session 2.45 — Injury/Role Confirmation Beyond MLB (NFL and Other Sports)

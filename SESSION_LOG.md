@@ -15343,3 +15343,91 @@ real, honestly-reported result, not a mistake to correct.
 - This full analysis used 2024->2025 as a proxy; re-confirm the same correlations hold for
   2025->2026 once real 2026 weeks 1-4 fully exist, rather than assuming last year's
   pattern automatically repeats.
+
+---
+
+## Session 2.44 follow-up v2 — A Sharper Role-Continuity Signal
+
+**Date completed:** 2026-09-17
+
+**Status:** ✅ Complete, real improvement confirmed over the coarse team-only flag —
+still NOT wired into `pickem_model.py`, same real structural reason as the rest of Session
+2.44 (no real 2026 leg-level data yet to run a Brier-based production fit against).
+
+**What was actually done:** built and tested the two sharper continuity signals the v1
+follow-up's open items named.
+1. **QB continuity**: each team's real primary passer (most real pass attempts,
+   `position == "QB"`) for full-season 2024 vs. real weeks-1-4 2025. A same-team receiver
+   whose team's primary QB changed is flagged `qb_continuity=False`.
+2. **Competing-weapon-added**: for each 2025 team, any pass-catcher (WR/TE/RB) who did
+   NOT appear on that SAME team's real 2024 roster and whose real 2025 weeks-1-4
+   `target_share` is >= 0.15 (a real, meaningful share, not a cameo) flags that whole team
+   `competing_weapon_added=True`.
+3. **`scripts/calibration/research_role_continuity_v2.py`** (new) — refined_continuity =
+   same_team AND qb_continuity AND NOT competing_weapon_added. Reran the identical
+   correlation comparison as the v1 script, split by this refined flag instead of the
+   coarse team-only one.
+4. **Real, non-cherry-picked sanity check surfaced something the v1 script's flag
+   completely missed**: Justin Jefferson (`qb_continuity=False` — Minnesota's real
+   primary passer changed from Sam Darnold in 2024 to J.J. McCarthy in real 2025 weeks
+   1-4) and Ja'Marr Chase (`qb_continuity=False` and `competing_weapon_added=True` —
+   Cincinnati's real primary-passer attempts shifted, consistent with Joe Burrow's real
+   2025 injury absence) BOTH got flagged `refined_continuity=False` despite being on the
+   SAME team both years. The coarse v1 flag would have (wrongly) called both of these
+   "reliable" purely because the team name didn't change — a real, concrete illustration
+   of exactly the gap this refinement was built to close.
+5. **Real result**: `refined_continuity=True` (n=48, a much smaller but genuinely
+   cleaner group) correlated at +0.864 (target_share), +0.765 (receiving_yards), +0.701
+   (receptions) — higher across all three than BOTH the v1 script's coarse same-team
+   group (+0.809/+0.706/+0.674) AND its changed-team group (+0.744/+0.774/+0.686).
+   `refined_continuity=False` (n=139) came in lower on all three (+0.776/+0.702/+0.670).
+   A real, if modest (~0.05-0.09 correlation gain), separation the coarse flag did not
+   produce.
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass, unchanged (research-only script, no production code touched).
+- Real primary-QB attempt totals resolved for all 32 teams in both seasons (no team
+  defaulted to a guess), and real 2024 team rosters used directly (not assumed) to
+  determine which 2025 pass-catchers were genuinely new to a team.
+- The Jefferson/Chase real-world disruption facts above (QB change at MIN, Burrow's
+  real 2025 injury at CIN) are independently checkable public facts, not derived only
+  from this script's own numbers — used here as an external sanity check on the flag's
+  logic, not just its aggregate output.
+
+**Files touched:**
+- `scripts/calibration/research_role_continuity_v2.py` (new)
+
+**Decisions made:**
+1. Defined "primary QB" as most real pass attempts across the relevant weeks (full 2024
+   season; 2025 weeks 1-4) rather than "Week 1 starter alone" — a real, stated proxy that
+   would miss a true in-season QB change if raw attempt counts still favored the old
+   starter; not observed as a problem in this sample, but named directly as a limitation.
+2. Made `competing_weapon_added` a TEAM-level flag (does this team have ANY meaningful new
+   pass-catcher) rather than person-specific (did THIS receiver specifically lose share to
+   that weapon) — a real, coarser-than-ideal simplification, stated rather than hidden,
+   because attributing SHARE LOST TO a specific teammate would need a more complex
+   redistribution model than this research pass attempts.
+3. Still did NOT wire a year-over-year prior into `pickem_model.py` — the refined flag is
+   a real, measured improvement, but confirming it clears THIS project's own production
+   bar needs the same real leg-level Brier fit (retained snapshots + graded legs) Session
+   2.44's own open items already call for, which still cannot run today: confirmed via
+   `outcome_log.csv` that this project has zero graded 2025-season NFL legs (only 2026
+   Week 1 NFL legs exist), so there is no real leg-level sample yet to validate a
+   production adjustment against, refined flag or not.
+
+**Corrections/reversals during the session:** None.
+
+**Open items / deferred validations:**
+- Once real 2026 Week 4+ legs exist (Session 2.44's own primary open item), run the real
+  leg-level Brier fit using THIS refined continuity flag (not the coarse one) to gate a
+  year-over-year `target_share` prior, alongside `usage_trend`'s own in-season signal —
+  the two are complementary (prior-season level before Week 4, in-season trend after) and
+  should likely be evaluated together in that future fit.
+- `competing_weapon_added`'s team-level coarseness (item 2 above) is worth sharpening to a
+  player-specific "how much share did THIS receiver actually lose to the new weapon" once
+  a production wiring is actually being built, rather than in this research pass.
+- The QB-continuity proxy (most attempts, not "Week 1 starter") should be spot-checked
+  against a few more known 2025 in-season QB changes (e.g. any team with a real
+  midseason benching) before being trusted as fully robust, beyond the Jefferson/Chase
+  cases this pass happened to surface.
