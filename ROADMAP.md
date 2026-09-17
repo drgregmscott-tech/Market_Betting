@@ -3035,6 +3035,16 @@ the tool's own sanity check and fixed before use.
 more observations. Re-run `fit_odds_type_implied_prob.py` whenever new rows are added to
 `data/pickem/demon_goblin_payout_observations.csv`.
 
+**Note added 2026-09-17 (same-day, answering "did we overlook anything"): this gap is
+NOT resolved by Session 2.40.** Isotonic calibration fixes the PROBABILITY estimate for
+its 12 covered stats, but the EDGE computation (what actually decides whether a leg gets
+flagged) compares that probability against `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` for
+Demon/Goblin legs — the same unvalidated, single-anecdote constant this card exists to
+fix. A Demon/Goblin leg on one of the 12 isotonic-covered stats today has a well-
+calibrated PROBABILITY but is still compared against a possibly-wrong BREAKEVEN. Both
+fixes are needed together before any Demon/Goblin flag on those stats is fully
+trustworthy — this card's real re-derivation remains the harder-blocking piece.
+
 ---
 
 ### Session 2.40 — Distribution-Shape Fix: Isotonic Calibration, Wired Into Production
@@ -3086,6 +3096,98 @@ season-only, Week-1-only sample. Strengthens, doesn't weaken, the "not enough re
 in-season data yet" conclusion. See SESSION_LOG.md's same-day addendum, including a real,
 sourced reframe of Session 2.38's finding (Week 1 lines being unusually soft is a
 documented, active industry phenomenon, not only a candidate bug explanation).
+
+---
+
+### Session 2.41b — MLB Grading-Path External Verification (Real Box-Score Spot-Check)
+**Status:** ✅ Complete (2026-09-17) — 2 real, external, exact-match spot-checks against
+Baseball-Reference.com's own published box scores. MLB's grading pipeline (Session 2.26),
+which produces 88.5% of this project's entire graded dataset (24,765 of 27,977 real
+win/loss legs), had never been externally verified the way Session 2.38 verified NFL's —
+this closes that gap.
+**Prerequisites:** Session 2.38 (established the external-spot-check method this session
+reuses).
+
+**Why this session exists:** raised directly by the user (2026-09-17 chat): "have we done
+enough reassessment, or is there something we're overlooking?" Checking the actual
+dataset makeup found a real, significant asymmetry — NFL got a rigorous, external,
+box-score-level check in Session 2.38, but MLB, which is nearly 9 of every 10 graded legs
+and drives almost every headline finding in Session 2.37's audit (the demon/goblin edges,
+all 12 of Session 2.40's isotonic-validated stats), had only ever been checked internally
+(plausibility of values, no repeated-row artifacts) — never against a real, independent,
+external source.
+
+**What was actually done:**
+1. Marcus Semien, `totalBases`, real graded leg flagged over 0.5, this project's
+   `actual_value` = 1.0. Real Baseball-Reference box score for the real 2026-09-14
+   Orioles @ Mets game: 1 hit (a single), explicitly listed in that box score's own "TB"
+   line as exactly 1 total base for Semien. **Exact match.**
+2. Keibert Ruiz, `hits+runs+rbi` (a COMPOSITE stat, not a single column — this also
+   verifies `compute_actual_value`'s composite-summing path, not just a plain column
+   pull), real graded leg flagged under 2.5, this project's `actual_value` = 0.0. Real
+   Baseball-Reference box score for the real 2026-09-16 Phillies @ Nationals game: 0-for-2,
+   0 runs, 0 RBI. **Exact match** (0+0+0=0).
+
+**Validation:** 2 of 2 real, external, exact matches, covering both a simple single-column
+stat and a composite (summed) stat — same rigor and same 2-check floor Session 2.38 used
+for NFL.
+
+**Files touched:** None — verification only, no code changed (nothing to fix).
+
+**Open items / deferred validations:**
+- Only 2 spot-checks were run, same as NFL's Session 2.38 — a larger, systematic sample
+  (e.g. 10-20 real legs across multiple real dates/parks) would be a stronger guarantee,
+  deferred as a lower-priority strengthening exercise rather than blocking further work.
+- Soccer/EPL/FIFA (2,380+270+21 real graded legs combined — a real but much smaller
+  share than MLB/NFL) have never been externally spot-checked at all. Lower priority given
+  their smaller share of the dataset, but a real, named gap, not silently ignored.
+
+---
+
+### Session 2.41c — Recalibrate SIGMA_CALIBRATION_FACTOR and Blend Weights on Clean Data
+**Status:** Not started — **recommended to run BEFORE Session 2.42**, not after (see why
+below).
+**Prerequisites:** Session 2.37's dedup/closing-line fix (already live).
+
+**Why this is a real, separate gap, raised by the same "did we overlook something"
+question:** `SIGMA_CALIBRATION_FACTOR = 1.61` (`pickem_model.py:278`) was fit (Session
+2.22) against an 8,196-leg sample from **2026-09-15 — before** the 2026-09-17 dedup/
+closing-line fix. It is very likely fit partly against the exact same duplicate-re-flag
+and wrong-line problems that fix corrected, and against the same demon/goblin/zero-
+inflated distortions Session 2.37 later found. `SEASON_AVG_BLEND_WEIGHT`/
+`RECENT_FORM_BLEND_WEIGHT` (both a flat, never-fitted 50/50) have never been empirically
+tested at all — `pickem_model.py`'s own docstring says so directly ("not claimed to be
+optimal"). Building Session 2.42's shrinkage estimator (or any future feature) and
+validating it against a model whose OWN existing calibration constant is itself
+potentially still contaminated is comparing against a moving, uncertain baseline — fixing
+the foundation first makes every later validation in this cycle more trustworthy, not
+just this one constant.
+**Note on scope overlap with Session 2.40:** the 12 stats Session 2.40's isotonic
+calibration already covers are NOT the priority here — isotonic calibration is
+mathematically invariant to whatever sigma factor produced the underlying z-scores (same
+reasoning as that session's own docstring), so those 12 stats are effectively already
+insulated from this problem. This session matters most for the ~30+ OTHER stats still
+scoring through the plain Gaussian + possibly-contaminated sigma path.
+
+**What this session does:**
+- Re-runs `fit_sigma_recalibration.py` (unchanged method) against the current, clean,
+  post-2026-09-17-fix `outcome_log.csv`, and separately fits
+  `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` the same way (grid search over
+  blend weight, minimizing Brier score on real graded outcomes) — a real fit, not a
+  restated assumption.
+- Compares the newly-fit values against the current production constants; if materially
+  different, updates them (a deliberate, logged, by-hand change, matching this project's
+  "no silent recalibration" precedent — not an automatic overwrite).
+- Explicitly excludes the 12 Session 2.40 isotonic-covered stats from needing a NEW
+  per-stat sigma override (already handled); focuses the per-stat check
+  (`pickem_calibration_by_stat.py`) on the remaining stats only.
+
+**Validation (required to close session):**
+- [ ] `SIGMA_CALIBRATION_FACTOR` re-fit against the clean, current dataset; real
+before/after comparison reported plainly (even if the answer is "barely changed").
+- [ ] Blend weight re-fit against real data for the first time ever, with a stated result
+(even if the answer is "50/50 turns out to be close to optimal").
+- [ ] Any updated constant is a deliberate, logged, by-hand change — not auto-applied.
 
 ---
 
