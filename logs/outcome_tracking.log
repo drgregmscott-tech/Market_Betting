@@ -756,3 +756,6 @@
 2026-09-14 15:44:29,202 UTC | INFO | Recorded outcome for flag_id='prizepicks|14311372': result=loss, context_lookup=ok. Outcome log now has 756 total rows.
 2026-09-14 15:44:29,383 UTC | INFO | Recorded outcome for flag_id='prizepicks|14173549': result=loss, context_lookup=ok. Outcome log now has 757 total rows.
 2026-09-14 15:44:29,567 UTC | INFO | Recorded outcome for flag_id='prizepicks|12379071': result=win, context_lookup=ok. Outcome log now has 758 total rows.
+2026-09-17 12:14:34,638 UTC | WARNING | flag_id 'prizepicks|14909339' already has a recorded outcome. Adding a new row rather than overwriting -- if this was a correction, remove the earlier row manually and note why (per this project's 'corrections are documented, not silently absorbed' convention).
+2026-09-17 12:14:35,207 UTC | INFO | Recorded outcome for flag_id='prizepicks|14909339': result=loss, context_lookup=ok. Outcome log now has 50051 total rows.
+2026-09-17 12:15:18,919 UTC | INFO | Recorded outcome for flag_id='prizepicks|14894802': result=loss, context_lookup=ok. Outcome log now has 50051 total rows.

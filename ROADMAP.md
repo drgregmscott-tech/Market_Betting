@@ -2911,6 +2911,76 @@ sample-size standard), not just whether a difference appears directionally.
 
 ---
 
+### Session 2.37 — Pick'em Model Validity Reassessment (Full Audit)
+**Status:** Not started
+**Prerequisites:** Sessions 2.18/2.26-2.29 (auto-grading, all sports) complete. Builds directly on a
+2026-09-17 morning-status conversation that found and fixed two real, compounding measurement bugs in
+`auto_grade_outcomes.py` (grading against `first_flagged_line` instead of the closing line, and
+counting every re-flag of the same real market as an independent sample instead of deduping on
+player+stat+game+odds_type) — see that session's chat log and the `2026-09-17 fix` note now in
+`auto_grade_outcomes.py`'s `grading_line()`/`market_key()`/`select_closing_flags()`.
+
+**Why this is its own session, not folded into anything else:** this is not a bug-fix session — it's
+a step back to answer the project's own founding question directly: does this track's model actually
+identify real +EV opportunities, or has every "positive signal" seen so far been an artifact of how it
+was measured? The 2026-09-17 conversation found three compounding problems in sequence, each of which
+independently changed the headline number, and the user's own words were "I'm not sure if the model is
+just wrong and can be improved or if it's just not effective" — that question deserves a dedicated,
+unhurried session, not a tacked-on validation checklist item.
+
+**Known problems going in (starting list, not exhaustive — this session's job is to find the rest):**
+1. **Flat breakeven applied to every odds_type.** `outcome_tracker.py`'s `BREAKEVEN_WIN_RATE = 0.5774`
+   assumes a standard-line payout structure. Demon/Goblin lines have real, different implied
+   probabilities already sourced in `pickem_model.py`'s `PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB` (demon
+   52.8%, goblin 69.5%) — comparing every leg's win rate against one flat number is wrong for any
+   non-standard line, in both directions (makes some legs look worse than they are, others better).
+2. **Gaussian probability model applied uniformly regardless of stat shape.** `prob_over()`
+   (`pickem_model.py:546`) is a plain normal-distribution CDF. Confirmed live: this systematically
+   overstates "over" probability for zero-inflated, right-skewed counting stats (MLB RBIs: 31.4% real
+   win rate across 1,386 legs; Batter Walks: 40.2% across 1,157) — a distribution-shape mismatch, not a
+   sigma-sizing problem, so the existing `SIGMA_CALIBRATION_FACTOR_BY_STAT` mechanism (which only
+   rescales, and is NFL-only besides) cannot fix it. Every sport/stat needs to be checked for the same
+   shape mismatch, not just MLB's counting stats.
+3. **Directional bias observed across every sport, not just MLB** (2026-09-17 finding, all-platform,
+   deduped/closing-line data): under beats over everywhere (MLB 66.2% vs 46.9%; NFL 70.2% vs 57.9%;
+   Soccer 77.4% vs 44.3%; FIFA 64.5% vs 37.3%). Not yet known how much of this is (a) the odds_type
+   breakeven-mismatch above, (b) the Gaussian-shape problem, or (c) something else entirely — this
+   session's job is to separate those out, not assume which one explains it.
+
+**What this session does:**
+- Builds a proper per-sport × per-stat × per-odds_type calibration table: real win rate vs. that
+  specific slice's REAL breakeven (derived from its real payout/implied-probability structure, not the
+  flat constant), with real n per cell, flagging any cell below the project's own sample-size floor as
+  "not yet enough evidence" rather than silently included or excluded.
+- For each stat showing a real, sample-size-qualified gap, checks whether the underlying distribution
+  assumption (Gaussian) is defensible for that stat's real shape (zero-inflated? bounded at zero? fat
+  right tail?) — starting from MLB RBIs/Walks as the known confirmed case, then checking every other
+  sport's low-count/spiky stats (e.g. NFL sacks/INTs, soccer shots/cards, tennis breaks) for the same
+  pattern.
+- Runs the "clean slice" check discussed in the 2026-09-17 conversation: MLB standard-odds-type,
+  Gaussian-appropriate stats only (Hits, Total Bases — not RBIs/Walks), deduped, closing-line graded —
+  isolates whether a real edge exists once every known measurement bug is stripped away, before
+  concluding anything about the model itself.
+- Explicitly separates "the measurement was wrong" findings from "the model's reasoning is wrong"
+  findings — per this project's own no-guessing standard, each stat/sport cell gets one of those two
+  labels (or "not yet enough evidence"), not a blended verdict.
+
+**Validation (required to close session):**
+- [ ] Per-sport × per-stat × per-odds_type calibration table produced, each cell compared against its
+own real breakeven (not the flat 57.74% constant), with real n and an explicit
+enough-sample/not-enough-sample call per cell.
+- [ ] The "clean slice" (MLB standard, Gaussian-appropriate stats, deduped, closing-line) result
+reported on its own, explicitly, as the cleanest available read on whether the core premise holds.
+- [ ] Every stat/sport showing a real, sample-size-qualified gap is labeled as either a measurement
+problem (fixable in the pipeline), a model-reasoning problem (fixable in the estimation logic), or "not
+yet enough evidence" — not left ambiguous.
+- [ ] Explicit go/no-go recorded on the track's foundational premise: does real evidence, honestly
+measured, show this model identifies real +EV opportunities? If not project-wide, does it hold for any
+specific, nameable subset (sport/stat/odds_type) worth continuing to build on while the rest gets
+reworked or dropped?
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer

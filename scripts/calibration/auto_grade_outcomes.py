@@ -595,6 +595,64 @@ def grade_result(flagged_side: str, line: float, actual_value: float) -> str:
     raise ValueError(f"Unrecognized flagged_side: {flagged_side!r}")
 
 
+def grading_line(flag_row: pd.Series) -> float:
+    """The line to grade against. Prefer the real closing line (what was
+    actually live right before the market locked) over first_flagged_line
+    (whatever the line happened to be the moment this specific flag_id was
+    first observed) -- see 2026-09-17 finding: PrizePicks issues a NEW
+    source_line_id every time a demon/goblin/standard line moves, so the
+    same real player+stat+game+odds_type market accumulates many flag_ids
+    over a day, each carrying its OWN first_flagged_line. Grading each one
+    against its own first-seen line systematically favors whichever flags
+    happened to catch the loosest, easiest-to-hit version of the line.
+    Falls back to first_flagged_line only when closing_line was never
+    captured (e.g. the closing-line re-check pass hadn't run yet)."""
+    closing = flag_row.get("closing_line")
+    if closing is not None and not (isinstance(closing, float) and pd.isna(closing)):
+        return float(closing)
+    return float(flag_row["first_flagged_line"])
+
+
+def market_key(flag_row: pd.Series) -> str:
+    """Identifies the real underlying market a flag belongs to: the same
+    player+stat+game+odds_type re-flagged at a different line over the
+    course of a day is the SAME real betting opportunity re-priced, not a
+    new independent one. game_id is PrizePicks/Underdog's own per-game id
+    (stable across re-flags, unlike source_line_id which changes every
+    time the line moves) -- see 2026-09-17 finding."""
+    game_id = flag_row.get("game_id")
+    if game_id is None or (isinstance(game_id, float) and pd.isna(game_id)):
+        # No stable game_id to dedupe on (e.g. some older/legacy rows) --
+        # treat as its own market rather than risk merging unrelated flags.
+        return f"__no_game_id__|{flag_row['flag_id']}"
+    odds_type = flag_row.get("odds_type")
+    odds_type = odds_type if isinstance(odds_type, str) and odds_type.strip() else "standard"
+    return "|".join([
+        normalize_name(str(flag_row.get("player_name", ""))),
+        str(flag_row.get("resolved_stat_key", "")),
+        str(game_id),
+        odds_type,
+    ])
+
+
+def select_closing_flags(candidates: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Splits candidates into (closing_flags, superseded_flags) per real
+    market (see market_key). closing_flags is one row per market -- the
+    one with the latest first_flagged_at, i.e. the version of the line
+    that was actually live last before the market closed. superseded_flags
+    are earlier re-flags of the same market; these get graded as 'void'
+    (excluded from win-rate stats, per outcome_tracker.py's own
+    win/loss-only report filter) rather than counted as independent
+    samples."""
+    if candidates.empty:
+        return candidates, candidates
+    df = candidates.copy()
+    df["_market_key"] = df.apply(market_key, axis=1)
+    df = df.sort_values("first_flagged_at")
+    is_last = ~df.duplicated(subset="_market_key", keep="last")
+    return df.loc[is_last].drop(columns="_market_key"), df.loc[~is_last].drop(columns="_market_key")
+
+
 # ---------------------------------------------------------------------------
 # Main run
 # ---------------------------------------------------------------------------
@@ -668,11 +726,13 @@ def _run_adapter(
     dry_run: bool,
 ) -> tuple[list[dict], dict]:
     plugin = adapter.plugin
-    candidates = find_gradable_candidates(clv_df, plugin.sport_labels, already_graded)
+    all_candidates = find_gradable_candidates(clv_df, plugin.sport_labels, already_graded)
+    candidates, superseded = select_closing_flags(all_candidates)
     log.info(
-        "%s: %d real closed flag(s) with a resolved stat key are not yet graded; "
-        "checking each against %s's real, published results.",
-        plugin.name, len(candidates), plugin.name,
+        "%s: %d real closed flag(s) with a resolved stat key are not yet graded "
+        "(%d distinct market(s) to check against %s's real, published results; "
+        "%d superseded re-flag(s) of the same market will be recorded as void).",
+        plugin.name, len(all_candidates), len(candidates), plugin.name, len(superseded),
     )
 
     context = adapter.load_context()
@@ -685,6 +745,17 @@ def _run_adapter(
     no_stat_value = 0
     bad_stat_key = 0
     new_rows: list[dict] = []
+
+    if not dry_run:
+        for _, srow in superseded.iterrows():
+            reported_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            new_rows.append(_build_outcome_row(
+                srow, "void", None, reported_at,
+                "Superseded by a later re-flag of the same real market "
+                "(same player+stat+game+odds_type, line moved) -- excluded "
+                "from win-rate stats, see auto_grade_outcomes.py market_key().",
+            ))
+    graded += len(superseded)
 
     for _, row in candidates.iterrows():
         flag_date = game_local_date(row["game_start_time"])
@@ -717,25 +788,29 @@ def _run_adapter(
             no_stat_value += 1
             continue
 
-        result = grade_result(row["flagged_side"], row["first_flagged_line"], actual_value)
+        line = grading_line(row)
+        result = grade_result(row["flagged_side"], line, actual_value)
 
         if dry_run:
             log.info(
-                "[dry-run] flag_id=%s player=%s stat=%s line=%s side=%s actual=%s -> %s",
+                "[dry-run] flag_id=%s player=%s stat=%s line=%s (first_flagged=%s) side=%s actual=%s -> %s",
                 row["flag_id"], row["player_name"], row["resolved_stat_key"],
-                row["first_flagged_line"], row["flagged_side"], actual_value, result,
+                line, row["first_flagged_line"], row["flagged_side"], actual_value, result,
             )
         else:
             reported_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
             new_rows.append(_build_outcome_row(
                 row, result, actual_value, reported_at,
-                f"Auto-graded from {plugin.name}'s real stats (Session 2.18/2.26).",
+                f"Auto-graded from {plugin.name}'s real stats (Session 2.18/2.26), "
+                f"graded against closing line {line} (2026-09-17 fix).",
             ))
         graded += 1
 
     summary = {
         "sport": plugin.name,
-        "candidates": len(candidates),
+        "candidates": len(all_candidates),
+        "distinct_markets": len(candidates),
+        "superseded_voided": len(superseded),
         "graded": graded,
         "no_player_match": no_player_match,
         "no_game_match": no_game_match,
