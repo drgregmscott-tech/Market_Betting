@@ -3060,6 +3060,29 @@ left as measurement-only.
 
 ---
 
+### Session 2.41 — Opponent/Matchup Adjustment Research (NFL First)
+**Status:** ✅ Complete, real negative result (2026-09-17) — built a real, sourced
+matchup-factor signal (nflverse team-level stats, prior-season defense-allowed rate) and
+tested it directly against all 1,972 real graded NFL legs. Correlation with real
+`actual_value` was weak-to-negative for 8 of 10 stats checked. **Not wired into
+`pickem_model.py`** — a legitimate, valuable "measured, doesn't help yet" result, not a
+failed session. See SESSION_LOG.md for the full writeup, including why only prior-season
+(not in-season) data could even be tested right now (100% of graded NFL legs are Week 1).
+**Prerequisites:** Session 2.37/2.38 (named and quantified this as the model's biggest
+stated gap; established the real Week-1-only shape of the current NFL sample).
+
+**Validation (required to close session):**
+- [x] Real, free, no-new-dependency data source found and confirmed working (nflverse
+`stats_team_week` parquet, same trusted family as the existing NFL plugin).
+- [x] Real opponent resolved for 100% of graded NFL legs via the real, published-in-advance
+schedule — the join mechanism itself is proven; the null result is about the signal.
+- [x] Per-stat correlation checked directly (never pooled across stats/scales) — honest,
+weak-to-negative result reported plainly, not massaged into a positive-looking summary.
+- [x] Explicit go/no-go: NOT wired into production. Re-check condition recorded: once
+real in-season (not prior-season) defense-allowed data exists for multiple weeks.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer

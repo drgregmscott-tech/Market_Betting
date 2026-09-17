@@ -14368,3 +14368,93 @@ represent that shape regardless of sigma tuning).
   now covers (see point 6 above on why it's robust to a wrong sigma factor for those
   specifically), but every OTHER stat still scores through the potentially-contaminated
   1.61 factor unchanged.
+
+## Session 2.41 — Opponent/Matchup Adjustment Research (NFL First)
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete, real negative result — researched and built a real, sourced
+opponent-strength signal for NFL, tested it directly against real graded outcomes, and it
+did not show real predictive value. Not wired into `pickem_model.py`. A legitimate,
+valuable research outcome, not a failed session — this is exactly the kind of honest
+"measured, found it doesn't help yet" result this project's standard exists to produce
+instead of shipping an unvalidated feature on hope.
+
+**What was actually done:**
+Direct follow-up to the 2026-09-17 chat conversation's root-cause diagnosis: `pickem_model.py`'s
+own docstring (line 111-113) already names "no opponent/matchup adjustment" as this
+model's single biggest stated gap versus what a real sharp props model typically uses.
+1. **Found a real, free, no-new-dependency data source in the SAME trusted family already
+   wired in**: nflverse-data publishes team-level weekly stats
+   (`stats_team/stats_team_week_{season}.parquet`) — confirmed live it exists and pulls
+   cleanly, same release-asset pattern this project's `NFL_PLUGIN` and
+   `auto_grade_outcomes.py`'s schedule pull already use. Each row is one team's own
+   offensive output in one real game; grouping by `opponent_team` and averaging gives
+   each team's real defense-allowed rate per stat — no new API key, no new source risk.
+2. **Realized and stated directly why this had to use PRIOR-SEASON (2025) data, not
+   in-season data**: checked directly that 100% of this project's real graded NFL legs
+   (1,972 of 1,972) are Week 1 of the 2026 season (Session 2.38's own finding) — meaning
+   zero real in-season defensive data exists yet for any opponent. The only real,
+   already-observed signal available before a Week 1 game is the opponent's prior full
+   season's defense-allowed rate, a real but structurally weaker signal (a full offseason
+   of roster/scheme turnover sits between it and the current game) — stated as a real
+   limitation of what could even be tested right now, not glossed over.
+3. **`scripts/calibration/research_nfl_matchup_adjustment.py`** (new) — builds real
+   `matchup_factor` (opponent's 2025 real average stat-allowed / real league average) for
+   10 volume/yardage-shaped stats (passing/rushing/receiving yards, receptions, targets,
+   completions, attempts, passing/rushing/receiving TDs — stats where "allowed" is the
+   natural interpretation; explicitly excludes `def_sacks`/`passing_interceptions`/
+   `fg_made`/kicking points, which need the opponent's OWN defensive-generation rate, a
+   different mapping not built this session, named as a stated gap). Resolves each real
+   graded leg's real opponent via the real, published-in-advance 2026 schedule
+   (nflverse/nfldata's `games.csv`) joined to the player's real Week 1 team (nflverse
+   `stats_player_week_2026.parquet`) — genuinely available before the game, not hindsight.
+4. **Real, direct check: does `matchup_factor` correlate with the leg's real
+   `actual_value`, per stat (never pooled across different stats/scales)?** Result:
+   weak-to-negative for 8 of 10 stats (receiving_yards -0.035 n=317, receptions -0.103
+   n=315, rushing_yards -0.039 n=149, targets -0.162 n=123, attempts -0.221 n=52,
+   completions -0.303 n=25, passing_yards -0.094 n=55, passing_tds +0.135 n=47,
+   receiving_tds +0.049 n=19). Only `rushing_tds` showed a real positive correlation
+   (+0.547 n=26), on a small, zero-inflated, unreliable sample (TD counts are exactly the
+   kind of stat Session 2.37/2.40 already flagged as needing special handling, not a
+   simple correlation check).
+5. **Decision: did NOT wire this into `pickem_model.py`.** A prior-season-only matchup
+   signal does not show real predictive value on the only real data available to check it
+   against — wiring in an adjustment that showed a NEGATIVE correlation for most stats
+   would very plausibly make the model worse, not better, exactly the "don't validate on
+   hope" failure mode this project's standard exists to prevent.
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass, unchanged (research-only script, no production code touched).
+- Real opponent resolved for all 1,972 real graded NFL legs (100% coverage) — the
+  schedule-join mechanism itself works cleanly; the null result is about the SIGNAL, not
+  a data-plumbing failure.
+
+**Files touched:**
+- `scripts/calibration/research_nfl_matchup_adjustment.py` (new)
+
+**Corrections/reversals during the session:** None — this session's own finding is itself
+the outcome (a real negative result), not a correction of a mistake made along the way.
+
+**Open items / deferred validations:**
+- **The real, honest caveat on this negative result**: it doesn't prove opponent quality
+  never matters — it shows a specific, weak proxy (prior-season average, applied only to
+  Week 1, the same anomalous week Session 2.38 already found behaves strangely
+  project-wide) doesn't show a detectable effect in the only sample available to check it
+  against right now. Re-check with real IN-SEASON defense-allowed data (e.g., using Weeks
+  1-3 to adjust Week 4+) once enough of the current season exists — a standard, typically
+  more predictive design than this session could actually build yet, since in-season data
+  literally does not exist yet for any week past Week 1.
+- The excluded stat categories (`def_sacks`, `passing_interceptions`, `fg_made`, kicking
+  points — needing the opponent's own defensive-generation rate rather than an "allowed"
+  reframing) are a real, separate piece of design work, not covered by this session's
+  correlation check at all.
+- If a future re-check with in-season data DOES show real signal, the wiring pattern from
+  Session 2.40 (a validated, held-out-tested adjustment, gated per-stat, visible via a
+  named output column, falling back cleanly when unvalidated) is the template to reuse —
+  do not wire in a matchup adjustment without the same held-out discipline that session
+  established.
+- Injury/role status, home/away split, pace/usage adjustment (the other three items in
+  `pickem_model.py`'s own "what this model does not do yet" list) remain completely
+  unaddressed — this session covered only the opponent/matchup piece the user specifically
+  asked about.
