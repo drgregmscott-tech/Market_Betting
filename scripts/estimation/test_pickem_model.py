@@ -28,6 +28,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest import mock
 
+import numpy as np
 import pandas as pd
 import pytest
 import requests
@@ -231,9 +232,79 @@ def test_process_props_blanks_edge_under_for_over_only_prizepicks_row():
     assert not pd.isna(row["implied_prob_under"])
 
 
+def test_isotonic_calibrate_overrides_prob_when_table_has_ready_entry():
+    """Session 2.40: a validated (ready_to_apply=True) isotonic table for a
+    row's resolved_stat_key must override BOTH prob_over and prob_under,
+    and prob_calibration_method must say so. Uses a synthetic single-block
+    table (any z maps to 0.13) purely to prove the override wiring fires
+    with the right value -- not a realistic multi-block shape (see
+    fit_isotonic_calibration.py for what a real table looks like)."""
+    props = pd.DataFrame([dict(
+        platform="prizepicks", source_line_id="1", player_name="Player One",
+        sport="nfl", stat_type="Pass Yards", line=265.5, odds_type="standard",
+    )])
+    weekly_fixture = build_nfl_weekly_fixture()
+
+    def fake_fetch(season: int) -> pd.DataFrame:
+        return weekly_fixture
+
+    fake_table = {"passing_yards": (np.array([8.0]), np.array([0.13]))}
+    original_fetch = NFL_PLUGIN.fetch_stats
+    NFL_PLUGIN.fetch_stats = fake_fetch
+    try:
+        with mock.patch("pickem_model._load_isotonic_table", return_value=fake_table):
+            result = process_props(props, season=2025)
+    finally:
+        NFL_PLUGIN.fetch_stats = original_fetch
+
+    row = result.iloc[0]
+    assert row["model_status"] == "estimated"
+    assert row["prob_calibration_method"] == "isotonic"
+    assert row["prob_over"] == pytest.approx(0.13)
+    assert row["prob_under"] == pytest.approx(0.13)
+
+
+def test_isotonic_calibrate_falls_back_to_gaussian_without_ready_entry():
+    """Session 2.40: a resolved_stat_key with NO validated table entry
+    (empty table, e.g. every stat before the first real fit, or a stat
+    that never cleared the held-out-improvement bar) must keep the plain
+    Gaussian probability unchanged and report prob_calibration_method as
+    "gaussian" -- never a silent partial override."""
+    props = pd.DataFrame([dict(
+        platform="prizepicks", source_line_id="1", player_name="Player One",
+        sport="nfl", stat_type="Pass Yards", line=265.5, odds_type="standard",
+    )])
+    weekly_fixture = build_nfl_weekly_fixture()
+
+    def fake_fetch(season: int) -> pd.DataFrame:
+        return weekly_fixture
+
+    original_fetch = NFL_PLUGIN.fetch_stats
+    NFL_PLUGIN.fetch_stats = fake_fetch
+    try:
+        with mock.patch("pickem_model._load_isotonic_table", return_value={}):
+            result = process_props(props, season=2025)
+    finally:
+        NFL_PLUGIN.fetch_stats = original_fetch
+
+    row = result.iloc[0]
+    assert row["model_status"] == "estimated"
+    assert row["prob_calibration_method"] == "gaussian"
+    assert row["prob_over"] == pytest.approx(1.0 - row["prob_under"])
+
+
 def test_nfl_regression_matches_golden_snapshot():
     """The core Session 2.12 validation item: byte-for-byte identical NFL
-    output before/after the plug-in refactor, on a fixed input."""
+    output before/after the plug-in refactor, on a fixed input.
+
+    SESSION 2.40 NOTE: forces an empty isotonic calibration table for the
+    duration of this test (mock.patch on pickem_model._load_isotonic_table)
+    so this regression guard tests process_props()'s own CODE, not whatever
+    happens to currently be in data/pickem/isotonic_calibration_by_stat.csv.
+    Without this, a future fit_isotonic_calibration.py re-run that adds a
+    stat this fixture happens to use would break this test for a reason
+    that has nothing to do with a real code regression -- the golden
+    snapshot itself was captured with the table forced empty (Session 2.40)."""
     if not GOLDEN_PATH.exists():
         pytest.skip(f"No golden snapshot at {GOLDEN_PATH} -- run capture_golden() first")
 
@@ -246,7 +317,8 @@ def test_nfl_regression_matches_golden_snapshot():
     original_fetch = NFL_PLUGIN.fetch_stats
     NFL_PLUGIN.fetch_stats = fake_fetch
     try:
-        result = process_props(props_fixture, season=2025)
+        with mock.patch("pickem_model._load_isotonic_table", return_value={}):
+            result = process_props(props_fixture, season=2025)
     finally:
         NFL_PLUGIN.fetch_stats = original_fetch
 

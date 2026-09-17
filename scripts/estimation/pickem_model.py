@@ -550,6 +550,117 @@ def prob_over(line: float, mean: float, sigma: float) -> Optional[float]:
     return 1.0 - normal_cdf(z)
 
 
+# ---------------------------------------------------------------------------
+# SESSION 2.40 -- ISOTONIC (NONPARAMETRIC) CALIBRATION FOR CONFIRMED
+# NON-GAUSSIAN STATS
+# ---------------------------------------------------------------------------
+# Session 2.37's full audit confirmed, directly against real graded
+# actual_value data, that many stats this model scores are zero-inflated or
+# heavily right-skewed (MLB home runs: 89.3% real zero-rate; RBI 70.7%; NFL
+# def_sacks 77.2%; 30 of 49 checked sport/stat cells flagged non-Gaussian).
+# prob_over()'s plain normal CDF above cannot represent that shape no matter
+# how SIGMA_CALIBRATION_FACTOR is tuned -- sigma only changes the curve's
+# WIDTH, not its shape.
+#
+# scripts/calibration/fit_isotonic_calibration.py fits a nonparametric,
+# monotonic (isotonic regression, via PAVA) recalibration curve per
+# resolved_stat_key directly against real win/loss outcomes, and validates
+# it on a real, TEMPORAL held-out split (fit on the earliest 70% of a stat's
+# real flags, scored against the most recent 30%, never seen during the fit)
+# -- not just in-sample Brier score, which isotonic regression trivially
+# improves for any stat by construction. Only stats that (a) have >=200 real
+# graded legs and (b) beat the current global-sigma-corrected model on that
+# held-out split are written to ISOTONIC_CALIBRATION_PATH with
+# ready_to_apply=True; this loader only ever reads those rows -- a stat
+# with a thin sample, or one where the isotonic fit did not actually
+# generalize, silently keeps using the plain Gaussian path above, never a
+# half-validated override. Re-run that script periodically as more real
+# outcomes accumulate; this loader picks up whatever is currently marked
+# ready in the CSV, no code change needed here to update the set.
+#
+# WHAT THE TABLE IS ACTUALLY FIT AGAINST -- IMPORTANT, NOT A RAW prob_over
+# Z-SCORE: clv_logger.py's determine_flagged_side_pickem()/model_prob
+# logic (see that file, ~line 602) logs first_flagged_model_prob as
+# prob_over when the OVER side was flagged, or prob_under when the UNDER
+# side was flagged -- i.e., always the probability of whichever side the
+# model actually favored, not always prob_over. fit_isotonic_calibration.py
+# recovers z from THAT value, so the table is keyed on a side-normalized
+# "confidence z" (call it z_eff: inverse_normal_cdf of whichever side's own
+# probability is being asked about), not literally (line - mean) / sigma.
+# isotonic_calibrate() below reproduces that exact convention -- callers
+# pass the raw probability of the SPECIFIC side they want calibrated
+# (prob_over or prob_under), never a raw z.
+ISOTONIC_CALIBRATION_PATH = (
+    Path(__file__).resolve().parents[2] / "data" / "pickem" / "isotonic_calibration_by_stat.csv"
+)
+
+_isotonic_table_cache: Optional[dict[str, tuple[np.ndarray, np.ndarray]]] = None
+
+
+def _load_isotonic_table() -> dict[str, tuple[np.ndarray, np.ndarray]]:
+    """Lazy-loaded, cached: resolved_stat_key -> (block_hi, block_val),
+    both sorted ascending, for stats with a validated (ready_to_apply=True)
+    isotonic calibration on file. Missing file or no ready rows -> empty
+    dict, so every row falls back to the plain Gaussian path with no
+    special-casing needed at call sites."""
+    global _isotonic_table_cache
+    if _isotonic_table_cache is not None:
+        return _isotonic_table_cache
+
+    table: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+    if ISOTONIC_CALIBRATION_PATH.exists():
+        df = pd.read_csv(ISOTONIC_CALIBRATION_PATH)
+        ready = df.loc[df["ready_to_apply"] == True]  # noqa: E712 (real bool column, not a Series compare pitfall here)
+        for stat_key, group in ready.groupby("resolved_stat_key"):
+            group = group.sort_values("z_hi")
+            table[stat_key] = (
+                group["z_hi"].to_numpy(dtype=float),
+                group["calibrated_prob"].to_numpy(dtype=float),
+            )
+    _isotonic_table_cache = table
+    return table
+
+
+def _inverse_normal_cdf(p: float, lo: float = -8.0, hi: float = 8.0, tol: float = 1e-10) -> float:
+    """Bisection inverse of normal_cdf() above -- exact match (same
+    erf-based CDF), so it exactly reverses the z that produced a given
+    probability. Deliberately duplicated from
+    scripts/calibration/fit_sigma_recalibration.py's identical function
+    rather than imported -- scripts/calibration already depends on this
+    file (pickem_model.py); the reverse dependency would be a real
+    architectural smell for ~10 lines of pure math with zero state."""
+    if p <= 0.0:
+        return lo
+    if p >= 1.0:
+        return hi
+    while hi - lo > tol:
+        mid = (lo + hi) / 2.0
+        if normal_cdf(mid) < p:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2.0
+
+
+def isotonic_calibrate(resolved_stat_key: str, raw_prob: Optional[float]) -> Optional[float]:
+    """The validated isotonic recalibration of a raw Gaussian-model
+    probability for ONE side (pass prob_over to calibrate prob_over, or
+    prob_under to calibrate prob_under -- see module note above for why
+    this is side-specific, not a shared z). Returns None if this stat has
+    no validated (ready_to_apply=True) table on file, or raw_prob itself
+    is None/NaN -- callers must keep the original Gaussian value in that
+    case, never silently drop the row."""
+    if raw_prob is None or raw_prob != raw_prob:
+        return None
+    table = _load_isotonic_table()
+    block_hi, block_val = table.get(resolved_stat_key, (None, None))
+    if block_hi is None:
+        return None
+    z_eff = _inverse_normal_cdf(raw_prob)
+    idx = int(np.clip(np.searchsorted(block_hi[:-1], z_eff, side="right"), 0, len(block_val) - 1))
+    return float(block_val[idx])
+
+
 def implied_prob_over_underdog(over_mult: Optional[float], under_mult: Optional[float]) -> Optional[float]:
     """No-vig-style normalization of Underdog's per-side payout multipliers."""
     if not over_mult or not under_mult or over_mult <= 0 or under_mult <= 0:
@@ -901,8 +1012,25 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["model_mean"] = model_mean
         row["model_sigma"] = sigma
         row["games_used"] = len(series)
+
+        prob_under_raw = (1.0 - p_over) if p_over is not None else None
+        # SESSION 2.40 -- for stats with a real, held-out-validated isotonic
+        # calibration on file (see module note above prob_over()), override
+        # the plain Gaussian probability with the empirical one. Each side
+        # is calibrated independently against its OWN raw probability, and
+        # either side falls straight back to the Gaussian value if no
+        # validated table exists for this resolved_stat_key -- never a
+        # partial or guessed override.
+        calibrated_over = isotonic_calibrate(row["resolved_stat_key"], p_over)
+        calibrated_under = isotonic_calibrate(row["resolved_stat_key"], prob_under_raw)
+        p_over = calibrated_over if calibrated_over is not None else p_over
+        prob_under = calibrated_under if calibrated_under is not None else prob_under_raw
+        row["prob_calibration_method"] = (
+            "isotonic" if (calibrated_over is not None or calibrated_under is not None) else "gaussian"
+        )
+
         row["prob_over"] = p_over
-        row["prob_under"] = (1.0 - p_over) if p_over is not None else None
+        row["prob_under"] = prob_under
         row["implied_prob_over"] = implied_over
         row["implied_prob_under"] = (1.0 - implied_over) if implied_over is not None else None
         row["edge_over"] = (
@@ -933,6 +1061,7 @@ def _blank_model_fields() -> dict:
         "games_used": None,
         "prob_over": None,
         "prob_under": None,
+        "prob_calibration_method": None,
         "implied_prob_over": None,
         "implied_prob_under": None,
         "edge_over": None,

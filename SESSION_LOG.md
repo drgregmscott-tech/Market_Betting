@@ -14255,3 +14255,116 @@ being used for anything.
   fitted values (deliberately not auto-applied by this script, matching
   `fit_sigma_recalibration.py`'s own "no silent recalibration" precedent) — and Session
   2.37's demon/goblin cells should be re-run against the corrected constant.
+
+## Session 2.40 — Distribution-Shape Fix: Isotonic Calibration, Wired Into Production
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — a real, held-out-validated fix for 12 of the confirmed
+non-Gaussian stats is now live in `pickem_model.py`, not just measured and left on the
+shelf.
+
+**What was actually done:**
+Direct follow-up to Session 2.37 Finding #2/#6 (many stats' real outcome distributions
+are zero-inflated or heavily right-skewed; `prob_over()`'s plain Gaussian CDF cannot
+represent that shape regardless of sigma tuning).
+1. **`scripts/calibration/fit_isotonic_calibration.py`** (new) — fits a nonparametric,
+   monotonic recalibration curve per `resolved_stat_key` via isotonic regression (PAVA,
+   reimplemented directly in numpy, no new dependency), against each leg's real recovered
+   z-score and real win/loss outcome.
+2. **First run found the obvious trap and corrected for it before reporting anything**:
+   in-sample, isotonic "improved" Brier score for 47 of 47 stats checked — expected by
+   construction (isotonic regression is the in-sample L2-optimal fit for any input; that
+   number is not evidence of generalization on its own). Rebuilt the script to do a real
+   TEMPORAL held-out split instead (join each leg's real `first_flagged_at` from
+   `clv_log.csv`, fit on the earliest 70% of a stat's real flags, score Brier on the most
+   recent 30%, never seen during the fit). Real, honest result: isotonic beat the current
+   production (global-sigma-corrected) model on held-out data for only 21 of 45 stats with
+   enough legs to check at all — a believable number, not a trivial one.
+3. **12 stats clear BOTH the held-out-improvement bar AND a 200-leg production-size
+   floor**: `homeRuns`, `doubles`, `stolenBases`, `strikeOuts`, `baseOnBalls`, `rbi`,
+   `p_baseOnBalls`, `p_hits`, `p_earnedRuns`, `pitcher fs`,
+   `passing_tds+rushing_tds+receiving_tds`, `receptions`. Notably, `hits` and `totalBases`
+   (Session 2.37's own "clean slice" stats) do NOT clear the held-out bar (isotonic is a
+   wash there, 0.2234 vs 0.2235 Brier) — a real, internally consistent result, since those
+   two were already flagged as the LEAST distorted MLB counting stats to begin with; there
+   is less to fix there.
+4. **Wired the 12 validated stats into `pickem_model.py` production scoring**, not left as
+   a diagnostic-only finding (unlike Sessions 2.37-2.39, which were measurement-only by
+   design). `isotonic_calibrate()` (new) overrides `prob_over`/`prob_under` with the
+   validated empirical curve for exactly those 12 stats; every other stat keeps the
+   existing Gaussian path unchanged, with zero special-casing needed at call sites (a
+   missing/unready table entry returns `None`, and the caller keeps the Gaussian value). A
+   new `prob_calibration_method` column ("isotonic" vs. "gaussian") makes which path fired
+   visible on every row, per this project's "no unnamed black-box factors" standard.
+5. **Caught and fixed a real design bug before wiring anything into production**: the
+   first draft computed `z = (line - mean) / sigma` directly for the lookup, always the
+   "over" z. Checked `clv_logger.py`'s own `determine_flagged_side_pickem()`/`model_prob`
+   logic directly (~line 602) and found `first_flagged_model_prob` is `prob_over` when the
+   OVER side got flagged, or `prob_under` when UNDER did — i.e. the isotonic table is
+   fit on a side-normalized "confidence z," not a fixed-side one. Rewrote
+   `isotonic_calibrate()` to take a raw probability for the SPECIFIC side being asked
+   about (mirroring the training data's own convention exactly) instead of a shared z.
+6. **A real, useful property, stated directly in the new code's docstring**: this fix is
+   robust to `SIGMA_CALIBRATION_FACTOR`'s own known problem (Session 2.37's open items
+   flagged it as fit on pre-fix, contaminated 2026-09-15 data) — isotonic regression only
+   depends on the RANK ORDER of z-scores within a stat group, and a uniform sigma-factor
+   rescale never changes that rank order. Whatever sigma factor produced the historical
+   training data, this fit and its application are unaffected by that factor's own
+   correctness.
+7. Regenerated `data/pickem/_test_fixtures/nfl_regression_golden.csv` (Session 2.12's
+   NFL regression-guard fixture) with a new `prob_calibration_method` column, and patched
+   that test (`mock.patch("pickem_model._load_isotonic_table", return_value={})`) so it
+   tests `process_props()`'s own code, not whatever happens to currently be in the live
+   isotonic calibration CSV — otherwise a future re-fit that adds a stat this fixture
+   happens to use would break an unrelated test for the wrong reason.
+8. Added `test_isotonic_calibrate_overrides_prob_when_table_has_ready_entry` and
+   `test_isotonic_calibrate_falls_back_to_gaussian_without_ready_entry` to
+   `test_pickem_model.py`, proving both the override and the fallback paths directly.
+
+**Validation:**
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass (77 pre-existing + 2 new).
+- Live sanity check against the real, current `isotonic_calibration_by_stat.csv` (not
+  mocked): `isotonic_calibrate('homeRuns', 0.9)` → 0.8966; an unready stat and a `None`
+  input both correctly return `None` (Gaussian fallback).
+- Held-out Brier improvement is real and numeric per stat (e.g. `homeRuns`: held-out
+  global-corrected Brier 0.1336 → isotonic 0.0863; `stolenBases`: 0.1021 → 0.0893), not
+  an in-sample artifact.
+
+**Files touched:**
+- `scripts/calibration/fit_isotonic_calibration.py` (new)
+- `data/pickem/isotonic_calibration_by_stat.csv` (new — the durable, re-runnable output)
+- `scripts/estimation/pickem_model.py` (`isotonic_calibrate()`, `_load_isotonic_table()`,
+  `_inverse_normal_cdf()` added; `process_props()` wired to use them; new
+  `prob_calibration_method` column)
+- `scripts/estimation/test_pickem_model.py` (2 new tests; golden-snapshot test patched to
+  isolate it from the live calibration file)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated)
+
+**Corrections/reversals during the session:**
+- The in-sample-only evaluation (47/47 "improves") was caught as misleading before being
+  reported anywhere and replaced with a real temporal held-out split.
+- The `(line, mean, sigma)` / fixed-"over"-z design was caught as inconsistent with the
+  training data's own side-normalized convention before being wired into
+  `process_props()`, and rewritten.
+
+**Open items / deferred validations:**
+- **This changes live model output for real, in-production stats** (12 of them, spanning
+  MLB and NFL) — the next real flags produced against these stats will use the isotonic
+  probability, not the plain Gaussian one, which will shift which legs clear
+  `FLAG_EDGE_THRESHOLD` and get logged to `clv_log.csv` going forward. Worth a focused
+  check after the next real ingestion run that flag volume/direction for these 12 stats
+  looks sane, not just that the code runs.
+- **The held-out split is a single 70/30 split per stat, not cross-validated** — a more
+  rigorous check (e.g. multiple temporal folds) would strengthen confidence further,
+  deferred as a future refinement, not blocking this session's close given the real,
+  non-trivial improvement already shown.
+- Re-run `fit_isotonic_calibration.py` periodically as more real graded legs accumulate —
+  more stats may clear the 200-leg floor over time, and any of the current 12 could in
+  principle stop clearing the held-out bar if the underlying pattern drifts; this script
+  is designed to be re-run repeatedly, not a one-time fit.
+- **`SIGMA_CALIBRATION_FACTOR`'s own re-fit (flagged as an open item in Session 2.37) is
+  still not done.** This session's isotonic fix reduces the urgency for the 12 stats it
+  now covers (see point 6 above on why it's robust to a wrong sigma factor for those
+  specifically), but every OTHER stat still scores through the potentially-contaminated
+  1.61 factor unchanged.

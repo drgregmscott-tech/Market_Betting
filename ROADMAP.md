@@ -3037,6 +3037,29 @@ more observations. Re-run `fit_odds_type_implied_prob.py` whenever new rows are 
 
 ---
 
+### Session 2.40 — Distribution-Shape Fix: Isotonic Calibration, Wired Into Production
+**Status:** ✅ Complete (2026-09-17) — real, held-out-validated nonparametric calibration
+now live in `pickem_model.py` for 12 confirmed non-Gaussian stats (`homeRuns`, `doubles`,
+`stolenBases`, `strikeOuts`, `baseOnBalls`, `rbi`, `p_baseOnBalls`, `p_hits`,
+`p_earnedRuns`, `pitcher fs`, `passing_tds+rushing_tds+receiving_tds`, `receptions`).
+Every other stat is unchanged (plain Gaussian path). See SESSION_LOG.md for the full
+derivation, including a caught-and-fixed in-sample-only evaluation trap and a caught-and-
+fixed side-normalization bug in the first design.
+**Prerequisites:** Session 2.37 (Findings #2/#6 named this gap).
+
+**Validation (required to close session):**
+- [x] Isotonic (PAVA, numpy-only) calibration fit per `resolved_stat_key`, validated on a
+real TEMPORAL held-out split (not in-sample, which trivially "improves" for any stat).
+- [x] Only stats clearing BOTH a 200-leg floor AND a real held-out Brier improvement over
+the current production model are wired in (12 of 45 checked) — every other stat falls
+straight back to the existing Gaussian path.
+- [x] Wired into `process_props()` with a visible `prob_calibration_method` column, not
+left as measurement-only.
+- [x] `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+— 79/79 pass, including 2 new tests proving both the override and fallback paths.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer
