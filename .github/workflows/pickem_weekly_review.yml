@@ -30,6 +30,10 @@ name: Pick'em Weekly Recalibration Review
 #    of depending on anyone remembering to open review_log.csv or the
 #    dashboard. See weekly_review.py's own "SESSION 2.23 ADDITION" module
 #    docstring section for why this check exists and what it measures.
+#    (Session 2.42: this same flag now also fires on a real SHRINKAGE_
+#    PRIOR_STRENGTH_K drift, not just sigma -- the issue body states both
+#    gaps by name so the real cause is never ambiguous; see
+#    weekly_review.py's "SESSION 2.42 ADDITION" module docstring section.)
 
 on:
   schedule:
@@ -118,19 +122,27 @@ jobs:
           with open("recalibration_body.txt", "w", encoding="utf-8") as f:
               f.write(
                   f"**Review:** {last['review_id']} ({last['run_at']})\n\n"
-                  f"**Post-fit calibration gap:** {last.get('post_fit_calibration_gap', 'n/a')}\n\n"
+                  f"**Post-fit calibration gap (sigma):** {last.get('post_fit_calibration_gap', 'n/a')}\n\n"
+                  f"**Post-fit calibration gap (shrinkage):** {last.get('post_shrinkage_calibration_gap', 'n/a')}\n\n"
                   f"{last.get('recommendation', '')}\n\n"
-                  f"Full detail: `data/pickem/review_log.csv` (this row) and "
-                  f"`data/pickem/sigma_recalibration_log.csv` (fit history)."
+                  f"Full detail: `data/pickem/review_log.csv` (this row), "
+                  f"`data/pickem/sigma_recalibration_log.csv` (sigma fit history), and "
+                  f"`data/pickem/shrinkage_recalibration_log.csv` (shrinkage fit history)."
               )
           PY
 
-          TITLE="Pick'em model recalibration suggested (sigma drift)"
+          # SESSION 2.42: this flag now fires from EITHER a real sigma drift OR
+          # a real shrinkage drift (weekly_review.py's build_recommendation()
+          # ORs the two checks into one recalibration_suggested column) -- the
+          # title/label stay drift-source-agnostic so a shrinkage-only trigger
+          # doesn't get mislabeled "(sigma drift)"; the body above always states
+          # both gaps by name so the real cause is never ambiguous.
+          TITLE="Pick'em model recalibration suggested"
           LABEL="recalibration-suggested"
 
           # Idempotent -- fails silently if the label already exists.
           gh label create "$LABEL" --color FBCA04 \
-            --description "weekly_review.py detected real sigma drift past its threshold" \
+            --description "weekly_review.py detected real sigma or shrinkage drift past its threshold" \
             2>/dev/null || true
 
           EXISTING=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number // empty')
