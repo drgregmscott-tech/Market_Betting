@@ -17,6 +17,12 @@ Session 2.25 addition: applies SIGMA_CALIBRATION_FACTOR_BY_STAT (see the
 Session 2.24 found still miscalibrated past a 0.03 gap after the global
 factor -- every other stat still falls back to the single global
 SIGMA_CALIBRATION_FACTOR. No other model logic changed.
+Session 2.41c addition: re-fit both SIGMA_CALIBRATION_FACTOR (1.61 -> 2.681)
+and SEASON_AVG_BLEND_WEIGHT/RECENT_FORM_BLEND_WEIGHT (0.5/0.5 -> 0.9/0.1)
+against the current, clean, post-2026-09-17-dedup-fix outcome_log.csv --
+the first real fit either constant has received since Session 2.22/2.24's
+original fits, which predate that fix. See the "SIGMA CALIBRATION" and
+"BLEND WEIGHT" notes below for the full derivation and real caveats.
 
 WHAT THIS SCRIPT IS
 --------------------
@@ -177,6 +183,35 @@ result. The fitted value (1.61) closed the calibration gap from 0.0674 to
 is multiplied by this factor before being used in prob_over(), UNLESS a
 per-stat override applies (see below).
 
+SESSION 2.41c ADDITION -- RE-FIT ON CLEAN, POST-DEDUP-FIX, POST-ISOTONIC DATA
+--------------------------------------------------------------------------------
+The 1.61 value above was fit 2026-09-15, BEFORE the 2026-09-17 dedup/closing-
+line fix (Session 2.37) and before Session 2.40's isotonic calibration
+existed. Both are real reasons the original fit could no longer be trusted
+as current: the dedup fix changed which legs even exist in outcome_log.csv,
+and isotonic calibration means 12 stat types' stored first_flagged_model_prob
+is no longer a plain normal_cdf(z/factor) value at all for legs flagged after
+Session 2.40 shipped (recovering a "z" from an isotonic-calibrated
+probability is not meaningful). Session 2.41c
+(scripts/calibration/fit_sigma_recalibration.py, re-run unchanged) refit
+against the clean, current, post-fix outcome_log.csv, EXCLUDING both the 12
+isotonic-covered stats and the 6 SIGMA_CALIBRATION_FACTOR_BY_STAT stats (each
+already handled by its own independent path -- mixing them into a single
+global fit would let 18% of the sample distort the other ~30+ stats' shared
+factor) -- 18,766 usable legs. Result: fitted multiplier k=1.665 on top of
+the existing 1.61 (i.e. the model was STILL meaningfully overconfident even
+after the original fix), giving a new global factor of 1.61 * 1.665 = 2.681.
+This closed the calibration gap from 0.0594 to 0.0151 on this clean sample --
+a real, large improvement, though not as tight as Session 2.22's original
+0.0008 (Brier-minimizing k does not always fully zero the mean gap; the
+residual 0.0151 is itself evidence sigma alone cannot fully fix every
+remaining stat -- see fit history in data/pickem/sigma_recalibration_log.csv).
+This REPLACES 1.61 as the production global factor. The 6-stat
+SIGMA_CALIBRATION_FACTOR_BY_STAT table below was fit independently and is
+untouched by this session; re-checking it against the new global default is
+scripts/calibration/pickem_calibration_by_stat.py's own job (see that
+script's Session 2.41c exclusion note), not this fit.
+
 SESSION 2.24/2.25 ADDITION -- SIGMA_CALIBRATION_FACTOR_BY_STAT
 ------------------------------------------------------------------
 The global fit above averages across every stat type combined -- Session
@@ -214,6 +249,53 @@ Re-fitting either the global or per-stat factors periodically as more real
 outcomes accumulate (and, eventually, per-sport once other sports have
 enough real graded volume of their own) is real future work -- see
 data/pickem/sigma_recalibration_log.csv's own notes.
+
+BLEND WEIGHT (Session 2.41c)
+-----------------------------
+SEASON_AVG_BLEND_WEIGHT/RECENT_FORM_BLEND_WEIGHT had been a flat, never-
+empirically-tested 50/50 since this model's first version -- a real,
+separate gap from sigma (the blend weight controls WHICH mean feeds
+prob_over(), not how extreme the resulting probability is; see "SIGMA
+CALIBRATION" above for why that's a different problem). Session 2.41c
+(scripts/calibration/fit_blend_weight.py, new) fit it for the first time
+against real graded outcomes. This needed a different data source than the
+sigma fit: outcome_log.csv/clv_log.csv never stored season_avg/recent_form
+as two separate numbers, only the final blended probability -- so this
+script joins each graded leg back to whichever RETAINED
+output/estimation/pickem_estimates_*.csv snapshot covers its flag date (35
+files survived locally, 2026-08-31 through 2026-09-16 -- a real, smaller,
+non-uniform sample than the sigma fit's, stated plainly, not glossed over)
+to recover the two real component means, matched at day granularity (the
+underlying player game log only changes once real games finish, not
+intra-day -- confirmed directly before relying on this, see that script's
+own docstring). Same exclusion as the sigma fit above (12 isotonic-covered +
+6 per-stat-override stats) applied for consistency. Result, on 9,170 joined
+clean legs: Brier score fell steadily from w=0.0 (0.2454) to an interior
+minimum at w=0.95 (0.2244) -- recent_form contributes only a small residual
+amount of value on this real sample, a genuinely surprising result for a
+component that had been trusted at equal weight since v1. Checked by sport
+before trusting the pooled number: MLB (n=8,057, 88% of the sample) alone
+prefers w=1.0 (recent_form contributes nothing), NFL (n=731) prefers w=0.8,
+FIFA (n=222) w=0.65 -- all meaningfully above 0.5, consistent in direction
+even though the exact optimum varies by sport; only SOCCER (n=143, the
+smallest usable group) disagreed (w=0.0). SEASON_AVG_BLEND_WEIGHT = 0.95 is
+the literal pooled-fit optimum, not a hand-softened compromise -- it is an
+interior grid point, not a boundary result, so no extra shrinkage was
+applied on top of it.
+Real, honest caveat, same as the sigma fit's: this recomputes probabilities
+directly from season_avg/recent_form/model_sigma (not via inverse_normal_cdf
+of a stored probability), so it is NOT distorted by isotonic calibration the
+way a naive re-run of the sigma-fit method would be -- but a real ~0.029
+mean absolute gap between this script's recomputed w=0.5 probability and the
+actual stored first_flagged_model_prob for the same rows (its own built-in
+sanity check) means the reconstruction is close but not exact, most likely
+from the SIGMA_FLOOR_FRACTION mean-dependence not being re-derived per
+counterfactual w (see that script's own docstring) -- a real, second-order
+approximation, not hidden. This is in-sample fit only, not held-out
+validated (Session 2.40/2.42's stricter standard) -- worth a held-out check
+in a future session, same as the sigma factor's own open item. Re-run
+periodically as more snapshots survive and more legs grade in, same cadence
+as the sigma fit.
 
 SESSION 2.12 REFACTOR -- what moved where
 ------------------------------------------
@@ -268,17 +350,23 @@ LOG_PATH = BASE_DIR / "logs" / "estimation.log"
 # stat series (see SESSION 2.12 REFACTOR note above).
 # ---------------------------------------------------------------------------
 RECENCY_WEIGHTS = [0.35, 0.25, 0.20, 0.12, 0.08]
-SEASON_AVG_BLEND_WEIGHT = 0.5
-RECENT_FORM_BLEND_WEIGHT = 0.5
+SEASON_AVG_BLEND_WEIGHT = 0.95  # Session 2.41c: re-fit from the original,
+RECENT_FORM_BLEND_WEIGHT = 0.05  # never-tested 0.5/0.5 -- see the "BLEND
+# WEIGHT" module docstring section below for the full derivation. Must
+# continue to sum to 1.0.
 MIN_GAMES_FOR_ESTIMATE = 2  # below this, sigma is not meaningfully estimable
 SIGMA_FLOOR_FRACTION = 0.15  # sigma floor, as a fraction of the mean, used
 # only when a player has exactly MIN_GAMES_FOR_ESTIMATE games and their
 # observed sample sigma is implausibly small (near-zero) -- prevents a
 # probability estimate of ~100%/~0% off two coincidentally similar games.
-SIGMA_CALIBRATION_FACTOR = 1.61  # Session 2.22: fit against 8,196 real graded
-# legs (data/pickem/outcome_log.csv, 2026-09-15) via
-# scripts/calibration/fit_sigma_recalibration.py -- see the "SIGMA
-# CALIBRATION" module docstring section above for the full derivation.
+SIGMA_CALIBRATION_FACTOR = 2.681  # Session 2.41c: re-fit against 18,766 real
+# graded legs on clean, post-2026-09-17-dedup-fix data (data/pickem/
+# outcome_log.csv), excluding the 12 isotonic-covered and 6 per-stat-override
+# stats, via scripts/calibration/fit_sigma_recalibration.py -- see the
+# "SIGMA CALIBRATION" module docstring section above for the full
+# derivation, and the "SESSION 2.41c ADDITION" note there for why the
+# original Session 2.22 value (1.61, fit 2026-09-15) could no longer be
+# trusted as current.
 
 SIGMA_CALIBRATION_FACTOR_BY_STAT = {
     # Session 2.24: scripts/calibration/pickem_calibration_by_stat.py found

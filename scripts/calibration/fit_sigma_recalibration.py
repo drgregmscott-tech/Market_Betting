@@ -66,6 +66,15 @@ python scripts/calibration/fit_sigma_recalibration.py
     this project) that Session 2.23's weekly_review.py reads directly, to
     know when the sigma factor currently in pickem_model.py was last fit
     and restrict its own post-fit drift check to legs flagged since then.
+
+SESSION 2.41c ADDITION -- EXCLUDES STATS THAT DON'T USE THE GLOBAL FACTOR
+------------------------------------------------------------------------
+load_graded_legs() now excludes the 12 Session 2.40 isotonic-covered stats
+and the 6 SIGMA_CALIBRATION_FACTOR_BY_STAT stats before fitting -- see
+load_excluded_stats()'s own docstring for why mixing them in would distort
+the fit for every other stat. This is a real, necessary correction to this
+script's method, not a style change: it was written (Session 2.22) before
+either exclusion existed.
 """
 
 from __future__ import annotations
@@ -78,11 +87,32 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "estimation"))
-from pickem_model import normal_cdf  # noqa: E402
+from pickem_model import SIGMA_CALIBRATION_FACTOR_BY_STAT, normal_cdf  # noqa: E402
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
 FIT_LOG_PATH = BASE_DIR / "data" / "pickem" / "sigma_recalibration_log.csv"
+ISOTONIC_CALIBRATION_PATH = BASE_DIR / "data" / "pickem" / "isotonic_calibration_by_stat.csv"
+
+
+def load_excluded_stats() -> set[str]:
+    """Session 2.41c: stats that do NOT go through the single global
+    SIGMA_CALIBRATION_FACTOR path this script fits, and must be excluded
+    from the global fit or they'd distort it for every other stat:
+    - the 12 Session 2.40 isotonic-covered stats, whose stored
+      first_flagged_model_prob (for legs flagged after that shipped) is an
+      isotonic-calibrated probability, not normal_cdf(z/factor) -- recovering
+      a "z" from it via inverse_normal_cdf() is not meaningful.
+    - the 6 SIGMA_CALIBRATION_FACTOR_BY_STAT stats, which use their own
+      independently-fit per-stat multiplier instead of the global one.
+    See pickem_calibration_by_stat.py's matching exclusion for the per-stat
+    diagnostic version of this same fix."""
+    excluded = set(SIGMA_CALIBRATION_FACTOR_BY_STAT.keys())
+    if ISOTONIC_CALIBRATION_PATH.exists():
+        iso = pd.read_csv(ISOTONIC_CALIBRATION_PATH)
+        if "ready_to_apply" in iso.columns:
+            excluded |= set(iso.loc[iso["ready_to_apply"] == True, "resolved_stat_key"].unique())  # noqa: E712
+    return excluded
 
 FIT_LOG_COLUMNS = [
     "run_at",
@@ -124,10 +154,13 @@ def inverse_normal_cdf(p: float, lo: float = -8.0, hi: float = 8.0, tol: float =
 
 
 def load_graded_legs() -> pd.DataFrame:
-    df = pd.read_csv(OUTCOME_LOG_PATH)
+    df = pd.read_csv(OUTCOME_LOG_PATH, low_memory=False)
     graded = df.loc[df["result"].isin(["win", "loss"])].copy()
     graded = graded.dropna(subset=["first_flagged_model_prob"])
     graded["win"] = (graded["result"] == "win").astype(int)
+    excluded = load_excluded_stats()
+    if excluded:
+        graded = graded.loc[~graded["resolved_stat_key"].isin(excluded)]
     return graded
 
 

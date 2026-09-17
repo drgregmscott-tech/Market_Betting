@@ -1,0 +1,2 @@
+run_at,n_legs,n_snapshot_files_used,sanity_check_mean_abs_diff_at_w050,baseline_brier_at_w050,fitted_w,fitted_brier,current_production_w
+2026-09-17T16:21:10Z,9170,35,0.02887160958136264,0.23450912602969787,0.95,0.23090298270072362,0.5

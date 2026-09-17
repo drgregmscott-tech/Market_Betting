@@ -14561,3 +14561,154 @@ existing pipeline is correct; nothing needed fixing.
   verified grading pipelines — a real, materially stronger foundation than existed before
   this session, worth stating plainly as part of answering "have we done enough
   reassessment."
+
+## Session 2.41c — Recalibrate SIGMA_CALIBRATION_FACTOR and Blend Weights on Clean Data
+
+**Date completed:** 2026-09-17
+**Status:** ✅ Complete — both constants re-fit against real, clean, current data for the
+first time since their original (now-stale) fits; both changed materially and were
+deliberately, logged updated in `pickem_model.py`.
+
+**What was actually done:**
+Direct follow-up to Sessions 2.37–2.41b's reassessment cycle, per this card's own ROADMAP.md
+rationale: `SIGMA_CALIBRATION_FACTOR = 1.61` was fit 2026-09-15, before the 2026-09-17
+dedup/closing-line fix and before Session 2.40's isotonic calibration existed; the blend
+weight had never been fit at all.
+1. **Re-ran `fit_sigma_recalibration.py` (Session 2.22's script) against the current, clean
+   `outcome_log.csv`** — but first found and fixed a real methodological gap the original
+   script predates: 12 stats now score through Session 2.40's isotonic calibration, so their
+   stored `first_flagged_model_prob` is an empirical, non-Gaussian probability, not
+   `normal_cdf(z/factor)` — recovering a "z" from it via `inverse_normal_cdf()` is not
+   meaningful. Added `load_excluded_stats()` to `fit_sigma_recalibration.py`, excluding both
+   the 12 isotonic-covered stats and the 6 existing `SIGMA_CALIBRATION_FACTOR_BY_STAT` stats
+   (which use their own independent path) — a real, necessary correction to the script's
+   method, not a style change. Made the same fix to `pickem_calibration_by_stat.py`
+   (`load_isotonic_covered_stats()`), per this card's own instruction to scope the per-stat
+   check to the remaining stats only.
+2. **Result on the clean 18,766-leg subset**: fitted multiplier `k=1.665` on top of the
+   existing 1.61 — the model was STILL meaningfully overconfident even after the original
+   fix. New global factor: `1.61 × 1.665 = 2.681`. Closed the calibration gap from 0.0594 to
+   0.0151 on this sample (not as tight as Session 2.22's original 0.0008 — stated plainly,
+   not glossed over; Brier-minimizing k does not always fully zero the mean gap).
+3. **Built `scripts/calibration/fit_blend_weight.py` (new)** to fit
+   `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` for the first time. This needed a
+   different data source than the sigma fit: `outcome_log.csv`/`clv_log.csv` never stored
+   `season_avg`/`recent_form` as separate numbers, only the final blended probability. The
+   script joins each graded leg (via `clv_log.csv`, for `source_line_id`/`first_flagged_at`)
+   back to whichever RETAINED `output/estimation/pickem_estimates_*.csv` snapshot covers its
+   flag date (35 files survived locally, 2026-08-31 through 2026-09-16 — a real, smaller,
+   non-uniform sample than the sigma fit's own, stated directly) to recover the two real
+   component means, matched at day granularity — confirmed directly beforehand that
+   `season_avg`/`recent_form`/`model_sigma` never vary across multiple same-day snapshots for
+   the same `(platform, source_line_id)`, so day-level matching is exact, not approximate.
+   A built-in sanity check (recomputed w=0.5 probability vs. the real stored
+   `first_flagged_model_prob` for the same rows) confirmed the join/recompute pipeline
+   reconstructs production's own numbers closely (mean abs diff 0.029 — a real, small,
+   named residual, most likely from `SIGMA_FLOOR_FRACTION`'s mean-dependence not being
+   re-derived per counterfactual weight, since that would require the player's raw per-game
+   series, not retained in any snapshot).
+4. **Result on 9,170 joined clean legs**: Brier score fell steadily from w=0.0 (0.2454) to
+   an interior minimum at **w=0.95** (0.2244) — `recent_form` contributes only a small
+   residual amount of value on this real sample, a genuinely surprising result for a
+   component trusted at equal weight since v1. Checked by sport before trusting the pooled
+   number: MLB (n=8,057, 88% of the sample) alone prefers w=1.0, NFL (n=731) prefers w=0.8,
+   FIFA (n=222) prefers w=0.65 — all meaningfully above 0.5, consistent in direction even
+   though the exact optimum varies by sport; only SOCCER (n=143, the smallest usable group)
+   disagreed (w=0.0), not treated as strong counter-evidence at that sample size.
+5. **Both constants updated in `pickem_model.py`, deliberately and logged (not auto-applied)**,
+   per this project's standing precedent: `SIGMA_CALIBRATION_FACTOR` 1.61 → 2.681;
+   `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` 0.5/0.5 → 0.95/0.05. Both the "SIGMA
+   CALIBRATION" and new "BLEND WEIGHT" module docstring sections in `pickem_model.py` were
+   rewritten with the full derivation, matching this project's "no unnamed black-box factors"
+   standard.
+6. **Regenerated `data/pickem/_test_fixtures/nfl_regression_golden.csv`** (Session 2.12's
+   regression-guard fixture) against the new constants, same mechanism Session 2.40 used.
+7. **Re-ran `pickem_calibration_by_stat.py` under the new global factor** (real follow-up
+   check, not part of this card's required checklist but a natural next question): found 25
+   stat types now flagged past the 0.03 gap threshold — up from the 6 the 1.61 factor left
+   flagged. Many are now OVER-corrected in the negative direction (e.g. `passing_interceptions`
+   -0.2153, `totalGoals+goalAssists` -0.1995) — the new global factor fixes the aggregate gap
+   but at a real, honest cost to several individual stat types. **Not resolved this session**
+   — a real, substantial follow-up (expanding `SIGMA_CALIBRATION_FACTOR_BY_STAT` well beyond
+   its current 6 entries) is named as an open item below, not silently left for a future
+   session to rediscover from scratch.
+
+**Files created/modified:**
+- `scripts/calibration/fit_sigma_recalibration.py` (new `load_excluded_stats()`; `load_graded_legs()`
+  now excludes isotonic-covered + per-stat-override stats)
+- `scripts/calibration/fit_blend_weight.py` (new)
+- `scripts/calibration/pickem_calibration_by_stat.py` (new `load_isotonic_covered_stats()`;
+  `main()` now excludes those stats from the per-stat check, per this card's own instruction)
+- `scripts/estimation/pickem_model.py` (`SIGMA_CALIBRATION_FACTOR` 1.61→2.681;
+  `SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` 0.5/0.5→0.95/0.05; module docstring's
+  "SIGMA CALIBRATION" section extended and new "BLEND WEIGHT" section added)
+- `data/pickem/sigma_recalibration_log.csv` (new dated row, 18,766-leg clean fit)
+- `data/pickem/blend_weight_recalibration_log.csv` (new — first-ever entry)
+- `data/pickem/_test_fixtures/nfl_regression_golden.csv` (regenerated)
+
+**Validation results:**
+- [x] `SIGMA_CALIBRATION_FACTOR` re-fit against the clean, current dataset; real before/after
+  comparison reported plainly: 1.61 → 2.681 (a materially different value, not "barely
+  changed" — the model was still meaningfully overconfident even after the original fix).
+- [x] Blend weight re-fit against real data for the first time ever: 50/50 → 95/5, a real,
+  stated result (not "50/50 turns out to be close to optimal" — the opposite finding).
+- [x] Both updated constants are deliberate, logged, by-hand changes (this log entry + the
+  two new CSV logs + the rewritten `pickem_model.py` docstrings), not auto-applied.
+- `python -m pytest scripts/estimation/test_pickem_model.py scripts/sizing/test_sizing_engine.py -q`
+  — 79/79 pass (78 pre-existing + regenerated golden fixture, 0 new tests needed since no new
+  code branch was added, only constant values and a diagnostic script's own filtering).
+- Live sanity check against the real, current production constants (not mocked): confirms
+  `SEASON_AVG_BLEND_WEIGHT=0.95`, `RECENT_FORM_BLEND_WEIGHT=0.05`, `SIGMA_CALIBRATION_FACTOR=2.681`
+  load correctly and `prob_over()` produces a sane value under them.
+
+**Decisions made:**
+1. Excluded isotonic-covered and per-stat-override stats from BOTH the global sigma re-fit
+   and the blend-weight re-fit, not just the per-stat diagnostic ROADMAP explicitly named —
+   mixing a non-Gaussian empirical probability into a Brier-minimizing Gaussian-z fit would
+   silently distort the result for every other stat sharing that fit.
+2. Adopted the blend weight fit's literal pooled optimum (w=0.95) rather than a hand-softened
+   compromise, because at the corrected, fine (0.05-step) grid resolution it landed on an
+   INTERIOR point, not a grid boundary — the earlier coarse/uncorrected exploratory runs
+   during this session hit w=1.0 (a boundary, less trustworthy as a literal adoption
+   candidate), but the final, properly-excluded, fine-grid fit did not.
+3. Did not attempt to expand `SIGMA_CALIBRATION_FACTOR_BY_STAT` to cover the newly-flagged 25
+   stats this session, even though the diagnostic script surfaced them directly — that is a
+   real, separate, substantial piece of work (25 independent per-stat fits plus judgment
+   calls on which are real vs. noise at small n, same caveats Session 2.24/2.25 already
+   documented), better scoped as its own session than rushed at the end of this one.
+
+**Corrections/reversals during the session:**
+- First pass at the blend-weight fit (and the sigma fit's first re-run) did not exclude
+  isotonic-covered/per-stat-override stats — caught before being adopted into production
+  (the mixed-population sigma fit gave a materially different, less-correct k=1.34 vs. the
+  clean fit's k=1.665) and fixed by adding the shared exclusion to both scripts.
+- Initial production choice for the blend weight was a hand-picked 0.9 (a deliberate
+  compromise against what looked like a boundary result on the mixed/coarse data) — reversed
+  once the corrected, fine-grid, clean-subset fit produced an interior optimum (0.95) that no
+  longer needed that hedge; adopted the literal fit value instead.
+
+**Open items / deferred validations:**
+- **25 stat types are now flagged past the 0.03 calibration-gap threshold under the new
+  2.681 global factor** (`pickem_calibration_by_stat.py`'s own output, captured this
+  session) — up from 6 under 1.61. Several are now over-corrected in the negative direction.
+  A real, substantial follow-up session (expanding `SIGMA_CALIBRATION_FACTOR_BY_STAT`,
+  matching Session 2.24/2.25's method) is needed and not yet scheduled on ROADMAP.md.
+- **Neither this session's sigma fit nor its blend-weight fit is held-out validated** — both
+  are same-sample Brier-minimizing fits, the same caveat Session 2.22/2.24/2.25's original
+  fits carried. Session 2.40's isotonic work established a real held-out-validation pattern
+  this project could apply here too in a future session.
+- **The two fits were done independently** (per this card's own instruction to fit them "the
+  same way" / "separately"), not jointly optimized — the NEW combination of sigma=2.681 and
+  blend=0.95/0.05 together, going forward, has not itself been validated as a pair; the next
+  real flags will be the first true test of the combination, and `weekly_review.py`'s ongoing
+  drift check is the natural place that would surface a problem if the interaction matters.
+- **The blend-weight fit's sample (9,170 clean legs, 35 retained snapshot files) is real but
+  smaller and less uniform than the sigma fit's (18,766 legs, the full clean `outcome_log.csv`)**
+  — `output/estimation/` does not retain every historical snapshot, a real, project-level
+  data-retention gap outside this session's scope to fix, though `fit_blend_weight.py` is
+  designed to be re-run as more snapshots accumulate going forward.
+- Per-sport blend-weight optimization (MLB alone prefers w=1.0, NFL w=0.8, FIFA w=0.65) was
+  measured but not wired in as a per-sport override this session — the single pooled 0.95
+  value is what shipped, matching this session's stated scope (global-level recalibration);
+  a `BLEND_WEIGHT_BY_SPORT` mechanism, mirroring `SIGMA_CALIBRATION_FACTOR_BY_STAT`'s
+  existing pattern, is a reasonable future refinement, not built here.

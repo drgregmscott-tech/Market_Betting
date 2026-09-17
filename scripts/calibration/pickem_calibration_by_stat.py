@@ -91,6 +91,31 @@ from fit_sigma_recalibration import (  # noqa: E402
 MIN_GROUP_SIZE = 20  # matches weekly_review.py's MIN_GROUP_SIZE_FOR_CHECK
 RECALIBRATION_GAP_THRESHOLD = 0.03  # matches weekly_review.py
 
+ISOTONIC_CALIBRATION_PATH = (
+    Path(__file__).resolve().parents[2] / "data" / "pickem" / "isotonic_calibration_by_stat.csv"
+)
+
+
+def load_isotonic_covered_stats() -> set[str]:
+    """Session 2.41c: stats with a validated, ready-to-apply isotonic table
+    (Session 2.40) no longer score through the plain Gaussian + sigma-factor
+    path this script diagnoses at all -- their real, stored
+    first_flagged_model_prob values (for legs flagged after Session 2.40
+    shipped) are the isotonic-calibrated probability, not
+    normal_cdf(z/SIGMA_CALIBRATION_FACTOR), so recovering a "z" from them via
+    inverse_normal_cdf() and re-fitting a sigma multiplier is not meaningful.
+    Excluded here per Session 2.41c's ROADMAP.md card ("this session matters
+    most for the ~30+ OTHER stats still scoring through the plain Gaussian
+    path"), read directly from the isotonic table so this list tracks
+    whatever is currently marked ready, no hardcoded duplicate list to drift
+    out of sync."""
+    if not ISOTONIC_CALIBRATION_PATH.exists():
+        return set()
+    df = pd.read_csv(ISOTONIC_CALIBRATION_PATH)
+    if "ready_to_apply" not in df.columns:
+        return set()
+    return set(df.loc[df["ready_to_apply"] == True, "resolved_stat_key"].unique())  # noqa: E712
+
 # Session 2.24 follow-up: the first pass's per-group grid search (bounded by
 # fit_sigma_recalibration.py's K_GRID_MAX=3.0, the same ceiling the global
 # fit uses) hit that ceiling for two groups (targets,
@@ -169,10 +194,19 @@ def main() -> None:
     print(f"Flag threshold (|global-corrected gap|): {RECALIBRATION_GAP_THRESHOLD}")
     print()
 
+    isotonic_covered = load_isotonic_covered_stats()
+    if isotonic_covered:
+        print(f"Excluding {len(isotonic_covered)} isotonic-covered stat(s) (Session 2.40, "
+              f"already handled by a validated non-Gaussian table, not this script's sigma "
+              f"path): {sorted(isotonic_covered)}")
+        print()
+
     counts = graded["resolved_stat_key"].value_counts()
     results = []
     skipped = []
     for stat_key, n in counts.items():
+        if stat_key in isotonic_covered:
+            continue
         group = graded.loc[graded["resolved_stat_key"] == stat_key]
         if len(group) < MIN_GROUP_SIZE:
             skipped.append((stat_key, len(group)))

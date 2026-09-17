@@ -3145,8 +3145,13 @@ for NFL.
 ---
 
 ### Session 2.41c — Recalibrate SIGMA_CALIBRATION_FACTOR and Blend Weights on Clean Data
-**Status:** Not started — **recommended to run BEFORE Session 2.42**, not after (see why
-below).
+**Status:** ✅ Complete (2026-09-17) — see SESSION_LOG.md for full derivation. Both constants
+re-fit and updated in `pickem_model.py`: `SIGMA_CALIBRATION_FACTOR` 1.61 → 2.681;
+`SEASON_AVG_BLEND_WEIGHT`/`RECENT_FORM_BLEND_WEIGHT` 0.5/0.5 → 0.95/0.05. Real follow-up
+need surfaced and NOT yet resolved: the new global sigma factor leaves 25 stat types flagged
+past the 0.03 calibration-gap threshold (up from 6 under 1.61), several over-corrected the
+other direction — a substantial `SIGMA_CALIBRATION_FACTOR_BY_STAT` expansion is real,
+necessary future work, not yet scheduled as its own session card.
 **Prerequisites:** Session 2.37's dedup/closing-line fix (already live).
 
 **Why this is a real, separate gap, raised by the same "did we overlook something"
@@ -3183,11 +3188,50 @@ scoring through the plain Gaussian + possibly-contaminated sigma path.
   (`pickem_calibration_by_stat.py`) on the remaining stats only.
 
 **Validation (required to close session):**
-- [ ] `SIGMA_CALIBRATION_FACTOR` re-fit against the clean, current dataset; real
-before/after comparison reported plainly (even if the answer is "barely changed").
-- [ ] Blend weight re-fit against real data for the first time ever, with a stated result
-(even if the answer is "50/50 turns out to be close to optimal").
-- [ ] Any updated constant is a deliberate, logged, by-hand change — not auto-applied.
+- [x] `SIGMA_CALIBRATION_FACTOR` re-fit against the clean, current dataset; real
+before/after comparison reported plainly (even if the answer is "barely changed"). Result:
+1.61 → 2.681, a materially different value.
+- [x] Blend weight re-fit against real data for the first time ever, with a stated result
+(even if the answer is "50/50 turns out to be close to optimal"). Result: 0.5/0.5 → 0.95/0.05
+— recent_form contributes only a small residual amount of value.
+- [x] Any updated constant is a deliberate, logged, by-hand change — not auto-applied. See
+SESSION_LOG.md Session 2.41c.
+
+---
+
+### Session 2.41d — Expand SIGMA_CALIBRATION_FACTOR_BY_STAT Under the New Global Factor
+**Status:** Not started — real, necessary follow-up surfaced by Session 2.41c, not yet run.
+**Prerequisites:** Session 2.41c (done).
+
+**Why this is a real, separate gap:** Session 2.41c's new global `SIGMA_CALIBRATION_FACTOR`
+(2.681) closes the AGGREGATE calibration gap on the clean dataset (0.0594 → 0.0151), but
+`pickem_calibration_by_stat.py`, re-run under the new factor, now flags 25 stat types past
+the 0.03 gap threshold — up from 6 under the old 1.61 factor. Several are now over-corrected
+in the negative direction (e.g. `passing_interceptions` -0.2153, `totalGoals+goalAssists`
+-0.1995), meaning the new global factor, while a real aggregate improvement, makes some
+individual stat types WORSE, not better. This is the same shape of problem Session 2.24/2.25
+solved for the original 1.61 factor's 6 outliers — that pattern needs re-running, not
+reinvented, against the new baseline.
+
+**What this session does:**
+- Re-runs the Session 2.24/2.25 per-stat sigma-fit method (already implemented in
+  `pickem_calibration_by_stat.py`) against all 25 currently-flagged stats, using the fit
+  values that script already computes (`per_stat_k` column) as the starting candidates.
+- Applies the same judgment Session 2.24/2.25 did: distinguish a real per-stat sigma problem
+  from a stat with no real model edge (where no sigma multiplier fixes a ~50% win rate) and
+  from small-n noise (the smallest newly-flagged groups are close to the 20-leg floor).
+- Updates `SIGMA_CALIBRATION_FACTOR_BY_STAT` in `pickem_model.py` with the validated
+  additions, keeping the existing 6 entries' own already-fit values unless this session's
+  re-check finds they've drifted.
+
+**Validation (required to close session):**
+- [ ] Each newly-added per-stat override is checked against the same 20-leg floor and
+Brier-vs-gap distinction Session 2.24/2.25 used, not blindly copied from the diagnostic
+table.
+- [ ] Re-run `pickem_calibration_by_stat.py` after the update; report how many of the 25
+originally-flagged stats remain flagged, plainly (even if the honest answer is "not all of
+them").
+- [ ] Full test suite still passes; golden fixture regenerated if constants changed.
 
 ---
 
