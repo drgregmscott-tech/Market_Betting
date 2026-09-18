@@ -973,15 +973,19 @@ def implied_prob_over_underdog(over_mult: Optional[float], under_mult: Optional[
     return raw_over / total
 
 
-# SESSION 2.55: was a flat 0.5, which is below any real Power Play breakeven.
-# Measured 2026-09-18 from the user's own PrizePicks app: an all-Standard
-# 3-pick Power Play pays 4.75x. With equal, independent legs each leg must win
-# 4.75 ** (-1/3) = 0.5949 for the entry to break even. Applies to BOTH sides
-# of a Standard line (a Standard "under" leg is the same product, so its
-# breakeven is this same number, not 1 minus it). Measured at ONE entry size
-# (3-pick); other sizes are unverified (the 2/4/5/6-pick Standard multipliers
-# in sizing_engine.py are older and may be stale too).
-PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5948883492590029
+# SESSION 2.55/2.56: was a flat 0.5, which is below every real Power Play
+# breakeven. Read by the user off their own PrizePicks app, 2026-09-18, for
+# all-Standard entries: 2/3/4/5/6-pick pay 2/4.75/9/19/36.5x. With equal,
+# independent legs each leg must win M ** (-1/N) for the entry to break even:
+# 0.7071 / 0.5949 / 0.5774 / 0.5549 / 0.5491. This constant is the LOWEST of
+# those (the 6-pick), so a flag means "this leg can be +EV in the most
+# favorable entry"; sizing_engine.py chooses the entry size and applies the
+# higher breakeven of any smaller entry. A 3-pick would need 0.5949. Applies
+# to BOTH sides of a Standard line (an under leg has the same entry payout,
+# so its breakeven is this same number, not 1 minus it). These multipliers
+# are one lineup and can vary by leg; legs PrizePicks marks adjusted_odds
+# are not scored at all (see is_scorable_prizepicks_odds_type).
+PRIZEPICKS_ASSUMED_IMPLIED_PROB = 36.5 ** (-1 / 6)
 
 # FIX (2026-09-11, real finding): PRIZEPICKS_ASSUMED_IMPLIED_PROB is only
 # defensible for a Standard-odds line. PrizePicks also offers "demon" (harder)
@@ -1050,9 +1054,22 @@ PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB = {
 PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard"}
 
 
+def prizepicks_odds_are_adjusted(row: dict) -> bool:
+    """True when PrizePicks' own adjusted_odds flag is set on this leg
+    (Session 2.56): the leg's payout is off the default table, so its real
+    price is unknown. Missing/None/False all mean default. Accepts a real
+    bool or the strings "True"/"true" (CSV round trip)."""
+    v = row.get("adjusted_odds")
+    if isinstance(v, str):
+        return v.strip().lower() == "true"
+    return isinstance(v, (bool, np.bool_)) and bool(v)
+
+
 def is_scorable_prizepicks_odds_type(row: dict) -> bool:
     if row.get("platform") != "prizepicks":
         return True
+    if prizepicks_odds_are_adjusted(row):
+        return False
     odds_type = row.get("odds_type")
     if not isinstance(odds_type, str) or not odds_type.strip():
         return True  # missing odds_type -- treat as Standard, matching pre-fix behavior

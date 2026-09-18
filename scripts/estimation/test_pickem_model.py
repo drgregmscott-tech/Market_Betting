@@ -1164,12 +1164,13 @@ def test_committed_isotonic_tables_never_invent_probability_below_their_range():
 
 
 def test_prizepicks_standard_breakeven_is_the_measured_3_pick_value_on_both_sides():
-    """Session 2.55: all-Standard 3-pick pays 4.75x, so each leg must win
-    4.75 ** (-1/3) = 0.5949. An under leg has the same payout, so its
-    breakeven is the same number, not 1 - implied_over."""
+    """Session 2.55/2.56: the leg-level breakeven is the lowest per-leg
+    breakeven across entry sizes (6-pick, 36.5x): 36.5 ** (-1/6) = 0.5491.
+    An under leg has the same payout, so its breakeven is the same number,
+    not 1 - implied_over."""
     import pickem_model as pm
 
-    assert pm.PRIZEPICKS_ASSUMED_IMPLIED_PROB == pytest.approx(4.75 ** (-1 / 3))
+    assert pm.PRIZEPICKS_ASSUMED_IMPLIED_PROB == pytest.approx(36.5 ** (-1 / 6))
     weekly_fixture = build_nfl_weekly_fixture()
     props = pd.DataFrame([dict(
         platform="prizepicks", source_line_id="1", player_name="Player One",
@@ -1182,8 +1183,8 @@ def test_prizepicks_standard_breakeven_is_the_measured_3_pick_value_on_both_side
             row = process_props(props, season=2025).iloc[0]
     finally:
         NFL_PLUGIN.fetch_stats = original_fetch
-    assert row["implied_prob_over"] == pytest.approx(4.75 ** (-1 / 3))
-    assert row["implied_prob_under"] == pytest.approx(4.75 ** (-1 / 3))
+    assert row["implied_prob_over"] == pytest.approx(36.5 ** (-1 / 6))
+    assert row["implied_prob_under"] == pytest.approx(36.5 ** (-1 / 6))
 
 
 @pytest.mark.parametrize("odds_type", ["demon", "goblin"])
@@ -1204,3 +1205,33 @@ def test_prizepicks_demon_and_goblin_are_not_scored(odds_type):
         NFL_PLUGIN.fetch_stats = original_fetch
     assert row["model_status"] == "unsupported_odds_type"
     assert pd.isna(row["edge_over"]) and pd.isna(row["edge_under"])
+
+
+@pytest.mark.parametrize("value, expected", [
+    (True, True), ("True", True), ("true", True), (np.True_, True),
+    (False, False), ("False", False), (None, False), (float("nan"), False), ("", False),
+])
+def test_prizepicks_odds_are_adjusted_reads_the_flag(value, expected):
+    import pickem_model as pm
+
+    assert pm.prizepicks_odds_are_adjusted({"adjusted_odds": value}) is expected
+
+
+def test_prizepicks_standard_with_adjusted_odds_is_not_scored_but_unadjusted_is():
+    """Session 2.56: adjusted_odds marks a leg whose payout is off the default
+    table, so its real price is unknown."""
+    weekly_fixture = build_nfl_weekly_fixture()
+    base = dict(platform="prizepicks", source_line_id="1", player_name="Player One",
+                sport="nfl", stat_type="Pass Yards", line=265.5, odds_type="standard")
+    props = pd.DataFrame([dict(base, adjusted_odds=True),
+                          dict(base, source_line_id="2", adjusted_odds=False),
+                          dict(base, source_line_id="3", adjusted_odds=None)])
+    original_fetch = NFL_PLUGIN.fetch_stats
+    NFL_PLUGIN.fetch_stats = lambda season: weekly_fixture
+    try:
+        with mock.patch("pickem_model._load_isotonic_table", return_value={}):
+            out = process_props(props, season=2025)
+    finally:
+        NFL_PLUGIN.fetch_stats = original_fetch
+    assert list(out["model_status"]) == ["unsupported_odds_type", "estimated", "estimated"]
+    assert pd.isna(out.iloc[0]["edge_over"])

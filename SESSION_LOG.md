@@ -15760,3 +15760,30 @@ The flag-time loss is confined to legs on the unflagged side of these stats; the
 2. Measure the all-Standard 2-, 4-, 5- and 6-pick multipliers, so the breakeven can use the best entry size, and confirm the 3-pick number for a home-run leg.
 3. Re-run the PrizePicks part of the audit at the new breakevens after a few days of clean flags.
 4. `sizing_engine.py` docs (`docs/sizing_methodology.md`) still quote 6.0x and the 2026-09-14 numbers.
+
+## Session 2.56 -- adjusted_odds Carried Through; Full Standard Payout Table
+
+**Date completed:** 2026-09-18
+**Status:** Complete. Open: the meaning of `adjusted_odds` is still an inference (see below).
+
+**All-Standard Power Play multipliers (read by the user off their own app):** 2-pick 2x, 3-pick 4.75x, 4-pick 9x, 5-pick 19x, 6-pick 36.5x (were 3, 6, 10, 20, 37.5). Per-leg breakeven for equal legs, M ** (-1/N): 0.7071, 0.5949, 0.5774, 0.5549, 0.5491.
+
+**Changes:**
+1. `adjusted_odds` is now ingested (`schema.py` column after `allowed_wager_types`; `ingest_pickem.py` reads `attrs.get("adjusted_odds")` for PrizePicks, None for Underdog) and carried to `clv_log.csv` (logged when a flag is first created).
+2. `pickem_model.py`: `prizepicks_odds_are_adjusted()` and `is_scorable_prizepicks_odds_type()`: a PrizePicks row is scorable only if it is Standard (or has no odds_type) AND `adjusted_odds` is not True. Missing or False counts as default. Adjusted rows get `unsupported_odds_type`, are kept visible and never flagged.
+3. `PRIZEPICKS_ASSUMED_IMPLIED_PROB` is now the lowest per-leg breakeven, the 6-pick 36.5 ** (-1/6) = 0.5491 (was 0.5949 at the 3-pick, and 0.5 before Session 2.55). It applies to both sides. Meaning: a flag says the leg can be +EV in the most favorable entry; `sizing_engine.py` chooses the entry size and uses the higher breakeven of smaller entries (a 3-pick needs 0.5949, a 2-pick 0.7071). With `FLAG_EDGE_THRESHOLD` 0.03 a flag needs a model probability of about 0.579.
+4. `sizing_engine.py` `PICKEM_ENTRY_PAYOUT["prizepicks"]` = 2/4.75/9/19/36.5x. Sizing tests updated (the old ones assumed a 2-pick 3x: their probabilities are raised so the entries still have positive edge; the Kelly hand check is now p=0.7225, b=1, f*=0.445). Golden NFL fixture regenerated; only the four implied/edge columns changed.
+5. `docs/sizing_methodology.md`: correction note added; the old tables are left below it.
+6. Tests: 3 new ingestion tests (`test_adjusted_odds.py`), 8 new model tests. Full suite 147 pass; `test_clv_logger.py` 17 pass; `test_sizing_engine.py` passes.
+
+**Check on real data (largest retained raw PrizePicks file, 47,299 lines, through the real normalizer and the scorability check):** Demon 31,828 and Goblin 8,293 unscorable; Standard with adjusted_odds True 1,445 unscorable; Standard with False 3,470 scorable; 2,263 Standard rows with the field missing are scorable by rule.
+
+**Past results at the new breakeven (graded PrizePicks Standard, 5,603 legs, 171 games, game-clustered; adjusted vs unadjusted cannot be split for old rows because the field was not logged):** won 56.2%. Against 0.5491: +1.3pp, CI [53.8, 58.6], inconclusive. Against 0.5949 (3-pick): -3.3pp, below. By side: overs 52.2% (n=3,394), unders 62.5% (n=2,209). So the PrizePicks Standard edge is only possible in 5-6 pick entries at the model's current accuracy. Not yet split by adjusted_odds.
+
+**Still an inference:** that `adjusted_odds` True means the leg's payout is off the default. It fits the field name, every Demon/Goblin line carrying it, and the user's readings; it has not been checked against the app.
+
+**Open items:**
+- Confirm on the user's app: an adjusted Standard leg (the pipeline can list some) pays a non-default multiplier, and a non-adjusted one pays the 4.75x/36.5x table.
+- After a week of flags carrying `adjusted_odds`, re-run the PrizePicks Standard audit split by it.
+- Larger question: the leg-level breakeven for a PrizePicks flag depends on entry size. Consider having the flag report edge against each entry size's breakeven.
+- The 2.37 audit, `weekly_review.py` (BREAKEVEN_WIN_RATE 0.5774, a 2-pick 3x number) and `docs/sample_size_methodology.md` still use old PrizePicks numbers.

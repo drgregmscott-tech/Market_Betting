@@ -35,6 +35,18 @@ platform's own page (confirmed live 2026-09-10):
 | 7 | *(not published)* | 65.0x |
 | 8 | *(not published)* | 120.0x |
 
+> **CORRECTION (Session 2.56, 2026-09-18).** The PrizePicks column above is
+> out of date. Read off the user's own PrizePicks app on 2026-09-18, an
+> all-Standard Power Play pays **2x / 4.75x / 9x / 19x / 36.5x** for 2 / 3 / 4
+> / 5 / 6 picks (`sizing_engine.py` now uses these). PrizePicks sets payouts
+> per leg and side, so these are one lineup and can differ by leg. Demon and
+> Goblin legs are priced per leg too: on a hits+runs+rbi leg Demon 5.25x and
+> Goblin 4.25x, on a home-run leg Demon 13.5x and Goblin 2.9x (3-pick, 2
+> Standard + 1 special). So the 2026-09-14 table below (Goblin 4.75x, Demon
+> 6.25x) applies to that one lineup only, and no constant per leg type can
+> price Demon/Goblin. They are not scored. Per-leg breakevens for equal
+> legs, M ** (-1/N): 0.707 / 0.595 / 0.577 / 0.555 / 0.549.
+
 Note the two platforms' numbers are genuinely different at almost every
 leg count (5 picks happens to tie at 20x) — this is exactly why
 `sizing_engine.py` looks up each entry's own (platform, leg count) pair

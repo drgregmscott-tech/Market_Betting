@@ -64,8 +64,9 @@ def make_leg(
 
 def test_1_bigger_edge_bigger_stake():
     bankroll = 1000.0
-    low_edge_legs = [make_leg("prizepicks|1", "prizepicks", 0.60), make_leg("prizepicks|2", "prizepicks", 0.60)]
-    high_edge_legs = [make_leg("prizepicks|3", "prizepicks", 0.75), make_leg("prizepicks|4", "prizepicks", 0.75)]
+    # Session 2.56: 2-pick pays 2x now (breakeven 0.5 combined, 0.707 per leg).
+    low_edge_legs = [make_leg("prizepicks|1", "prizepicks", 0.75), make_leg("prizepicks|2", "prizepicks", 0.75)]
+    high_edge_legs = [make_leg("prizepicks|3", "prizepicks", 0.85), make_leg("prizepicks|4", "prizepicks", 0.85)]
 
     low_result = size_entry(low_edge_legs, bankroll)
     high_result = size_entry(high_edge_legs, bankroll)
@@ -77,8 +78,8 @@ def test_1_bigger_edge_bigger_stake():
         f"low={low_result['suggested_stake']}, high={high_result['suggested_stake']}"
     )
     print(
-        f"PASS test_1: low-edge (p=0.60x0.60) stake=${low_result['suggested_stake']}, "
-        f"high-edge (p=0.75x0.75) stake=${high_result['suggested_stake']}"
+        f"PASS test_1: low-edge (p=0.75x0.75) stake=${low_result['suggested_stake']}, "
+        f"high-edge (p=0.85x0.85) stake=${high_result['suggested_stake']}"
     )
 
 
@@ -147,7 +148,7 @@ def test_5b_prizepicks_3_through_6_pick_sized():
     """Session 2.11: PrizePicks' own published Power Play table (3, 4, 5, 6
     picks) is sized correctly, using that leg count's own real multiplier."""
     bankroll = 1000.0
-    for n, expected_multiplier in [(3, 4.75), (4, 10.0), (5, 20.0), (6, 37.5)]:
+    for n, expected_multiplier in [(3, 4.75), (4, 9.0), (5, 19.0), (6, 36.5)]:
         legs = [
             make_leg(f"prizepicks|p{n}_{i}", "prizepicks", 0.75, game_id=f"g{i}")
             for i in range(n)
@@ -188,12 +189,12 @@ def test_6_closed_leg_status_check():
 def test_7_same_game_pair_gets_extra_dampener():
     bankroll = 1000.0
     same_game_legs = [
-        make_leg("prizepicks|20", "prizepicks", 0.68, game_id="GAME_X"),
-        make_leg("prizepicks|21", "prizepicks", 0.66, game_id="GAME_X"),
+        make_leg("prizepicks|20", "prizepicks", 0.80, game_id="GAME_X"),
+        make_leg("prizepicks|21", "prizepicks", 0.78, game_id="GAME_X"),
     ]
     diff_game_legs = [
-        make_leg("prizepicks|22", "prizepicks", 0.68, game_id="GAME_X"),
-        make_leg("prizepicks|23", "prizepicks", 0.66, game_id="GAME_Y"),
+        make_leg("prizepicks|22", "prizepicks", 0.80, game_id="GAME_X"),
+        make_leg("prizepicks|23", "prizepicks", 0.78, game_id="GAME_Y"),
     ]
 
     same_result = size_entry(same_game_legs, bankroll)
@@ -204,7 +205,7 @@ def test_7_same_game_pair_gets_extra_dampener():
     assert diff_result["same_game_pair"] is False, diff_result
     assert diff_result["same_game_caution_multiplier_applied"] == 1.0, diff_result
 
-    # Same combined probability either way (0.68 x 0.66), so the ONLY
+    # Same combined probability either way (0.80 x 0.78), so the ONLY
     # difference in suggested stake should be the same-game dampener.
     assert same_result["suggested_stake"] < diff_result["suggested_stake"], (
         f"Expected same-game pair to get a smaller stake than an "
@@ -222,14 +223,14 @@ def test_manual_kelly_math_sanity_check():
     """Independent hand-check of the Kelly formula itself, outside
     size_entry()'s own code path -- same verification discipline Session
     2.3 used for the Kicking Points / Fantasy Score formulas."""
-    p = 0.70 * 0.70  # = 0.49
-    b = entry_net_odds_b(PICKEM_ENTRY_PAYOUT["prizepicks"][2])  # 2.0
+    p = 0.85 * 0.85  # = 0.7225
+    b = entry_net_odds_b(PICKEM_ENTRY_PAYOUT["prizepicks"][2])  # 1.0 (2-pick pays 2x)
     f_star_expected = (p * (b + 1) - 1) / b  # hand formula
     f_star_actual = raw_kelly_fraction(p, b)
     assert abs(f_star_expected - f_star_actual) < 1e-9, (f_star_expected, f_star_actual)
-    # Hand-verify the actual number: p=0.49, b=2 -> (0.49*3 - 1)/2 = (1.47-1)/2 = 0.235
-    assert abs(f_star_actual - 0.235) < 1e-9, f_star_actual
-    print(f"PASS manual check: p=0.49, b=2.0 -> raw Kelly fraction = {f_star_actual:.4f} (hand-computed: 0.2350)")
+    # Hand-verify the actual number: p=0.7225, b=1 -> (0.7225*2 - 1)/1 = 0.445
+    assert abs(f_star_actual - 0.445) < 1e-9, f_star_actual
+    print(f"PASS manual check: p=0.7225, b=1.0 -> raw Kelly fraction = {f_star_actual:.4f} (hand-computed: 0.4450)")
 
 
 def make_politics_flag(

@@ -722,10 +722,10 @@ ENTRY_TYPE_NAME = {"prizepicks": "Power Play", "underdog": "Standard"}
 # 2.5's own independently-sourced number (sample_size_methodology.md
 # Section 2).
 PICKEM_ENTRY_PAYOUT = {
-    # 3-pick corrected 2026-09-18 (Session 2.55): the user's own PrizePicks app
-    # shows 4.75x for an all-Standard 3-pick Power Play, not 6.0x. The other
-    # leg counts were not re-checked and may be stale too.
-    "prizepicks": {2: 3.0, 3: 4.75, 4: 10.0, 5: 20.0, 6: 37.5},
+    # 2026-09-18 (Sessions 2.55/2.56): all five read by the user off their own
+    # PrizePicks app for all-Standard Power Play entries (were 3/6/10/20/37.5).
+    # They vary with the legs chosen; these are one lineup.
+    "prizepicks": {2: 2.0, 3: 4.75, 4: 9.0, 5: 19.0, 6: 36.5},
     # Underdog Standard entry -- sourced directly from Underdog's own help
     # article (help.underdogsports.com/en/articles/13780101-pick-em-standard-
     # flex-entry-payouts, "Standard Entries" table), confirmed live

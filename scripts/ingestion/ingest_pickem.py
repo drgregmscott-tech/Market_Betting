@@ -329,6 +329,7 @@ def normalize_prizepicks(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     status=attrs.get("status"),
                     odds_type=attrs.get("odds_type"),
                     allowed_wager_types=attrs.get("allowed_wager_types"),
+                    adjusted_odds=attrs.get("adjusted_odds"),
                     pulled_at=pulled_at,
                 )
             )
@@ -489,6 +490,7 @@ def normalize_underdog(payload: dict, pulled_at: str) -> list[NormalizedProp]:
                     status=line.get("status"),
                     odds_type=None,  # PrizePicks-only concept -- see schema.py
                     allowed_wager_types=None,  # PrizePicks-only concept -- see schema.py
+                    adjusted_odds=None,  # PrizePicks-only concept -- see schema.py
                     pulled_at=pulled_at,
                 )
             )

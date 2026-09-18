@@ -3507,8 +3507,10 @@ Session 2.33's own "measurement first, gating second" discipline).
 ### Session 2.55 -- PrizePicks Pricing Corrected
 **Status:** Partial (2026-09-18). Standard breakeven 0.5 to 0.5949 (measured 4.75x 3-pick, both sides). Demon/Goblin unscored: the payout is set per leg, so no constant prices them. Sizing 3-pick payout 6.0x to 4.75x.
 - [x] Constants, tests, golden fixture and observations log updated.
-- [ ] Carry `adjusted_odds` (raw PrizePicks field, True on all Demon/Goblin and about 24% of Standard) through ingestion; do not score adjusted Standard legs; verify on the user's app.
-- [ ] Measure 2/4/5/6-pick Standard multipliers; update `docs/sizing_methodology.md`.
+- [x] `adjusted_odds` carried through ingestion, model and CLV log; adjusted legs not scored (Session 2.56).
+- [x] 2/4/5/6-pick Standard multipliers measured (2/9/19/36.5x); `sizing_engine.py` and `docs/sizing_methodology.md` updated. Breakeven now the 6-pick, 0.5491.
+- [ ] Confirm on the user's app that `adjusted_odds` True means a non-default payout; re-run the PrizePicks Standard audit split by it after a week of flags.
+- [ ] Report edge against each entry size's breakeven, not only the 6-pick; update `weekly_review.py` and `sample_size_methodology.md` breakevens.
 
 ---
 

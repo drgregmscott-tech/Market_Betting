@@ -78,6 +78,15 @@ FIELD NOTES (traced back to Session 2.1's real captured field names)
   side that does not exist to bet on PrizePicks. None for every Underdog
   row (Underdog has no equivalent concept in this project's ingested
   data).
+- adjusted_odds: PrizePicks-only (attributes.adjusted_odds). Added 2026-09-18
+  (Session 2.56). In the largest retained raw feed (47,299 lines) it is True
+  on every Demon and Goblin line and on about 24% of Standard lines, and
+  False or missing on the rest. Read as: PrizePicks has moved this leg's
+  payout off the default table (the user measured payouts that differ by leg
+  and side). True = the leg's price is unknown, so pickem_model.py does not
+  score it. False/None = default payout. Stored as True/False, or None when
+  the API omits it and for every Underdog row. NOT yet confirmed against the
+  app; see SESSION_LOG.md Session 2.56.
 """
 
 from dataclasses import dataclass, asdict
@@ -101,6 +110,7 @@ NORMALIZED_COLUMNS = [
     "status",
     "odds_type",
     "allowed_wager_types",
+    "adjusted_odds",
     "pulled_at",
 ]
 
@@ -124,6 +134,7 @@ class NormalizedProp:
     status: Optional[str]
     odds_type: Optional[str]
     allowed_wager_types: Optional[str]
+    adjusted_odds: Optional[bool]
     pulled_at: str
 
     def as_row(self) -> dict:
