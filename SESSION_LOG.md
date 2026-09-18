@@ -15673,3 +15673,24 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 - Re-run `validate_sigma_held_out.py` after about a week of new game days; then decide on p_strikes, triples, foulsCommitted and p_numberOfPitches.
 - pitcher fs: revisit at 200+ joined legs.
 - Improve snapshot retention (about 45% of graded legs join today). It limits every held-out test here.
+
+## Session 2.52 -- Isotonic Upkeep and Snapshot Retention
+
+**Date completed:** 2026-09-18
+**Status:** Complete for what the data allows. One permanent fix to the retention problem. The re-checks and the volume watch have no data yet.
+
+**Retention problem, measured:** Only about 45% of graded legs join to a retained snapshot. The CI pipeline (`pickem_pipeline.yml`) commits only `output/estimation/latest.csv`. The 51 timestamped snapshots in git came from manual local runs and cover about 8 days (2026-08-31, 09-01, 09-11, 09-12, 09-15 to 09-18; nothing for 09-02 to 09-10 or 09-13/09-14). Each snapshot is about 5 MB (276 MB in total), so committing every hourly snapshot is not workable.
+
+**Fix:** `clv_logger.py` now writes `season_avg`, `recent_form`, `model_sigma`, `games_used` and `league_avg` on each flag row when the flag is first logged. About 2 MB more in `clv_log.csv` (25.7 MB now). Any blend, sigma or shrinkage configuration can then be re-scored on every flag logged from now on, with no snapshot. Flags logged before this change stay blank and still need snapshots. `model_sigma` is the value in force at flag time (raw sigma times that day's factor), same as the snapshot value.
+
+**Tests:** three scenarios added to `test_clv_logger.py` (17 pass; run it directly, `pytest` does not collect it): consensus matches with different game ids (regression for Session 2.49; scenario 1 used one shared id, which hid the bug), ambiguous matches are rejected, components are logged. `pytest` 115/115.
+
+**Isotonic upkeep:**
+- Session 2.51 changed sigma only for p_baseOnBalls and p_earnedRuns. Neither is isotonic-covered, so no refit is needed.
+- Joined legs at 200+ threshold: p_hits 150, p_earnedRuns 147, p_baseOnBalls 137, pitcher fs 134. Not yet.
+- Flag volume: the last logged flag is 2026-09-18 17:28 UTC and Session 2.47 landed at 18:28 UTC, so no post-change run exists. Before the change, the four dropped MLB stats were a steady 1-2% of MLB flags per day (p_hits 1.4-1.9%, p_earnedRuns 1.5-2.0%, p_baseOnBalls 1.1-1.8%, pitcher fs 0.5-0.7%), with the partial 09-18 day lower. Compare against that.
+
+**Open items:**
+- Point `validate_sigma_held_out.py`, `refit_isotonic_current_config.py` and the blend fit at the logged components (snapshot fallback for older flags). Not done: the components only exist for new flags, so this waits until enough have graded.
+- Re-check at 200+ joined legs; watch flag volume after the next pipeline runs.
+- Consider one snapshot per day for the 09-02 to 09-10 and 09-13/09-14 gaps: not recoverable.

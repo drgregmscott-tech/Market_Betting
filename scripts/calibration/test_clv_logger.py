@@ -101,6 +101,42 @@ def scenario_1_new_flag_with_consensus():
     print("PASS: scenario_1_new_flag_with_consensus")
 
 
+def scenario_1b_consensus_matches_across_different_game_ids():
+    """Session 2.49 regression: PrizePicks and Underdog never share a
+    game_id, so the match key must not depend on it."""
+    pp_row = _base_row(game_id="pp_game_9")
+    ud_row = _base_row(platform="underdog", source_line_id="ud_1", game_id="ud_game_4",
+                       over_payout_multiplier=1.9, under_payout_multiplier=1.9)
+    log_df = clv_logger.process_run_pickem(pd.DataFrame([pp_row, ud_row]), _empty_pickem_log(), "2026-09-01T10:00:00Z")
+    r = log_df[log_df["flag_id"] == "prizepicks|pp_1"].iloc[0]
+    assert r["consensus_available"] == True, "different game_ids must still match"  # noqa: E712
+    assert r["consensus_platform"] == "underdog"
+    print("PASS: scenario_1b_consensus_matches_across_different_game_ids")
+
+
+def scenario_1c_ambiguous_consensus_is_not_matched():
+    """Two Underdog rows for the same player/stat/sport (alt lines or two
+    games): no match, rather than a guess."""
+    pp_row = _base_row()
+    ud1 = _base_row(platform="underdog", source_line_id="ud_1", over_payout_multiplier=1.9, under_payout_multiplier=1.9)
+    ud2 = _base_row(platform="underdog", source_line_id="ud_2", line=280.5,
+                    over_payout_multiplier=1.9, under_payout_multiplier=1.9)
+    log_df = clv_logger.process_run_pickem(pd.DataFrame([pp_row, ud1, ud2]), _empty_pickem_log(), "2026-09-01T10:00:00Z")
+    r = log_df[log_df["flag_id"] == "prizepicks|pp_1"].iloc[0]
+    assert r["consensus_available"] == False  # noqa: E712
+    print("PASS: scenario_1c_ambiguous_consensus_is_not_matched")
+
+
+def scenario_1d_model_components_logged_at_flag_time():
+    """Session 2.52: the flag row keeps the components needed to re-score it."""
+    log_df = clv_logger.process_run_pickem(pd.DataFrame([_base_row(league_avg=250.0)]), _empty_pickem_log(),
+                                           "2026-09-01T10:00:00Z")
+    r = log_df.iloc[0]
+    assert (r["season_avg"], r["recent_form"], r["model_sigma"], r["games_used"], r["league_avg"]) == (
+        270.0, 280.0, 30.0, 5, 250.0)
+    print("PASS: scenario_1d_model_components_logged_at_flag_time")
+
+
 def scenario_2_new_flag_without_consensus():
     pp_row = _base_row(game_id="game_solo")
     estimates_df = pd.DataFrame([pp_row])
@@ -472,6 +508,9 @@ def run_all():
     clv_logger.log = clv_logger.setup_logging()
 
     scenario_1_new_flag_with_consensus()
+    scenario_1b_consensus_matches_across_different_game_ids()
+    scenario_1c_ambiguous_consensus_is_not_matched()
+    scenario_1d_model_components_logged_at_flag_time()
     scenario_2_new_flag_without_consensus()
     scenario_3_below_threshold_not_flagged()
     scenario_4_refresh_open_flag_line_moves()
@@ -487,7 +526,7 @@ def run_all():
     scenario_12_props_betmgm_selection_id_collision()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 14 scenarios passed.")
+    print("\nAll 17 scenarios passed.")
 
 
 if __name__ == "__main__":

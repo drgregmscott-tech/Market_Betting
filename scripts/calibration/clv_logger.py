@@ -295,6 +295,14 @@ CLV_LOG_COLUMNS_PICKEM = [
     "last_seen_at", "last_seen_line", "last_seen_implied_prob", "status",
     "closing_line", "closing_implied_prob", "closing_pulled_at", "line_moved",
     "clv_edge_at_close",
+    # SESSION 2.52 -- model components at flag time, so any sigma / blend /
+    # shrinkage configuration can be re-scored on this flag later. Before
+    # this, they lived only in output/estimation/ snapshots, and only about
+    # 45% of graded legs still had one (CI commits latest.csv only). Written
+    # once, when the flag is first logged. model_sigma is the value in force
+    # then (raw sigma times that day's calibration factor). Blank for flags
+    # logged before this column existed.
+    "season_avg", "recent_form", "model_sigma", "games_used", "league_avg",
 ]
 
 WEATHER_EXTRA_COLUMNS = [
@@ -655,6 +663,11 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "closing_pulled_at": None,
             "line_moved": None,
             "clv_edge_at_close": None,
+            "season_avg": row.get("season_avg"),  # Session 2.52
+            "recent_form": row.get("recent_form"),
+            "model_sigma": row.get("model_sigma"),
+            "games_used": row.get("games_used"),
+            "league_avg": row.get("league_avg"),
         })
 
     if new_rows:
