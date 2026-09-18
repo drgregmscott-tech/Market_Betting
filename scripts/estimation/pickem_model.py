@@ -1202,6 +1202,37 @@ def compute_nfl_injury_status(
 
 
 # ---------------------------------------------------------------------------
+# SESSION 2.46 -- NFL game-time wind. See pickem_sport_plugins/nfl.py for the
+# research and the factor table. Returns (roof, wind_mph, temp_f); wind and
+# temp are None for dome/closed/unknown roofs, unknown stadiums, past the
+# forecast window, or any fetch failure -- which means no adjustment.
+# ---------------------------------------------------------------------------
+def compute_nfl_weather(
+    row: dict,
+    venue_df: Optional[pd.DataFrame],
+    forecast_cache: dict[tuple[str, str], Optional[tuple[float, float]]],
+) -> tuple[Optional[str], Optional[float], Optional[float]]:
+    matchup = row.get("game_matchup")
+    kickoff = row.get("game_start_time")
+    if venue_df is None or not isinstance(matchup, str) or "@" not in matchup:
+        return None, None, None
+    away_label, _, home_label = matchup.partition("@")
+    venue = nfl_plugin_module.find_nfl_game_venue(venue_df, away_label.strip(), home_label.strip())
+    if venue is None or not isinstance(venue["roof"], str):
+        return None, None, None
+    coords = nfl_plugin_module.STADIUM_COORDS.get(str(venue["stadium_id"]))
+    if venue["roof"] != "outdoors" or coords is None or not isinstance(kickoff, str):
+        return venue["roof"], None, None
+    key = (str(venue["stadium_id"]), kickoff)
+    if key not in forecast_cache:
+        forecast_cache[key] = nfl_plugin_module.fetch_kickoff_weather(coords[0], coords[1], kickoff)
+    forecast = forecast_cache[key]
+    if forecast is None:
+        return venue["roof"], None, None
+    return venue["roof"], forecast[0], forecast[1]
+
+
+# ---------------------------------------------------------------------------
 # Main per-row processing
 # ---------------------------------------------------------------------------
 def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
@@ -1223,6 +1254,8 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     league_avg_cache: dict[tuple[str, str], Optional[float]] = {}
     prior_stats_cache: dict[str, pd.DataFrame] = {}  # Session 2.44 follow-up v3
     nfl_injury_cache: dict[str, Optional[pd.DataFrame]] = {}  # Session 2.45, loaded once per run
+    nfl_venue_cache: dict[str, Optional[pd.DataFrame]] = {}  # Session 2.46
+    nfl_forecast_cache: dict[tuple[str, str], Optional[tuple[float, float]]] = {}  # Session 2.46
 
     def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
         if plugin.name not in stats_cache:
@@ -1244,6 +1277,10 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         # existing model columns).
         row["mlb_starter_status"] = None
         row["nfl_injury_status"] = None  # Session 2.45
+        row["weather_roof"] = None  # Session 2.46
+        row["weather_wind_mph"] = None
+        row["weather_temp_f"] = None
+        row["weather_factor"] = None
         sport = str(row.get("sport") or "").strip().lower()
         plugin = plugin_for_sport(sport)
 
@@ -1305,6 +1342,17 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
                 row, player_id, nfl_injury_cache["injuries"], nfl_injury_cache["schedule"]
             )
 
+        weather_factor = 1.0
+        if plugin.name == "nfl":  # Session 2.46
+            if "venues" not in nfl_venue_cache:
+                nfl_venue_cache["venues"] = nfl_plugin_module.fetch_nfl_schedule_with_venues(season)
+            roof, wind_mph, temp_f = compute_nfl_weather(
+                row, nfl_venue_cache["venues"], nfl_forecast_cache
+            )
+            row["weather_roof"], row["weather_wind_mph"], row["weather_temp_f"] = roof, wind_mph, temp_f
+            weather_factor = nfl_plugin_module.wind_factor(row.get("resolved_stat_key"), wind_mph)
+            row["weather_factor"] = weather_factor
+
         series = build_stat_series(plugin, stats_df, player_id, kind, value)
         if len(series) < MIN_GAMES_FOR_ESTIMATE:
             row["model_status"] = "insufficient_history"
@@ -1349,6 +1397,8 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         model_mean, prior_weight = apply_prior_season_blend(
             model_mean, len(series), prior_season_mean
         )
+
+        model_mean *= weather_factor  # Session 2.46: 1.0 unless windy outdoor NFL game
 
         sigma = sample_sigma(series, model_mean)
         if sigma == sigma:  # NaN-safe: NaN sigma stays NaN, prob_over() handles it

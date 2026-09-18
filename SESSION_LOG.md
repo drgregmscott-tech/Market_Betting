@@ -15485,3 +15485,42 @@ follow-up's open items named.
 - No frontend badge yet (MLB has one). Add if the human wants it visible.
 - Only the injury report is used. Depth-chart/role changes (a healthy player losing snaps) are not covered.
 - Non-NFL sports (NBA, NHL) not covered.
+
+
+## Session 2.46 — Weather (Wind) as a Model Input for Outdoor NFL Games
+
+**Date completed:** 2026-09-18
+
+**Status:** Built and switched ON for four wind-sensitive stats, only for windy outdoor games. pytest 114/114.
+
+**What this is (plain terms):** Strong wind makes passing harder. The estimation run (`pickem_model.py`, automatic, every pipeline run) now looks up the forecast wind at each outdoor NFL game. If wind at mid-game is 15 mph or more, it multiplies the model's mean for four stats by a fixed factor before it computes the over/under probability. Before this, a prop for a 25 mph wind game was scored as if the day were calm.
+
+**Data (checked live 2026-09-18):**
+- Forecast: free Open-Meteo API (`api.open-meteo.com/v1/forecast`), no key, 16-day horizon. Wind in mph, temperature in F, hourly. The run reads the hour of kickoff + 2 hours.
+- Roof and stadium: the nflverse schedule file (`nfldata games.csv`) already carries `roof` (outdoors / dome / closed / open) and `stadium_id` per game. Its `temp` and `wind` columns hold observed game-time weather for played games; the research used them.
+- Stadium coordinates: 20 outdoor stadiums hard-coded by `stadium_id` in `nfl.py`. Domes and retractable roofs have none on purpose.
+
+**Research (`scripts/calibration/research_nfl_weather_effect.py`):** 62,834 outdoor player-weeks, 2020-2025. Residual = actual minus the player's own mean of earlier games that season (3+ games). Fit on 2020-23, checked on 2024-25. Wind 15+ mph versus calm (<10):
+
+| Stat | Fit | Held-out |
+|---|---|---|
+| passing_yards | -14% | -18% |
+| completions | -10% | -14% |
+| receiving_yards | -11% | -18% |
+| receptions | -7% | -12% |
+
+Wind slopes were negative in both periods (t between -1.8 and -3.0 for the passing stats; t -2.1 to -3.0 for receiving yards). Not adjusted, because the data did not support it: `rushing_yards` (no consistent sign), `fg_made` (no wind slope; cold temperature only), `passing_tds` (real but noisy, zero-inflated, same caveat as Session 2.41), and temperature for all stats (mixed; cold is confounded with wind and late season). Wind 10-15 mph showed about no effect, so the threshold is 15.
+
+**Factors used** (`WIND_FACTOR_BY_STAT` in `nfl.py`): passing_yards 0.88, completions 0.90, receiving_yards 0.90, receptions 0.93. Set milder than measured because forecast wind is noisier than observed wind.
+
+**Dome vs outdoor:** only `roof == "outdoors"` gets a forecast. Dome, closed and open-retractable roofs get no adjustment. Live check: LV@LAC and NYG@LA (SoFi) returned `dome`; retractable-roof games returned blank (roof not yet set in the schedule file); outdoor games returned a real forecast.
+
+**New columns** (estimates file): `weather_roof`, `weather_wind_mph`, `weather_temp_f`, `weather_factor` (1.0 = no adjustment, blank = not resolved). `clv_logger.py` carries `weather_wind_mph` and `weather_factor` into the CLV log per flag (refreshed while open).
+
+**Files:** `scripts/estimation/pickem_sport_plugins/nfl.py`, `scripts/estimation/pickem_model.py` (`compute_nfl_weather`), `scripts/calibration/clv_logger.py`, `scripts/estimation/test_pickem_model.py` (1 new test; golden test mocks the venue fetch), golden fixture (4 new columns), new `research_nfl_weather_effect.py`.
+
+**Open items / caveats:**
+- No leg-level Brier check on graded 2026 legs yet (too few windy games graded). Windy games are about 8% of outdoor games; revisit after Week 6+ using the CLV log's `weather_factor`.
+- Underdog rows use full team names ("Packers @ Jets"), which the schedule lookup does not match, so they get no weather (same gap already exists for the injury status). PrizePicks rows work. Worth a team-name map in a later session.
+- The forecast is a snapshot at estimate time; wind can change before kickoff. Games more than 16 days out get blank.
+- Precipitation not tested (not in the schedule file); could be added from Open-Meteo history.

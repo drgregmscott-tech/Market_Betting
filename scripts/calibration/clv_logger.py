@@ -287,7 +287,7 @@ CLV_LOG_COLUMNS_PICKEM = [
     # as resolved_stat_key -- this file does not compute it. Always None
     # for every non-MLB or non-Underdog row (additive only, no other
     # column's meaning changed).
-    "mlb_starter_status", "nfl_injury_status", "odds_type", "allowed_wager_types", "game_id", "game_start_time",
+    "mlb_starter_status", "nfl_injury_status", "weather_wind_mph", "weather_factor", "odds_type", "allowed_wager_types", "game_id", "game_start_time",
     "flagged_side", "first_flagged_at", "first_flagged_line",
     "first_flagged_model_prob", "first_flagged_implied_prob", "first_flagged_edge",
     "consensus_available", "consensus_platform", "consensus_source_line_id",
@@ -581,6 +581,8 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
                 # latest real state, not a stale first-seen snapshot.
                 log_df.loc[flag_id, "mlb_starter_status"] = row.get("mlb_starter_status")
                 log_df.loc[flag_id, "nfl_injury_status"] = row.get("nfl_injury_status")  # Session 2.45
+                log_df.loc[flag_id, "weather_wind_mph"] = row.get("weather_wind_mph")  # Session 2.46
+                log_df.loc[flag_id, "weather_factor"] = row.get("weather_factor")
             # else: leave it alone -- it's not in present_flag_ids (either
             # unsupported_odds_type, or SESSION 2.36's own recorded side
             # is no longer buyable), so the close-on-disappearance pass
@@ -621,6 +623,8 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
             "resolved_stat_key": row.get("resolved_stat_key"),
             "mlb_starter_status": row.get("mlb_starter_status"),  # Session 2.32
             "nfl_injury_status": row.get("nfl_injury_status"),  # Session 2.45
+            "weather_wind_mph": row.get("weather_wind_mph"),  # Session 2.46
+            "weather_factor": row.get("weather_factor"),
             "odds_type": row.get("odds_type"),
             "allowed_wager_types": row.get("allowed_wager_types"),
             "game_id": row.get("game_id"),

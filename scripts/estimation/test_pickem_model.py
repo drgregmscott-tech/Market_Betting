@@ -317,7 +317,7 @@ def test_nfl_regression_matches_golden_snapshot():
     original_fetch = NFL_PLUGIN.fetch_stats
     NFL_PLUGIN.fetch_stats = fake_fetch
     try:
-        with mock.patch("pickem_model._load_isotonic_table", return_value={}),                 mock.patch("pickem_sport_plugins.nfl.fetch_injury_report", return_value=None),                 mock.patch("pickem_sport_plugins.nfl.fetch_nfl_schedule", return_value=None):
+        with mock.patch("pickem_model._load_isotonic_table", return_value={}),                 mock.patch("pickem_sport_plugins.nfl.fetch_injury_report", return_value=None),                 mock.patch("pickem_sport_plugins.nfl.fetch_nfl_schedule", return_value=None),                 mock.patch("pickem_sport_plugins.nfl.fetch_nfl_schedule_with_venues", return_value=None):
             result = process_props(props_fixture, season=2025)
     finally:
         NFL_PLUGIN.fetch_stats = original_fetch
@@ -1084,3 +1084,32 @@ def test_nfl_injury_status_buckets():
     assert compute_nfl_injury_status({"game_matchup": "bad"}, "p", injuries, schedule) is None
     assert compute_nfl_injury_status(row, "p", None, schedule) is None
     assert compute_nfl_injury_status({"game_matchup": "XXX @ YYY"}, "p", injuries, schedule) is None
+
+
+def test_nfl_weather_wind_factor_and_roof_gate():
+    """Session 2.46: only windy OUTDOOR games on wind-sensitive stats shrink."""
+    from pickem_model import compute_nfl_weather
+    from pickem_sport_plugins.nfl import wind_factor
+
+    assert wind_factor("passing_yards", 20.0) == 0.88
+    assert wind_factor("passing_yards", 14.9) == 1.0
+    assert wind_factor("rushing_yards", 30.0) == 1.0  # not wind-sensitive
+    assert wind_factor("passing_yards", None) == 1.0  # unknown -> no adjustment
+
+    venues = pd.DataFrame(
+        {
+            "away_team": ["DET", "MIA"], "home_team": ["BUF", "DAL"],
+            "roof": ["outdoors", "closed"], "stadium_id": ["BUF00", "DAL00"],
+        }
+    )
+    kickoff = "2026-09-20T13:00:00.000-04:00"
+    with mock.patch("pickem_sport_plugins.nfl.fetch_kickoff_weather", return_value=(22.0, 40.0)) as fetch:
+        cache: dict = {}
+        out = compute_nfl_weather({"game_matchup": "DET @ BUF", "game_start_time": kickoff}, venues, cache)
+        assert out == ("outdoors", 22.0, 40.0)
+        compute_nfl_weather({"game_matchup": "DET @ BUF", "game_start_time": kickoff}, venues, cache)
+        assert fetch.call_count == 1  # forecast cached per stadium+kickoff
+        # Closed roof: no forecast fetched, no adjustment.
+        assert compute_nfl_weather({"game_matchup": "MIA @ DAL", "game_start_time": kickoff}, venues, cache) == ("closed", None, None)
+        assert fetch.call_count == 1
+    assert compute_nfl_weather({"game_matchup": "DET @ BUF"}, None, {}) == (None, None, None)

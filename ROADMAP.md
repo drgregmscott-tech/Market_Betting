@@ -3445,24 +3445,18 @@ Session 2.33's own "measurement first, gating second" discipline).
 ---
 
 ### Session 2.46 — Weather as a Model Input (Outdoor Games)
-**Status:** Not started — lower priority than Sessions 2.42-2.44 (per the user's own
-prioritization, 2026-09-17; real research also places weather below EPA/pace/usage as a
-predictive driver).
+**Status:** ✅ Complete (2026-09-18) — see SESSION_LOG.md "Session 2.46". Wind adjustment ON for passing_yards, completions, receiving_yards, receptions at forecast wind >= 15 mph, outdoor games only.
 **Prerequisites:** None.
 
-**What this session does:** sources a real, free weather data API keyed to stadium
-location and real game time; correctly distinguishes dome/indoor games (where weather is
-irrelevant) from real outdoor games; checks real correlation between wind/precipitation/
-temperature and wind-sensitive stats specifically (passing yards, field-goal accuracy) on
-real graded legs; wires in only if a real, held-out-validated effect is found.
+**What this session did:** sourced the free Open-Meteo forecast API, used nflverse's `roof`/`stadium_id` to separate dome/closed/retractable games (no adjustment) from outdoor games, and tested wind/temperature against real 2020-2025 player stats with a fit (2020-23) / held-out (2024-25) split. Wind 15+ mph cut passing/receiving stats 7-18% in both periods; temperature, rushing, kicking and TDs showed no reliable effect and are not adjusted.
 
 **Validation (required to close session):**
-- [ ] Real, free, sourced weather data feed confirmed live.
-- [ ] Dome vs. outdoor games correctly distinguished (a wrong dome list would silently
-apply a real-weather adjustment to a game weather can't affect).
-- [ ] Real correlation/held-out check against wind-sensitive stats specifically, not a
-blanket assumption that weather matters uniformly.
-- [ ] Wired in only if validated.
+- [x] Real, free, sourced weather data feed confirmed live (Open-Meteo forecast; nflverse schedule for roof/stadium).
+- [x] Dome vs. outdoor games correctly distinguished (only `roof == "outdoors"` adjusted; live-checked).
+- [x] Real held-out check against wind-sensitive stats specifically (see table in SESSION_LOG.md).
+- [x] Wired in only where validated (4 stats, wind only).
+
+**Follow-ups:** leg-level Brier check on graded 2026 windy legs (Week 6+); team-name map so Underdog rows get weather/injury tags; optional precipitation test.
 
 ---
 

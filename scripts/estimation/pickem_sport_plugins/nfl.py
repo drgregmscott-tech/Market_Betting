@@ -278,3 +278,121 @@ def find_nfl_game_week(schedule: pd.DataFrame, away_label: str, home_label: str)
     if hit.empty:
         return None
     return int(hit.iloc[0]["week"])
+
+
+# ---------------------------------------------------------------------------
+# SESSION 2.46 -- NFL game-time weather (wind) adjustment.
+#
+# WHAT: strong wind makes passing harder. Research
+# (scripts/calibration/research_nfl_weather_effect.py, 2020-2025 outdoor
+# games, fit 2020-23, checked on 2024-25) found that when game-time wind is
+# 15 mph or more, passing yards, completions, receiving yards and receptions
+# fall about 10-18% below the calm-wind level, in BOTH the fit and the
+# held-out seasons. Temperature effects were weaker and mixed; kicking was
+# NOT wind-sensitive in the data; rushing showed no reliable effect. So only
+# the four wind-sensitive stats below are adjusted, only at wind >= 15 mph.
+# WHO/WHY: pickem_model.py multiplies its estimated mean by the factor, so a
+# windy-game prop is not scored as if the game were calm.
+# SOURCE: free Open-Meteo forecast API (no key). Stadium roof type and
+# stadium id come from the nflverse schedule file. Only roof == "outdoors"
+# games are adjusted; dome, closed and open-retractable games get NO
+# adjustment (weather cannot be trusted to act there).
+# Runs automatically inside every estimation run. Fail-safe: any failure
+# leaves the factor at 1.0 (no adjustment) -- never a guess.
+# ---------------------------------------------------------------------------
+OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+WEATHER_WIND_THRESHOLD_MPH = 15.0
+# Multiplier on the model mean when forecast wind >= threshold. Measured
+# effect vs calm (<10 mph), fit / held-out: passing_yards -14%/-18%,
+# completions -10%/-14%, receiving_yards -11%/-18%, receptions -7%/-12%.
+# Set slightly milder than measured because forecast wind is noisier than
+# the observed wind the research used.
+WIND_FACTOR_BY_STAT: dict[str, float] = {
+    "passing_yards": 0.88,
+    "completions": 0.90,
+    "receiving_yards": 0.90,
+    "receptions": 0.93,
+}
+
+# (latitude, longitude) by nflverse stadium_id, for OUTDOOR venues only.
+# Domes/retractables are omitted on purpose: no coordinates, no adjustment.
+STADIUM_COORDS: dict[str, tuple[float, float]] = {
+    "BAL00": (39.278, -76.623), "BOS00": (42.091, -71.264), "BUF00": (42.774, -78.787),
+    "CAR00": (35.226, -80.853), "CHI98": (41.862, -87.617), "CIN00": (39.095, -84.516),
+    "CLE00": (41.506, -81.700), "DEN00": (39.744, -105.020), "GNB00": (44.501, -88.062),
+    "JAX00": (30.324, -81.637), "KAN00": (39.049, -94.484), "MIA00": (25.958, -80.239),
+    "NAS00": (36.166, -86.771), "NYC01": (40.814, -74.074), "PHI00": (39.901, -75.168),
+    "PIT00": (40.447, -80.016), "SEA00": (47.595, -122.332), "SFO01": (37.403, -121.970),
+    "TAM00": (27.976, -82.503), "WAS00": (38.908, -76.864),
+}
+
+_VENUE_FIELDS = ["gameday", "gametime", "roof", "stadium_id"]
+
+
+def fetch_nfl_schedule_with_venues(season: int) -> "pd.DataFrame | None":
+    """Schedule with venue fields (roof, stadium id, date, time), or None."""
+    try:
+        df = pd.read_csv(
+            SCHEDULE_URL,
+            usecols=["season", "week", "game_type", "away_team", "home_team"] + _VENUE_FIELDS,
+        )
+    except Exception:  # noqa: BLE001
+        return None
+    df = df[(df["season"] == season) & (df["game_type"] == "REG")].copy()
+    df["away_team"] = df["away_team"].map(normalize_nfl_team)
+    df["home_team"] = df["home_team"].map(normalize_nfl_team)
+    return df
+
+
+def find_nfl_game_venue(
+    schedule: pd.DataFrame, away_label: str, home_label: str
+) -> "dict | None":
+    """Roof and stadium id of the scheduled game, or None if not found."""
+    away, home = normalize_nfl_team(away_label), normalize_nfl_team(home_label)
+    hit = schedule[(schedule["away_team"] == away) & (schedule["home_team"] == home)]
+    if hit.empty:
+        return None
+    first = hit.iloc[0]
+    return {"roof": first.get("roof"), "stadium_id": first.get("stadium_id")}
+
+
+def fetch_kickoff_weather(
+    lat: float, lon: float, kickoff_iso: str
+) -> "tuple[float, float] | None":
+    """(wind_mph, temp_f) forecast for kickoff plus two hours (mid-game), or
+    None on any failure or if the game is past the forecast window.
+    `kickoff_iso` carries its own UTC offset."""
+    try:
+        import requests
+
+        kickoff = pd.Timestamp(kickoff_iso)
+        if kickoff.tzinfo is None:
+            return None
+        target = (kickoff + pd.Timedelta(hours=2)).tz_convert("UTC").floor("h")
+        resp = requests.get(
+            OPEN_METEO_FORECAST_URL,
+            params={
+                "latitude": lat, "longitude": lon,
+                "hourly": "wind_speed_10m,temperature_2m",
+                "wind_speed_unit": "mph", "temperature_unit": "fahrenheit",
+                "timezone": "UTC", "forecast_days": 16,
+            },
+            timeout=15,
+        )
+        resp.raise_for_status()
+        hourly = resp.json()["hourly"]
+        idx = hourly["time"].index(target.strftime("%Y-%m-%dT%H:00"))
+        wind, temp = hourly["wind_speed_10m"][idx], hourly["temperature_2m"][idx]
+        if wind is None or temp is None:
+            return None
+        return float(wind), float(temp)
+    except Exception:  # noqa: BLE001 -- fault-isolated, factor stays 1.0
+        return None
+
+
+def wind_factor(resolved_stat_key: object, wind_mph: "float | None") -> float:
+    """Multiplier for the model mean. 1.0 unless wind >= threshold and the
+    stat is one of the wind-sensitive ones."""
+    if wind_mph is None or wind_mph < WEATHER_WIND_THRESHOLD_MPH:
+        return 1.0
+    return WIND_FACTOR_BY_STAT.get(str(resolved_stat_key), 1.0)
