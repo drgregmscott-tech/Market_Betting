@@ -3474,6 +3474,28 @@ Session 2.33's own "measurement first, gating second" discipline).
 - [x] Held-out validation built and run (single split and rolling-origin, game-clustered paired tests).
 - [ ] Re-run after more game days; decide a minimum-leg rule for per-stat overrides; give p_baseOnBalls, p_earnedRuns and pitcher fs a per-stat factor or restore their isotonic tables when data allows.
 
+
+### Session 2.49 -- Consensus Signal: Match Key Fixed
+**Status:** Partial (2026-09-18). The consensus fields were never populated (all 75,848 logged flags had `consensus_available` False), because the match key used a per-platform `game_id`. Key is now player + stat + sport, unique on both platforms. Fixed going forward only.
+- [x] Match key fixed; regression test added (Session 2.52).
+- [ ] After a few hundred graded flags carry consensus: test whether agreement with the model's side predicts outcomes (audit loader, game-clustered intervals). Decide on a backfill from `data/pickem/normalized/`.
+
+### Session 2.50 -- Held-Out Test of Per-Sport Blend Weights
+**Status:** Complete (2026-09-18). No constant changed. Per-sport weight vs pooled: -0.00015 Brier, SE 0.00022. Soccer's train-fit weight of 0.0 was significantly worse held-out.
+- [x] `validate_per_sport_blend.py` built and run.
+- [ ] Re-run when NFL and FIFA legs reach the test blocks (NFL from about Week 4-6).
+
+### Session 2.51 -- Sigma Follow-Ups
+**Status:** Complete for what the data allows (2026-09-18). Added held-out-validated overrides `p_baseOnBalls` 0.85 and `p_earnedRuns` 1.0. `pitcher fs` left on global (unstable, no gain). Minimum-leg rule (100 legs plus held-out check) written into the constants table.
+- [ ] After about a week of new game days: re-run `validate_sigma_held_out.py`; decide on p_strikes, triples, foulsCommitted, p_numberOfPitches.
+
+### Session 2.52 -- Isotonic Upkeep and Snapshot Retention
+**Status:** Complete (2026-09-18). Model components now stored on each flag in `clv_log.csv`. Isotonic re-checks and the flag-volume watch have no data yet.
+- [x] `season_avg`, `recent_form`, `model_sigma`, `games_used`, `league_avg` logged at flag time.
+- [ ] Re-check p_hits, p_earnedRuns, p_baseOnBalls, pitcher fs at 200+ joined legs (134-150 today).
+- [ ] Watch flag volume on the stats dropped from isotonic once pipeline runs after Session 2.47 exist.
+- [ ] Update the fit and validation loaders to use the logged components (fall back to snapshots for older flags).
+
 ---
 
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
