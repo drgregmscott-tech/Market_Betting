@@ -3425,8 +3425,7 @@ SESSION_LOG.md's "Session 2.44 follow-up v2" entry).
 ---
 
 ### Session 2.45 — Injury/Role Confirmation Beyond MLB (NFL and Other Sports)
-**Status:** Not started — lower priority than Sessions 2.42-2.44 (per the user's own
-prioritization, 2026-09-17).
+**Status:** ⚠️ Built 2026-09-18; live validation window OPEN (deliberately not closed) — see SESSION_LOG.md "Session 2.45".
 **Prerequisites:** Sessions 2.32/2.33 (MLB's starter/lineup-confirmation gate) as the
 existing precedent to extend, including Session 2.33's live-validation-window pattern
 (measure real win-rate-by-bucket over time before gating on it, not just build and trust).
@@ -3438,9 +3437,9 @@ status: confirmed / different-than-expected / not-yet-confirmed), then opens a l
 validation window (Session 2.33's pattern) rather than gating on it immediately.
 
 **Validation (required to close session):**
-- [ ] Real, free, sourced NFL injury/inactive data feed confirmed live.
-- [ ] Confirmation-status gate built, mirroring the MLB pattern's naming/shape.
-- [ ] Live validation window explicitly opened, not closed in this same session (matching
+- [x] Real, free, sourced NFL injury/inactive data feed confirmed live.
+- [x] Confirmation-status gate built, mirroring the MLB pattern's naming/shape.
+- [x] Live validation window explicitly opened, not closed in this same session (matching
 Session 2.33's own "measurement first, gating second" discipline).
 
 ---

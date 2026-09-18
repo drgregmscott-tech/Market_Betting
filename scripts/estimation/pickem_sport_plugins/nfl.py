@@ -207,3 +207,74 @@ NFL_PLUGIN = SportPlugin(
     computed_stat_types=COMPUTED_STAT_TYPES,
     computed_required_columns=COMPUTED_REQUIRED_COLUMNS,
 )
+
+
+# ---------------------------------------------------------------------------
+# SESSION 2.45 -- NFL injury-report confirmation signal (informational only).
+#
+# WHAT: nflverse republishes the NFL's official weekly injury report (the
+# list each team must file for every game: practice level Wed-Fri, plus a
+# final game status of Questionable / Doubtful / Out) as a free CSV. No API
+# key. Checked live 2026-09-18: 2026 file had weeks 1-2, 2025 had full season.
+# WHO/WHY: pickem_model.py uses it to tag each NFL prop with a status, the
+# same idea as MLB's `mlb_starter_status` (Session 2.32): the model only
+# knows season averages, but the platform's own line may already price in
+# that a player is hurt.
+# Runs automatically inside every estimation run. Fail-safe: any fetch
+# error returns None and the status stays blank -- never a guess.
+# ---------------------------------------------------------------------------
+INJURY_REPORT_URL_TEMPLATE = NFLVERSE_BASE_URL + "/injuries/injuries_{season}.csv"
+SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
+
+# Team-code spellings differ between platforms, the schedule, and injuries.
+NFL_TEAM_ALIASES: dict[str, str] = {
+    "LAR": "LA", "JAC": "JAX", "WSH": "WAS", "OAK": "LV", "LVR": "LV",
+    "SD": "LAC", "STL": "LA", "ARZ": "ARI", "BLT": "BAL", "CLV": "CLE",
+    "HST": "HOU", "SL": "LA", "NWE": "NE", "GNB": "GB", "KAN": "KC",
+    "NOR": "NO", "SFO": "SF", "TAM": "TB",
+}
+
+
+def normalize_nfl_team(code: object) -> str:
+    """Upper-cases a team code and maps known alternate spellings to the
+    nflverse spelling. Returns "" for non-strings."""
+    if not isinstance(code, str):
+        return ""
+    cleaned = code.strip().upper()
+    return NFL_TEAM_ALIASES.get(cleaned, cleaned)
+
+
+def fetch_injury_report(season: int) -> "pd.DataFrame | None":
+    """One season of the NFL weekly injury report, or None on any failure."""
+    try:
+        df = pd.read_csv(INJURY_REPORT_URL_TEMPLATE.format(season=season))
+    except Exception:  # noqa: BLE001 -- fault-isolated, status stays blank
+        return None
+    required = {"team", "week", "gsis_id", "report_status", "game_type"}
+    if not required.issubset(df.columns):
+        return None
+    df = df[df["game_type"] == "REG"].copy()
+    df["team"] = df["team"].map(normalize_nfl_team)
+    return df
+
+
+def fetch_nfl_schedule(season: int) -> "pd.DataFrame | None":
+    """One season of the NFL schedule (week + teams), or None on failure."""
+    try:
+        df = pd.read_csv(SCHEDULE_URL, usecols=["season", "week", "game_type", "away_team", "home_team"])
+    except Exception:  # noqa: BLE001
+        return None
+    df = df[(df["season"] == season) & (df["game_type"] == "REG")].copy()
+    df["away_team"] = df["away_team"].map(normalize_nfl_team)
+    df["home_team"] = df["home_team"].map(normalize_nfl_team)
+    return df
+
+
+def find_nfl_game_week(schedule: pd.DataFrame, away_label: str, home_label: str) -> "int | None":
+    """Week number of the scheduled game between these two teams, or None.
+    Two teams meet at most once per regular season in nearly all cases."""
+    away, home = normalize_nfl_team(away_label), normalize_nfl_team(home_label)
+    hit = schedule[(schedule["away_team"] == away) & (schedule["home_team"] == home)]
+    if hit.empty:
+        return None
+    return int(hit.iloc[0]["week"])

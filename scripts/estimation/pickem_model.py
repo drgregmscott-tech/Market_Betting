@@ -363,6 +363,7 @@ import pandas as pd
 
 from pickem_sport_plugins import SportPlugin, plugin_for_sport
 from pickem_sport_plugins import mlb as mlb_plugin_module
+from pickem_sport_plugins import nfl as nfl_plugin_module
 from season_utils import current_pickem_season
 
 # ---------------------------------------------------------------------------
@@ -1151,6 +1152,56 @@ def compute_mlb_starter_status(
 
 
 # ---------------------------------------------------------------------------
+# SESSION 2.45 -- NFL injury-report confirmation status (informational only,
+# same shape and names as MLB's mlb_starter_status). Does NOT change any
+# edge or probability. A live validation window is open: read win rate by
+# status from the CLV/outcome logs before anyone gates on it (Session 2.33's
+# "measure first, gate second" rule).
+#   confirmed              final game-status report is out, player not
+#                          listed as Out/Doubtful/Questionable
+#   different_than_expected player is listed Out or Doubtful
+#   not_yet_confirmed      no final game statuses filed yet for that team's
+#                          week, or the player is Questionable
+#   None                   could not resolve the prop to a real game/report
+# ---------------------------------------------------------------------------
+NFL_INJURY_STATUS_CONFIRMED = "confirmed"
+NFL_INJURY_STATUS_DIFFERENT = "different_than_expected"
+NFL_INJURY_STATUS_NOT_YET_CONFIRMED = "not_yet_confirmed"
+
+
+def compute_nfl_injury_status(
+    row: dict,
+    player_id: str,
+    injury_df: Optional[pd.DataFrame],
+    schedule_df: Optional[pd.DataFrame],
+) -> Optional[str]:
+    """See the SESSION 2.45 block comment above. `player_id` is the nflverse
+    gsis id, which is also the injury report's `gsis_id`."""
+    if injury_df is None or schedule_df is None:
+        return None
+    matchup = row.get("game_matchup")
+    if not isinstance(matchup, str) or "@" not in matchup:
+        return None
+    away_label, _, home_label = matchup.partition("@")
+    week = nfl_plugin_module.find_nfl_game_week(schedule_df, away_label.strip(), home_label.strip())
+    if week is None:
+        return None
+    teams = {
+        nfl_plugin_module.normalize_nfl_team(away_label),
+        nfl_plugin_module.normalize_nfl_team(home_label),
+    }
+    week_rows = injury_df[(injury_df["week"] == week) & (injury_df["team"].isin(teams))]
+    if week_rows.empty or week_rows["report_status"].notna().sum() == 0:
+        return NFL_INJURY_STATUS_NOT_YET_CONFIRMED
+    mine = week_rows[week_rows["gsis_id"] == player_id]["report_status"].dropna()
+    if mine.empty:
+        return NFL_INJURY_STATUS_CONFIRMED
+    if set(mine) & {"Out", "Doubtful"}:
+        return NFL_INJURY_STATUS_DIFFERENT
+    return NFL_INJURY_STATUS_NOT_YET_CONFIRMED
+
+
+# ---------------------------------------------------------------------------
 # Main per-row processing
 # ---------------------------------------------------------------------------
 def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
@@ -1171,6 +1222,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     # stat only computes the league average for it once, not once per row.
     league_avg_cache: dict[tuple[str, str], Optional[float]] = {}
     prior_stats_cache: dict[str, pd.DataFrame] = {}  # Session 2.44 follow-up v3
+    nfl_injury_cache: dict[str, Optional[pd.DataFrame]] = {}  # Session 2.45, loaded once per run
 
     def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
         if plugin.name not in stats_cache:
@@ -1191,6 +1243,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         # applied the same way _blank_model_fields() already does for the
         # existing model columns).
         row["mlb_starter_status"] = None
+        row["nfl_injury_status"] = None  # Session 2.45
         sport = str(row.get("sport") or "").strip().lower()
         plugin = plugin_for_sport(sport)
 
@@ -1242,6 +1295,14 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         if plugin.name == "mlb" and row.get("platform") == "underdog":
             row["mlb_starter_status"] = compute_mlb_starter_status(
                 row, player_id, mlb_schedule_cache, mlb_lineup_cache
+            )
+
+        if plugin.name == "nfl":  # Session 2.45
+            if not nfl_injury_cache:
+                nfl_injury_cache["injuries"] = nfl_plugin_module.fetch_injury_report(season)
+                nfl_injury_cache["schedule"] = nfl_plugin_module.fetch_nfl_schedule(season)
+            row["nfl_injury_status"] = compute_nfl_injury_status(
+                row, player_id, nfl_injury_cache["injuries"], nfl_injury_cache["schedule"]
             )
 
         series = build_stat_series(plugin, stats_df, player_id, kind, value)

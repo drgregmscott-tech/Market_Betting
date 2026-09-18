@@ -317,7 +317,7 @@ def test_nfl_regression_matches_golden_snapshot():
     original_fetch = NFL_PLUGIN.fetch_stats
     NFL_PLUGIN.fetch_stats = fake_fetch
     try:
-        with mock.patch("pickem_model._load_isotonic_table", return_value={}):
+        with mock.patch("pickem_model._load_isotonic_table", return_value={}),                 mock.patch("pickem_sport_plugins.nfl.fetch_injury_report", return_value=None),                 mock.patch("pickem_sport_plugins.nfl.fetch_nfl_schedule", return_value=None):
             result = process_props(props_fixture, season=2025)
     finally:
         NFL_PLUGIN.fetch_stats = original_fetch
@@ -1056,3 +1056,31 @@ def test_prior_season_blend_formula_and_missing_prior():
         assert weight == pytest.approx(0.5)
         assert blended == pytest.approx(70.0)
         assert pickem_model.apply_prior_season_blend(50.0, 4, None) == (50.0, 0.0)
+
+
+def test_nfl_injury_status_buckets():
+    """Session 2.45: confirmed / different_than_expected / not_yet_confirmed / None."""
+    from pickem_model import compute_nfl_injury_status
+
+    schedule = pd.DataFrame(
+        {"week": [2, 3], "away_team": ["DET", "MIA"], "home_team": ["BUF", "LAR"]}
+    )
+    schedule["home_team"] = schedule["home_team"].replace({"LAR": "LA"})
+    injuries = pd.DataFrame(
+        {
+            "week": [2, 2, 2],
+            "team": ["DET", "DET", "BUF"],
+            "gsis_id": ["p_out", "p_q", "p_other"],
+            "report_status": ["Out", "Questionable", None],
+        }
+    )
+    row = {"game_matchup": "DET @ BUF"}
+    assert compute_nfl_injury_status(row, "p_out", injuries, schedule) == "different_than_expected"
+    assert compute_nfl_injury_status(row, "p_q", injuries, schedule) == "not_yet_confirmed"
+    assert compute_nfl_injury_status(row, "p_healthy", injuries, schedule) == "confirmed"
+    # Week 3 has no report yet -> honest "don't know yet", not "confirmed".
+    assert compute_nfl_injury_status({"game_matchup": "MIA @ LAR"}, "p", injuries, schedule) == "not_yet_confirmed"
+    # Unresolvable inputs -> None, never a guess.
+    assert compute_nfl_injury_status({"game_matchup": "bad"}, "p", injuries, schedule) is None
+    assert compute_nfl_injury_status(row, "p", None, schedule) is None
+    assert compute_nfl_injury_status({"game_matchup": "XXX @ YYY"}, "p", injuries, schedule) is None

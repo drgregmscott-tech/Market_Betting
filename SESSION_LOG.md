@@ -15459,3 +15459,29 @@ follow-up's open items named.
 
 **v3 addendum (2026-09-18) -- leg-level line-vs-actual check with a 2024 blend.** `scripts/calibration/research_prior_blend_2024_check.py` (new). Uses the 395 graded NFL receiving_yards/receptions legs (scored off full-2025 history, avg 14.5 games), blends each player's 2024 per-game average in (320 legs had a 2024 prior), sigma fixed, Brier on the flagged side vs the real win/loss (no money involved). k fit on the earliest 70%, tested on the latest 30% (119 legs). Result: fitted k=4 (the same k the point-estimate backtest chose); held-out Brier 0.270144 -> 0.265589. receptions improved (0.2751 -> 0.2655, n=58); receiving_yards was flat (0.2654 -> 0.2656, n=61). Small sample, modest gain, and indirect evidence: it blends 2024 into a 2025-based mean, not 2025 into 2026 games as production will. It does support k=4 and the direction of the effect. Still to do before switching on: repeat on graded 2026-season legs (needs Week 3+, since MIN_GAMES_FOR_ESTIMATE=2). pytest unchanged (research-only).
 
+
+
+## Session 2.45 — NFL Injury/Role Confirmation Signal (Validation Window Opened)
+
+**Date completed:** 2026-09-18
+
+**Status:** Built and informational only. Live validation window is OPEN. No gating.
+
+**What this is (plain terms):** Each week, every NFL team files an official injury report. It lists players as Questionable, Doubtful or Out. The `nflverse` project republishes it as a free CSV (no key). The estimation run (`pickem_model.py`, automatic, every pipeline run) now tags each NFL prop with `nfl_injury_status`. It is the NFL twin of MLB's `mlb_starter_status` (Session 2.32). The model knows only season averages. The platform's line may already price in an injury. The tag shows when that could be true.
+
+**Data source (checked live 2026-09-18):** `github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.csv` (2026 file: weeks 1-2, 412 rows; 2025: full season, 6,068 rows). Player key `gsis_id` equals the `player_id` in the stats file, so no name matching is needed. Week comes from the free schedule file `nflverse/nfldata games.csv`, matched on the prop's "AWAY @ HOME" teams.
+
+**Statuses:** `confirmed` (final statuses filed for the team-week, player not listed), `different_than_expected` (Out or Doubtful), `not_yet_confirmed` (no final statuses filed yet, or Questionable), blank (game or report not resolvable, or fetch failed; never a guess).
+
+**Live check:** real week-2 Out players (DET) returned `different_than_expected`; an unlisted player in week 2 returned `confirmed`; week 3 returned `not_yet_confirmed`; all 32 injury-file team codes match the schedule.
+
+**Files:** `scripts/estimation/pickem_sport_plugins/nfl.py` (fetch + week lookup), `scripts/estimation/pickem_model.py` (`compute_nfl_injury_status`, new column), `scripts/calibration/clv_logger.py` (column carried into the CLV log, refreshed while a flag is open), `scripts/estimation/test_pickem_model.py` (1 new test; golden test now mocks the two network fetches), golden fixture (new empty column). pytest 113/113.
+
+**Validation window (open):** the CLV log now records `nfl_injury_status` per flag. Do not gate until graded NFL legs exist per bucket. Suggested rule (Session 2.33 pattern): compare win rate of `confirmed` vs `different_than_expected` vs `not_yet_confirmed` after about 100 graded legs per bucket.
+
+**Open items / caveats:**
+- Snapshot at estimate time: a flag's status is refreshed each run while open, but the logged value is the latest one before close.
+- The report has no snapshot of Wed/Thu/Fri changes; only the latest is served.
+- No frontend badge yet (MLB has one). Add if the human wants it visible.
+- Only the injury report is used. Depth-chart/role changes (a healthy player losing snaps) are not covered.
+- Non-NFL sports (NBA, NHL) not covered.
