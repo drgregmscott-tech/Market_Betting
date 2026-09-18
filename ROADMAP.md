@@ -3420,6 +3420,8 @@ from the first follow-up. Still not wired in — needs a real leg-level Brier fi
 this project's own graded legs, which does not exist yet for NFL beyond Week 1 2026 (see
 SESSION_LOG.md's "Session 2.44 follow-up v2" entry).
 
+**Follow-up v3 (2026-09-18):** backtested blending the prior season into the mean (k fit on 2023->2024, tested on 2024->2025): held-out RMSE fell ~25% for receiving_yards and ~25% for receptions. Wired into `pickem_model.py` OFF (`PRIOR_SEASON_STRENGTH_K = 0.0`, new columns `prior_season_mean`/`prior_season_weight`); switch on at k=4.0 after a leg-level Brier fit on graded 2026 legs. The continuity flag was not needed for the gain. See SESSION_LOG.md "Session 2.44 follow-up v3".
+
 ---
 
 ### Session 2.45 — Injury/Role Confirmation Beyond MLB (NFL and Other Sports)

@@ -1039,3 +1039,20 @@ if __name__ == "__main__":
         GOLDEN_PATH.parent.mkdir(parents=True, exist_ok=True)
         result.to_csv(GOLDEN_PATH, index=False)
         print(f"Wrote golden snapshot: {GOLDEN_PATH} ({len(result)} rows)")
+
+
+def test_prior_season_blend_is_noop_by_default():
+    import pickem_model
+
+    assert pickem_model.PRIOR_SEASON_STRENGTH_K == 0.0
+    assert pickem_model.apply_prior_season_blend(50.0, 3, 80.0) == (50.0, 0.0)
+
+
+def test_prior_season_blend_formula_and_missing_prior():
+    import pickem_model
+
+    with mock.patch.object(pickem_model, "PRIOR_SEASON_STRENGTH_K", 4.0):
+        blended, weight = pickem_model.apply_prior_season_blend(50.0, 4, 90.0)
+        assert weight == pytest.approx(0.5)
+        assert blended == pytest.approx(70.0)
+        assert pickem_model.apply_prior_season_blend(50.0, 4, None) == (50.0, 0.0)

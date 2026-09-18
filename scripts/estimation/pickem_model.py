@@ -763,6 +763,29 @@ def apply_shrinkage(
     return shrunk, weight
 
 
+PRIOR_SEASON_STRENGTH_K = 0.0  # Session 2.44 follow-up v3: OFF (clean no-op).
+# Backtest (scripts/calibration/research_prior_blend_backtest.py) fit k=4 on
+# 2023->2024 and cut held-out 2024->2025 RMSE for receiving_yards 33.8->25.3
+# and receptions 2.39->1.80 (weeks 2-4, continuity-reliable players). It is
+# NOT switched on because it needs a real leg-level Brier fit on graded 2026
+# legs first (none exist past Week 1). Set to 4.0 only after that fit.
+PRIOR_SEASON_STAT_KEYS = frozenset({"receiving_yards", "receptions"})  # NFL only
+
+
+def apply_prior_season_blend(
+    mean: float, n_games: int, prior_mean: Optional[float]
+) -> tuple[float, float]:
+    """Session 2.44 follow-up v3 -- blends the player's current mean toward
+    their own PRIOR-season per-game average of the same stat:
+    (n/(n+k))*mean + (k/(n+k))*prior_mean, k = PRIOR_SEASON_STRENGTH_K.
+    Returns (blended_mean, prior_weight); (mean, 0.0) exactly when the prior
+    is missing or k <= 0."""
+    if prior_mean is None or PRIOR_SEASON_STRENGTH_K <= 0:
+        return mean, 0.0
+    weight = PRIOR_SEASON_STRENGTH_K / (n_games + PRIOR_SEASON_STRENGTH_K)
+    return (1.0 - weight) * mean + weight * prior_mean, weight
+
+
 def sample_sigma(series: pd.Series, model_mean: float) -> float:
     """Sample standard deviation of the player's own game log for this
     stat. A floor proportional to the mean is applied only when exactly
@@ -1147,6 +1170,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
     # (plugin.name, resolved_stat_key) so a run with many props on the same
     # stat only computes the league average for it once, not once per row.
     league_avg_cache: dict[tuple[str, str], Optional[float]] = {}
+    prior_stats_cache: dict[str, pd.DataFrame] = {}  # Session 2.44 follow-up v3
 
     def get_stats_and_lookup(plugin: SportPlugin) -> tuple[pd.DataFrame, dict[str, str]]:
         if plugin.name not in stats_cache:
@@ -1245,6 +1269,26 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         league_avg = league_avg_cache[cache_key]
         model_mean, shrinkage_weight = apply_shrinkage(raw_model_mean, len(series), league_avg)
 
+        prior_season_mean: Optional[float] = None
+        if (
+            PRIOR_SEASON_STRENGTH_K > 0
+            and plugin.name == "nfl"
+            and row["resolved_stat_key"] in PRIOR_SEASON_STAT_KEYS
+        ):
+            if plugin.name not in prior_stats_cache:
+                try:
+                    prior_stats_cache[plugin.name] = plugin.fetch_stats(season - 1)
+                except RuntimeError:
+                    prior_stats_cache[plugin.name] = pd.DataFrame()
+            prior_df = prior_stats_cache[plugin.name]
+            if not prior_df.empty:
+                prior_series = build_stat_series(plugin, prior_df, player_id, kind, value)
+                if len(prior_series) > 0:
+                    prior_season_mean = season_average(prior_series)
+        model_mean, prior_weight = apply_prior_season_blend(
+            model_mean, len(series), prior_season_mean
+        )
+
         sigma = sample_sigma(series, model_mean)
         if sigma == sigma:  # NaN-safe: NaN sigma stays NaN, prob_over() handles it
             calibration_factor = SIGMA_CALIBRATION_FACTOR_BY_STAT.get(
@@ -1270,6 +1314,8 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["model_mean_pre_shrinkage"] = raw_model_mean
         row["league_avg"] = league_avg
         row["shrinkage_weight"] = shrinkage_weight
+        row["prior_season_mean"] = prior_season_mean
+        row["prior_season_weight"] = prior_weight
         row["model_mean"] = model_mean
         row["model_sigma"] = sigma
         row["games_used"] = len(series)
@@ -1320,6 +1366,8 @@ def _blank_model_fields() -> dict:
         "model_mean_pre_shrinkage": None,
         "league_avg": None,
         "shrinkage_weight": None,
+        "prior_season_mean": None,
+        "prior_season_weight": None,
         "model_mean": None,
         "model_sigma": None,
         "games_used": None,

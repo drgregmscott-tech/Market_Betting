@@ -15431,3 +15431,29 @@ follow-up's open items named.
   against a few more known 2025 in-season QB changes (e.g. any team with a real
   midseason benching) before being trusted as fully robust, beyond the Jefferson/Chase
   cases this pass happened to surface.
+
+---
+
+## Session 2.44 follow-up v3 — Prior-Season Blend Backtest, Wired In Switched Off
+
+**Date completed:** 2026-09-18
+
+**Status:** Complete. Backtest was clearly positive; the feature is wired into `pickem_model.py` but OFF (`PRIOR_SEASON_STRENGTH_K = 0.0`), pending a real leg-level Brier fit.
+
+**What was done:**
+1. `scripts/calibration/research_prior_blend_backtest.py` (new): predicts each qualifying receiver's real weeks 1-4 receiving_yards/receptions two ways -- the model's own style of estimate from current-season games only (0.95 season_avg + 0.05 recent_form), versus that estimate shrunk toward the player's own prior-season per-game average with weight k/(n+k). k was fit on 2023->2024 and evaluated unchanged on 2024->2025 (a true held-out season).
+2. Result (held-out, continuity-reliable players, weeks 2-4): receiving_yards RMSE 33.8 -> 25.3, receptions RMSE 2.39 -> 1.80. Week 1 (baseline = group mean): 31.7 -> 30.6 and 2.31 -> 2.28, a small gain. Fitted k = 4 (both groups).
+3. Honest finding: the continuity flag is NOT required for the gain. Non-reliable players also improved (pooled RMSE 22.2 -> 19.1 vs 24.0 -> 17.9 for reliable), with the same best k=4. The flag makes the gain larger, not possible. So the wiring does not gate on it.
+4. Wiring: `apply_prior_season_blend()`, `PRIOR_SEASON_STRENGTH_K` (0.0), `PRIOR_SEASON_STAT_KEYS` (receiving_yards, receptions, NFL only), two new output columns `prior_season_mean`, `prior_season_weight`. With k=0 nothing changes: model_mean is identical, and the prior season file is not even fetched.
+
+**Validation:** pytest 81/81 (2 new tests: default no-op; formula and missing-prior fallback). Golden fixture regenerated only to add the two new columns (all existing values unchanged).
+
+**Files:** `scripts/calibration/research_prior_blend_backtest.py` (new), `scripts/estimation/pickem_model.py`, `scripts/estimation/test_pickem_model.py`, `data/pickem/_test_fixtures/nfl_regression_golden.csv`.
+
+**Open items:**
+- Switch on (k=4.0) only after a leg-level Brier fit on graded 2026 NFL legs (needs Week 2+ games graded).
+- Week-1 props are still `insufficient_history` (MIN_GAMES_FOR_ESTIMATE=2), so the prior cannot help them until that gate is relaxed for players with a prior season -- a separate, deliberate change.
+- When switched on, this stacks with league-average shrinkage (Session 2.42) for these two stats; re-check for double-shrinking then.
+- The backtest measures point-estimate error, not probability calibration; sigma is not yet adjusted for the blended mean.
+- Rushing, TDs, and non-NFL sports were not tested and are not covered.
+
