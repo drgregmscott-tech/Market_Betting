@@ -15631,3 +15631,22 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 **Open items:**
 - After a few hundred graded flags carry consensus, run the audit loader split (consensus agrees with model side vs not), with game-clustered intervals. Note: clusters must use the flag's own `game_id`, which is fine within one platform.
 - Decide on a backfill.
+
+## Session 2.50 -- Held-Out Test of Per-Sport Blend Weights
+
+**Date completed:** 2026-09-18
+**Status:** Complete. No constant changed. Per-sport blend weights show no measurable gain.
+
+**What was done:** `scripts/calibration/validate_per_sport_blend.py` (new, re-runnable, reuses the loader from `validate_sigma_held_out.py`). It runs four rolling-origin folds. In each fold it fits, on train legs only, (a) one pooled blend weight and (b) one weight per sport with 100+ train legs. Each arm then refits its own global sigma factor. Per-stat factors are left out. Scoring uses Brier on the test legs with game-clustered standard errors.
+
+**Data:** 6,675 legs (MLB 4,894, NFL 1,293, SOCCER 245, FIFA 226, EPL 17). The pooled test set is 3,338 legs from 66 games, dated 2026-09-15 to 09-16.
+
+**Results:**
+- Pooled 0.22006, per-sport 0.21991, production (0.95, 2.681) 0.22083 in-sample. Per-sport minus pooled: -0.00015, SE 0.00022. Not distinguishable.
+- Train-fit weights per sport are stable across folds: MLB 0.95-1.0, NFL 0.9, FIFA 0.6. The pooled weight moves 0.85-0.95. So the sport differences are real in train, but they do not change held-out accuracy.
+- Soccer: the train-fit weight was 0.0 (season average ignored). On 127 test legs from 7 games this was worse than pooled by +0.0026, SE 0.0011. A per-sport weight fit on about 100-245 legs can hurt.
+- NFL and FIFA legs sit almost entirely in the train part. Only MLB (3,203 legs) and soccer (127) reach the test blocks, so the NFL and FIFA weights are untested held-out.
+
+**Decision:** Keep the pooled 0.95. MLB is 73% of legs and its best weight is near 1.0 anyway. The largest possible gain (0.0002 Brier) is inside the noise.
+
+**Open items:** Re-run when NFL and FIFA legs reach the test blocks (NFL from about Week 4-6). If a per-sport weight is ever adopted, require a minimum leg count at fit time (same rule as the sigma overrides).
