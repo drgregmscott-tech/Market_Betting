@@ -15552,3 +15552,32 @@ Wind slopes were negative in both periods (t between -1.8 and -3.0 for the passi
 - The four stats dropped only for sample size (p_hits, p_earnedRuns, p_baseOnBalls, pitcher fs) should be re-checked as more snapshot-joined legs accumulate; the refit script is designed to be re-run.
 - Any future change to sigma factors, blend weight or shrinkage k requires re-running this refit in the same change.
 - 6 of 12 previously covered stats now score Gaussian; flag volume on them will shift on the next pipeline run.
+
+## Session 2.33 -- MLB Starter/Lineup Confirmation Signal: Live Validation (first read)
+
+**Date completed:** 2026-09-18
+**Status:** Complete with the window left open. First real read: no-go on gating flags by `mlb_starter_status`. The signal is confounded with flag staleness, and the sample is about 3.5 game days.
+
+**What was done:** `scripts/calibration/report_mlb_starter_status_validation.py` (new, re-runnable). It joins graded Underdog MLB legs carrying a status to their own real breakeven, dedupes per market, grades against the closing line, and uses game-clustered intervals (same loader as the Session 2.37 audit).
+
+**Per-bucket result (3,564 legs, 36 distinct games, game dates 2026-09-15 to 2026-09-18):**
+- confirmed: n=1,926 (22 games), win 42.8% vs breakeven 41.4%, +1.4pp, cluster CI [38.9, 46.8], inconclusive.
+- not_yet_confirmed: n=1,615 (36 games), 38.8% vs 42.5%, -3.7pp, CI [35.4, 42.2], below breakeven. By side: overs 32.9% vs 41.2% (-8.3pp, below); unders 59.2% vs 47.2% (+12.0pp, above).
+- different_than_expected: n=23 across 3 games, 21.7%, CI [-5.4, 48.9]. Not enough evidence.
+- Same-window Underdog MLB legs with no status: 47.8% vs 45.8%, inconclusive.
+
+**Why the bucket gap is not evidence about lineups:** `mlb_starter_status` is the value logged when a flag was last seen on the board, and MLB posts lineups roughly 1-3 hours before first pitch. A flag that left the board earlier can only show not_yet_confirmed. Median hours between last seen and first pitch: confirmed 0.9, not_yet_confirmed 4.4 (max 16.9). Splitting all legs by that staleness instead of by status:
+- Overs: 41-42% win at 0-1.5h (breakeven about 40%), 38.5% at 1.5-3h, 25.8% at 3-6h (-16.5pp, below), 34.6% at over 6h (-5.8pp, below).
+- Unders: 67.1% at 3-6h (+19.3pp) and 55.8% at over 6h (+10.7pp), both above breakeven.
+- The only band where both buckets exist in volume is 1.5-3h overs: confirmed 38.6%, not_yet_confirmed 39.4%. They are indistinguishable there.
+So the observed gap comes from flags that left the board 3+ hours before first pitch, and status cannot be separated from that with this data.
+
+**Sample-size statement:** not enough to act on. The effective sample is 36 games, the earliest-graded days are partial (day games grade first), and the third bucket has 23 legs.
+
+**Decision:** no gating on `mlb_starter_status`, and no follow-up gating session on lineup status alone. Two follow-ups instead:
+1. A different, testable hypothesis: flags that leave the board 3+ hours before first pitch behave differently (overs lose, unders win). It could reflect line movement after news, a stale-flag selection effect, or noise from a short window. Re-run this report after roughly 10 game days; a claim needs the pattern to hold within side and to survive game-level clustering.
+2. Betting relevance: a leg that left the board 4 hours early was bettable only earlier, at that line. Any use of this pattern must be a rule on a live, currently visible flag, not on a fact known only after it closed.
+
+**Correction to note:** the earlier interim read (this conversation) that not_yet_confirmed "supports gating out" was premature; the staleness split shows why.
+
+**Open items:** re-run the report as days accumulate; the staleness pattern and the different_than_expected bucket both need more games.

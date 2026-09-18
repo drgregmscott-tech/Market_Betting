@@ -2879,7 +2879,7 @@ NFL's 924, per Session 2.31) — NFL/other sports explicitly out of scope this s
   silently break the match for that one team until `MLB_TEAM_ID_TO_NICKNAME` is updated by hand.
 
 ### Session 2.33 — MLB Starter/Lineup Confirmation Signal: Live Validation Window
-**Status:** Not started
+**Status:** First read complete (2026-09-18), window stays open — no-go on gating by status: it is confounded with how early a flag left the board; see SESSION_LOG.md Session 2.33. Re-run `scripts/calibration/report_mlb_starter_status_validation.py` after ~10 game days.
 **Prerequisites:** Session 2.32 (the `mlb_starter_status` column this session evaluates must exist
 and be flowing into `data/pickem/clv_log.csv` first).
 
