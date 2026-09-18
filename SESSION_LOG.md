@@ -15709,3 +15709,25 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 **Decision:** No gating, no code change. Re-run both `report_mlb_starter_status_validation.py` and this flag-time split after about 10 game days. A claim needs the same direction within side, survival under game clustering, and a band definition fixed in advance. This check is not saved as a script yet; the logic is short and should join the report when the window closes.
 
 **Open items:** as above; the different_than_expected bucket (23 legs) is still too small.
+
+## Session 2.54 -- weekly_review Tests, Post-Fit Drift Check, and an Isotonic Out-of-Range Bug
+
+**Date completed:** 2026-09-18
+**Status:** Complete. One model bug fixed. Demon/Goblin payout question is open (see below).
+
+**1. Tests for `weekly_review.py`:** `scripts/calibration/test_weekly_review.py` (new, 16 tests, pytest). It covers the calibration-gap, post-fit (fit-time filter from Session 2.41e), edge-threshold and recommendation logic, and `run_review()` end to end on temporary files. It never touches the real logs. Full suite: 134 pass.
+
+**2. Post-fit drift check (read-only; `--run` was not used because it appends a permanent row to `review_log.csv`):** All-time gap +4.6pp. Legs FLAGGED since the sigma fit (2026-09-17 16:21 UTC): 837, gap +11.0pp, game-clustered SE 2.2pp, above the 3pp threshold. All 837 come from ONE pipeline run (flag time 16:57:50 UTC, 16 games), so this is one batch, not a trend. Cause: `homeRuns`, 77 legs, stated 83.3%, won 6.5%. Excluding it, the post-fit gap is +4.4pp. No shrinkage-fit legs exist yet (fit 17:33 UTC, none flagged since).
+
+**3. Bug found: isotonic tables applied outside their fitted range.** `isotonic_calibrate()` in `pickem_model.py` calibrates each side's raw probability with a table that was fit on FLAGGED-side legs only. The lowest fitted z is not low: homeRuns 0.13 (a raw probability of 55%), stolenBases 0.25, doubles -0.18. A raw probability below that range fell into the first block and took its value:
+- homeRuns: every prop got prob_over 0.8333 (the older table) or 0.5 (the 2.47 table). 544 of 544 homeRuns rows on the 9/18 run. Result: 77 graded over flags on a 0.5 line, 5 wins.
+- stolenBases: 0.654 for every raw probability. On the latest run, 225 over flags at a raw probability of about 25%.
+- doubles: 0.5 for every raw probability. Several others returned 0.000 at low raw probabilities.
+The flag-time loss is confined to legs on the unflagged side of these stats; the flagged-side (mostly under) legs were fine (homeRuns pre-fit: 765 legs, stated 82%, won 89%).
+**Fix:** below the table's lowest fitted `z_lo`, `isotonic_calibrate()` now returns None and the caller keeps the Gaussian value. Above the range the last block still clamps. Replay on the latest estimates file with the committed table: stolenBases over flags 225 to 0; all other stats within 2 flags. 3 regression tests added, including one over every committed table. No isotonic refit is needed.
+**Not fixed, noted:** several tables end in blocks at calibrated_prob 1.000 (homeRuns: 0.955 and above). A calibrated probability of 1.0 is an in-sample artifact and implies an infinite edge. Needs a cap or a smoothed top block, validated held-out.
+**Correction to Session 2.47/2.40 read:** the held-out validation of the isotonic tables scored flagged-side legs only, so it could not see this failure.
+
+**4. Demon/Goblin payouts (open):** the user supplied https://heatcheckhq.io/blog/prizepicks-demons-goblins-explained as a general rule. Its Power Play table (third-party, treated as data): all-Standard 2/3/4/5/6-pick = 3/5/10/20/25x; 1 Demon mixed about 3.5/6/12/22/30x; all Demons about 4/8/15/25/37.5x; all Goblins 2/2.25/5/10/15x. It says ratios hold across sports and seasons and does not publish Flex. Conflicts with the project: it gives 5x for an all-Standard 3-pick (project: 6.0x in `sizing_engine.py`) and 25x for the 6-pick (project: 37.5x). Our two real entries (2 Standard + 1 special, 3-pick) paid 6.25x Demon and 4.75x Goblin: exactly 1.25x and 0.95x of a 5.0x baseline. Against 6.0x they are 1.04x and 0.79x. That supports 5x, but nobody has verified the live number. With 5x, the per-leg breakevens would be Demon 0.468 and Goblin 0.616 (now 0.528 and 0.695).
+**Also found:** the model's own scales disagree. Standard is assumed 0.5, but Demon is 0.528 (above Standard) even though a Demon leg pays more and must break even LOWER. The two constants were derived against a 0.55 Standard baseline but scored next to a 0.5 Standard. The flat 0.5 for Standard is also below any real per-leg breakeven for a Power Play (about 0.55-0.59 depending on entry size).
+**Decision:** no change yet. Needs one fact from the user: the multiplier their PrizePicks app shows for an all-Standard 3-pick Power Play.

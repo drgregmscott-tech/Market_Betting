@@ -873,6 +873,7 @@ ISOTONIC_CALIBRATION_PATH = (
 )
 
 _isotonic_table_cache: Optional[dict[str, tuple[np.ndarray, np.ndarray]]] = None
+_isotonic_domain_min_cache: Optional[dict[str, float]] = None
 
 
 def _load_isotonic_table() -> dict[str, tuple[np.ndarray, np.ndarray]]:
@@ -881,22 +882,32 @@ def _load_isotonic_table() -> dict[str, tuple[np.ndarray, np.ndarray]]:
     isotonic calibration on file. Missing file or no ready rows -> empty
     dict, so every row falls back to the plain Gaussian path with no
     special-casing needed at call sites."""
-    global _isotonic_table_cache
+    global _isotonic_table_cache, _isotonic_domain_min_cache
     if _isotonic_table_cache is not None:
         return _isotonic_table_cache
 
     table: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+    domain_min: dict[str, float] = {}
     if ISOTONIC_CALIBRATION_PATH.exists():
         df = pd.read_csv(ISOTONIC_CALIBRATION_PATH)
         ready = df.loc[df["ready_to_apply"] == True]  # noqa: E712 (real bool column, not a Series compare pitfall here)
         for stat_key, group in ready.groupby("resolved_stat_key"):
             group = group.sort_values("z_hi")
+            domain_min[stat_key] = float(group["z_lo"].min())
             table[stat_key] = (
                 group["z_hi"].to_numpy(dtype=float),
                 group["calibrated_prob"].to_numpy(dtype=float),
             )
     _isotonic_table_cache = table
+    _isotonic_domain_min_cache = domain_min
     return table
+
+
+def _isotonic_domain_min(resolved_stat_key: str) -> float:
+    """Lowest z the stat's isotonic table was fit on (-inf if unknown, e.g.
+    a test that mocks _load_isotonic_table). See isotonic_calibrate()."""
+    _load_isotonic_table()
+    return (_isotonic_domain_min_cache or {}).get(resolved_stat_key, float("-inf"))
 
 
 def _inverse_normal_cdf(p: float, lo: float = -8.0, hi: float = 8.0, tol: float = 1e-10) -> float:
@@ -935,6 +946,17 @@ def isotonic_calibrate(resolved_stat_key: str, raw_prob: Optional[float]) -> Opt
     if block_hi is None:
         return None
     z_eff = _inverse_normal_cdf(raw_prob)
+    # SESSION 2.54 FIX: the tables are fit on FLAGGED-side legs only, so
+    # they start at whatever the lowest flagged confidence was (homeRuns:
+    # z=0.13, a raw probability of 55%). A raw probability below that range
+    # (for example a 10% chance a hitter homers) used to fall into the first
+    # block and take its value -- 0.5 for homeRuns and doubles, 0.654 for
+    # stolenBases, 0.0 for several others -- which invented a large edge on
+    # the unflagged side (homeRuns: every over at exactly 0.8333, 77 graded
+    # losses at 6.5% wins). Below the fitted range there is no evidence, so
+    # return None and let the caller keep the plain Gaussian value.
+    if z_eff < _isotonic_domain_min(resolved_stat_key):
+        return None
     idx = int(np.clip(np.searchsorted(block_hi[:-1], z_eff, side="right"), 0, len(block_val) - 1))
     return float(block_val[idx])
 

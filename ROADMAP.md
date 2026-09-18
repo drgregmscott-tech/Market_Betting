@@ -3496,6 +3496,13 @@ Session 2.33's own "measurement first, gating second" discipline).
 - [ ] Watch flag volume on the stats dropped from isotonic once pipeline runs after Session 2.47 exist.
 - [ ] Update the fit and validation loaders to use the logged components (fall back to snapshots for older flags).
 
+
+### Session 2.54 -- weekly_review Tests, Drift Check, Isotonic Out-of-Range Fix
+**Status:** Complete (2026-09-18). 16 tests for `weekly_review.py`. Fixed isotonic tables being applied below their fitted range (fake over flags on homeRuns, stolenBases). Demon/Goblin payout question open, waiting on the user's 3-pick Standard multiplier.
+- [x] Tests written; drift check run read-only; bug fixed with 3 regression tests.
+- [ ] Cap or smooth the 1.000 top blocks in the isotonic tables (held-out validated).
+- [ ] Decide the PrizePicks Standard breakeven (currently 0.5) and the Demon/Goblin constants on one consistent scale.
+
 ---
 
 # PHASE 3 — Track 2: Cross-Venue Arbitrage

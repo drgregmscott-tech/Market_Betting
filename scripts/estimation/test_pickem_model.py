@@ -1126,3 +1126,38 @@ def test_normalize_nfl_team_handles_nicknames():
     assert normalize_nfl_team("JAC") == "JAX"  # code alias still works
     assert normalize_nfl_team("DET") == "DET"
     assert normalize_nfl_team(None) == ""
+
+
+def test_isotonic_calibrate_does_not_extrapolate_below_the_fitted_range():
+    """Session 2.54: the tables are fit on flagged-side legs only, so they
+    start at the lowest flagged confidence. A raw probability below that
+    (a 10% chance a hitter homers) must fall back to the Gaussian value
+    (None here), not take the first block's value -- that bug gave every
+    homeRuns/stolenBases over a large fake edge."""
+    import pickem_model as pm
+
+    # One block covering z in [0.5, 2.0]; first block value 0.65.
+    table = {"stat_x": (np.array([2.0]), np.array([0.65]))}
+    with mock.patch("pickem_model._load_isotonic_table", return_value=table), \
+            mock.patch("pickem_model._isotonic_domain_min", return_value=0.5):
+        assert pm.isotonic_calibrate("stat_x", 0.10) is None  # z = -1.28, below range
+        assert pm.isotonic_calibrate("stat_x", 0.70) == pytest.approx(0.65)  # z = 0.52, inside the range
+
+
+def test_isotonic_calibrate_in_range_and_above_range_still_calibrate():
+    import pickem_model as pm
+
+    table = {"stat_x": (np.array([1.0, 2.0]), np.array([0.55, 0.70]))}
+    with mock.patch("pickem_model._load_isotonic_table", return_value=table), \
+            mock.patch("pickem_model._isotonic_domain_min", return_value=0.2):
+        assert pm.isotonic_calibrate("stat_x", 0.70) == pytest.approx(0.55)  # z = 0.52, first block
+        assert pm.isotonic_calibrate("stat_x", 0.99) == pytest.approx(0.70)  # above range clamps to last block
+
+
+def test_committed_isotonic_tables_never_invent_probability_below_their_range():
+    """Regression on the real committed table: a raw 10% chance must never
+    come back as anything but None (Gaussian fallback) for any covered stat."""
+    import pickem_model as pm
+
+    for stat in pm._load_isotonic_table():
+        assert pm.isotonic_calibrate(stat, 0.05) is None, stat
