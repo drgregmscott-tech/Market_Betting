@@ -10010,3 +10010,7 @@ Call log:
 2026-09-18 16:27:57,950 UTC | INFO | PrizePicks: 37964 normalized rows
 2026-09-18 16:28:01,843 UTC | INFO | Underdog: 13689 normalized rows
 2026-09-18 16:28:03,130 UTC | INFO | === Ingestion run complete: 51653 total rows (PrizePicks OK, Underdog OK) ===
+2026-09-18 17:12:57,824 UTC | INFO | === Ingestion run starting ===
+2026-09-18 17:13:02,638 UTC | INFO | PrizePicks: 38388 normalized rows
+2026-09-18 17:13:20,945 UTC | INFO | Underdog: 13795 normalized rows
+2026-09-18 17:13:22,219 UTC | INFO | === Ingestion run complete: 52183 total rows (PrizePicks OK, Underdog OK) ===

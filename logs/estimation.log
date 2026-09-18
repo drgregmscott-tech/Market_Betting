@@ -1811,3 +1811,15 @@
 2026-09-18 16:41:59,873 UTC | INFO | Model status breakdown: {'unsupported_stat_type': 13121, 'estimated': 13115, 'no_player_match': 10653, 'unsupported_sport': 8053, 'insufficient_history': 5207, 'no_line_value': 1504}
 2026-09-18 16:42:00,733 UTC | INFO | Wrote 51653 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260918T164159Z.csv
 2026-09-18 16:42:01,548 UTC | INFO | Wrote 51653 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv
+2026-09-18 17:13:23,880 UTC | INFO | === Estimation run starting (season=2026) ===
+2026-09-18 17:13:24,081 UTC | INFO | Loaded 52183 ingested props from C:\Users\gmsco\Desktop\Market_Betting\data\pickem\normalized\latest.csv
+2026-09-18 17:13:24,442 UTC | INFO | Loaded 5488 tennis stat rows for season 2026
+2026-09-18 17:18:07,662 UTC | INFO | Loaded 22003 soccer stat rows for season 2026
+2026-09-18 17:22:25,169 UTC | INFO | Loaded 2549 epl stat rows for season 2026
+2026-09-18 17:24:49,856 UTC | INFO | Loaded 53574 mlb stat rows for season 2026
+2026-09-18 17:26:07,075 UTC | INFO | Loaded 0 cfb stat rows for season 2026
+2026-09-18 17:26:34,019 UTC | INFO | Loaded 1190 nfl stat rows for season 2026
+2026-09-18 17:27:15,641 UTC | INFO | Loaded 0 nba stat rows for season 2026
+2026-09-18 17:28:03,095 UTC | INFO | Model status breakdown: {'unsupported_stat_type': 13306, 'estimated': 13131, 'no_player_match': 10751, 'unsupported_sport': 8116, 'insufficient_history': 5363, 'no_line_value': 1516}
+2026-09-18 17:28:03,974 UTC | INFO | Wrote 52183 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\pickem_estimates_20260918T172803Z.csv
+2026-09-18 17:28:04,842 UTC | INFO | Wrote 52183 rows to C:\Users\gmsco\Desktop\Market_Betting\output\estimation\latest.csv
