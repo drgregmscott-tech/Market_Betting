@@ -103,13 +103,12 @@ name: Weather Pipeline
 # GitHub's shared infrastructure at once (GitHub's own documentation warns
 # busy, predictable slots are the most likely to be delayed or skipped).
 on:
-  # schedule:
-    # - cron: "15 5,11,17,23 * * *"
-    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
-    # a live cadence yet; this repo's Actions minutes were crowding out
-    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
-    # for regular automated runs again. Manual runs via workflow_dispatch
-    # below still work in the meantime.
+  schedule:
+    # Re-enabled 2026-09-18, unchanged -- this cadence was already tied to
+    # real GFS model cycle timing (see this file's own header), not GH
+    # Actions minutes, so there's no reason to trim it just because this
+    # repo is now public.
+    - cron: "15 5,11,17,23 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
   # be triggered by hand for testing without waiting for the next scheduled

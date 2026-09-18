@@ -86,18 +86,20 @@ name: Arbitrage Pipeline
 # as a placeholder to recalibrate once Session 3.6 produces real timing
 # data -- not presented as a final, evidence-based answer.
 on:
-  # schedule:
-    # Runs 6 times a day, roughly every 4 hours, offset from the exact
-    # hour for the same reason pickem_pipeline.yml avoids the exact top
-    # of the hour -- GitHub's own documentation warns that jobs
-    # scheduled for the busiest, most predictable slots on their
-    # infrastructure are the most likely to be delayed or skipped.
-    # - cron: "11 1,5,9,13,17,21 * * *"
-    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
-    # a live cadence yet; this repo's Actions minutes were crowding out
-    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
-    # for regular automated runs again. Manual runs via workflow_dispatch
-    # below still work in the meantime.
+  schedule:
+    # Re-enabled 2026-09-18 at 1x/day (down from 6x/day) -- deliberate cut,
+    # not a GH-minutes decision (this repo is now public): a single daily
+    # snapshot is enough to keep accumulating real evidence on how long a
+    # genuine mispricing stays open (the original goal, see this file's
+    # header) while still respecting the Kalshi rate-limit caution this
+    # track was already built around. Offset from the exact hour for the
+    # same reason pickem_pipeline.yml avoids the exact top of the hour --
+    # GitHub's own documentation warns that jobs scheduled for the
+    # busiest, most predictable slots on their infrastructure are the
+    # most likely to be delayed or skipped. A placeholder to revisit once
+    # this track is further along, same as every other cadence in this
+    # project.
+    - cron: "11 13 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
   # can be triggered by hand for testing without waiting for the next

@@ -105,13 +105,11 @@ name: Politics Pipeline
 # confirms the fix worked, rather than being indistinguishable from a
 # lucky on-time firing of the old, possibly-stuck registration.
 on:
-  # schedule:
-    # - cron: "43 13 * * *"
-    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
-    # a live cadence yet; this repo's Actions minutes were crowding out
-    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
-    # for regular automated runs again. Manual runs via workflow_dispatch
-    # below still work in the meantime.
+  schedule:
+    # Re-enabled 2026-09-18, unchanged -- down-ballot race odds move slowly
+    # enough that 1x/day was already the right cadence, independent of GH
+    # Actions cost.
+    - cron: "43 13 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
   # be triggered by hand for testing without waiting for the next scheduled

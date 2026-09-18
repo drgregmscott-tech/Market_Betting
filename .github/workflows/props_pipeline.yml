@@ -125,13 +125,18 @@ name: Props Pipeline
 # infrastructure at once (GitHub's own documentation warns busy,
 # predictable slots are the most likely to be delayed or skipped).
 on:
-  # schedule:
-    # - cron: "22 */3 * * *"
-    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
-    # a live cadence yet; this repo's Actions minutes were crowding out
-    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
-    # for regular automated runs again. Manual runs via workflow_dispatch
-    # below still work in the meantime.
+  schedule:
+    # Re-enabled 2026-09-18, changed from every 3h to every 4h (8x/day ->
+    # 6x/day, matching pickem_pipeline.yml's new cadence) now that this
+    # repo is public and GH Actions minutes are no longer the constraint.
+    # NOT increasing this beyond its old cadence, unlike some other
+    # tracks: this one's real limit was never GH minutes -- it's
+    # Akamai's bot-detection layer on DraftKings and Rotowire's ToS on
+    # the BetMGM path (see this file's own header comment), both
+    # independent of Actions cost. A placeholder to revisit once this
+    # track is further along, same as every other cadence in this
+    # project.
+    - cron: "22 */4 * * *"
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this can
   # be triggered by hand for testing without waiting for the next scheduled

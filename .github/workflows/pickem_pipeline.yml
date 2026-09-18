@@ -30,27 +30,27 @@ name: Pick'em Pipeline
 #    tab so a failure is never silent.
 
 on:
-  # schedule:
-    # Runs 7 minutes past every hour, in UTC (GitHub Actions schedules are
-    # always UTC, regardless of where you are). Deliberately NOT at the
-    # exact top of the hour (":00") -- GitHub's own documentation warns
-    # that jobs scheduled for the exact top of the hour hit the busiest
-    # slot on their infrastructure and are the most likely to be delayed
-    # or skipped. Matches Windows Task Scheduler's hourly pattern
-    # (SESSION_LOG.md, Session 2.2) -- just offset by a few minutes.
-    #
-    # Confirmed working: run #5 (2026-09-01, ~21:47 UTC) fired as a real
-    # "Scheduled" trigger at the previous "*/5 * * * *" test setting,
-    # after roughly 1h40m for GitHub to register the schedule following
-    # a fresh push. That registration delay is a one-time thing per
-    # schedule change, not an ongoing problem -- see SESSION_LOG.md
-    # Session 2.7 for the full troubleshooting trail.
-    # - cron: "7 * * * *"
-    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
-    # a live cadence yet; this repo's Actions minutes were crowding out
-    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
-    # for regular automated runs again. Manual runs via workflow_dispatch
-    # below still work in the meantime.
+  schedule:
+    # Re-enabled 2026-09-18 at a new, deliberately lower cadence (down from
+    # hourly) now that this repo is public -- GitHub Actions minutes are no
+    # longer the constraint, but hourly here was never actually justified
+    # by anything real; the original comment openly said it was chosen to
+    # "match Windows Task Scheduler's hourly pattern," not any real
+    # line-movement or API-budget signal (CFBD_API_KEY's own call-budget
+    # plan, see cfb.py, already caches per-week and stays far under its
+    # 1,000/month cap regardless of pipeline frequency, so that's not a
+    # constraint either). Every 4 hours, every day (6x/day, was 24x/day)
+    # -- still far below hourly, but dense enough to catch both
+    # NFL/CFB's gradual week-long drift and MLB/soccer's same-day
+    # morning-open-to-lock movement. Not at the exact top of the hour, for
+    # the reason described below. A placeholder to revisit once this
+    # track is further along, same as every other cadence in this
+    # project -- not presented as a final, evidence-based answer.
+    - cron: "7 */4 * * *"
+    # Deliberately NOT at the exact top of the hour (":00") -- GitHub's own
+    # documentation warns that jobs scheduled for the exact top of the hour
+    # hit the busiest slot on their infrastructure and are the most likely
+    # to be delayed or skipped.
   workflow_dispatch: {}
     # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
     # can be triggered by hand for testing without waiting for the next
@@ -97,7 +97,8 @@ jobs:
         run: python scripts/run_pipeline.py
 
       - name: Auto-grade closed NFL flags against real nflverse results (Session 2.18)
-        # Runs every hour, same cadence as the pipeline above -- newly
+        # Runs on the same cadence as the pipeline above (every 4h as of
+        # 2026-09-18, was hourly) -- newly
         # closed flags become gradable as soon as their real game's stats
         # post to nflverse (typically within a day). Never blocks the
         # pipeline: a real failure here (e.g. nflverse or the schedule
