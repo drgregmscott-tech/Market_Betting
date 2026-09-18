@@ -86,13 +86,18 @@ name: Arbitrage Pipeline
 # as a placeholder to recalibrate once Session 3.6 produces real timing
 # data -- not presented as a final, evidence-based answer.
 on:
-  schedule:
+  # schedule:
     # Runs 6 times a day, roughly every 4 hours, offset from the exact
     # hour for the same reason pickem_pipeline.yml avoids the exact top
     # of the hour -- GitHub's own documentation warns that jobs
     # scheduled for the busiest, most predictable slots on their
     # infrastructure are the most likely to be delayed or skipped.
-    - cron: "11 1,5,9,13,17,21 * * *"
+    # - cron: "11 1,5,9,13,17,21 * * *"
+    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
+    # a live cadence yet; this repo's Actions minutes were crowding out
+    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
+    # for regular automated runs again. Manual runs via workflow_dispatch
+    # below still work in the meantime.
   workflow_dispatch: {}
   # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
   # can be triggered by hand for testing without waiting for the next

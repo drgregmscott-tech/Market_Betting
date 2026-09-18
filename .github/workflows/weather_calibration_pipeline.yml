@@ -57,8 +57,13 @@ name: Weather Calibration Pipeline
 # "yesterday" is a complete, settled real reading by the time this run
 # pulls it - not a partial day still accumulating observations.
 on:
-  schedule:
-    - cron: "23 11 * * *"
+  # schedule:
+    # - cron: "23 11 * * *"
+    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
+    # a live cadence yet; this repo's Actions minutes were crowding out
+    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
+    # for regular automated runs again. Manual runs via workflow_dispatch
+    # below still work in the meantime.
   workflow_dispatch: {}
   # Manual "Run workflow" button on GitHub's Actions tab, for testing
   # without waiting for the next scheduled run.

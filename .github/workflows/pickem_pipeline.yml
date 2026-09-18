@@ -30,7 +30,7 @@ name: Pick'em Pipeline
 #    tab so a failure is never silent.
 
 on:
-  schedule:
+  # schedule:
     # Runs 7 minutes past every hour, in UTC (GitHub Actions schedules are
     # always UTC, regardless of where you are). Deliberately NOT at the
     # exact top of the hour (":00") -- GitHub's own documentation warns
@@ -45,7 +45,12 @@ on:
     # a fresh push. That registration delay is a one-time thing per
     # schedule change, not an ongoing problem -- see SESSION_LOG.md
     # Session 2.7 for the full troubleshooting trail.
-    - cron: "7 * * * *"
+    # - cron: "7 * * * *"
+    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
+    # a live cadence yet; this repo's Actions minutes were crowding out
+    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
+    # for regular automated runs again. Manual runs via workflow_dispatch
+    # below still work in the meantime.
   workflow_dispatch: {}
     # Adds a manual "Run workflow" button on GitHub's Actions tab, so this
     # can be triggered by hand for testing without waiting for the next

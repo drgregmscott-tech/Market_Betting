@@ -36,11 +36,16 @@ name: Pick'em Weekly Recalibration Review
 #    weekly_review.py's "SESSION 2.42 ADDITION" module docstring section.)
 
 on:
-  schedule:
+  # schedule:
     # Weekly, Monday 08:13 UTC -- deliberately not the exact top of the
     # hour, for the same reason pickem_pipeline.yml's cron avoids ":00"
     # (GitHub's documented busiest-slot warning).
-    - cron: "13 8 * * 1"
+    # - cron: "13 8 * * 1"
+    # Schedule disabled 2026-09-18: product is unvalidated and doesn't need
+    # a live cadence yet; this repo's Actions minutes were crowding out
+    # DFS_Optimizer's. Re-enable by uncommenting the line above once ready
+    # for regular automated runs again. Manual runs via workflow_dispatch
+    # below still work in the meantime.
   workflow_dispatch: {}
     # Manual "Run workflow" button on GitHub's Actions tab, for testing
     # without waiting for the next scheduled Monday.
