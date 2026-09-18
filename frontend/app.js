@@ -269,6 +269,29 @@ function mlbStarterStatusBadgeHtml(r) {
 }
 
 // ---------------------------------------------------------------------
+// Session 2.45 -- NFL injury-report badge. The NFL twin of the MLB badge
+// above. pickem_model.py's compute_nfl_injury_status() attaches
+// `nfl_injury_status` (from the official NFL injury report) to NFL rows;
+// null for every other row. Informational only, same styling and same
+// honesty as the MLB badge: a validation window is open and no real
+// graded evidence yet exists on whether it predicts a win or a loss.
+// ---------------------------------------------------------------------
+function nflInjuryStatusBadgeHtml(r) {
+  const status = r.nfl_injury_status;
+  if (!status) return "";
+  if (status === "confirmed") {
+    return `<span class="starter-status-badge confirmed" title="The NFL's final injury report for this game is out and does not list this player. No real graded evidence yet on whether this predicts a win -- see the Session 2.45 write-up.">Injury report clear</span>`;
+  }
+  if (status === "different_than_expected") {
+    return `<span class="starter-status-badge different" title="The NFL injury report lists this player as Out or Doubtful. The model assumed a normal game. No real graded evidence yet on whether this predicts a loss -- see the Session 2.45 write-up.">Injury: Out/Doubtful</span>`;
+  }
+  if (status === "not_yet_confirmed") {
+    return `<span class="starter-status-badge pending" title="Final NFL injury statuses are not filed yet for this game, or the player is Questionable. An honest 'not known yet' state, not the same as clear.">Injury TBD</span>`;
+  }
+  return "";
+}
+
+// ---------------------------------------------------------------------
 // Session 2.34 -- surface odds_type (Standard/Demon/Goblin) and, for a
 // row PrizePicks restricts to one side, which side is actually buyable.
 // Prompted by a real user report (2026-09-16): the open-flags table gave
@@ -732,7 +755,7 @@ function renderOpenTable(open) {
           <td class="checkbox-cell">
             <input type="checkbox" data-flag-id="${escapeAttr(r.flag_id)}" ${checked} />
           </td>
-          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${mlbStarterStatusBadgeHtml(r)}${pickemOddsTypeBadgeHtml(r)}${pickemWagerSideBadgeHtml(r)}${lineCountBadge}${escapeHtml(r.player_name) || "—"}</td>
+          <td class="name-cell">${blockedBadgeHtml("pickem", r)}${rowCautionBadgeHtml(r.sport)}${mlbStarterStatusBadgeHtml(r)}${nflInjuryStatusBadgeHtml(r)}${pickemOddsTypeBadgeHtml(r)}${pickemWagerSideBadgeHtml(r)}${lineCountBadge}${escapeHtml(r.player_name) || "—"}</td>
           <td>${escapeHtml(r.game_matchup) || "—"}</td>
           <td>${escapeHtml(r.stat_type) || "—"}</td>
           <td>${escapeHtml(r.flagged_side) || "—"}</td>
