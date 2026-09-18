@@ -147,7 +147,7 @@ def test_5b_prizepicks_3_through_6_pick_sized():
     """Session 2.11: PrizePicks' own published Power Play table (3, 4, 5, 6
     picks) is sized correctly, using that leg count's own real multiplier."""
     bankroll = 1000.0
-    for n, expected_multiplier in [(3, 6.0), (4, 10.0), (5, 20.0), (6, 37.5)]:
+    for n, expected_multiplier in [(3, 4.75), (4, 10.0), (5, 20.0), (6, 37.5)]:
         legs = [
             make_leg(f"prizepicks|p{n}_{i}", "prizepicks", 0.75, game_id=f"g{i}")
             for i in range(n)

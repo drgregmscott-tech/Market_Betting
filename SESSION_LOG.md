@@ -15731,3 +15731,32 @@ The flag-time loss is confined to legs on the unflagged side of these stats; the
 **4. Demon/Goblin payouts (open):** the user supplied https://heatcheckhq.io/blog/prizepicks-demons-goblins-explained as a general rule. Its Power Play table (third-party, treated as data): all-Standard 2/3/4/5/6-pick = 3/5/10/20/25x; 1 Demon mixed about 3.5/6/12/22/30x; all Demons about 4/8/15/25/37.5x; all Goblins 2/2.25/5/10/15x. It says ratios hold across sports and seasons and does not publish Flex. Conflicts with the project: it gives 5x for an all-Standard 3-pick (project: 6.0x in `sizing_engine.py`) and 25x for the 6-pick (project: 37.5x). Our two real entries (2 Standard + 1 special, 3-pick) paid 6.25x Demon and 4.75x Goblin: exactly 1.25x and 0.95x of a 5.0x baseline. Against 6.0x they are 1.04x and 0.79x. That supports 5x, but nobody has verified the live number. With 5x, the per-leg breakevens would be Demon 0.468 and Goblin 0.616 (now 0.528 and 0.695).
 **Also found:** the model's own scales disagree. Standard is assumed 0.5, but Demon is 0.528 (above Standard) even though a Demon leg pays more and must break even LOWER. The two constants were derived against a 0.55 Standard baseline but scored next to a 0.5 Standard. The flat 0.5 for Standard is also below any real per-leg breakeven for a Power Play (about 0.55-0.59 depending on entry size).
 **Decision:** no change yet. Needs one fact from the user: the multiplier their PrizePicks app shows for an all-Standard 3-pick Power Play.
+
+## Session 2.55 -- PrizePicks Pricing: Standard Breakeven Corrected, Demon/Goblin Unscored
+
+**Date completed:** 2026-09-18
+**Status:** Partial. Two pricing errors fixed. The remaining gap (per-leg price) needs a data change, not a constant.
+
+**Measured by the user, 2026-09-18, in their own PrizePicks app (3-pick Power Play, one leg varied):**
+- Leg = hits+runs+rbi: all Standard 4.75x, one Goblin 4.25x, one Demon 5.25x.
+- Leg = home runs: Demon 13.5x, Goblin 2.9x.
+- The user also reports the multiplier "is different for each bet", that it follows difficulty (an over on 0.5 home runs pays far more than an over on 6 fantasy points), and that it depends on side (an under on a top pitcher facing a weak team pays more than the over).
+- The 2026-09-14 entry (Demon 6.25x, Goblin 4.75x) was another lineup. The third-party page https://heatcheckhq.io/blog/prizepicks-demons-goblins-explained gave a fixed table (Standard 3-pick 5x; 6-pick 25x); both conflict with the user's app and the project's 37.5x, so it was not used.
+
+**Conclusion:** PrizePicks prices each leg (and side). There is no general Demon/Goblin rule. The previous per-odds_type constants (Demon 0.528, Goblin 0.695) were single observations from one lineup.
+
+**What changed:**
+1. `PRIZEPICKS_SCORABLE_ODDS_TYPES` is now {"standard"}. Demon and Goblin rows are `unsupported_odds_type`: kept visible, never flagged; open Demon/Goblin flags close in `clv_logger` as before.
+2. Standard breakeven: `PRIZEPICKS_ASSUMED_IMPLIED_PROB` 0.5 to 4.75 ** (-1/3) = 0.5949 (the measured all-Standard 3-pick payout, equal independent legs). Applied to both sides: a Standard under leg has the same payout, so `implied_prob_under` is the same number (it was 1 minus the over number).
+3. `sizing_engine.py`: PrizePicks 3-pick 6.0x to 4.75x. The mixed Demon/Goblin entry table is emptied (entries with a Demon/Goblin leg are not sized). The 2/4/5/6-pick multipliers are unverified.
+4. Five new rows in `data/pickem/demon_goblin_payout_observations.csv`. Golden NFL fixture regenerated: only the Standard PrizePicks breakeven and edge columns and the Demon row changed. Tests: 137 pass, `test_clv_logger.py` 17 pass.
+
+**Results on real graded PrizePicks legs, priced at the new breakevens (game-clustered):** Standard n=5,603, 171 games: won 56.2% vs 59.5%, -3.3pp, CI [53.8, 58.6], below breakeven (it was scored against 0.5 before). Demon flags: 10,245 of 11,196 were UNDERS, winning about 79% -- not a product our price covered, and the purchasable Demon overs won 10-34%. Goblin overs about 70% vs 66.5% (a single-lineup price, not reliable). The apparent Demon "edge" of 20+ points was an artifact of the price and side.
+
+**Important finding, not yet acted on:** the raw PrizePicks feed has an `adjusted_odds` field. In the largest retained raw file (47,299 lines) it is True on all 31,828 Demon and 8,293 Goblin lines and on 1,445 of 7,178 Standard lines; False or missing on the rest. `is_promo` is almost never True. No pipeline file reads `adjusted_odds`. Most likely it marks a leg whose payout is not the default. If so, a Standard leg with `adjusted_odds` not True pays the default table, and the 0.5949 applies; an adjusted Standard leg has an unknown price and should not be scored. This is an inference from the field name and the user's observations, not confirmed.
+
+**Open items:**
+1. Carry `adjusted_odds` through ingestion, normalized data, estimates and the CLV log; do not score Standard rows where it is True. Then check on the user's app that an adjusted Standard leg pays a non-default multiplier and a non-adjusted one pays 4.75x.
+2. Measure the all-Standard 2-, 4-, 5- and 6-pick multipliers, so the breakeven can use the best entry size, and confirm the 3-pick number for a home-run leg.
+3. Re-run the PrizePicks part of the audit at the new breakevens after a few days of clean flags.
+4. `sizing_engine.py` docs (`docs/sizing_methodology.md`) still quote 6.0x and the 2026-09-14 numbers.

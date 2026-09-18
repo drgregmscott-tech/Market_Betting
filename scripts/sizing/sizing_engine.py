@@ -722,7 +722,10 @@ ENTRY_TYPE_NAME = {"prizepicks": "Power Play", "underdog": "Standard"}
 # 2.5's own independently-sourced number (sample_size_methodology.md
 # Section 2).
 PICKEM_ENTRY_PAYOUT = {
-    "prizepicks": {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5},
+    # 3-pick corrected 2026-09-18 (Session 2.55): the user's own PrizePicks app
+    # shows 4.75x for an all-Standard 3-pick Power Play, not 6.0x. The other
+    # leg counts were not re-checked and may be stale too.
+    "prizepicks": {2: 3.0, 3: 4.75, 4: 10.0, 5: 20.0, 6: 37.5},
     # Underdog Standard entry -- sourced directly from Underdog's own help
     # article (help.underdogsports.com/en/articles/13780101-pick-em-standard-
     # flex-entry-payouts, "Standard Entries" table), confirmed live
@@ -743,10 +746,13 @@ PICKEM_ENTRY_PAYOUT = {
 # odds_type) so lookup doesn't care which position the special leg is in.
 # Deliberately NOT extrapolated to any other leg count or Standard/special
 # mix -- those are simply not sourced yet.
-PRIZEPICKS_MIXED_ENTRY_PAYOUT = {
-    (3, ("goblin", "standard", "standard")): 4.75,
-    (3, ("demon", "standard", "standard")): 6.25,
-}
+# SESSION 2.55: emptied. Measured 2026-09-18 on the user's app (3-pick, 2
+# Standard + 1 special leg): hits+runs+rbi leg Demon 5.25x, Goblin 4.25x;
+# home-run leg Demon 13.5x, Goblin 2.9x. The 2026-09-14 numbers above (6.25x
+# and 4.75x) were for another lineup. The multiplier is set per leg, so a
+# table keyed only by leg count and odds types is wrong for any leg it was
+# not measured on. Entries with a Demon/Goblin leg are not sized.
+PRIZEPICKS_MIXED_ENTRY_PAYOUT: dict = {}
 
 
 def _leg_odds_type(leg: dict) -> str:

@@ -973,7 +973,15 @@ def implied_prob_over_underdog(over_mult: Optional[float], under_mult: Optional[
     return raw_over / total
 
 
-PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5  # stated, unverified assumption -- see docstring
+# SESSION 2.55: was a flat 0.5, which is below any real Power Play breakeven.
+# Measured 2026-09-18 from the user's own PrizePicks app: an all-Standard
+# 3-pick Power Play pays 4.75x. With equal, independent legs each leg must win
+# 4.75 ** (-1/3) = 0.5949 for the entry to break even. Applies to BOTH sides
+# of a Standard line (a Standard "under" leg is the same product, so its
+# breakeven is this same number, not 1 minus it). Measured at ONE entry size
+# (3-pick); other sizes are unverified (the 2/4/5/6-pick Standard multipliers
+# in sizing_engine.py are older and may be stale too).
+PRIZEPICKS_ASSUMED_IMPLIED_PROB = 0.5948883492590029
 
 # FIX (2026-09-11, real finding): PRIZEPICKS_ASSUMED_IMPLIED_PROB is only
 # defensible for a Standard-odds line. PrizePicks also offers "demon" (harder)
@@ -1028,7 +1036,18 @@ PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB = {
     "goblin": 0.6951425787146582,
 }
 
-PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard", "demon", "goblin"}
+# SESSION 2.55: Demon and Goblin are NOT scorable. Measured 2026-09-18 on the
+# user's own PrizePicks app (3-pick, 2 Standard + 1 special leg): on a
+# hits+runs+rbi leg Demon paid 5.25x and Goblin 4.25x (Standard 4.75x); on a
+# home-run leg Demon paid 13.5x and Goblin 2.9x. The multiplier is set per leg
+# (PrizePicks builds its own probability for that line into it), so no single
+# constant per odds_type can price them, and the feed carries no per-leg
+# multiplier. Scoring them against a constant produced edges of 30+ points
+# that were artifacts of the constant. PRIZEPICKS_ODDS_TYPE_IMPLIED_PROB above
+# is kept only for history and for fit_odds_type_implied_prob.py; nothing in
+# scoring reads it. To score them again, the ingestion must capture a real
+# per-leg price.
+PRIZEPICKS_SCORABLE_ODDS_TYPES = {"standard"}
 
 
 def is_scorable_prizepicks_odds_type(row: dict) -> bool:
@@ -1490,7 +1509,12 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["prob_over"] = p_over
         row["prob_under"] = prob_under
         row["implied_prob_over"] = implied_over
-        row["implied_prob_under"] = (1.0 - implied_over) if implied_over is not None else None
+        if row.get("platform") == "prizepicks":
+            # Session 2.55: a Standard under leg has the same entry payout as an
+            # over leg, so its breakeven is the same number, not 1 - implied_over.
+            row["implied_prob_under"] = implied_over
+        else:
+            row["implied_prob_under"] = (1.0 - implied_over) if implied_over is not None else None
         row["edge_over"] = (
             (p_over - implied_over)
             if (p_over is not None and implied_over is not None and prizepicks_side_is_buyable(row, "over"))

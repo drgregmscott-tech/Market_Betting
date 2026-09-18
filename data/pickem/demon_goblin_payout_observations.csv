@@ -1,3 +1,8 @@
 date_observed,platform,leg_count,standard_legs,demon_legs,goblin_legs,observed_multiplier,notes
 2026-09-14,prizepicks,3,2,1,0,6.25,"Session 2.21 -- real 3-pick Power Play (2 Standard legs + 1 Demon leg) from the user's own PrizePicks account"
 2026-09-14,prizepicks,3,2,0,1,4.75,"Session 2.21 -- same real entry/leg re-tagged Goblin instead of Demon, from the user's own PrizePicks account"
+2026-09-18,prizepicks,3,3,0,0,4.75,"Session 2.55 -- all-Standard 3-pick Power Play, legs incl. a hits+runs+rbi leg, from the user's own PrizePicks app"
+2026-09-18,prizepicks,3,2,0,1,4.25,"Session 2.55 -- same entry, hits+runs+rbi leg swapped to Goblin"
+2026-09-18,prizepicks,3,2,1,0,5.25,"Session 2.55 -- same entry, hits+runs+rbi leg swapped to Demon"
+2026-09-18,prizepicks,3,2,1,0,13.5,"Session 2.55 -- same entry with a home-run leg as Demon. Payout is set per leg (compare 5.25x above)"
+2026-09-18,prizepicks,3,2,0,1,2.9,"Session 2.55 -- same entry with a home-run leg as Goblin"

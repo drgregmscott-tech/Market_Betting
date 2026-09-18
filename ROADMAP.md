@@ -3503,6 +3503,13 @@ Session 2.33's own "measurement first, gating second" discipline).
 - [ ] Cap or smooth the 1.000 top blocks in the isotonic tables (held-out validated).
 - [ ] Decide the PrizePicks Standard breakeven (currently 0.5) and the Demon/Goblin constants on one consistent scale.
 
+
+### Session 2.55 -- PrizePicks Pricing Corrected
+**Status:** Partial (2026-09-18). Standard breakeven 0.5 to 0.5949 (measured 4.75x 3-pick, both sides). Demon/Goblin unscored: the payout is set per leg, so no constant prices them. Sizing 3-pick payout 6.0x to 4.75x.
+- [x] Constants, tests, golden fixture and observations log updated.
+- [ ] Carry `adjusted_odds` (raw PrizePicks field, True on all Demon/Goblin and about 24% of Standard) through ingestion; do not score adjusted Standard legs; verify on the user's app.
+- [ ] Measure 2/4/5/6-pick Standard multipliers; update `docs/sizing_methodology.md`.
+
 ---
 
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
