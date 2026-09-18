@@ -3469,6 +3469,13 @@ Session 2.33's own "measurement first, gating second" discipline).
 
 ---
 
+### Session 2.48 -- Held-Out Validation of the Sigma Settings and Blend Weight
+**Status:** Complete (2026-09-18). No constant changed. The 2.41c/2.41d constants are not measurably better than the old ones; the hits and singles overrides hold up held-out; small-sample overrides do not (p_strikes significantly worse). See SESSION_LOG.md.
+- [x] Held-out validation built and run (single split and rolling-origin, game-clustered paired tests).
+- [ ] Re-run after more game days; decide a minimum-leg rule for per-stat overrides; give p_baseOnBalls, p_earnedRuns and pitcher fs a per-stat factor or restore their isotonic tables when data allows.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer

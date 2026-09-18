@@ -15581,3 +15581,36 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 **Correction to note:** the earlier interim read (this conversation) that not_yet_confirmed "supports gating out" was premature; the staleness split shows why.
 
 **Open items:** re-run the report as days accumulate; the staleness pattern and the different_than_expected bucket both need more games.
+
+## Session 2.48 -- Held-Out Validation of the Sigma Settings and Blend Weight
+
+**Date completed:** 2026-09-18
+**Status:** Complete. No constant changed. The 2.41c/2.41d constants are not shown to be better than the old ones, the overrides for large-sample stats hold up, and several small-sample overrides do not.
+
+**What was done:** `scripts/calibration/validate_sigma_held_out.py` (new). It rebuilds every graded leg's flagged-side Gaussian probability from snapshot components (same join as Session 2.47), so any configuration can be scored on any leg. Stats covered by the isotonic tables are excluded. It reports a single 70/30 temporal split and a rolling-origin version (train on everything before each of four consecutive test blocks, predictions pooled), with paired per-leg Brier differences and game-clustered standard errors. Constants are re-fit on train legs only with the same grid searches.
+
+**Data limits:** 6,675 legs in scope, but the snapshot-joined legs sit almost entirely on 2026-09-15 and 09-16 for the test blocks. The pooled held-out set is 3,338 legs from 66 games; the single-split test set is 2,003 legs from 35 games. That is a short window.
+
+**Results (pooled rolling-origin, Brier; lower is better):**
+- Current production 0.2179; old (1.61 global, 0.5/0.5 blend, original 6 overrides) 0.2171; train-refit with per-stat factors 0.2174; current global factor only 0.2208; no calibration (factor 1) is within 0.002 of the others on the single split.
+- Current vs old: +0.0008, SE 0.0020, not distinguishable. The 2.41c/2.41d refit did not measurably improve Brier over the old configuration on this window. The old configuration had the smaller calibration gap (-0.004 vs -0.015).
+- Per-stat overrides as a set vs global factor only: -0.0030, SE 0.0010, the set is better. Same for train-fit per-stat vs train-fit global: -0.0027, SE 0.0010.
+- Train-only fits drift across folds: blend weight 0.85-0.95, global factor 3.00 -> 2.45 -> 2.20 -> 2.00. The constants are not stable over even two days.
+
+**Per overridden stat (pooled, override minus global factor, negative is better):**
+- hits (n=748, factor 1.28): -0.0117, SE 0.0019. singles (n=431, 1.385): -0.0095, SE 0.0025. Both clearly better than the global factor.
+- plateAppearances (n=190) -0.0012, no difference. triples (n=23), foulsCommitted (n=27), p_numberOfPitches (n=78): worse in point estimate, not distinguishable. p_strikes (n=25, factor 0.925): +0.0856, SE 0.0406, worse than global by more than 1.96 SE.
+- Of 21 overrides only 7 have 15+ held-out legs. Overrides better by >1.96 SE: 2. Global better by >1.96 SE: 1.
+
+**Stats with no override that a train-fit factor beat 2.681 on the single split:** hits+runs+rbi (factor 2.0), p_baseOnBalls (1.0), p_earnedRuns (1.05), pitcher fs, shotsOnTarget. p_baseOnBalls, p_earnedRuns and pitcher fs are three of the stats Session 2.47 moved off isotonic back to the Gaussian path; they now score on the untuned global 2.681, and their held-out Brier was better at factors near 1.0 (for example p_baseOnBalls 0.177 vs 0.196). Sample sizes there are 50-60 test legs.
+
+**Decisions:**
+1. No production constant is changed. Every difference between configurations is 0.003 Brier or less, the window is two days, and the fitted constants move fold to fold.
+2. The `hits` and `singles` overrides are validated. The overrides fit on fewer than about 100 legs (p_strikes, triples, foulsCommitted, p_numberOfPitches, and similar) are not supported held-out; p_strikes is the one significant case. Left in place until a longer window can confirm removal.
+3. Sigma tuning is a second-order lever here. Its total effect on Brier is about 0.002-0.004, so the model's remaining error is mostly not in these constants.
+
+**Open items:**
+- Re-run after more game days accumulate (the window is currently two days of test data).
+- Give p_baseOnBalls, p_earnedRuns and pitcher fs a per-stat factor, or bring back their isotonic tables, once each has enough legs; they currently run on an unvalidated global factor.
+- Decide a rule for overrides: require a minimum leg count at fit time (about 100) and a held-out check before adding one.
+- Blend weight: 0.85-0.95 all similar; keep 0.95 for now.
