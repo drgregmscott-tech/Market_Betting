@@ -15614,3 +15614,20 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 - Give p_baseOnBalls, p_earnedRuns and pitcher fs a per-stat factor, or bring back their isotonic tables, once each has enough legs; they currently run on an unvalidated global factor.
 - Decide a rule for overrides: require a minimum leg count at fit time (about 100) and a held-out check before adding one.
 - Blend weight: 0.85-0.95 all similar; keep 0.95 for now.
+
+## Session 2.49 -- Consensus Signal: Found That It Was Never Logged, Fixed the Match Key
+
+**Date completed:** 2026-09-18
+**Status:** Partial. Bug fixed going forward. The predictive-value test has not run, because there is no consensus data to test yet.
+
+**What was found:** The handoff said we log the other platform's line at flag time and never tested it. The log holds no such data. `consensus_available` is False on all 75,848 rows in `data/pickem/clv_log.csv`; `consensus_line`, `consensus_edge` and `consensus_implied_prob_same_side` are empty on all of them.
+
+**Cause:** `consensus_match_key_pickem()` in `scripts/calibration/clv_logger.py` built the key as `player|stat|game_id`. `game_id` is a per-platform id. PrizePicks and Underdog never share one (example: 188102 vs 182910). In the latest estimates file, the name+stat overlap was 5,194 pairs and the name+stat+game_id overlap was 0. Underdog rows also have no `game_start_time`, so no game-level key exists.
+
+**Fix:** The key is now `player|stat|sport`. `find_consensus_row_pickem()` returns no match unless the key is unique on both platforms. That avoids pairing a player's two games or two alt lines. On the latest snapshot, 2,568 of 52,183 rows now match (mostly MLB). On unique pairs the lines are equal 94.9% of the time. Tests: 115/115.
+
+**Not done:** No historical backfill. Old flags stay without consensus. A backfill from `data/pickem/normalized/` (37 snapshots) is possible but not started. No claim about whether consensus predicts outcomes.
+
+**Open items:**
+- After a few hundred graded flags carry consensus, run the audit loader split (consensus agrees with model side vs not), with game-clustered intervals. Note: clusters must use the flag's own `game_id`, which is fine within one platform.
+- Decide on a backfill.

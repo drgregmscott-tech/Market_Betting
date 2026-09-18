@@ -418,17 +418,25 @@ def determine_flagged_side_pickem(row: pd.Series) -> Optional[str]:
 
 
 def consensus_match_key_pickem(row: pd.Series) -> Optional[str]:
+    """Cross-platform key: normalized player name + resolved stat + sport.
+    FIX (2026-09-18): the key used to end in game_id, but game_id is a
+    per-platform id (PrizePicks and Underdog never share one), so no flag
+    ever matched and consensus_available was False on every logged row.
+    Underdog also carries no game_start_time, so a game-level key is not
+    available. Name+stat+sport can hit two different games (multi-game
+    days) or two alt lines, so find_consensus_row_pickem() returns no match
+    unless the key is unique on BOTH platforms."""
     name = row.get("player_name")
     stat_key = row.get("resolved_stat_key")
-    game_id = row.get("game_id")
+    sport = row.get("sport")
     if not name or not isinstance(name, str):
         return None
     if not stat_key or not isinstance(stat_key, str):
         return None
-    if not game_id or (isinstance(game_id, float) and pd.isna(game_id)):
+    if not sport or not isinstance(sport, str):
         return None
     norm_name = " ".join(name.strip().lower().split())
-    return f"{norm_name}|{stat_key}|{game_id}"
+    return f"{norm_name}|{stat_key}|{sport.strip().upper()}"
 
 
 def implied_prob_same_side_pickem(row: pd.Series, side: str) -> Optional[float]:
@@ -458,14 +466,11 @@ def find_consensus_row_pickem(
 ) -> Optional[pd.Series]:
     other_platform = "underdog" if own_platform == "prizepicks" else "prizepicks"
     candidates = index.get((other_platform, match_key))
-    if not candidates:
+    own_candidates = index.get((own_platform, match_key), [])
+    if not candidates or len(candidates) > 1 or len(own_candidates) > 1:
+        # Ambiguous (multi-game player or alt lines): no match rather than
+        # a guess -- a wrong pairing would poison the consensus signal.
         return None
-    if len(candidates) > 1:
-        log.warning(
-            "Multiple consensus candidates found for platform=%s key=%s "
-            "(%d matches) -- using the first.",
-            other_platform, match_key, len(candidates),
-        )
     return estimates_df.loc[candidates[0]]
 
 
