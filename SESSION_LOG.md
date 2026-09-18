@@ -15650,3 +15650,26 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 **Decision:** Keep the pooled 0.95. MLB is 73% of legs and its best weight is near 1.0 anyway. The largest possible gain (0.0002 Brier) is inside the noise.
 
 **Open items:** Re-run when NFL and FIFA legs reach the test blocks (NFL from about Week 4-6). If a per-sport weight is ever adopted, require a minimum leg count at fit time (same rule as the sigma overrides).
+
+## Session 2.51 -- Sigma Follow-Ups: Two Validated Overrides, Nothing Else Changed
+
+**Date completed:** 2026-09-18
+**Status:** Complete for what the data allows. Two overrides added. The small-sample overrides stay as they are, because no new evidence exists.
+
+**Re-run of `validate_sigma_held_out.py`:** The output is identical to Session 2.48 (same 6,675 legs, same 9/15-9/16 test window). The reason: legs flagged 9/17 or later have not joined to a retained snapshot. Checking the graded log directly shows the same limit: p_strikes has 91 graded legs against 90 at fit time, so almost none are out of sample. More game days must grade before the small-sample overrides can be re-judged.
+
+**p_baseOnBalls, p_earnedRuns, pitcher fs (untuned global 2.681):** Rolling-origin test on these three stats only (418 joined legs, 82 games; 251 test legs, 39 games). Fit on train only, scored on test:
+- Per-stat factor vs global, pooled over the three: -0.0112 Brier, SE 0.0048 (better).
+- p_baseOnBalls: -0.019 (SE 0.015). p_earnedRuns: -0.018 (SE 0.010). Each is not significant alone. The train-fit factors stayed in 0.85-1.15 in all four folds.
+- pitcher fs: -0.0004 (SE 0.003). The fitted factor swung 2.65-3.85 across folds. No gain, unstable.
+
+**Change:** `SIGMA_CALIBRATION_FACTOR_BY_STAT` gets `p_baseOnBalls` 0.85 (137 legs) and `p_earnedRuns` 1.0 (147 legs), fit on all joined legs. Both stats are `ready_to_apply=False` in the isotonic table, so they run on the Gaussian path and the override applies. No isotonic refit is needed: no isotonic-covered stat uses either factor. `pitcher fs` stays on global. Tests: 115/115.
+
+**Caveat:** The held-out gain per stat is not significant alone (about 2 SE only when pooled), and it comes from 39 games in a 2-day window. Watch these two stats' flag volume and calibration in the next pipeline runs.
+
+**Minimum-leg rule (now written in the constants table):** A new override needs at least 100 legs at fit time plus a held-out check. Older entries with fewer legs pre-date it. They are not removed: p_strikes (90 fit legs, worse than global by more than 1.96 SE held-out), triples, foulsCommitted, p_numberOfPitches stay until more days grade. The NFL overrides cannot be tested until NFL legs reach the test blocks.
+
+**Open items:**
+- Re-run `validate_sigma_held_out.py` after about a week of new game days; then decide on p_strikes, triples, foulsCommitted and p_numberOfPitches.
+- pitcher fs: revisit at 200+ joined legs.
+- Improve snapshot retention (about 45% of graded legs join today). It limits every held-out test here.

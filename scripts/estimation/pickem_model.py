@@ -465,6 +465,20 @@ SIGMA_CALIBRATION_FACTOR_BY_STAT = {
     # groups for drift rather than excluding them outright, but weaker
     # evidence than every other entry here
 
+    # SESSION 2.51 -- the first overrides validated held-out before wiring.
+    # p_baseOnBalls and p_earnedRuns had been moved off isotonic (Session
+    # 2.47) onto the untuned global factor. Rolling-origin (4 folds, train
+    # only fit, 251 test legs, 39 games): a per-stat factor beat the global
+    # 2.681 by -0.019 Brier (p_baseOnBalls) and -0.018 (p_earnedRuns), and
+    # the train-fit factor stayed in 0.85-1.15 across folds. Final values are
+    # fit on all snapshot-joined legs (137 and 147). "pitcher fs" was
+    # tested the same way and NOT given an override: its fitted factor swung
+    # 2.65-3.85 and it did not beat global (-0.0004). See SESSION_LOG.md
+    # Session 2.51. Rule for any new override: at least 100 legs at fit time
+    # plus a held-out check (older entries below with fewer legs pre-date it).
+    "p_baseOnBalls": 0.850,  # n=137 joined legs
+    "p_earnedRuns": 1.000,  # n=147 joined legs
+
     # Excluded from the Session 2.41d expansion on purpose, same "no real
     # edge" or "degenerate fit" reasoning as "targets" above:
     # - "numberOfPitchesSeen" (n=396): real win rate 50.3% -- no real edge;
