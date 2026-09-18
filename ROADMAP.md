@@ -3460,6 +3460,15 @@ Session 2.33's own "measurement first, gating second" discipline).
 
 ---
 
+### Session 2.47 -- Isotonic Calibration Refit Under the Current Model Configuration
+**Status:** Complete (2026-09-18). Live table was misaligned after Sessions 2.41c/2.42 changed sigma, blend and shrinkage; refit under current configuration, 9 stats covered. See SESSION_LOG.md.
+- [x] Raw Gaussian probabilities logged on every row (`prob_over_raw`, `prob_under_raw`).
+- [x] Refit script built and run with held-out validation against Gaussian and against the previously live table.
+- [x] Live table replaced; tests pass (115/115).
+- [ ] Re-check p_hits, p_earnedRuns, p_baseOnBalls, pitcher fs once each has 200+ snapshot-joined legs.
+
+---
+
 # PHASE 3 — Track 2: Cross-Venue Arbitrage
 
 *Highest-confidence track. Unlike Phase 2, this track skips the estimation layer

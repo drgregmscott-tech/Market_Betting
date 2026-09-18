@@ -15524,3 +15524,31 @@ Wind slopes were negative in both periods (t between -1.8 and -3.0 for the passi
 - ~~Underdog rows use nicknames ("Packers @ Jets") and got no weather/injury tag.~~ FIXED same day: `NFL_TEAM_NICKNAMES` in `nfl.py` maps all 32 nicknames (and full names via last word) to nflverse codes inside `normalize_nfl_team`. Live check: Underdog games now resolve to real forecasts and injury statuses. New test `test_normalize_nfl_team_handles_nicknames`; pytest 115/115.
 - The forecast is a snapshot at estimate time; wind can change before kickoff. Games more than 16 days out get blank.
 - Precipitation not tested (not in the schedule file); could be added from Open-Meteo history.
+
+## Session 2.47 -- Isotonic Calibration Refit Under the Current Model Configuration
+
+**Date completed:** 2026-09-18
+**Status:** Complete. The live isotonic table was misaligned with the model and has been refit; 9 stats are now covered (was 12).
+
+**Why:** Session 2.40 fit the isotonic tables on 2026-09-17 under sigma factor 1.61, a 50/50 blend and no shrinkage. Sessions 2.41c and 2.42 then changed all three that same day and the table was never refit. The table is a step function keyed on an absolute z-score, so a change in the model's z-scores misaligns it. Session 2.40's claim that isotonic is "robust to the sigma factor" holds for fitting (rank order is unchanged by a uniform rescale) but not for applying an old table to new-configuration probabilities. A second flaw: for legs flagged after 2.40 shipped, `first_flagged_model_prob` is already isotonic-calibrated, so refitting on it would calibrate a calibration.
+
+**What was done:**
+1. `pickem_model.py` now writes `prob_over_raw` / `prob_under_raw` (the pre-isotonic Gaussian probabilities) on every scored row and snapshot, so later refits never touch a calibrated value. Golden fixture regenerated; only these two columns changed.
+2. New `scripts/calibration/refit_isotonic_current_config.py`. It joins graded legs to retained estimate snapshots (13,936 legs, 39 snapshot files), rebuilds each leg's raw probability as the current code would (0.95/0.05 blend, shrinkage k=5, current per-stat sigma factor recovered from the factor in force at snapshot time), fits isotonic per stat on the earliest 70% by flag time, and scores the latest 30% against both the plain Gaussian and the table that was live. Snapshots written within the 2.41c/2.41d/2.42 deployment windows are dropped because the factor in force cannot be told from the file.
+3. `fit_isotonic_calibration.py` now refuses to run without `--legacy` (its input is the contaminated `first_flagged_model_prob`).
+4. Refit written to `data/pickem/isotonic_calibration_by_stat.csv`.
+
+**Held-out result (Brier, lower is better; live_tbl = the misaligned table that was serving):**
+- rbi: Gaussian 0.2063, live 0.2237, refit 0.1813. strikeOuts 0.2118 / 0.2032 / 0.1966. homeRuns 0.1371 / 0.0874 / 0.0873. doubles 0.1700 / 0.1247 / 0.1183.
+- The live table was worse than plain Gaussian for rbi, strikeOuts, baseOnBalls, p_hits, p_earnedRuns, passing_tds+rushing_tds+receiving_tds and receptions. It was serving flags on those stats with probabilities worse than no calibration.
+- Newly covered (refit beats Gaussian held-out, n>=200): hitter fs, runs, totalBases.
+- Dropped to Gaussian: passing_tds+rushing_tds+receiving_tds and receptions (refit does not beat Gaussian), and p_hits, p_earnedRuns, p_baseOnBalls, pitcher fs (refit beats Gaussian and the old live table held-out, but only 134-150 snapshot-joined legs, under the 200-leg floor).
+
+**Stated approximations:** league_avg is the current-season value, not per flag date; wind (2.46) and the switched-off prior-season blend (2.44) are not reconstructed; the 2-game sigma floor is not re-derived; only snapshot-joined legs (about 45% of graded legs) are used, and held-out sets are small (14-442 legs per stat). Refit gains for the smallest stats are not strong evidence.
+
+**Correction:** Session 2.40's "robust to SIGMA_CALIBRATION_FACTOR" statement is wrong for application, as above.
+
+**Open items:**
+- The four stats dropped only for sample size (p_hits, p_earnedRuns, p_baseOnBalls, pitcher fs) should be re-checked as more snapshot-joined legs accumulate; the refit script is designed to be re-run.
+- Any future change to sigma factors, blend weight or shrinkage k requires re-running this refit in the same change.
+- 6 of 12 previously covered stats now score Gaussian; flag volume on them will shift on the next pipeline run.

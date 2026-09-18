@@ -1432,6 +1432,10 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
         row["games_used"] = len(series)
 
         prob_under_raw = (1.0 - p_over) if p_over is not None else None
+        # Session 2.47: keep the pre-isotonic Gaussian probabilities on the row so a
+        # refit of the isotonic tables never has to calibrate an already-calibrated value.
+        row["prob_over_raw"] = p_over
+        row["prob_under_raw"] = prob_under_raw
         # SESSION 2.40 -- for stats with a real, held-out-validated isotonic
         # calibration on file (see module note above prob_over()), override
         # the plain Gaussian probability with the empirical one. Each side
@@ -1485,6 +1489,8 @@ def _blank_model_fields() -> dict:
         "prob_over": None,
         "prob_under": None,
         "prob_calibration_method": None,
+        "prob_over_raw": None,
+        "prob_under_raw": None,
         "implied_prob_over": None,
         "implied_prob_under": None,
         "edge_over": None,

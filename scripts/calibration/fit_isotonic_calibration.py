@@ -283,6 +283,13 @@ def fit_stat(stat_key: str, group: pd.DataFrame) -> dict:
 
 
 def main() -> None:
+    if "--legacy" not in sys.argv:
+        raise SystemExit(
+            "Superseded by scripts/calibration/refit_isotonic_current_config.py (Session 2.47): "
+            "this script keys the fit on first_flagged_model_prob, which is already isotonic-"
+            "calibrated for legs flagged after Session 2.40, and on z-scores from the old sigma/"
+            "blend configuration. Pass --legacy to run it anyway (e.g. for the PAVA helpers only)."
+        )
     graded = load_graded_legs_with_timestamp()
     print(f"Total graded legs with usable model_prob and a real first_flagged_at: {len(graded)}")
     print(f"Production SIGMA_CALIBRATION_FACTOR: {SIGMA_CALIBRATION_FACTOR}")
