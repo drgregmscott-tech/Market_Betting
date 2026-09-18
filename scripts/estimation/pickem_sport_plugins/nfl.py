@@ -235,12 +235,32 @@ NFL_TEAM_ALIASES: dict[str, str] = {
 }
 
 
+# Session 2.46 follow-up: Underdog labels teams by nickname ("Packers @ Jets"),
+# not by code. Maps each nickname (upper-case) to the nflverse team code.
+NFL_TEAM_NICKNAMES: dict[str, str] = {
+    "CARDINALS": "ARI", "FALCONS": "ATL", "RAVENS": "BAL", "BILLS": "BUF",
+    "PANTHERS": "CAR", "BEARS": "CHI", "BENGALS": "CIN", "BROWNS": "CLE",
+    "COWBOYS": "DAL", "BRONCOS": "DEN", "LIONS": "DET", "PACKERS": "GB",
+    "TEXANS": "HOU", "COLTS": "IND", "JAGUARS": "JAX", "CHIEFS": "KC",
+    "RAIDERS": "LV", "CHARGERS": "LAC", "RAMS": "LA", "DOLPHINS": "MIA",
+    "VIKINGS": "MIN", "PATRIOTS": "NE", "SAINTS": "NO", "GIANTS": "NYG",
+    "JETS": "NYJ", "EAGLES": "PHI", "STEELERS": "PIT", "49ERS": "SF",
+    "SEAHAWKS": "SEA", "BUCCANEERS": "TB", "TITANS": "TEN", "COMMANDERS": "WAS",
+}
+
+
 def normalize_nfl_team(code: object) -> str:
-    """Upper-cases a team code and maps known alternate spellings to the
-    nflverse spelling. Returns "" for non-strings."""
+    """Upper-cases a team label and maps it to the nflverse team code.
+    Handles codes with alternate spellings ("JAC"), nicknames ("Packers")
+    and full names ("Green Bay Packers", via the last word). Returns "" for
+    non-strings."""
     if not isinstance(code, str):
         return ""
     cleaned = code.strip().upper()
+    if cleaned in NFL_TEAM_NICKNAMES:
+        return NFL_TEAM_NICKNAMES[cleaned]
+    if " " in cleaned and cleaned.split()[-1] in NFL_TEAM_NICKNAMES:
+        return NFL_TEAM_NICKNAMES[cleaned.split()[-1]]
     return NFL_TEAM_ALIASES.get(cleaned, cleaned)
 
 

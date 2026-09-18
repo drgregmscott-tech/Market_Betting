@@ -1113,3 +1113,16 @@ def test_nfl_weather_wind_factor_and_roof_gate():
         assert compute_nfl_weather({"game_matchup": "MIA @ DAL", "game_start_time": kickoff}, venues, cache) == ("closed", None, None)
         assert fetch.call_count == 1
     assert compute_nfl_weather({"game_matchup": "DET @ BUF"}, None, {}) == (None, None, None)
+
+
+def test_normalize_nfl_team_handles_nicknames():
+    """Session 2.46 follow-up: Underdog nicknames map to nflverse codes."""
+    from pickem_sport_plugins.nfl import normalize_nfl_team
+
+    assert normalize_nfl_team("Packers") == "GB"
+    assert normalize_nfl_team("49ers") == "SF"
+    assert normalize_nfl_team("Green Bay Packers") == "GB"
+    assert normalize_nfl_team("Rams") == "LA"
+    assert normalize_nfl_team("JAC") == "JAX"  # code alias still works
+    assert normalize_nfl_team("DET") == "DET"
+    assert normalize_nfl_team(None) == ""

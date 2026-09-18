@@ -15521,6 +15521,6 @@ Wind slopes were negative in both periods (t between -1.8 and -3.0 for the passi
 
 **Open items / caveats:**
 - No leg-level Brier check on graded 2026 legs yet (too few windy games graded). Windy games are about 8% of outdoor games; revisit after Week 6+ using the CLV log's `weather_factor`.
-- Underdog rows use full team names ("Packers @ Jets"), which the schedule lookup does not match, so they get no weather (same gap already exists for the injury status). PrizePicks rows work. Worth a team-name map in a later session.
+- ~~Underdog rows use nicknames ("Packers @ Jets") and got no weather/injury tag.~~ FIXED same day: `NFL_TEAM_NICKNAMES` in `nfl.py` maps all 32 nicknames (and full names via last word) to nflverse codes inside `normalize_nfl_team`. Live check: Underdog games now resolve to real forecasts and injury statuses. New test `test_normalize_nfl_team_handles_nicknames`; pytest 115/115.
 - The forecast is a snapshot at estimate time; wind can change before kickoff. Games more than 16 days out get blank.
 - Precipitation not tested (not in the schedule file); could be added from Open-Meteo history.

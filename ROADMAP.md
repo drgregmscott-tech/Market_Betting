@@ -3456,7 +3456,7 @@ Session 2.33's own "measurement first, gating second" discipline).
 - [x] Real held-out check against wind-sensitive stats specifically (see table in SESSION_LOG.md).
 - [x] Wired in only where validated (4 stats, wind only).
 
-**Follow-ups:** leg-level Brier check on graded 2026 windy legs (Week 6+); team-name map so Underdog rows get weather/injury tags; optional precipitation test.
+**Follow-ups:** leg-level Brier check on graded 2026 windy legs (Week 6+); (done 2026-09-18: Underdog team-name map); optional precipitation test.
 
 ---
 
