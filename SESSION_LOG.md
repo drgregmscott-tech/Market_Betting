@@ -15694,3 +15694,18 @@ So the observed gap comes from flags that left the board 3+ hours before first p
 - Point `validate_sigma_held_out.py`, `refit_isotonic_current_config.py` and the blend fit at the logged components (snapshot fallback for older flags). Not done: the components only exist for new flags, so this waits until enough have graded.
 - Re-check at 200+ joined legs; watch flag volume after the next pipeline runs.
 - Consider one snapshot per day for the 09-02 to 09-10 and 09-13/09-14 gaps: not recoverable.
+
+## Session 2.53 -- MLB Lineup-Status Window: Re-Run and a Flag-Time Check
+
+**Date completed:** 2026-09-18
+**Status:** Window still open. No rule. The re-run of the Session 2.33 report gives the same numbers (3,564 legs, 36 games, game dates 09-15 to 09-18), because no new games have graded into it. Wait for about 10 game days.
+
+**New check (not in the 2.33 report):** The 2.33 staleness split used the hour a flag was last seen on the board, which is known only after the flag closes. A live rule cannot use it. Here the split uses the hours between the flag FIRST appearing and first pitch, which is known at flag time. Same population (Underdog MLB legs with a lineup status), game-clustered intervals, four bands set before looking.
+- Overs: <=3h n=1,124 (28 games) +1.5pp inconclusive; 3-6h n=564 (27 games) 30.1% vs 41.1%, -10.9pp below breakeven; 6-9h n=287 (18 games) -2.0pp inconclusive; >9h n=863 (32 games) -4.4pp below breakeven.
+- Unders: <=3h +1.7pp inconclusive; 3-6h +11.2pp inconclusive (n=134); 6-9h +9.3pp inconclusive (n=75); >9h n=202 (29 games) 60.9% vs 48.8%, +12.0pp above breakeven.
+
+**Read:** Early overs run below breakeven and early unders above it, in the same direction as the 2.33 staleness result. It is not monotonic (the 6-9h over band sits near breakeven), most under bands are inconclusive, and the window is 36 games with four bands tested. This is not evidence for a rule. It stays a hypothesis: overs flagged more than 3 hours before first pitch lose, unders win.
+
+**Decision:** No gating, no code change. Re-run both `report_mlb_starter_status_validation.py` and this flag-time split after about 10 game days. A claim needs the same direction within side, survival under game clustering, and a band definition fixed in advance. This check is not saved as a script yet; the logic is short and should join the report when the window closes.
+
+**Open items:** as above; the different_than_expected bucket (23 legs) is still too small.
