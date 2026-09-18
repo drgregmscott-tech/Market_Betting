@@ -1,0 +1,5 @@
+platform,source_line_id,player_name,game_matchup,sport,stat_type,line,over_payout_multiplier,under_payout_multiplier,game_id,game_start_time,status,odds_type,allowed_wager_types,pulled_at
+prizepicks,pp-1001,Test Player A,,NBA,Points,27.5,,,game-1,2026-08-30T00:00:00Z,pre_game,,,2026-09-18T16:25:12.007663+00:00
+prizepicks,pp-1002,,,,,,,,,,,,,2026-09-18T16:25:12.007663+00:00
+underdog,ud-2001,Test Player B,,,Rebounds,8.5,1.9,1.9,m-1,2026-08-30T00:00:00Z,active,,,2026-09-18T16:25:12.007663+00:00
+underdog,ud-2002,,,,Assists,,,,,,active,,,2026-09-18T16:25:12.007663+00:00
