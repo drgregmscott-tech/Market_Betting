@@ -15898,3 +15898,31 @@ Many modules open `logs/<name>.log` at import time, so tests of their failure pa
 3. Players with no nflverse stat row are NOT graded. nflverse lists only players with a stat, so such a player scored 0 TDs, or did not play (a book would void the bet). Grading them all as losses would be wrong; skipping them makes the win rate slightly high. **Session 6.12 must treat the 47 as loss-or-void and show results with and without them.**
 **Open items:** the 47 ungraded flags above; a snap-count source would separate "played, no TD" from "did not play". Session 6.7 stays open until 6.12.
 
+## Session 6.12 -- Props Validity Audit
+
+**Date completed:** 2026-09-19
+**Status:** Complete on the evidence available: 340 graded legs, 25 games (about 2 NFL weeks; the card asked for 4-5 weeks, started early at the user's request). Every verdict is "inconclusive" or "insufficient". The audit's main result is a pricing bug, not a win-rate verdict. Nothing in flagging was changed.
+**What:** `scripts/calibration/props_model_validity_audit.py --report` (7 tests; 190 pytest pass). Rules were fixed in its docstring before any result: verdict needs >= 30 legs and >= 8 games; verdict is on ROI at the real odds with a game-clustered 95% interval; "worth building on" needs "beats", >= 100 legs, >= 30 games, and still "beats" with ungraded flags counted as losses. Output: `data/sportsbook_props/model_validity_audit_20260919.csv`.
+**Main finding: the model's "market price" is wrong for these markets.** The flag price (`first_flagged_market_price`) is field-normalized: each player's price is divided by the sum over the whole game field so prices add to 1.0. That fits "first TD scorer" (one winner). It does not fit "anytime" and "2+" (many winners). Logged price averages 5.8%; the odds the books quoted imply 25.8% (DraftKings 21.0%, BetMGM 29.2%). A bet at quoted odds breaks even at the quoted probability, so that is the correct breakeven (used per leg by the audit). Stated edges of 15-25 points were mostly this bug. The model's probability itself is roughly calibrated overall (stated 26.5%, won 25.0%).
+**Results (graded legs; game-clustered 95% intervals; ROI = profit per unit staked at the quoted odds):**
+- BetMGM anytime: 191 legs, 15 games; won 28.8% [23.8, 33.8]; stated 28.5%; quoted breakeven 29.2%; ROI -0.2% [-30.7, 30.4]. Inconclusive.
+- DraftKings anytime: 120 legs, 10 games; won 22.5% [15.7, 29.3]; stated 25.9%; quoted breakeven 24.6%; ROI +9.6% [-33.8, 52.9]. Inconclusive.
+- DraftKings 2+ TDs: 29 legs, 9 games; won 10.3%; stated 15.6%; quoted breakeven 7.3%. Insufficient (under 30 legs).
+- All: 340 legs, 25 games; won 25.0% [20.8, 29.2]; ROI +6.8% [-23.1, 36.8]. Inconclusive.
+- The same verdicts hold with the 47 ungraded flags counted as losses. No cell is "worth building on".
+- Calibration by stated band (legs, won vs stated): under 15% (77): 26.0% vs 10.0%; 15-25% (119): 15.1% vs 19.6%; 25-35% (56): 28.6% vs 30.8%; 35-50% (54): 35.2% vs 41.2%; 50%+ (34): 35.3% vs 57.1% [16.8, 53.8]. Longshots are underrated, the top tail is overconfident (interval excludes the stated 57.1%).
+- Field-vig flag: all 387 flags carry `implied_prob_includes_field_vig` = False. The 0.60 sizing dampener therefore never applied; the field normalization itself is the problem. 16 flags have no quoted odds in the log or any snapshot; they are left out of ROI.
+**Exploratory only (one post-hoc look, not evidence; do not act on it):** re-scoring edge against the quoted price, the 145 graded flags with model minus quoted >= 3 points won 17.9%, ROI -15.5% [-53.7, +22.7]; the 182 below 3 points won 31.9%, ROI +24.7%. The interval is wide, but nothing here suggests the flagged set beats the quoted odds.
+**Decisions:**
+1. p0 corrected in `docs/props_sample_size_methodology.md` (new Section 8): 0.2255 -> about 0.258; required n about 1,705 (was 1,562). The report's 1,562 target stays until 6.13 decides what is flagged.
+2. Field-vig treatment: corrected, not confirmed. Anytime and 2+ must be priced from the quoted odds, not field-normalized.
+3. Ungraded flags: kept as a sensitivity (loss-or-void), not graded. See Session 6.11.
+4. Not covered: no player position in the log (no role split); all flags are the over side (no side split); pooled intervals are slightly too narrow because DraftKings and BetMGM use different game ids for one real game (per-book cells are the primary read).
+**Model fixes this audit supports (input to Session 6.13; none applied):**
+1. Price anytime and 2+ markets from the quoted odds (raw implied probability), keep field normalization only for a true one-winner market. Re-run the flag count: only 145 of 327 graded flags with odds keep a 3-point edge under the corrected price.
+2. Ceiling on stated probability: the 50%+ band won 35.3% against 57.1% stated.
+3. Longshot band (under 15% stated) wins more than stated; consider no shrinkage there. Needs more legs first.
+4. Stop-flag rules: not supported yet; every cell is inconclusive. Re-run this audit at about 4-5 NFL weeks (roughly 70 games) before removing anything.
+5. Drift tests for the sizing constants and a props weekly review: unchanged from the 6.13 card.
+**Open items:** the 47 ungraded flags; re-run at 4-5 weeks of games; 6.13 scope above.
+

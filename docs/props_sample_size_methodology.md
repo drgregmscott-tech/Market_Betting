@@ -149,3 +149,24 @@ actual kickoff.
   that flag (v1 scope, same reasoning as Session 6.6's decision to keep
   it a per-row badge rather than a separate track); a future recalibration
   pass could test whether the two groups' real hit rates actually differ.
+
+## 8. Correction (Session 6.12, 2026-09-19): p₀ was measured on the wrong price
+
+Section 2 took p₀ from `first_flagged_market_price`. For touchdown markets
+that price is field-normalized: each player's price is divided by the sum
+over the whole game's field so the prices add to 1.0. That is correct for
+"first touchdown scorer" (one winner) and wrong for "anytime" and "2+"
+(many winners). On the 387 real closed flags the logged price averages 5.3%,
+while the odds the books actually quoted imply 19% (DraftKings) to 27%
+(BetMGM). A bet at quoted odds breaks even at the quoted probability, so the
+quoted probability is the correct breakeven.
+
+- **Corrected p₀ ≈ 0.258** (mean quoted breakeven of the 340 graded legs).
+  It is still a snapshot and still selection-biased; it will move.
+- **Corrected n** with the same p₁ = p₀ + 0.03, α = 0.05, power 0.80:
+  ≈ **1,705 graded flags** (was 1,562). The `props_sample_report.py`
+  target of 1,562 is left in place until Session 6.13 decides what is
+  flagged, because the flagged mix will change.
+- The "44% of flags include field vig" note in Section 7 is moot for these
+  markets: at flag time all 387 flags carry `implied_prob_includes_field_vig`
+  = False, and the field normalization itself is the problem.

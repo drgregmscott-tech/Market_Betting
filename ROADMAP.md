@@ -5317,7 +5317,7 @@ until one of two named re-check triggers fires (see SESSION_LOG.md).
 ---
 
 ### Session 6.12 -- Props Validity Audit
-**Status:** Not started. Timing: run after about 4-5 NFL weeks of graded flags (roughly 70 games; NFL slates arrive once a week, so evidence builds slowly).
+**Status:** ✅ Complete 2026-09-19 on 340 legs / 25 games (started early; all cells inconclusive; found the field-normalized price bug; re-run at 4-5 weeks). Original timing note: run after about 4-5 NFL weeks of graded flags (roughly 70 games; NFL slates arrive once a week, so evidence builds slowly).
 **Prerequisites:** Session 6.11 complete and enough graded legs (interim floor 30 closed; see `docs/props_sample_size_methodology.md`).
 **What gets built:** the props twin of `pickem_model_validity_audit.py`, with the lessons of Sessions 2.55-2.62 built in from the start:
 - Score every leg against its OWN correct no-vig breakeven, never one constant. Recheck p0 = 0.2255 in `props_sample_size_methodology.md`: it is the mean flagged price, which is selection-biased.
@@ -5328,10 +5328,10 @@ until one of two named re-check triggers fires (see SESSION_LOG.md).
 - Decide and fix in advance the "worth building on" rule, the way the shadow measure fixed its rule before any data (Session 2.65).
 **Files touched:** `scripts/calibration/props_model_validity_audit.py` (new), `docs/props_sample_size_methodology.md` (correction if p0 changes), tests.
 **Validation (required to close session):**
-- [ ] Audit run on real graded props with game counts stated per cell.
-- [ ] Explicit read recorded for each book and market type: beats, below, or inconclusive, with the intervals.
-- [ ] p0 and the field-vig treatment either confirmed or corrected in the methodology doc.
-- [ ] List of model fixes the audit supports (input to Session 6.13); nothing changed in flagging in this session.
+- [x] Audit run on real graded props with game counts stated per cell.
+- [x] Explicit read recorded for each book and market type: beats, below, or inconclusive, with the intervals.
+- [x] p0 and the field-vig treatment either confirmed or corrected in the methodology doc.
+- [x] List of model fixes the audit supports (input to Session 6.13); nothing changed in flagging in this session.
 
 ---
 
