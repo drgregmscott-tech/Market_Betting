@@ -15813,3 +15813,12 @@ Added a "Games graded" tile (`outcomeStatGames`) next to "% of full sample". It 
 
 **Date completed:** 2026-09-19
 **Status:** Complete. `weekly_review.py` now logs `n_games_cumulative` and `pct_of_games_target_reached` (target `FULL_SAMPLE_GAMES_THRESHOLD` = 100) in `review_log.csv`, and `--history` prints them. `game_id` is joined from `clv_log.csv` by `flag_id`; games are platform + game_id; legs without a game id are not counted. Old review rows keep blank values for the two new columns. 2 new tests (154 pass). Read-only check on the real logs: 31,369 graded legs, 314 games (same as the dashboard). The next `--run` writes the first row with the new columns.
+
+## Session 2.60 -- Ceiling on Stated Probability (the 1.000 Top Blocks)
+
+**Date completed:** 2026-09-19
+**Status:** Complete. Closes the Session 2.54 open item "calibrated probability of 1.0 implies an infinite edge".
+**Problem:** 198 of 301 ready isotonic blocks are at exactly 0.0 or 1.0 (every fit leg in that range won or lost), and the Gaussian reaches 0.99+ in the tail. On the latest estimates file 1,669 `prob_under` values were at 0.999 or higher.
+**Evidence (graded legs, game-clustered):** stated 0.95-0.99: won 89.3% (n=628); 0.99-1.0: 90.0% (n=349); exactly 1.0: 90.4% [84.1, 96.7] (n=104). All 1,081 legs stated at 0.95+: 89.6% won vs 98% stated. Time split (earlier half vs later half of those legs): a ceiling improves the Brier score in both halves; best cap 0.88 early, 0.93 late (early win rate 86.7%, late 92.6%); 0.90 is the pooled win rate. The overstatement is spread over stats (stolenBases 93%, totalShots 85%, homeRuns 93%, doubles 81% at 0.97-0.99 stated).
+**Fix:** `MAX_MODEL_PROB = 0.90` and `cap_model_prob()` in `pickem_model.py`, applied to both sides after isotonic/Gaussian, before edges. The tables and `prob_over_raw` / `prob_under_raw` are unchanged, so refits are unaffected. Replay on the latest estimates: 0 flags lost (edge over a 0.55-0.60 breakeven stays above 0.30); 811 flagged legs above the cap now show a lower edge and a smaller Kelly stake. Golden NFL fixture regenerated: only `prob_under` and `edge_under` changed. Tests: fallback test now compares to the raw columns; 3 new tests. 156 pass.
+**Caveat:** the cap is one number chosen on legs flagged under several table versions, and the early and late halves disagree (0.88 vs 0.93). Re-check after about 500 more legs stated at 0.95+ have graded. Not done: a smoother, per-stat top block; the data per stat is too thin (25-190 legs at 0.95+).

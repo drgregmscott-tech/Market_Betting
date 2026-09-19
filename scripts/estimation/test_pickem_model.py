@@ -34,6 +34,9 @@ import pytest
 import requests
 
 from pickem_model import (
+    MAX_MODEL_PROB,
+    cap_model_prob,
+    isotonic_calibrate,
     MLB_STARTER_STATUS_CONFIRMED,
     MLB_STARTER_STATUS_DIFFERENT,
     MLB_STARTER_STATUS_NOT_YET_CONFIRMED,
@@ -290,7 +293,31 @@ def test_isotonic_calibrate_falls_back_to_gaussian_without_ready_entry():
     row = result.iloc[0]
     assert row["model_status"] == "estimated"
     assert row["prob_calibration_method"] == "gaussian"
-    assert row["prob_over"] == pytest.approx(1.0 - row["prob_under"])
+    # Session 2.60: the two sides still add to 1 before the ceiling; the
+    # ceiling (MAX_MODEL_PROB) only ever lowers the larger side.
+    assert row["prob_over_raw"] + row["prob_under_raw"] == pytest.approx(1.0)
+    assert row["prob_over"] == pytest.approx(min(row["prob_over_raw"], MAX_MODEL_PROB))
+    assert row["prob_under"] == pytest.approx(min(row["prob_under_raw"], MAX_MODEL_PROB))
+
+
+def test_cap_model_prob_limits_only_the_top_and_passes_none_through():
+    assert cap_model_prob(1.0) == MAX_MODEL_PROB
+    assert cap_model_prob(0.9999) == MAX_MODEL_PROB
+    assert cap_model_prob(0.55) == 0.55
+    assert cap_model_prob(0.0) == 0.0
+    assert cap_model_prob(None) is None
+    assert cap_model_prob(float("nan")) != cap_model_prob(float("nan"))  # NaN stays NaN
+
+
+def test_no_committed_isotonic_table_can_produce_a_stated_probability_above_the_ceiling():
+    """Regression for the 1.000 top blocks: the raw table value can be 1.0,
+    the value the model states must not be."""
+    from pickem_model import _load_isotonic_table
+    table = _load_isotonic_table()
+    assert any(vals.max() > MAX_MODEL_PROB for _, vals in table.values())  # tables still end at 1.0
+    for stat_key in table:
+        stated = cap_model_prob(isotonic_calibrate(stat_key, 0.9999))
+        assert stated is None or stated <= MAX_MODEL_PROB
 
 
 def test_nfl_regression_matches_golden_snapshot():

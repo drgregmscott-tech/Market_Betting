@@ -931,6 +931,28 @@ def _inverse_normal_cdf(p: float, lo: float = -8.0, hi: float = 8.0, tol: float 
     return (lo + hi) / 2.0
 
 
+# SESSION 2.60 -- CEILING ON A STATED PROBABILITY. Some isotonic tables end in
+# blocks at exactly 1.000 (every leg in that range won, in the fit sample),
+# and the plain Gaussian also reaches 0.99+ far out in the tail. Neither is
+# real: on 1,081 graded legs stated at 0.95 or higher, 89.6% won (stated 0.98).
+# Stated 0.99-0.9999: 90.0% won (n=349); exactly 1.0: 90.4% won (n=104,
+# game-clustered 95% interval 84.1-96.7%). Time split (fit on the earlier half,
+# scored on the later half): capping improves the Brier score in BOTH halves;
+# the best cap was 0.88 early and 0.93 late, 0.90 is the pooled win rate.
+# A stated 1.0 implies an infinite edge and a full-size Kelly stake, so the
+# ceiling is applied to both sides after calibration. It does not change which
+# legs are flagged (the edge over a 0.55-0.60 breakeven stays above 0.30); it
+# fixes the stated probability, the edge shown, and the stake.
+MAX_MODEL_PROB = 0.90
+
+
+def cap_model_prob(prob: Optional[float]) -> Optional[float]:
+    """Apply MAX_MODEL_PROB. None (and NaN) pass through unchanged."""
+    if prob is None or prob != prob:
+        return prob
+    return min(prob, MAX_MODEL_PROB)
+
+
 def isotonic_calibrate(resolved_stat_key: str, raw_prob: Optional[float]) -> Optional[float]:
     """The validated isotonic recalibration of a raw Gaussian-model
     probability for ONE side (pass prob_over to calibrate prob_over, or
@@ -1523,6 +1545,8 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
             "isotonic" if (calibrated_over is not None or calibrated_under is not None) else "gaussian"
         )
 
+        p_over = cap_model_prob(p_over)
+        prob_under = cap_model_prob(prob_under)
         row["prob_over"] = p_over
         row["prob_under"] = prob_under
         row["implied_prob_over"] = implied_over
