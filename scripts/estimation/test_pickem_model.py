@@ -320,6 +320,25 @@ def test_no_committed_isotonic_table_can_produce_a_stated_probability_above_the_
         assert stated is None or stated <= MAX_MODEL_PROB
 
 
+def test_prizepicks_mlb_overs_are_not_scorable_but_everything_else_is():
+    """Session 2.64: PrizePicks MLB overs won 50.1% (2,969 legs, below every
+    entry breakeven); the side is not flagged. Only that side."""
+    from pickem_model import PRIZEPICKS_UNFLAGGED_SIDES, prizepicks_side_is_scorable
+    mlb = dict(platform="prizepicks", sport="MLB", allowed_wager_types="under_or_over")
+    assert prizepicks_side_is_scorable(mlb, "over") is False
+    assert prizepicks_side_is_scorable(mlb, "under") is True
+    assert prizepicks_side_is_scorable(dict(mlb, sport="nfl"), "over") is True
+    assert prizepicks_side_is_scorable(dict(mlb, platform="underdog"), "over") is True
+    assert prizepicks_side_is_scorable(dict(mlb, allowed_wager_types="over"), "under") is False  # still buyable rule
+    assert PRIZEPICKS_UNFLAGGED_SIDES == frozenset({("mlb", "over")})
+
+
+def test_clv_logger_mirrors_the_unflagged_sides():
+    import clv_logger
+    from pickem_model import PRIZEPICKS_UNFLAGGED_SIDES
+    assert clv_logger.PRIZEPICKS_UNFLAGGED_SIDES == PRIZEPICKS_UNFLAGGED_SIDES
+
+
 def test_nfl_regression_matches_golden_snapshot():
     """The core Session 2.12 validation item: byte-for-byte identical NFL
     output before/after the plug-in refactor, on a fixed input.

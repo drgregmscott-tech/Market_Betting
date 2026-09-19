@@ -511,6 +511,12 @@ def _is_scorable_pickem_row(row: pd.Series) -> bool:
     return odds_type.strip().lower() in {"standard", "demon", "goblin"}
 
 
+# SESSION 2.64: mirrors pickem_model.PRIZEPICKS_UNFLAGGED_SIDES (a test keeps
+# the two equal). A flag already open on such a side is retired the same way
+# a no-longer-buyable one is (see process_run_pickem()).
+PRIZEPICKS_UNFLAGGED_SIDES = frozenset({("mlb", "over")})
+
+
 def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
     """SESSION 2.36 FIX (2026-09-16, real finding): mirrors pickem_model.py's
     own prizepicks_side_is_buyable(). Found live: 4 real, currently-open
@@ -529,6 +535,8 @@ def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
     path below on that basis alone."""
     if row.get("platform") != "prizepicks":
         return True
+    if (str(row.get("sport") or "").strip().lower(), side) in PRIZEPICKS_UNFLAGGED_SIDES:
+        return False
     raw = row.get("allowed_wager_types")
     if not isinstance(raw, str) or not raw.strip():
         return True

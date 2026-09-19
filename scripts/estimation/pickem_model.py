@@ -1141,6 +1141,34 @@ def prizepicks_side_is_buyable(row: dict, side: str) -> bool:
     return True  # "under_or_over" or any other stated value -- both sides buyable
 
 
+# SESSION 2.64 -- SIDES THE MODEL DOES NOT FLAG. PrizePicks MLB overs won
+# 50.1% on 2,969 graded Standard legs over 108 games (game-clustered 95%
+# interval 47.4-52.8%), below even the lowest per-leg breakeven of any entry
+# size (6-pick, 54.9%), while the model stated them at 58%+. The shortfall is
+# spread over the big stats (hitter fantasy score 50.2%, total bases 46.3%).
+# Unders (56.2%, inconclusive) stay flagged. The row is kept visible with its
+# probability, but no edge is computed for that side, so it is never flagged.
+# Underdog is not affected (44.6% vs 44.2% breakeven, inconclusive). Re-check
+# once 200 new clean-flag legs exist on this side; remove the entry to undo.
+# clv_logger.py mirrors this set (test_clv_logger / test_pickem_model compare
+# the two).
+PRIZEPICKS_UNFLAGGED_SIDES = frozenset({("mlb", "over")})
+
+
+def prizepicks_side_is_flaggable(row: dict, side: str) -> bool:
+    """False for a (sport, side) the model has decided not to flag (see
+    PRIZEPICKS_UNFLAGGED_SIDES). Always True for non-PrizePicks rows."""
+    if row.get("platform") != "prizepicks":
+        return True
+    sport = str(row.get("sport") or "").strip().lower()
+    return (sport, side) not in PRIZEPICKS_UNFLAGGED_SIDES
+
+
+def prizepicks_side_is_scorable(row: dict, side: str) -> bool:
+    """Buyable AND not a side the model has decided not to flag."""
+    return prizepicks_side_is_buyable(row, side) and prizepicks_side_is_flaggable(row, side)
+
+
 # ---------------------------------------------------------------------------
 # SESSION 2.32 -- real-time MLB starter/lineup confirmation signal
 # (Underdog gate, MLB only). See docs/research/underdog_pricing_gap_
@@ -1558,7 +1586,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
             row["implied_prob_under"] = (1.0 - implied_over) if implied_over is not None else None
         row["edge_over"] = (
             (p_over - implied_over)
-            if (p_over is not None and implied_over is not None and prizepicks_side_is_buyable(row, "over"))
+            if (p_over is not None and implied_over is not None and prizepicks_side_is_scorable(row, "over"))
             else None
         )
         row["edge_under"] = (
@@ -1566,7 +1594,7 @@ def process_props(props_df: pd.DataFrame, season: int) -> pd.DataFrame:
             if (
                 row["prob_under"] is not None
                 and row["implied_prob_under"] is not None
-                and prizepicks_side_is_buyable(row, "under")
+                and prizepicks_side_is_scorable(row, "under")
             )
             else None
         )

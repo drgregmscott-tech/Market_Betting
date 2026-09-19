@@ -317,6 +317,32 @@ def scenario_6b_existing_flag_closes_when_side_becomes_unbuyable():
     print("PASS: scenario_6b_existing_flag_closes_when_side_becomes_unbuyable")
 
 
+def scenario_6c_open_mlb_over_flag_closes_under_the_unflagged_side_rule():
+    """SESSION 2.64 -- PrizePicks MLB overs are no longer flagged. An MLB
+    over flag already open must retire, not keep refreshing as open."""
+    open_row = _base_row(source_line_id="pp_mlb_over", sport="mlb", stat_type="Hits", resolved_stat_key="hits",
+                         line=0.5, prob_over=0.70, implied_prob_over=0.5491, edge_over=0.1509,
+                         prob_under=0.30, implied_prob_under=0.5491, edge_under=-0.2491)
+    log1 = clv_logger.process_run_pickem(pd.DataFrame([open_row]), _empty_pickem_log(), "2026-09-01T10:00:00Z")
+    assert log1.iloc[0]["status"] == "open" and log1.iloc[0]["flagged_side"] == "over"
+    # Run 2: the model no longer computes an over edge for this row.
+    row2 = dict(open_row, edge_over=None, pulled_at="2026-09-01T11:00:00Z")
+    log2 = clv_logger.process_run_pickem(pd.DataFrame([row2]), log1, "2026-09-01T11:00:00Z")
+    assert log2.iloc[0]["status"] == "closed"
+    # No NEW MLB over flag is created either, and an MLB under still flags.
+    fresh_over = dict(open_row, source_line_id="pp_mlb_over_2", edge_over=None)
+    fresh_under = dict(open_row, source_line_id="pp_mlb_under", edge_over=None,
+                       prob_under=0.70, edge_under=0.1509)
+    log3 = clv_logger.process_run_pickem(pd.DataFrame([fresh_over, fresh_under]), _empty_pickem_log(), "2026-09-01T12:00:00Z")
+    assert list(log3["flag_id"]) == ["prizepicks|pp_mlb_under"] and log3.iloc[0]["flagged_side"] == "under"
+    # The logger's own side check agrees, and Underdog / NFL are untouched.
+    assert clv_logger._side_is_buyable_pickem(pd.Series(open_row), "over") is False
+    assert clv_logger._side_is_buyable_pickem(pd.Series(open_row), "under") is True
+    assert clv_logger._side_is_buyable_pickem(pd.Series(dict(open_row, sport="nfl")), "over") is True
+    assert clv_logger._side_is_buyable_pickem(pd.Series(dict(open_row, platform="underdog")), "over") is True
+    print("PASS: scenario_6c_open_mlb_over_flag_closes_under_the_unflagged_side_rule")
+
+
 def _props_base_row(**overrides):
     row = {
         "platform": "draftkings",
@@ -518,6 +544,7 @@ def run_all():
     scenario_5b_prizepicks_clv_not_available_at_close()
     scenario_6_idempotent_same_file_twice()
     scenario_6b_existing_flag_closes_when_side_becomes_unbuyable()
+    scenario_6c_open_mlb_over_flag_closes_under_the_unflagged_side_rule()
     scenario_7_props_new_flag_with_consensus()
     scenario_8_props_new_flag_without_consensus()
     scenario_9_props_below_threshold_not_flagged()
@@ -526,7 +553,7 @@ def run_all():
     scenario_12_props_betmgm_selection_id_collision()
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
-    print("\nAll 17 scenarios passed.")
+    print("\nAll 18 scenarios passed.")
 
 
 if __name__ == "__main__":
