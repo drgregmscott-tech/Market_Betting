@@ -15850,3 +15850,9 @@ Added a "Games graded" tile (`outcomeStatGames`) next to "% of full sample". It 
 - Cells clearing the floor: 100 of 132 before, 53 of 132 now. Underdog rows unchanged.
 **Tests:** `test_model_validity_audit.py` (new, 6). 165 pass. New record: `data/pickem/model_validity_audit_20260919.csv`.
 **Read:** the earlier read that the PrizePicks MLB model had a large edge was an artifact of the price, as Session 2.55 suspected. Nothing was changed in flagging.
+
+## Session 2.63 -- Tests No Longer Write Into the Real Logs
+
+**Date completed:** 2026-09-19
+**Status:** Complete. Closes the minor open item from Session 2.57.
+Many modules open `logs/<name>.log` at import time, so tests of their failure paths ("boom", "simulated network failure") appended fake errors to `logs/estimation.log` and `logs/ingestion.log` on every `pytest` run (30 lines per run). New root `conftest.py` replaces `logging.FileHandler` for the pytest session with a subclass that sends any file under `logs/` to a temp folder (removed at exit); it covers handlers created at import and inside `run()`, and any future module. `pytest.ini` (empty) anchors the rootdir so the conftest loads whether pytest is run from the repo root, a subfolder, or with a subfolder argument. Verified: full suite (165 pass), `pytest scripts/estimation`, and a run from `scripts/ingestion` all leave `git status` clean. Direct `python test_x.py` runs do not load the conftest; `test_ingest_pickem.py` isolates itself (Session 2.57).
