@@ -1125,6 +1125,10 @@ async function initPickem() {
 
 const BREAKEVEN_WIN_RATE = 0.5549; // 5-pick 19x; was 0.5774 before Session 2.57
 const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
+// Session 2.58 -- legs from one game are correlated (measured design effect
+// 3.49), so games, not legs, are the real unit of evidence. About 3,300 real
+// legs = about 100 games (docs/sample_size_methodology.md, Session 2.57).
+const FULL_SAMPLE_GAMES_THRESHOLD = 100;
 
 // Session 2.26 -- generalized from NFL-only to every sport with real
 // graded rows in outcome_log.csv. The four top-line stats (Graded legs /
@@ -1136,7 +1140,20 @@ const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
 // shows every sport's own real numbers separately, whether validated or
 // not, so nothing is hidden -- just not blended into one number that
 // implies more than it should.
-function renderOutcomeStats(rows, gameStartByFlagId) {
+// Distinct games behind a set of graded legs. A game is platform + game_id
+// (ids from different platforms are not comparable, so one real game seen on
+// both platforms counts twice: a slight overcount). Legs with no game_id in
+// clv_log.csv are not counted, so this can only undercount, never inflate.
+function countGradedGames(gradedRows, gameIdByFlagId) {
+  const games = new Set();
+  gradedRows.forEach((r) => {
+    const gameId = gameIdByFlagId && gameIdByFlagId.get(r.flag_id);
+    if (gameId) games.add(String(r.platform || "") + "|" + gameId);
+  });
+  return games.size;
+}
+
+function renderOutcomeStats(rows, gameStartByFlagId, gameIdByFlagId) {
   const allGraded = rows.filter((r) => r.result === "win" || r.result === "loss");
   const graded = allGraded.filter((r) => isValidatedSport(r.sport));
   const wins = graded.filter((r) => r.result === "win").length;
@@ -1147,6 +1164,7 @@ function renderOutcomeStats(rows, gameStartByFlagId) {
   setText("outcomeStatWinRate", winRate === null ? "—" : (winRate * 100).toFixed(1) + "%");
   setText("outcomeStatBreakeven", (BREAKEVEN_WIN_RATE * 100).toFixed(2) + "%");
   setText("outcomeStatSample", pctOfFullSample === null ? "—" : pctOfFullSample.toFixed(1) + "%");
+  setText("outcomeStatGames", String(countGradedGames(graded, gameIdByFlagId)));
 
   const winRateEl = document.getElementById("outcomeStatWinRate");
   if (winRateEl && winRate !== null) {
@@ -1282,12 +1300,14 @@ async function initOutcomeReview() {
   // own comment) and this must not create an ordering dependency between
   // the two.
   let gameStartByFlagId = new Map();
+  const gameIdByFlagId = new Map();
   try {
     const res = await fetch(DATA_URL, { cache: "no-store" });
     if (res.ok) {
       const clvRows = parseCSV(await res.text());
       clvRows.forEach((r) => {
         if (r.flag_id && r.game_start_time) gameStartByFlagId.set(r.flag_id, r.game_start_time);
+        if (r.flag_id && r.game_id) gameIdByFlagId.set(r.flag_id, r.game_id);
       });
     }
   } catch (err) {
@@ -1298,7 +1318,7 @@ async function initOutcomeReview() {
     const res = await fetch(OUTCOME_DATA_URL, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const rows = parseCSV(await res.text());
-    renderOutcomeStats(rows, gameStartByFlagId);
+    renderOutcomeStats(rows, gameStartByFlagId, gameIdByFlagId);
   } catch (err) {
     console.error("Market_Betting frontend: failed to load real-outcome grading data.", err);
   }

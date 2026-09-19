@@ -15802,3 +15802,9 @@ The flag-time loss is confined to legs on the unflagged side of these stats; the
 Docs: correction note at the top of `docs/sample_size_methodology.md`.
 
 **Open items:** show games (not only legs) toward the threshold on the dashboards; PrizePicks Standard MLB and overs are below hurdle, so consider what that means for flagging (not acted on: needs the `adjusted_odds` split first); the 2.37 audit script still uses old breakeven numbers.
+
+## Session 2.58 -- Games Toward the Threshold on the Dashboard
+
+**Date completed:** 2026-09-19
+**Status:** Complete for the Real-outcome grading panel. `weekly_review.py` and `review_log.csv` still report legs only.
+Added a "Games graded" tile (`outcomeStatGames`) next to "% of full sample". It counts distinct platform + `game_id` among graded validated-sport legs, joining `outcome_log.csv` to `clv_log.csv` by `flag_id` (outcome rows carry no game id). Legs with no logged game id are not counted, so it can only undercount; one real game seen on both platforms counts twice. Target `FULL_SAMPLE_GAMES_THRESHOLD = 100` (about 3,300 real legs, Session 2.57). Checked in the browser against the real logs: 31,369 graded legs, 314 games. That tile mixes both platforms and all validated sports, so it is a volume check, not the PrizePicks Standard test; use `report_sample_size_check.py` for that (171 games).
