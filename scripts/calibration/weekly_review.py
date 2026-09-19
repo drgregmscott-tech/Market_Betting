@@ -174,6 +174,10 @@ LOG_PATH = BASE_DIR / "logs" / "weekly_review.log"
 # and the methodology doc together, not just one.
 BREAKEVEN_WIN_RATE = 0.5549          # Section 2 (5-pick 19x; was 0.5774 before Session 2.57)
 FULL_SAMPLE_SIZE_THRESHOLD = 3725    # Section 3
+# Legs from one game are correlated (measured design effect 3.49), so games
+# are the real unit of evidence: about 3,300 real legs = about 100 games.
+# See sample_size_methodology.md, Session 2.57 correction note.
+FULL_SAMPLE_GAMES_THRESHOLD = 100
 INTERIM_REPORTING_FLOOR = 30         # Section 6
 
 # Minimum legs required in EACH group before a recalibration check is run
@@ -202,6 +206,8 @@ REVIEW_LOG_COLUMNS = [
     "win_rate_cumulative",
     "breakeven_win_rate",
     "pct_of_full_sample_reached",
+    "n_games_cumulative",
+    "pct_of_games_target_reached",
     "sample_status",
     "calibration_gap",
     "calibration_check_status",
@@ -269,10 +275,27 @@ def _attach_first_flagged_at(df: pd.DataFrame) -> pd.DataFrame:
     if not CLV_LOG_PATH.exists() or "flag_id" not in df.columns:
         df["first_flagged_at"] = pd.NaT
         return df
-    clv = pd.read_csv(CLV_LOG_PATH, usecols=["flag_id", "first_flagged_at"])
+    # game_id is joined here too (Session 2.59) so run_review can count games.
+    wanted = ["flag_id", "first_flagged_at", "game_id"]
+    clv = pd.read_csv(CLV_LOG_PATH, usecols=lambda c: c in wanted)
+    if "game_id" not in clv.columns:
+        clv["game_id"] = pd.NA
+    clv = clv.drop_duplicates("flag_id")
     clv["first_flagged_at"] = pd.to_datetime(clv["first_flagged_at"], utc=True, errors="coerce")
     df = df.merge(clv, on="flag_id", how="left")
     return df
+
+
+def count_games(graded: pd.DataFrame) -> int:
+    """Distinct games behind the graded legs: platform + game_id. Ids from
+    different platforms are not comparable, so one real game on both
+    platforms counts twice (a slight overcount). Legs with no game_id are
+    not counted, so this can only undercount."""
+    if "game_id" not in graded.columns:
+        return 0
+    known = graded.loc[graded["game_id"].notna()]
+    platform = known["platform"].astype(str) if "platform" in known.columns else ""
+    return int((platform + "|" + known["game_id"].astype(str)).nunique())
 
 
 def load_review_log() -> pd.DataFrame:
@@ -553,6 +576,8 @@ def run_review() -> dict:
     n_wins_cumulative = int((graded_all["result"] == "win").sum())
     win_rate_cumulative = (n_wins_cumulative / n_cumulative) if n_cumulative > 0 else None
 
+    n_games_cumulative = count_games(graded_all)
+
     sample_status = "ok" if n_cumulative >= INTERIM_REPORTING_FLOOR else "insufficient_sample"
 
     calibration_gap, calibration_status = check_calibration_gap(graded_all)
@@ -591,6 +616,8 @@ def run_review() -> dict:
         "win_rate_cumulative": win_rate_cumulative,
         "breakeven_win_rate": BREAKEVEN_WIN_RATE,
         "pct_of_full_sample_reached": round(100 * n_cumulative / FULL_SAMPLE_SIZE_THRESHOLD, 2),
+        "n_games_cumulative": n_games_cumulative,
+        "pct_of_games_target_reached": round(100 * n_games_cumulative / FULL_SAMPLE_GAMES_THRESHOLD, 2),
         "sample_status": sample_status,
         "calibration_gap": calibration_gap,
         "calibration_check_status": calibration_status,
@@ -609,9 +636,9 @@ def run_review() -> dict:
     review_log.to_csv(REVIEW_LOG_PATH, index=False)
 
     log.info(
-        "Review %s complete: %d graded this period (%d cumulative). "
+        "Review %s complete: %d graded this period (%d cumulative, %d games). "
         "sample_status=%s. Recommendation: %s",
-        review_id, n_this_period, n_cumulative, sample_status, recommendation,
+        review_id, n_this_period, n_cumulative, n_games_cumulative, sample_status, recommendation,
     )
     return new_row
 
@@ -624,7 +651,7 @@ def print_history() -> None:
     cols = [
         "review_id", "period_end", "n_graded_this_period", "win_rate_this_period",
         "n_graded_cumulative", "win_rate_cumulative", "pct_of_full_sample_reached",
-        "sample_status", "recommendation",
+        "n_games_cumulative", "pct_of_games_target_reached", "sample_status", "recommendation",
     ]
     print(review_log[cols].to_string(index=False))
 

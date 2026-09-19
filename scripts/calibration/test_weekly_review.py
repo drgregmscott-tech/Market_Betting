@@ -164,6 +164,29 @@ def test_run_review_writes_a_row_and_second_run_reports_only_new_legs(tmp_logs):
     assert len(log_df) == 2 and list(log_df.columns) == wr.REVIEW_LOG_COLUMNS
 
 
+def test_run_review_counts_distinct_games_by_platform(tmp_logs):
+    n = 60
+    pd.DataFrame([{
+        "flag_id": f"f{i}", "platform": "prizepicks" if i < 40 else "underdog",
+        "reported_at": "2026-09-16T00:00:00Z", "result": "win" if i % 2 == 0 else "loss",
+        "first_flagged_model_prob": 0.55, "first_flagged_edge": 0.05,
+    } for i in range(n)]).to_csv(tmp_logs / "outcome_log.csv", index=False)
+    # 40 prizepicks legs over 4 games; 20 underdog legs over 2 games (one id
+    # shared with prizepicks: still its own game, ids are per platform); 6 legs
+    # of the underdog 20 have no game id and must not be counted.
+    game = [f"g{i % 4}" for i in range(40)] + [f"g{i % 2}" if i < 14 else None for i in range(20)]
+    pd.DataFrame({"flag_id": [f"f{i}" for i in range(n)], "first_flagged_at": ["2026-09-15T12:00:00Z"] * n,
+                  "game_id": game}).to_csv(tmp_logs / "clv_log.csv", index=False)
+    row = wr.run_review()
+    assert row["n_games_cumulative"] == 6
+    assert row["pct_of_games_target_reached"] == pytest.approx(6.0)
+
+
+def test_run_review_without_game_ids_reports_zero_games(tmp_logs):
+    _write_outcomes(tmp_logs, n=60)
+    assert wr.run_review()["n_games_cumulative"] == 0
+
+
 def test_run_review_below_floor_still_logs_but_says_insufficient(tmp_logs):
     _write_outcomes(tmp_logs, n=10)
     row = wr.run_review()
