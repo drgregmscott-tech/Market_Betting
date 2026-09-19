@@ -15835,3 +15835,18 @@ Added a "Games graded" tile (`outcomeStatGames`) next to "% of full sample". It 
 **Change:** derived, nothing new stored. `sizing_engine.entry_size_edges(platform, p)` and `playable_entry_sizes(platform, p, min_edge=0.03)` (test 23). The Open flags table has a new "Playable in" column (JS mirror `entrySizeEdges`) that shows the entry sizes where the leg clears that size's breakeven by 3+ points, e.g. "5-6-pick"; hover shows the edge at every size. Equal, independent legs assumed. A flag at 0.60 is playable in 5-6-pick only; 0.65 in 3-6-pick; a 2-pick needs 0.737 (0.707 + 0.03). Checked in the browser on the real log: 80 of 84 open PrizePicks rows read 2-6-pick (their logged probabilities are the old uncapped 1.0 values, pre Session 2.60), 1 read 5-6, 1 read 4-6, 2 read none (older Demon/Goblin-era rows). 159 pytest pass.
 
 **Not done:** the estimates CSV and CLV log do not carry per-size edges (derivable from the logged probability and the table). The sizing panel still sizes only the entry you select; it does not suggest a best size. Underdog's column uses its entry table against the leg's model probability, which is a different concept from its no-vig row edge.
+
+## Session 2.62 -- Validity Audit: PrizePicks Breakeven Corrected
+
+**Date completed:** 2026-09-19
+**Status:** Complete. Closes the Session 2.56 open item "the 2.37 audit still uses old PrizePicks numbers". Underdog rows were not re-examined.
+**Problem:** `pickem_model_validity_audit.py` scored each graded leg against the implied probability LOGGED at flag time. For PrizePicks that was never a real breakeven: Standard rows carry the flat 0.5 (6,006 of 6,065), Demon/Goblin rows the single-lineup constants (0.472/0.528, 0.305/0.695). Every PrizePicks Standard cell looked about 5 points better than it is, and Demon/Goblin cells (18,750 legs, mostly unders bought at a price nobody measured) were scored as if priced.
+**Fix (`apply_breakeven_reference()` in `load_joined()`):** PrizePicks Standard uses the 5-pick reference 0.5549 (from `sizing_engine`, same as the dashboards); PrizePicks Demon/Goblin get no breakeven and the verdict `no_valid_breakeven` (47 cells listed, not scored); Underdog keeps its logged value; the logged number stays in `breakeven_logged`. Over/under, platform and clean-slice sections use only legs with a valid breakeven (17,362 of 36,255).
+**Effect on the headline results (game-clustered):**
+- MLB PrizePicks: was 62.6% vs 46.1%, +16.5 pts, "beats breakeven"; now (Standard only, n=4,394) 52.1% vs 55.5%, -3.4 pts, cluster CI [50.1, 54.1], **below breakeven**.
+- NFL PrizePicks: was +19.1 pts; now 69.1% vs 55.5%, +13.6 pts, CI [65.9, 72.4], still beats (16 games only).
+- SOCCER PrizePicks: was +25.4 pts "beats"; now 53.5% vs 55.5%, inconclusive (n=243).
+- Clean slice (MLB Standard Hits/Total Bases): was -0.2 pts inconclusive; now 50.0% vs 55.5%, -5.5 pts, **below breakeven**.
+- Cells clearing the floor: 100 of 132 before, 53 of 132 now. Underdog rows unchanged.
+**Tests:** `test_model_validity_audit.py` (new, 6). 165 pass. New record: `data/pickem/model_validity_audit_20260919.csv`.
+**Read:** the earlier read that the PrizePicks MLB model had a large edge was an artifact of the price, as Session 2.55 suspected. Nothing was changed in flagging.

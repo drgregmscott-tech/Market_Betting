@@ -70,6 +70,24 @@ Cells backed by fewer than MIN_CLUSTERS distinct games are labeled
 30-leg floor exists for uncorrelated data -- 30 correlated legs from 3
 games is not real evidence either.
 
+SESSION 2.62 CORRECTION -- WHAT "BREAKEVEN" MEANS FOR PRIZEPICKS ROWS
+------------------------------------------------------------------------
+The per-row breakeven above was the implied probability LOGGED at flag time.
+For PrizePicks that logged number was never a real breakeven: Standard rows
+carry the flat 0.5 constant (6,006 of 6,065 graded Standard rows), and
+Demon/Goblin rows carry single-lineup constants (0.472/0.528 and 0.305/
+0.695). Sessions 2.55/2.56 found PrizePicks prices each leg separately and
+that the all-Standard payouts are 2/4.75/9/19/36.5x, so the real per-leg
+breakeven is 0.7071 ... 0.5491 depending on entry size. Scoring Standard
+against 0.5 made every PrizePicks Standard cell look about 5 points better
+than it is. Now, in load_joined(): PrizePicks Standard rows use the reference
+entry's breakeven (5-pick, 0.5549, same as the dashboards, Session 2.57);
+PrizePicks Demon/Goblin rows get NO breakeven (verdict "no_valid_breakeven":
+their per-leg price was never measured in general); Underdog rows keep their
+logged implied probability (not re-examined here). The logged value stays in
+the `breakeven_logged` column. Tables that mix rows (over/under, platform,
+clean slice) use only rows that have a breakeven.
+
 USAGE
 -----
 python scripts/calibration/pickem_model_validity_audit.py
@@ -85,8 +103,13 @@ import math
 from datetime import datetime, timezone
 from pathlib import Path
 
+import sys
+
 import numpy as np
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "sizing"))
+from sizing_engine import breakeven_win_rate_per_leg  # noqa: E402
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
@@ -98,6 +121,8 @@ MIN_CLUSTERS = 8  # interim floor on distinct real games -- see Session 2.38 not
 ZERO_INFLATION_THRESHOLD = 0.20  # >=20% of real outcomes are exactly 0
 SKEW_THRESHOLD = 1.0  # |skew| > 1.0 treated as materially non-Gaussian
 Z_95 = 1.96
+REFERENCE_ENTRY_LEGS = 5  # PrizePicks reference entry; docs/sample_size_methodology.md
+PRIZEPICKS_STANDARD_BREAKEVEN = breakeven_win_rate_per_leg("prizepicks", REFERENCE_ENTRY_LEGS)
 
 
 def wilson_ci(wins: int, n: int, z: float = Z_95) -> tuple[float, float]:
@@ -174,6 +199,17 @@ def load_joined() -> pd.DataFrame:
         # pickem_model.py's is_scorable_prizepicks_odds_type() default.
 
     df["odds_bucket"] = df.apply(odds_bucket, axis=1)
+    return apply_breakeven_reference(df)
+
+
+def apply_breakeven_reference(df: pd.DataFrame) -> pd.DataFrame:
+    """Session 2.62: replace the logged (never-real) PrizePicks breakevens.
+    Keeps the logged number in `breakeven_logged`. See module note."""
+    df = df.copy()
+    df["breakeven_logged"] = df["breakeven"]
+    is_pp = df["platform"] == "prizepicks"
+    df.loc[is_pp & (df["odds_bucket"] == "standard"), "breakeven"] = PRIZEPICKS_STANDARD_BREAKEVEN
+    df.loc[is_pp & (df["odds_bucket"] != "standard"), "breakeven"] = float("nan")
     return df
 
 
@@ -203,8 +239,10 @@ def cell_stats(group: pd.DataFrame) -> dict:
     ).to_numpy()
     c_lo, c_hi, n_clusters = clustered_ci(y, cluster_key)
 
-    if n < MIN_CELL_N or n_clusters < MIN_CLUSTERS or math.isnan(p0):
+    if n < MIN_CELL_N or n_clusters < MIN_CLUSTERS:
         verdict = "not_enough_evidence"
+    elif math.isnan(p0):
+        verdict = "no_valid_breakeven"  # Session 2.62: e.g. PrizePicks Demon/Goblin
     elif c_lo > p0:
         verdict = "beats_breakeven"
     elif c_hi < p0:
@@ -296,7 +334,10 @@ def main() -> None:
     print(f"Full {len(table)}-cell sport x stat x odds_type table written to {out_path}")
     print()
 
-    qualified = table.loc[table["verdict"] != "not_enough_evidence"].copy()
+    qualified = table.loc[~table["verdict"].isin(["not_enough_evidence", "no_valid_breakeven"])].copy()
+    unpriced = table.loc[table["verdict"] == "no_valid_breakeven"]
+    print(f"Cells with no valid breakeven (PrizePicks Demon/Goblin): {len(unpriced)} cells, "
+          f"{int(unpriced['n'].sum())} legs, listed in the CSV but not scored.")
     print(f"Cells clearing the {MIN_CELL_N}-leg floor: {len(qualified)} of {len(table)}")
     print()
     print("Top 25 qualified cells by |edge| (real win rate - real per-row breakeven).")
@@ -327,8 +368,10 @@ def main() -> None:
     print()
 
     # --- 3. Directional bias (over vs under), per sport -----------------
+    priced = graded.loc[graded["breakeven"].notna()]
+    print(f"(Sections 3-5 use the {len(priced)} of {len(graded)} graded legs that have a valid breakeven.)")
     print("Directional check (flagged_side over vs under), per sport:")
-    direc = directional_check(graded)
+    direc = directional_check(priced)
     for _, r in direc.iterrows():
         print(
             f"  {r['sport']:<8} {str(r['flagged_side']):<6} n={r['n']:>5} games={r['n_clusters']:>3} "
@@ -340,7 +383,7 @@ def main() -> None:
 
     # --- 4. Platform check (prizepicks vs underdog), per sport -----------
     print("Platform check (prizepicks vs underdog), per sport:")
-    plat = platform_check(graded)
+    plat = platform_check(priced)
     for _, r in plat.iterrows():
         print(
             f"  {r['sport']:<8} {r['platform']:<11} n={r['n']:>5} games={r['n_clusters']:>3} "
@@ -351,7 +394,7 @@ def main() -> None:
     print()
 
     # --- 5. Clean slice ---------------------------------------------------
-    cs = clean_slice(graded)
+    cs = clean_slice(priced)
     print("Clean slice -- MLB, PrizePicks, Standard odds_type, Hits/Total Bases only "
           "(deduped, closing-line graded):")
     print(
