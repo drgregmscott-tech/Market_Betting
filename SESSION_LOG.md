@@ -15876,3 +15876,25 @@ Many modules open `logs/<name>.log` at import time, so tests of their failure pa
 **Pipeline:** new non-blocking step in `pickem_pipeline.yml` after auto-grading; the two shadow files are `git add`ed only if they exist, so a failed shadow step cannot block the real commit.
 **Tested:** 6 new tests (`test_shadow_mlb_overs.py`): filtering, the shadow run flags an over the real path refuses and does not retire it, threshold, verdict rules, grading writes only to the shadow file. End-to-end track/grade/report on temp paths against the real estimates file (255 rows in, 158 open shadow flags, second run idempotent). 173 pytest pass; 18 of 18 logger scenarios. The grader's MLB stats fetch is not exercised offline; the first real grading will be the first live test of that path.
 **Expected pace:** the local estimates file showed 158 shadow flags in one run; a game day's flags close and grade the next day, so 200 legs should take a few days, and 30 games about a week.
+
+## Session 6.11 -- Props Outcome Grading
+
+**Date completed:** 2026-09-19
+**Status:** Complete with one stated gap (47 flags ungradable, see Open items). Starts the props evidence clock.
+**What:** `scripts/calibration/grade_props_outcomes.py` checks closed props flags against real nflverse results and writes `data/sportsbook_props/outcome_log.csv`. It calls `auto_grade_outcomes.run()` (same code as pick'em) with a props adapter. Touchdown markets have no numeric line in the log, so each maps to a line on the OVER side: Anytime TD Scorer and BetMGM `anytd` = 0.5, 2+ TDs = 1.5; stat is `rushing_tds+receiving_tds` (the model's definition). Half-point lines cannot push.
+**Two problems found and fixed while building:**
+1. BetMGM (Rotowire) rows have no `game_start_time` (all 215). A date join was impossible. The props adapter uses the team's next scheduled game on or after the flag date (nflverse schedule) and grades only if the player has a stat row for exactly that game.
+2. Anytime TD and 2+ TDs share one stat key, so the shared grader's market key treated the second as a "re-flag" and voided 31 DraftKings flags. The wrapper now puts platform and market name in `odds_type`. Test covers it.
+**Also:** props flags now log model components at flag time (`season_avg, recent_form, model_mean, model_sigma, games_played, games_remaining`), the props twin of Session 2.52 (blank for the 387 earlier flags). `props_sample_report.py --report` now shows graded legs, games, wins, losses and closed-but-ungraded. New non-blocking step `Grade closed props flags` in `props_pipeline.yml` (`continue-on-error`); the outcome file is `git add`ed only if it exists.
+**Real result (first grading, 2026-09-19):** 387 closed flags; 340 graded in 25 games (85 wins, 255 losses, 25.0% raw); 47 ungraded. By cell: BetMGM anytime 55/191 (28.8%); DraftKings anytime 27/120 (22.5%); DraftKings 2+ TDs 3/29 (10.3%). This is a raw count only, not an audit: no breakeven, no game-clustered interval, and the mean stated probability is not compared. Session 6.12 does that. Model stated about 30% on the sample flags seen, so the direction is worth watching, not concluding.
+**Validation:**
+- [x] Real closed DraftKings TD flags graded end to end, actual value from nflverse (e.g. Mike Gesicki win, actual 1; Cade Otton loss, actual 0; Chase Brown 2+ TDs loss, actual 1).
+- [x] Tests (`test_grade_props_outcomes.py`, 10): anytime TD win and loss, 2+ TDs, player with no game row, no pushes, futures and First TD left ungraded, BetMGM proxy date, BetMGM flag after the game, idempotent second run, report counts, model components logged. 183 pytest pass.
+- [x] Pipeline commit not blocked when the grader fails: `continue-on-error: true`, and the outcome file is added only if present.
+- [x] `props_sample_report.py --report`: 387 closed, 340 graded, 25 games.
+**Decisions:**
+1. First TD Scorer stays ungradable: the model never prices it (`unsupported_market_first_scorer`), so it is never flagged or logged. No play-by-play work needed now.
+2. FanDuel season-long futures: none are in the log; any that appear have no line mapping and stay pending until the season ends (about January 2027). Do not force a grade.
+3. Players with no nflverse stat row are NOT graded. nflverse lists only players with a stat, so such a player scored 0 TDs, or did not play (a book would void the bet). Grading them all as losses would be wrong; skipping them makes the win rate slightly high. **Session 6.12 must treat the 47 as loss-or-void and show results with and without them.**
+**Open items:** the 47 ungraded flags above; a snap-count source would separate "played, no TD" from "did not play". Session 6.7 stays open until 6.12.
+

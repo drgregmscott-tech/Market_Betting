@@ -5297,7 +5297,7 @@ in Action Network's scoreboard payload. Caesars is dropped from scope
 until one of two named re-check triggers fires (see SESSION_LOG.md).
 
 ### Session 6.11 -- Props Outcome Grading
-**Status:** Not started. Planned 2026-09-19 after the Session 2.5x-2.65 pick'em work (see SESSION_LOG.md). Do first: it starts the evidence clock.
+**Status:** ✅ Complete (2026-09-19, one gap: 47 flags ungradable; see SESSION_LOG.md). 340 legs graded in 25 games.
 **Prerequisites:** none. Closes the deferred item in Session 6.7 ("a props-specific realized-outcome tracker is deliberately NOT built this session").
 **Why now:** the props log (`data/sportsbook_props/clv_log.csv`) has 387 flags, all NFL (DraftKings 172, BetMGM 215), all closed, none graded, and no props outcome log exists. Pick'em's problems (a flat 0.5 breakeven, Demon/Goblin prices, overconfident tails) stayed invisible until 56,000 graded legs existed. Props has zero, so nothing about its model can be judged yet.
 **What gets built:**
@@ -5309,10 +5309,10 @@ until one of two named re-check triggers fires (see SESSION_LOG.md).
 - A non-blocking pipeline step in `props_pipeline.yml`, same pattern as the pick'em one (the outcome file added to the commit only if it exists).
 **Files touched:** `scripts/calibration/auto_grade_outcomes.py` (adapter or new props grader), `scripts/calibration/clv_logger.py` (props components), `.github/workflows/props_pipeline.yml`, tests.
 **Validation (required to close session):**
-- [ ] At least one real closed DraftKings TD flag graded end to end (win/loss recorded, actual value from nflverse).
-- [ ] Grader tests cover: anytime TD, 2+ TDs, a player with no game row, a push-free market, futures left ungraded.
-- [ ] Props pipeline commit is not blocked when the grader step fails.
-- [ ] `props_sample_report.py --report` shows real closed and graded counts.
+- [x] At least one real closed DraftKings TD flag graded end to end (win/loss recorded, actual value from nflverse).
+- [x] Grader tests cover: anytime TD, 2+ TDs, a player with no game row, a push-free market, futures left ungraded.
+- [x] Props pipeline commit is not blocked when the grader step fails.
+- [x] `props_sample_report.py --report` shows real closed and graded counts.
 
 ---
 

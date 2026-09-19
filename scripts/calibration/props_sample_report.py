@@ -35,9 +35,32 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 CLV_LOG_PATH = BASE_DIR / "data" / "sportsbook_props" / "clv_log.csv"
+OUTCOME_LOG_PATH = BASE_DIR / "data" / "sportsbook_props" / "outcome_log.csv"  # Session 6.11
 
 INTERIM_FLOOR = 30
 FULL_CONFIDENCE_TARGET = 1562  # docs/props_sample_size_methodology.md Section 3
+
+
+def summarize_graded(clv_df: pd.DataFrame, outcome_path: Path = OUTCOME_LOG_PATH) -> dict:
+    """Session 6.11: real graded counts from the props outcome log. Only
+    win and loss count as graded; void rows are excluded. Games are counted
+    because legs from one game are correlated."""
+    closed = int((clv_df["status"] == "closed").sum()) if "status" in clv_df.columns else 0
+    if not outcome_path.exists():
+        return {"outcome_log_exists": False, "graded_legs": 0, "graded_games": 0, "wins": 0, "losses": 0,
+                "closed_but_ungraded": closed, "graded_interim_floor_met": False}
+    out = pd.read_csv(outcome_path)
+    real = out.loc[out["result"].isin(["win", "loss"])]
+    games = clv_df.drop_duplicates("flag_id").set_index("flag_id")["game_id"]
+    return {
+        "outcome_log_exists": True,
+        "graded_legs": int(len(real)),
+        "graded_games": int(real["flag_id"].map(games).nunique()),
+        "wins": int((real["result"] == "win").sum()),
+        "losses": int((real["result"] == "loss").sum()),
+        "closed_but_ungraded": closed - int(len(real)),
+        "graded_interim_floor_met": len(real) >= INTERIM_FLOOR,
+    }
 
 
 def build_report() -> dict:
@@ -63,8 +86,10 @@ def build_report() -> dict:
     closed = df.loc[df["status"] == "closed"] if "status" in df.columns else df.iloc[0:0]
     n_closed = len(closed)
 
+    graded = summarize_graded(df)
     return {
         "clv_log_exists": True,
+        **graded,
         "total_flags_ever_logged": total,
         "closed_flags_observed": n_closed,
         "note": (

@@ -330,6 +330,10 @@ PROPS_EXTRA_COLUMNS = [
     # -- added 2026-09-10 so the frontend can show the real quoted odds
     # instead of only an implied-probability price.
     "over_american_odds", "under_american_odds",
+    # SESSION 6.11 -- model components at flag time (the props twin of Session
+    # 2.52), so a later refit or audit does not depend on estimate snapshots.
+    # Written once, when the flag is first logged. Blank for earlier flags.
+    "season_avg", "recent_form", "model_mean", "model_sigma", "games_played", "games_remaining",
 ]
 CLV_LOG_COLUMNS_PROPS = CLV_CORE_COLUMNS + PROPS_EXTRA_COLUMNS
 
@@ -1371,6 +1375,12 @@ def build_props_candidates(df: pd.DataFrame) -> list[dict]:
             "implied_prob_includes_field_vig": row.get("implied_prob_includes_field_vig"),
             "over_american_odds": row.get("over_american_odds"),
             "under_american_odds": row.get("under_american_odds"),
+            "season_avg": row.get("season_avg"),
+            "recent_form": row.get("recent_form"),
+            "model_mean": row.get("model_mean"),
+            "model_sigma": row.get("model_sigma"),
+            "games_played": row.get("games_played"),
+            "games_remaining": row.get("games_remaining"),
         })
     return candidates
 

@@ -183,12 +183,20 @@ jobs:
         # Linux runner.
         run: xvfb-run --auto-servernum python scripts/run_props_pipeline.py
 
+      - name: Grade closed props flags against real results (Session 6.11)
+        # Checks closed touchdown-prop flags against nflverse results and
+        # writes data/sportsbook_props/outcome_log.csv. Never blocks the
+        # pipeline: a failure here must not stop clv_log.csv being committed.
+        continue-on-error: true
+        run: python scripts/calibration/grade_props_outcomes.py --run
+
       - name: Commit and push updated data, estimates, CLV log, and digest
         id: commit
         run: |
           git config user.name "props-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/sportsbook_props/raw/ data/sportsbook_props/normalized/ output/estimation/sportsbook_props_latest.csv data/sportsbook_props/clv_log.csv data/sportsbook_props/clv_snapshots/ output/digest/props_digest_latest.md output/digest/props_digest_*.md
+          if [ -f data/sportsbook_props/outcome_log.csv ]; then git add data/sportsbook_props/outcome_log.csv; fi
           if git diff --cached --quiet; then
             echo "No changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"
