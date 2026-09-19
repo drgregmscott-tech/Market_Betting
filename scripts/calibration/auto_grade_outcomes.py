@@ -820,15 +820,25 @@ def _run_adapter(
     return new_rows, summary
 
 
-def run(dry_run: bool = False) -> dict:
-    clv_df = load_clv_log()
-    outcome_df = load_outcome_log()
+def run(
+    dry_run: bool = False,
+    clv_df: Optional[pd.DataFrame] = None,
+    outcome_df: Optional[pd.DataFrame] = None,
+    outcome_path: Optional[Path] = None,
+    adapters: Optional[list[GradingAdapter]] = None,
+) -> dict:
+    """Session 2.65: the optional arguments let shadow_mlb_overs.py grade its
+    own log into its own file with the same code. Called with none of them
+    (the pipeline, the CLI) this is unchanged: the real logs, every adapter."""
+    clv_df = load_clv_log() if clv_df is None else clv_df
+    outcome_df = load_outcome_log() if outcome_df is None else outcome_df
+    outcome_path = OUTCOME_LOG_PATH if outcome_path is None else outcome_path
     already_graded = set(outcome_df["flag_id"])
 
     all_new_rows: list[dict] = []
     per_sport_summary: list[dict] = []
 
-    for adapter in ADAPTERS:
+    for adapter in (ADAPTERS if adapters is None else adapters):
         new_rows, summary = _run_adapter(adapter, clv_df, already_graded, dry_run)
         all_new_rows.extend(new_rows)
         per_sport_summary.append(summary)
@@ -840,9 +850,9 @@ def run(dry_run: bool = False) -> dict:
     if all_new_rows:
         combined = pd.concat([outcome_df, pd.DataFrame(all_new_rows)], ignore_index=True)
         combined = combined[OUTCOME_LOG_COLUMNS]
-        OUTCOME_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        combined.to_csv(OUTCOME_LOG_PATH, index=False)
-        log.info("Wrote %d new auto-graded row(s) to %s.", len(all_new_rows), OUTCOME_LOG_PATH)
+        outcome_path.parent.mkdir(parents=True, exist_ok=True)
+        combined.to_csv(outcome_path, index=False)
+        log.info("Wrote %d new auto-graded row(s) to %s.", len(all_new_rows), outcome_path)
 
     summary = {
         "dry_run": dry_run,

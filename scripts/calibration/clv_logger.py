@@ -517,7 +517,7 @@ def _is_scorable_pickem_row(row: pd.Series) -> bool:
 PRIZEPICKS_UNFLAGGED_SIDES = frozenset({("mlb", "over")})
 
 
-def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
+def _side_is_buyable_pickem(row: pd.Series, side: str, unflagged_sides=None) -> bool:
     """SESSION 2.36 FIX (2026-09-16, real finding): mirrors pickem_model.py's
     own prizepicks_side_is_buyable(). Found live: 4 real, currently-open
     Christian Pulisic Shots flags (Demon 7.5/3.5, Goblin 2.5/1.5) were all
@@ -535,7 +535,8 @@ def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
     path below on that basis alone."""
     if row.get("platform") != "prizepicks":
         return True
-    if (str(row.get("sport") or "").strip().lower(), side) in PRIZEPICKS_UNFLAGGED_SIDES:
+    blocked = PRIZEPICKS_UNFLAGGED_SIDES if unflagged_sides is None else unflagged_sides
+    if (str(row.get("sport") or "").strip().lower(), side) in blocked:
         return False
     raw = row.get("allowed_wager_types")
     if not isinstance(raw, str) or not raw.strip():
@@ -548,7 +549,15 @@ def _side_is_buyable_pickem(row: pd.Series, side: str) -> bool:
     return True  # "under_or_over" or any other stated value -- both sides buyable
 
 
-def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, run_pulled_at: str) -> pd.DataFrame:
+def process_run_pickem(
+    estimates_df: pd.DataFrame,
+    existing_log: pd.DataFrame,
+    run_pulled_at: str,
+    unflagged_sides=None,
+) -> pd.DataFrame:
+    """`unflagged_sides` overrides PRIZEPICKS_UNFLAGGED_SIDES. Only the shadow
+    tracker (shadow_mlb_overs.py, Session 2.65) passes it, an empty set, to
+    keep a separate log of the sides the real log no longer flags."""
     log_df = existing_log.copy()
     log_df = log_df.set_index("flag_id", drop=False) if not log_df.empty else log_df
 
@@ -575,7 +584,7 @@ def process_run_pickem(estimates_df: pd.DataFrame, existing_log: pd.DataFrame, r
         existing_side = log_df.loc[flag_id, "flagged_side"]
         if not isinstance(existing_side, str) or not existing_side.strip():
             return True
-        return _side_is_buyable_pickem(row, existing_side)
+        return _side_is_buyable_pickem(row, existing_side, unflagged_sides)
 
     buyable_mask = estimates_df.apply(_existing_side_still_buyable, axis=1)
     present_flag_ids = set(estimates_df.loc[scorable_mask & buyable_mask, "_flag_id"])

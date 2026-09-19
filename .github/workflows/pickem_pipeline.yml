@@ -109,6 +109,14 @@ jobs:
         continue-on-error: true
         run: python scripts/calibration/auto_grade_outcomes.py --run
 
+      - name: Shadow record for PrizePicks MLB overs (Session 2.65)
+        # Since Session 2.64 the model no longer flags PrizePicks MLB overs.
+        # This logs and grades the ones it WOULD have flagged, in separate
+        # files (data/pickem/shadow_*.csv), so the rule can be re-checked
+        # with evidence. Touches no real log. Never blocks the pipeline.
+        continue-on-error: true
+        run: python scripts/calibration/shadow_mlb_overs.py --run
+
       - name: Commit and push updated CLV log and digest
         id: commit
         run: |
@@ -122,6 +130,11 @@ jobs:
           git config user.name "pickem-pipeline-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/pickem/clv_log.csv data/pickem/clv_snapshots/ output/digest/ output/estimation/latest.csv data/pickem/cache/cfbd/ data/pickem/outcome_log.csv data/pickem/cache/nfl_schedule/
+          # Shadow files (Session 2.65) are added only if they exist, so a failed
+          # shadow step can never block the real commit.
+          for shadow_file in data/pickem/shadow_clv_log.csv data/pickem/shadow_outcome_log.csv; do
+            if [ -f "$shadow_file" ]; then git add "$shadow_file"; fi
+          done
           if git diff --cached --quiet; then
             echo "No changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"
