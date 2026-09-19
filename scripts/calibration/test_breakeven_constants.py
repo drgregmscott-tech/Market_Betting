@@ -56,3 +56,15 @@ def test_frontend_flag_threshold_matches_the_logger():
     js = (ROOT / "frontend" / "app.js").read_text(encoding="utf-8")
     match = re.search(r"const FLAG_EDGE_THRESHOLD = ([0-9.]+);", js)
     assert float(match.group(1)) == clv_logger.FLAG_EDGE_THRESHOLD_PICKEM
+
+
+def test_frontend_props_dampener_text_matches_the_sizing_engine():
+    """Session 6.13: the props badges in app.js quote the sizing constants in
+    their tooltips. If sizing_engine.py changes a value, this fails."""
+    from sizing_engine import PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER, PROPS_PLATFORM_RISK_MULTIPLIER
+    js = (ROOT / "frontend" / "app.js").read_text(encoding="utf-8")
+    risk = re.search(r"PROPS_PLATFORM_RISK_MULTIPLIER = ([0-9.]+)", js)
+    field = re.search(r"PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER \(([0-9.]+)\)", js)
+    assert risk is not None and field is not None
+    assert set(PROPS_PLATFORM_RISK_MULTIPLIER.values()) == {float(risk.group(1))}
+    assert float(field.group(1)) == PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER

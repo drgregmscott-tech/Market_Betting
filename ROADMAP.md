@@ -5336,7 +5336,7 @@ until one of two named re-check triggers fires (see SESSION_LOG.md).
 ---
 
 ### Session 6.13 -- Props Model Fixes From the Audit
-**Status:** Not started. Scope is set by Session 6.12; do not start before it.
+**Status:** ✅ Complete 2026-09-19: quoted-odds price applied; ceiling tested and rejected on held-out; the rest not supported yet (see SESSION_LOG.md).
 **Prerequisites:** Session 6.12 complete.
 **What gets built (each only if the audit supports it, with a held-out or time-split check like Sessions 2.50, 2.51 and 2.60):**
 - A ceiling on stated probabilities if the top tail is overconfident.
@@ -5346,9 +5346,9 @@ until one of two named re-check triggers fires (see SESSION_LOG.md).
 - Weekly review for props (the twin of `weekly_review.py`) if the audit shows a stable baseline.
 **Files touched:** `scripts/estimation/sportsbook_props_model.py`, `scripts/calibration/clv_logger.py`, `scripts/sizing/sizing_engine.py`, `frontend/app.js`, tests.
 **Validation (required to close session):**
-- [ ] Every change has its evidence (numbers and intervals) written in SESSION_LOG.md.
-- [ ] Any rule that stops flagging something has a shadow measure and a fixed re-check rule.
-- [ ] Tests pass; a golden fixture is regenerated only where the change is intended.
+- [x] Every change has its evidence (numbers and intervals) written in SESSION_LOG.md.
+- [x] Any rule that stops flagging something has a shadow measure and a fixed re-check rule.
+- [x] Tests pass; a golden fixture is regenerated only where the change is intended.
 
 **Related:** Session 8.4 (Ingestion Health Monitoring) covers props ingestion fragility (DraftKings/FanDuel/Rotowire endpoints) and should be scheduled near this work. Session 6.7 stays open until 6.12 gives a go/no-go read.
 

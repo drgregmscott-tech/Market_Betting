@@ -446,7 +446,6 @@ def _blank_model_fields() -> dict:
 
 def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season: int) -> pd.DataFrame:
     name_lookup = build_name_lookup(weekly_df)
-    field_vig_index = build_field_vig_index(props_df)
     season_stale = stats_season_is_stale(stats_season)
     if season_stale:
         log.warning(
@@ -518,22 +517,17 @@ def process_props(props_df: pd.DataFrame, weekly_df: pd.DataFrame, stats_season:
                 else poisson_prob_at_least(model_mean, 2)
             )
 
-            # Session 6.4 -- real DK field-vig fix. field_vig_index holds
-            # every row's own same-market group's field-normalized
-            # probability (group_size >= 2 selections priced against each
-            # other) precomputed by build_field_vig_index() above. A row
-            # this run's data could only capture alone (group_size == 1,
-            # or the row's own odds were missing so it never entered any
-            # group) falls back to the raw, still-vig-included price --
-            # honestly still flagged True, never silently assumed fixed.
-            field_entry = field_vig_index.get(row_idx)
-            raw_implied = american_odds_to_implied_probability(row.get("over_american_odds"))
-            if field_entry is not None and field_entry[1] >= 2:
-                implied_prob = field_entry[0]
-                includes_field_vig = False
-            else:
-                implied_prob = raw_implied
-                includes_field_vig = True
+            # Session 6.13 -- the price is the QUOTED odds' implied probability.
+            # Session 6.12's audit found the Session 6.4 field normalization
+            # (dividing by the sum over the whole game field so prices add to
+            # 1.0) is wrong for "anytime" and "2+" markets, where several
+            # players win: it gave an average price of 5.8% against 25.8% quoted
+            # (340 graded legs). A bet at quoted odds breaks even at the quoted
+            # probability, so that is the breakeven; the book's margin is
+            # already inside it. Field normalization stays correct only for a
+            # one-winner market (First TD Scorer), which is not modeled here.
+            implied_prob = american_odds_to_implied_probability(row.get("over_american_odds"))
+            includes_field_vig = False
 
             row["model_status"] = "estimated"
             row["season_avg"] = s_avg

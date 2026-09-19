@@ -15926,3 +15926,20 @@ Many modules open `logs/<name>.log` at import time, so tests of their failure pa
 5. Drift tests for the sizing constants and a props weekly review: unchanged from the 6.13 card.
 **Open items:** the 47 ungraded flags; re-run at 4-5 weeks of games; 6.13 scope above.
 
+## Session 6.13 -- Props Model Fixes From the Audit
+
+**Date completed:** 2026-09-19
+**Status:** Complete: one fix applied, one fix tested and rejected, three fixes deliberately not done. Takes effect on the next props pipeline run after this is pushed.
+**Applied: quoted-odds price (audit fix 1).** `sportsbook_props_model.py` now sets the implied probability for anytime and 2+ TD rows to the raw implied probability of the quoted `over_american_odds`, and `implied_prob_includes_field_vig` is False. Before, it divided by the sum over the whole game field (Session 6.4), which gave an average price of 5.8% against 25.8% quoted on 340 graded legs (Session 6.12). A bet at quoted odds breaks even at the quoted probability, so this is arithmetic, not a fitted parameter; no held-out check is needed. `build_field_vig_index` stays in the file (still tested) for a future one-winner market such as First TD Scorer, which is not modeled. Effect on flagging (re-scoring the graded legs that have odds): 145 of 327 keep the 3-point edge, so about 56% fewer new flags. Already-open flags in the log keep their original edge. New test: three players in one market keep quoted prices that sum above 1.0.
+**Tested and rejected: ceiling on stated probability.** The audit's top band (50%+, 34 legs) won 35.3% against 57.1% stated. Held-out check: split the 25 games into two halves (alternate game ids). Legs stated above 35%: half A 39 legs, won 43.6% against 47.3% stated (capping raised the Brier score, 0.2115 vs 0.2090); half B 49 legs, won 28.6% against 47.3% stated (capping lowered it, 0.1625 vs 0.1746). The two halves disagree, so the overconfidence is not established. No ceiling added. Re-test at 4-5 weeks of games.
+**Not done, with reasons:**
+1. Calibration (isotonic or shrinkage): every band has under 120 legs; the pick'em minimum was 100 legs per stat plus a held-out check. Longshot underrating (under 15% stated won 26.0%) is a single-sample read.
+2. Stop flagging a side or market: every audit cell is inconclusive. No shadow measure needed because nothing was stopped.
+3. Props weekly review: no stable baseline yet.
+**Drift test added:** `test_breakeven_constants.py` now checks that the props dampener numbers quoted in `frontend/app.js` tooltips (0.50 platform risk, 0.60 field vig) equal `sizing_engine.py`. The 0.60 field-vig dampener now applies to no new flag, since the flag is always False; the constant stays as a placeholder.
+**Validation:**
+- [x] Each change has its evidence written above.
+- [x] No rule stops flagging anything, so no shadow measure is needed.
+- [x] 192 pytest pass. No golden fixture was affected.
+**Open items:** re-run `props_model_validity_audit.py` at 4-5 NFL weeks of graded games (about 70 games; the corrected required n is about 1,705 legs, so the flagged count will be lower after this fix and the target may need a fresh look); re-test the ceiling then; check the first pipeline run after this push to confirm new flags carry quoted-odds prices (logged price near 20-30%, not 5%). The 47 ungraded flags from Session 6.11 remain.
+

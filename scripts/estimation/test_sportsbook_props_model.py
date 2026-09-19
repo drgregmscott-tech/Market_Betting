@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sportsbook_props_model import (
     build_field_vig_index,
+    process_props,
     poisson_prob_at_least,
     project_season_total,
     prob_over,
@@ -146,6 +147,30 @@ def test_build_field_vig_index_skips_rows_with_missing_odds_or_ids():
     print("PASS: test_build_field_vig_index_skips_rows_with_missing_odds_or_ids")
 
 
+def test_anytime_td_price_is_the_quoted_odds_not_field_normalized():
+    """Session 6.13: three players in one anytime-TD market. Field normalization
+    would shrink each price so the three sum to 1.0; the quoted price must not."""
+    weekly = pd.DataFrame({
+        "player_id": ["A", "A", "B", "B", "C", "C"],
+        "player_display_name": ["Alpha One", "Alpha One", "Bravo Two", "Bravo Two", "Charlie Three", "Charlie Three"],
+        "season": 2026, "week": [1, 2] * 3, "sort_key": [1, 2] * 3, "team": ["X"] * 6, "position": ["WR"] * 6,
+        "rushing_tds": [0] * 6, "receiving_tds": [1, 0, 0, 1, 1, 1],
+    })
+    props = pd.DataFrame({
+        "platform": "draftkings", "source_event_id": "e1", "source_market_id": "m1",
+        "source_selection_id": ["s1", "s2", "s3"], "player_name": ["Alpha One", "Bravo Two", "Charlie Three"],
+        "sport": "NFL", "stat_type": "Anytime TD Scorer", "prop_category": "player_touchdown",
+        "line": None, "over_american_odds": [200, 300, 100], "under_american_odds": None,
+    })
+    out = process_props(props, weekly, 2026)
+    est = out.loc[out["model_status"] == "estimated"]
+    assert len(est) == 3, out["model_status"].tolist()
+    assert list(est["implied_prob_over"].round(4)) == [round(100 / 300, 4), 0.25, 0.5]
+    assert est["implied_prob_over"].sum() > 1.0  # not normalized to 1.0
+    assert not est["implied_prob_includes_field_vig"].any()
+    print("PASS: test_anytime_td_price_is_the_quoted_odds_not_field_normalized")
+
+
 if __name__ == "__main__":
     test_two_sided_devig_matches_known_example()
     test_two_sided_devig_missing_side_returns_none()
@@ -158,4 +183,5 @@ if __name__ == "__main__":
     test_prob_over_none_sigma_returns_none()
     test_build_field_vig_index_groups_same_market_and_normalizes()
     test_build_field_vig_index_skips_rows_with_missing_odds_or_ids()
+    test_anytime_td_price_is_the_quoted_odds_not_field_normalized()
     print("\nAll tests passed.")
