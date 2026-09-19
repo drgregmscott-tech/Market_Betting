@@ -13,7 +13,7 @@ session). Each run does two things:
 
 1. REPORTS real performance -- this week's graded legs, plus the running
    cumulative total -- always shown next to the two fixed reference points
-   from sample_size_methodology.md: the 57.7% real breakeven win rate
+   from sample_size_methodology.md: the 55.5% real breakeven win rate
    (Section 2) and the 3,725-leg full-strength sample size (Section 3).
 2. CHECKS whether the model itself looks like it needs recalibrating, using
    two real, computable signals (see "Recalibration checks" below). This
@@ -172,7 +172,7 @@ LOG_PATH = BASE_DIR / "logs" / "weekly_review.log"
 # Fixed reference points from sample_size_methodology.md -- not recomputed
 # here, only compared against. If these ever change, update both this file
 # and the methodology doc together, not just one.
-BREAKEVEN_WIN_RATE = 0.5774          # Section 2
+BREAKEVEN_WIN_RATE = 0.5549          # Section 2 (5-pick 19x; was 0.5774 before Session 2.57)
 FULL_SAMPLE_SIZE_THRESHOLD = 3725    # Section 3
 INTERIM_REPORTING_FLOOR = 30         # Section 6
 

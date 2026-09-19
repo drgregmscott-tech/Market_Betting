@@ -103,11 +103,17 @@ CLV_LOG_PATH = BASE_DIR / "data" / "pickem" / "clv_log.csv"
 OUTCOME_LOG_PATH = BASE_DIR / "data" / "pickem" / "outcome_log.csv"
 LOG_PATH = BASE_DIR / "logs" / "outcome_tracking.log"
 
-# Real breakeven per-leg win rate for a standard PrizePicks 2-pick Power Play
-# (3x payout, both legs must hit: p^2 * 3 = 1 -> p = sqrt(1/3)). Sourced in
-# sample_size_methodology.md Section 2. Used only for --report's summary
-# comparison -- not enforced anywhere else in this script.
-BREAKEVEN_WIN_RATE = 0.5774
+# Reference per-leg breakeven win rate: an all-Standard PrizePicks 5-pick
+# Power Play, 19x measured in the user's app (Session 2.56):
+# 19 ** (-1/5) = 0.5549. Before Session 2.57 this was 0.5774, from a 2-pick 3x
+# payout the app does not pay. The breakeven depends on entry size (2-pick
+# 0.7071 ... 6-pick 0.5491, see sizing_engine.PICKEM_ENTRY_PAYOUT). The 5-pick
+# is the reference because at the accuracy this model can show (about 0.60)
+# 5- and 6-pick entries grow a bankroll fastest; see
+# docs/sample_size_methodology.md and report_sample_size_check.py.
+# test_breakeven_constants.py keeps this equal to the sizing table.
+# Used only for --report's summary comparison -- not enforced elsewhere.
+BREAKEVEN_WIN_RATE = 0.5549
 SAMPLE_SIZE_THRESHOLD = 3725  # sample_size_methodology.md Section 3
 
 OUTCOME_LOG_COLUMNS = [

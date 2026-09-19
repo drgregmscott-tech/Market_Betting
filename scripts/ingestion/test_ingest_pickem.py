@@ -28,8 +28,11 @@ python test_ingest_pickem.py
 
 from __future__ import annotations
 
+import contextlib
+import logging
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -135,12 +138,53 @@ def make_synthetic_underdog() -> dict:
     }
 
 
+@contextlib.contextmanager
+def isolated_data_dirs():
+    """Point the pipeline's data and log paths at a temp folder.
+
+    Without this, run() writes synthetic rows into the real data/pickem
+    folders and logs/ingestion.log, and reset_data_dirs() deletes them.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        with mock.patch.object(pipeline, "RAW_DIR", root / "raw"),                 mock.patch.object(pipeline, "NORMALIZED_DIR", root / "normalized"),                 mock.patch.object(pipeline, "LOG_PATH", root / "ingestion.log"):
+            # The module opened its log file at import time, on the real
+            # logs/ingestion.log. Swap that handler for one in the temp folder.
+            saved = list(pipeline.log.handlers)
+            for handler in saved:
+                if isinstance(handler, logging.FileHandler):
+                    pipeline.log.removeHandler(handler)
+            temp_handler = logging.FileHandler(root / "ingestion.log", encoding="utf-8")
+            pipeline.log.addHandler(temp_handler)
+            try:
+                yield
+            finally:
+                pipeline.log.removeHandler(temp_handler)
+                temp_handler.close()
+                for handler in saved:
+                    if isinstance(handler, logging.FileHandler):
+                        pipeline.log.addHandler(handler)
+
+
+try:
+    import pytest
+
+    @pytest.fixture(autouse=True)
+    def _isolate_data_dirs():
+        with isolated_data_dirs():
+            yield
+except ImportError:  # direct `python test_ingest_pickem.py` runs need no pytest
+    pass
+
+
 def reset_data_dirs():
     for d in (pipeline.RAW_DIR, pipeline.NORMALIZED_DIR):
         if d.exists():
             shutil.rmtree(d)
     if pipeline.LOG_PATH.exists():
-        pipeline.LOG_PATH.unlink()
+        # Truncate, do not delete: the log handler holds the file open, and
+        # Windows refuses to delete an open file.
+        pipeline.LOG_PATH.write_text("", encoding="utf-8")
 
 
 def test_normal_case():
@@ -264,7 +308,7 @@ def latest_row_count() -> int:
         return sum(1 for _ in _csv.DictReader(f))
 
 
-if __name__ == "__main__":
+def _run_all():
     reset_data_dirs()
     try:
         test_normal_case()
@@ -281,3 +325,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     print("\nAll ingest_pickem.py validation tests passed.")
+
+
+if __name__ == "__main__":
+    with isolated_data_dirs():
+        _run_all()

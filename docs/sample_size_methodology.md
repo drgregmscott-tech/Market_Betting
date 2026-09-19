@@ -31,6 +31,41 @@ one-sample proportion test (comparing the track's real win rate against its
 real breakeven win rate), the same category of test used throughout sports
 betting and DFS performance evaluation.
 
+> **Correction, Session 2.57 (read this before Sections 2-5).** Two inputs
+> below were wrong, and the 3,725 figure was re-checked on real data with
+> `scripts/calibration/report_sample_size_check.py`.
+>
+> 1. **Payout.** PrizePicks does not pay 3x for a 2-pick. Measured in the
+>    user's app: all-Standard 2/3/4/5/6-pick = 2 / 4.75 / 9 / 19 / 36.5x, so
+>    the per-leg breakeven is 0.7071 / 0.5949 / 0.5774 / 0.5549 / 0.5491.
+>    (0.5774 is now the 4-pick number, by coincidence.)
+> 2. **Reference entry.** At a true leg win rate near 0.60, the entry size
+>    with the best bankroll growth (Kelly log-growth, equal independent legs)
+>    is 6-pick (0.577% per entry vs 0.556% for 5-pick); 5-pick wins from
+>    about 0.62 up. A 3-pick barely grows at 0.60 (0.009%) and a 2-pick never
+>    does. Code now uses the **5-pick, 0.5549**: almost as good as the 6-pick
+>    and it wins about 7.8% of entries, not 4.7%.
+> 3. **Independence.** Legs from one game are correlated. Measured design
+>    effect (real variance / independent-leg variance) for PrizePicks
+>    Standard: **3.49** (171 games, 32.8 legs per game, game-clustered).
+>    5,603 graded legs carry the information of about 1,600 independent legs.
+> 4. **Re-derived threshold.** Detect a true 60% against 0.5549 (5% false
+>    positive, 80% power): 946 independent legs x 3.49 = **about 3,300
+>    real legs, about 100 games**. The 3,725 figure was derived the wrong
+>    way (wrong hurdle, independence assumed) but lands within 13% of this,
+>    so it is **kept**. Read it as real, game-clustered legs. Count games,
+>    not only legs: adding legs from games already counted adds little.
+>    A 6-pick reference needs about 2,600 legs (79 games); a 3-pick reference
+>    cannot test a 60% target at all (it needs about 250,000 legs).
+> 5. **Pooled numbers hide big differences.** On real graded legs (game-
+>    clustered 95% interval): MLB 51.9% [49.7, 54.0] is below even the 6-pick
+>    hurdle; NFL 69.1% [65.9, 72.4] is above it but rests on only 16 games;
+>    unders 62.5% [59.1, 65.8] are above, overs 52.2% [49.2, 55.1] are below
+>    the 5-pick hurdle. The pooled 56.2% [53.8, 58.6] is inconclusive. Judge
+>    by sport and side, not only pooled.
+>
+> The original text below is kept as written for history.
+
 ## 2. The real breakeven win rate — sourced, not assumed
 
 Track 1's estimation model (Session 2.3) flags individual over/under legs.

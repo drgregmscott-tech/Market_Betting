@@ -1123,7 +1123,7 @@ async function initPickem() {
 // this panel reports the CURRENT recalibration read, not a full history.
 // =======================================================================
 
-const BREAKEVEN_WIN_RATE = 0.5774;
+const BREAKEVEN_WIN_RATE = 0.5549; // 5-pick 19x; was 0.5774 before Session 2.57
 const FULL_SAMPLE_SIZE_THRESHOLD = 3725;
 
 // Session 2.26 -- generalized from NFL-only to every sport with real

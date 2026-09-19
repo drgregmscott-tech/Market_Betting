@@ -15787,3 +15787,18 @@ The flag-time loss is confined to legs on the unflagged side of these stats; the
 - After a week of flags carrying `adjusted_odds`, re-run the PrizePicks Standard audit split by it.
 - Larger question: the leg-level breakeven for a PrizePicks flag depends on entry size. Consider having the flag report edge against each entry size's breakeven.
 - The 2.37 audit, `weekly_review.py` (BREAKEVEN_WIN_RATE 0.5774, a 2-pick 3x number) and `docs/sample_size_methodology.md` still use old PrizePicks numbers.
+
+## Session 2.57 -- Test Isolation Fix; Breakeven Reference and Sample-Size Threshold Re-Checked
+
+**Date completed:** 2026-09-19
+**Status:** Complete. Threshold kept (re-derived). Open: game count is not yet shown on the dashboards.
+
+**1. Test pollution fixed.** `test_ingest_pickem.py` ran the real pipeline against the real `data/pickem/` folders and `logs/ingestion.log`, and its `reset_data_dirs()` deleted them. It clobbered the working `latest.csv` (52,184 rows to 4) and left 44 junk raw and normalized files. The test now patches `RAW_DIR`, `NORMALIZED_DIR`, `LOG_PATH` and the log file handler to a temp folder (works under `pytest` and direct `python`). Verified: real data untouched after both. Still open (minor): other tests (ESPN, FPL, MLB fetch) append a few lines to `logs/estimation.log` and `logs/ingestion.log`.
+
+**2. Stale breakeven.** `BREAKEVEN_WIN_RATE` was 0.5774 (a 2-pick 3x payout the app does not pay) in `outcome_tracker.py`, `weekly_review.py`, `frontend/app.js`. Now 0.5549, the all-Standard 5-pick (19x). Reason: at a true leg win rate of 0.60 the best entries by Kelly log-growth are 6-pick then 5-pick (3-pick barely grows, 2-pick never); the 5-pick wins about 7.8% of entries vs 4.7% for the 6-pick. `test_breakeven_constants.py` (new) keeps all three equal to `sizing_engine.py`. Old rows in `review_log.csv` keep 0.5774.
+
+**3. Sample-size threshold (3,725) re-checked on real data** (`scripts/calibration/report_sample_size_check.py`, new, read-only). Measured design effect for PrizePicks Standard: 3.49 (171 games, 32.8 legs per game); 5,603 legs carry the information of about 1,600 independent legs. Detecting a true 60% vs 0.5549: 946 independent legs x 3.49 = about 3,300 real legs, about 100 games (6-pick reference: 2,600 legs, 79 games; 3-pick reference: about 250,000, so it cannot be tested). The old 3,725 used the wrong hurdle and assumed independence, but is within 13% of the correct figure. **Kept.** Read as game-clustered legs; count games.
+**Results at the new hurdle (game-clustered 95% intervals):** pooled 56.2% [53.8, 58.6] inconclusive; MLB 51.9% [49.7, 54.0] below even the 6-pick hurdle; NFL 69.1% [65.9, 72.4] above but only 16 games; unders 62.5% [59.1, 65.8] above; overs 52.2% [49.2, 55.1] below the 5-pick hurdle. The model's 60% target is not shown by the pooled data (upper bound 58.6%).
+Docs: correction note at the top of `docs/sample_size_methodology.md`.
+
+**Open items:** show games (not only legs) toward the threshold on the dashboards; PrizePicks Standard MLB and overs are below hurdle, so consider what that means for flagging (not acted on: needs the `adjusted_odds` split first); the 2.37 audit script still uses old breakeven numbers.
