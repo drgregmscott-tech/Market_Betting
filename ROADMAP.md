@@ -5249,6 +5249,62 @@ live, zero `czr_*` fields on Rotowire's props page, zero Caesars mentions
 in Action Network's scoreboard payload. Caesars is dropped from scope
 until one of two named re-check triggers fires (see SESSION_LOG.md).
 
+### Session 6.11 -- Props Outcome Grading
+**Status:** Not started. Planned 2026-09-19 after the Session 2.5x-2.65 pick'em work (see SESSION_LOG.md). Do first: it starts the evidence clock.
+**Prerequisites:** none. Closes the deferred item in Session 6.7 ("a props-specific realized-outcome tracker is deliberately NOT built this session").
+**Why now:** the props log (`data/sportsbook_props/clv_log.csv`) has 387 flags, all NFL (DraftKings 172, BetMGM 215), all closed, none graded, and no props outcome log exists. Pick'em's problems (a flat 0.5 breakeven, Demon/Goblin prices, overconfident tails) stayed invisible until 56,000 graded legs existed. Props has zero, so nothing about its model can be judged yet.
+**What gets built:**
+- A props auto-grader that reuses `auto_grade_outcomes.py` (it now takes its own log and outcome paths, Session 2.65) and writes `data/sportsbook_props/outcome_log.csv`.
+- DraftKings touchdown props ("Anytime TD Scorer", "2+ TDs") graded from nflverse (rushing plus receiving TDs, the same definition the model uses). "First TD Scorer" needs play-by-play: decide in-session whether it is gradable or stays ungraded.
+- FanDuel season-long futures are NOT gradable until the season ends (about January 2027): list them as pending, do not force a grade.
+- Check what markets the 215 BetMGM (Rotowire) rows are before choosing how to grade them.
+- Log the model components on each props flag at flag time (as Session 2.52 did for pick'em), so later refits do not depend on snapshots.
+- A non-blocking pipeline step in `props_pipeline.yml`, same pattern as the pick'em one (the outcome file added to the commit only if it exists).
+**Files touched:** `scripts/calibration/auto_grade_outcomes.py` (adapter or new props grader), `scripts/calibration/clv_logger.py` (props components), `.github/workflows/props_pipeline.yml`, tests.
+**Validation (required to close session):**
+- [ ] At least one real closed DraftKings TD flag graded end to end (win/loss recorded, actual value from nflverse).
+- [ ] Grader tests cover: anytime TD, 2+ TDs, a player with no game row, a push-free market, futures left ungraded.
+- [ ] Props pipeline commit is not blocked when the grader step fails.
+- [ ] `props_sample_report.py --report` shows real closed and graded counts.
+
+---
+
+### Session 6.12 -- Props Validity Audit
+**Status:** Not started. Timing: run after about 4-5 NFL weeks of graded flags (roughly 70 games; NFL slates arrive once a week, so evidence builds slowly).
+**Prerequisites:** Session 6.11 complete and enough graded legs (interim floor 30 closed; see `docs/props_sample_size_methodology.md`).
+**What gets built:** the props twin of `pickem_model_validity_audit.py`, with the lessons of Sessions 2.55-2.62 built in from the start:
+- Score every leg against its OWN correct no-vig breakeven, never one constant. Recheck p0 = 0.2255 in `props_sample_size_methodology.md`: it is the mean flagged price, which is selection-biased.
+- Check the field-vig case: rows with `implied_prob_includes_field_vig` are priced against the whole field of players; verify the model and breakeven treat them consistently (the 0.60 dampener in sizing is a stated placeholder).
+- Game-clustered intervals only (legs from one game are correlated; the pick'em design effect was 3.5). Report games as well as legs.
+- Split by book, market type (anytime TD vs 2+ TDs), side and player role; state the games behind each cell.
+- Calibration by stated-probability band (does 30% mean 30%?), including the top tail.
+- Decide and fix in advance the "worth building on" rule, the way the shadow measure fixed its rule before any data (Session 2.65).
+**Files touched:** `scripts/calibration/props_model_validity_audit.py` (new), `docs/props_sample_size_methodology.md` (correction if p0 changes), tests.
+**Validation (required to close session):**
+- [ ] Audit run on real graded props with game counts stated per cell.
+- [ ] Explicit read recorded for each book and market type: beats, below, or inconclusive, with the intervals.
+- [ ] p0 and the field-vig treatment either confirmed or corrected in the methodology doc.
+- [ ] List of model fixes the audit supports (input to Session 6.13); nothing changed in flagging in this session.
+
+---
+
+### Session 6.13 -- Props Model Fixes From the Audit
+**Status:** Not started. Scope is set by Session 6.12; do not start before it.
+**Prerequisites:** Session 6.12 complete.
+**What gets built (each only if the audit supports it, with a held-out or time-split check like Sessions 2.50, 2.51 and 2.60):**
+- A ceiling on stated probabilities if the top tail is overconfident.
+- Calibration (isotonic or shrinkage) only where a stat or market has enough graded legs (the pick'em minimum was 100 legs plus a held-out check).
+- Stop flagging any side or market the audit shows below breakeven, kept measurable with a shadow record (`shadow_mlb_overs.py` is the pattern).
+- Drift tests between the sizing constants in `sizing_engine.py` and their copies in `frontend/app.js` (the PrizePicks table went stale there until Session 2.61).
+- Weekly review for props (the twin of `weekly_review.py`) if the audit shows a stable baseline.
+**Files touched:** `scripts/estimation/sportsbook_props_model.py`, `scripts/calibration/clv_logger.py`, `scripts/sizing/sizing_engine.py`, `frontend/app.js`, tests.
+**Validation (required to close session):**
+- [ ] Every change has its evidence (numbers and intervals) written in SESSION_LOG.md.
+- [ ] Any rule that stops flagging something has a shadow measure and a fixed re-check rule.
+- [ ] Tests pass; a golden fixture is regenerated only where the change is intended.
+
+**Related:** Session 8.4 (Ingestion Health Monitoring) covers props ingestion fragility (DraftKings/FanDuel/Rotowire endpoints) and should be scheduled near this work. Session 6.7 stays open until 6.12 gives a go/no-go read.
+
 ---
 
 # PHASE 7 — Track 6: Sportsbook Main Lines / Flagship Exchange Sports Markets
