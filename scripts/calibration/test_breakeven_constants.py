@@ -34,3 +34,25 @@ def test_frontend_constant_matches_sizing_table():
     match = re.search(r"const BREAKEVEN_WIN_RATE = ([0-9.]+);", js)
     assert match is not None
     assert float(match.group(1)) == expected
+
+
+def _js_payout_table(platform: str) -> dict:
+    js = (ROOT / "frontend" / "app.js").read_text(encoding="utf-8")
+    block = re.search(r"const PICKEM_ENTRY_PAYOUT = \{(.*?)\n\};", js, re.S).group(1)
+    line = re.search(platform + r": \{([^}]*)\}", block).group(1)
+    return {int(k): float(v) for k, v in re.findall(r"(\d+):\s*([0-9.]+)", line)}
+
+
+def test_frontend_payout_tables_match_the_sizing_engine():
+    """Until Session 2.61 the frontend still sized PrizePicks entries at
+    3/6/10/20/37.5x after the Python table moved to 2/4.75/9/19/36.5x."""
+    from sizing_engine import PICKEM_ENTRY_PAYOUT
+    for platform in ("prizepicks", "underdog"):
+        assert _js_payout_table(platform) == PICKEM_ENTRY_PAYOUT[platform], platform
+
+
+def test_frontend_flag_threshold_matches_the_logger():
+    import clv_logger
+    js = (ROOT / "frontend" / "app.js").read_text(encoding="utf-8")
+    match = re.search(r"const FLAG_EDGE_THRESHOLD = ([0-9.]+);", js)
+    assert float(match.group(1)) == clv_logger.FLAG_EDGE_THRESHOLD_PICKEM

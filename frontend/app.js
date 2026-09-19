@@ -63,9 +63,39 @@ const REVIEW_DATA_URL = "data/review_log.csv";
 const SUPPORTED_PLATFORMS = new Set(["prizepicks", "underdog"]);
 const ENTRY_TYPE_NAME = { prizepicks: "Power Play", underdog: "Standard" };
 const PICKEM_ENTRY_PAYOUT = {
-  prizepicks: { 2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5 },
+  // 2026-09-18 (Sessions 2.55/2.56): all-Standard, read off the user's own app.
+  // Was 3/6/10/20/37.5 here until Session 2.61 (only the Python table had been updated).
+  prizepicks: { 2: 2.0, 3: 4.75, 4: 9.0, 5: 19.0, 6: 36.5 },
   underdog: { 2: 3.5, 3: 6.5, 4: 12.0, 5: 20.0, 6: 35.0, 7: 65.0, 8: 120.0 },
 };
+const FLAG_EDGE_THRESHOLD = 0.03; // same as clv_logger.FLAG_EDGE_THRESHOLD_PICKEM
+
+// Session 2.61 -- a leg's edge against EACH entry size's per-leg breakeven
+// (payout ** (-1 / legs)), mirrored from sizing_engine.entry_size_edges().
+// The flag's own edge is measured against the lowest breakeven (most
+// favorable entry), so it overstates the edge for a smaller entry.
+function entrySizeEdges(platform, legWinProb) {
+  const table = PICKEM_ENTRY_PAYOUT[platform];
+  if (!table || legWinProb === null) return [];
+  return Object.keys(table)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .map((legs) => ({ legs, edge: legWinProb - Math.pow(table[legs], -1 / legs) }));
+}
+
+function playableEntrySizesHtml(r) {
+  const edges = entrySizeEdges(r.platform, toNum(r.first_flagged_model_prob));
+  if (!edges.length) return "—";
+  const playable = edges.filter((e) => e.edge >= FLAG_EDGE_THRESHOLD).map((e) => e.legs);
+  const detail = edges.map((e) => `${e.legs}-pick: ${e.edge >= 0 ? "+" : ""}${(e.edge * 100).toFixed(1)} pts`).join(" · ");
+  const label = !playable.length
+    ? "none"
+    : playable.length === 1
+      ? `${playable[0]}-pick`
+      : `${playable[0]}–${playable[playable.length - 1]}-pick`;
+  return `<span title="${escapeAttr("Edge vs each entry size's breakeven: " + detail + ". A flag needs " + (FLAG_EDGE_THRESHOLD * 100).toFixed(0) + "+ pts. Equal, independent legs assumed.")}">${label}</span>`;
+}
+
 const KELLY_FRACTION = 0.25;
 const PLATFORM_RISK_MULTIPLIER = { prizepicks: 0.70, underdog: 0.85 };
 const MAX_SINGLE_POSITION_PCT = 0.05;
@@ -762,6 +792,7 @@ function renderOpenTable(open) {
           <td>${escapeHtml(r.platform) || "—"}</td>
           <td>${escapeHtml(r.last_seen_line || r.first_flagged_line) || "—"}</td>
           <td class="${edgeClass(edge)}">${fmtEdge(edge)}</td>
+          <td>${playableEntrySizesHtml(r)}</td>
           <td>${fmtDate(r.game_start_time)}</td>
         </tr>`;
         })

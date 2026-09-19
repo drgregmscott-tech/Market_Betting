@@ -802,6 +802,26 @@ def breakeven_win_rate_per_leg(platform: str, leg_count: int) -> float:
     multiplier = PICKEM_ENTRY_PAYOUT[platform][leg_count]
     return multiplier ** (-1.0 / leg_count)
 
+def entry_size_edges(platform: str, leg_win_prob: float) -> dict[int, float]:
+    """Session 2.61: a leg's edge against EACH entry size's per-leg breakeven,
+    {leg_count: leg_win_prob - breakeven}. A pick'em leg has no single
+    breakeven: it depends on how many legs the entry has (PrizePicks
+    all-Standard: 2-pick 0.7071 ... 6-pick 0.5491). The model's flag edge is
+    measured against the LOWEST of these (the most favorable entry), so it
+    overstates the edge for anyone playing a smaller entry. Equal-probability,
+    independent legs assumed, same as breakeven_win_rate_per_leg()."""
+    return {
+        leg_count: leg_win_prob - breakeven_win_rate_per_leg(platform, leg_count)
+        for leg_count in sorted(PICKEM_ENTRY_PAYOUT[platform])
+    }
+
+
+def playable_entry_sizes(platform: str, leg_win_prob: float, min_edge: float = 0.03) -> list[int]:
+    """Leg counts where this leg clears its breakeven by at least min_edge
+    (default: the pick'em flag threshold, FLAG_EDGE_THRESHOLD_PICKEM)."""
+    return [n for n, edge in entry_size_edges(platform, leg_win_prob).items() if edge >= min_edge]
+
+
 KELLY_FRACTION = 0.25  # quarter-Kelly -- stated placeholder, see docstring
 
 PLATFORM_RISK_MULTIPLIER = {

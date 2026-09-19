@@ -532,6 +532,23 @@ def test_22_weather_single_position_cap_binds():
     print(f"PASS test_22: extreme edge correctly capped at ${expected_cap} ({WEATHER_MAX_SINGLE_POSITION_PCT*100:.0f}% of bankroll)")
 
 
+def test_23_entry_size_edges_and_playable_sizes():
+    """Session 2.61: a leg's edge against each entry size's own breakeven."""
+    from sizing_engine import entry_size_edges, playable_entry_sizes
+    edges = entry_size_edges("prizepicks", 0.60)
+    assert sorted(edges) == [2, 3, 4, 5, 6]
+    assert abs(edges[5] - (0.60 - 19 ** (-1 / 5))) < 1e-12
+    assert abs(edges[6] - (0.60 - 36.5 ** (-1 / 6))) < 1e-12
+    assert edges[2] < 0 < edges[6]                       # smaller entries need more
+    # 0.60 clears 0.5549 + 0.03 (5-pick) and 0.5491 + 0.03 (6-pick), nothing smaller.
+    assert playable_entry_sizes("prizepicks", 0.60) == [5, 6]
+    assert playable_entry_sizes("prizepicks", 0.65) == [3, 4, 5, 6]
+    assert playable_entry_sizes("prizepicks", 0.55) == []
+    # the model's own flag needs 0.5491 + 0.03: exactly the 6-pick only
+    assert playable_entry_sizes("prizepicks", 0.5491 + 0.0301) == [6]
+    print("PASS 23: entry-size edges")
+
+
 if __name__ == "__main__":
     test_1_bigger_edge_bigger_stake()
     test_2_no_bet_below_breakeven()
@@ -560,4 +577,5 @@ if __name__ == "__main__":
     test_20_weather_fee_shrinks_stake_vs_no_fee_kelly()
     test_21_weather_no_bet_below_breakeven()
     test_22_weather_single_position_cap_binds()
+    test_23_entry_size_edges_and_playable_sizes()
     print("\nAll sizing_engine.py synthetic tests passed.")
