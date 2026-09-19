@@ -3500,8 +3500,8 @@ Session 2.33's own "measurement first, gating second" discipline).
 ### Session 2.54 -- weekly_review Tests, Drift Check, Isotonic Out-of-Range Fix
 **Status:** Complete (2026-09-18). 16 tests for `weekly_review.py`. Fixed isotonic tables being applied below their fitted range (fake over flags on homeRuns, stolenBases). Demon/Goblin payout question open, waiting on the user's 3-pick Standard multiplier.
 - [x] Tests written; drift check run read-only; bug fixed with 3 regression tests.
-- [ ] Cap or smooth the 1.000 top blocks in the isotonic tables (held-out validated).
-- [ ] Decide the PrizePicks Standard breakeven (currently 0.5) and the Demon/Goblin constants on one consistent scale.
+- [x] Cap the 1.000 top blocks, validated by a time split (Session 2.60).
+- [x] PrizePicks Standard breakeven decided (Sessions 2.55, 2.56, 2.57); Demon/Goblin unscored, so no constants to reconcile.
 
 
 ### Session 2.55 -- PrizePicks Pricing Corrected
@@ -3510,7 +3510,54 @@ Session 2.33's own "measurement first, gating second" discipline).
 - [x] `adjusted_odds` carried through ingestion, model and CLV log; adjusted legs not scored (Session 2.56).
 - [x] 2/4/5/6-pick Standard multipliers measured (2/9/19/36.5x); `sizing_engine.py` and `docs/sizing_methodology.md` updated. Breakeven now the 6-pick, 0.5491.
 - [ ] Confirm on the user's app that `adjusted_odds` True means a non-default payout; re-run the PrizePicks Standard audit split by it after a week of flags.
-- [ ] Report edge against each entry size's breakeven, not only the 6-pick; update `weekly_review.py` and `sample_size_methodology.md` breakevens.
+- [x] Edge reported against each entry size (Session 2.61); `weekly_review.py`, dashboards and `sample_size_methodology.md` breakevens updated (Session 2.57).
+
+
+### Session 2.56 -- adjusted_odds Carried Through; Full Standard Payout Table
+**Status:** Complete (2026-09-18). A PrizePicks row is scored only if it is Standard and `adjusted_odds` is not True. All-Standard payouts 2/4.75/9/19/36.5x; flag breakeven is the 6-pick, 0.5491.
+- [x] `adjusted_odds` ingested and logged; adjusted rows unscored; sizing table updated; tests.
+- [ ] Confirm on the user's app that an adjusted Standard leg pays a non-default multiplier (still an inference).
+
+### Session 2.57 -- Test Isolation; Breakeven Reference; Sample-Size Threshold Re-Checked
+**Status:** Complete (2026-09-19).
+- [x] `test_ingest_pickem.py` no longer writes into or deletes the real data folders.
+- [x] Dashboard and review breakeven 0.5774 to 0.5549 (5-pick, 19x); test keeps the constants equal to the sizing table.
+- [x] 3,725-leg threshold re-derived on real data: design effect 3.49 (legs from one game are correlated), about 3,300 real legs, about 100 games; kept, read as game-clustered legs. `report_sample_size_check.py` added.
+- Findings: pooled PrizePicks Standard 56.2% (inconclusive); MLB below breakeven; unders above; NFL above on 16 games.
+
+### Session 2.58 -- Games Toward the Threshold (Dashboard)
+**Status:** Complete (2026-09-19). "Games graded" tile in the Real-outcome grading panel (target about 100).
+
+### Session 2.59 -- Games Count in weekly_review
+**Status:** Complete (2026-09-19). `n_games_cumulative` and `pct_of_games_target_reached` in `review_log.csv`.
+
+### Session 2.60 -- Ceiling on Stated Probability
+**Status:** Complete (2026-09-19). `MAX_MODEL_PROB = 0.90`: stated 0.95+ won 89.6% (1,081 legs); a cap improved the Brier score in both halves of a time split. No flags lost; edge and stake shown are lower on 811 flags.
+- [ ] Re-check after about 500 more graded legs stated at 0.95+ (the early and late halves disagreed: best cap 0.88 vs 0.93).
+
+### Session 2.61 -- Per-Entry-Size Edge; Stale Frontend Payout Table
+**Status:** Complete (2026-09-19). The dashboard's PrizePicks payout table was still 3/6/10/20/37.5x and is fixed; a test now keeps the JS tables equal to the Python ones. New "Playable in" column: entry sizes where a leg clears that size's own breakeven by 3+ points.
+- [ ] The sizing panel does not yet suggest a best entry size.
+
+### Session 2.62 -- Validity Audit: PrizePicks Breakeven Corrected
+**Status:** Complete (2026-09-19). The audit scored PrizePicks legs against the logged 0.5 (never a real breakeven); now the 5-pick 0.5549, Demon/Goblin unscored. MLB PrizePicks went from "+16.5 pts, beats" to "-3.4 pts, below breakeven"; 100 of 132 qualified cells became 53.
+- [ ] Underdog rows keep their logged breakeven and were not re-examined.
+
+### Session 2.63 -- Tests No Longer Write Into the Real Logs
+**Status:** Complete (2026-09-19). Root `conftest.py` redirects any log under `logs/` to a temp folder during pytest; empty `pytest.ini` anchors the rootdir.
+
+### Session 2.64 -- PrizePicks MLB Overs No Longer Flagged
+**Status:** Complete in code (2026-09-19); live from the first pipeline run after the push.
+- Evidence: MLB overs 50.1% on 2,969 legs, 108 games, interval 47.4-52.8%, below every entry breakeven while stated at 58%+. Unders (56.2%, inconclusive), NFL, soccer and Underdog unchanged.
+- [x] `PRIZEPICKS_UNFLAGGED_SIDES` in `pickem_model.py`, mirrored in `clv_logger.py`; open MLB over flags (361) retire on the next run.
+- [ ] Re-check via the shadow record (Session 2.65).
+
+### Session 2.65 -- Shadow Measure for PrizePicks MLB Overs
+**Status:** Complete in code (2026-09-19); collects from the first pipeline run after the push.
+- [x] `shadow_mlb_overs.py` logs and grades the overs the model would have flagged, in `data/pickem/shadow_*.csv`, using the same logger and grader; non-blocking pipeline step.
+- Decision rule fixed in advance: no verdict before 200 graded legs across 30 games; then recovered (interval low above 55.5%), still below (interval high below 54.9%), or inconclusive.
+- [ ] First live grading of the shadow flags (the grader's MLB fetch was not exercised offline).
+- [ ] After the first CI run on the new code: check the run, `adjusted_odds` and component columns are populated, the 361 MLB over flags closed, flag volume, and whether CFB week 3 graded (Session 2.28).
 
 ---
 
