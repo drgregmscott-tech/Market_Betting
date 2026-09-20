@@ -1,9 +1,9 @@
-# Pipeline Digest -- 2026-09-20T18:42:48Z
+# Pipeline Digest -- 2026-09-20T22:23:24Z
 
 ## Run summary
-- Ingestion: 24050 rows (PrizePicks OK, Underdog OK)
-- Estimation: 24050 rows estimated (from 24050 ingested props)
-- CLV logging: 583 newly flagged, 0 newly closed, 693 still open (81401 total ever logged)
+- Ingestion: 10515 rows (PrizePicks OK, Underdog OK)
+- Estimation: 10515 rows estimated (from 10515 ingested props)
+- CLV logging: 48 newly flagged, 0 newly closed, 146 still open (81449 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
@@ -12,694 +12,147 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 |---|---|---|---|---|---|---|---|
 | prizepicks|15020920 | prizepicks | Sam LaPorta | Rec Yards | under | 0.4999998908997208 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
 | prizepicks|15020919 | prizepicks | Jameson Williams | Rec Yards | under | 0.4984267311890689 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|f1451849-a6ef-4b6e-b1a4-f3de84fb4221 | underdog | Christian Pulisic | Shots Attempted | under | 0.4 | 2026-09-20T04:56:02Z | 2026-09-20T18:45:00Z |
-| underdog|2526a6af-950f-4c25-b251-c1e57ef78cc3 | underdog | Pete Alonso | RBIs | over | 0.3705050505050505 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| prizepicks|15069794 | prizepicks | Corbin Burnes | Pitcher FS | under | 0.3509424650567749 | 2026-09-20T18:49:37Z | 2026-09-20T16:10:00.000-04:00 |
-| underdog|b8a78460-4275-45ef-a4c3-2512051a9404 | underdog | Josue De Paula | Batter Walks | over | 0.2973967307781866 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|91577a97-4bbc-4175-9339-48efc3f1076c | underdog | Mike Trout | Batter Walks | over | 0.2849653622917057 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|cc012f93-7503-4d43-a220-39f2734d55fb | underdog | Munetaka Murakami | Batter Walks | over | 0.2770921622502678 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|7397d414-4038-4792-9297-482ce8c5b013 | underdog | Corbin Burnes | Pitching Outs | under | 0.2728166651015992 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|bc5c6cb7-9a76-49f4-9629-b98f8254b859 | underdog | Miguel Vargas | Batter Walks | over | 0.2653372008701957 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|d4880d8b-dfb4-4207-aa67-3869d1e4a35c | underdog | Zack Gelof | Runs | over | 0.2610887861096366 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|49c2d854-3adf-403f-851a-4fde721e2157 | underdog | Kade Anderson | Pitching Outs | under | 0.2566968035047596 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
+| underdog|25a81783-971e-45dd-bd24-021ebe143408 | underdog | Pete Alonso | RBIs | over | 0.3839341692789968 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|89b6ab3a-b7b6-41fd-84c8-04b76440ddbd | underdog | Kaitlin Quevedo | Double Faults | under | 0.251826584125199 | 2026-09-20T18:49:37Z | 2026-09-20T18:50:00Z |
-| underdog|78eeac2f-a8f8-4c91-9f23-f6c0395ba496 | underdog | Joel Monteiro | Shots on Target | under | 0.2476190476190477 | 2026-09-20T04:56:02Z | 2026-09-20T18:45:00Z |
 | prizepicks|13975919 | prizepicks | Jayson Tatum | Pts+Asts | under | 0.2451279480496665 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
 | prizepicks|13975925 | prizepicks | Jayson Tatum | Pts+Rebs | under | 0.2442060163021608 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
 | prizepicks|13952668 | prizepicks | LeBron James | Points | over | 0.2397149568250941 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|e2ef76cb-18cb-4195-8a42-15196d175c37 | underdog | Ben Rice | RBIs | over | 0.2373737373737374 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3a6472d6-65fc-4b94-95d9-a5546cf089f7 | underdog | Matt Wilkinson | Earned Runs Allowed | under | 0.2342553188989626 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|08e82631-b6db-48a0-9919-9e367ab39863 | underdog | Corbin Burnes | Walks Allowed | under | 0.2341443666178767 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|14745308 | prizepicks | Matthew Stafford | Rush Yards | over | 0.2309141879479694 | 2026-09-11T16:24:54Z | 2026-09-21T20:15:00.000-04:00 |
 | prizepicks|15073126 | prizepicks | Lanlana Tararudee | Break Points Won | under | 0.2280858421818844 | 2026-09-20T18:49:37Z | 2026-09-20T23:00:00.000-04:00 |
 | prizepicks|13975988 | prizepicks | LeBron James | Pts+Rebs | over | 0.2247745517150446 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|7ade819d-ca1d-4459-967e-3844864b9453 | underdog | Matt Wilkinson | Walks Allowed | under | 0.2242015025614426 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ab05b2fa-eb94-497b-a310-e5951416be25 | underdog | Chase Meidroth | Runs | over | 0.2238350898124214 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|b5add44b-0739-4c40-a3e2-f12d9d537f5c | underdog | Geraldo Perdomo | Batter Walks | over | 0.2224489795918367 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|8dee4cd6-dc1e-4213-b1b8-c24f10210071 | underdog | Samad Taylor | Runs | over | 0.222255518929178 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|8524c6c6-d523-458e-a448-4db23771a2d7 | underdog | Christian Moore | Runs | under | 0.219634703196347 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|c47a88df-895e-4aae-9b79-3177c1ce44b9 | underdog | Jakob Marsee | Runs | over | 0.2143121239622198 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|13952667 | prizepicks | Jalen Brunson | Points | over | 0.2135813857285506 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|2d989caa-82c8-41dc-aa9c-4f12c370ee6a | underdog | Corbin Burnes | Strikeouts | under | 0.2130673268873496 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|91e4d78d-ecdc-4bbc-b9e5-7b3e68cfdad9 | underdog | Kevin McGonigle | Batter Walks | over | 0.207142857142857 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|c416a4cd-460a-4ee0-984b-c35df516134a | underdog | Jack Perkins | Walks Allowed | under | 0.2064809178289112 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | prizepicks|14745311 | prizepicks | Matthew Stafford | Pass Yards | over | 0.1999038485589053 | 2026-09-11T16:24:54Z | 2026-09-21T20:15:00.000-04:00 |
-| underdog|a5fd93ce-6172-44e9-95f2-b10c85df18db | underdog | Christian Pulisic | Shots on Target | under | 0.1951144131683104 | 2026-09-20T04:56:02Z | 2026-09-20T18:45:00Z |
 | prizepicks|15020918 | prizepicks | Amon-Ra St. Brown | Rec Yards | under | 0.1912444819607222 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|04f2dc3e-59f8-444a-a63e-4ad84d8be9ee | underdog | Shea Langeliers | Runs | over | 0.1900617186263649 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | underdog|b628bf1b-5bd7-4957-bd4c-ced5615857d3 | underdog | Gunnar Henderson | Runs | over | 0.1900617186263649 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|7246ef61-bafd-4e35-8d03-c8b7bc454581 | underdog | Jo Adell | Batter Walks | under | 0.1897969457962746 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | prizepicks|13975959 | prizepicks | Jalen Brunson | Pts+Rebs | over | 0.1892442263984233 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
 | prizepicks|13975931 | prizepicks | Jayson Tatum | PRA | under | 0.1859948657142129 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|eb4f29b7-cf06-47f7-a585-ade4dae1337e | underdog | Max Clark | Runs | over | 0.1858994514900606 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|e1ef042f-2128-4882-a203-18b24873bc3d | underdog | Jack Perkins | Pitching Outs | under | 0.1844888223569 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|ca24383c-5038-4c06-bd56-f697e82ef184 | underdog | Gavin Williams | Earned Runs Allowed | over | 0.1832996404591863 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | underdog|e522f682-75fa-40e9-abd7-47543c664ac5 | underdog | Coby Mayo | Runs | over | 0.1813953488372093 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | underdog|fe719bbc-dbff-4446-af96-cc905f2ad80e | underdog | Colton Cowser | Total Bases | over | 0.1810801668733792 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|6711ee47-dd22-484e-847f-06ab133b47c1 | underdog | Jordan Beck | RBIs | under | 0.1809523809523811 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | prizepicks|13975984 | prizepicks | LeBron James | Pts+Asts | over | 0.1791375054527176 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|76ef41c3-f650-43a7-abc1-422370372815 | underdog | Christian Encarnacion-Strand | RBIs | over | 0.1781703083520522 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d413e52f-7a39-4508-9a04-3bca316e8b87 | underdog | Max Muncy | Batter Walks | under | 0.1755693196106739 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9627d8dc-9dd5-4351-893e-e3366c6848c8 | underdog | Neal Maupay | Shots Attempted | under | 0.1743110988622682 | 2026-09-20T18:49:37Z | 2026-09-20T18:45:00Z |
-| underdog|018019bf-f234-4d28-8de0-304e012917dd | underdog | George Lombard | Runs | over | 0.1740229019945164 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
+| underdog|126ebc9e-1d4a-4c32-abbf-b08537e203de | underdog | Pete Alonso | Runs | over | 0.1771991108288347 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|6d36a2b7-c636-44e7-a5c1-be05981bc1cb | underdog | Jeremiah Jackson | RBIs | over | 0.1721460514030173 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|bfbc4ae0-0079-46a4-9cbc-aa3ba52a04b1 | underdog | Jake Bauers | Batter Walks | over | 0.1714285714285713 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | underdog|fc0253d6-50ee-46a2-bcf2-44f57e862683 | underdog | Brice Turang | Batter Walks | over | 0.1714285714285713 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | prizepicks|13975992 | prizepicks | LeBron James | PRA | over | 0.1710160714309272 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|daedb410-7bbd-4538-9279-7912dcc72c96 | underdog | Ben Rice | Total Bases | over | 0.170876085240726 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|b1c138dc-0211-495c-ac08-1997f9c84956 | underdog | Adael Amador | Runs | over | 0.1705332046817969 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|699f3c0e-72d3-4bef-924f-3fa656235f8a | underdog | Zack Gelof | Total Bases | over | 0.1704545454545454 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|4896a932-82d9-477a-85c6-a62fe59f2b2d | underdog | Shea Langeliers | RBIs | over | 0.1690382218529288 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|4adc056d-9dc5-4224-8a60-6cea9f5c8d63 | underdog | Leody Taveras | Total Bases | over | 0.1679754325938805 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|7677db00-29d7-4a3e-8353-b257936011a9 | underdog | Braden Montgomery | Runs | over | 0.1672882843352347 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|bc649ed1-ba8d-48d4-9858-02d1fe194131 | underdog | Khvicha Kvaratskhelia | Shots Attempted | under | 0.1654209724094094 | 2026-09-18T16:42:01Z | 2026-09-20T18:45:00Z |
-| underdog|43931744-b61d-42a5-ad5a-7196e0910567 | underdog | Nolan Arenado | Runs | over | 0.1623456103260265 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a2bd4e1e-8afd-4954-b487-a6e146d80c32 | underdog | Pete Alonso | Runs | over | 0.1612937889533635 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d6942240-0c4a-48c4-af22-aefa57d33e10 | underdog | Samuel Chukwueze | Shots Attempted | under | 0.1599938632804691 | 2026-09-20T18:49:37Z | 2026-09-20T18:45:00Z |
+| underdog|c4a51be0-a2b8-4c01-bfb0-78c2098605d9 | underdog | Leody Taveras | Total Bases | over | 0.1635500779147187 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13975964 | prizepicks | Jalen Brunson | PRA | over | 0.1594536543882333 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|4e4df685-2b22-4508-90cb-a636fc04b394 | underdog | Troy Melton | Earned Runs Allowed | under | 0.1593278451340197 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | prizepicks|13975883 | prizepicks | Cade Cunningham | Assists | under | 0.1583653539789251 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|92edccf1-9bf9-45fd-8bfa-eb6645c23646 | underdog | Gabriel Moreno | RBIs | over | 0.1569463695489924 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|15072771 | prizepicks | Maja Chwalinska | Break Points Won | under | 0.156393217977166 | 2026-09-20T18:49:37Z | 2026-09-21T01:40:00.000-04:00 |
 | prizepicks|14745233 | prizepicks | Puka Nacua | Rec Yards | over | 0.1539916674633568 | 2026-09-11T16:24:54Z | 2026-09-21T20:15:00.000-04:00 |
 | prizepicks|13975900 | prizepicks | Cade Cunningham | PRA | under | 0.1531773965770679 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|cb71db19-5daf-4b25-912d-0d69d2ce6d70 | underdog | Miguel Vargas | Runs | over | 0.1524334251606975 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|82b548c2-9cec-4125-a815-a1c944e70d06 | underdog | Zack Gelof | Hits | over | 0.1521806777442749 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|82fa3e62-4ef6-4ce4-b0f7-c9b1003f6462 | underdog | Otto Lopez | Runs | over | 0.1521204226371401 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|7a13c6ba-66ec-41d4-b5d9-20eccc8dd118 | underdog | Sandy Alcantara | Walks Allowed | over | 0.1519510841944282 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c755d6df-0bb1-48bd-ab04-2a826dc95352 | underdog | Emmanuel Rodriguez | Batter Walks | under | 0.1515874910479828 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|900cbcf4-753e-4121-8b4e-cef794669b94 | underdog | Angel Martínez | RBIs | over | 0.1515250189948984 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|dee377fc-2104-4ed4-8849-c9258c123430 | underdog | Jackson Chourio | Total Bases | over | 0.15046792197542 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|b6222a5c-98e1-41d6-9f4d-a6df6747f09d | underdog | Samad Taylor | RBIs | over | 0.1492287581699345 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| prizepicks|14745236 | prizepicks | Jaxon Smith-Njigba | Rec Yards | over | 0.1486338703044543 | 2026-09-11T16:24:54Z | 2026-09-20T16:25:00.000-04:00 |
-| underdog|42a0a7ab-9e27-43d8-9444-9e6825caf71b | underdog | Miguel Rojas | RBIs | under | 0.1484018264840182 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4593bad2-f6cc-401d-b8fd-8ee8fd5a0964 | underdog | Eduardo Valencia | Runs | over | 0.1469017688285681 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | prizepicks|13975955 | prizepicks | Jalen Brunson | Pts+Asts | over | 0.1457490982774579 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|804787d6-2251-41a2-8ba6-ad39419c17f5 | underdog | Tomoyuki Sugano | Walks Allowed | under | 0.1450092228769088 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|b3bc58fc-927d-4580-b431-60d426822fe0 | underdog | Gleyber Torres | Runs | over | 0.1440400331209275 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|2441bfc7-3592-4e76-9e55-c73664c8470f | underdog | Corbin Carroll | Runs | over | 0.1440400331209275 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|049ab561-5996-44e8-bbbb-226863fe1a09 | underdog | Brice Turang | Runs | over | 0.1428993084837237 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | underdog|5fbcdd84-1fd1-4b75-a1a0-8b6a74565f19 | underdog | Coby Mayo | Total Bases | over | 0.1428163544997716 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|c05454b0-072f-4e75-b90e-64c2bc105948 | underdog | Kyle Teel | RBIs | over | 0.1427628321505198 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|9c435155-ad6b-40af-bc82-328e884ada13 | underdog | Vaughn Grissom | RBIs | over | 0.1427628321505198 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|c90d4859-e44c-4a16-ab3a-8bb22bef9f83 | underdog | Job Ochieng | Shots Attempted | under | 0.1414165518006337 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|e88ab260-c6df-426f-bc07-066b0ea3effd | underdog | Josue De Paula | RBIs | over | 0.141089243853241 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|75928914-ee63-4064-946e-94d2c78621d2 | underdog | Jonah Heim | Total Bases | over | 0.1402638403427669 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
+| underdog|1768786d-b0ed-4585-8ecb-514b41d133ef | underdog | Jackson Chourio | Total Bases | over | 0.1402638403427669 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13976081 | prizepicks | Jalen Brunson | Rebounds | over | 0.1400370452709755 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|f3372370-1bf0-4dc4-b0d7-08cbbed66ed3 | underdog | Mikel Oyarzabal | Shots on Target | under | 0.1399488754782364 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|e8fb4e0c-3953-4ff7-a161-1c796b154755 | underdog | Eduardo Valencia | Batter Walks | under | 0.1398692810457515 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|95f8a3cd-7eba-45e4-be62-33410b9c1d06 | underdog | Otto Lopez | Total Bases | over | 0.1397475180781956 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|05982c96-5be2-4a3b-b767-4346071b1936 | underdog | Shea Langeliers | Hits + Runs + RBIs | over | 0.1395967861347964 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|834ee6cc-bfcc-4340-a693-45611e833456 | underdog | Nikola Stulic | Shots on Target | over | 0.1395160394073649 | 2026-09-17T16:57:50Z | 2026-09-20T18:45:00Z |
-| underdog|f0eac688-981f-4cba-8034-19c8cbe144d5 | underdog | Griffin Conine | Runs | over | 0.139078887368901 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|19b16e4d-900c-4044-9928-d04077455298 | underdog | Zack Gelof | RBIs | over | 0.1388353155469837 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|bd0e3c33-d961-4062-a198-26267150c7a5 | underdog | Dominic Canzone | Hits | under | 0.138359354127359 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|121f7c77-1736-4945-8d98-5564d585ce17 | underdog | Mookie Betts | Batter Walks | under | 0.138095238095238 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|e4098d8f-9d7e-4dbe-83a7-0379fbe85a78 | underdog | Javier Sanoja | RBIs | over | 0.1377390462357782 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|54de780b-6b4a-4091-9317-32cea3b40801 | underdog | Brock Rodden | RBIs | under | 0.1369047619047619 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|f8fbe208-2e6a-47ae-b37e-4acc44d9f518 | underdog | Cody Bellinger | Runs | over | 0.1368143001881605 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b91cdb23-bc98-4a3f-acd9-5179b7ff64d0 | underdog | Samad Taylor | Total Bases | over | 0.1366505993260247 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|873ae8f4-2c0a-4eb9-bc10-c4af419e94f2 | underdog | Samuel Basallo | RBIs | over | 0.1355192146014698 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
+| underdog|a49d7058-4be8-483a-8e1a-1be009b28a2e | underdog | Garrett Mitchell | Runs | over | 0.139078887368901 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|65cfe6c3-5608-4514-a298-6941c78de969 | underdog | Coby Mayo | RBIs | over | 0.1355192146014698 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15020924 | prizepicks | James Cook III | Rush Yards | under | 0.1353753051756937 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|cde9c817-fa03-4371-a6f8-4f3d78213fb4 | underdog | Brenton Doyle | Total Bases | over | 0.1351617995264403 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|2c461f16-9a19-4ebc-94cc-f8c866c29954 | underdog | Luka Sucic | Shots on Target | over | 0.1348037151895488 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|ce28c4f7-b3ea-40fe-86f4-723c7ced7154 | underdog | Jake McCarthy | RBIs | over | 0.1337572512271307 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | prizepicks|15020921 | prizepicks | Jahmyr Gibbs | Rec Yards | under | 0.1333703389598928 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|18ba5a69-af63-41c0-ae52-ed0e94911f58 | underdog | Nathaniel Lowe | Batter Walks | under | 0.1329348531183394 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|05315056-ffcb-4634-b61d-30091d9dc970 | underdog | Samad Taylor | Hits + Runs + RBIs | over | 0.1327882659352703 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|2cf178c1-a5cf-44e9-b152-2556ddaa550b | underdog | Colson Montgomery | RBIs | over | 0.1321432519067094 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|8ac7bd1d-6475-4e52-bb4c-8e3021b26ca9 | underdog | Ryan Johnson | Hits Allowed | under | 0.1312786649108193 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|755d6490-d819-4747-8f1c-26fb7ef6de4a | underdog | Jacob Misiorowski | Earned Runs Allowed | over | 0.1318960640248991 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|b7b60f9d-592b-49dd-87fd-76381b3ea7a9 | underdog | Christian Yelich | Runs | over | 0.1309907586503332 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | underdog|25a2493a-6634-4ce2-9fa6-732019c1d4a5 | underdog | Brice Turang | RBIs | over | 0.1306423852090389 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | prizepicks|13975891 | prizepicks | Cade Cunningham | Pts+Asts | under | 0.1301298534041951 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|0c3e0eda-8cde-42ce-9fd7-bd1179661d49 | underdog | Zach Neto | Runs | over | 0.1299240676259593 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|0aca4d55-8dff-47a7-99d7-61e7c8eecec1 | underdog | Munetaka Murakami | Total Bases | over | 0.1296382189239331 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|49c1852d-22af-4092-bafc-d812fb29a374 | underdog | Cal Raleigh | Runs | under | 0.1295144571740317 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|03fafae6-0fa2-44cd-bd81-f4055365a133 | underdog | Cal Raleigh | Hits | under | 0.1291884323157159 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|0aefc3ba-b7f0-4588-9d16-4f5daa78177e | underdog | Jacob Misiorowski | Earned Runs Allowed | over | 0.1291720119377493 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|58b5cf18-d6c9-4227-b088-3eb9f839bf03 | underdog | Jonah Heim | RBIs | over | 0.1285551763367463 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|db1c34c7-4aa7-4f1f-98c8-4683b7b8ca67 | underdog | Jakob Marsee | RBIs | under | 0.1284875183553598 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4189f4cd-1980-4ef7-9aab-3e9306b86301 | underdog | Miguel Rojas | Runs | under | 0.1284271284271284 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ca4f6ea4-a22b-4a42-ae1c-9da62df7c986 | underdog | Joe Mack | RBIs | over | 0.1279178338001866 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|102236ea-3200-4e4e-a888-51e574147cf1 | underdog | Victor Caratini | RBIs | over | 0.1279178338001866 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|170e75b8-030b-418e-b4c2-64b6a96385c6 | underdog | Samuel Basallo | RBIs | over | 0.1290781305548717 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13975904 | prizepicks | Cade Cunningham | Rebs+Asts | under | 0.1276349180264445 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|7b670f7f-7a4a-4a8a-a9b9-d83d5555a3d3 | underdog | Munetaka Murakami | Runs | over | 0.127293997221613 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|547022d6-2ffb-469e-b640-050b3b464fe1 | underdog | Grant McCray | RBIs | under | 0.1271062271062271 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3e280b62-294f-4f3e-ad71-fb92039619e8 | underdog | Kade Anderson | Hits Allowed | under | 0.1265718478109436 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|469963c5-08de-4926-9327-c2b9bbd6cf1e | underdog | Samad Taylor | Batter Walks | over | 0.1262883967751811 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c20b35f2-1207-4720-991b-2e885210e7be | underdog | Shea Langeliers | Hits | over | 0.1256977977572576 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|34869b50-8809-43d3-b938-e03ab2f4350a | underdog | Ty France | Total Bases | over | 0.1256159465147949 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | underdog|7df6f464-8dc3-449a-8ea5-6c27996dbce2 | underdog | Leody Taveras | Runs | over | 0.12529374677595 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|7a3c327b-8723-42de-95e8-62217917e93b | underdog | Josue De Paula | Runs | over | 0.1243862520458266 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a6b24756-8a57-4dce-b1e5-17265473b096 | underdog | Coby Mayo | RBIs | over | 0.1243776943401473 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|81780317-e180-4b9f-9d62-c08695dbc263 | underdog | Nikola Stulic | Shots Attempted | over | 0.1243727756904235 | 2026-09-17T16:57:50Z | 2026-09-20T18:45:00Z |
 | prizepicks|13976014 | prizepicks | Shai Gilgeous-Alexander | Pts+Rebs | under | 0.1235832751001789 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|a7da7ceb-3bc5-47f6-a6cb-a1dd881ab30c | underdog | Brice Turang | Total Bases | over | 0.123544051767048 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|33b6dab2-ced6-4cf7-9d5f-1cd41210f467 | underdog | Andrew Knizner | RBIs | under | 0.1233766233766234 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0713500d-a5ab-4ecc-ab5a-35304a89adcd | underdog | Ryan Johnson | Pitching Outs | under | 0.1227160650854596 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|ad7c7537-6987-44b1-82a8-2ce2a290689e | underdog | Carlos Narváez | Total Bases | over | 0.1226164079822613 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|4d7adb04-2278-4c64-93a8-b0c1800ec0ea | underdog | Colton Cowser | Hits + Runs + RBIs | over | 0.1220987135203883 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|8a8ef67e-bad7-4bdd-a28f-cc5ce9bfeacb | underdog | Gabriel Moreno | Runs | over | 0.1219985170820737 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b86d5a94-c49d-4e7f-a1b4-5f26bc703001 | underdog | Brett Harris | Batter Walks | under | 0.121971595655806 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ecb4574f-b1a1-4bf9-89ef-7bac5855283c | underdog | Otto Lopez | RBIs | over | 0.1219669555948272 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c6b9d7d8-11ed-4b97-a127-d005e7509ede | underdog | Spencer Jones | RBIs | over | 0.1219669555948272 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|13976082 | prizepicks | Shai Gilgeous-Alexander | Rebounds | under | 0.1216050430415754 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|b508d786-1c64-4915-be68-7425b1626ba6 | underdog | Munetaka Murakami | RBIs | over | 0.1213827271703636 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | prizepicks|13975945 | prizepicks | Jalen Brunson | Assists | under | 0.1210560575434291 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
 | underdog|166d4984-17fd-4913-9f3b-90bfa43cc6b4 | underdog | Colton Cowser | Hits | over | 0.1208529141453846 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|e5bfe737-20d3-450d-a047-951d7f85aaef | underdog | Jung Hoo Lee | Total Bases | over | 0.120852430759588 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9a8bf5b1-1667-4127-bbbe-07ea21fce83e | underdog | Christian Yelich | Total Bases | over | 0.120852430759588 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|0e7b9ff1-1183-4633-8e8c-7bb3e931cf25 | underdog | Cody Bellinger | Total Bases | over | 0.1205398043828151 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|441af650-812f-4b08-8499-06c6583c0a1b | underdog | Samad Taylor | Hits | over | 0.1202277538003047 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|666f893c-6f5b-4618-9d0c-fb6d4ab80134 | underdog | Pete Alonso | Hits + Runs + RBIs | over | 0.1203512790851769 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15020926 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.1197756097336648 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|f23c5432-975d-4999-a30e-8193c8fd6202 | underdog | Chase Meidroth | Hits + Runs + RBIs | over | 0.1195360254083615 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
 | underdog|5faebea4-4718-4745-b606-8d10d6ed4d81 | underdog | Dylan Beavers | RBIs | over | 0.1193311036789298 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|aa4b1634-eb86-4e5c-a98f-2f7424a17aeb | underdog | Shea Langeliers | Total Bases | over | 0.1192173839232662 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|715a0635-237e-4ffa-a822-475dd5edaf6a | underdog | Heriberto Hernández | Total Bases | over | 0.1189370078740158 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|15039314 | prizepicks | Robin Montgomery | Total Games | over | 0.1188183128015181 | 2026-09-20T04:56:02Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|8922c308-23a2-4776-b4e8-7f6cd98e8f8d | underdog | Lazaro Montes | Batter Walks | under | 0.1186988367083154 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|229e52e0-78c0-4686-8bf9-88c0ae26b5a8 | underdog | Zach Neto | Total Bases | over | 0.1184420109507215 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|c10f787c-75c9-4784-b2fe-fe9bda20aa00 | underdog | Pete Alonso | Hits + Runs + RBIs | over | 0.1181309426272224 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | prizepicks|15073137 | prizepicks | Magda Linette | Break Points Won | under | 0.1180779654629361 | 2026-09-20T18:49:37Z | 2026-09-21T02:10:00.000-04:00 |
 | underdog|8ebf8410-5ceb-4b39-9350-eda82ca36577 | underdog | Polina Kudermetova | Double Faults | under | 0.117634722930922 | 2026-09-20T18:49:37Z | 2026-09-21T04:10:00Z |
-| underdog|057d628c-17ca-4eff-8d93-e1f8956c1037 | underdog | Riley Greene | Total Bases | over | 0.1175659029317563 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
+| underdog|f8c366c0-5edf-40ea-aa37-e114d13fd594 | underdog | Carlos Narváez | Hits + Runs + RBIs | over | 0.116824951093588 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13976095 | prizepicks | Cade Cunningham | 3PTM | over | 0.1168098507846668 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|b05370d7-7554-462a-9df0-99905faeb035 | underdog | Gavin Williams | Pitching Outs | under | 0.1167108824234999 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|7d965497-ea24-4547-ac2a-25debeb95ee0 | underdog | Adael Amador | RBIs | over | 0.1165990978130531 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|3b787017-6f9e-44bb-8d1b-480344dfcd04 | underdog | Ty France | RBIs | over | 0.1165990978130531 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|58c7bcd8-4dfe-4dcb-9510-b3d6bcb04c4d | underdog | Henry Bolte | Hits + Runs + RBIs | over | 0.116497128633612 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | underdog|45e96c68-9995-44d1-ac83-5d6672770e16 | underdog | William Contreras | Runs | over | 0.1164061369228543 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|5967353e-a76b-4235-baab-3f099fc189af | underdog | Angel Martínez | Batter Walks | under | 0.1158633897223109 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|edf3946a-a464-46f0-930a-038c01f2e4b7 | underdog | Julio Rodríguez | Hits | under | 0.1158019007196399 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|1ba204f5-ae8e-4d06-9165-bea3404b6c7a | underdog | Chase DeLauter | Total Bases | over | 0.1154636622508354 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|f76c5818-ae5f-4bb2-b548-35a376e1240b | underdog | Shay Whitcomb | RBIs | under | 0.1153846153846154 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|cc8029b9-912f-4454-8b7e-7e397a086df3 | underdog | Walker Jenkins | Batter Walks | under | 0.1151330729403217 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
 | underdog|45423149-50ae-4405-94d2-b17d13fd8979 | underdog | Jacob Misiorowski | Walks Allowed | over | 0.1147301369483729 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|9cc4508c-477e-47b8-b829-4c7c74adf620 | underdog | Max Clark | RBIs | over | 0.1139244103438475 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | underdog|e9925e71-122c-4b49-9028-b943afaef6b6 | underdog | Pete Alonso | Total Bases | over | 0.1134453781512604 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|ff31e157-da12-4cb7-aa1d-f4f681155908 | underdog | Josh Bell | RBIs | over | 0.111859761320162 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|345c49c9-4589-4f8b-9da8-d5183a4a3434 | underdog | Steven Kwan | RBIs | under | 0.1106442577030812 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|6e787c98-e62a-4d70-ae92-cf968cec8af6 | underdog | Christian Encarnacion-Strand | Total Bases | over | 0.1092300556586269 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|bf0ecd35-ea62-4564-8865-46570926f1f5 | underdog | Kade Anderson | Strikeouts | under | 0.108901115911503 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
+| underdog|4ce86dff-8686-41da-8c06-16f870cc819f | underdog | Brice Turang | Total Bases | over | 0.113339970134395 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|b4b03f83-e1d3-4b34-8b97-e70f0f797932 | underdog | Leody Taveras | Hits | over | 0.1086502780322454 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|c8112efa-1f59-46a1-8703-14c6914375f6 | underdog | Dominic Canzone | Runs | under | 0.1085070381970697 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|ec90e2b5-abf2-4aba-a613-b537b581931c | underdog | Julio Rodríguez | Runs | under | 0.1085070381970697 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|dd8cca7b-9138-4c5b-a9ba-354fbe57c7ac | underdog | Kevin McGonigle | Runs | over | 0.1085070381970696 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|c9f2fb55-760d-4943-acd6-8da106de658e | underdog | Braden Montgomery | Hits + Runs + RBIs | over | 0.1084789626022874 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|5854db33-7641-4ea8-86f9-41ea531cef5d | underdog | Josh Bell | Batter Walks | under | 0.1083291905816423 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|02b4d3a8-384a-47ae-a5ef-ebfdee27fb5b | underdog | Royce Lewis | Total Bases | over | 0.1069520832509002 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|4af28d16-ea67-4f81-bd5d-3312846c6d2d | underdog | Denzel Clarke | Hits + Runs + RBIs | over | 0.1066598557687584 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|53e32b30-f894-4e0d-934f-2bb00b019192 | underdog | Ketel Marte | Batter Walks | under | 0.1064939737362835 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|9c5f713e-c455-4ad4-b51b-5e6dbae87b93 | underdog | Mike Trout | Runs | over | 0.1062020552902013 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|0b7b0f3a-6e35-4d82-8e87-7110f04e6c9a | underdog | Kevin McGonigle | Total Bases | over | 0.1060662914321449 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|e32fa083-a20b-4405-b8f1-868a29f0366d | underdog | Emmanuel Rodriguez | RBIs | over | 0.1056692868042958 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|cb0cc73c-2347-4bfa-b19b-7595e8ac1dbc | underdog | Griffin Conine | RBIs | over | 0.1056692868042958 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0c6250dd-2de7-46b9-abac-843b0e94b9d3 | underdog | Munetaka Murakami | Hits + Runs + RBIs | over | 0.1055079741563932 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|55549ffb-ab37-4aa8-96e2-68dcb3783bf9 | underdog | Manny Machado | Total Bases | over | 0.1049471088841167 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|713b22f5-25b9-49ea-b685-77cd370adef7 | underdog | Cole Carrigg | Runs | over | 0.1046204998853473 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|ccc0688d-1db4-4ddc-a705-ac26b02d4b6f | underdog | J.P. Crawford | Runs | under | 0.1046204998853472 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|f5003c89-9b74-4113-9e03-ff37a78c2918 | underdog | Nathaniel Lowe | RBIs | over | 0.1043438024177222 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|4a363e46-be72-4c50-8b09-f811dfba2cc2 | underdog | Dean Kremer | Pitching Outs | under | 0.1038171363468284 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
 | prizepicks|15073131 | prizepicks | Kamilla Rakhimova | Break Points Won | under | 0.1037644317304841 | 2026-09-20T18:49:37Z | 2026-09-21T00:10:00.000-04:00 |
-| underdog|9a3ddada-de2a-4b2a-a855-3cfc46c0111a | underdog | Griffin Conine | Hits + Runs + RBIs | over | 0.1035864901821406 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c373d84c-8611-4034-8c67-e61053c4a507 | underdog | Gabriel Moreno | Total Bases | over | 0.1031358885017419 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|4f5838fc-980e-4b37-bbc7-62815215c5bc | underdog | Ketel Marte | Total Bases | over | 0.1031358885017419 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b74b3ef9-455f-4417-810a-976057d3520e | underdog | Grant McCray | Hits | under | 0.1026967102589148 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|13976040 | prizepicks | Victor Wembanyama | Pts+Asts | under | 0.1021735734863812 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|1f889cb4-7d65-4a5c-9d0e-4e335557a319 | underdog | Jackson Merrill | RBIs | over | 0.102062094531974 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c7313e0d-aee6-4398-aa17-05e69e67d398 | underdog | Miguel Vargas | RBIs | over | 0.102062094531974 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|abd7bed3-d141-477b-9012-c776acd28594 | underdog | Cody Bellinger | RBIs | over | 0.1016573295985059 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a46376b3-4229-4fc0-a2d9-bf43e4fe8cd9 | underdog | Kevin McGonigle | RBIs | over | 0.1016573295985059 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|18688b46-c2b8-4837-aa64-770a457cb6d2 | underdog | George Lombard | RBIs | over | 0.1016573295985059 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|04d8056a-51fd-41a7-a797-8dc0199dbffc | underdog | J.P. Crawford | Hits | under | 0.1016177714570336 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|f4ede3cf-b3de-46b8-8072-3f47d82de399 | underdog | Wade Meckler | Batter Walks | under | 0.1015920129519698 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|80b020ba-7541-494b-8b94-c5341aab33c7 | underdog | Jakob Marsee | Hits + Runs + RBIs | over | 0.101315753830712 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|e3e63b2a-5221-49dd-9280-ebf1a94985f5 | underdog | Gleyber Torres | Batter Walks | over | 0.1010101010101009 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|93b0827b-445e-42e8-a5df-f1d422d1d83b | underdog | Kody Clemens | Total Bases | over | 0.1009380863039398 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|5562f9b1-be38-43be-9e75-a9492d3bc641 | underdog | Mikel Oyarzabal | Shots Attempted | under | 0.1005905474050686 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|f1fb2281-899b-4738-a905-056b70e65741 | underdog | Brandon Young | Earned Runs Allowed | under | 0.1004034834241489 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|aa78b3c2-1936-42f0-b532-35bcafb41fb1 | underdog | Brooks Lee | RBIs | over | 0.1002960227439256 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|2ff79ae2-c838-41be-be97-5fcce28ea204 | underdog | Nolan Arenado | RBIs | over | 0.1002960227439256 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|50f70b5e-ecd0-405b-9054-d9e6a1d411fe | underdog | Cooper Pratt | RBIs | over | 0.1002960227439256 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|4a35a5c9-4e71-48ce-bb29-827abd6fb5b5 | underdog | Arnaut Danjuma | Shots Attempted | under | 0.1002948257535145 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
+| underdog|b626b643-f2b7-428a-a81f-177947866898 | underdog | Brandon Young | Earned Runs Allowed | under | 0.1007022964829303 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13975896 | prizepicks | Cade Cunningham | Pts+Rebs | under | 0.1002719704236944 | 2026-09-12T11:28:56Z | 2026-10-20T15:10:00.000-04:00 |
-| underdog|16a6c12f-f09f-4bb3-a19b-2044eaaa05a1 | underdog | Max Clark | Total Bases | over | 0.1002585649644474 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|7ce395ec-1bb8-478e-a373-25d394a981c9 | underdog | Donovan Walton | RBIs | over | 0.099783393501805 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|bdc374be-ca80-4388-b601-fa4093c3b8d2 | underdog | Sam Antonacci | Runs | over | 0.0995184590690207 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|3fc7de83-afe4-49e8-b51a-e2c7b4fd8c93 | underdog | Jackson Merrill | Runs | over | 0.0995184590690207 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|1e0f1898-c9b4-4b68-aa8f-9940ee25318a | underdog | Joe Mack | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3703d3da-6104-437d-8ba4-c00328e1b0f2 | underdog | Brett Harris | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|44b7f16d-ca64-44fd-b248-f5b528820ea8 | underdog | Scott Bandura | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|eaab9511-00f9-4b1d-bd59-d66266381fb0 | underdog | Donovan Walton | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|cbab36fc-e1c9-45bb-92c6-1888c049a785 | underdog | Ethan Salas | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|59b30fc8-52cb-4eb0-9d22-bc79fdd7efeb | underdog | Ben Ross | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|a6cce16c-6d50-4ef5-9200-1bf235ac66cd | underdog | Samuel Basallo | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|7193202f-27a3-4d43-875e-73865b13fe21 | underdog | Brett Callahan | Total Bases | over | 0.0994475138121546 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|d991d197-67b4-4d22-971e-1c0c68bf3113 | underdog | Christian Moore | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|8a2ddf8c-3255-4527-9640-d38e8a2546a0 | underdog | Tim Tawa | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9774e1ec-8f47-47b3-a7fb-04dba775dd3f | underdog | Josh Lowe | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|2f447639-4781-4fae-98c4-4fd5d4c8329b | underdog | Hunter Feduccia | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | underdog|d1ddf32e-6022-461f-b53a-ad2704209e0b | underdog | Dylan Beavers | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|1ff23bde-f5ec-4de6-9240-124922d3c809 | underdog | Jose Siri | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|55daeccf-6ec1-44c7-8b25-697d7704b98b | underdog | Deyvison De Los Santos | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|191f3ab9-d937-467a-81f3-764451afcf66 | underdog | Pavin Smith | Total Bases | over | 0.0994475138121546 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|dd774758-527b-4859-9a98-88ab4d484ce5 | underdog | Alika Williams | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|29ee876a-9f04-4139-9972-e0399a0dd713 | underdog | Lawrence Butler | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|3516f3b6-de83-4fd3-bca7-6c34fc650d1c | underdog | Graham Pauley | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|020863b6-f864-4610-80e2-439f0cace496 | underdog | Colson Montgomery | Hits + Runs + RBIs | over | 0.0990866473004907 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|ffe2d78c-c127-4ce8-8a9a-e73a10bb31d6 | underdog | Angel Genao | RBIs | under | 0.098639455782313 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|cd13c89c-879b-4e01-b858-894c87e0ca47 | underdog | Riley Greene | RBIs | over | 0.0986080243303309 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|c404ed0a-9c47-4a02-b1ac-77dc42d07404 | underdog | Luis García | Batter Walks | under | 0.098042080654588 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|ab088850-0344-4d70-aeb2-4bc5fa4b0d4d | underdog | Zack Gelof | Batter Walks | under | 0.098022624031353 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|a38db25b-d4e3-4df0-a40b-239f2feaccdc | underdog | Dean Kremer | Strikeouts | under | 0.0979968398737207 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|1d12cd29-f314-4146-bb6f-b1f392175735 | underdog | Nolan Arenado | Hits + Runs + RBIs | over | 0.0978911609594972 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d18c9679-6fde-4b19-8045-8b333daf8d27 | underdog | Alina Korneeva | Double Faults | under | 0.0978703563814868 | 2026-09-20T18:49:37Z | 2026-09-21T04:10:00Z |
-| underdog|41eadaa3-e1e6-4af7-9688-009bfbe8d356 | underdog | Denzel Clarke | Total Bases | over | 0.0978456373156402 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|9a5fc59f-612c-415e-b508-2d84d36232fa | underdog | Jo Adell | Total Bases | over | 0.0978456373156402 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|8a5e28c1-9299-455f-b304-48f0e38acde4 | underdog | Mike Trout | Total Bases | over | 0.0978456373156402 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|09e23a50-16b1-49a7-8269-63774235e879 | underdog | Mike Trout | Singles | over | 0.0978378067897917 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|50e2e63f-1780-4b02-af50-73d1504a42ab | underdog | Leody Taveras | Batter Walks | over | 0.097604084838963 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|5c24498a-4c46-4208-99ad-3fdd1f97da7e | underdog | José Caballero | Hits + Runs + RBIs | over | 0.0966288638886907 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|925c7254-45e1-461d-a636-1ca3fc4e8d21 | underdog | Spencer Jones | Hits + Runs + RBIs | over | 0.0964310505651168 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a3cdf421-4c1e-4295-b963-19bb206c3112 | underdog | Dustin Harris | Runs | over | 0.0962432915921288 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|d5067f78-46f3-428c-b2d3-222c9c6a63f8 | underdog | Jeremiah Jackson | Total Bases | over | 0.0994475138121546 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|a6cce16c-6d50-4ef5-9200-1bf235ac66cd | underdog | Samuel Basallo | Total Bases | over | 0.0994475138121546 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
+| underdog|448fa8c1-9527-4a57-943a-337eeee6fa7a | underdog | Christian Yelich | Total Bases | over | 0.0978456373156402 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|1f4fe333-51a5-46c7-8a5e-cf1e20858b7f | underdog | Leody Taveras | Batter Walks | over | 0.097604084838963 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15073129 | prizepicks | Katie Volynets | Break Points Won | under | 0.0961432684490362 | 2026-09-20T18:49:37Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|a27e8426-5b86-4a16-acb8-4674458de079 | underdog | Fernando Tatis | Batter Walks | over | 0.0961327180839375 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| prizepicks|15069820 | prizepicks | Heliot Ramos | Plate Appearances | under | 0.0958896946478237 | 2026-09-20T18:49:37Z | 2026-09-20T16:10:00.000-04:00 |
-| underdog|6bcc9697-d491-47c0-81c0-e851f46f06d0 | underdog | Corbin Carroll | Total Bases | over | 0.0958098811757346 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c94fe444-ee53-4b12-82e2-9e1199980584 | underdog | Andrew Benintendi | Hits + Runs + RBIs | over | 0.0957411120466779 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|6124c182-6ff2-4c5e-ab04-75f7c0086bfc | underdog | Jackson Merrill | Total Bases | over | 0.0951590937229167 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|31efb0a2-9c21-4f12-9d0e-2c4ec186c4d0 | underdog | Eduardo Valencia | Hits + Runs + RBIs | over | 0.0946045084323425 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
+| underdog|2f56dd81-2400-494a-9de5-eb23a07ef71b | underdog | Garrett Mitchell | Batter Walks | over | 0.0961327180839375 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|99e23f52-12b5-46c2-868d-145b14f4a19a | underdog | Brandon Young | Walks Allowed | under | 0.0957151776427044 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15072774 | prizepicks | Leylah Fernandez | Break Points Won | under | 0.0945781535059221 | 2026-09-20T18:49:37Z | 2026-09-21T06:30:00.000-04:00 |
-| underdog|e4866640-729f-4574-bc62-dada746a24e8 | underdog | Zach Neto | RBIs | over | 0.0944179473591237 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|2bcfc1c7-8d37-49bc-90ec-ca7a2f48a63e | underdog | Nolan Arenado | Total Bases | over | 0.093964858670741 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|4e560609-1b4d-4278-941e-983739afb71b | underdog | Lazaro Montes | RBIs | over | 0.0937536553982921 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|cb2fc18a-3908-4e3d-a10b-1714914339dd | underdog | José Ramírez | Total Bases | over | 0.0936805976176056 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|9f02d093-0a73-46ff-9d9f-31544ab9b340 | underdog | Brandon Young | Walks Allowed | under | 0.0935268763799934 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|6aa12f92-34b0-4a92-aba9-c14a04dc11bf | underdog | Hunter Feduccia | RBIs | under | 0.0934959349593496 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d8e79a57-3756-488e-8312-d1a846862300 | underdog | Tommy White | Hits | over | 0.0931853187855996 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|d939385e-b40a-4454-a07f-5c8a36a3994d | underdog | Teoscar Hernández | Batter Walks | under | 0.0931682550993142 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|15043546 | prizepicks | Linda Fruhvirtova | 1st Set Total Games Won | over | 0.093062823732776 | 2026-09-20T04:56:02Z | 2026-09-20T23:00:00.000-04:00 |
 | underdog|8ba300af-e60c-4549-9278-0f4493b468b5 | underdog | Coby Mayo | Hits | over | 0.0927472491662126 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
 | prizepicks|15039952 | prizepicks | Yue Yuan | Total Games | over | 0.0926970873133662 | 2026-09-20T04:56:02Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|935b2cd5-a5d4-4701-a686-94c69ed74e28 | underdog | Luis García | RBIs | over | 0.0919776667646193 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|98c68dcc-0e91-4a32-9c52-ba9e61a18821 | underdog | Mookie Betts | RBIs | over | 0.0919776667646193 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|19034045-9e8b-41ed-b132-c5aa0f2e48c8 | underdog | Dustin Harris | RBIs | over | 0.0915923945335709 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d69dd30f-cf7f-4bf1-8108-67dc07e879ca | underdog | Angel Genao | Batter Walks | under | 0.0914328768337544 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|de4bfb00-f044-43c9-a327-5d61e0596d50 | underdog | Adael Amador | Total Bases | over | 0.0906717017515668 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|ade1eb0a-8c5f-4e4b-9892-20685a9b07af | underdog | Christian Yelich | Batter Walks | under | 0.0897959183673468 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|5f31fdc9-28a8-4a27-a9c6-a3f448a4f8d5 | underdog | Heliot Ramos | Total Bases | over | 0.0897955937326016 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|719b9072-34bd-476f-ab04-6be7ff1b5b9a | underdog | Luis Lara | Batter Walks | under | 0.0897141848976712 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|380718a5-6074-4c65-a3c4-7e9a67c04496 | underdog | Kody Clemens | Runs | over | 0.0893143774363677 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|9cb5bf0f-b4a6-442b-98d4-d04ef54cc949 | underdog | Jakob Marsee | Batter Walks | over | 0.0889487870619945 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|5d7de2cf-49f0-445b-bad6-47858dea282c | underdog | William Contreras | RBIs | over | 0.0919776667646193 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|1aa0001a-e9a4-4883-9c26-b83f6dfc6a11 | underdog | Jake Bauers | Total Bases | over | 0.088821892393321 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|150dfad9-d106-4adf-8f09-859c6c03744d | underdog | Emmanuel Rodriguez | Runs | under | 0.0886699507389162 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|f63abac6-f325-480f-8cbd-fcf949e73af8 | underdog | Javier Sanoja | Total Bases | over | 0.0885523924894005 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|1ca9c134-f85c-4c9a-93ff-5713b29a0175 | underdog | Kyle Stowers | Total Bases | over | 0.0885523924894005 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|ecad93de-ea9f-476e-8766-d22e9b217ad8 | underdog | Cooper Pratt | RBIs | over | 0.0884866767219708 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|019f732a-d703-4db6-8fad-411ee4d4e9c1 | underdog | Jake Bauers | Runs | over | 0.0879218788980364 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|07f732a6-469b-4ad4-8cf9-be8b3071b776 | underdog | Leody Taveras | Hits + Runs + RBIs | over | 0.0878855575272699 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d5a87c4e-6860-4165-b008-124090e7b3d4 | underdog | Brooks Lee | Total Bases | over | 0.0876933530516808 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|1d12fcb7-5928-4365-b9d4-aa04f4af076f | underdog | Cody Bellinger | Batter Walks | over | 0.087370531239559 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3ae6da5e-ea55-48f8-a8f8-e838a9100d20 | underdog | Gunnar Henderson | Batter Walks | over | 0.087370531239559 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|bc3eee12-8cac-40c2-827b-efca14b78c47 | underdog | Luka Sucic | Shots Attempted | over | 0.0871353847158452 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|063c3838-bbec-4ef1-adc6-e99fec7af13d | underdog | Chase Meidroth | RBIs | over | 0.0869172932330827 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|75fc2ba6-cd37-49cc-b15f-9c4fc50444c1 | underdog | Brock Rodden | Hits | under | 0.086837226749197 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | underdog|a2796a6f-e70a-4166-b59e-9badc5b7ac8d | underdog | Jackson Chourio | Runs | over | 0.0867768595041319 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|b133cb25-66cb-44a3-a287-8a0b9285bd93 | underdog | Josh Naylor | Runs | under | 0.0867768595041319 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|55d66a31-d4ff-4c77-9801-9484b57e5024 | underdog | Ben Rice | Runs | over | 0.0867768595041319 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|daaa0e0e-2968-47bd-a6c2-ae09a8372df1 | underdog | Connor Norby | Runs | under | 0.0867768595041319 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|2e5fff12-7ef1-425f-b0f1-971bb09f5fec | underdog | Tommy White | Batter Walks | under | 0.0866118614210217 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|40451842-b5db-47df-a709-64f9fde280f3 | underdog | Riley Greene | Runs | over | 0.0864655221582159 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|7045e3de-477c-43d0-ab3c-2a063a87efe4 | underdog | Ketel Marte | Runs | over | 0.0864655221582159 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|f23ae4b9-38f0-42d4-86f7-0b91d454bddf | underdog | Nathaniel Lowe | Hits + Runs + RBIs | over | 0.0855679610976948 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|622004c4-5b2e-408e-bdc1-c840818fc1d0 | underdog | Dean Kremer | Earned Runs Allowed | over | 0.0854728389768536 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|3053ad6a-0b66-4677-933c-d478ae025902 | underdog | Brice Turang | Runs | over | 0.0867768595041319 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|d9c51cb5-174a-45a9-91eb-5efb58479bb5 | underdog | Carlos Narváez | Hits | over | 0.0842708695011316 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|03d03b15-42fc-4002-a582-112346996542 | underdog | Samuel Basallo | Hits | over | 0.084175821206152 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|b66baff8-cbda-43ef-9b75-903aefc6213a | underdog | Garrett Mitchell | RBIs | over | 0.0841278407387419 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|f81feb85-501f-4ea3-bea1-73ad93522c90 | underdog | Hao-Yu Lee | RBIs | over | 0.0841278407387419 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | prizepicks|15020925 | prizepicks | Josh Allen | Rush Yards | under | 0.084024205820317 | 2026-09-19T04:39:42Z | 2026-09-27T13:00:00.000-04:00 |
-| underdog|03b09cf1-fb17-4f62-9501-483d923b871a | underdog | Cole Carrigg | RBIs | over | 0.0834470888480028 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | underdog|294bd585-876c-417f-bf09-75b8f224c215 | underdog | Dylan Beavers | Hits | over | 0.0834256872964591 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|83b06cec-223f-4adb-8eae-4d8672ece8ac | underdog | Hao-Yu Lee | Batter Walks | under | 0.083227250779158 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|85b8e97a-a778-4f2a-b95d-e8a224e19328 | underdog | Pavin Smith | Batter Walks | under | 0.083227250779158 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4e9c1fea-325e-47ac-add5-a73391e88d22 | underdog | José Ramírez | Runs | over | 0.0828967532698957 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | underdog|798b08ce-5f10-412c-ad93-5c6ccfebb080 | underdog | William Contreras | Batter Walks | over | 0.0828043211938969 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|835fbce9-4c47-4cdc-9c80-a3da82189a1e | underdog | Cole Carrigg | Total Bases | over | 0.0827277252364359 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|aa2e20a6-7c2e-434b-8de9-aa6e9ffb6112 | underdog | Eduardo Valencia | RBIs | over | 0.0826481130086442 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|2b872cea-1a6b-410b-9b64-286b83d09bec | underdog | Riley Greene | Hits | over | 0.0823565346217335 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|e04e7b39-743c-460f-8ee2-aeb2569c5a66 | underdog | Graham Pauley | RBIs | over | 0.0823529411764705 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ab933616-8b09-47d5-b5f0-8f294d7bc549 | underdog | Moisés Ballesteros | Runs | under | 0.0819327731092437 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|bd1464f0-853b-4d29-9b85-573a31f8a48f | underdog | Miguel Vargas | Total Bases | over | 0.0818588742029475 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|365cf64a-8c44-43bc-8305-3fe4787592c7 | underdog | Angel Martínez | Total Bases | over | 0.0816220581449007 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|0e73f2e2-72f5-422a-a5c6-1659ee7f91c1 | underdog | Jo Adell | RBIs | over | 0.0815937015388285 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|a496d62a-e3fc-4257-96e4-3e23b1a448e9 | underdog | William Contreras | RBIs | over | 0.0815937015388285 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|b1762612-50c4-4c94-8863-32c041a76719 | underdog | Manny Machado | Runs | over | 0.0813893800262362 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3a3f7632-96f5-4732-9117-1a188c3392b2 | underdog | Chase Meidroth | Batter Walks | over | 0.0813381069590513 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|095df395-f63e-43fd-a523-d6382521eb51 | underdog | Heriberto Hernández | RBIs | over | 0.0811546840958605 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|263b6b0b-fbc1-428b-88a2-d40761bbe629 | underdog | Ketel Marte | RBIs | over | 0.0811546840958605 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0b5dee6b-6e22-4d90-91e0-e9347d030346 | underdog | Andrew Benintendi | RBIs | over | 0.0811546840958605 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|8dda402b-37e5-4aae-95c5-0d1df26b8773 | underdog | Spencer Torkelson | RBIs | over | 0.0811546840958605 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
+| underdog|6590d057-b13e-4b4e-92ab-b5b9a85bdaec | underdog | Jackson Chourio | RBIs | over | 0.0815937015388285 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15066453 | prizepicks | Yue Yuan | Total Games | over | 0.0810151439258699 | 2026-09-20T18:49:37Z | 2026-09-21T01:00:00.000-04:00 |
-| underdog|6dba3c29-8489-4496-a577-4cda78f35132 | underdog | Max Clark | Hits + Runs + RBIs | over | 0.0810113670725272 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|a8417a29-f426-4869-874b-34be59f7865a | underdog | Josh Bell | Runs | over | 0.0808586762075134 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|c659d635-9a05-4a6f-a63a-d0d32e79cefd | underdog | Lawrence Butler | Hits | over | 0.0806795180800022 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
+| underdog|9d2982c9-a981-45d9-8e2b-8a62798a7f54 | underdog | Christian Yelich | Batter Walks | under | 0.0805194805194805 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|1c31988f-4b60-407f-8004-91839a6d5d68 | underdog | William Contreras | Total Bases | over | 0.0804676201189138 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|bac0f0a0-4122-4184-94f5-8154aaa12218 | underdog | TJ Rumfield | Total Bases | over | 0.0804676201189138 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|5b498a58-2e55-4791-9133-611f5ea36904 | underdog | Christian Moore | RBIs | over | 0.0804562737642585 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|ebaed069-d746-41cd-b966-de99f336c1f9 | underdog | Braden Montgomery | RBIs | over | 0.0804562737642585 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|55351d03-67ce-4a86-8702-0849288d005e | underdog | Jack Perkins | Strikeouts | under | 0.0802542081411464 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|0384689a-8151-4d83-9890-20958cbf8a3d | underdog | Alan Roden | Runs | under | 0.0801393728222997 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|ce413905-bc47-49e7-b24a-51a0ff47a485 | underdog | Brenton Doyle | Hits | over | 0.079970751332063 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|8b634933-866e-47ba-85ee-c605adb29c7c | underdog | Chase Meidroth | Total Bases | over | 0.0795454545454544 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|65b4a607-37e7-4928-abcd-045e2048358b | underdog | Nolan Arenado | Hits | over | 0.0793081956843321 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|2d7b0bf7-3062-45ce-a9f0-2c092d3a2e9e | underdog | Eduardo Valencia | Total Bases | over | 0.0786178107606678 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|b3f3ebb0-94bc-437d-8004-22d2e4a9d5a5 | underdog | Jake Cronenworth | Hits + Runs + RBIs | over | 0.0786149186694658 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|580c98ea-3701-4e73-8c20-f33cee0bbe1e | underdog | Anthony Volpe | Hits + Runs + RBIs | over | 0.078202363291031 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|02ecaec8-9040-4de4-8c0d-950810d61370 | underdog | Brett Sullivan | Hits | under | 0.078025622630814 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|41a2281a-6454-462e-8943-d6c116a8f2d5 | underdog | Tim Tawa | RBIs | over | 0.0776923076923077 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|f6202eca-d6bb-4e68-b245-f94a2f62389e | underdog | Josh Bell | Total Bases | over | 0.0775410687877213 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|1f74fa1e-a9b3-4e5a-b0bc-4dc8a7b3f1c8 | underdog | Alika Williams | Batter Walks | under | 0.0774971297359357 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|153a19d7-bd61-4a25-97e9-28cd35e6da2b | underdog | Denzer Guzman | Hits + Runs + RBIs | over | 0.0769557084500438 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|18ff502f-8b45-4f72-ac2c-e2999026b258 | underdog | Spencer Torkelson | Hits + Runs + RBIs | over | 0.0768659759614706 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|db1ef723-c406-4ea1-bdd0-cd96d97f3c6f | underdog | Troy Melton | Pitching Outs | over | 0.0768020623052804 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|c5fd92b5-50d0-4886-a938-7cb34c1b663e | underdog | Jake McCarthy | Hits + Runs + RBIs | over | 0.0765297783255055 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|4fde3cf8-7073-4b4b-8d63-11ff966f8a60 | underdog | Tomoyuki Sugano | Pitching Outs | under | 0.0763850280335372 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|7c17126f-1773-4687-ad84-39c643bd86d2 | underdog | Lawrence Butler | Runs | over | 0.0761593565414101 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|64bacce7-3176-40f5-8119-308598dcbd20 | underdog | Christian Encarnacion-Strand | Runs | over | 0.0761593565414101 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|0eacc34e-33c1-438e-8a1c-74305d55adf4 | underdog | Grant McCray | Batter Walks | over | 0.0759829415435822 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0c16f8a6-fac8-4dfb-98d4-99b15fea8526 | underdog | Cole Carrigg | Batter Walks | over | 0.0759829415435822 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|1f5a3e26-914a-43c8-aa79-cbaf744df29e | underdog | Chase Meidroth | Hits | over | 0.0756538471639667 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|d95194db-3076-4adc-979d-a45eac6ec0f0 | underdog | George Lombard | Hits + Runs + RBIs | over | 0.075553279745564 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|a299cb6f-3d11-40c6-8daa-86f4cc05d10b | underdog | Freddie Freeman | Total Bases | over | 0.0753655793025872 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|33b92097-53a4-44a7-a4e8-b3dd428abba2 | underdog | Ryan Johnson | Walks Allowed | over | 0.0753391080569483 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|d439b6e1-4149-46e3-bb30-cd54697eb88b | underdog | Colson Montgomery | Batter Walks | under | 0.075177181616592 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|fe015aee-9d90-4e9b-a332-909f0d9c3195 | underdog | Garrett Mitchell | Runs | over | 0.0750796836264904 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
+| underdog|96b58e07-3be4-4eb7-aae6-f9fd5b15e5f0 | underdog | Gunnar Henderson | Hits | over | 0.0798946936308806 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|4874c00e-5254-437f-97e1-4224d86f5e1f | underdog | Pete Alonso | Hits | over | 0.0789011566502864 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|0f780f7d-76c1-4d28-b80e-bd7d9a41fdfd | underdog | Gunnar Henderson | Batter Walks | over | 0.0783649503161698 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|24e8f5eb-15d7-421d-ac29-082a8e399ded | underdog | Colton Cowser | Batter Walks | over | 0.0769788644840447 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13952671 | prizepicks | Victor Wembanyama | Points | under | 0.0750528755951651 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|7f5da180-49e1-4c32-a59a-16d215004879 | underdog | Ezequiel Tovar | Hits + Runs + RBIs | over | 0.0741899025505286 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|b40c034f-8a81-4866-93a0-1f7810414f43 | underdog | Angel Martínez | Hits + Runs + RBIs | over | 0.0738707179729465 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|c35d0aa1-1851-4b9f-aa26-4c89f71f1cb3 | underdog | Christian Koss | RBIs | under | 0.0737913486005089 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|81e14b49-394a-4451-b3b2-d7e37e227a3d | underdog | Wade Meckler | Hits + Runs + RBIs | over | 0.0736069819416954 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|e0d33083-dda1-4b31-8bbc-fce9554b3391 | underdog | Henry Bolte | Hits | over | 0.0733692536082052 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|de4e9397-4fbd-4970-a62f-0717868b65a2 | underdog | Kevin McGonigle | Hits | over | 0.0732035889863289 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|6749c601-0017-4a49-977b-39089ce16df7 | underdog | John Peck | RBIs | over | 0.0729411764705882 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|529934ee-47cb-4354-9e09-b2b12cf5d1f7 | underdog | Jonah Heim | Hits | over | 0.0725586218907501 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|39fa2e9c-29f6-46a3-a0ec-86b4bfe417af | underdog | Gunnar Henderson | Hits | over | 0.0725110310367813 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|662d2dd3-1205-4549-877d-58625ca92191 | underdog | Freddie Freeman | Batter Walks | under | 0.0724437998549673 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|f2887620-7e55-4f94-8f62-a0ed46d80b07 | underdog | Denzer Guzman | Batter Walks | over | 0.0721494817239497 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|3ddb815b-5103-4990-91cf-766b265a5687 | underdog | José Caballero | Total Bases | over | 0.0718093228573808 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|10a77ed6-e085-4fe8-bee6-8d3033b5f2c9 | underdog | George Lombard | Total Bases | over | 0.0714697738809414 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|1d41e77e-f2dc-48a9-a459-021b4f122818 | underdog | Kade Anderson | Walks Allowed | over | 0.0713619805485453 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|dd8c9d7a-8157-4784-9a6b-8abfd6c5d016 | underdog | Donovan Walton | Hits | over | 0.0711965020837372 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|b42ff115-840f-4e2a-81f5-a98e88323441 | underdog | John Peck | Batter Walks | over | 0.0708828522920204 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|2b7ba799-a8b0-4811-87fa-9d33b08e037d | underdog | Cooper Pratt | Hits + Runs + RBIs | over | 0.0707600883393339 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|9e4cb006-c64f-4f0f-8756-a8972986c07c | underdog | Pete Alonso | Batter Walks | over | 0.0706633234556645 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|8156b922-1395-4fc1-9958-e7c0463b3dc6 | underdog | Walker Jenkins | Hits | under | 0.069923127504927 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|3bc0324a-cc3e-429a-8075-c18649056edd | underdog | Julio Rodríguez | Batter Walks | over | 0.0698380566801619 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|cdbe601c-0ca1-420f-9c4f-75d046d93ffc | underdog | Anthony Volpe | Batter Walks | over | 0.0698380566801619 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9737aff3-9630-4b46-aba5-0292a83877b7 | underdog | Joe Mack | Batter Walks | under | 0.0695593220338983 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|b73aafb1-c509-4381-9e4c-a49f7199b533 | underdog | Jackson Chourio | Hits + Runs + RBIs | over | 0.0749351029401079 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|eeabc208-fb3b-4fb6-95f0-048ed61edb25 | underdog | Garrett Mitchell | Hits + Runs + RBIs | over | 0.0729704615235541 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15066381 | prizepicks | Sofia Kenin | Total Games Won | under | 0.0692569659087233 | 2026-09-20T18:49:37Z | 2026-09-21T23:00:00.000-04:00 |
-| underdog|21feecc0-22d3-4e6e-b656-e049516969c3 | underdog | Sandy Alcantara | Earned Runs Allowed | over | 0.0688441381131267 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|7f56fd6b-4fbf-4dd4-8eef-51f408ff7e1a | underdog | Nolan Arenado | Batter Walks | over | 0.0687847667950363 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4018b9d4-e221-4d89-a671-c4511df4baaa | underdog | Kyle Stowers | RBIs | over | 0.0687801600390934 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|f73ced44-7200-4859-9dbd-401881e6e6bd | underdog | Christian Koss | Runs | over | 0.068556570268899 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|13976051 | prizepicks | Victor Wembanyama | PRA | under | 0.0685309144464778 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|a1b0612d-b971-4183-970a-abac0b1e1ee8 | underdog | Heriberto Hernández | Batter Walks | under | 0.068413496051687 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|043fff57-dacf-4da8-9dc6-b8d7063c8543 | underdog | Sandy Alcantara | Hits Allowed | over | 0.0678691772533116 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|172c3896-c433-4fef-b114-5d0516c32d14 | underdog | Jackson Chourio | RBIs | over | 0.0678313253012047 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|5bf72dd8-5dd0-4d41-8bef-41fde06de1a6 | underdog | Jack Perkins | Hits Allowed | under | 0.0678224538856507 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|4e7b3a90-5b57-450f-b8f2-c8c1a82bdde3 | underdog | Luis García | Total Bases | over | 0.0674216027874562 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|4de3307a-9bac-4d5f-9095-81e222616cc3 | underdog | Cole Young | Hits + Runs + RBIs | under | 0.0673388888517189 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|deb7a95a-78e9-40f1-9762-39df4cb78c71 | underdog | José Ramírez | RBIs | over | 0.06720058915585 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|40b5c35c-5fa7-45b2-8793-dd9950b5c67e | underdog | Emmanuel Rodriguez | Hits + Runs + RBIs | over | 0.0670356056806094 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|a0d6334a-94bb-4805-a28b-a465436d1310 | underdog | Ben Ross | Runs | over | 0.0670277158330678 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|78ff01c7-ba4b-466a-a19b-b135dac50030 | underdog | Cody Bellinger | Singles | over | 0.0664757441071202 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ed51c26b-13d3-4462-9d66-0a18375b72c9 | underdog | Tommy White | Total Bases | over | 0.0661141804788213 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|7a644ef9-ec55-468a-9a77-a470289207cc | underdog | Zach Neto | Batter Walks | over | 0.0659904262594027 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|84debc87-29b3-4087-8bec-f163624c7813 | underdog | Christian Yelich | RBIs | over | 0.06720058915585 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|39b36b87-6989-4cf5-b1e8-1675050c2f56 | underdog | Jake Bauers | RBIs | over | 0.0658715263062298 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13976018 | prizepicks | Shai Gilgeous-Alexander | PRA | under | 0.0657969563767089 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|8b5fc5b2-a93b-4a59-98fe-452ad7c6cfd0 | underdog | Victor Caratini | Batter Walks | under | 0.0657421891514818 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|71b3f844-b212-4355-8a90-b4da183b870f | underdog | Max Clark | Batter Walks | under | 0.0657206550630198 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|e4bd8239-cf7d-4d56-98c7-8fd3b1b448fa | underdog | Alika Williams | Hits | over | 0.0656725958310022 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|3b09007e-a6a3-4cf2-b7f7-02b4d527ea54 | underdog | Jonah Cox | Batter Walks | under | 0.0655783065855007 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9e32955c-efde-443a-89b9-4950fdc0f14a | underdog | Davis Martin | Hits Allowed | over | 0.0655262931905535 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|8ac8c16c-5fba-4a3f-bb37-e8fb669d01dc | underdog | Tomoyuki Sugano | Earned Runs Allowed | under | 0.065523777191592 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|aada8b70-9b43-4961-9da2-b5f881505596 | underdog | Christian Encarnacion-Strand | Hits | over | 0.0652570542232372 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d0505ba3-9596-48cb-9af3-a0cb39b1e59f | underdog | Jesús Sánchez | Runs | under | 0.0652472527472527 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| prizepicks|15046036 | prizepicks | Jordan Beck | Hitter FS | under | 0.0652281793424891 | 2026-09-20T18:49:37Z | 2026-09-20T15:10:00.000-04:00 |
-| underdog|5b611e46-1540-4c93-a2a6-9a66c9fd2391 | underdog | Mookie Betts | Total Bases | over | 0.0650406504065038 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b006f2f4-6027-4dc9-8519-8afd7b933c8a | underdog | Dustin Harris | Hits + Runs + RBIs | over | 0.0647742925677367 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4cca47bb-dccd-432a-b655-99b9752d08c6 | underdog | Kyle Teel | Hits | under | 0.0647248719072973 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|81340f06-aab4-4ce4-b549-5b666872b23f | underdog | Jonah Heim | Batter Walks | over | 0.0646348236600943 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|aae993fb-936c-4b7f-9f77-7a1af2ae8858 | underdog | Pete Alonso | Hits | over | 0.0645200397117229 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|3630f642-3b80-41e2-b684-083e3cc3f65a | underdog | Max Muncy | Runs | under | 0.0641637941774987 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|12e5ea76-4b82-4b0c-870b-e3bd95599f69 | underdog | José Caballero | RBIs | over | 0.064 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|48204cf6-9691-407e-93cd-cfeffac683c0 | underdog | Victor Caratini | Hits + Runs + RBIs | over | 0.0639982146284749 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|e409d6fb-f51a-4c2c-9345-001c1f918c06 | underdog | Travis Bazzana | RBIs | over | 0.0639965306817829 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|1829144b-2490-45e7-b06e-bce7cb8462cd | underdog | Mookie Betts | Hits | over | 0.0639083750450772 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ceecd567-2611-4f66-bc38-db653500ad6c | underdog | Jake Bauers | RBIs | over | 0.0638919313618108 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|f0437974-9321-470d-a264-f5c2c29bc9f9 | underdog | Denzel Clarke | Batter Walks | over | 0.0638238573021181 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | prizepicks|13976046 | prizepicks | Victor Wembanyama | Pts+Rebs | under | 0.0636568093159484 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|9b1ac2df-47ed-4816-bc1a-cee5f3a01b38 | underdog | Cooper Pratt | Batter Walks | over | 0.0636412459720729 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|aed478c0-7ff7-4892-b3d3-d6f1a1598642 | underdog | Geraldo Perdomo | Hits + Runs + RBIs | over | 0.063633458687225 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|13976096 | prizepicks | Victor Wembanyama | 3PTM | under | 0.0631157689671098 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|0d9ef5ae-9d99-4c56-a703-f60c6c81d1df | underdog | Dean Kremer | Hits Allowed | under | 0.0627646653669516 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|a32f0496-6ebe-42df-9826-64a77aa1032a | underdog | Otto Lopez | Hits + Runs + RBIs | over | 0.0626358298262221 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|972360c6-8204-4d35-b18d-22279b4e4f3b | underdog | Hao-Yu Lee | Hits + Runs + RBIs | over | 0.0625826414718069 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|6016a1d8-f516-4009-ad59-9393214937cf | underdog | Tim Tawa | Hits | over | 0.0619355658320698 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|11b2f5f0-ad43-470d-8ed1-28f4411538c1 | underdog | Lazaro Montes | Hits | under | 0.0617520429284634 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|e92bb469-7c20-4a8f-9b74-e7954cdc310d | underdog | Samuel Chukwueze | Shots on Target | under | 0.0616844122679602 | 2026-09-18T04:45:02Z | 2026-09-20T18:45:00Z |
-| underdog|c127ee46-f067-4562-9370-0c46eeae8a61 | underdog | Walker Buehler | Earned Runs Allowed | over | 0.0614851373479258 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|63f1ca79-04c9-49f9-b353-a9a003e3de3f | underdog | Colton Cowser | Batter Walks | over | 0.0614576564868962 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d2ae0a89-7168-4fb8-82ce-e090bce8cdd8 | underdog | Matt Wilkinson | Hits Allowed | under | 0.0612252250993038 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|e32c1a62-b650-4632-a0cf-949ab05797be | underdog | Xander Bogaerts | Batter Walks | over | 0.0612067969020922 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|6d6c5ed9-57f7-4714-8e54-b6a10ea4abdd | underdog | Spencer Jones | Batter Walks | under | 0.0611338942206063 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|2dd81df8-1849-478a-ab35-54c74d52072c | underdog | Patrick Bailey | Batter Walks | under | 0.0611338942206063 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|380d263b-1d0d-43b3-9221-9340a9bf6efb | underdog | Jacob Misiorowski | Hits Allowed | over | 0.0606851108840144 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|7523f7f7-9ed5-41b3-8b2b-e91f2a45a380 | underdog | Gavin Williams | Walks Allowed | over | 0.0604086835894788 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|245840f8-bba0-425f-8306-e7fc56890b57 | underdog | Hunter Goodman | Runs | over | 0.0602836879432625 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|0c1c387f-99c6-4bd9-8bf2-d620b9efbac3 | underdog | Jake Bauers | Runs | over | 0.0602836879432625 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|703ea3d2-36bc-46e4-b88f-8266d8005df0 | underdog | Fernando Tatis | Runs | over | 0.0602836879432625 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|34657e24-112b-4cc8-903d-9d081359e90b | underdog | Jake McCarthy | Runs | over | 0.0602836879432625 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|02eaf2f7-6e64-4d7e-aaa1-308195de6db0 | underdog | Christian Moore | Hits | over | 0.0602016783077219 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|42ebf1b7-7e1a-4fef-ba7e-88c9c04c5441 | underdog | Fernando Tatis | Hits + Runs + RBIs | over | 0.0599065519062542 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|557a249a-a35c-4f1d-b311-b1d3bf51a87b | underdog | Scott Bandura | Hits | over | 0.0598961537441429 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9f7c5a3c-dd77-4c37-843e-f334730f10f9 | underdog | Victor Bericoto | RBIs | over | 0.0598373983739837 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ca09c04a-8a21-4498-b6d3-6f4b0a30f3fb | underdog | Lawrence Butler | RBIs | over | 0.0598373983739837 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|93ddb4af-4398-4423-9f6c-03a8bd0026b3 | underdog | Jake Cronenworth | Batter Walks | under | 0.0596330275229357 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|174a88d7-d336-4374-8949-61e34af18cd6 | underdog | Fernando Tatis | Total Bases | over | 0.0593455080279444 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|00e346fa-ecf7-45fd-b3e7-b9efae4834ce | underdog | Hunter Goodman | Total Bases | over | 0.0593455080279444 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|5985ce8b-a5fc-4184-af3c-6905e0966e16 | underdog | Tommy Edman | Hits | under | 0.058896714361555 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3328eced-3401-4ad5-9cfa-1bf52c14768d | underdog | Corbin Burnes | Earned Runs Allowed | under | 0.0588871303967758 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|0b74472f-f19a-4d00-acdf-66049128aa29 | underdog | Pete Alonso | Batter Walks | over | 0.0628163828808099 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|22cb8f39-4336-4f92-8111-a168891d9b34 | underdog | Jacob Misiorowski | Hits Allowed | over | 0.060544948336585 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|3fc68bba-43df-471a-bd85-a322d83ba02e | underdog | Sal Frelick | Hits + Runs + RBIs | over | 0.0598663409204534 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|f310d259-09d2-499c-a632-7e9d91bfd262 | underdog | Garrett Mitchell | RBIs | over | 0.0592571941888918 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15039924 | prizepicks | Renata Zarazua | 1st Set Total Games Won | under | 0.058752563037674 | 2026-09-20T18:49:37Z | 2026-09-21T23:00:00.000-04:00 |
-| underdog|198b0b31-a40b-4769-bb05-3168284a5969 | underdog | John Peck | Total Bases | over | 0.0586311872815423 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|d7790b24-2ed4-4065-af85-6efa27ffb6b6 | underdog | Christian Koss | Total Bases | over | 0.0586311872815423 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c6f67c63-9da1-4e6d-9b70-cbd76f35622a | underdog | Matt Wilkinson | Pitching Outs | under | 0.0583881801398102 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|15039092 | prizepicks | Alina Korneeva | Total Games | over | 0.0580417564948919 | 2026-09-20T04:56:02Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|7705ea49-4f52-4398-95c4-7c7f90e6b9b8 | underdog | Walker Buehler | Strikeouts | under | 0.0579731690889145 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|badaadf3-d38c-437f-93bb-7532e1a9aadd | underdog | Gabriel Moreno | Hits + Runs + RBIs | over | 0.0579531548049361 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|515fd888-fb75-40d1-9807-f7ffdcf1c7a0 | underdog | Otto Lopez | Hits | over | 0.0578635031869216 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3f804eb1-f476-40ba-a7ae-f3a99bfe0800 | underdog | Christian Yelich | RBIs | over | 0.0576097105508869 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|9b399c7b-cf04-4bea-a442-3561958a273a | underdog | Walker Jenkins | Runs | over | 0.057546274323683 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|4826b79c-9542-49ec-8899-3444bc946218 | underdog | Filip Ugrinic | Shots on Target | over | 0.0572490102015598 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|f4e1a8fd-8760-4baf-a11f-1353cd8da4e2 | underdog | Josh Naylor | Hits | under | 0.0568257095641043 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|6f139c7a-30cb-4966-a605-17d0619bb478 | underdog | Joe Mack | Hits | over | 0.0568244986880996 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b213303d-906e-4a06-a74a-d137be2c71a4 | underdog | Hunter Goodman | RBIs | over | 0.0568160968748088 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|5be26b76-fbb9-4d2b-9fe4-bfdc2f15125f | underdog | Alan Roden | Hits | under | 0.0568055514691353 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
 | underdog|6e3a8f34-fad3-4bcb-99bd-6841c4e53335 | underdog | Samuel Basallo | Hits + Runs + RBIs | over | 0.05667404970745 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|cbf8873d-5edb-4601-8d48-70aa92e0b6d7 | underdog | Jonah Cox | Hits + Runs + RBIs | over | 0.056601966632361 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|538532cf-0ad6-4fd6-9e53-443c49887fa8 | underdog | Shay Whitcomb | Batter Walks | under | 0.056498673740053 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|5519cd8d-df41-4018-b0a8-7e83688d2202 | underdog | Austin Wells | Total Bases | over | 0.0563003056903272 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|8e68c044-1434-4240-a40d-6d858feb5919 | underdog | Ethan Salas | RBIs | over | 0.0557723577235771 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|46c65d52-6c00-4700-9979-a0466cd416da | underdog | Steven Kwan | Runs | over | 0.0557280785952233 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|9b659f6d-d1d5-473d-bdff-8a0ec6da31b5 | underdog | Munetaka Murakami | Hits | over | 0.0556137387180857 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|dfa15817-1ead-446e-ae57-c406c66c45e6 | underdog | Andrew Knizner | Hits + Runs + RBIs | over | 0.0555948052006417 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|6719b6bf-7261-4adf-9cb1-ebc16308e97c | underdog | Josh Lowe | Runs | under | 0.0555179417738659 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|cc9f4ba6-c232-4032-adb1-f815ba876221 | underdog | Sam Antonacci | Batter Walks | under | 0.055045871559633 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|5ea957b0-a76a-4470-bfbf-04eb9c198c4d | underdog | Kevin McGonigle | Hits + Runs + RBIs | over | 0.0548873379771592 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|268f742d-06c0-47a6-b03c-7766927e6f82 | underdog | Jordan Beck | Hits | under | 0.0548490662611307 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|e62b2575-7cdf-4813-96b9-76ecca8e9af2 | underdog | Randy Arozarena | Batter Walks | under | 0.0545131485429991 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| prizepicks|15069599 | prizepicks | Dean Kremer | Pitcher FS | under | 0.0544785141679101 | 2026-09-20T18:49:37Z | 2026-09-20T16:07:00.000-04:00 |
-| underdog|87de3db9-5974-4f16-824a-935699d6f80c | underdog | Royce Lewis | Hits + Runs + RBIs | over | 0.0542180258413197 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
 | prizepicks|15042294 | prizepicks | Linda Fruhvirtova | Total Games Won | over | 0.0541658841081486 | 2026-09-20T04:56:02Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|f91cdd9f-917e-4bdb-84ee-8688fcf1de73 | underdog | Hunter Feduccia | Runs | under | 0.0539083557951481 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|5839aa46-966e-4938-b4a3-7792bcb2c665 | underdog | Walker Buehler | Walks Allowed | over | 0.0538944356142907 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9cc04da5-b748-4892-8976-ba9b40f71f6f | underdog | Tommy Edman | Batter Walks | under | 0.0535796573247874 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0833b65a-75cd-4d57-a865-73691fc72cd6 | underdog | Gleyber Torres | Total Bases | over | 0.0535391225689733 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|cfcfcdc2-ad69-4042-b5e4-9177ba491292 | underdog | Cole Young | Hits | under | 0.0533901120160054 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|4a69acb8-fd31-4fc8-8c6c-e47c5e1eb443 | underdog | Julio Rodríguez | Hits + Runs + RBIs | under | 0.053372230905567 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|c25ae688-a49a-40a9-adea-2cc75502e9d0 | underdog | Graham Pauley | Batter Walks | under | 0.0531030482696398 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0cc2a7a7-33b9-4070-ba15-ebd78abefa44 | underdog | Javier Sanoja | Hits + Runs + RBIs | over | 0.0529658351190363 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|93764549-a7ac-4227-89c4-3f9e86cf89ba | underdog | Joel Monteiro | Shots Attempted | under | 0.052804875316365 | 2026-09-20T04:56:02Z | 2026-09-20T18:45:00Z |
-| underdog|690d8a47-1d16-455f-a720-600f4485c3e7 | underdog | Patrick Bailey | Hits + Runs + RBIs | over | 0.052780782107892 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|38d074f3-accd-4768-9890-6c81e27bcb57 | underdog | Sandy Alcantara | Pitching Outs | over | 0.0526939081909069 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0a5ad9af-bdd3-46b0-a65b-d26e8c3dfeb9 | underdog | Julio Rodríguez | Total Bases | under | 0.052160358127823 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|bef98f7c-ac5f-4f2d-9bcd-adc28da80026 | underdog | Dylan Beavers | Batter Walks | under | 0.0521267723102585 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|ec57ba27-7709-4fd1-ad2e-e8b14779850d | underdog | Ben Rice | Hits + Runs + RBIs | over | 0.0517549024187384 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| prizepicks|15069348 | prizepicks | Dominic Canzone | Pitches Seen | under | 0.0516826395101933 | 2026-09-20T18:49:37Z | 2026-09-20T15:10:00.000-04:00 |
-| underdog|af907c2a-f5e5-419b-a21a-661f84f58d6d | underdog | Braden Montgomery | Batter Walks | over | 0.0514774859287054 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|587e8f6f-37e6-41b1-9ea1-a8431189b65c | underdog | Jung Hoo Lee | RBIs | over | 0.0514049586776859 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|38c7de25-c086-4fd5-a6fa-76ab1642d528 | underdog | Spencer Torkelson | Total Bases | over | 0.0512241635583474 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|a5ced2ce-0e86-4924-a747-9560a3de3490 | underdog | Jake Cronenworth | Total Bases | over | 0.0512241635583474 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|7238d81b-afcf-42c7-8165-187cdc9bf717 | underdog | Andrew Knizner | Total Bases | over | 0.0512241635583474 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|f6d214a6-3ef3-4175-9421-593d93885115 | underdog | Corbin Carroll | RBIs | over | 0.0511617725240016 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9250d934-ac8c-434d-9866-45b40fd15647 | underdog | Connor Norby | Hits + Runs + RBIs | under | 0.0510418809452889 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|8f08d9b1-1767-4c17-867d-e2dfe546e0de | underdog | Heriberto Hernández | Hits + Runs + RBIs | over | 0.050996417592073 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|5868a5f2-abab-4acc-80fc-f9d93f52d03c | underdog | Eduardo Valencia | Hits | over | 0.0507548102654031 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|110af06d-4a5f-466c-98da-dace83fb5a60 | underdog | Pavin Smith | Runs | under | 0.0507343124165554 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|f5b5f8b2-d16e-4f1a-99e8-d2fd4dbf30fd | underdog | Henry Bolte | Runs | over | 0.0507177033492823 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|929d4fe8-9cc5-46a7-8528-7012334b19bf | underdog | Kody Clemens | Batter Walks | under | 0.0506870355764041 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|4c4705b4-7970-44d0-8f2c-13f9133ed904 | underdog | Shea Langeliers | Batter Walks | under | 0.0506870355764041 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|7538abcd-aec5-4b9c-8472-3354278a941a | underdog | Royce Lewis | Batter Walks | over | 0.0504663557628247 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
 | underdog|35fcf457-bd17-43c3-b6fc-c24cf845da53 | underdog | Jackson Chourio | Batter Walks | over | 0.0504663557628247 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|03c9faf8-6375-4b80-b84b-cf3409df9772 | underdog | Cole Young | Batter Walks | under | 0.0504587155963303 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | prizepicks|15073133 | prizepicks | Yue Yuan | Break Points Won | under | 0.0502978382273101 | 2026-09-20T18:49:37Z | 2026-09-21T01:00:00.000-04:00 |
-| underdog|65c7beea-13c4-4eb1-bc3a-13163cde31fa | underdog | Nathaniel Lowe | Hits | over | 0.0502875331517468 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|833a8a56-69ae-4b06-9edc-484828540023 | underdog | Dominic Canzone | Total Bases | under | 0.0498553752209546 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|f53646be-14b2-406c-a812-44b647451389 | underdog | Cole Young | Total Bases | over | 0.0498553752209546 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|3a59491d-c4bc-48ad-9c43-73a908bbed8e | underdog | Manny Machado | Hits | under | 0.0496255767245901 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | prizepicks|14007606 | prizepicks | LeBron James | Rebs+Asts | under | 0.04958671453074 | 2026-09-12T11:28:56Z | 2026-10-20T19:10:00.000-04:00 |
-| underdog|ef1dc9de-c7ce-4b06-a3e2-0e9c1274aa63 | underdog | Tommy Edman | RBIs | over | 0.0494595274007038 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ad191f35-5e64-451b-ac8b-928f94623554 | underdog | Angel Martínez | Hits | over | 0.0492196826186173 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|38394d90-a7b0-4057-bfba-931bb35312c0 | underdog | Lars Nootbaar | RBIs | over | 0.0491666666666666 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|1abe8948-8da8-4eae-81d6-4c37a9b59ea3 | underdog | Sal Frelick | RBIs | over | 0.0491666666666666 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|71f41b8a-dd9c-45d6-8807-2b35791ab002 | underdog | Gunnar Henderson | RBIs | over | 0.0491666666666666 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d0821637-50bc-4419-9ad5-706f3ae8f0de | underdog | Khvicha Kvaratskhelia | Shots on Target | under | 0.0491563622402398 | 2026-09-18T16:42:01Z | 2026-09-20T18:45:00Z |
-| underdog|0aa98cb7-29c9-487e-a7d1-e92c244f7fec | underdog | Jake Cronenworth | Hits | over | 0.0491368890207983 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d2545a84-f5d2-4525-ba90-e24b55320778 | underdog | Brock Rodden | Runs | under | 0.0489485134155185 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|30df4f02-1c70-4514-a226-aa3311d17a5d | underdog | Heliot Ramos | Hits + Runs + RBIs | over | 0.0488732081304692 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|5557e9da-ca3b-4ea0-8e3d-7e31d4fcac55 | underdog | Patrick Bailey | Total Bases | over | 0.0484271056488893 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|fb0de30d-e94b-4b01-a8bc-daf78807ba82 | underdog | Manny Machado | Batter Walks | over | 0.0483720387443109 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c78588b2-9f77-4f86-822f-779e32e3f6d9 | underdog | Will Warren | Walks Allowed | under | 0.0482536511637913 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|360f98fd-a8a0-4e7e-acd3-8c881622e97a | underdog | Brett Harris | Hits | under | 0.0481266047331427 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|2ea18c9a-73e3-4599-a3fd-55a27b6f32a7 | underdog | Gleyber Torres | RBIs | over | 0.0480334728033473 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| prizepicks|15069581 | prizepicks | Wade Meckler | Pitches Seen | under | 0.0479741446029037 | 2026-09-20T18:49:37Z | 2026-09-20T16:07:00.000-04:00 |
-| underdog|95cdc613-49b0-47e4-9571-12922bb2c944 | underdog | Spencer Torkelson | Hits | over | 0.047431736261896 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
+| underdog|f5294976-b605-424e-97b3-d51beba89000 | underdog | Joey Ortiz | Hits | under | 0.0486938924045229 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|76cf1952-32be-4966-8b8d-a5479fb00b06 | underdog | Dylan Beavers | Batter Walks | under | 0.0475813177648041 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15072779 | prizepicks | Talia Gibson | Break Points Won | under | 0.0471238958288736 | 2026-09-20T18:49:37Z | 2026-09-21T02:00:00.000-04:00 |
-| underdog|040d295c-2ccc-4ccc-8420-506568863b63 | underdog | Adael Amador | Batter Walks | over | 0.0468960863697705 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|484dbfb8-b106-4497-983f-cedab69944ce | underdog | Miguel Vargas | Hits + Runs + RBIs | over | 0.046707786134964 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|bea0561a-a138-4d4b-91ac-ea1919050b6b | underdog | Riley Greene | Hits + Runs + RBIs | over | 0.0466834209018156 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|b8c25266-3dea-4c28-afe9-59fec87b30fd | underdog | Jose Siri | Batter Walks | under | 0.0466200466200465 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|10887f30-39c0-40cf-aaa9-0d5c3195d358 | underdog | Jesús Sánchez | Hits + Runs + RBIs | over | 0.0465989722912616 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|72eb3e24-14dd-4a55-8fa8-3796e3429076 | underdog | Griffin Conine | Hits | over | 0.0465725329977821 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|25482c9e-d7b8-4c33-80c9-91f50083e529 | underdog | Jackson Chourio | Hits | over | 0.0464446037682525 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|0d92393d-b155-409b-9645-d43ff0f05a75 | underdog | Jakob Marsee | Hits | over | 0.0464067352079116 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|fb115b22-cac5-4286-8454-b142405aecbc | underdog | Donovan Walton | Batter Walks | under | 0.0461621486985761 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|1bcf27c5-5553-4712-85a6-cb0b37ace677 | underdog | Hunter Goodman | Batter Walks | under | 0.0461621486985761 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | underdog|e5b38d47-4147-408d-b1e4-d4e905fe1a18 | underdog | Gunnar Henderson | Total Bases | over | 0.0461480214263678 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|d08d4249-3a5c-4824-b7a1-65a9a3a06799 | underdog | Andrew Benintendi | Total Bases | over | 0.0461480214263678 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|88589640-a0c1-4f16-8dd6-a37cc2f6b035 | underdog | Miguel Rojas | Hits | under | 0.0459102240225471 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|40f85a0f-8708-477c-a956-0bb8f6f64c1d | underdog | Amine Harit | Shots on Target | over | 0.0458157364441685 | 2026-09-18T16:42:01Z | 2026-09-20T18:45:00Z |
-| underdog|4d7ff93b-ab2e-4084-b96c-d7f356e209ba | underdog | Brock Rodden | Batter Walks | over | 0.0456855658459453 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|6f52698b-cec2-4b66-b766-a579416f855b | underdog | Gabriel Moreno | Batter Walks | over | 0.0449511016849298 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|405e350c-c94f-4e13-bf23-63a8327aaf81 | underdog | Randy Arozarena | Hits | under | 0.044948645962183 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|2f16d55f-de81-494f-afe4-eae8bb7d0e29 | underdog | Jack Perkins | Earned Runs Allowed | under | 0.0448798536497175 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|7f210418-8893-40e6-ade2-ae9f0ed8f06e | underdog | Walker Buehler | Hits Allowed | over | 0.0448217938494974 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a9e81a0d-779f-45f4-bce9-f13495ecad1c | underdog | Teoscar Hernández | Total Bases | over | 0.044753334404628 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|261e5237-392c-4bf2-9878-c5dd2db3eaf2 | underdog | Davis Martin | Pitching Outs | over | 0.0447467122678988 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|1468481d-adf9-437a-9a07-1676fc038408 | underdog | Josh Lowe | Batter Walks | under | 0.0446937999239254 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|b22c93e3-3937-4923-ab81-e57b42873189 | underdog | Moisés Ballesteros | Hits + Runs + RBIs | over | 0.044671080803917 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|34dcb2d7-d068-473f-8bf7-284ae0c1cab6 | underdog | Brenton Doyle | RBIs | under | 0.0444059976931949 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|58506ccb-0c9b-4841-bc74-334bcf2112cf | underdog | Tommy White | RBIs | under | 0.0444059976931949 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|26c63edc-28a6-4cfa-ace7-d9fb1c4c3981 | underdog | Cooper Pratt | Runs | over | 0.0442307692307692 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|91832a8a-672a-4599-9d3d-7d577c281fb9 | underdog | Garrett Mitchell | Batter Walks | under | 0.0439775910364145 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|4772635c-38d6-4f2e-a48f-2749d096a2a9 | underdog | Cody Bellinger | Hits + Runs + RBIs | over | 0.043828579317019 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c60eb010-f180-4717-b923-18517a6cfe38 | underdog | Angel Genao | Hits + Runs + RBIs | over | 0.0438012061917011 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|a5af42e3-7ec8-4382-a38c-cf33ef8948d6 | underdog | Troy Melton | Strikeouts | under | 0.0433578601407703 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|0104161a-e3c6-42b2-bd51-f535b0b5d88f | underdog | Colson Montgomery | Hits | over | 0.0433279676150077 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|d227d132-32ec-4e25-ba28-f993a9446060 | underdog | Shay Whitcomb | Total Bases | over | 0.0433250648325628 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|e0e753aa-c858-40be-b972-7c957099227d | underdog | Lawrence Butler | Batter Walks | over | 0.04321572341937 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|cd8d521b-a00d-444d-a11e-3192699f8a4f | underdog | Kyle Stowers | Batter Walks | over | 0.04321572341937 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| prizepicks|15068270 | prizepicks | Henry Bolte | Pitches Seen | under | 0.0427336516455647 | 2026-09-20T18:49:37Z | 2026-09-20T14:40:00.000-04:00 |
-| underdog|5f0ccfc8-5a93-4d28-8c92-9a98008f2c72 | underdog | Denzer Guzman | RBIs | over | 0.042689075630252 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|cbe17caa-1a98-44d3-88ed-f0cb493d8ab2 | underdog | Cooper Pratt | Batter Walks | over | 0.0456855658459453 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|a29f09b8-b62d-4f59-bd2c-7b57d162ec4a | underdog | Sal Frelick | Batter Walks | over | 0.0433253516911103 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|13976010 | prizepicks | Shai Gilgeous-Alexander | Pts+Asts | under | 0.0419653653034837 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|06c05869-4d99-417f-b2a1-6278571b4295 | underdog | Brett Callahan | Runs | over | 0.0419089554953013 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|89381b9d-997e-4f0d-a946-81da5a184863 | underdog | Ryan Johnson | Strikeouts | under | 0.0414296836562929 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|b57e9b51-d44c-4947-a91f-30bc7bb80cd4 | underdog | Kody Clemens | RBIs | over | 0.0411510882670219 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|bbe6dad7-5733-414e-88c6-9da98d6105d0 | underdog | Geraldo Perdomo | Hits | over | 0.0411390051511698 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|5b1b5872-842f-4700-a45d-48bd0bcd86bf | underdog | Colson Montgomery | Total Bases | over | 0.0410718792943881 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|fc6a8b5c-9fef-4233-be4d-4e3821b83c2a | underdog | Jackson Merrill | Hits + Runs + RBIs | over | 0.0402807733479 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0167ddc7-93a3-4296-9625-006552bd48b3 | underdog | Luis García | Hits | under | 0.0401952617012246 | 2026-09-20T04:56:02Z | 2026-09-20T20:10:00Z |
-| underdog|b78ad150-959b-456f-8bca-d8373d3df33d | underdog | Kyle Teel | Hits + Runs + RBIs | over | 0.0400019996334494 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|738a345b-9b60-418f-9210-ce985cc79f2d | underdog | Jung Hoo Lee | Runs | over | 0.0397723512672886 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
 | underdog|6a89dfa6-09b4-47f4-a554-7229e07e5c41 | underdog | Jake Bauers | Hits + Runs + RBIs | over | 0.0397330112357015 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|155abba3-a0bc-4c9b-9cec-0f9aaa5ed971 | underdog | Davis Martin | Walks Allowed | over | 0.0396097126881686 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|734845e0-c1f4-4aea-bc8e-073d7b167412 | underdog | Alika Williams | RBIs | under | 0.0394144144144144 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|b38925bc-aba6-4c26-8dcc-f8d402b702b4 | underdog | Josh Lowe | Hits | over | 0.0393555289993896 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|97f77bc0-ea78-4ff5-8304-6dadfad2663d | underdog | Job Ochieng | Shots on Target | under | 0.0391118521208951 | 2026-09-20T18:49:37Z | 2026-09-20T19:00:00Z |
-| underdog|669367e1-4abb-448b-a0c3-99947959107a | underdog | Max Clark | Hits | over | 0.0390372465472833 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
 | underdog|ccaa46ef-48b5-4a07-a895-09e843ce7877 | underdog | Joey Ortiz | Total Bases | over | 0.0390117401660253 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|124cf46d-1e6f-406b-9519-8b7062fa9be9 | underdog | Ben Ross | Hits + Runs + RBIs | over | 0.0388653082666362 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|f2e8af57-9f09-438f-aa92-442aa77b284c | underdog | Max Muncy | RBIs | under | 0.0385809312638582 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d0cba561-c185-4599-a283-32327272d103 | underdog | Josh Bell | Hits + Runs + RBIs | over | 0.0384933199997221 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| underdog|f116a023-c2d8-494f-b8d2-41a68782fab3 | underdog | Joey Ortiz | RBIs | under | 0.0385809312638582 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | prizepicks|15072775 | prizepicks | Storm Hunter | Break Points Won | under | 0.0380084157410456 | 2026-09-20T18:49:37Z | 2026-09-21T07:40:00.000-04:00 |
-| underdog|be838fd7-6119-4735-8197-bd933383db44 | underdog | Anthony Volpe | RBIs | over | 0.0379487179487179 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|32d15162-a1c0-42f1-ac39-d700e1e8ac43 | underdog | Will Warren | Strikeouts | over | 0.0376847582911662 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|92530fe4-a350-4aba-b700-085ad2561bfe | underdog | Alan Roden | Batter Walks | over | 0.0376430205949656 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|5ddb3d1e-b50c-4374-bf77-bec4dcefc1b1 | underdog | Griffin Conine | Total Bases | over | 0.0375918437090618 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|208be7ac-5fdb-40cb-9999-cfa4be9288a4 | underdog | Chase DeLauter | RBIs | over | 0.0375816993464051 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|f49902c1-68d5-45f9-b629-7cafdcadbdcf | underdog | Fernando Tatis | RBIs | over | 0.0375816993464051 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|02f09b04-3e7f-45bf-a938-ed1de5751f92 | underdog | Ketel Marte | Hits + Runs + RBIs | over | 0.03750119913163 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|360f970a-200e-4a76-929c-de5055f8a691 | underdog | Kamilla Rakhimova | Double Faults | under | 0.0379095992141229 | 2026-09-20T22:27:50Z | 2026-09-21T04:10:00Z |
 | prizepicks|13976083 | prizepicks | Victor Wembanyama | Rebounds | over | 0.0374835925599008 | 2026-09-12T11:28:56Z | 2026-10-20T21:40:00.000-04:00 |
-| underdog|f7d7cc83-2a9e-403c-8ffa-e0a9386318c3 | underdog | Donovan Walton | Hits + Runs + RBIs | over | 0.0374151717076154 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | underdog|25b799da-ddab-43f0-95d3-3f39875f51b4 | underdog | Brandon Young | Strikeouts | over | 0.0372876739076417 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|cd278ba7-96d5-44a6-a5d4-dae85dd0be6d | underdog | Cal Raleigh | Total Bases | over | 0.0372703412073491 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
 | underdog|568538af-4ede-43a7-8625-840be66f4102 | underdog | Christian Yelich | Hits + Runs + RBIs | over | 0.0371713213857302 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|068de98b-ff88-4616-84a1-08db2ef7bd9c | underdog | Josue De Paula | Hits | under | 0.0371531776243568 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|e5cb7882-b47b-4020-8233-a217e751fb79 | underdog | Wade Meckler | Total Bases | under | 0.0370963172804532 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|bdc25011-4eb9-497f-b1ca-a0a93bc4d988 | underdog | Angel Genao | Total Bases | under | 0.0370963172804532 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|900d1111-53bb-4017-a2a1-00b28f716dff | underdog | José Caballero | Hits | over | 0.0368056119771291 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|212ad2ef-e591-4537-b75e-1e14538608a3 | underdog | Gabriel Moreno | Hits | over | 0.0365773438850425 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|16bc6acc-7283-4427-86a0-8dccab2fdaa4 | underdog | Coby Mayo | Hits + Runs + RBIs | over | 0.0369382068417737 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|7a8d475b-6069-4aa9-b68b-1afd86352484 | underdog | Jacob Misiorowski | Pitching Outs | over | 0.0365487329369398 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|0e886171-8bb0-45ca-a662-9a27a6e6548c | underdog | Tim Tawa | Batter Walks | over | 0.0364615384615384 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|29acbc42-43a7-4294-81ff-ce5f2e3bcc8b | underdog | Heliot Ramos | Batter Walks | under | 0.0361671763506625 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|dac9b7d6-6b71-4590-b1b9-0f4daba46f76 | underdog | Dustin Harris | Hits | over | 0.0360547999007696 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d2fd8943-1af1-4b2d-908a-e59f354d9abe | underdog | Teoscar Hernández | Hits + Runs + RBIs | under | 0.0359178716230477 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|32b1dd13-93ae-4401-9fb9-e4b0efff3775 | underdog | Ethan Salas | Hits + Runs + RBIs | under | 0.0356918961607879 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|688a185a-682b-4ab5-ac12-a54947f0de50 | underdog | Zach Neto | Hits + Runs + RBIs | over | 0.0355781539406785 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|0ce839e2-7309-4b9a-b38b-56889041a3f5 | underdog | Josh Naylor | Batter Walks | over | 0.0354971115840679 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|986ac59a-6273-429b-8bfe-5d9c1c20902d | underdog | John Peck | Runs | under | 0.0353866317169069 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|abdb2e3a-e517-4963-8878-3a72f6bcd8ba | underdog | Miguel Rojas | Total Bases | over | 0.0353449497095905 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d806cbe9-8c0d-43c6-a5c6-9d8bcda1f821 | underdog | Brice Turang | Hits | over | 0.0351470918002665 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|ee059b08-0b2e-4f81-a64b-882ec8cb3d4c | underdog | Dominic Canzone | Batter Walks | under | 0.0348299098806528 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|b78b6946-5268-4002-a903-643a2e2c3d82 | underdog | Will Warren | Earned Runs Allowed | under | 0.0348068767245587 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|c9ebd9c0-6053-48f7-8435-b2e276772f81 | underdog | Adael Amador | Hits | under | 0.0346477839198955 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|7aa1c456-c2c4-48b5-9709-e4f514aac426 | underdog | Wade Meckler | Hits | over | 0.034592768530141 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
+| prizepicks|14745234 | prizepicks | Davante Adams | Rec Yards | over | 0.0351398325190843 | 2026-09-11T16:24:54Z | 2026-09-21T20:15:00.000-04:00 |
 | prizepicks|15066741 | prizepicks | Fiona Ferro | 1st Set Total Games Won | under | 0.0343574335161322 | 2026-09-20T18:49:37Z | 2026-09-21T02:00:00.000-04:00 |
-| underdog|c1887b50-a927-4bf4-9766-065b6cf083bd | underdog | Royce Lewis | Hits | over | 0.0343274653089485 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|f0e5920a-dfe9-4e7b-8432-6f6fca6a406e | underdog | Brooks Lee | Hits + Runs + RBIs | over | 0.0342611625878492 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|f59a4afe-8092-4d93-addd-938bba91851b | underdog | Corbin Carroll | Hits + Runs + RBIs | over | 0.0341549577204325 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3a82901e-be2b-4bf8-b8b4-afeaee76ea7c | underdog | Tommy Edman | Hits + Runs + RBIs | under | 0.0339844965934365 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a3763c48-87c1-4d31-b7a7-a6ff0f6462be | underdog | Corbin Burnes | Hits Allowed | under | 0.0338117435672076 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0909503e-79b8-4010-b798-5ceea572f121 | underdog | Victor Bericoto | Total Bases | over | 0.0337909481555889 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|d7ed3ad8-f89d-43fa-b4b1-b276e847a38e | underdog | Walker Jenkins | Total Bases | over | 0.0337909481555889 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|655f580d-96ca-492c-bfa4-bb1284d1b782 | underdog | Cooper Pratt | Hits | over | 0.0337657033964834 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|01e5f948-5aa4-49ab-ab0b-607eb8b00049 | underdog | Dominic Canzone | Hits + Runs + RBIs | under | 0.0336962498199316 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|25d97d33-4aed-4c47-813d-9b6e1566ef4e | underdog | Hunter Feduccia | Batter Walks | under | 0.0335044254940791 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|dc2af1d4-04c2-41d6-8834-a679d6d6a412 | underdog | Gleyber Torres | Hits + Runs + RBIs | over | 0.0334878080490539 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| prizepicks|15070206 | prizepicks | Kyle Stowers | Pitches Seen | under | 0.0333509043431123 | 2026-09-20T18:49:37Z | 2026-09-20T16:10:00.000-04:00 |
-| underdog|21281ce8-aa1a-46e1-af62-1dfb611f4f91 | underdog | Alika Williams | Hits + Runs + RBIs | over | 0.0332841303609481 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|5de13e7a-9105-49e7-a21d-f1478979f571 | underdog | Wade Meckler | Runs | over | 0.03318260406969 | 2026-09-20T18:49:37Z | 2026-09-20T20:07:00Z |
-| underdog|95659da7-3d52-47e8-863b-8f096473c33a | underdog | Ezequiel Tovar | Total Bases | over | 0.0331209831999097 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| prizepicks|15069397 | prizepicks | Kade Anderson | Pitcher FS | under | 0.0330860719757992 | 2026-09-20T18:49:37Z | 2026-09-20T15:10:00.000-04:00 |
-| underdog|2e36333c-0cc1-4d50-ae89-9000e3685077 | underdog | José Caballero | Batter Walks | over | 0.0324615384615383 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|95f10e9a-e153-4663-8899-57796f3f0ee3 | underdog | Xander Bogaerts | RBIs | over | 0.0324463519313304 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|3d41f1b0-0705-4e55-9186-6fc383213e39 | underdog | Scott Bandura | Hits + Runs + RBIs | over | 0.0323222553074938 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|7075b5fa-69c4-4fd3-aa23-cc003d2d0605 | underdog | Jung Hoo Lee | Batter Walks | over | 0.0321428571428571 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|78e95a30-0f60-499a-83e6-443f8b8a8294 | underdog | Denzel Clarke | Hits | over | 0.0320859502709597 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|6c9967dc-5a47-4921-becc-04febb1b5cd7 | underdog | Steven Kwan | Hits + Runs + RBIs | under | 0.0319733064036078 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|6ea93324-1e38-45f4-870a-8f6461dfbf52 | underdog | Braden Montgomery | Hits | over | 0.031939008575277 | 2026-09-20T18:49:37Z | 2026-09-20T18:10:00Z |
-| underdog|5dbe4b0e-dee4-49af-a508-eb30279f8e1d | underdog | Amine Gouiri | Shots on Target | under | 0.0319054892958649 | 2026-09-18T16:42:01Z | 2026-09-20T18:45:00Z |
-| underdog|a009f80f-7c5e-48e1-8690-f257f2e3616e | underdog | Josh Naylor | Total Bases | under | 0.0317073170731705 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|2085c44f-f1ff-4dd6-8947-6dbe50b76c19 | underdog | Grant McCray | Total Bases | over | 0.0317073170731705 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|a0bf4367-46c7-4634-9bdc-857d92ea1942 | underdog | Jake McCarthy | Total Bases | over | 0.0317073170731705 | 2026-09-20T18:49:37Z | 2026-09-20T19:10:00Z |
-| underdog|4c96411d-48b5-4bb5-bfac-beee4fed7b61 | underdog | J.P. Crawford | Total Bases | under | 0.0317073170731705 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|78925dc2-d27b-4008-bd6c-a7e7c0dfb1e7 | underdog | Randy Arozarena | Total Bases | over | 0.0317073170731705 | 2026-09-20T04:56:02Z | 2026-09-20T19:10:00Z |
-| underdog|e87098cb-c9b4-42d2-bedc-56aa0769cd0d | underdog | Jackson Merrill | Hits | over | 0.0316503402670383 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
+| underdog|9378c61f-5bbc-4ca7-98e0-6bc05c984c9c | underdog | Garrett Mitchell | Hits | over | 0.0337133395018499 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
+| underdog|bbc5573b-052f-4875-bead-b6eb1cdade69 | underdog | Jackson Chourio | Hits | over | 0.0333314921827009 | 2026-09-20T22:27:50Z | 2026-09-20T23:20:00Z |
 | underdog|d94e408d-3ecf-4cce-bf67-84f61d664d5a | underdog | Dylan Beavers | Hits + Runs + RBIs | over | 0.0316028226248358 | 2026-09-20T18:49:37Z | 2026-09-20T23:20:00Z |
-| underdog|688ffe2d-4e8c-4231-b709-764fdf36c1dd | underdog | Freddie Freeman | Hits | over | 0.0314078521470007 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|0f4f83ad-317e-4c92-9d54-ce839015a610 | underdog | Jo Adell | Hits + Runs + RBIs | over | 0.0311238780300885 | 2026-09-20T04:56:02Z | 2026-09-20T17:40:00Z |
-| underdog|a0a7577b-b8fb-4196-a0a3-4c141304e047 | underdog | Hao-Yu Lee | Total Bases | over | 0.0311171240819481 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|d42d5f6a-affb-4339-93d7-651dc1762d03 | underdog | Ben Rice | Hits | over | 0.0310207093430783 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|4113fa78-e72e-473b-a68d-e6e093db320c | underdog | Austin Wells | Hits | under | 0.0309675011152443 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|b9eb2db5-5f6e-45ca-a4f4-bd4e130e619b | underdog | Braden Montgomery | Total Bases | over | 0.0309195950304287 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
-| underdog|0669fb2e-678d-4a3a-a71d-7a74b0c8eaf5 | underdog | Jung Hoo Lee | Hits + Runs + RBIs | over | 0.0306422899593508 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|ebcb18a7-7e48-48d8-9984-a280107b1030 | underdog | Mookie Betts | Hits + Runs + RBIs | under | 0.0306363491618033 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|9887067d-95af-49fc-84db-d32ac476dc82 | underdog | Amine Gouiri | Shots Attempted | under | 0.0304290910896248 | 2026-09-18T16:42:01Z | 2026-09-20T18:45:00Z |
-| underdog|967798e2-8c1f-4efb-a46a-5ada319b0cf6 | underdog | Travis Bazzana | Hits | over | 0.0303908750442469 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
-| underdog|c9336abb-afe1-47c3-a318-c3231988299b | underdog | Austin Wells | Hits + Runs + RBIs | over | 0.0303260064523389 | 2026-09-20T18:49:37Z | 2026-09-20T20:10:00Z |
-| underdog|807b7bc9-4558-47c5-bd33-b90b4b8061d7 | underdog | Jo Adell | Hits | over | 0.0302923163139166 | 2026-09-20T18:49:37Z | 2026-09-20T17:40:00Z |
 | prizepicks|15067246 | prizepicks | Aliaksandra Sasnovich | 1st Set Total Games Won | under | 0.0301367538109708 | 2026-09-20T18:49:37Z | 2026-09-20T23:00:00.000-04:00 |
-| underdog|b4fd41e3-49d9-4d25-9720-dbc6bf2d6488 | underdog | Sam Antonacci | Total Bases | over | 0.0301365182854783 | 2026-09-20T04:56:02Z | 2026-09-20T18:10:00Z |
