@@ -1,0 +1,213 @@
+{
+  "markets": [
+    {
+      "id": "372090234",
+      "eventId": "34118189",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--1618975601",
+      "sortOrder": 1234,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118189|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA372090234#2293778713_13L88808Q11336808573Q20",
+      "marketId": "372090234",
+      "label": "Kenneth Walker III",
+      "displayOdds": {
+        "american": "\u2212230",
+        "decimal": "1.43",
+        "fractional": "10/23",
+        "percentage": "69.6%",
+        "multiplier": "1.43x"
+      },
+      "trueOdds": 1.43478261,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640873",
+          "name": "Kenneth Walker III",
+          "type": "Player",
+          "seoIdentifier": "Kenneth Walker III",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "113172"
+          }
+        }
+      ],
+      "sortOrder": 3001430,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA372090234#2293778584_13L88808Q1431588624Q20",
+      "marketId": "372090234",
+      "label": "De'Von Achane",
+      "displayOdds": {
+        "american": "\u2212115",
+        "decimal": "1.86",
+        "fractional": "20/23",
+        "percentage": "53.4%",
+        "multiplier": "1.86x"
+      },
+      "trueOdds": 1.86956522,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "706555",
+          "name": "De'Von Achane",
+          "type": "Player",
+          "seoIdentifier": "De'Von Achane",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123960"
+          }
+        }
+      ],
+      "sortOrder": 3001860,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA372090234#2293778716_13L88808Q1-511040682Q20",
+      "marketId": "372090234",
+      "label": "Travis Kelce",
+      "displayOdds": {
+        "american": "+170",
+        "decimal": "2.70",
+        "fractional": "17/10",
+        "percentage": "37%",
+        "multiplier": "2.70x"
+      },
+      "trueOdds": 2.7,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "11557",
+          "name": "Travis Kelce",
+          "type": "Player",
+          "seoIdentifier": "Travis Kelce",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54973"
+          }
+        }
+      ],
+      "sortOrder": 3002700,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA372090234#2293778701_13L88808Q11579636272Q20",
+      "marketId": "372090234",
+      "label": "Malik Willis",
+      "displayOdds": {
+        "american": "+300",
+        "decimal": "4.00",
+        "fractional": "3/1",
+        "percentage": "25%",
+        "multiplier": "4.00x"
+      },
+      "trueOdds": 4,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "631230",
+          "name": "Malik Willis",
+          "type": "Player",
+          "seoIdentifier": "Malik Willis",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "125541"
+          }
+        }
+      ],
+      "sortOrder": 3004000,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--1618975601": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118189' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
