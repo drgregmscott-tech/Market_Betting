@@ -1,0 +1,255 @@
+{
+  "markets": [
+    {
+      "id": "374120786",
+      "eventId": "34118104",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-1846368260",
+      "sortOrder": 1786,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118104|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA374120786#2301815795_13L88808Q1-477446093Q20",
+      "marketId": "374120786",
+      "label": "Cameron Skattebo",
+      "displayOdds": {
+        "american": "\u2212135",
+        "decimal": "1.74",
+        "fractional": "20/27",
+        "percentage": "57.4%",
+        "multiplier": "1.74x"
+      },
+      "trueOdds": 1.74074075,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "875779",
+          "name": "Cameron Skattebo",
+          "type": "Player",
+          "seoIdentifier": "Cam Skattebo",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "168269"
+          }
+        }
+      ],
+      "sortOrder": 3001740,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA374120786#2301815812_13L88808Q1-1746222609Q20",
+      "marketId": "374120786",
+      "label": "Jeremiyah Love",
+      "displayOdds": {
+        "american": "\u2212110",
+        "decimal": "1.90",
+        "fractional": "10/11",
+        "percentage": "52.3%",
+        "multiplier": "1.90x"
+      },
+      "trueOdds": 1.90909091,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "957946",
+          "name": "Jeremiyah Love",
+          "type": "Player",
+          "seoIdentifier": "Jeremiyah Love",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "164845"
+          }
+        }
+      ],
+      "sortOrder": 3001900,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA374120786#2301815814_13L88808Q11587306986Q20",
+      "marketId": "374120786",
+      "label": "Trey McBride",
+      "displayOdds": {
+        "american": "+110",
+        "decimal": "2.10",
+        "fractional": "11/10",
+        "percentage": "47.6%",
+        "multiplier": "2.10x"
+      },
+      "trueOdds": 2.1,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640885",
+          "name": "Trey McBride",
+          "type": "Player",
+          "seoIdentifier": "Trey McBride",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "143266"
+          }
+        }
+      ],
+      "sortOrder": 3002100,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA374120786#2301815796_13L88808Q1-1380864812Q20",
+      "marketId": "374120786",
+      "label": "Malik Nabers",
+      "displayOdds": {
+        "american": "+145",
+        "decimal": "2.45",
+        "fractional": "29/20",
+        "percentage": "40.8%",
+        "multiplier": "2.45x"
+      },
+      "trueOdds": 2.45,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "779719",
+          "name": "Malik Nabers",
+          "type": "Player",
+          "seoIdentifier": "Malik Nabers",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "135655"
+          }
+        }
+      ],
+      "sortOrder": 3002450,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA374120786#2301815798_13L88808Q1-1809117535Q20",
+      "marketId": "374120786",
+      "label": "Isaiah Likely",
+      "displayOdds": {
+        "american": "+240",
+        "decimal": "3.40",
+        "fractional": "12/5",
+        "percentage": "29.4%",
+        "multiplier": "3.40x"
+      },
+      "trueOdds": 3.4,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "641030",
+          "name": "Isaiah Likely",
+          "type": "Player",
+          "seoIdentifier": "Isaiah Likely",
+          "statistic": {
+            "prefix": "RRTD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "127927"
+          }
+        }
+      ],
+      "sortOrder": 3003400,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-1846368260": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118104' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
