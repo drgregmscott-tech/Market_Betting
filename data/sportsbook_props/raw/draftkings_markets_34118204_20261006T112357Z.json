@@ -1,0 +1,171 @@
+{
+  "markets": [
+    {
+      "id": "376116870",
+      "eventId": "34118204",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--1756925879",
+      "sortOrder": 1870,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118204|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA376116870#2309624973_13L88808Q1-1853948704Q20",
+      "marketId": "376116870",
+      "label": "Braelon Allen",
+      "displayOdds": {
+        "american": "\u2212125",
+        "decimal": "1.80",
+        "fractional": "4/5",
+        "percentage": "55%",
+        "multiplier": "1.80x"
+      },
+      "trueOdds": 1.8,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "787895",
+          "name": "Braelon Allen",
+          "type": "Player",
+          "seoIdentifier": "Braelon Allen",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "146467"
+          }
+        }
+      ],
+      "sortOrder": 3001800,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA376116870#2309624987_13L88808Q1-1895349765Q20",
+      "marketId": "376116870",
+      "label": "Quinshon Judkins",
+      "displayOdds": {
+        "american": "+110",
+        "decimal": "2.10",
+        "fractional": "11/10",
+        "percentage": "47%",
+        "multiplier": "2.10x"
+      },
+      "trueOdds": 2.1,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "886065",
+          "name": "Quinshon Judkins",
+          "type": "Player",
+          "seoIdentifier": "Quinshon Judkins",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "157651"
+          }
+        }
+      ],
+      "sortOrder": 3002100,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA376116870#2309624974_13L88808Q1322761913Q20",
+      "marketId": "376116870",
+      "label": "Garrett Wilson",
+      "displayOdds": {
+        "american": "+135",
+        "decimal": "2.35",
+        "fractional": "27/20",
+        "percentage": "42%",
+        "multiplier": "2.35x"
+      },
+      "trueOdds": 2.35,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640761",
+          "name": "Garrett Wilson",
+          "type": "Player",
+          "seoIdentifier": "Garrett Wilson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100632"
+          }
+        }
+      ],
+      "sortOrder": 3002350,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--1756925879": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118204' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
