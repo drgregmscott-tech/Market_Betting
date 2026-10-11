@@ -1,10 +1,10 @@
-# Politics Pipeline Digest -- 2026-10-10T18:00:43Z
+# Politics Pipeline Digest -- 2026-10-11T18:27:33Z
 
 ## Run summary
 - Race-market ingestion: 434 races (74 on both venues, 94 Kalshi series matched)
 - Polling ingestion: 5655 rows (435 House, 5220 state legislature)
 - Estimation: 868 (race, party) rows written (from 434 races read)
-- CLV logging: 1 newly flagged, 0 newly closed, 438 still open (438 total ever logged)
+- CLV logging: 0 newly flagged, 0 newly closed, 438 still open (438 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py politics size`, Session 5.4) -- this table is what to scan to pick a race/party worth sizing. `hours_to_resolution` matters here more than for the other two tracks: politics positions can sit open for weeks or months (Session 5.4's lockup dampener).
