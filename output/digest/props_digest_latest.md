@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-10T23:42:01Z
+# Props Pipeline Digest -- 2026-10-11T06:02:55Z
 
 ## Run summary
-- DraftKings ingestion: 702 rows across 8 events (OK)
+- DraftKings ingestion: 707 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1076 rows (OK)
-- Estimation: 1778 rows written (from 1778 ingested rows) -- status breakdown: {'estimated': 739, 'unsupported_market_first_scorer': 483, 'unsupported_stat_type': 348, 'no_player_match': 142, 'insufficient_history': 63, 'no_line_value': 3}
-- CLV logging: 0 newly flagged, 0 newly closed, 98 still open (926 total ever logged)
+- BetMGM ingestion (via Rotowire): 1096 rows (OK)
+- Estimation: 1803 rows written (from 1803 ingested rows) -- status breakdown: {'estimated': 748, 'unsupported_market_first_scorer': 485, 'unsupported_stat_type': 359, 'no_player_match': 146, 'insufficient_history': 62, 'no_line_value': 3}
+- CLV logging: 1 newly flagged, 0 newly closed, 99 still open (927 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -14,6 +14,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 |---|---|---|---|---|---|---|---|---|---|
 | betmgm|recs|18889 | betmgm | Efton Chism | recs | over | 1.0 | 0.3797 | 0.6203 | False | 2026-10-10T06:05:24Z |
 | betmgm|recs|19321 | betmgm | Josh Cameron | recs | over | 1.0 | 0.4059 | 0.5941 | False | 2026-10-09T06:23:06Z |
+| betmgm|recs|16959 | betmgm | Elijah Higgins | recs | over | 1.0 | 0.4248 | 0.5752 | False | 2026-10-11T06:03:14Z |
 | betmgm|recs|16849 | betmgm | Marvin Mims | recs | over | 0.9987 | 0.4518 | 0.5469 | False | 2026-10-10T06:05:24Z |
 | betmgm|recs|16790 | betmgm | Puka Nacua | recs | over | 1.0 | 0.4554 | 0.5446 | False | 2026-10-07T15:40:15Z |
 | betmgm|recs|17802 | betmgm | Will Shipley | recs | over | 1.0 | 0.4653 | 0.5346 | False | 2026-10-09T06:23:06Z |
