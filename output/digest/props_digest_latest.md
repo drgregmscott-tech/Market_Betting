@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-13T11:58:33Z
+# Props Pipeline Digest -- 2026-10-13T19:24:13Z
 
 ## Run summary
-- DraftKings ingestion: 206 rows across 8 events (OK)
+- DraftKings ingestion: 203 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 106 rows (OK)
-- Estimation: 312 rows written (from 312 ingested rows) -- status breakdown: {'estimated': 189, 'unsupported_market_first_scorer': 49, 'no_player_match': 36, 'unsupported_stat_type': 29, 'insufficient_history': 9}
-- CLV logging: 10 newly flagged, 0 newly closed, 33 still open (989 total ever logged)
+- BetMGM ingestion (via Rotowire): 250 rows (OK)
+- Estimation: 453 rows written (from 453 ingested rows) -- status breakdown: {'estimated': 264, 'unsupported_market_first_scorer': 96, 'unsupported_stat_type': 48, 'no_player_match': 35, 'insufficient_history': 10}
+- CLV logging: 2 newly flagged, 0 newly closed, 35 still open (991 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -13,6 +13,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
 | draftkings|378203985|0QA378203985#2317707850_13L88808Q1-577361648Q20 | draftkings | Nate Adkins | Anytime TD Scorer | over | 0.5075 | 0.0588 | 0.4487 | False | 2026-10-12T06:13:10Z |
+| betmgm|recs|19448 | betmgm | Nate Boerkircher | recs | over | 1.0 | 0.5941 | 0.4059 | False | 2026-10-13T19:24:28Z |
 | draftkings|378203985|0QA378203985#2317707859_13L88808Q1-2108815135Q20 | draftkings | Tory Horton | Anytime TD Scorer | over | 0.4182 | 0.1176 | 0.3006 | False | 2026-10-12T06:13:10Z |
 | draftkings|378238663|0QA378238663#2317852746_13L88808Q1491696445Q20 | draftkings | Jaxon Smith-Njigba | 2+ TDs | over | 0.3714 | 0.125 | 0.2464 | False | 2026-10-12T06:13:10Z |
 | draftkings|378203985|0QA378203985#2317707851_13L88808Q11896367839Q20 | draftkings | Jaxon Smith-Njigba | Anytime TD Scorer | over | 0.7261 | 0.4878 | 0.2383 | False | 2026-10-12T06:13:10Z |
@@ -41,7 +42,8 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|378209959|0QA378209959#2317732111_13L88808Q1621783265Q20 | draftkings | Emeka Egbuka | Anytime TD Scorer | over | 0.3527 | 0.303 | 0.0497 | False | 2026-10-13T11:58:47Z |
 | draftkings|378200505|0QA378200505#2317691310_13L88808Q1-271780635Q20 | draftkings | Brian Thomas Jr. | Anytime TD Scorer | over | 0.2015 | 0.1538 | 0.0476 | False | 2026-10-13T02:09:00Z |
 | draftkings|378561764|0QA378561764#2319060850_13L88808Q1-1327690156Q20 | draftkings | Chris Rodriguez Jr. | 2+ TDs | over | 0.0684 | 0.0278 | 0.0406 | False | 2026-10-13T11:58:47Z |
-| betmgm|anytd|17593 | betmgm | Emanuel Wilson | anytd | over | 0.5157 | 0.4762 | 0.0395 | False | 2026-10-13T11:58:47Z |
 | draftkings|378203985|0QA378203985#2317707852_13L88808Q11707072676Q20 | draftkings | Emanuel Wilson | Anytime TD Scorer | over | 0.5157 | 0.4762 | 0.0395 | False | 2026-10-13T11:58:47Z |
+| betmgm|anytd|17593 | betmgm | Emanuel Wilson | anytd | over | 0.5157 | 0.4762 | 0.0395 | False | 2026-10-13T11:58:47Z |
+| draftkings|378230346|0QA378230346#2317819236_13L88808Q1-349638135Q20 | draftkings | Romeo Doubs | Anytime TD Scorer | over | 0.3624 | 0.3279 | 0.0345 | False | 2026-10-13T19:24:28Z |
 | draftkings|378561764|0QA378561764#2319060855_13L88808Q1-1585722573Q20 | draftkings | Josh Cameron | 2+ TDs | over | 0.0462 | 0.0123 | 0.0339 | False | 2026-10-13T11:58:47Z |
 | draftkings|378238663|0QA378238663#2317852724_13L88808Q1-1357951342Q20 | draftkings | Emanuel Wilson | 2+ TDs | over | 0.1645 | 0.1333 | 0.0312 | False | 2026-10-13T11:58:47Z |
