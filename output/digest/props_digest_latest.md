@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-17T15:45:54Z
+# Props Pipeline Digest -- 2026-10-17T18:37:36Z
 
 ## Run summary
-- DraftKings ingestion: 679 rows across 8 events (OK)
+- DraftKings ingestion: 682 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 967 rows (OK)
-- Estimation: 1646 rows written (from 1646 ingested rows) -- status breakdown: {'estimated': 724, 'unsupported_market_first_scorer': 425, 'unsupported_stat_type': 324, 'no_player_match': 127, 'insufficient_history': 44, 'no_line_value': 2}
-- CLV logging: 1 newly flagged, 0 newly closed, 52 still open (1076 total ever logged)
+- BetMGM ingestion (via Rotowire): 980 rows (OK)
+- Estimation: 1662 rows written (from 1662 ingested rows) -- status breakdown: {'estimated': 729, 'unsupported_market_first_scorer': 430, 'unsupported_stat_type': 328, 'no_player_match': 128, 'insufficient_history': 45, 'no_line_value': 2}
+- CLV logging: 1 newly flagged, 0 newly closed, 53 still open (1077 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -18,6 +18,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | betmgm|recs|17821 | betmgm | Kimani Vidal | recs | over | 1.0 | 0.4554 | 0.5446 | False | 2026-10-17T04:43:27Z |
 | betmgm|recs|14657 | betmgm | Rico Dowdle | recs | over | 1.0 | 0.4797 | 0.5203 | False | 2026-10-17T04:43:27Z |
 | betmgm|recs|17185 | betmgm | Jalen Brooks | recs | over | 0.998 | 0.509 | 0.489 | False | 2026-10-14T23:21:18Z |
+| betmgm|recs|16042 | betmgm | Chig Okonkwo | recs | over | 1.0 | 0.5835 | 0.4165 | False | 2026-10-17T18:37:50Z |
 | betmgm|recs|19448 | betmgm | Nate Boerkircher | recs | over | 1.0 | 0.5941 | 0.4059 | False | 2026-10-13T19:24:28Z |
 | draftkings|378331043|0QA378331043#2318198575_13L88808Q11627968604Q20 | draftkings | Darius Cooper | Anytime TD Scorer | over | 0.5873 | 0.2 | 0.3873 | False | 2026-10-16T04:45:58Z |
 | betmgm|anytd|18251 | betmgm | Hayden Rucci | anytd | over | 0.4182 | 0.0345 | 0.3837 | False | 2026-10-15T23:09:30Z |
