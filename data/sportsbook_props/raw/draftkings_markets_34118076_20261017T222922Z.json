@@ -1,0 +1,3051 @@
+{
+  "markets": [
+    {
+      "id": "378228853",
+      "eventId": "34118076",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--1136667446",
+      "sortOrder": 1853,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118076|11019",
+      "dynamicMetadata": {}
+    },
+    {
+      "id": "357438421",
+      "eventId": "34118076",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "First TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11018",
+        "betOfferTypeId": 0,
+        "name": "1st Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--1136667446",
+      "sortOrder": 2421,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118076|11018",
+      "dynamicMetadata": {}
+    },
+    {
+      "id": "378729427",
+      "eventId": "34118076",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "2+ TDs",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11020",
+        "betOfferTypeId": 0,
+        "name": "Score 2 or More"
+      },
+      "subscriptionKey": "markets--1136667446",
+      "sortOrder": 3427,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118076|11020",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA357438421#2317807528_13L88808Q1-203534720Q20",
+      "marketId": "357438421",
+      "label": "Bijan Robinson",
+      "displayOdds": {
+        "american": "+340",
+        "decimal": "4.40",
+        "fractional": "17/5",
+        "percentage": "22%",
+        "multiplier": "4.40x"
+      },
+      "trueOdds": 4.4,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "693112",
+          "name": "Bijan Robinson",
+          "type": "Player",
+          "seoIdentifier": "Bijan Robinson",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123668"
+          }
+        }
+      ],
+      "sortOrder": 1004400,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808379_13L88808Q12032469197Q20",
+      "marketId": "357438421",
+      "label": "D'Andre Swift",
+      "displayOdds": {
+        "american": "+400",
+        "decimal": "5.00",
+        "fractional": "4/1",
+        "percentage": "20%",
+        "multiplier": "5.00x"
+      },
+      "trueOdds": 5,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "485479",
+          "name": "D'Andre Swift",
+          "type": "Player",
+          "seoIdentifier": "D'Andre Swift",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64475"
+          }
+        }
+      ],
+      "sortOrder": 1005000,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317807555_13L88808Q1-1524818264Q20",
+      "marketId": "357438421",
+      "label": "Drake London",
+      "displayOdds": {
+        "american": "+900",
+        "decimal": "10.00",
+        "fractional": "9/1",
+        "percentage": "10%",
+        "multiplier": "10.00x"
+      },
+      "trueOdds": 10,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "630530",
+          "name": "Drake London",
+          "type": "Player",
+          "seoIdentifier": "Drake London",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123848"
+          }
+        }
+      ],
+      "sortOrder": 1010000,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808541_13L88808Q11206423224Q20",
+      "marketId": "357438421",
+      "label": "Rome Odunze",
+      "displayOdds": {
+        "american": "+1100",
+        "decimal": "12.00",
+        "fractional": "11/1",
+        "percentage": "8.3%",
+        "multiplier": "12.00x"
+      },
+      "trueOdds": 12,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "779717",
+          "name": "Rome Odunze",
+          "type": "Player",
+          "seoIdentifier": "Rome Odunze",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "140339"
+          }
+        }
+      ],
+      "sortOrder": 1012000,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808414_13L88808Q1868631041Q20",
+      "marketId": "357438421",
+      "label": "Colston Loveland",
+      "displayOdds": {
+        "american": "+1300",
+        "decimal": "14.00",
+        "fractional": "13/1",
+        "percentage": "7.1%",
+        "multiplier": "14.00x"
+      },
+      "trueOdds": 14,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "877803",
+          "name": "Colston Loveland",
+          "type": "Player",
+          "seoIdentifier": "Colston Loveland",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159238"
+          }
+        }
+      ],
+      "sortOrder": 1014000,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808467_13L88808Q1-579868776Q20",
+      "marketId": "357438421",
+      "label": "Luther Burden III",
+      "displayOdds": {
+        "american": "+1300",
+        "decimal": "14.00",
+        "fractional": "13/1",
+        "percentage": "7.1%",
+        "multiplier": "14.00x"
+      },
+      "trueOdds": 14,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "886103",
+          "name": "Luther Burden III",
+          "type": "Player",
+          "seoIdentifier": "Luther Burden III",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159047"
+          }
+        }
+      ],
+      "sortOrder": 1014000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317807655_13L88808Q1-230819548Q20",
+      "marketId": "357438421",
+      "label": "Brian Robinson Jr.",
+      "displayOdds": {
+        "american": "+1400",
+        "decimal": "15.00",
+        "fractional": "14/1",
+        "percentage": "6.6%",
+        "multiplier": "15.00x"
+      },
+      "trueOdds": 15,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "640926",
+          "name": "Brian Robinson Jr.",
+          "type": "Player",
+          "seoIdentifier": "Brian Robinson Jr.",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100618"
+          }
+        }
+      ],
+      "sortOrder": 1015000,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317807749_13L88808Q1744531262Q20",
+      "marketId": "357438421",
+      "label": "Kyle Pitts Sr.",
+      "displayOdds": {
+        "american": "+1800",
+        "decimal": "19.00",
+        "fractional": "18/1",
+        "percentage": "5.2%",
+        "multiplier": "19.00x"
+      },
+      "trueOdds": 19,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "557862",
+          "name": "Kyle Pitts Sr.",
+          "type": "Player",
+          "seoIdentifier": "Kyle Pitts Sr.",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123052"
+          }
+        }
+      ],
+      "sortOrder": 1019000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317807847_13L88808Q1422660337Q20",
+      "marketId": "357438421",
+      "label": "Jahan Dotson",
+      "displayOdds": {
+        "american": "+2000",
+        "decimal": "21.00",
+        "fractional": "20/1",
+        "percentage": "4.7%",
+        "multiplier": "21.00x"
+      },
+      "trueOdds": 21,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "640766",
+          "name": "Jahan Dotson",
+          "type": "Player",
+          "seoIdentifier": "Jahan Dotson",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123730"
+          }
+        }
+      ],
+      "sortOrder": 1021000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317809858_13L88808Q11509304822Q20",
+      "marketId": "357438421",
+      "label": "Caleb Williams",
+      "displayOdds": {
+        "american": "+2000",
+        "decimal": "21.00",
+        "fractional": "20/1",
+        "percentage": "4.7%",
+        "multiplier": "21.00x"
+      },
+      "trueOdds": 21,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "779692",
+          "name": "Caleb Williams",
+          "type": "Player",
+          "seoIdentifier": "Caleb Williams",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123644"
+          }
+        }
+      ],
+      "sortOrder": 1021000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808579_13L88808Q1-1792332700Q20",
+      "marketId": "357438421",
+      "label": "Kalif Raymond",
+      "displayOdds": {
+        "american": "+2200",
+        "decimal": "23.00",
+        "fractional": "22/1",
+        "percentage": "4.3%",
+        "multiplier": "23.00x"
+      },
+      "trueOdds": 23,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "19993",
+          "name": "Kalif Raymond",
+          "type": "Player",
+          "seoIdentifier": "Kalif Raymond",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "61159"
+          }
+        }
+      ],
+      "sortOrder": 1023000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808666_13L88808Q1-442586005Q20",
+      "marketId": "357438421",
+      "label": "Roschon Johnson",
+      "displayOdds": {
+        "american": "+2200",
+        "decimal": "23.00",
+        "fractional": "22/1",
+        "percentage": "4.3%",
+        "multiplier": "23.00x"
+      },
+      "trueOdds": 23,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "695456",
+          "name": "Roschon Johnson",
+          "type": "Player",
+          "seoIdentifier": "Roschon Johnson",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123669"
+          }
+        }
+      ],
+      "sortOrder": 1023000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808625_13L88808Q11142078243Q20",
+      "marketId": "357438421",
+      "label": "Cole Kmet",
+      "displayOdds": {
+        "american": "+2800",
+        "decimal": "29.00",
+        "fractional": "28/1",
+        "percentage": "3.4%",
+        "multiplier": "29.00x"
+      },
+      "trueOdds": 29,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "485483",
+          "name": "Cole Kmet",
+          "type": "Player",
+          "seoIdentifier": "Cole Kmet",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64806"
+          }
+        }
+      ],
+      "sortOrder": 1029000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808793_13L88808Q1500626324Q20",
+      "marketId": "357438421",
+      "label": "ATL Falcons D/ST",
+      "displayOdds": {
+        "american": "+3500",
+        "decimal": "36.00",
+        "fractional": "35/1",
+        "percentage": "2.7%",
+        "multiplier": "36.00x"
+      },
+      "trueOdds": 36,
+      "outcomeType": "ToScoreFirst",
+      "sortOrder": 1036000,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808809_14L88808Q1-1227731033Q20",
+      "marketId": "357438421",
+      "label": "CHI Bears D/ST",
+      "displayOdds": {
+        "american": "+3500",
+        "decimal": "36.00",
+        "fractional": "35/1",
+        "percentage": "2.7%",
+        "multiplier": "36.00x"
+      },
+      "trueOdds": 36,
+      "outcomeType": "ToScoreFirst",
+      "sortOrder": 1036000,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317807947_13L88808Q1102747272Q20",
+      "marketId": "357438421",
+      "label": "Olamide Zaccheaus",
+      "displayOdds": {
+        "american": "+5500",
+        "decimal": "56.00",
+        "fractional": "55/1",
+        "percentage": "1.7%",
+        "multiplier": "56.00x"
+      },
+      "trueOdds": 56,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "11349",
+          "name": "Olamide Zaccheaus",
+          "type": "Player",
+          "seoIdentifier": "Olamide Zaccheaus",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "59333"
+          }
+        }
+      ],
+      "sortOrder": 1056000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808023_13L88808Q1-1690732318Q20",
+      "marketId": "357438421",
+      "label": "Zachariah Branch",
+      "displayOdds": {
+        "american": "+6000",
+        "decimal": "61.00",
+        "fractional": "60/1",
+        "percentage": "1.6%",
+        "multiplier": "61.00x"
+      },
+      "trueOdds": 61,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "953045",
+          "name": "Zachariah Branch",
+          "type": "Player",
+          "seoIdentifier": "Zachariah Branch",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165038"
+          }
+        }
+      ],
+      "sortOrder": 1061000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808060_13L88808Q1900382540Q20",
+      "marketId": "357438421",
+      "label": "Michael Penix Jr.",
+      "displayOdds": {
+        "american": "+6000",
+        "decimal": "61.00",
+        "fractional": "60/1",
+        "percentage": "1.6%",
+        "multiplier": "61.00x"
+      },
+      "trueOdds": 61,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "787659",
+          "name": "Michael Penix Jr.",
+          "type": "Player",
+          "seoIdentifier": "Michael Penix Jr.",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123688"
+          }
+        }
+      ],
+      "sortOrder": 1061000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808097_13L88808Q1-772198018Q20",
+      "marketId": "357438421",
+      "label": "Austin Hooper",
+      "displayOdds": {
+        "american": "+6000",
+        "decimal": "61.00",
+        "fractional": "60/1",
+        "percentage": "1.6%",
+        "multiplier": "61.00x"
+      },
+      "trueOdds": 61,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "11125",
+          "name": "Austin Hooper",
+          "type": "Player",
+          "seoIdentifier": "Austin Hooper",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54880"
+          }
+        }
+      ],
+      "sortOrder": 1061000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808682_13L88808Q1-2083509679Q20",
+      "marketId": "357438421",
+      "label": "Jahdae Walker",
+      "displayOdds": {
+        "american": "+6000",
+        "decimal": "61.00",
+        "fractional": "60/1",
+        "percentage": "1.6%",
+        "multiplier": "61.00x"
+      },
+      "trueOdds": 61,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "894931",
+          "name": "Jahdae Walker",
+          "type": "Player",
+          "seoIdentifier": "Jahdae Walker",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166530"
+          }
+        }
+      ],
+      "sortOrder": 1061000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808731_13L88808Q1-835081077Q20",
+      "marketId": "357438421",
+      "label": "Zavion Thomas",
+      "displayOdds": {
+        "american": "+7000",
+        "decimal": "71.00",
+        "fractional": "70/1",
+        "percentage": "1.4%",
+        "multiplier": "71.00x"
+      },
+      "trueOdds": 71,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "970416",
+          "name": "Zavion Thomas",
+          "type": "Player",
+          "seoIdentifier": "Zavion Thomas",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "170659"
+          }
+        }
+      ],
+      "sortOrder": 1071000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808158_13L88808Q1-955852171Q20",
+      "marketId": "357438421",
+      "label": "Charlie Woerner",
+      "displayOdds": {
+        "american": "+7500",
+        "decimal": "76.00",
+        "fractional": "75/1",
+        "percentage": "1.3%",
+        "multiplier": "76.00x"
+      },
+      "trueOdds": 76,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "485615",
+          "name": "Charlie Woerner",
+          "type": "Player",
+          "seoIdentifier": "Charlie Woerner",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64919"
+          }
+        }
+      ],
+      "sortOrder": 1076000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808753_13L88808Q1-709714931Q20",
+      "marketId": "357438421",
+      "label": "Sam Roush",
+      "displayOdds": {
+        "american": "+9000",
+        "decimal": "91.00",
+        "fractional": "90/1",
+        "percentage": "1.0%",
+        "multiplier": "91.00x"
+      },
+      "trueOdds": 91,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "957882",
+          "name": "Sam Roush",
+          "type": "Player",
+          "seoIdentifier": "Sam Roush",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165425"
+          }
+        }
+      ],
+      "sortOrder": 1091000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808304_13L88808Q1-423960878Q20",
+      "marketId": "357438421",
+      "label": "Chris Blair",
+      "displayOdds": {
+        "american": "+10000",
+        "decimal": "101.00",
+        "fractional": "100/1",
+        "percentage": "0.9%",
+        "multiplier": "101.00x"
+      },
+      "trueOdds": 101,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "549316",
+          "name": "Chris Blair",
+          "type": "Player",
+          "seoIdentifier": "Chris Blair",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "117766"
+          }
+        }
+      ],
+      "sortOrder": 1101000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2319620748_13L88808Q1-474720751Q20",
+      "marketId": "357438421",
+      "label": "Zavier Scott",
+      "displayOdds": {
+        "american": "+10000",
+        "decimal": "101.00",
+        "fractional": "100/1",
+        "percentage": "0.9%",
+        "multiplier": "101.00x"
+      },
+      "trueOdds": 101,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "707429",
+          "name": "Zavier Scott",
+          "type": "Player",
+          "seoIdentifier": "Zavier Scott",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "164705"
+          }
+        }
+      ],
+      "sortOrder": 1101000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2317808327_13L88808Q11941701256Q20",
+      "marketId": "357438421",
+      "label": "Nick Muse",
+      "displayOdds": {
+        "american": "+11000",
+        "decimal": "111.00",
+        "fractional": "110/1",
+        "percentage": "0.9%",
+        "multiplier": "111.00x"
+      },
+      "trueOdds": 111,
+      "outcomeType": "ToScoreFirst",
+      "participants": [
+        {
+          "id": "641123",
+          "name": "Nick Muse",
+          "type": "Player",
+          "seoIdentifier": "Nick Muse",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "146566"
+          }
+        }
+      ],
+      "sortOrder": 1111000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA357438421#2235221123_13L88808Q1-1777442974Q20",
+      "marketId": "357438421",
+      "label": "No Touchdown Scorer",
+      "displayOdds": {
+        "american": "+20000",
+        "decimal": "201.00",
+        "fractional": "200/1",
+        "percentage": "0.4%",
+        "multiplier": "201.00x"
+      },
+      "trueOdds": 201,
+      "outcomeType": "ToScoreFirst",
+      "sortOrder": 1201000,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813534_13L88808Q1-1195523501Q20",
+      "marketId": "378228853",
+      "label": "Bijan Robinson",
+      "displayOdds": {
+        "american": "\u2212310",
+        "decimal": "1.32",
+        "fractional": "10/31",
+        "percentage": "75%",
+        "multiplier": "1.32x"
+      },
+      "trueOdds": 1.32258065,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "693112",
+          "name": "Bijan Robinson",
+          "type": "Player",
+          "seoIdentifier": "Bijan Robinson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 5,
+            "stringValue": "5.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123668"
+          }
+        }
+      ],
+      "sortOrder": 3001320,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813547_13L88808Q151577722Q20",
+      "marketId": "378228853",
+      "label": "D'Andre Swift",
+      "displayOdds": {
+        "american": "\u2212215",
+        "decimal": "1.46",
+        "fractional": "20/43",
+        "percentage": "68%",
+        "multiplier": "1.46x"
+      },
+      "trueOdds": 1.46511628,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "485479",
+          "name": "D'Andre Swift",
+          "type": "Player",
+          "seoIdentifier": "D'Andre Swift",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64475"
+          }
+        }
+      ],
+      "sortOrder": 3001460,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813535_13L88808Q1689607609Q20",
+      "marketId": "378228853",
+      "label": "Drake London",
+      "displayOdds": {
+        "american": "\u2212105",
+        "decimal": "1.95",
+        "fractional": "20/21",
+        "percentage": "51%",
+        "multiplier": "1.95x"
+      },
+      "trueOdds": 1.95238096,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "630530",
+          "name": "Drake London",
+          "type": "Player",
+          "seoIdentifier": "Drake London",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123848"
+          }
+        }
+      ],
+      "sortOrder": 3001950,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813550_13L88808Q1-848465730Q20",
+      "marketId": "378228853",
+      "label": "Rome Odunze",
+      "displayOdds": {
+        "american": "+155",
+        "decimal": "2.55",
+        "fractional": "31/20",
+        "percentage": "39%",
+        "multiplier": "2.55x"
+      },
+      "trueOdds": 2.55,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "779717",
+          "name": "Rome Odunze",
+          "type": "Player",
+          "seoIdentifier": "Rome Odunze",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "140339"
+          }
+        }
+      ],
+      "sortOrder": 3002550,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813548_13L88808Q1-2109230062Q20",
+      "marketId": "378228853",
+      "label": "Colston Loveland",
+      "displayOdds": {
+        "american": "+170",
+        "decimal": "2.70",
+        "fractional": "17/10",
+        "percentage": "37%",
+        "multiplier": "2.70x"
+      },
+      "trueOdds": 2.7,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "877803",
+          "name": "Colston Loveland",
+          "type": "Player",
+          "seoIdentifier": "Colston Loveland",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159238"
+          }
+        }
+      ],
+      "sortOrder": 3002700,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813549_13L88808Q12086988331Q20",
+      "marketId": "378228853",
+      "label": "Luther Burden III",
+      "displayOdds": {
+        "american": "+175",
+        "decimal": "2.75",
+        "fractional": "7/4",
+        "percentage": "36%",
+        "multiplier": "2.75x"
+      },
+      "trueOdds": 2.75,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "886103",
+          "name": "Luther Burden III",
+          "type": "Player",
+          "seoIdentifier": "Luther Burden III",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159047"
+          }
+        }
+      ],
+      "sortOrder": 3002750,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813536_13L88808Q12077388378Q20",
+      "marketId": "378228853",
+      "label": "Brian Robinson Jr.",
+      "displayOdds": {
+        "american": "+205",
+        "decimal": "3.05",
+        "fractional": "41/20",
+        "percentage": "32%",
+        "multiplier": "3.05x"
+      },
+      "trueOdds": 3.05,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640926",
+          "name": "Brian Robinson Jr.",
+          "type": "Player",
+          "seoIdentifier": "Brian Robinson Jr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100618"
+          }
+        }
+      ],
+      "sortOrder": 3003050,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813537_13L88808Q1999478588Q20",
+      "marketId": "378228853",
+      "label": "Kyle Pitts Sr.",
+      "displayOdds": {
+        "american": "+285",
+        "decimal": "3.85",
+        "fractional": "57/20",
+        "percentage": "25%",
+        "multiplier": "3.85x"
+      },
+      "trueOdds": 3.85,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "557862",
+          "name": "Kyle Pitts Sr.",
+          "type": "Player",
+          "seoIdentifier": "Kyle Pitts Sr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123052"
+          }
+        }
+      ],
+      "sortOrder": 3003850,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813552_13L88808Q1633357284Q20",
+      "marketId": "378228853",
+      "label": "Kalif Raymond",
+      "displayOdds": {
+        "american": "+300",
+        "decimal": "4.00",
+        "fractional": "3/1",
+        "percentage": "25%",
+        "multiplier": "4.00x"
+      },
+      "trueOdds": 4,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "19993",
+          "name": "Kalif Raymond",
+          "type": "Player",
+          "seoIdentifier": "Kalif Raymond",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "61159"
+          }
+        }
+      ],
+      "sortOrder": 3004000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813551_13L88808Q11505799344Q20",
+      "marketId": "378228853",
+      "label": "Caleb Williams",
+      "displayOdds": {
+        "american": "+360",
+        "decimal": "4.60",
+        "fractional": "18/5",
+        "percentage": "21%",
+        "multiplier": "4.60x"
+      },
+      "trueOdds": 4.6,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "779692",
+          "name": "Caleb Williams",
+          "type": "Player",
+          "seoIdentifier": "Caleb Williams",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123644"
+          }
+        }
+      ],
+      "sortOrder": 3004600,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813538_13L88808Q1-419764349Q20",
+      "marketId": "378228853",
+      "label": "Jahan Dotson",
+      "displayOdds": {
+        "american": "+370",
+        "decimal": "4.70",
+        "fractional": "37/10",
+        "percentage": "21%",
+        "multiplier": "4.70x"
+      },
+      "trueOdds": 4.7,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640766",
+          "name": "Jahan Dotson",
+          "type": "Player",
+          "seoIdentifier": "Jahan Dotson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123730"
+          }
+        }
+      ],
+      "sortOrder": 3004700,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813556_13L88808Q11750193742Q20",
+      "marketId": "378228853",
+      "label": "Roschon Johnson",
+      "displayOdds": {
+        "american": "+370",
+        "decimal": "4.70",
+        "fractional": "37/10",
+        "percentage": "21%",
+        "multiplier": "4.70x"
+      },
+      "trueOdds": 4.7,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "695456",
+          "name": "Roschon Johnson",
+          "type": "Player",
+          "seoIdentifier": "Roschon Johnson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123669"
+          }
+        }
+      ],
+      "sortOrder": 3004700,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813554_13L88808Q1-1982448170Q20",
+      "marketId": "378228853",
+      "label": "Cole Kmet",
+      "displayOdds": {
+        "american": "+450",
+        "decimal": "5.50",
+        "fractional": "9/2",
+        "percentage": "18%",
+        "multiplier": "5.50x"
+      },
+      "trueOdds": 5.5,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "485483",
+          "name": "Cole Kmet",
+          "type": "Player",
+          "seoIdentifier": "Cole Kmet",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64806"
+          }
+        }
+      ],
+      "sortOrder": 3005500,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813506_13L88808Q1-249793997Q20",
+      "marketId": "378228853",
+      "label": "ATL Falcons D/ST",
+      "displayOdds": {
+        "american": "+650",
+        "decimal": "7.50",
+        "fractional": "13/2",
+        "percentage": "13%",
+        "multiplier": "7.50x"
+      },
+      "trueOdds": 7.5,
+      "outcomeType": "ToScoreAnyTime",
+      "sortOrder": 3007500,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813507_14L88808Q1550144014Q20",
+      "marketId": "378228853",
+      "label": "CHI Bears D/ST",
+      "displayOdds": {
+        "american": "+650",
+        "decimal": "7.50",
+        "fractional": "13/2",
+        "percentage": "13%",
+        "multiplier": "7.50x"
+      },
+      "trueOdds": 7.5,
+      "outcomeType": "ToScoreAnyTime",
+      "sortOrder": 3007500,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813541_13L88808Q1-189550648Q20",
+      "marketId": "378228853",
+      "label": "Austin Hooper",
+      "displayOdds": {
+        "american": "+800",
+        "decimal": "9.00",
+        "fractional": "8/1",
+        "percentage": "11%",
+        "multiplier": "9.00x"
+      },
+      "trueOdds": 9,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "11125",
+          "name": "Austin Hooper",
+          "type": "Player",
+          "seoIdentifier": "Austin Hooper",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54880"
+          }
+        }
+      ],
+      "sortOrder": 3009000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813539_13L88808Q1826333955Q20",
+      "marketId": "378228853",
+      "label": "Olamide Zaccheaus",
+      "displayOdds": {
+        "american": "+900",
+        "decimal": "10.00",
+        "fractional": "9/1",
+        "percentage": "10%",
+        "multiplier": "10.00x"
+      },
+      "trueOdds": 10,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "11349",
+          "name": "Olamide Zaccheaus",
+          "type": "Player",
+          "seoIdentifier": "Olamide Zaccheaus",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "59333"
+          }
+        }
+      ],
+      "sortOrder": 3010000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813540_13L88808Q1-825672971Q20",
+      "marketId": "378228853",
+      "label": "Zachariah Branch",
+      "displayOdds": {
+        "american": "+950",
+        "decimal": "10.50",
+        "fractional": "19/2",
+        "percentage": "9.5%",
+        "multiplier": "10.50x"
+      },
+      "trueOdds": 10.5,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "953045",
+          "name": "Zachariah Branch",
+          "type": "Player",
+          "seoIdentifier": "Zachariah Branch",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165038"
+          }
+        }
+      ],
+      "sortOrder": 3010500,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813542_13L88808Q1173183317Q20",
+      "marketId": "378228853",
+      "label": "Michael Penix Jr.",
+      "displayOdds": {
+        "american": "+1200",
+        "decimal": "13.00",
+        "fractional": "12/1",
+        "percentage": "7.6%",
+        "multiplier": "13.00x"
+      },
+      "trueOdds": 13,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "787659",
+          "name": "Michael Penix Jr.",
+          "type": "Player",
+          "seoIdentifier": "Michael Penix Jr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123688"
+          }
+        }
+      ],
+      "sortOrder": 3013000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813555_13L88808Q1-1770507643Q20",
+      "marketId": "378228853",
+      "label": "Jahdae Walker",
+      "displayOdds": {
+        "american": "+1200",
+        "decimal": "13.00",
+        "fractional": "12/1",
+        "percentage": "7.6%",
+        "multiplier": "13.00x"
+      },
+      "trueOdds": 13,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "894931",
+          "name": "Jahdae Walker",
+          "type": "Player",
+          "seoIdentifier": "Jahdae Walker",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166530"
+          }
+        }
+      ],
+      "sortOrder": 3013000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813544_13L88808Q1-1356990742Q20",
+      "marketId": "378228853",
+      "label": "Charlie Woerner",
+      "displayOdds": {
+        "american": "+1300",
+        "decimal": "14.00",
+        "fractional": "13/1",
+        "percentage": "7.1%",
+        "multiplier": "14.00x"
+      },
+      "trueOdds": 14,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "485615",
+          "name": "Charlie Woerner",
+          "type": "Player",
+          "seoIdentifier": "Charlie Woerner",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64919"
+          }
+        }
+      ],
+      "sortOrder": 3014000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813557_13L88808Q1266242460Q20",
+      "marketId": "378228853",
+      "label": "Zavion Thomas",
+      "displayOdds": {
+        "american": "+1400",
+        "decimal": "15.00",
+        "fractional": "14/1",
+        "percentage": "6.6%",
+        "multiplier": "15.00x"
+      },
+      "trueOdds": 15,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "970416",
+          "name": "Zavion Thomas",
+          "type": "Player",
+          "seoIdentifier": "Zavion Thomas",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "170659"
+          }
+        }
+      ],
+      "sortOrder": 3015000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813558_13L88808Q1519659230Q20",
+      "marketId": "378228853",
+      "label": "Sam Roush",
+      "displayOdds": {
+        "american": "+1700",
+        "decimal": "18.00",
+        "fractional": "17/1",
+        "percentage": "5.5%",
+        "multiplier": "18.00x"
+      },
+      "trueOdds": 18,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "957882",
+          "name": "Sam Roush",
+          "type": "Player",
+          "seoIdentifier": "Sam Roush",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165425"
+          }
+        }
+      ],
+      "sortOrder": 3018000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813545_13L88808Q1-911892125Q20",
+      "marketId": "378228853",
+      "label": "Chris Blair",
+      "displayOdds": {
+        "american": "+1800",
+        "decimal": "19.00",
+        "fractional": "18/1",
+        "percentage": "5.2%",
+        "multiplier": "19.00x"
+      },
+      "trueOdds": 19,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "549316",
+          "name": "Chris Blair",
+          "type": "Player",
+          "seoIdentifier": "Chris Blair",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "117766"
+          }
+        }
+      ],
+      "sortOrder": 3019000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2317813546_13L88808Q11180641602Q20",
+      "marketId": "378228853",
+      "label": "Nick Muse",
+      "displayOdds": {
+        "american": "+1800",
+        "decimal": "19.00",
+        "fractional": "18/1",
+        "percentage": "5.2%",
+        "multiplier": "19.00x"
+      },
+      "trueOdds": 19,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "641123",
+          "name": "Nick Muse",
+          "type": "Player",
+          "seoIdentifier": "Nick Muse",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "146566"
+          }
+        }
+      ],
+      "sortOrder": 3019000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378228853#2319620719_13L88808Q11627987125Q20",
+      "marketId": "378228853",
+      "label": "Zavier Scott",
+      "displayOdds": {
+        "american": "+2200",
+        "decimal": "23.00",
+        "fractional": "22/1",
+        "percentage": "4.3%",
+        "multiplier": "23.00x"
+      },
+      "trueOdds": 23,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "707429",
+          "name": "Zavier Scott",
+          "type": "Player",
+          "seoIdentifier": "Zavier Scott",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "164705"
+          }
+        }
+      ],
+      "sortOrder": 3023000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709832_13L88808Q1-1354855512Q20",
+      "marketId": "378729427",
+      "label": "Bijan Robinson",
+      "displayOdds": {
+        "american": "+170",
+        "decimal": "2.70",
+        "fractional": "17/10",
+        "percentage": "37%",
+        "multiplier": "2.70x"
+      },
+      "trueOdds": 2.7,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "693112",
+          "name": "Bijan Robinson",
+          "type": "Player",
+          "seoIdentifier": "Bijan Robinson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 5,
+            "stringValue": "5.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123668"
+          }
+        }
+      ],
+      "sortOrder": 27032,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709843_13L88808Q1-1008695778Q20",
+      "marketId": "378729427",
+      "label": "D'Andre Swift",
+      "displayOdds": {
+        "american": "+255",
+        "decimal": "3.55",
+        "fractional": "51/20",
+        "percentage": "28%",
+        "multiplier": "3.55x"
+      },
+      "trueOdds": 3.55,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "485479",
+          "name": "D'Andre Swift",
+          "type": "Player",
+          "seoIdentifier": "D'Andre Swift",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64475"
+          }
+        }
+      ],
+      "sortOrder": 35543,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709833_13L88808Q1-1818727041Q20",
+      "marketId": "378729427",
+      "label": "Drake London",
+      "displayOdds": {
+        "american": "+650",
+        "decimal": "7.50",
+        "fractional": "13/2",
+        "percentage": "13%",
+        "multiplier": "7.50x"
+      },
+      "trueOdds": 7.5,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "630530",
+          "name": "Drake London",
+          "type": "Player",
+          "seoIdentifier": "Drake London",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123848"
+          }
+        }
+      ],
+      "sortOrder": 75033,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709846_13L88808Q1-1587915923Q20",
+      "marketId": "378729427",
+      "label": "Rome Odunze",
+      "displayOdds": {
+        "american": "+1200",
+        "decimal": "13.00",
+        "fractional": "12/1",
+        "percentage": "7.6%",
+        "multiplier": "13.00x"
+      },
+      "trueOdds": 13,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "779717",
+          "name": "Rome Odunze",
+          "type": "Player",
+          "seoIdentifier": "Rome Odunze",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "140339"
+          }
+        }
+      ],
+      "sortOrder": 130046,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709844_13L88808Q1-244560726Q20",
+      "marketId": "378729427",
+      "label": "Colston Loveland",
+      "displayOdds": {
+        "american": "+1300",
+        "decimal": "14.00",
+        "fractional": "13/1",
+        "percentage": "7.1%",
+        "multiplier": "14.00x"
+      },
+      "trueOdds": 14,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "877803",
+          "name": "Colston Loveland",
+          "type": "Player",
+          "seoIdentifier": "Colston Loveland",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159238"
+          }
+        }
+      ],
+      "sortOrder": 140044,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709845_13L88808Q1422541123Q20",
+      "marketId": "378729427",
+      "label": "Luther Burden III",
+      "displayOdds": {
+        "american": "+1300",
+        "decimal": "14.00",
+        "fractional": "13/1",
+        "percentage": "7.1%",
+        "multiplier": "14.00x"
+      },
+      "trueOdds": 14,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "886103",
+          "name": "Luther Burden III",
+          "type": "Player",
+          "seoIdentifier": "Luther Burden III",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159047"
+          }
+        }
+      ],
+      "sortOrder": 140045,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709834_13L88808Q1-2016866086Q20",
+      "marketId": "378729427",
+      "label": "Brian Robinson Jr.",
+      "displayOdds": {
+        "american": "+1700",
+        "decimal": "18.00",
+        "fractional": "17/1",
+        "percentage": "5.5%",
+        "multiplier": "18.00x"
+      },
+      "trueOdds": 18,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "640926",
+          "name": "Brian Robinson Jr.",
+          "type": "Player",
+          "seoIdentifier": "Brian Robinson Jr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100618"
+          }
+        }
+      ],
+      "sortOrder": 180034,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709835_13L88808Q1-703917339Q20",
+      "marketId": "378729427",
+      "label": "Kyle Pitts Sr.",
+      "displayOdds": {
+        "american": "+2800",
+        "decimal": "29.00",
+        "fractional": "28/1",
+        "percentage": "3.4%",
+        "multiplier": "29.00x"
+      },
+      "trueOdds": 29,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "557862",
+          "name": "Kyle Pitts Sr.",
+          "type": "Player",
+          "seoIdentifier": "Kyle Pitts Sr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123052"
+          }
+        }
+      ],
+      "sortOrder": 290035,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709847_13L88808Q1-2087296206Q20",
+      "marketId": "378729427",
+      "label": "Kalif Raymond",
+      "displayOdds": {
+        "american": "+2800",
+        "decimal": "29.00",
+        "fractional": "28/1",
+        "percentage": "3.4%",
+        "multiplier": "29.00x"
+      },
+      "trueOdds": 29,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "19993",
+          "name": "Kalif Raymond",
+          "type": "Player",
+          "seoIdentifier": "Kalif Raymond",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "61159"
+          }
+        }
+      ],
+      "sortOrder": 290047,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709848_13L88808Q1-589656278Q20",
+      "marketId": "378729427",
+      "label": "Roschon Johnson",
+      "displayOdds": {
+        "american": "+3500",
+        "decimal": "36.00",
+        "fractional": "35/1",
+        "percentage": "2.7%",
+        "multiplier": "36.00x"
+      },
+      "trueOdds": 36,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "695456",
+          "name": "Roschon Johnson",
+          "type": "Player",
+          "seoIdentifier": "Roschon Johnson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123669"
+          }
+        }
+      ],
+      "sortOrder": 360048,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709850_13L88808Q1-77651570Q20",
+      "marketId": "378729427",
+      "label": "Caleb Williams",
+      "displayOdds": {
+        "american": "+3500",
+        "decimal": "36.00",
+        "fractional": "35/1",
+        "percentage": "2.7%",
+        "multiplier": "36.00x"
+      },
+      "trueOdds": 36,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "779692",
+          "name": "Caleb Williams",
+          "type": "Player",
+          "seoIdentifier": "Caleb Williams",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123644"
+          }
+        }
+      ],
+      "sortOrder": 360050,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709836_13L88808Q1258503148Q20",
+      "marketId": "378729427",
+      "label": "Jahan Dotson",
+      "displayOdds": {
+        "american": "+4000",
+        "decimal": "41.00",
+        "fractional": "40/1",
+        "percentage": "2.4%",
+        "multiplier": "41.00x"
+      },
+      "trueOdds": 41,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "640766",
+          "name": "Jahan Dotson",
+          "type": "Player",
+          "seoIdentifier": "Jahan Dotson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123730"
+          }
+        }
+      ],
+      "sortOrder": 410036,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709849_13L88808Q1-2114998825Q20",
+      "marketId": "378729427",
+      "label": "Cole Kmet",
+      "displayOdds": {
+        "american": "+5500",
+        "decimal": "56.00",
+        "fractional": "55/1",
+        "percentage": "1.7%",
+        "multiplier": "56.00x"
+      },
+      "trueOdds": 56,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "485483",
+          "name": "Cole Kmet",
+          "type": "Player",
+          "seoIdentifier": "Cole Kmet",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64806"
+          }
+        }
+      ],
+      "sortOrder": 560049,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709855_13L88808Q1-1302231828Q20",
+      "marketId": "378729427",
+      "label": "ATL Falcons D/ST",
+      "displayOdds": {
+        "american": "+6500",
+        "decimal": "66.00",
+        "fractional": "65/1",
+        "percentage": "1.5%",
+        "multiplier": "66.00x"
+      },
+      "trueOdds": 66,
+      "outcomeType": "ToScore2OrMore",
+      "sortOrder": 660055,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709856_14L88808Q1-344179471Q20",
+      "marketId": "378729427",
+      "label": "CHI Bears D/ST",
+      "displayOdds": {
+        "american": "+6500",
+        "decimal": "66.00",
+        "fractional": "65/1",
+        "percentage": "1.5%",
+        "multiplier": "66.00x"
+      },
+      "trueOdds": 66,
+      "outcomeType": "ToScore2OrMore",
+      "sortOrder": 660056,
+      "tags": [
+        "SGP",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709840_13L88808Q1-2106790228Q20",
+      "marketId": "378729427",
+      "label": "Austin Hooper",
+      "displayOdds": {
+        "american": "+7500",
+        "decimal": "76.00",
+        "fractional": "75/1",
+        "percentage": "1.3%",
+        "multiplier": "76.00x"
+      },
+      "trueOdds": 76,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "11125",
+          "name": "Austin Hooper",
+          "type": "Player",
+          "seoIdentifier": "Austin Hooper",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54880"
+          }
+        }
+      ],
+      "sortOrder": 760040,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709838_13L88808Q1364963217Q20",
+      "marketId": "378729427",
+      "label": "Olamide Zaccheaus",
+      "displayOdds": {
+        "american": "+10000",
+        "decimal": "101.00",
+        "fractional": "100/1",
+        "percentage": "0.9%",
+        "multiplier": "101.00x"
+      },
+      "trueOdds": 101,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "11349",
+          "name": "Olamide Zaccheaus",
+          "type": "Player",
+          "seoIdentifier": "Olamide Zaccheaus",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "59333"
+          }
+        }
+      ],
+      "sortOrder": 1010038,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709839_13L88808Q1814030951Q20",
+      "marketId": "378729427",
+      "label": "Charlie Woerner",
+      "displayOdds": {
+        "american": "+10000",
+        "decimal": "101.00",
+        "fractional": "100/1",
+        "percentage": "0.9%",
+        "multiplier": "101.00x"
+      },
+      "trueOdds": 101,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "485615",
+          "name": "Charlie Woerner",
+          "type": "Player",
+          "seoIdentifier": "Charlie Woerner",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64919"
+          }
+        }
+      ],
+      "sortOrder": 1010039,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709837_13L88808Q12071319887Q20",
+      "marketId": "378729427",
+      "label": "Zachariah Branch",
+      "displayOdds": {
+        "american": "+12000",
+        "decimal": "121.00",
+        "fractional": "120/1",
+        "percentage": "0.8%",
+        "multiplier": "121.00x"
+      },
+      "trueOdds": 121,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "953045",
+          "name": "Zachariah Branch",
+          "type": "Player",
+          "seoIdentifier": "Zachariah Branch",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165038"
+          }
+        }
+      ],
+      "sortOrder": 1210037,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709842_13L88808Q11574653505Q20",
+      "marketId": "378729427",
+      "label": "Nick Muse",
+      "displayOdds": {
+        "american": "+12000",
+        "decimal": "121.00",
+        "fractional": "120/1",
+        "percentage": "0.8%",
+        "multiplier": "121.00x"
+      },
+      "trueOdds": 121,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "641123",
+          "name": "Nick Muse",
+          "type": "Player",
+          "seoIdentifier": "Nick Muse",
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "146566"
+          }
+        }
+      ],
+      "sortOrder": 1210042,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709853_13L88808Q198254461Q20",
+      "marketId": "378729427",
+      "label": "Zavion Thomas",
+      "displayOdds": {
+        "american": "+13000",
+        "decimal": "131.00",
+        "fractional": "130/1",
+        "percentage": "0.7%",
+        "multiplier": "131.00x"
+      },
+      "trueOdds": 131,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "970416",
+          "name": "Zavion Thomas",
+          "type": "Player",
+          "seoIdentifier": "Zavion Thomas",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "170659"
+          }
+        }
+      ],
+      "sortOrder": 1310053,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319763260_13L88808Q11152059581Q20",
+      "marketId": "378729427",
+      "label": "Chris Blair",
+      "displayOdds": {
+        "american": "+13000",
+        "decimal": "131.00",
+        "fractional": "130/1",
+        "percentage": "0.7%",
+        "multiplier": "131.00x"
+      },
+      "trueOdds": 131,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "549316",
+          "name": "Chris Blair",
+          "type": "Player",
+          "seoIdentifier": "Chris Blair",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "117766"
+          }
+        }
+      ],
+      "sortOrder": 1310060,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709852_13L88808Q1-704328598Q20",
+      "marketId": "378729427",
+      "label": "Jahdae Walker",
+      "displayOdds": {
+        "american": "+15000",
+        "decimal": "151.00",
+        "fractional": "150/1",
+        "percentage": "0.6%",
+        "multiplier": "151.00x"
+      },
+      "trueOdds": 151,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "894931",
+          "name": "Jahdae Walker",
+          "type": "Player",
+          "seoIdentifier": "Jahdae Walker",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166530"
+          }
+        }
+      ],
+      "sortOrder": 1510052,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709841_13L88808Q1-1909827413Q20",
+      "marketId": "378729427",
+      "label": "Michael Penix Jr.",
+      "displayOdds": {
+        "american": "+16000",
+        "decimal": "161.00",
+        "fractional": "160/1",
+        "percentage": "0.6%",
+        "multiplier": "161.00x"
+      },
+      "trueOdds": 161,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "787659",
+          "name": "Michael Penix Jr.",
+          "type": "Player",
+          "seoIdentifier": "Michael Penix Jr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123688"
+          }
+        }
+      ],
+      "sortOrder": 1610041,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709851_13L88808Q1650575947Q20",
+      "marketId": "378729427",
+      "label": "Sam Roush",
+      "displayOdds": {
+        "american": "+19000",
+        "decimal": "191.00",
+        "fractional": "190/1",
+        "percentage": "0.5%",
+        "multiplier": "191.00x"
+      },
+      "trueOdds": 191,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "957882",
+          "name": "Sam Roush",
+          "type": "Player",
+          "seoIdentifier": "Sam Roush",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "165425"
+          }
+        }
+      ],
+      "sortOrder": 1910051,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA378729427#2319709854_13L88808Q1-1321162937Q20",
+      "marketId": "378729427",
+      "label": "Zavier Scott",
+      "displayOdds": {
+        "american": "+20000",
+        "decimal": "201.00",
+        "fractional": "200/1",
+        "percentage": "0.4%",
+        "multiplier": "201.00x"
+      },
+      "trueOdds": 201,
+      "outcomeType": "ToScore2OrMore",
+      "participants": [
+        {
+          "id": "707429",
+          "name": "Zavier Scott",
+          "type": "Player",
+          "seoIdentifier": "Zavier Scott",
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "164705"
+          }
+        }
+      ],
+      "sortOrder": 2010054,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--1136667446": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118076' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
