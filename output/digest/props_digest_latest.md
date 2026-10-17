@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-17T12:18:25Z
+# Props Pipeline Digest -- 2026-10-17T15:45:54Z
 
 ## Run summary
-- DraftKings ingestion: 678 rows across 8 events (OK)
+- DraftKings ingestion: 679 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 974 rows (OK)
-- Estimation: 1652 rows written (from 1652 ingested rows) -- status breakdown: {'estimated': 728, 'unsupported_market_first_scorer': 425, 'unsupported_stat_type': 327, 'no_player_match': 127, 'insufficient_history': 43, 'no_line_value': 2}
-- CLV logging: 0 newly flagged, 0 newly closed, 51 still open (1075 total ever logged)
+- BetMGM ingestion (via Rotowire): 967 rows (OK)
+- Estimation: 1646 rows written (from 1646 ingested rows) -- status breakdown: {'estimated': 724, 'unsupported_market_first_scorer': 425, 'unsupported_stat_type': 324, 'no_player_match': 127, 'insufficient_history': 44, 'no_line_value': 2}
+- CLV logging: 1 newly flagged, 0 newly closed, 52 still open (1076 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -60,6 +60,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|378211536|0QA378211536#2317738846_13L88808Q12018204784Q20 | draftkings | Zay Flowers | Anytime TD Scorer | over | 0.3631 | 0.3279 | 0.0352 | False | 2026-10-16T22:56:18Z |
 | draftkings|379077545|0QA379077545#2321016681_13L88808Q1-1228251151Q20 | draftkings | John Metchie III | 2+ TDs | over | 0.0422 | 0.0083 | 0.0339 | False | 2026-10-14T23:21:18Z |
 | draftkings|378209599|0QA378209599#2317730704_13L88808Q1-403572542Q20 | draftkings | Kendre Miller | Anytime TD Scorer | over | 0.3968 | 0.3636 | 0.0331 | False | 2026-10-16T04:45:58Z |
+| draftkings|378930895|0QA378930895#2320520977_13L88808Q1652552487Q20 | draftkings | Romeo Doubs | 2+ TDs | over | 0.0754 | 0.0435 | 0.032 | False | 2026-10-17T15:46:11Z |
 | draftkings|379077723|0QA379077723#2321017257_13L88808Q1-464941358Q20 | draftkings | Devontez Walker | 2+ TDs | over | 0.0404 | 0.0099 | 0.0305 | False | 2026-10-15T19:58:24Z |
 | draftkings|378869520|0QA378869520#2320229132_13L88808Q11041398384Q20 | draftkings | Tyler Warren | 2+ TDs | over | 0.1137 | 0.0833 | 0.0304 | False | 2026-10-14T23:21:18Z |
 | draftkings|378331043|0QA378331043#2318198584_13L88808Q11112660000Q20 | draftkings | Bryce Young | Anytime TD Scorer | over | 0.1732 | 0.1429 | 0.0304 | False | 2026-10-15T19:58:24Z |
