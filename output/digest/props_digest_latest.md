@@ -1,20 +1,23 @@
-# Props Pipeline Digest -- 2026-10-16T22:56:02Z
+# Props Pipeline Digest -- 2026-10-17T04:43:10Z
 
 ## Run summary
-- DraftKings ingestion: 682 rows across 8 events (OK)
+- DraftKings ingestion: 680 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 875 rows (OK)
-- Estimation: 1557 rows written (from 1557 ingested rows) -- status breakdown: {'estimated': 712, 'unsupported_market_first_scorer': 375, 'unsupported_stat_type': 296, 'no_player_match': 127, 'insufficient_history': 45, 'no_line_value': 2}
-- CLV logging: 1 newly flagged, 0 newly closed, 48 still open (1071 total ever logged)
+- BetMGM ingestion (via Rotowire): 974 rows (OK)
+- Estimation: 1654 rows written (from 1654 ingested rows) -- status breakdown: {'estimated': 728, 'unsupported_market_first_scorer': 425, 'unsupported_stat_type': 327, 'no_player_match': 128, 'insufficient_history': 44, 'no_line_value': 2}
+- CLV logging: 4 newly flagged, 0 newly closed, 51 still open (1075 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|recs|18550 | betmgm | Jalen Royals | recs | over | 0.9975 | 0.3887 | 0.6087 | False | 2026-10-17T04:43:27Z |
 | betmgm|recs|19262 | betmgm | Zachariah Branch | recs | over | 1.0 | 0.4335 | 0.5665 | False | 2026-10-15T19:58:24Z |
+| betmgm|recs|16810 | betmgm | Keaton Mitchell | recs | over | 1.0 | 0.4518 | 0.5482 | False | 2026-10-17T04:43:27Z |
+| betmgm|recs|17821 | betmgm | Kimani Vidal | recs | over | 1.0 | 0.4554 | 0.5446 | False | 2026-10-17T04:43:27Z |
+| betmgm|recs|14657 | betmgm | Rico Dowdle | recs | over | 1.0 | 0.4797 | 0.5203 | False | 2026-10-17T04:43:27Z |
 | betmgm|recs|17185 | betmgm | Jalen Brooks | recs | over | 0.998 | 0.509 | 0.489 | False | 2026-10-14T23:21:18Z |
-| betmgm|recs|13894 | betmgm | KaVontae Turpin | recs | over | 1.0 | 0.5835 | 0.4165 | False | 2026-10-15T23:09:30Z |
 | betmgm|recs|19448 | betmgm | Nate Boerkircher | recs | over | 1.0 | 0.5941 | 0.4059 | False | 2026-10-13T19:24:28Z |
 | draftkings|378331043|0QA378331043#2318198575_13L88808Q11627968604Q20 | draftkings | Darius Cooper | Anytime TD Scorer | over | 0.5873 | 0.2 | 0.3873 | False | 2026-10-16T04:45:58Z |
 | betmgm|anytd|18251 | betmgm | Hayden Rucci | anytd | over | 0.4182 | 0.0345 | 0.3837 | False | 2026-10-15T23:09:30Z |
