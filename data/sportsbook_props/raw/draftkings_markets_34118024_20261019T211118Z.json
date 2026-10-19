@@ -1,0 +1,338 @@
+{
+  "markets": [
+    {
+      "id": "380412485",
+      "eventId": "34118024",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-2028813745",
+      "sortOrder": 1485,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118024|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA380412485#2326607829_13L88808Q1850190615Q20",
+      "marketId": "380412485",
+      "label": "Chuba Hubbard",
+      "displayOdds": {
+        "american": "\u2212175",
+        "decimal": "1.57",
+        "fractional": "4/7",
+        "percentage": "63%",
+        "multiplier": "1.57x"
+      },
+      "trueOdds": 1.57142858,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "560815",
+          "name": "Chuba Hubbard",
+          "type": "Player",
+          "seoIdentifier": "Chuba Hubbard",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 6,
+            "stringValue": "6.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "122775"
+          }
+        }
+      ],
+      "sortOrder": 3001570,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607840_13L88808Q1666446492Q20",
+      "marketId": "380412485",
+      "label": "Bucky Irving",
+      "displayOdds": {
+        "american": "\u2212105",
+        "decimal": "1.95",
+        "fractional": "20/21",
+        "percentage": "51%",
+        "multiplier": "1.95x"
+      },
+      "trueOdds": 1.95238096,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "780214",
+          "name": "Bucky Irving",
+          "type": "Player",
+          "seoIdentifier": "Bucky Irving",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "175179"
+          }
+        }
+      ],
+      "sortOrder": 3001950,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607830_13L88808Q1-719490824Q20",
+      "marketId": "380412485",
+      "label": "Tetairoa McMillan",
+      "displayOdds": {
+        "american": "+140",
+        "decimal": "2.40",
+        "fractional": "7/5",
+        "percentage": "41%",
+        "multiplier": "2.40x"
+      },
+      "trueOdds": 2.4,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "886102",
+          "name": "Tetairoa McMillan",
+          "type": "Player",
+          "seoIdentifier": "Tetairoa McMillan",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "167862"
+          }
+        }
+      ],
+      "sortOrder": 3002400,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607841_13L88808Q1621783265Q20",
+      "marketId": "380412485",
+      "label": "Emeka Egbuka",
+      "displayOdds": {
+        "american": "+165",
+        "decimal": "2.65",
+        "fractional": "33/20",
+        "percentage": "37%",
+        "multiplier": "2.65x"
+      },
+      "trueOdds": 2.65,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "886104",
+          "name": "Emeka Egbuka",
+          "type": "Player",
+          "seoIdentifier": "Emeka Egbuka",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "138379"
+          }
+        }
+      ],
+      "sortOrder": 3002650,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607831_13L88808Q1-537154100Q20",
+      "marketId": "380412485",
+      "label": "Jalen Coker",
+      "displayOdds": {
+        "american": "+200",
+        "decimal": "3.00",
+        "fractional": "2/1",
+        "percentage": "33%",
+        "multiplier": "3.00x"
+      },
+      "trueOdds": 3,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "788337",
+          "name": "Jalen Coker",
+          "type": "Player",
+          "seoIdentifier": "Jalen Coker",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "181404"
+          }
+        }
+      ],
+      "sortOrder": 3003000,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607832_13L88808Q1-813345382Q20",
+      "marketId": "380412485",
+      "label": "Tommy Tremble",
+      "displayOdds": {
+        "american": "+285",
+        "decimal": "3.85",
+        "fractional": "57/20",
+        "percentage": "25%",
+        "multiplier": "3.85x"
+      },
+      "trueOdds": 3.85,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "560756",
+          "name": "Tommy Tremble",
+          "type": "Player",
+          "seoIdentifier": "Tommy Tremble",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "122769"
+          }
+        }
+      ],
+      "sortOrder": 3003850,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380412485#2326607845_13L88808Q1-1181521367Q20",
+      "marketId": "380412485",
+      "label": "Cade Otton",
+      "displayOdds": {
+        "american": "+290",
+        "decimal": "3.90",
+        "fractional": "29/10",
+        "percentage": "25%",
+        "multiplier": "3.90x"
+      },
+      "trueOdds": 3.9,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "631226",
+          "name": "Cade Otton",
+          "type": "Player",
+          "seoIdentifier": "Cade Otton",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 0,
+            "stringValue": "0.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "124932"
+          }
+        }
+      ],
+      "sortOrder": 3003900,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-2028813745": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118024' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}

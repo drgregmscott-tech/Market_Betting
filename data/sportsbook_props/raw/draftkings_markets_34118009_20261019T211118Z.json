@@ -1,0 +1,296 @@
+{
+  "markets": [
+    {
+      "id": "380413767",
+      "eventId": "34118009",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-1010338776",
+      "sortOrder": 1767,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118009|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA380413767#2326613369_13L88808Q1-709958170Q20",
+      "marketId": "380413767",
+      "label": "Jaylen Warren",
+      "displayOdds": {
+        "american": "\u2212120",
+        "decimal": "1.83",
+        "fractional": "5/6",
+        "percentage": "54%",
+        "multiplier": "1.83x"
+      },
+      "trueOdds": 1.83333334,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "641178",
+          "name": "Jaylen Warren",
+          "type": "Player",
+          "seoIdentifier": "Jaylen Warren",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "126003"
+          }
+        }
+      ],
+      "sortOrder": 3001830,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380413767#2326613359_13L88808Q1-1726186093Q20",
+      "marketId": "380413767",
+      "label": "Chris Olave",
+      "displayOdds": {
+        "american": "+115",
+        "decimal": "2.15",
+        "fractional": "23/20",
+        "percentage": "46%",
+        "multiplier": "2.15x"
+      },
+      "trueOdds": 2.15,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640762",
+          "name": "Chris Olave",
+          "type": "Player",
+          "seoIdentifier": "Chris Olave",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123722"
+          }
+        }
+      ],
+      "sortOrder": 3002150,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380413767#2326613370_13L88808Q11791428316Q20",
+      "marketId": "380413767",
+      "label": "DK Metcalf",
+      "displayOdds": {
+        "american": "+155",
+        "decimal": "2.55",
+        "fractional": "31/20",
+        "percentage": "39%",
+        "multiplier": "2.55x"
+      },
+      "trueOdds": 2.55,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "19923",
+          "name": "DK Metcalf",
+          "type": "Player",
+          "seoIdentifier": "DK Metcalf",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "55067"
+          }
+        }
+      ],
+      "sortOrder": 3002550,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380413767#2326613358_13L88808Q1-403572542Q20",
+      "marketId": "380413767",
+      "label": "Kendre Miller",
+      "displayOdds": {
+        "american": "+175",
+        "decimal": "2.75",
+        "fractional": "7/4",
+        "percentage": "36%",
+        "multiplier": "2.75x"
+      },
+      "trueOdds": 2.75,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "694449",
+          "name": "Kendre Miller",
+          "type": "Player",
+          "seoIdentifier": "Kendre Miller",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123662"
+          }
+        }
+      ],
+      "sortOrder": 3002750,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380413767#2326613365_13L88808Q144959304Q20",
+      "marketId": "380413767",
+      "label": "Tyler Shough",
+      "displayOdds": {
+        "american": "+245",
+        "decimal": "3.45",
+        "fractional": "49/20",
+        "percentage": "28%",
+        "multiplier": "3.45x"
+      },
+      "trueOdds": 3.45,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "788320",
+          "name": "Tyler Shough",
+          "type": "Player",
+          "seoIdentifier": "Tyler Shough",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123673"
+          }
+        }
+      ],
+      "sortOrder": 3003450,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380413767#2326613357_13L88808Q11055160431Q20",
+      "marketId": "380413767",
+      "label": "Alvin Kamara",
+      "displayOdds": {
+        "american": "+255",
+        "decimal": "3.55",
+        "fractional": "51/20",
+        "percentage": "28%",
+        "multiplier": "3.55x"
+      },
+      "trueOdds": 3.55,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "18573",
+          "name": "Alvin Kamara",
+          "type": "Player",
+          "seoIdentifier": "Alvin Kamara",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "55015"
+          }
+        }
+      ],
+      "sortOrder": 3003550,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-1010338776": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118009' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}

@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-19T15:46:01Z
+# Props Pipeline Digest -- 2026-10-19T21:11:18Z
 
 ## Run summary
 - DraftKings ingestion: 193 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 74 rows (OK)
-- Estimation: 267 rows written (from 267 ingested rows) -- status breakdown: {'estimated': 149, 'unsupported_market_first_scorer': 70, 'unsupported_stat_type': 23, 'no_player_match': 19, 'insufficient_history': 6}
-- CLV logging: 6 newly flagged, 0 newly closed, 31 still open (1125 total ever logged)
+- BetMGM ingestion (via Rotowire): 67 rows (OK)
+- Estimation: 260 rows written (from 260 ingested rows) -- status breakdown: {'estimated': 148, 'unsupported_market_first_scorer': 66, 'unsupported_stat_type': 24, 'no_player_match': 17, 'insufficient_history': 5}
+- CLV logging: 0 newly flagged, 0 newly closed, 30 still open (1125 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -26,7 +26,6 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|380412485|0QA380412485#2326607832_13L88808Q1-813345382Q20 | draftkings | Tommy Tremble | Anytime TD Scorer | over | 0.4231 | 0.2597 | 0.1633 | False | 2026-10-19T15:46:16Z |
 | draftkings|378218690|0QA378218690#2317773844_13L88808Q1436278619Q20 | draftkings | Brandin Cooks | Anytime TD Scorer | over | 0.4182 | 0.2817 | 0.1365 | False | 2026-10-18T22:31:17Z |
 | draftkings|378535859|0QA378535859#2318977020_13L88808Q11175147349Q20 | draftkings | Jayden Daniels | 2+ TDs | over | 0.1808 | 0.0476 | 0.1331 | False | 2026-10-18T22:31:17Z |
-| betmgm|anytd|9260 | betmgm | Brandin Cooks | anytd | over | 0.4182 | 0.2857 | 0.1325 | False | 2026-10-13T11:58:47Z |
 | draftkings|380457140|0QA380457140#2326805310_13L88808Q1573901773Q20 | draftkings | Demario Douglas | 2+ TDs | over | 0.1472 | 0.0278 | 0.1194 | False | 2026-10-19T04:57:20Z |
 | draftkings|380457140|0QA380457140#2326805312_13L88808Q1652552487Q20 | draftkings | Romeo Doubs | 2+ TDs | over | 0.1302 | 0.0278 | 0.1024 | False | 2026-10-19T04:57:20Z |
 | draftkings|378535859|0QA378535859#2318977024_13L88808Q1-60147958Q20 | draftkings | Stefon Diggs | 2+ TDs | over | 0.1412 | 0.05 | 0.0912 | False | 2026-10-18T22:31:17Z |
