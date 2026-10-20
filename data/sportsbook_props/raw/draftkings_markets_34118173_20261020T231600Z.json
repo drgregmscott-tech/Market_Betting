@@ -1,0 +1,171 @@
+{
+  "markets": [
+    {
+      "id": "380408418",
+      "eventId": "34118173",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-614717990",
+      "sortOrder": 1418,
+      "tags": [
+        "SGP",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118173|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA380408418#2326588985_13L88808Q12135347711Q20",
+      "marketId": "380408418",
+      "label": "Aaron Jones",
+      "displayOdds": {
+        "american": "\u2212125",
+        "decimal": "1.80",
+        "fractional": "4/5",
+        "percentage": "55%",
+        "multiplier": "1.80x"
+      },
+      "trueOdds": 1.8,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "19636",
+          "name": "Aaron Jones",
+          "type": "Player",
+          "seoIdentifier": "Aaron Jones Sr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54936"
+          }
+        }
+      ],
+      "sortOrder": 3001800,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380408418#2326588996_13L88808Q1-1720506042Q20",
+      "marketId": "380408418",
+      "label": "Jonathan Taylor",
+      "displayOdds": {
+        "american": "\u2212125",
+        "decimal": "1.80",
+        "fractional": "4/5",
+        "percentage": "55%",
+        "multiplier": "1.80x"
+      },
+      "trueOdds": 1.8,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "468700",
+          "name": "Jonathan Taylor",
+          "type": "Player",
+          "seoIdentifier": "Jonathan Taylor",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 7,
+            "stringValue": "7.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "64459"
+          }
+        }
+      ],
+      "sortOrder": 3001800,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA380408418#2326588986_13L88808Q11777736040Q20",
+      "marketId": "380408418",
+      "label": "Justin Jefferson",
+      "displayOdds": {
+        "american": "+155",
+        "decimal": "2.55",
+        "fractional": "31/20",
+        "percentage": "39%",
+        "multiplier": "2.55x"
+      },
+      "trueOdds": 2.55,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "485454",
+          "name": "Justin Jefferson",
+          "type": "Player",
+          "seoIdentifier": "Justin Jefferson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "62598"
+          }
+        }
+      ],
+      "sortOrder": 3002550,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-614717990": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118173' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
