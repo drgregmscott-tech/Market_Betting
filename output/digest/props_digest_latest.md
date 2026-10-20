@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-20T13:42:30Z
+# Props Pipeline Digest -- 2026-10-20T20:04:26Z
 
 ## Run summary
 - DraftKings ingestion: 188 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 171 rows (OK)
-- Estimation: 359 rows written (from 359 ingested rows) -- status breakdown: {'estimated': 229, 'unsupported_market_first_scorer': 68, 'unsupported_stat_type': 31, 'no_player_match': 21, 'insufficient_history': 10}
-- CLV logging: 6 newly flagged, 0 newly closed, 34 still open (1143 total ever logged)
+- BetMGM ingestion (via Rotowire): 272 rows (OK)
+- Estimation: 460 rows written (from 460 ingested rows) -- status breakdown: {'estimated': 322, 'unsupported_market_first_scorer': 68, 'unsupported_stat_type': 31, 'no_player_match': 24, 'insufficient_history': 15}
+- CLV logging: 1 newly flagged, 0 newly closed, 35 still open (1144 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -27,12 +27,13 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|380412485|0QA380412485#2326607832_13L88808Q1-813345382Q20 | draftkings | Tommy Tremble | Anytime TD Scorer | over | 0.4231 | 0.2597 | 0.1633 | False | 2026-10-19T15:46:16Z |
 | draftkings|380413767|0QA380413767#2326613365_13L88808Q144959304Q20 | draftkings | Tyler Shough | Anytime TD Scorer | over | 0.3173 | 0.1905 | 0.1268 | False | 2026-10-20T05:03:27Z |
 | draftkings|380457140|0QA380457140#2326805310_13L88808Q1573901773Q20 | draftkings | Demario Douglas | 2+ TDs | over | 0.1472 | 0.0278 | 0.1194 | False | 2026-10-19T04:57:20Z |
+| betmgm|anytd|17818 | betmgm | Dylan Laube | anytd | over | 0.1881 | 0.0714 | 0.1166 | False | 2026-10-20T20:04:41Z |
 | draftkings|380413767|0QA380413767#2326613374_13L88808Q1-1532462247Q20 | draftkings | Darnell Washington | Anytime TD Scorer | over | 0.357 | 0.2439 | 0.1131 | False | 2026-10-20T05:03:27Z |
 | draftkings|380726543|0QA380726543#2327888777_13L88808Q1839820985Q20 | draftkings | Alvin Kamara | 2+ TDs | over | 0.1472 | 0.0345 | 0.1127 | False | 2026-10-20T05:03:27Z |
 | draftkings|380726543|0QA380726543#2327888819_13L88808Q1-162258478Q20 | draftkings | Pat Freiermuth | 2+ TDs | over | 0.15 | 0.0385 | 0.1116 | False | 2026-10-20T05:03:27Z |
 | draftkings|380413767|0QA380413767#2326613363_13L88808Q11438391772Q20 | draftkings | Bryce Lance | Anytime TD Scorer | over | 0.2277 | 0.125 | 0.1027 | False | 2026-10-20T05:03:27Z |
-| betmgm|anytd|19319 | betmgm | Bryce Lance | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
 | betmgm|anytd|14371 | betmgm | Jordan Love | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
+| betmgm|anytd|19319 | betmgm | Bryce Lance | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
 | draftkings|380726543|0QA380726543#2327888781_13L88808Q1669299964Q20 | draftkings | Noah Fant | 2+ TDs | over | 0.1026 | 0.0123 | 0.0902 | False | 2026-10-20T05:03:27Z |
 | draftkings|380457140|0QA380457140#2326805300_13L88808Q1-77651570Q20 | draftkings | Caleb Williams | 2+ TDs | over | 0.1164 | 0.0278 | 0.0887 | False | 2026-10-19T04:57:20Z |
 | draftkings|380414163|0QA380414163#2326615211_13L88808Q11958986630Q20 | draftkings | Kyle Williams | Anytime TD Scorer | over | 0.1881 | 0.1111 | 0.077 | False | 2026-10-19T04:57:20Z |
