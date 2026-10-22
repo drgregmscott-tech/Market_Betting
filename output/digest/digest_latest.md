@@ -1,9 +1,9 @@
-# Pipeline Digest -- 2026-10-21T23:13:55Z
+# Pipeline Digest -- 2026-10-22T04:31:00Z
 
 ## Run summary
-- Ingestion: 49990 rows (PrizePicks OK, Underdog OK)
-- Estimation: 49990 rows estimated (from 49990 ingested props)
-- CLV logging: 372 newly flagged, 0 newly closed, 886 still open (104351 total ever logged)
+- Ingestion: 34864 rows (PrizePicks OK, Underdog OK)
+- Estimation: 34864 rows estimated (from 34864 ingested props)
+- CLV logging: 44 newly flagged, 0 newly closed, 870 still open (104395 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
@@ -19,14 +19,14 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|065460d7-1c5c-43d4-8968-bba3d831f322 | underdog | C.J. Stroud | Pass Yards | under | 0.4144451746277202 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|d901ce25-9ca6-4d08-a605-d775897a85aa | underdog | Geno Smith | Pass Yards | under | 0.4090737399477504 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|cfdec0e5-5807-4c43-83e2-f7e8906a7bf3 | underdog | Joe Burrow | Pass Yards | under | 0.4009474513937309 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|744ff821-5f30-4dad-ac3a-d24911e71405 | underdog | A.J. Brown | Receiving Yards | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
-| underdog|00b0662f-876d-4f27-b8de-738d4ca273ff | underdog | Caleb Williams | Pass Attempts | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|2e3945a9-dff0-4fe2-bb26-284930c9646e | underdog | Chase Brown | Rush + Rec Yards | under | 0.4 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|7a520285-f44f-4692-8b2c-e0a7ebd6e60c | underdog | A.J. Brown | Receptions | under | 0.4 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|d424e459-1d04-4391-92fb-b90d20c159d8 | underdog | Michael Penix | Pass Yards | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|e1ed7c34-5984-4d1d-b0f0-10d131ce332c | underdog | Brock Purdy | Pass Attempts | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|9ac2fb87-7b6f-4695-9458-ccea6878beba | underdog | Drake Maye | Pass Yards | under | 0.4 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|8ddd3d29-fe64-4279-87e3-2a09c8b64156 | underdog | Caleb Williams | Pass Yards | under | 0.4 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
-| underdog|e1ed7c34-5984-4d1d-b0f0-10d131ce332c | underdog | Brock Purdy | Pass Attempts | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|00b0662f-876d-4f27-b8de-738d4ca273ff | underdog | Caleb Williams | Pass Attempts | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
+| underdog|744ff821-5f30-4dad-ac3a-d24911e71405 | underdog | A.J. Brown | Receiving Yards | under | 0.4 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
+| underdog|7a520285-f44f-4692-8b2c-e0a7ebd6e60c | underdog | A.J. Brown | Receptions | under | 0.4 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|cdb5e111-4cf9-4bfd-82c6-27b11ce762fc | underdog | Eddy Pineiro | FG Made | under | 0.3955537623462751 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|e3084a60-03df-4043-9baa-8fdd03ce53ce | underdog | Malik Willis | Pass Yards | under | 0.3948522906927716 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|9693ec51-4551-43f9-853c-0fb05eafd96d | underdog | Daniel Jones | Pass Yards | under | 0.3939654564213076 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -41,13 +41,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|38a39011-3779-4d19-a6e6-ca06836b54c2 | underdog | Brendan Baird | XP Made | under | 0.3592651266806685 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
 | underdog|4ae8ad3b-3e4b-49b9-a170-e5307e2a5898 | underdog | Brock Purdy | Pass Yards | under | 0.3591836734693877 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|fae2f2fb-162d-478a-bc84-3a89b031403c | underdog | Christian McCaffrey | Rush + Rec Yards | under | 0.3536954659192478 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| prizepicks|15902072 | prizepicks | A.J. Brown | Recs | under | 0.3509424650567749 | 2026-10-21T04:43:18Z | 2026-10-22T20:15:00.000-04:00 |
-| prizepicks|15900717 | prizepicks | Caleb Williams | Pass Attempts | under | 0.3509424650567749 | 2026-10-21T23:24:30Z | 2026-10-22T20:15:00.000-04:00 |
 | prizepicks|15944973 | prizepicks | Bo Nix | Pass Yards | under | 0.3509424650567749 | 2026-10-21T04:43:18Z | 2026-10-25T16:05:00.000-04:00 |
+| prizepicks|15900717 | prizepicks | Caleb Williams | Pass Attempts | under | 0.3509424650567749 | 2026-10-21T23:24:30Z | 2026-10-22T20:15:00.000-04:00 |
 | prizepicks|16039393 | prizepicks | Kyler Murray | Pass+Rush+Rec TDs | under | 0.3509424650567749 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|f6ae9fbb-9d9b-4197-aac0-f2b5bef7b975 | underdog | Courtland Sutton | Receptions | under | 0.3467583550754631 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|d0517fae-e001-44f5-8e9a-0a74f44ad68b | underdog | Baker Mayfield | Pass Yards | under | 0.3467005076142132 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|dafb7fbd-b94b-4f85-967d-1a30d38b5835 | underdog | J.K. Dobbins | Rush + Rec Yards | under | 0.3438700335212077 | 2026-10-21T23:24:30Z | 2026-10-25T20:05:00Z |
 | underdog|37edd000-30ff-4318-96d8-a3ca5e430a8d | underdog | Patrick Mahomes | Pass Yards | under | 0.3421724696477669 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|275ada1e-5712-4c62-8eaf-c3fd618f6b39 | underdog | Cam Ward | Pass Yards | under | 0.3358974358974359 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|8dc47268-4a7d-404f-9e49-dcd9ba768270 | underdog | Kyler Murray | Pass Yards | under | 0.3335652027540378 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -62,6 +60,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|21ae2dbb-b8cd-47b4-8d9e-617160fee214 | underdog | Jake Elliott | FG Made | under | 0.3198767487193468 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|154124b9-f603-40a2-80d3-6e46172c515f | underdog | Cam Ward | Pass Attempts | under | 0.3135302584652062 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|469a1bdc-08fa-448d-abcb-21164ec4757c | underdog | Daniel Jones | Pass Attempts | under | 0.3129432398892975 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|a4c02697-4212-4bef-bafb-3eba15f96f8c | underdog | J.K. Dobbins | Rush + Rec Yards | under | 0.3101149429620515 | 2026-10-22T04:39:42Z | 2026-10-25T20:05:00Z |
 | underdog|3811e671-92b4-49a5-a5fd-5e744b5a1c3f | underdog | Cole Tabb | Receiving Yards | over | 0.3100338305600112 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|6778a4ed-0a07-462f-ad67-3327e6b33ee7 | underdog | Tyler Shough | Pass Yards | under | 0.307201308387714 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|102f8491-8491-4fe3-bb7e-7fb1ff8adcd6 | underdog | Tommy Carr | Pass Yards | under | 0.3058042973526443 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
@@ -75,12 +74,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|586acb89-828d-495a-b781-835f3b0cca6b | underdog | Courtland Sutton | Receiving Yards | under | 0.2913478359944116 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|b014eef2-594f-4c80-9d5b-a085e4a2ebe8 | underdog | Taylor Walls | Runs | over | 0.2903540385838457 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|04a4df3d-c7db-42ac-b930-94951fa9779e | underdog | Brock Bowers | Receiving Yards | under | 0.2882455496564065 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
-| underdog|dd2e2081-f616-4204-bcca-e9dc82322443 | underdog | Aaron Rodgers | Pass Attempts | under | 0.2859768457225595 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | prizepicks|15945775 | prizepicks | Courtland Sutton | Rec Yards | under | 0.2858886737283282 | 2026-10-21T04:43:18Z | 2026-10-25T16:05:00.000-04:00 |
 | underdog|739590e9-a831-4e2e-831f-8105a7b0bfa3 | underdog | Javonte Williams | Rush + Rec Yards | under | 0.2856924823941684 | 2026-10-21T23:24:30Z | 2026-10-27T00:15:00Z |
 | underdog|c11d6abb-9301-4b7f-a75b-0121f5e5949d | underdog | J.K. Dobbins | Rush Yards | under | 0.2835422534352462 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|27afcb09-4472-4907-b73c-9de29d4e33b2 | underdog | George Kittle | Receptions | under | 0.2828324993741664 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|1dc224d8-4045-43ec-97c9-959c5e18ba2f | underdog | Tucker Kraft | Receiving Yards | under | 0.2825174713014219 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
+| underdog|79b2b766-9806-4ad9-8c3b-a2f1e9541a4b | underdog | Aaron Rodgers | Pass Attempts | under | 0.2815799685858499 | 2026-10-22T04:39:42Z | 2026-10-25T13:30:00Z |
 | underdog|ed554cdd-6711-4d20-ab5c-3f9edfe1ddf7 | underdog | Jahmyr Gibbs | Receptions | under | 0.2812284582963593 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|17ee8953-2dc9-435f-abb2-1065e9ccb4c1 | underdog | Dak Prescott | Pass Yards | under | 0.2811881188118813 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | prizepicks|15945785 | prizepicks | Puka Nacua | Rec Yards | under | 0.2807439602633035 | 2026-10-21T04:43:18Z | 2026-10-25T16:25:00.000-04:00 |
@@ -89,7 +88,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|16051256 | prizepicks | Troy Franklin | Rec Targets | under | 0.2765686467453297 | 2026-10-21T23:24:30Z | 2026-10-25T16:05:00.000-04:00 |
 | underdog|7df49b24-8e83-4f82-b7f2-53a583a4ba71 | underdog | Tyler Allgeier | Receiving Yards | over | 0.2762376237623761 | 2026-10-21T23:24:30Z | 2026-10-25T20:05:00Z |
 | underdog|2ef34ff6-b6af-4c78-88e6-b43e09e6eba7 | underdog | Jaylen Wright | Rush Yards | under | 0.2759048149626352 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|00c9927f-5ade-43b4-b9b7-fefb63611a2d | underdog | Malik Willis | Pass Attempts | under | 0.2754400964710172 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|22912826-8c9f-498b-98f5-be4a620263b6 | underdog | J.J. McCarthy | Pass Attempts | under | 0.2732219605335578 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|e975f741-7c02-4bd6-ad98-eede89cbef4a | underdog | Nico Collins | Receiving Yards | under | 0.2731951910841539 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|e296ce35-a81f-49e2-af2f-4786a54b96b7 | underdog | Caleb Williams | Pass TDs | under | 0.2699980933802138 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
@@ -103,8 +101,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|73395da4-8892-4961-b521-7e1248b8f7cf | underdog | Bo Nix | Rush Yards | under | 0.2605581005357792 | 2026-10-21T23:24:30Z | 2026-10-25T20:05:00Z |
 | underdog|7f9ff427-eeca-41d9-b667-16c9f1fc8e5d | underdog | Tony Pollard | Rush + Rec Yards | under | 0.2596998817408331 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|b2ca7cc4-8309-462a-93ef-879c52f609b7 | underdog | Bryce Young | Rush Yards | under | 0.2592736328532177 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|c36d1310-dae3-43f8-bcf2-44cbaae783a7 | underdog | Jake Bauers | Batter Walks | over | 0.2551849166062363 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|d5c0a70d-a8ac-41e3-86ca-e7106f25948d | underdog | Malik Willis | Pass Attempts | under | 0.2589864723038607 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
+| underdog|183dc84a-07dd-44fe-9baa-6b50e2dab0f0 | underdog | Rico Dowdle | Rush + Rec Yards | under | 0.2554746786082785 | 2026-10-22T04:39:42Z | 2026-10-25T13:30:00Z |
 | underdog|09bee2cd-e008-407b-87a5-2ef9740a5f75 | underdog | Malik Willis | Pass TDs | under | 0.2548170435450879 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|84c203fb-a291-4994-bc67-9f775d82af26 | underdog | Jake Bauers | Batter Walks | over | 0.2530612244897959 | 2026-10-22T04:39:42Z | 2026-10-24T00:00:00Z |
+| underdog|e9c57054-9bea-42e9-bf70-bbe00d9d285b | underdog | Dak Prescott | Pass Attempts | under | 0.2525504200578303 | 2026-10-22T04:39:42Z | 2026-10-27T00:15:00Z |
 | underdog|198558ac-0686-475a-8b78-cb8654c58971 | underdog | Joe Burrow | Pass Attempts | under | 0.2525151606208103 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|4d49df5b-b50b-4f4f-b3cc-23c54ad94116 | underdog | Liam Hicks | RBIs | over | 0.2523518732464103 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|7594b837-9c0a-4a5e-a07c-cb03792bcec9 | underdog | Rico Dowdle | Rush Yards | under | 0.2523393133447593 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
@@ -125,14 +126,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|b12fe859-db0b-49c6-bb78-c544b80293d7 | underdog | Patrick Mahomes | Pass Attempts | under | 0.2376070105771173 | 2026-10-21T23:24:30Z | 2026-10-26T00:20:00Z |
 | underdog|0a21b579-be4c-4502-b653-2800bbfc14bd | underdog | Jacoby Brissett | Pass Attempts | under | 0.2341561518035735 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|63a589be-c960-48d9-a32f-d3109bb47742 | underdog | Kirk Cousins | Pass Attempts | under | 0.2338585829420534 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
-| underdog|fe831560-509f-4242-9401-4ecd4e49d5cb | underdog | Dak Prescott | Pass Attempts | under | 0.2320315894402933 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|751c6c65-bb0e-4b5a-bdd1-24aa64b44573 | underdog | Colston Loveland | Receiving Yards | under | 0.2310302617610162 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|193c6a4c-aa4a-46b0-a869-9e9de2826135 | underdog | Bo Nix | Pass TDs | under | 0.2300413174167165 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|4d576151-8dfd-4253-b495-f9e32f0fbfcb | underdog | Luther Burden | Receiving Yards | under | 0.2288068722746987 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|58b3f25a-6eba-4472-9821-0fc96a39ffc8 | underdog | Geno Smith | Pass Attempts | under | 0.2275649013349008 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|17c2adf9-75e8-44b7-9e46-b0a6769151cf | underdog | Germie Bernard | Receiving Yards | under | 0.2275384159492459 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|e4c964b1-0b2b-4857-acae-59f009c1792e | underdog | J.J. McCarthy | Pass TDs | under | 0.2273642896866348 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|32c667b7-abd0-4436-bf1e-dab251e7a113 | underdog | Rico Dowdle | Rush + Rec Yards | under | 0.2235175135999006 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|ae0a75f0-8fde-4629-9e70-516e0115471c | underdog | Cairo Santos | FG Made | under | 0.2234479238389184 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|f24167ed-e4e0-4dc7-a643-26438a6ed08f | underdog | Junior Caminero | Runs | over | 0.222255518929178 | 2026-10-21T23:24:30Z | 2026-10-24T00:00:00Z |
 | underdog|bf1d95e3-f10c-4550-8a39-10f875aed153 | underdog | C.J. Stroud | Pass Attempts | under | 0.2210784579055988 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -149,6 +148,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|16051257 | prizepicks | Amon-Ra St. Brown | Rec Targets | under | 0.212391920232314 | 2026-10-21T23:24:30Z | 2026-10-25T16:25:00.000-04:00 |
 | underdog|0968c1b9-32ed-4b02-9b0a-f3c60b894a02 | underdog | Jackson Chourio | Runs | over | 0.211734693877551 | 2026-10-21T23:24:30Z | 2026-10-24T00:00:00Z |
 | underdog|3d7bdfbe-fd96-4e73-b04d-e4b53c629b08 | underdog | Yandy Díaz | RBIs | over | 0.210772501771793 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|b5f70af1-5ab3-496e-9e03-6a4fc51e9990 | underdog | Tyrone Tracy | Rush + Rec Yards | under | 0.2105991543286356 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|a9df4b24-c600-46b7-a5e9-ec9eb30eeff5 | underdog | Xavier Hutchinson | Receiving Yards | over | 0.2103451992664808 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|cca13465-8252-4583-b62f-7d1a577c6168 | underdog | Garrett Mitchell | Runs | over | 0.2099080694586312 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|b3d36ef2-c5d1-42ce-bdf6-3dcd1e9c4bd1 | underdog | Colby Parkinson | Receiving Yards | under | 0.2087631852016807 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
@@ -156,9 +156,10 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|5e78605e-bcba-4d2f-90f8-e6c3dfec5088 | underdog | Rico Scott | Receiving Yards | under | 0.2078501632803695 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|e4e5c670-0987-4d0a-8a4a-9428d204a893 | underdog | Amon-Ra St. Brown | Receptions | under | 0.2077532646208933 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|c1d936d4-68f3-4e44-837e-b333d2c4f1a2 | underdog | Jameson Williams | Receiving Yards | under | 0.2060331671729401 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
+| underdog|b370506b-e908-4214-93a8-152af846ee21 | underdog | D'Andre Swift | Rush + Rec Yards | under | 0.2052940952466103 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|18a8053e-96a8-43b5-909e-4c6210c3a9b2 | underdog | Andy Borregales | FG Made | under | 0.2038454190489985 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | prizepicks|16043109 | prizepicks | Jacob Misiorowski | Pitches Thrown | under | 0.2038387781039828 | 2026-10-21T23:24:30Z | 2026-10-23T20:00:00.000-04:00 |
-| underdog|dee64e29-a37f-4460-926f-e59809784b84 | underdog | Jared Goff | Pass TDs | under | 0.203422304954593 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
+| underdog|4ce494db-1a02-483c-9b1b-ee9ddf695bd0 | underdog | Woody Marks | Rush Yards | under | 0.2028480523660538 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|34385afe-49f2-48b5-8b4a-6630c3ae7446 | underdog | Rhamondre Stevenson | Rush Yards | under | 0.2023355512513842 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|10021345-bbed-4a2f-a584-a3e81916b523 | underdog | Daniel Jones | Pass TDs | under | 0.200856388948677 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|affd0c33-7502-4960-933f-087b18e4f52d | underdog | Davion Gause | Rush Yards | under | 0.2000431939029789 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
@@ -168,14 +169,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|16051270 | prizepicks | Nico Collins | Rec Targets | under | 0.1977937055574494 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|7478a968-ff4e-476b-9b0f-02fe597e1822 | underdog | Dallas Goedert | Receptions | under | 0.1970050433176551 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|bfc2e148-a21c-4383-a448-5598a14b86aa | underdog | Jonathan Taylor | Rush Yards | under | 0.1969151744354131 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|01d5c5b7-53f8-4d6a-ad44-0d7907cfefd3 | underdog | Noah Fifita | Pass Yards | under | 0.1952555715819752 | 2026-10-22T04:39:42Z | 2026-10-24T23:30:00Z |
 | underdog|dd2e01e1-9b2b-4090-aa87-6a74f55e0015 | underdog | Troy Franklin | Receptions | under | 0.19440896280038 | 2026-10-21T23:24:30Z | 2026-10-25T20:05:00Z |
-| underdog|aa032c3a-ab8c-44cf-bda6-46bf6ce33ace | underdog | Braelon Allen | Receptions | under | 0.1926017411966414 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|20fc080b-0ef4-4f8e-ba9b-b3a556efc9df | underdog | Mason Taylor | Receptions | under | 0.1922767858829452 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|65609d8f-35d2-4020-84b7-e43c37ee65f7 | underdog | Noah Fifita | Pass Yards | under | 0.1920839964489332 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|7cff4e33-d73d-44f1-8d0d-5a5bf4c7277c | underdog | Matthew Golden | Receiving Yards | under | 0.1918683958802021 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
-| underdog|ff64e89c-bb9d-467a-a5fd-e2e001f92b4b | underdog | Adam Damante | Pass Yards | under | 0.1914535423656664 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|ec32d38f-4baa-4dd5-b4ce-84216707909c | underdog | Kyler Murray | Pass Attempts | under | 0.191433222145686 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|d9d7d2d5-f575-4533-bf8b-2d991c71ada4 | underdog | Braelon Allen | Receiving Yards | under | 0.1913098694035109 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|fa30225c-a2b8-4007-91b4-6e7775ca4b91 | underdog | Kendre Miller | Rush Yards | under | 0.1907546806271176 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|ee0fd630-668b-45c5-b6f7-9a2833d72609 | underdog | Kendre Miller | Rush + Rec Yards | under | 0.1896770029694203 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|a9599a2a-d2a5-4707-b22c-39668c345e29 | underdog | Zay Flowers | Receptions | under | 0.1892743875611844 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -186,7 +184,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|69170097-9590-4b1c-b393-fe6a547e6eb3 | underdog | Sam LaPorta | Receptions | under | 0.1854602802656819 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | prizepicks|16046139 | prizepicks | Daniel Jones | Pass TDs | under | 0.1853194844296951 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | prizepicks|16051243 | prizepicks | Denzel Boston | Rec Targets | under | 0.1843661428516428 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
+| prizepicks|16039884 | prizepicks | Pierre-Hugues Herbert | Break Points Won | over | 0.1835147466966274 | 2026-10-22T04:39:42Z | 2026-10-22T09:10:00.000-04:00 |
 | underdog|01b304ef-c918-44f1-8674-16230b54ff51 | underdog | Jackson Chourio | Total Bases | over | 0.1832038589898196 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|9e47717e-400a-4145-b32f-c8afda16b513 | underdog | John Mateer | Pass Yards | under | 0.1823937743823583 | 2026-10-22T04:39:42Z | 2026-10-24T19:30:00Z |
 | underdog|d5f7613a-54af-4d37-b05a-48a2b92f3df7 | underdog | Jake Bauers | Runs | over | 0.1821742352069441 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|98e02204-e6fc-49e9-9efb-16eddaa9eb4d | underdog | Jake Elliott | Kicking Points | under | 0.1818784511935599 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|ca74e334-4fb2-412b-bdb9-08168dd9098c | underdog | Chuba Hubbard | Rush + Rec Yards | under | 0.1815324987306645 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -196,7 +196,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|95e13e96-3915-4814-acdb-210d240d4701 | underdog | Jahmyr Gibbs | Receiving Yards | under | 0.1799180201769094 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | prizepicks|16046140 | prizepicks | J.J. McCarthy | Pass TDs | under | 0.1795941015500882 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|15f3e859-2c6f-4254-abb6-7275ce408513 | underdog | Nico Collins | Receptions | under | 0.1794482585928581 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|470366f8-60c7-4b54-8852-c4dee8b4d88f | underdog | John Mateer | Pass Yards | under | 0.1758147865680269 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | prizepicks|16051241 | prizepicks | Ja'Marr Chase | Rec Targets | under | 0.175795415306488 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|8dc8a64b-8a6d-4bbb-9c34-ed8b89025f6b | underdog | Brandon Aubrey | FG Made | under | 0.1756787358146653 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|0bfe77e7-f046-485b-9c54-f72737f36efb | underdog | Garrett Wilson | Receptions | under | 0.1755107928461772 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -205,15 +204,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|11e17eff-c3c7-4b31-a4e1-eb3c30ed8c12 | underdog | KC Concepcion | Receptions | under | 0.173856293946127 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|ea4459fa-5f07-4a26-b2c8-da05776fd757 | underdog | Taylor Walls | Total Bases | over | 0.1738064881711291 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | prizepicks|16051252 | prizepicks | Courtland Sutton | Rec Targets | under | 0.1732814208652097 | 2026-10-21T23:24:30Z | 2026-10-25T16:05:00.000-04:00 |
-| underdog|08fb110d-3970-4d45-a88b-0c0e82fec0f2 | underdog | Braelon Allen | Rush + Rec Yards | under | 0.1730792537215599 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|5f4f76c2-49bb-4115-8ddf-226b9d67ee9f | underdog | D'Andre Swift | Rush + Rec Yards | under | 0.1727801046442281 | 2026-10-21T23:24:30Z | 2026-10-23T00:15:00Z |
-| underdog|fb6d7054-2342-41b2-b0fa-2421e2ef1f95 | underdog | Chris Reed | Receptions | under | 0.1725349247676104 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|3614abc9-c288-4ddb-a25e-d8e7de7b52ef | underdog | Darian Mensah | Rush Yards | over | 0.1718691063862979 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
-| underdog|72bbe3a3-c9ed-4f5e-9efe-d6367c597685 | underdog | Rome Odunze | Receiving Yards | under | 0.1718158725979823 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | prizepicks|16051254 | prizepicks | Jaylen Waddle | Rec Targets | under | 0.1709506794129931 | 2026-10-21T23:24:30Z | 2026-10-25T16:05:00.000-04:00 |
 | prizepicks|16051269 | prizepicks | Marvin Harrison Jr. | Rec Targets | under | 0.1706456696230398 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
-| underdog|d0b24edb-4dc8-4f46-ae4f-c250461a8311 | underdog | Jake Bauers | Total Bases | over | 0.1704545454545454 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|2eef6a10-bacb-4d87-80f2-e93f2ddb4319 | underdog | Jonny DeLuca | Total Bases | over | 0.1704545454545454 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|d0b24edb-4dc8-4f46-ae4f-c250461a8311 | underdog | Jake Bauers | Total Bases | over | 0.1704545454545454 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|404ee6e2-c47e-4246-9c9a-08758d28c9ef | underdog | Arch Manning | Pass Yards | under | 0.1700288444215447 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|25c84983-7531-4d73-b90d-493d66582b20 | underdog | Pat Freiermuth | Receiving Yards | under | 0.1693161019733358 | 2026-10-21T23:24:30Z | 2026-10-25T13:30:00Z |
 | underdog|ee4edd7e-7b6f-41ad-933e-3a50e62080ea | underdog | Bijan Robinson | Receptions | under | 0.1692203598276945 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -263,26 +258,27 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|16051264 | prizepicks | Tucker Kraft | Rec Targets | under | 0.1515049144076509 | 2026-10-21T23:24:30Z | 2026-10-25T16:25:00.000-04:00 |
 | underdog|40c92b84-7aa2-4a31-ae7b-160596e0c514 | underdog | Isaiah Likely | Receiving Yards | under | 0.1509578137931236 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|fe464e1e-f6c0-4abe-b76a-3316fe11545b | underdog | Liam Hicks | Hits | over | 0.1508110346565297 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|8aeef796-b881-40de-b031-de3a0de6dff4 | underdog | Rhamondre Stevenson | Rush + Rec Yards | under | 0.150477982850234 | 2026-10-22T04:39:42Z | 2026-10-23T00:15:00Z |
 | underdog|83cc1041-7a0f-47b2-84ac-351e9d8533f3 | underdog | Taylor Walls | Hits | over | 0.1504427927544617 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|6cd40a1f-1e9f-45e8-8de2-60ebf0b846c6 | underdog | Rome Odunze | Receiving Yards | under | 0.1501463657464657 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|f649e406-fd37-43ad-8bae-7bb995d397fd | underdog | Beau Pribula | Pass TDs | over | 0.1499521545038517 | 2026-10-19T04:39:53Z | 2026-10-23T23:00:00Z |
 | underdog|3fe03957-f78a-4577-b650-0f54860d6b2e | underdog | Chris Boswell | FG Made | under | 0.1495032069538866 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|eb118ae3-88ec-4af1-a4d5-238969093a3c | underdog | Greg Dulcich | Receptions | under | 0.148738688298966 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|b63c3a37-09bc-42ec-acde-2b15af175d27 | underdog | Tyler Shough | Pass Attempts | under | 0.1486185642801181 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|52e828a6-c228-46b9-ba0c-81b778711038 | underdog | Jeremy Hecklinski | Pass Yards | under | 0.1484425373240185 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|aa0b7a3e-d2b1-4670-bacd-e7f0265e9da6 | underdog | Kaelon Black | Rush Yards | under | 0.1484179947276228 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|88139da8-1ba3-489d-95be-42633a2c77b3 | underdog | David Olano | FG Made | over | 0.1482970994741699 | 2026-10-22T04:39:42Z | 2026-10-24T19:30:00Z |
 | underdog|8e6bce48-c270-48c4-af74-f023a926fd3c | underdog | Trey Smack | Kicking Points | under | 0.1479856099025124 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|cbdf6397-eda3-42b8-8e11-2e87240b78f5 | underdog | Lukas Van Ness | Sacks | over | 0.1479299343980902 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
 | underdog|dfcf3d2f-2bf0-48ae-bcbb-1e6ad4b39a9e | underdog | Matthew Stafford | Pass Attempts | under | 0.1478843620945529 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
-| underdog|fc39f33d-cb8c-4589-988e-c0b7372a9140 | underdog | Brandon Nakashima | Aces | under | 0.1473788856314388 | 2026-10-21T23:24:30Z | 2026-10-22T18:10:00Z |
 | underdog|968ff81d-59d7-4800-83ce-cfa34ff971b7 | underdog | Dak Prescott | Pass TDs | under | 0.1473394026606165 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|3dcd92ab-0c27-4d63-9fb5-575d5f92cffd | underdog | Garrett Wilson | Receiving Yards | under | 0.1471362850852574 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
+| underdog|1ae5d24c-6f16-4cc5-8989-4a8e6240c971 | underdog | Tyler Shough | Pass Attempts | under | 0.1469924013389894 | 2026-10-22T04:39:42Z | 2026-10-25T13:30:00Z |
 | underdog|c48a289c-ab9f-4495-895d-bcbc743bb51b | underdog | Ethan Moczulski | FG Made | over | 0.1469323117588332 | 2026-10-21T04:43:18Z | 2026-10-24T19:00:00Z |
 | underdog|9e7823b5-6ba8-4931-8647-93f4834676fa | underdog | Tucker Kraft | Receptions | under | 0.14624892899467 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|b952decd-601e-4f92-8345-d2f8930b6eb8 | underdog | Junior Caminero | Hits + Runs + RBIs | over | 0.146220517841205 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|d2449003-4b4a-40d0-bd62-6ed45409ae57 | underdog | Jonathan Taylor | Rush + Rec Yards | under | 0.1460778473710767 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|359ed06b-9344-42b7-a543-df0895950a41 | underdog | Samaje Perine | Receptions | under | 0.1460568513705 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|d1d03112-0155-4136-93e2-5ad6c20dc792 | underdog | Braylon Staley | Receptions | under | 0.1456644416724575 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
-| underdog|bbf6c867-efde-4782-bac3-2f8df3a9662c | underdog | David Olano | FG Made | over | 0.1451543388925353 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|9fb64b31-fb4e-4775-8815-fd8a63623c12 | underdog | George Pickens | Receiving Yards | under | 0.1449746054605076 | 2026-10-21T23:24:30Z | 2026-10-27T00:15:00Z |
 | underdog|765a2af0-4350-434c-a349-c576efd78c11 | underdog | TreVeyon Henderson | Receiving Yards | over | 0.1447113440135895 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|31dad224-5bc7-4e6f-b703-f0f2543dbbd8 | underdog | Derrick Henry | Rush + Rec Yards | under | 0.1446776712141652 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -295,13 +291,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|a5c7fe6d-1a20-451b-a6f8-7879b27d6f11 | underdog | Derrick Henry | Rush Yards | under | 0.1431595063697152 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|bfcce5cc-c027-490d-8076-653dd3f79753 | underdog | Alex McPherson | XP Made | over | 0.1430779996374752 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|6b69bdc8-296e-48f7-acc2-b95f5ac68d4f | underdog | Braylon Staley | Receiving Yards | under | 0.1430721831158183 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
-| underdog|ceb80c8d-d67c-45db-8b9b-efd6615cda7f | underdog | Tony Pollard | Receiving Yards | under | 0.1429028060309192 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|bd5833ce-b0e6-4960-9506-705850df7ad8 | underdog | Richie Palacios | Total Bases | over | 0.1425947219339821 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|f06599db-6e94-41c7-b4e8-7df338f7a276 | underdog | Jaxon Smith-Njigba | Receptions | under | 0.1424277006620714 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|98f3d922-1419-4e72-abf7-d288db5fb99d | underdog | Alexandra Eala | Double Faults | under | 0.1421397017971493 | 2026-10-21T23:24:30Z | 2026-10-22T07:20:00Z |
 | underdog|cc694e60-9523-4ed2-a9c6-3646385f9315 | underdog | Ka'imi Fairbairn | FG Made | under | 0.1420318353198051 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|ed3825a2-9c90-4618-bea7-7776443f101b | underdog | Bear Bachmeier | Pass TDs | over | 0.1419644793617892 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
-| underdog|f13a4f1c-1830-44cf-8d68-688ba16326bb | underdog | MJ Dowdy | Rush Yards | under | 0.1418119583154389 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|11effad5-80fc-47d9-b6c9-d853122dcbdc | underdog | Yandy Díaz | Total Bases | over | 0.1417073170731705 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|e58c86c8-e648-43d4-b9d2-cabbfd06a61d | underdog | Drake London | Receptions | under | 0.1414594528835526 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | prizepicks|15945777 | prizepicks | Michael Wilson | Rec Yards | under | 0.1412964357388831 | 2026-10-21T04:43:18Z | 2026-10-25T16:05:00.000-04:00 |
@@ -312,13 +306,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|48b922ca-bdb6-4e04-8520-17e4b9d55fee | underdog | Aidan Chiles | Pass Yards | under | 0.1394975675051353 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|9c22489a-921c-4a35-a1f6-ba9e6aee26d3 | underdog | Carnell Tate | Receiving Yards | under | 0.1394857182718097 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|d0143747-2eae-48ea-a3a6-8fab2c79ffeb | underdog | Michael Wilson | Receiving Yards | under | 0.1390199081777683 | 2026-10-21T23:24:30Z | 2026-10-25T20:05:00Z |
-| underdog|ee2f16a0-cc84-43ab-abd2-d8efb58bbded | underdog | Braelon Allen | Rush Yards | under | 0.1389514518716874 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|44a4e634-3c12-458a-8a81-c8b06b39a7d7 | underdog | Will Hammond | Pass Yards | under | 0.1382318502544831 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|0938d052-b379-4057-b914-c43b6591ad06 | underdog | D'Andre Swift | Rush Yards | under | 0.1379712055333796 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|6e080788-8634-47c3-bd6e-7726cac733b2 | underdog | Rico Dowdle | Receptions | under | 0.1377303975112497 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|71003cc8-a145-4c98-87b6-c386cb7542a0 | underdog | Jaden Craig | Pass Yards | under | 0.1374318134819523 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|ee5b9227-9f37-4dbe-a6e8-55c41f22dd4f | underdog | Jekail Middlebrook | Rush Yards | under | 0.1366528604973662 | 2026-10-21T04:43:18Z | 2026-10-23T23:00:00Z |
-| underdog|a36d3b0c-087b-4e18-84f8-70f064fd3aad | underdog | Rhamondre Stevenson | Rush + Rec Yards | under | 0.136283636992093 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|990e3a36-0fa9-42d5-b447-447c46e0605b | underdog | Germie Bernard | Receptions | under | 0.1357845862590205 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|a5dc555d-b835-41b2-b481-a747557a08b5 | underdog | Malik Nabers | Receiving Yards | under | 0.1355033403010405 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|575f222c-106d-4acd-bb96-fa38483730e4 | underdog | Jake Ferguson | Receptions | under | 0.1353654788338305 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
@@ -341,7 +333,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|362a367a-8287-4a9b-afac-79b549e4c9a2 | underdog | AJ Barner | Receiving Yards | under | 0.1306153642795884 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|1b176313-e08a-4847-957b-32a569fdd619 | underdog | Danielle Hunter | Sacks | under | 0.1305467838319396 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|00b01f82-0268-4b96-b82c-afd43774bbb8 | underdog | Jackson Kleather | FG Made | over | 0.1303279119894879 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
-| underdog|d06eefe7-d221-4b8a-847e-dacdc1cae223 | underdog | Tyrone Tracy | Rush + Rec Yards | under | 0.1301385570274678 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|d3e7a81d-6114-4db4-bc38-f399c76501e2 | underdog | David Hamilton | Runs | over | 0.1297705620384463 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|b832c29c-26dd-4b07-a2d1-feaa7b7e7052 | underdog | Dallas Goedert | Receiving Yards | under | 0.1296687932557064 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|daf87a2e-804d-4d72-a2fe-77e260478754 | underdog | LaNorris Sellers | Pass Yards | under | 0.1296056863781028 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
@@ -353,6 +344,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|16051245 | prizepicks | KC Concepcion Jr. | Rec Targets | under | 0.1283711896398486 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|fe9a8643-cbb5-455e-917e-c33f3a025f7c | underdog | CeeDee Lamb | Receiving Yards | under | 0.1283347069925714 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|87fa81f1-4e8b-4f24-be98-1f49a7ee7f3a | underdog | Jayden Maiava | Pass Yards | under | 0.1279852222492714 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
+| underdog|04ceb9dc-b96f-4be9-a4f4-88b9c13a1b1b | underdog | Tony Pollard | Receiving Yards | under | 0.127869488638269 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|d3c78fb1-24fb-4022-825b-11cb5e84b5fc | underdog | Yandy Díaz | Hits + Runs + RBIs | over | 0.1277825349237309 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|cb509be0-2b5d-4563-b28b-e94cb396030c | underdog | Jake Bauers | Hits + Runs + RBIs | over | 0.127491030204322 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|26d39b80-32f6-4d20-a89d-ce35e5c3bf55 | underdog | Jaylen Warren | Rush Yards | under | 0.1269833611823008 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
@@ -361,15 +353,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|39d3e316-5d17-465f-b268-469f78421358 | underdog | Tony Pollard | Receptions | under | 0.1260078504794592 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|b3bf83ab-c79a-442e-a00a-95213b95e3de | underdog | Jake Ferguson | Receiving Yards | under | 0.1255662633886676 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|9d76b014-0fc4-4360-b3c4-6c3715996d7b | underdog | Carnell Tate | Receptions | under | 0.1254536750854675 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|90c1dd53-3be2-43de-bf0b-baf6a360086b | underdog | Jerry Jeudy | Receptions | under | 0.1240065201300302 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|eaddf12e-bf09-415a-9908-175b69e1378e | underdog | Joey Slye | FG Made | under | 0.1236431134007916 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|30d9b768-f076-4bf2-bc53-fae6cbfb5392 | underdog | Cooper Barkate | Receptions | under | 0.1236103888243352 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
-| underdog|5038367f-7d8c-4caa-9518-c77dfcc91aec | underdog | Belinda Bencic | Double Faults | under | 0.1235580668551631 | 2026-10-21T23:24:30Z | 2026-10-22T06:10:00Z |
 | underdog|61e7bf09-5421-4218-9b7d-53d1a654a3cc | underdog | George Pickens | Receptions | under | 0.1233908843202937 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | prizepicks|15945770 | prizepicks | Kyle Pitts Sr. | Rec Yards | under | 0.1232415700497886 | 2026-10-21T04:43:18Z | 2026-10-25T13:00:00.000-04:00 |
-| underdog|60cace4c-dfd0-4667-a103-b08cb4f6d79d | underdog | Walker Lyons | Receptions | under | 0.1232359978751732 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|90006bf7-f321-4955-95cd-018f58fe2476 | underdog | Victor Mesa | RBIs | over | 0.1231774761186525 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
-| underdog|0d785a6f-c6b4-459a-9e17-0599f6267fab | underdog | Billy Edwards Jr. | Pass Yards | under | 0.1231721875309805 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
-| underdog|5898a181-fc80-46b4-8f47-e277ecfc170b | underdog | James Jones | Rush Yards | under | 0.1227740803776211 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|db05949d-1016-4e95-9a76-8b07e10da91c | underdog | Liam Hicks | Runs | over | 0.1226890756302521 | 2026-10-21T23:24:30Z | 2026-10-24T00:00:00Z |
 | underdog|8248b0a4-7bbb-45f0-bb6b-f4afa7b390e3 | underdog | Tyrone Tracy | Receptions | under | 0.1223478921251329 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|cdb7d26e-5b5d-44ee-b1d9-ffc08b833663 | underdog | David Hamilton | Total Bases | over | 0.1220605791387878 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
@@ -377,6 +366,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|9023ba89-bfaa-477b-b72c-7408017ef70b | underdog | Brice Turang | Hits + Runs + RBIs | over | 0.1213989620392013 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | prizepicks|16051293 | prizepicks | Devaughn Vele | Rec Targets | under | 0.1192863816858713 | 2026-10-21T23:24:30Z | 2026-10-25T09:30:00.000-04:00 |
 | underdog|6f6b68bb-0f13-4a6e-960e-9aaa06bf2c88 | underdog | Richie Palacios | Hits | over | 0.1190986730781363 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|8511dcf4-aaac-4a37-8f6b-424f6fd42e73 | underdog | Sam Leavitt | Pass Yards | under | 0.11878734877496 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|2b96e389-ec54-4965-a240-5d2e6eb051a0 | underdog | Jason Sanders | Kicking Points | under | 0.1187154660907585 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|a04b010f-6f7a-4bca-bf84-a019fdc98cb2 | underdog | Jason Myers | FG Made | under | 0.1186141311795658 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|e642bd88-7ada-49a6-bc3e-0426f77a3d02 | underdog | Jared Goff | Rush Yards | over | 0.1184823448445742 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
@@ -391,17 +381,19 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|a8389eaa-f9e8-4862-9d49-e0eb14b5dbe3 | underdog | Geno Smith | Pass TDs | under | 0.1162581741290298 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|43da2b56-6f19-429a-884b-a4c12ba9020c | underdog | Rashid Shaheed | Receiving Yards | under | 0.1151993821374695 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|04f5fcbc-4780-4d20-9c3d-345e6cd2ea8a | underdog | D'Andre Swift | Receptions | under | 0.1151747294320429 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
-| underdog|f2c65f57-5314-4723-93b1-50c1b7988b2a | underdog | Sam Leavitt | Pass Yards | under | 0.1147160585577962 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|1b0fc4dd-38ef-4e17-85a8-e24686ccb9a1 | underdog | Drake London | Receiving Yards | under | 0.1146582581752583 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|8ac96afb-46f0-4924-9765-9144862ff599 | underdog | Conor Talty | FG Made | over | 0.1146366001969039 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|231c4c82-8c83-44fa-95a3-a3748a7aee08 | underdog | Rhamondre Stevenson | Receiving Yards | under | 0.1146179526454099 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|2f1f417f-135b-4830-a474-fb5c75784b48 | underdog | KJ Duff | Receptions | under | 0.1145312653667987 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
+| underdog|fad5ac5e-c29c-4a38-a5e5-6b2ccb7fc6b6 | underdog | Nate McCashland | XP Made | under | 0.1143167549807949 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|7e65673c-68cc-43d7-8230-c848586a250c | underdog | Jonathan Aranda | Total Bases | over | 0.1141668788727612 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|e85445e5-423b-403d-b942-d8c2f9c8c893 | underdog | Baker Mayfield | Rush Yards | under | 0.1140527808285041 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|6a027ba4-a559-4acd-aaab-ecdbbdaa4f47 | underdog | Griffin Wilde | Receptions | under | 0.1139519591506299 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
+| underdog|b5b582dd-8199-4045-8d13-54751a54bd83 | underdog | Davis Allen | Receptions | under | 0.1138668513723839 | 2026-10-22T04:39:42Z | 2026-10-25T20:25:00Z |
 | underdog|8aa1c383-f2a2-4617-a19c-f44214cfd4f6 | underdog | RJ Harvey | Rush Yards | under | 0.1137840709178916 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | prizepicks|16043110 | prizepicks | Drew Rasmussen | Pitches Thrown | under | 0.1137208862944164 | 2026-10-21T23:24:30Z | 2026-10-23T20:00:00.000-04:00 |
 | underdog|82ab5aa5-420e-4364-bd82-207d555c2689 | underdog | Sam Darnold | Pass Attempts | under | 0.1133043312291657 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
+| underdog|67171798-827d-40b9-a838-74ca604983ab | underdog | Billy Edwards Jr. | Pass Yards | under | 0.1131549606227114 | 2026-10-22T04:39:42Z | 2026-10-24T23:30:00Z |
 | underdog|b4fdcabe-4236-4ba3-b391-25a3dce3c454 | underdog | Cam Coleman | Receptions | under | 0.1130325570488033 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|f6e4d0b0-e037-405e-b285-07e6fe26eedb | underdog | Cooper Pratt | Hits + Runs + RBIs | over | 0.1129325344089059 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|e89b86e3-ff12-4d6f-a2fe-818c587a8383 | underdog | Keelon Russell | Pass Yards | under | 0.1129234550913104 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
@@ -421,7 +413,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|5c1d01bf-5469-4fb9-a3ad-d8a4de3206a2 | underdog | Spencer Shrader | FG Made | over | 0.110097123969825 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | prizepicks|16034954 | prizepicks | Colston Loveland | Rec Targets | under | 0.1093517415690608 | 2026-10-21T23:24:30Z | 2026-10-22T20:15:00.000-04:00 |
 | underdog|147eafa0-8ae0-4d0a-be58-413d0472c6e9 | underdog | Elijah Ponder | Sacks | over | 0.1087067325384188 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
-| underdog|82c54119-63a0-4da2-b4f6-2747361e34d9 | underdog | Stan Wawrinka | Aces | under | 0.1086313932419438 | 2026-10-21T23:24:30Z | 2026-10-22T17:00:00Z |
 | underdog|309f3f09-f15f-4c7d-9a77-6213274e2724 | underdog | Bijan Robinson | Rush Yards | under | 0.1086167266871781 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|b01b4479-d0ff-4f0b-aa25-8572040fd5fb | underdog | Logan Hall | Sacks | over | 0.1080312577396586 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|c37e171f-5e70-4561-abd4-a2dca0b9ba20 | underdog | Mason Taylor | Receiving Yards | under | 0.1075683290440285 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -429,11 +420,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|349793f7-6a35-43bd-be86-669e5bf6f8cc | underdog | Kyren Williams | Rush + Rec Yards | under | 0.1071814066988122 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|d3850c26-85bc-4082-a18f-1f8853b6f594 | underdog | Drake Maye | Rush Yards | under | 0.1068196271586217 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
 | underdog|33b6fb1b-243f-4946-8212-e797f561fe8b | underdog | Luther Burden | Receptions | under | 0.1067635448973685 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
-| underdog|79c6f4ad-b7e0-45d6-93f8-5b9b939f1b36 | underdog | Adam Damante | Pass TDs | under | 0.1062426371552336 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
+| underdog|4e85e966-7941-468f-86d4-2141e2f41a04 | underdog | Roschon Johnson | Receiving Yards | over | 0.1065088727230489 | 2026-10-22T04:39:42Z | 2026-10-23T00:15:00Z |
 | underdog|fd02b717-c3a5-4e7d-91cb-9989e22c31cd | underdog | Patrick Mahomes | Rush Yards | under | 0.105668666481013 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|0660c889-a4a5-4941-beff-bf58b7b65837 | underdog | Deshaun Watson | Pass TDs | under | 0.1056653767810689 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|32c6a58f-4543-44ab-9513-73e8857d24bb | underdog | DK Metcalf | Receptions | under | 0.1054909425928073 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|5549b40f-c25b-4262-aa4b-46e8542b8221 | underdog | Brock Bowers | Receptions | under | 0.1052220927493255 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
+| underdog|f8e1e49f-cc5f-43e5-910e-84dc1bb53c3a | underdog | Jaziun Patterson | Rush Yards | under | 0.1052016470706469 | 2026-10-22T04:39:42Z | 2026-10-24T19:30:00Z |
 | underdog|ea37df82-0d35-4f1b-acc4-e9a83779e8c9 | underdog | Conner Weigman | Pass TDs | over | 0.1050716675351449 | 2026-10-21T04:43:18Z | 2026-10-25T02:15:00Z |
 | underdog|461909ac-72fc-4954-8f53-031088f82680 | underdog | Antonio Chadha | XP Made | over | 0.1049028544387513 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
 | prizepicks|16051301 | prizepicks | Dallas Goedert | Rec Targets | under | 0.104508400091262 | 2026-10-21T23:24:30Z | 2026-10-26T20:15:00.000-04:00 |
@@ -448,17 +440,17 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|66a12d68-7694-45bf-bff5-0baebc9e9694 | underdog | Brandon Aubrey | Kicking Points | under | 0.1027789805682906 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|8395879d-f49f-49f0-b8ba-3b5a0b927b04 | underdog | Tommy Carr | Rush Yards | over | 0.1025853034809183 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|99f7d836-efd8-4905-b9e8-aa0fa8d4379b | underdog | CJ Bailey | Pass TDs | under | 0.1023031786424184 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
+| underdog|8eca6819-a17c-47ea-8148-5ba624e08ca6 | underdog | Jaron-Keawe Sagapolutele | Pass TDs | over | 0.1021525513693104 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|a918ff3a-256c-4ff1-99f8-a76599f5eb5a | underdog | Trinidad Chambliss | Pass TDs | over | 0.1015714872609133 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|e78a3150-01af-4911-935d-3f7efa466938 | underdog | Garrett Mitchell | Batter Walks | over | 0.1015540686380315 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|883c9554-18e2-4c83-a8e4-86d5eff8ca2d | underdog | JC French | Rush Yards | over | 0.1013785104343703 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|cb6b3385-177c-4f4c-a76f-851fc6f581d6 | underdog | Christian Yelich | Total Bases | over | 0.1012237762237762 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|ff61b03d-9f28-44a0-ab24-2363edfd3351 | underdog | Travis Kelce | Receiving Yards | under | 0.101127840693776 | 2026-10-22T04:39:42Z | 2026-10-26T00:20:00Z |
 | underdog|3b079c5e-ac07-42c8-af8a-98041f6f8dfa | underdog | Victor Mesa | Hits | over | 0.1009844763480287 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
-| prizepicks|16039195 | prizepicks | Kayla Day | Break Points Won | under | 0.1009598663002648 | 2026-10-21T23:24:30Z | 2026-10-21T22:30:00.000-04:00 |
 | underdog|5bee9c19-46e7-45de-9505-7fffe7682621 | underdog | Colton Joseph | Pass TDs | over | 0.1009178937061043 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|0a8e9968-79e9-4e19-9777-a06b21b6c1c3 | underdog | Ashton Jeanty | Rush + Rec Yards | under | 0.1007112845271449 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|bdd208dd-4e0d-4782-960c-7392e03373a9 | underdog | KJ Duff | Receiving Yards | under | 0.1006835033376762 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | prizepicks|16034957 | prizepicks | Luther Burden III | Rec Targets | under | 0.1003818182051711 | 2026-10-21T23:24:30Z | 2026-10-22T20:15:00.000-04:00 |
-| underdog|66176240-9346-4efb-a506-abe54845d954 | underdog | Daniel Carlson | Kicking Points | under | 0.1001222893209393 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | prizepicks|16051305 | prizepicks | Germie Bernard | Rec Targets | under | 0.0999657351122397 | 2026-10-21T23:24:30Z | 2026-10-25T09:30:00.000-04:00 |
 | underdog|25473403-4276-4b6e-b54d-9bd4c192aa32 | underdog | TreVeyon Henderson | Receptions | under | 0.0999337311915784 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|557db697-20ab-4b71-b516-64a4afeb68ce | underdog | Aidan Chiles | Pass TDs | under | 0.0996663803350599 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
@@ -468,10 +460,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|9a70aa52-1fd9-4201-bc6d-d00ebd15f2d7 | underdog | William Contreras | Hits + Runs + RBIs | over | 0.0993449768275279 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|602ad854-cba6-4aa9-938a-771d9ab27f0d | underdog | Tyler Higbee | Receiving Yards | under | 0.0990552102507815 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | prizepicks|15945774 | prizepicks | Jaylen Waddle | Rec Yards | under | 0.0982250040001608 | 2026-10-21T04:43:18Z | 2026-10-25T16:05:00.000-04:00 |
+| underdog|056b4bf9-2e07-4100-9cf0-b407ae2b4431 | underdog | Joey Slye | Kicking Points | under | 0.0980175472674714 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|ab1c3f52-8d19-4a07-8886-0d55bab8d009 | underdog | William Contreras | Total Bases | over | 0.0978456373156402 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|be676320-be59-4657-964d-ad112790c91b | underdog | Efton Chism | Receiving Yards | under | 0.097808107783012 | 2026-10-21T23:24:30Z | 2026-10-23T00:15:00Z |
 | underdog|7d98395f-f4ec-4d64-9c69-e4f7cc2131a7 | underdog | Jake Bates | Kicking Points | under | 0.0977903849845823 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|5601128f-d4fb-4340-811b-2d1b48f13fe6 | underdog | Chandler Simpson | Runs | over | 0.0977008026069639 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|d969d472-0006-49a6-96a1-39c0ce1cf08e | underdog | Dylan Lonergan | Pass Yards | under | 0.0976455339561735 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|3a7f9d86-1eff-4f73-890e-01385c3bde3e | underdog | Junior Caminero | Batter Walks | over | 0.0975062889642349 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|4a3d8c3a-2255-48b6-add7-8a9ccaf422eb | underdog | Kirk Cousins | Rush Yards | over | 0.0973825339695121 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | prizepicks|16051262 | prizepicks | Christian Watson | Rec Targets | under | 0.096747312779029 | 2026-10-21T23:24:30Z | 2026-10-25T16:25:00.000-04:00 |
@@ -482,11 +476,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|7ed37d87-d675-4f6c-a0ff-8bad34041ac7 | underdog | Jake Bauers | Hits | over | 0.0957158320205936 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | prizepicks|15945789 | prizepicks | Travis Kelce | Rec Yards | under | 0.0956329735871087 | 2026-10-21T04:43:18Z | 2026-10-25T20:20:00.000-04:00 |
 | underdog|25ed5f3f-a2de-45eb-b5dc-ebf775b350ce | underdog | Andre Szmyt | Kicking Points | under | 0.0952743873816968 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|7bd26f65-dd91-42aa-a024-375ee2097a76 | underdog | Jaziun Patterson | Rush Yards | under | 0.0947184977275839 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|0df41e12-76ce-4dda-968a-c925e406f3ba | underdog | Roschon Johnson | Rush Yards | under | 0.0947113161106421 | 2026-10-21T23:24:30Z | 2026-10-23T00:15:00Z |
 | underdog|0f7916e4-5189-45ec-81bd-8741389faad3 | underdog | Chandler Simpson | Hits + Runs + RBIs | over | 0.0946840065898005 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|6a798cc2-869f-4765-8413-cbdeb21f919f | underdog | Dylan Lonergan | Pass TDs | over | 0.0945615929103332 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
-| underdog|f40512d3-460c-4dbe-8e53-35aa4261164b | underdog | Dylan Lonergan | Pass Yards | under | 0.0943200189212675 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|70d3eee2-da03-4988-a667-14a183033678 | underdog | Taylor Walls | Hits + Runs + RBIs | over | 0.094209080703896 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|fe80682c-0e04-450e-9223-a949ee5399b5 | underdog | Junior Caminero | Total Bases | over | 0.093964858670741 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|5f059838-bf65-4a1c-b367-0439087f5356 | underdog | Ollie Gordon | Rush + Rec Yards | under | 0.0935892146626595 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -529,7 +521,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|84d99d91-e7f4-4a28-9faf-3da2729847a0 | underdog | Jahmyr Gibbs | Rush Yards | under | 0.0846102335479987 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
 | underdog|be4cbc1a-8a5d-4c12-8410-2bc6c9858974 | underdog | Sheldon Rankins | Sacks | under | 0.0843381307351941 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|573631cf-53e6-4bd4-bc65-8708981cff8f | underdog | Blake Corum | Rush + Rec Yards | under | 0.0837213148980291 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
-| underdog|02a4f5ad-b9f4-4b04-b80c-817b025670fd | underdog | David Hamilton | Batter Walks | over | 0.0836833814649513 | 2026-10-21T23:24:30Z | 2026-10-24T00:00:00Z |
+| underdog|9fa03551-cde0-4279-b334-28d48b850a96 | underdog | Rodney Fields | Rush Yards | under | 0.083568178063358 | 2026-10-22T04:39:42Z | 2026-10-24T19:45:00Z |
 | underdog|56f293ed-4635-4cc3-833c-4ed9a375750c | underdog | Tee Higgins | Receiving Yards | under | 0.0834112064258462 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|2816aaad-c9d9-4cd5-ad6d-58de25217f97 | underdog | Michael Mayer | Receptions | under | 0.0834003397411226 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|50636f28-b556-4195-9780-5aff7702ef87 | underdog | Malik Willis | Rush Yards | under | 0.0832931322442289 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -541,19 +533,19 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|3b0eb78b-d28f-46ab-8459-886657d5c203 | underdog | Isaac TeSlaa | Receptions | under | 0.0822432608821583 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|3fdf958b-4aeb-446f-a872-8228a3fb7690 | underdog | Kendrick Bourne | Receiving Yards | under | 0.0821950618308543 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | prizepicks|16051290 | prizepicks | Jordan Addison | Rec Targets | under | 0.0810609688919091 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
+| underdog|cfa707d3-c8b9-477e-80c2-22c924cedaa6 | underdog | Daniel Carlson | Kicking Points | under | 0.0807323556687517 | 2026-10-22T04:39:42Z | 2026-10-25T13:30:00Z |
 | underdog|41308d6a-1585-4bd8-88a3-c4fc5587e979 | underdog | Jason Sanders | FG Made | under | 0.0803782078621125 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|fa91546b-2faf-49cd-aa41-3929b7a7a669 | underdog | Chase McLaughlin | FG Made | under | 0.0799826010276563 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|5a015a20-1646-49b0-905f-1e21fef83b11 | underdog | Jayden Savoury | Receiving Yards | over | 0.0798869647179381 | 2026-10-22T04:39:42Z | 2026-10-24T19:30:00Z |
 | underdog|0562b5f4-e52b-4875-a7c4-8c6ca0f6cffb | underdog | Emory Williams | Pass TDs | under | 0.0798418420376368 | 2026-10-21T04:43:18Z | 2026-10-22T23:30:00Z |
 | underdog|ccbb2f68-eb79-4ad2-a495-e847e535bfba | underdog | Cooper Pratt | Runs | over | 0.0790784557907846 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|e091a42a-e0f8-44c0-8b29-4d4f96450333 | underdog | Jaylen Raynor | Pass Yards | under | 0.0788511546485264 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | prizepicks|16051285 | prizepicks | Caleb Douglas | Rec Targets | under | 0.0785950926735681 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|357d1c55-39ca-4e80-8e47-b9b3fb1d91e6 | underdog | Tetairoa McMillan | Receiving Yards | under | 0.0783802647011688 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|34c8bc09-1997-451c-ac84-1ce2d960b821 | underdog | Josh Hoover | Pass Yards | under | 0.0783066023797937 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | prizepicks|16051235 | prizepicks | Chuba Hubbard | Rec Targets | under | 0.0781746328140772 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|0a56cc2f-fa78-45d9-a9c4-d7c80f847c6b | underdog | Ryan Wingo | Receptions | under | 0.078061783478131 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|0d25c245-efca-4a13-baed-2eda4672ccf9 | underdog | Mike Gesicki | Receptions | under | 0.0779878372316424 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|ba66bea3-cfcc-40be-ad8c-fd53ecf64444 | underdog | Alvin Kamara | Rush Yards | under | 0.0777359816039499 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
-| underdog|b953a9f9-2573-4350-a3b8-853951bb39ee | underdog | Flavio Cobolli | Aces | under | 0.0774680080165742 | 2026-10-21T23:24:30Z | 2026-10-22T17:00:00Z |
 | underdog|99192d3b-e302-42f3-b7ab-2ff5db8b8a4e | underdog | Drake Lindsey | Pass Yards | under | 0.0772448058323824 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|8fd1c477-6e69-4818-b672-7f17ab84976f | underdog | Roschon Johnson | Receptions | over | 0.0771623200700971 | 2026-10-21T23:24:30Z | 2026-10-23T00:15:00Z |
 | underdog|9a23291c-d740-46d9-b862-79e3ebb3d2a5 | underdog | Derrick Henry | Receptions | over | 0.0769349421556845 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -575,6 +567,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|f25ffd07-3f96-4391-a7b4-6f6d04a0fc54 | underdog | Yandy Díaz | Hits | over | 0.0749959435830694 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|97d446fb-6f46-42e0-bd77-1a1f75434676 | underdog | Henry Hasselbeck | Pass TDs | under | 0.0749179127250797 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
 | underdog|04882c50-0847-4489-b6b5-03d5f55d7ae0 | underdog | Gianni Spetic | FG Made | over | 0.0748838856482054 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
+| underdog|fa6b3d2e-4ca3-4536-8709-91606f82acdb | underdog | Jared Goff | Pass TDs | under | 0.0748246656634097 | 2026-10-22T04:39:42Z | 2026-10-25T20:25:00Z |
 | underdog|4d56f089-4b03-403a-a338-eee3ee958a94 | underdog | Wayne Knight | Rush Yards | under | 0.0747414438806199 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|dfbe2fbb-ed28-4fbb-8781-5bcac4758534 | underdog | Drew Sample | Receptions | under | 0.0745894946131864 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|b2c13edd-7371-41b1-981b-44a00f821031 | underdog | Konata Mumpfield | Receiving Yards | under | 0.0744373876519054 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
@@ -587,11 +580,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|1e6dcf52-47f9-487f-ae1e-f4976a392121 | underdog | Legend Glasker | Receptions | under | 0.0731708661649952 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|958b2e94-8620-4d28-bb6c-7d0ce9109466 | underdog | Nico Brown | Receiving Yards | under | 0.073066996998227 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
 | underdog|6664dbee-84f6-4192-97a8-e1086c85f73b | underdog | Chase McLaughlin | Kicking Points | under | 0.0730635220054324 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|0ca06627-9996-4b46-b268-4e810fd73613 | underdog | Roschon Johnson | Rush + Rec Yards | under | 0.0730149187018492 | 2026-10-22T04:39:42Z | 2026-10-23T00:15:00Z |
+| underdog|9d5b9674-51ed-4b64-a994-67fa27987fd4 | underdog | CJ Baxter | Rush Yards | under | 0.0730132210660023 | 2026-10-22T04:39:42Z | 2026-10-24T23:30:00Z |
 | prizepicks|16039381 | prizepicks | Marie Bouzkova | Break Points Won | under | 0.0727768220758328 | 2026-10-21T23:24:30Z | 2026-10-23T01:00:00.000-04:00 |
 | underdog|97342769-6caa-4fe7-bcee-4a3847dfcd2e | underdog | Preston Douglas | Receiving Yards | under | 0.0727476715105379 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
 | underdog|ab4700cd-4ca2-4863-ac85-6301c804c057 | underdog | Mike Matthews | Receptions | under | 0.0726184227012455 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|e26442d1-e193-41a1-b88c-71f0f33d3168 | underdog | Evan McPherson | FG Made | under | 0.0722696105068416 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|ae068659-a1c5-4440-a0bd-1eb5dffe682a | underdog | Kyrian Jacquet | Aces | under | 0.072088694335081 | 2026-10-21T23:24:30Z | 2026-10-22T18:10:00Z |
 | underdog|dec83796-a559-4c28-b27a-563b6106bd80 | underdog | David Hamilton | Hits | over | 0.0720133292783155 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|83952101-4b7a-488e-92a8-f2da161b929f | underdog | Garrett Mitchell | Total Bases | over | 0.0718093228573808 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|1026247a-4975-41a1-bed2-06f98abc4cc0 | underdog | Iva Jovic | Double Faults | under | 0.0715801405402826 | 2026-10-21T23:24:30Z | 2026-10-22T05:00:00Z |
@@ -614,10 +608,10 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|569ac77b-d993-4d8d-968a-1792c6b74392 | underdog | Cole Kmet | Receptions | over | 0.0703821345408157 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|24312ff1-78a8-4546-a295-0dc2eb910b54 | underdog | Aaron Rodgers | Rush Yards | over | 0.0700844647787815 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|7f10cedd-5cac-41a5-9819-e2515fb44f10 | underdog | Jonathan Aranda | Runs | over | 0.0700713338804368 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|8eefccda-1a39-4756-b15c-6140ab387286 | underdog | Walker Lyons | Receptions | under | 0.0699926238960955 | 2026-10-22T04:39:42Z | 2026-10-24T19:30:00Z |
 | underdog|00aa1266-017b-4d1d-9745-2d4a2b1e4a7d | underdog | LaNorris Sellers | Pass TDs | over | 0.0699838081654409 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | prizepicks|16051306 | prizepicks | Jaylen Warren | Rec Targets | under | 0.0699206862123872 | 2026-10-21T23:24:30Z | 2026-10-25T09:30:00.000-04:00 |
 | underdog|b70f3869-b6bb-48ce-8185-2e807b0c193b | underdog | Camden Coleman | Pass Yards | under | 0.0697956086865554 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
-| underdog|90e0b472-d365-4c67-89ed-8088137a5e2d | underdog | Jayden Savoury | Receiving Yards | over | 0.069541750197373 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | prizepicks|16051239 | prizepicks | Tetairoa McMillan | Rec Targets | under | 0.0694964909576487 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | prizepicks|15944963 | prizepicks | Jared Goff | Rush Yards | over | 0.0694248099013491 | 2026-10-21T04:43:18Z | 2026-10-25T16:25:00.000-04:00 |
 | prizepicks|16051253 | prizepicks | Evan Engram | Rec Targets | under | 0.0692857795326448 | 2026-10-21T23:24:30Z | 2026-10-25T16:05:00.000-04:00 |
@@ -644,7 +638,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|2047a103-6641-4551-a223-10b0b1ce23c3 | underdog | Davis Warren | Pass TDs | over | 0.0657634292166943 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
 | underdog|bc5e98e3-a5ce-45a5-90f0-bbacbef40b3c | underdog | Tetairoa McMillan | Receptions | under | 0.0657606101669747 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|d0131b66-956e-40d4-b77b-fa40d10bbfc1 | underdog | Mazeo Bennett | Receiving Yards | under | 0.0655546726670815 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
-| underdog|55152f24-2a8d-4b79-bc9d-67ce2edca5ec | underdog | Marcus Stokes | Rush Yards | under | 0.0654589404258774 | 2026-10-21T23:24:30Z | 2026-10-22T23:30:00Z |
 | underdog|bebb9fcd-25b5-4cc2-9117-5d996c6b688c | underdog | Deshawn Purdie | Pass Yards | under | 0.0653797844737866 | 2026-10-21T04:43:18Z | 2026-10-22T23:00:00Z |
 | prizepicks|15945074 | prizepicks | Jahmyr Gibbs | Rush Yards | under | 0.064833820071657 | 2026-10-21T04:43:18Z | 2026-10-25T16:25:00.000-04:00 |
 | underdog|cb49c65a-d9c3-4097-a44f-5fdeb899d702 | underdog | Rome Odunze | Receptions | under | 0.0646316627856106 | 2026-10-19T04:39:53Z | 2026-10-23T00:15:00Z |
@@ -653,7 +646,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|69c654d5-7f0d-40ba-b4de-0146a790613e | underdog | Jordan Addison | Receptions | under | 0.0643744310105808 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|5f537512-e682-45ae-a272-aa72bf7b13b6 | underdog | Devin Singletary | Receiving Yards | over | 0.0641126579417455 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|8c66b214-2beb-4cf9-be7d-cf621cb15bd7 | underdog | DJ Black | Receiving Yards | over | 0.0640859389916257 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
-| underdog|e28bc6e9-744d-4db8-a47a-b57fdee92fd1 | underdog | Landyn Locke | Pass Yards | under | 0.063659655930349 | 2026-10-21T04:43:18Z | 2026-10-22T00:00:00Z |
+| underdog|6cfb1088-efaf-4b79-89f2-9b2b8326b011 | underdog | Josh Hoover | Pass Yards | under | 0.063841479686229 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|cfbdd3d7-05e4-4a61-b2f7-be3f0ae409aa | underdog | Liam Hicks | Hits + Runs + RBIs | over | 0.0636127420865686 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|7d03a69c-ecb9-4e1a-aafa-cc8c680c02ed | underdog | Davis Warren | Pass Yards | under | 0.0635816966082328 | 2026-10-21T23:24:30Z | 2026-10-24T02:30:00Z |
 | underdog|20ad3fb3-4941-4ecf-9767-f1675a5f74c1 | underdog | DeSean Bishop | Rush Yards | under | 0.0632296563147589 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
@@ -662,15 +655,14 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|5269421a-c57b-41e4-9ae0-fe4f4f648a18 | underdog | William Contreras | Batter Walks | over | 0.0628163828808099 | 2026-10-21T23:24:30Z | 2026-10-24T00:00:00Z |
 | underdog|3b625a33-dfe7-4c56-a081-2453c34284ce | underdog | Tate Sandell | XP Made | under | 0.062585771684329 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|cd894ebb-1464-4062-9e9d-d7034e80fd27 | underdog | Tommy Tremble | Receiving Yards | under | 0.0625505359363844 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|95bf36d6-b9c5-46a3-b080-b5ee26dc128e | underdog | Chris Reed | Receiving Yards | under | 0.0621344498802399 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|04d5c5e5-e62e-43e4-b7ad-f05b27c1e49f | underdog | Aaron Rodgers | Pass TDs | under | 0.0620273967369939 | 2026-10-21T23:24:30Z | 2026-10-25T13:30:00Z |
 | underdog|bad7ccd3-6884-4391-aab3-98594caab197 | underdog | Chris Bell | Receiving Yards | under | 0.061951957479485 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | prizepicks|16051228 | prizepicks | Kendrick Bourne | Rec Targets | under | 0.0616943000896329 | 2026-10-21T23:24:30Z | 2026-10-25T16:05:00.000-04:00 |
 | underdog|365c7fa6-dcc5-4b1b-b9af-c0c3cdca5d6b | underdog | Puka Nacua | Receptions | under | 0.0616090079415561 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
 | underdog|9ff8ad4e-4c75-4cfd-badd-45cf27902270 | underdog | Chris Bell | Receptions | under | 0.0614599626838349 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|aac8f74c-2119-4b2e-a91e-5efe2a4b948d | underdog | Samaje Perine | Rush Yards | under | 0.0614244302386539 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|ad0ef3f7-fe1a-4267-99ab-4c3bf8bc4f9d | underdog | Cam Coleman | Receiving Yards | under | 0.0612304355005692 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|5954f148-25b6-4392-adb1-cc64c04c60fc | underdog | Wayshawn Parker | Rush Yards | under | 0.0611840684856361 | 2026-10-21T04:43:18Z | 2026-10-25T02:15:00Z |
+| underdog|82932e52-6bd2-40d8-8f4e-8c0311ba997f | underdog | Sam Leavitt | Pass TDs | under | 0.0609996532059247 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|24666207-a1dd-46e8-aab0-107b45a16292 | underdog | Jackson Chourio | Hits | over | 0.0609658343933108 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|9652f501-f964-4500-bf8c-eb8ddf1eca96 | underdog | Trinidad Chambliss | Pass Yards | under | 0.0608342622565741 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|2b8f786a-ddf3-4c91-98e5-a939a1e123fe | underdog | Harold Fannin | Receptions | under | 0.0608103254568292 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -693,11 +685,11 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|d6621be4-5bff-46ff-962e-0460297191db | underdog | Willie Rodriguez | Receptions | under | 0.0587377030395643 | 2026-10-21T04:43:18Z | 2026-10-24T23:30:00Z |
 | underdog|164633fa-5589-47e1-99e9-15fad6a9eaed | underdog | Kyler Murray | Rush Yards | under | 0.0586655465615735 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|82b87a3e-717d-47a1-9033-082bc7c7694c | underdog | TJ Engleman | Rush Yards | under | 0.0586400937826925 | 2026-10-21T23:24:30Z | 2026-10-22T23:30:00Z |
-| underdog|0ed55f2b-808d-43d8-ab4f-7ff5cf8c7eff | underdog | Landyn Locke | Pass TDs | over | 0.0585821309963746 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|3c27ced9-c782-4952-836e-43b81b480fcc | underdog | Tyler Higbee | Receptions | under | 0.0585445402433147 | 2026-10-21T23:24:30Z | 2026-10-25T20:25:00Z |
 | underdog|5585fcc2-4a13-429f-8e52-c78d296cf0bc | underdog | Conner Weigman | Pass Yards | under | 0.058345996023547 | 2026-10-21T23:24:30Z | 2026-10-25T02:15:00Z |
 | underdog|4b7329da-dbec-4af2-96c4-93d046abc581 | underdog | Tyler Allgeier | Receptions | under | 0.0583402865378401 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|0ae804a5-84f2-4446-95c6-dfaad3ffdf55 | underdog | Cooper Pratt | Batter Walks | over | 0.0581140350877192 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|afdfce20-049f-4147-810c-83e63d002ea1 | underdog | Marcus Stokes | Rush Yards | under | 0.0580151043262577 | 2026-10-22T04:39:42Z | 2026-10-22T23:30:00Z |
 | underdog|b359de29-0515-46be-8ab6-0d86fc6803fe | underdog | Ryan Fitzgerald | FG Made | under | 0.0575761782932597 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|11977e8c-1468-4369-bd39-5d487c3972a7 | underdog | Braden Pegan | Receiving Yards | under | 0.0575034827429468 | 2026-10-21T04:43:18Z | 2026-10-25T02:15:00Z |
 | underdog|ff89c271-25fb-4c54-8a1f-fdf8628af230 | underdog | Darnell Mooney | Receiving Yards | over | 0.0574533030448441 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
@@ -714,7 +706,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|f7747872-2256-41eb-988e-da59a2931a51 | underdog | Chuba Hubbard | Receptions | under | 0.0567888839933112 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|39c5f5d9-269b-4f71-bbab-95e121e8a0b9 | underdog | Nick Marsh | Receptions | under | 0.0567063898269377 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|4ccd9dfa-b8f2-44ed-ac02-02bad7fedc9f | underdog | Jaylin Carter | Rush Yards | under | 0.0566930683098388 | 2026-10-21T23:24:30Z | 2026-10-22T23:30:00Z |
-| prizepicks|15983310 | prizepicks | Mary Stoiana | Total Games | over | 0.0562484605851002 | 2026-10-21T04:43:18Z | 2026-10-21T22:30:00.000-04:00 |
 | underdog|f15a3695-f852-4979-90f0-f2b517bf4da9 | underdog | Elijah Higgins | Receiving Yards | under | 0.0561049507995341 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|8933129e-bb98-41af-a84b-5e524615a1d6 | underdog | T.J. Hockenson | Receiving Yards | under | 0.0559605706113038 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|c4ea5c9d-4af5-4fb1-a0d3-ce920d2e12bd | underdog | Semaj Morgan | Receptions | under | 0.055890311835268 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
@@ -722,18 +713,17 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|a0300642-02c7-49c3-909f-7ff1b09d1382 | underdog | Kamari Moulton | Rush Yards | under | 0.0555951821254596 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|8ac91a1d-e17e-4e89-917e-0741ed24326f | underdog | Kenneth Walker III | Rush + Rec Yards | under | 0.0552499210820918 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|7e550ddd-6c5f-4197-ba91-929eeaf952a5 | underdog | Drake Maye | Pass TDs | under | 0.0551889519417927 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
+| prizepicks|16061699 | prizepicks | Unai Marrero | Goalie Saves | under | 0.0551853897982704 | 2026-10-22T04:39:42Z | 2026-10-22T15:00:00.000-04:00 |
 | underdog|c68d1bb1-5199-47e8-8dac-8d8a3f546afc | underdog | Calvin Ridley | Receptions | under | 0.0551783452688616 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|5370b3c0-bab6-413f-bab1-db354b16d2d0 | underdog | Ethan Grunkemeyer | Pass Yards | under | 0.0551642788819503 | 2026-10-21T23:24:30Z | 2026-10-24T23:00:00Z |
 | underdog|d3d14224-d4f3-44e4-b59f-eea3b318c350 | underdog | Bijan Robinson | Rush + Rec Yards | under | 0.0545437934043115 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|2dd8d10d-2956-4b6a-9cb4-fda1851e8b02 | underdog | Radarious Jackson | Receiving Yards | over | 0.0544359927857397 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|096beaa3-503a-4e1c-9e67-fe625725b5c4 | underdog | Mateen Bhaghani | XP Made | over | 0.0543306333436769 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
-| underdog|3afe0879-3a33-4df0-bc4a-abbbc031dcc3 | underdog | Mason McKenzie | Pass TDs | over | 0.0542330107772298 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|1016ca21-bada-4f8c-89c3-8aa706b67cbf | underdog | Juwan Johnson | Receptions | under | 0.0539535225588111 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|ce32c899-c546-40d5-b26e-9ced9c6ef8a3 | underdog | Cam Skattebo | Rush + Rec Yards | over | 0.0539214755329643 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|6b9c5594-b8af-4155-99e7-1bdcacdccd19 | underdog | Cooper Pratt | Hits | over | 0.0538445646795883 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|27a3f441-48f3-45da-843c-63bf227081f4 | underdog | Makai Jackson | Receptions | under | 0.0536513236489964 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
 | underdog|9cc86a60-d5ef-45ba-b5ef-58ac24df4bce | underdog | Henry Hasselbeck | Rush Yards | under | 0.053513300175952 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
-| underdog|8e00f16b-1aa4-47ad-9801-bf9741a91dac | underdog | Jaron Tibbs | Receiving Yards | under | 0.0534056928790488 | 2026-10-21T23:24:30Z | 2026-10-24T19:45:00Z |
 | underdog|ac3836b7-ed31-46ae-a383-3b2f7ddd8724 | underdog | RJ Harvey | Receiving Yards | under | 0.0533369848818797 | 2026-10-21T04:43:18Z | 2026-10-25T20:05:00Z |
 | underdog|47d8257d-2ea4-4623-916d-733646daaf24 | underdog | Scott Starzyk | FG Made | over | 0.0533337885644754 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|ac3b79eb-a5c7-46d4-b81d-4144d003c99e | underdog | King Miller | Rush Yards | under | 0.0531509199491621 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
@@ -742,7 +732,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|0cb669cf-b827-461d-9d39-42e64e403fdf | underdog | Tyrell Henry | Receptions | over | 0.0525262856234594 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|16dd8af6-c5f6-4560-b6e7-9e44957262e1 | underdog | Byrum Brown | Rush Yards | under | 0.0524329037532033 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | prizepicks|16051317 | prizepicks | Wan'Dale Robinson | Rec Targets | under | 0.0522923521605553 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
-| underdog|dfa64bae-a034-4407-b1dd-d31c300fb55e | underdog | Mason McKenzie | Pass Yards | under | 0.0521422828512561 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|394cdb68-ea09-451b-a418-5a955d639501 | underdog | Ayden Greene | Receiving Yards | over | 0.0520052566854629 | 2026-10-21T23:24:30Z | 2026-10-24T23:00:00Z |
 | underdog|dfba68ee-d29a-4eec-987a-b2c4b83be096 | underdog | Malachi Toney | Receiving Yards | under | 0.0518552229293483 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
 | underdog|c3e31ab1-4709-4b43-8b04-8f227c273411 | underdog | Harrison Butker | Kicking Points | under | 0.05183794000713 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
@@ -751,10 +740,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|52741e38-1315-43da-8187-93cd6bf8681f | underdog | Gianni Spetic | XP Made | over | 0.0516215714674945 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|07431a32-42ce-4d0b-abd0-cfb6db23b271 | underdog | Noah Jennings | Receiving Yards | under | 0.0515036832685247 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|662a988b-d8bd-4ab2-8a39-d3807e0ef5ef | underdog | Trent Mosley | Receiving Yards | under | 0.0513544523997693 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
+| underdog|f48fe119-d77d-4af5-a89a-b2123775970d | underdog | Jaron-Keawe Sagapolutele | Pass Yards | under | 0.0513287366475165 | 2026-10-22T04:39:42Z | 2026-10-24T16:00:00Z |
 | underdog|c01f7d6b-9ff9-4aaf-8d56-d4522c63a040 | underdog | Cam Skattebo | Receptions | over | 0.0512513434405716 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | prizepicks|16051288 | prizepicks | Malik Washington | Rec Targets | under | 0.050971826753459 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|81d3d9e3-d5c3-4a8c-a5b4-d60fe7edc089 | underdog | Kyler Kasper | Receiving Yards | under | 0.0509493282923424 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|bd024d3e-d866-4c4d-b1c1-64bd1707ce94 | underdog | Calvin Ridley | Receiving Yards | under | 0.0507494952659456 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|744f7c64-587e-41f1-af9d-1bbabfac4473 | underdog | Chuba Hubbard | Receiving Yards | under | 0.0504931979002241 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | underdog|25fa3790-d20b-4150-9c6a-160e2a5d2896 | underdog | Tyjae Spears | Rush Yards | under | 0.0503793612554041 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|8225d625-378d-487c-8596-68cf88140f58 | underdog | Ryan Flournoy | Receptions | under | 0.0501148528015784 | 2026-10-21T04:43:18Z | 2026-10-27T00:15:00Z |
 | underdog|0c1a8b52-a086-444e-9bbf-7623ea229a24 | underdog | Rashid Shaheed | Receptions | under | 0.0500925370142416 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
@@ -767,12 +758,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|788dd9c7-6866-4b20-98c7-2c5d4e417cd0 | underdog | Rico Dowdle | Receiving Yards | under | 0.0493372067079616 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | underdog|aa76ff62-2cea-4932-a3b6-25933bffd7a3 | underdog | Jeremiah Koger | Receiving Yards | over | 0.0492893008519933 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|1ceaf7f9-ef04-4cb3-8126-bf2e192e0c6b | underdog | Liam Hicks | Batter Walks | over | 0.0492863514719 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|f6c5d90c-aa20-4df0-8599-3fd8ba03d321 | underdog | J.K. Dobbins | Receiving Yards | over | 0.0489630391293001 | 2026-10-22T04:39:42Z | 2026-10-25T20:05:00Z |
 | underdog|06c8c71a-f7db-4a2c-9d8a-ff6d764c68ef | underdog | Bucky Irving | Rush Yards | under | 0.0487607240531607 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|38da6842-8e2b-4b9f-8e1a-2627589e622a | underdog | Harrison Butker | FG Made | under | 0.0486124772086066 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|b6571da0-cfdd-4408-a40f-9ae3ad574756 | underdog | Charlie Becker | Receptions | under | 0.0485302858619418 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|7f4bce83-fa6d-4487-9f6a-5c219c05606b | underdog | Jonathan Aranda | Hits + Runs + RBIs | over | 0.048402522074492 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|27fc268e-10b4-49d2-aaf1-0ff311eada68 | underdog | William Contreras | Hits | over | 0.048354401129859 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
-| prizepicks|16030723 | prizepicks | Mattia Bellucci | Total Games Won | under | 0.0481533361077964 | 2026-10-21T23:24:30Z | 2026-10-22T02:30:00.000-04:00 |
 | underdog|9f6e1ab5-783f-4278-8f0f-6de356b2430b | underdog | Yandy Díaz | Batter Walks | over | 0.0480963045912653 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|8013e31d-bd8b-4999-bc9b-560a68cefba4 | underdog | DJ Vonnahme | Receptions | under | 0.0479906983735245 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|02ac5a60-be69-4c7d-9dc5-943625cde654 | underdog | Rodney Bullard | Receptions | over | 0.0479331909628191 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
@@ -786,14 +777,12 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|b57929fa-a09d-4e6f-a44b-3038db73bdd9 | underdog | Samaje Perine | Rush + Rec Yards | over | 0.0470082519671165 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|4bea4249-5328-4b26-85df-5346909fe70a | underdog | Daniel Bellinger | Receiving Yards | under | 0.0467675237802784 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|f56646dd-e9dc-47e0-b4cb-8184a207198c | underdog | Ty Dieffenbach | Pass Yards | under | 0.046696388412307 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
-| underdog|a5d4adff-e6b4-4dbd-999c-0829410a97e3 | underdog | Kyan Berry-Johnson | Receiving Yards | over | 0.0464301885487878 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | prizepicks|15980960 | prizepicks | Polina Kudermetova | Total Games Won | over | 0.04626309288049 | 2026-10-21T04:43:18Z | 2026-10-22T01:00:00.000-04:00 |
 | underdog|d1dda524-e3d3-4fba-8cde-c8d9b3fb7823 | underdog | Amare Thomas | Receptions | over | 0.0462398251608691 | 2026-10-21T23:24:30Z | 2026-10-25T02:15:00Z |
 | prizepicks|16051280 | prizepicks | Colby Parkinson | Rec Targets | under | 0.0462161930535303 | 2026-10-21T23:24:30Z | 2026-10-25T16:25:00.000-04:00 |
 | underdog|35962dae-0852-4830-ab91-68c9dcafb2d3 | underdog | Cam Skattebo | Rush Yards | under | 0.046116001037545 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|b6f0be07-3802-43c1-86c1-d6bb682a6d07 | underdog | Tyler Shough | Pass TDs | over | 0.0460949746765986 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
 | prizepicks|16030988 | prizepicks | Karen Khachanov | Total Games | over | 0.0454511933425606 | 2026-10-21T23:24:30Z | 2026-10-22T04:00:00.000-04:00 |
-| underdog|e0bf2f56-cc7d-417b-83b3-56514cab7324 | underdog | Sam Leavitt | Pass TDs | under | 0.0450984511304398 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|28b03f54-427a-472e-a4ed-e8b6e6726d9f | underdog | Wayshawn Parker | Receiving Yards | over | 0.0447581023566774 | 2026-10-21T23:24:30Z | 2026-10-25T02:15:00Z |
 | underdog|5689b0d3-95b4-48cf-8b7a-64637e335481 | underdog | Derrick Henry | Receiving Yards | over | 0.0446794913234094 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|ac1c6c6c-2327-4e95-af19-59c5bd28b38c | underdog | Juwan Johnson | Receiving Yards | under | 0.0446562817968326 | 2026-10-21T04:43:18Z | 2026-10-25T13:30:00Z |
@@ -802,15 +791,14 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|42b4ce0c-6967-4f41-8971-3ab713e4b156 | underdog | Gideon Davidson | Rush Yards | under | 0.0443032159264056 | 2026-10-21T23:24:30Z | 2026-10-24T23:00:00Z |
 | prizepicks|16051251 | prizepicks | Ryan Flournoy | Rec Targets | under | 0.0440754381772996 | 2026-10-21T23:24:30Z | 2026-10-26T20:15:00.000-04:00 |
 | underdog|26e188e4-5702-4798-95e5-7343fe610a16 | underdog | Arch Manning | Pass TDs | under | 0.0438757827757912 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
-| underdog|e40c88ee-022c-460d-a447-35935e484914 | underdog | Joey Slye | Kicking Points | under | 0.0437911990002866 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|d4d8e68c-0ce5-4a5e-bb07-87acf116625a | underdog | Diana Shnaider | Double Faults | under | 0.0431202099866588 | 2026-10-21T23:24:30Z | 2026-10-22T07:20:00Z |
 | prizepicks|16051283 | prizepicks | Puka Nacua | Rec Targets | under | 0.042939941428605 | 2026-10-21T23:24:30Z | 2026-10-25T16:25:00.000-04:00 |
 | underdog|976edc90-d679-4566-8607-829d2e9644fc | underdog | Keenan Allen | Receptions | under | 0.042892061025248 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|c635f281-ca04-4c4c-ae31-8bb556878ff3 | underdog | Daylyn Upshaw | Receptions | under | 0.0428467738274781 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
 | underdog|776c286d-9d20-4bc9-bc16-33d22c00a46e | underdog | Camden Coleman | Rush Yards | over | 0.0428395769389584 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
+| underdog|25ef4d6c-fafc-461a-91ad-cc9e6a9ca45e | underdog | Cooper Kupp | Receptions | under | 0.0428006415227674 | 2026-10-22T04:39:42Z | 2026-10-26T00:20:00Z |
 | underdog|12bfff80-1934-4f3a-a28d-5b8cdafeac85 | underdog | Marcus Stokes | Pass Yards | under | 0.0424536333070093 | 2026-10-21T04:43:18Z | 2026-10-22T23:30:00Z |
 | underdog|d1a9db61-ffce-482e-bc6b-98706add7fe6 | underdog | Ka'imi Fairbairn | Kicking Points | under | 0.0423914620274074 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
-| underdog|00c1fd66-6956-4cef-bf87-66447836d8f4 | underdog | Grady O'Neill | Receptions | under | 0.0422730965787097 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|3fbd3419-83f4-4912-89f1-cd3c466b1cff | underdog | Cole Kmet | Receiving Yards | under | 0.0420084288264219 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | prizepicks|16051240 | prizepicks | Tommy Tremble | Rec Targets | under | 0.0417284345604694 | 2026-10-21T23:24:30Z | 2026-10-25T13:00:00.000-04:00 |
 | underdog|4d71b875-6dd2-4b78-a799-3a0909c0e2b6 | underdog | Trey Butkowski | FG Made | over | 0.0416026174253986 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
@@ -838,7 +826,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|10c4574b-0684-4f09-815a-2e43548c4fc1 | underdog | Colton Joseph | Rush Yards | under | 0.0379603812021208 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|046ad160-8a73-4019-9661-3da94708c8f4 | underdog | Deshawn Purdie | Pass TDs | over | 0.0378066594112244 | 2026-10-21T04:43:18Z | 2026-10-22T23:00:00Z |
 | underdog|0beceeea-8dd0-4760-afe8-eeb63492b9e9 | underdog | Mateen Bhaghani | FG Made | over | 0.0377670802335744 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
-| underdog|d74fe0e2-492a-474d-b789-b82c817d930e | underdog | Alex Michelsen | Aces | under | 0.0376365171750154 | 2026-10-21T23:24:30Z | 2026-10-22T12:40:00Z |
 | underdog|13e3fb16-7141-4f72-8054-a51adda5f9b3 | underdog | Samaje Perine | Receiving Yards | under | 0.0375109763104946 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
 | underdog|3753c21e-bad3-43a8-8e6f-e7002d0790cb | underdog | Reece Vander Zee | Receptions | over | 0.0374300137689319 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|05ea1410-88a6-44cd-a8ad-de5e26c8af7f | underdog | Gavin Lahm | XP Made | over | 0.0373018163286511 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
@@ -857,6 +844,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|72c9953f-c670-4bc2-9799-3c8f16d50d10 | underdog | JJ Buchanan | Receptions | over | 0.0354632731283425 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|aa104b28-f09d-4347-b2ca-6314a59c5fa1 | underdog | Kyle Ferrie | FG Made | over | 0.0354543097195177 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|c07c53d6-5e28-4e56-84c4-7f5377197c29 | underdog | Sal Frelick | Total Bases | over | 0.0353449497095905 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
+| underdog|f1a02319-532f-48ea-b85d-f1f8764f33d1 | underdog | Jaron Tibbs | Receiving Yards | under | 0.0352320649773695 | 2026-10-22T04:39:42Z | 2026-10-24T19:45:00Z |
 | underdog|6de3ecf1-c2e1-4ffd-af16-c9510234efe0 | underdog | Jonny DeLuca | Hits + Runs + RBIs | over | 0.0351824731940149 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|8db350de-6410-46bf-9c27-7d0328352246 | underdog | Jackson Chourio | Batter Walks | over | 0.0350877192982455 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|c66e8fe0-4e1e-4c20-a04e-49dc04b3a837 | underdog | Jamari Person | Receiving Yards | over | 0.0349027322063265 | 2026-10-21T04:43:18Z | 2026-10-22T23:00:00Z |
@@ -868,19 +856,16 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|1a5520d8-dc0e-4149-b0f8-bd112b30d722 | underdog | Avery Johnson | Pass TDs | over | 0.0345275702524721 | 2026-10-21T23:24:30Z | 2026-10-24T19:45:00Z |
 | underdog|0acf1d16-15c1-4ad2-b506-7a1bf70e7bbe | underdog | Walker Lyons | Receiving Yards | under | 0.0344986746849036 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|484399f4-298f-4063-9c16-33871082f309 | underdog | Patrick Overmyer | Receiving Yards | under | 0.0344533909502258 | 2026-10-21T04:43:18Z | 2026-10-25T02:15:00Z |
-| underdog|201ca58d-9924-4e33-9689-f020bfae9c43 | underdog | Nate McCashland | XP Made | over | 0.0343895288617329 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|dc364f92-76cd-4db4-84af-95dd2c29f95f | underdog | Nyck Harbor | Receiving Yards | under | 0.0342231016278906 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|d92d231d-58a6-4ef9-b39e-4a82d9662500 | underdog | Eli Raridon | Receiving Yards | over | 0.034179084008324 | 2026-10-21T04:43:18Z | 2026-10-23T00:15:00Z |
 | underdog|6b5a1de9-3eef-4741-9170-14f9deced32e | underdog | Matt Gay | Kicking Points | under | 0.0340167035528746 | 2026-10-21T04:43:18Z | 2026-10-25T20:25:00Z |
 | underdog|c4570c51-d4b2-49a4-be2a-a8dd9be0c3f3 | underdog | David Hamilton | RBIs | under | 0.0340022296544035 | 2026-10-21T04:43:18Z | 2026-10-24T00:00:00Z |
 | underdog|b7abf682-4a29-4bb1-a75c-ce25057372c5 | underdog | Laquon Treadwell | Receptions | under | 0.0336950744689883 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|e07b8b4f-667f-4273-a1f1-88ef9c358ed8 | underdog | Jayden Savoury | Receptions | under | 0.0335051261206084 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
-| underdog|e1237ca6-c1de-42af-af96-2f51a245e8ca | underdog | Isaiah Horton | Receptions | under | 0.0335034079007621 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | underdog|9dbc436f-aa52-4668-9616-c736415d380c | underdog | Tyjae Spears | Receiving Yards | under | 0.0334345042428332 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
 | underdog|73ccb174-e10e-4fab-b016-1288d6d50b2f | underdog | Chase Brown | Receptions | under | 0.0331873731070406 | 2026-10-21T23:24:30Z | 2026-10-25T17:00:00Z |
-| underdog|ac61048b-b8c4-452c-8fca-d9168fefca15 | underdog | Josiah Thomas | Receptions | under | 0.0331309967950763 | 2026-10-21T23:24:30Z | 2026-10-22T00:00:00Z |
 | underdog|9ae00861-5dbe-4edb-ba32-2a64fe363093 | underdog | Emmett Johnson | Rush Yards | over | 0.0328425645250116 | 2026-10-21T04:43:18Z | 2026-10-26T00:20:00Z |
 | underdog|425fbbd0-9045-445e-83f3-1092d3b649a5 | underdog | Deuce Alexander | Receiving Yards | under | 0.0324621299207996 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
+| underdog|aee58f28-868b-42d3-b3f5-6157d1cda633 | underdog | Dohnte Meyers | Receiving Yards | over | 0.0323209492678826 | 2026-10-22T04:39:42Z | 2026-10-25T17:00:00Z |
 | prizepicks|16051314 | prizepicks | Rashid Shaheed | Rec Targets | under | 0.032115498076035 | 2026-10-21T23:24:30Z | 2026-10-25T20:20:00.000-04:00 |
 | underdog|eea26e28-d674-4d7b-8f8e-fc71ea5a2dde | underdog | Trey Butkowski | XP Made | over | 0.0319308924100778 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|e4480b0f-913c-4202-bf76-e2aff55f73c7 | underdog | Cam Ward | Rush Yards | under | 0.0318471189373211 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
@@ -889,10 +874,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | underdog|ddb3b6de-e82e-47a8-8018-e76d2c842a21 | underdog | Ryan Wingo | Receiving Yards | under | 0.0315164104140868 | 2026-10-21T23:24:30Z | 2026-10-24T23:30:00Z |
 | underdog|daeae6e3-9cf7-46ed-868a-8684ea3345f8 | underdog | Terrance Carter | Receptions | under | 0.031467990002767 | 2026-10-21T23:24:30Z | 2026-10-24T16:00:00Z |
 | underdog|bfdd88bc-09e5-4f42-917e-ce62f1c65f04 | underdog | Makai Jackson | Receiving Yards | under | 0.0310717080847511 | 2026-10-21T23:24:30Z | 2026-10-22T23:00:00Z |
-| underdog|bef5eb70-dadd-4153-8820-8ba478dc63ae | underdog | Alessio Milivojevic | Pass Yards | under | 0.0309809442749204 | 2026-10-21T23:24:30Z | 2026-10-24T19:30:00Z |
 | underdog|ae6a1b6b-65d7-4ec6-844c-c6cc1c49c137 | underdog | Keelon Russell | Pass TDs | over | 0.0309791832376557 | 2026-10-21T04:43:18Z | 2026-10-24T19:30:00Z |
 | prizepicks|16034961 | prizepicks | Efton Chism III | Rec Targets | under | 0.0307745978030012 | 2026-10-21T23:24:30Z | 2026-10-22T20:15:00.000-04:00 |
 | underdog|eb47b832-623a-4517-b8e3-f59db1fa3394 | underdog | Dominic Zvada | FG Made | over | 0.0304043417105965 | 2026-10-21T04:43:18Z | 2026-10-25T17:00:00Z |
+| underdog|d9a8d714-defd-4ed1-823b-8d91a782c465 | underdog | Alex Michelsen | Aces | under | 0.0302294934518206 | 2026-10-22T04:39:42Z | 2026-10-22T12:40:00Z |
 | underdog|98567d65-69d2-46b3-804e-141171ccac4e | underdog | Kenny Darby | Receptions | under | 0.0301176139915753 | 2026-10-21T04:43:18Z | 2026-10-24T23:30:00Z |
-| prizepicks|16039197 | prizepicks | Moyuka Uchijima | Break Points Won | under | 0.0300948713971492 | 2026-10-21T23:24:30Z | 2026-10-21T23:40:00.000-04:00 |
 | underdog|d8958df4-dbda-4f8f-895c-fcc504fc3ac7 | underdog | Charlie Becker | Receiving Yards | under | 0.0300748709040623 | 2026-10-21T04:43:18Z | 2026-10-24T16:00:00Z |
