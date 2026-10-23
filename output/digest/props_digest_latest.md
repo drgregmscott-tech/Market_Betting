@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-23T20:01:15Z
+# Props Pipeline Digest -- 2026-10-23T23:15:53Z
 
 ## Run summary
-- DraftKings ingestion: 706 rows across 8 events (OK)
+- DraftKings ingestion: 704 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 820 rows (OK)
-- Estimation: 1526 rows written (from 1526 ingested rows) -- status breakdown: {'estimated': 699, 'unsupported_market_first_scorer': 412, 'unsupported_stat_type': 252, 'no_player_match': 118, 'insufficient_history': 44, 'no_line_value': 1}
-- CLV logging: 6 newly flagged, 0 newly closed, 84 still open (1219 total ever logged)
+- BetMGM ingestion (via Rotowire): 885 rows (OK)
+- Estimation: 1589 rows written (from 1589 ingested rows) -- status breakdown: {'estimated': 712, 'unsupported_market_first_scorer': 429, 'unsupported_stat_type': 278, 'no_player_match': 118, 'insufficient_history': 51, 'no_line_value': 1}
+- CLV logging: 0 newly flagged, 0 newly closed, 84 still open (1219 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
