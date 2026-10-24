@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-24T18:53:09Z
+# Props Pipeline Digest -- 2026-10-24T22:36:49Z
 
 ## Run summary
-- DraftKings ingestion: 715 rows across 8 events (OK)
+- DraftKings ingestion: 716 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 998 rows (OK)
-- Estimation: 1713 rows written (from 1713 ingested rows) -- status breakdown: {'estimated': 752, 'unsupported_market_first_scorer': 458, 'unsupported_stat_type': 312, 'no_player_match': 135, 'insufficient_history': 55, 'no_line_value': 1}
-- CLV logging: 0 newly flagged, 0 newly closed, 88 still open (1223 total ever logged)
+- BetMGM ingestion (via Rotowire): 1045 rows (OK)
+- Estimation: 1761 rows written (from 1761 ingested rows) -- status breakdown: {'estimated': 764, 'unsupported_market_first_scorer': 476, 'unsupported_stat_type': 329, 'no_player_match': 137, 'insufficient_history': 54, 'no_line_value': 1}
+- CLV logging: 3 newly flagged, 0 newly closed, 91 still open (1226 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -14,12 +14,15 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 |---|---|---|---|---|---|---|---|---|---|
 | betmgm|recs|14418 | betmgm | J.K. Dobbins | recs | over | 1.0 | 0.3666 | 0.6334 | False | 2026-10-23T20:01:31Z |
 | betmgm|recs|16069 | betmgm | John Metchie | recs | over | 1.0 | 0.3887 | 0.6113 | False | 2026-10-23T20:01:31Z |
+| betmgm|recs|9260 | betmgm | Brandin Cooks | recs | over | 1.0 | 0.4335 | 0.5665 | False | 2026-10-24T22:37:09Z |
 | betmgm|recs|13449 | betmgm | Devin Singletary | recs | over | 0.9988 | 0.4754 | 0.5234 | False | 2026-10-23T05:15:13Z |
 | betmgm|recs|17967 | betmgm | Tyrone Tracy | recs | over | 1.0 | 0.4797 | 0.5203 | False | 2026-10-23T05:15:13Z |
 | betmgm|recs|19314 | betmgm | Omar Cooper | recs | over | 1.0 | 0.5 | 0.5 | False | 2026-10-23T20:01:31Z |
+| betmgm|recs|18647 | betmgm | Jordan Watkins | recs | over | 1.0 | 0.5246 | 0.4754 | False | 2026-10-24T22:37:09Z |
 | betmgm|recs|19343 | betmgm | Caleb Douglas | recs | over | 1.0 | 0.5482 | 0.4518 | False | 2026-10-24T12:49:27Z |
 | betmgm|recs|18535 | betmgm | Mason Taylor | recs | over | 1.0 | 0.5665 | 0.4335 | False | 2026-10-22T13:57:22Z |
 | draftkings|380428471|0QA380428471#2326683930_13L88808Q1-1846552455Q20 | draftkings | Mike Gesicki | Anytime TD Scorer | over | 0.6321 | 0.2083 | 0.4238 | False | 2026-10-20T23:16:14Z |
+| betmgm|recs|19230 | betmgm | Ja'Kobi Lane | recs | over | 1.0 | 0.6113 | 0.3887 | False | 2026-10-24T22:37:09Z |
 | draftkings|380429075|0QA380429075#2326686724_13L88808Q1-1461677560Q20 | draftkings | Foster Moreau | Anytime TD Scorer | over | 0.4831 | 0.1667 | 0.3165 | False | 2026-10-21T20:17:03Z |
 | draftkings|380413767|0QA380413767#2326613364_13L88808Q11213714519Q20 | draftkings | Noah Fant | Anytime TD Scorer | over | 0.4173 | 0.1333 | 0.2839 | False | 2026-10-20T05:03:27Z |
 | draftkings|380407190|0QA380407190#2326583670_13L88808Q1433051443Q20 | draftkings | Jeremy Ruckert | Anytime TD Scorer | over | 0.3198 | 0.05 | 0.2698 | False | 2026-10-23T05:15:13Z |
@@ -33,8 +36,8 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|380428471|0QA380428471#2329037509_13L88808Q1-700661814Q20 | draftkings | Matthew Hibner | Anytime TD Scorer | over | 0.276 | 0.0769 | 0.199 | False | 2026-10-20T23:16:14Z |
 | draftkings|380413767|0QA380413767#2326613357_13L88808Q11055160431Q20 | draftkings | Alvin Kamara | Anytime TD Scorer | over | 0.4908 | 0.2941 | 0.1967 | False | 2026-10-19T15:46:16Z |
 | draftkings|380412485|0QA380412485#2326628065_13L88808Q11141276074Q20 | draftkings | Sean Tucker | Anytime TD Scorer | over | 0.3677 | 0.1818 | 0.1858 | False | 2026-10-21T13:58:59Z |
-| draftkings|380407190|0QA380407190#2326583686_13L88808Q1-533028316Q20 | draftkings | Kevin Coleman Jr. | Anytime TD Scorer | over | 0.2704 | 0.0909 | 0.1795 | False | 2026-10-23T05:15:13Z |
 | betmgm|anytd|19426 | betmgm | Josh Cuevas | anytd | over | 0.2704 | 0.0909 | 0.1795 | False | 2026-10-22T05:06:55Z |
+| draftkings|380407190|0QA380407190#2326583686_13L88808Q1-533028316Q20 | draftkings | Kevin Coleman Jr. | Anytime TD Scorer | over | 0.2704 | 0.0909 | 0.1795 | False | 2026-10-23T05:15:13Z |
 | betmgm|anytd|10729 | betmgm | Jared Goff | anytd | over | 0.2404 | 0.0645 | 0.1759 | False | 2026-10-20T13:42:44Z |
 | draftkings|380429075|0QA380429075#2326686734_13L88808Q1-98347530Q20 | draftkings | Tyrone Tracy Jr. | Anytime TD Scorer | over | 0.4035 | 0.2326 | 0.1709 | False | 2026-10-21T20:17:03Z |
 | draftkings|380412485|0QA380412485#2326607832_13L88808Q1-813345382Q20 | draftkings | Tommy Tremble | Anytime TD Scorer | over | 0.4231 | 0.2597 | 0.1633 | False | 2026-10-19T15:46:16Z |
@@ -62,8 +65,8 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|380429075|0QA380429075#2326686735_13L88808Q11930260006Q20 | draftkings | Devin Singletary | Anytime TD Scorer | over | 0.253 | 0.1538 | 0.0991 | False | 2026-10-21T20:17:03Z |
 | draftkings|380428471|0QA380428471#2326683935_13L88808Q1219777051Q20 | draftkings | Joe Burrow | Anytime TD Scorer | over | 0.2015 | 0.1053 | 0.0962 | False | 2026-10-20T23:16:14Z |
 | draftkings|380407190|0QA380407190#2326583667_13L88808Q12123082164Q20 | draftkings | Isaiah Williams | Anytime TD Scorer | over | 0.1675 | 0.0714 | 0.0961 | False | 2026-10-23T05:15:13Z |
-| betmgm|anytd|14371 | betmgm | Jordan Love | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
 | betmgm|anytd|19319 | betmgm | Bryce Lance | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
+| betmgm|anytd|14371 | betmgm | Jordan Love | anytd | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-20T13:42:44Z |
 | draftkings|380726543|0QA380726543#2327888781_13L88808Q1669299964Q20 | draftkings | Noah Fant | 2+ TDs | over | 0.1026 | 0.0123 | 0.0902 | False | 2026-10-20T05:03:27Z |
 | draftkings|381094650|0QA381094650#2329260714_13L88808Q1282689831Q20 | draftkings | Jonathan Taylor | 2+ TDs | over | 0.2783 | 0.1905 | 0.0879 | False | 2026-10-21T05:03:46Z |
 | draftkings|380428471|0QA380428471#2326683921_13L88808Q1-1199795272Q20 | draftkings | Devontez Walker | Anytime TD Scorer | over | 0.2015 | 0.1176 | 0.0838 | False | 2026-10-20T23:16:14Z |
