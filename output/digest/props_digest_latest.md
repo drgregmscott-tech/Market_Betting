@@ -1,25 +1,32 @@
-# Props Pipeline Digest -- 2026-10-26T05:02:24Z
+# Props Pipeline Digest -- 2026-10-26T15:30:13Z
 
 ## Run summary
-- DraftKings ingestion: 178 rows across 8 events (OK)
+- DraftKings ingestion: 210 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 73 rows (OK)
-- Estimation: 251 rows written (from 251 ingested rows) -- status breakdown: {'estimated': 116, 'unsupported_market_first_scorer': 70, 'no_player_match': 30, 'unsupported_stat_type': 24, 'insufficient_history': 10, 'no_line_value': 1}
-- CLV logging: 18 newly flagged, 0 newly closed, 19 still open (1254 total ever logged)
+- BetMGM ingestion (via Rotowire): 77 rows (OK)
+- Estimation: 287 rows written (from 287 ingested rows) -- status breakdown: {'estimated': 147, 'unsupported_market_first_scorer': 70, 'no_player_match': 33, 'unsupported_stat_type': 25, 'insufficient_history': 11, 'no_line_value': 1}
+- CLV logging: 7 newly flagged, 0 newly closed, 26 still open (1261 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|recs|17908 | betmgm | Brevyn Spann-Ford | recs | over | 1.0 | 0.396 | 0.604 | False | 2026-10-26T15:30:26Z |
 | draftkings|380448718|0QA380448718#2326767582_13L88808Q1-121899859Q20 | draftkings | Dameon Pierce | Anytime TD Scorer | over | 0.4182 | 0.1333 | 0.2849 | False | 2026-10-26T05:02:37Z |
 | draftkings|382678835|0QA382678835#2336411431_13L88808Q11890020597Q20 | draftkings | Anthony Tyus III | Anytime TD Scorer | over | 0.3198 | 0.0714 | 0.2484 | False | 2026-10-26T05:02:37Z |
+| draftkings|382665132|0QA382665132#2336049742_13L88808Q1999478588Q20 | draftkings | Kyle Pitts Sr. | Anytime TD Scorer | over | 0.5555 | 0.3279 | 0.2276 | False | 2026-10-26T15:30:26Z |
+| draftkings|382641891|0QA382641891#2335870681_13L88808Q1480222870Q20 | draftkings | Jameson Williams | Anytime TD Scorer | over | 0.6068 | 0.3922 | 0.2146 | False | 2026-10-26T15:30:26Z |
 | draftkings|380448718|0QA380448718#2326767588_13L88808Q11627968604Q20 | draftkings | Darius Cooper | Anytime TD Scorer | over | 0.5026 | 0.2899 | 0.2127 | False | 2026-10-26T05:02:37Z |
 | draftkings|382678835|0QA382678835#2336140028_13L88808Q1294436062Q20 | draftkings | Darren Waller | Anytime TD Scorer | over | 0.3965 | 0.2 | 0.1965 | False | 2026-10-26T05:02:37Z |
 | draftkings|380954198|0QA380954198#2328738842_13L88808Q12056061885Q20 | draftkings | Javonte Williams | 2+ TDs | over | 0.3826 | 0.2222 | 0.1604 | False | 2026-10-26T05:02:37Z |
 | draftkings|382678835|0QA382678835#2336140032_13L88808Q1-813345382Q20 | draftkings | Tommy Tremble | Anytime TD Scorer | over | 0.3408 | 0.1905 | 0.1503 | False | 2026-10-26T05:02:37Z |
+| draftkings|382709590|0QA382709590#2336304212_13L88808Q1410823711Q20 | draftkings | Tony Pollard | Anytime TD Scorer | over | 0.5813 | 0.4545 | 0.1268 | False | 2026-10-26T15:30:26Z |
+| draftkings|382656185|0QA382656185#2336007908_13L88808Q11402568200Q20 | draftkings | Pat Freiermuth | Anytime TD Scorer | over | 0.4206 | 0.2985 | 0.1221 | False | 2026-10-26T15:30:26Z |
 | draftkings|380954198|0QA380954198#2328738834_13L88808Q1-477962024Q20 | draftkings | Darius Cooper | 2+ TDs | over | 0.1552 | 0.0435 | 0.1117 | False | 2026-10-26T05:02:37Z |
+| draftkings|382641891|0QA382641891#2335870682_13L88808Q1472584472Q20 | draftkings | Sam LaPorta | Anytime TD Scorer | over | 0.4025 | 0.3125 | 0.09 | False | 2026-10-26T15:30:26Z |
 | draftkings|380954198|0QA380954198#2328738830_13L88808Q1-1542884767Q20 | draftkings | Dameon Pierce | 2+ TDs | over | 0.1031 | 0.0141 | 0.089 | False | 2026-10-26T05:02:37Z |
+| draftkings|382656185|0QA382656185#2336007914_13L88808Q1-1895349765Q20 | draftkings | Quinshon Judkins | Anytime TD Scorer | over | 0.5034 | 0.4167 | 0.0867 | False | 2026-10-26T15:30:26Z |
 | draftkings|382678835|0QA382678835#2336140012_13L88808Q1-135035926Q20 | draftkings | MarShawn Lloyd | Anytime TD Scorer | over | 0.3392 | 0.2597 | 0.0794 | False | 2026-10-26T05:02:37Z |
 | draftkings|382734951|0QA382734951#2336425062_13L88808Q1637812501Q20 | draftkings | Darren Waller | 2+ TDs | over | 0.0917 | 0.0217 | 0.07 | False | 2026-10-26T05:02:37Z |
 | draftkings|382678835|0QA382678835#2336140015_13L88808Q1-1213243313Q20 | draftkings | Jordan Love | Anytime TD Scorer | over | 0.1783 | 0.1111 | 0.0672 | False | 2026-10-26T05:02:37Z |
