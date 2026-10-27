@@ -1,0 +1,214 @@
+{
+  "markets": [
+    {
+      "id": "382796087",
+      "eventId": "34118199",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets-250040114",
+      "sortOrder": 1087,
+      "tags": [
+        "SGP",
+        "PlayerStack",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118199|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA382796087#2336703211_13L88808Q1-851338045Q20",
+      "marketId": "382796087",
+      "label": "Ashton Jeanty",
+      "displayOdds": {
+        "american": "\u2212125",
+        "decimal": "1.80",
+        "fractional": "4/5",
+        "percentage": "55%",
+        "multiplier": "1.80x"
+      },
+      "trueOdds": 1.8,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "874247",
+          "name": "Ashton Jeanty",
+          "type": "Player",
+          "seoIdentifier": "Ashton Jeanty",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166134"
+          }
+        }
+      ],
+      "sortOrder": 3001800,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA382796087#2336703212_13L88808Q1978119999Q20",
+      "marketId": "382796087",
+      "label": "Brock Bowers",
+      "displayOdds": {
+        "american": "+115",
+        "decimal": "2.15",
+        "fractional": "23/20",
+        "percentage": "46%",
+        "multiplier": "2.15x"
+      },
+      "trueOdds": 2.15,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "781453",
+          "name": "Brock Bowers",
+          "type": "Player",
+          "seoIdentifier": "Brock Bowers",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "126004"
+          }
+        }
+      ],
+      "sortOrder": 3002150,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA382796087#2336703197_13L88808Q1322761913Q20",
+      "marketId": "382796087",
+      "label": "Garrett Wilson",
+      "displayOdds": {
+        "american": "+140",
+        "decimal": "2.40",
+        "fractional": "7/5",
+        "percentage": "41%",
+        "multiplier": "2.40x"
+      },
+      "trueOdds": 2.4,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640761",
+          "name": "Garrett Wilson",
+          "type": "Player",
+          "seoIdentifier": "Garrett Wilson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "100632"
+          }
+        }
+      ],
+      "sortOrder": 3002400,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA382796087#2336703200_13L88808Q1938922925Q20",
+      "marketId": "382796087",
+      "label": "Omar Cooper Jr.",
+      "displayOdds": {
+        "american": "+235",
+        "decimal": "3.35",
+        "fractional": "47/20",
+        "percentage": "29%",
+        "multiplier": "3.35x"
+      },
+      "trueOdds": 3.35,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "957911",
+          "name": "Omar Cooper Jr.",
+          "type": "Player",
+          "seoIdentifier": "Omar Cooper Jr.",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166009"
+          }
+        }
+      ],
+      "sortOrder": 3003350,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets-250040114": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118199' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
