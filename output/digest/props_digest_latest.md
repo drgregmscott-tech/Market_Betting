@@ -1,18 +1,17 @@
-# Props Pipeline Digest -- 2026-10-27T14:43:48Z
+# Props Pipeline Digest -- 2026-10-27T20:49:59Z
 
 ## Run summary
-- DraftKings ingestion: 193 rows across 8 events (OK)
+- DraftKings ingestion: 190 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 102 rows (OK)
-- Estimation: 295 rows written (from 295 ingested rows) -- status breakdown: {'estimated': 162, 'unsupported_market_first_scorer': 71, 'unsupported_stat_type': 24, 'no_player_match': 23, 'insufficient_history': 15}
-- CLV logging: 4 newly flagged, 0 newly closed, 23 still open (1266 total ever logged)
+- BetMGM ingestion (via Rotowire): 135 rows (OK)
+- Estimation: 325 rows written (from 325 ingested rows) -- status breakdown: {'estimated': 188, 'unsupported_market_first_scorer': 72, 'no_player_match': 26, 'unsupported_stat_type': 21, 'insufficient_history': 18}
+- CLV logging: 1 newly flagged, 0 newly closed, 22 still open (1267 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
-| betmgm|recs|18554 | betmgm | Savion Williams | recs | over | 1.0 | 0.5 | 0.5 | False | 2026-10-27T14:44:03Z |
 | betmgm|anytd|18946 | betmgm | Anthony Tyus | anytd | over | 0.3198 | 0.0645 | 0.2553 | False | 2026-10-27T14:44:03Z |
 | draftkings|382678835|0QA382678835#2336411431_13L88808Q11890020597Q20 | draftkings | Anthony Tyus III | Anytime TD Scorer | over | 0.3198 | 0.0714 | 0.2484 | False | 2026-10-26T05:02:37Z |
 | draftkings|382665132|0QA382665132#2336049742_13L88808Q1999478588Q20 | draftkings | Kyle Pitts Sr. | Anytime TD Scorer | over | 0.5555 | 0.3279 | 0.2276 | False | 2026-10-26T15:30:26Z |
@@ -22,7 +21,6 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383051429|0QA383051429#2337756863_13L88808Q1-106544391Q20 | draftkings | Jameson Williams | 2+ TDs | over | 0.2397 | 0.0588 | 0.1809 | False | 2026-10-27T14:44:03Z |
 | draftkings|382678835|0QA382678835#2336140032_13L88808Q1-813345382Q20 | draftkings | Tommy Tremble | Anytime TD Scorer | over | 0.3408 | 0.1905 | 0.1503 | False | 2026-10-26T05:02:37Z |
 | draftkings|382709590|0QA382709590#2336304212_13L88808Q1410823711Q20 | draftkings | Tony Pollard | Anytime TD Scorer | over | 0.5813 | 0.4545 | 0.1268 | False | 2026-10-26T15:30:26Z |
-| draftkings|382656185|0QA382656185#2336007908_13L88808Q11402568200Q20 | draftkings | Pat Freiermuth | Anytime TD Scorer | over | 0.4206 | 0.2985 | 0.1221 | False | 2026-10-26T15:30:26Z |
 | draftkings|382641891|0QA382641891#2335870687_13L88808Q1-1939996255Q20 | draftkings | Jared Goff | Anytime TD Scorer | over | 0.1881 | 0.0714 | 0.1166 | False | 2026-10-27T14:44:03Z |
 | draftkings|382641891|0QA382641891#2335870682_13L88808Q1472584472Q20 | draftkings | Sam LaPorta | Anytime TD Scorer | over | 0.4025 | 0.3125 | 0.09 | False | 2026-10-26T15:30:26Z |
 | draftkings|382656185|0QA382656185#2336007914_13L88808Q1-1895349765Q20 | draftkings | Quinshon Judkins | Anytime TD Scorer | over | 0.5034 | 0.4167 | 0.0867 | False | 2026-10-26T15:30:26Z |
@@ -34,4 +32,5 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|382734951|0QA382734951#2336425071_13L88808Q1-2074865306Q20 | draftkings | Anthony Tyus III | 2+ TDs | over | 0.0577 | 0.0055 | 0.0522 | False | 2026-10-26T05:02:37Z |
 | draftkings|382734951|0QA382734951#2336425059_13L88808Q1-2084365438Q20 | draftkings | Chuba Hubbard | 2+ TDs | over | 0.2147 | 0.1667 | 0.0481 | False | 2026-10-26T05:02:37Z |
 | draftkings|382678835|0QA382678835#2336140031_13L88808Q1259912862Q20 | draftkings | John Metchie III | Anytime TD Scorer | over | 0.1479 | 0.1 | 0.0479 | False | 2026-10-26T05:02:37Z |
+| draftkings|383051429|0QA383051429#2337756864_13L88808Q1-558374750Q20 | draftkings | Sam LaPorta | 2+ TDs | over | 0.0948 | 0.0476 | 0.0472 | False | 2026-10-27T20:50:12Z |
 | draftkings|382734951|0QA382734951#2336425063_13L88808Q1372601323Q20 | draftkings | Tommy Tremble | 2+ TDs | over | 0.0661 | 0.0196 | 0.0465 | False | 2026-10-26T05:02:37Z |
