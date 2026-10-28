@@ -1,0 +1,214 @@
+{
+  "markets": [
+    {
+      "id": "383074636",
+      "eventId": "34118131",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--424956580",
+      "sortOrder": 1636,
+      "tags": [
+        "SGP",
+        "PlayerStack",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118131|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA383074636#2337864277_13L88808Q1-2070504203Q20",
+      "marketId": "383074636",
+      "label": "Javonte Williams",
+      "displayOdds": {
+        "american": "\u2212265",
+        "decimal": "1.37",
+        "fractional": "20/53",
+        "percentage": "72%",
+        "multiplier": "1.37x"
+      },
+      "trueOdds": 1.3773585,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "560593",
+          "name": "Javonte Williams",
+          "type": "Player",
+          "seoIdentifier": "Javonte Williams",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 9,
+            "stringValue": "9.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "122492"
+          }
+        }
+      ],
+      "sortOrder": 3001370,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA383074636#2337864278_13L88808Q1759561049Q20",
+      "marketId": "383074636",
+      "label": "CeeDee Lamb",
+      "displayOdds": {
+        "american": "+100",
+        "decimal": "2.00",
+        "fractional": "1/1",
+        "percentage": "50%",
+        "multiplier": "2.00x"
+      },
+      "trueOdds": 2,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "485450",
+          "name": "CeeDee Lamb",
+          "type": "Player",
+          "seoIdentifier": "CeeDee Lamb",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 6,
+            "stringValue": "6.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "62412"
+          }
+        }
+      ],
+      "sortOrder": 3002000,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA383074636#2337864265_13L88808Q11587306986Q20",
+      "marketId": "383074636",
+      "label": "Trey McBride",
+      "displayOdds": {
+        "american": "+105",
+        "decimal": "2.05",
+        "fractional": "21/20",
+        "percentage": "48%",
+        "multiplier": "2.05x"
+      },
+      "trueOdds": 2.05,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640885",
+          "name": "Trey McBride",
+          "type": "Player",
+          "seoIdentifier": "Trey McBride",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "143266"
+          }
+        }
+      ],
+      "sortOrder": 3002050,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA383074636#2337864279_13L88808Q1-1127265655Q20",
+      "marketId": "383074636",
+      "label": "George Pickens",
+      "displayOdds": {
+        "american": "+130",
+        "decimal": "2.30",
+        "fractional": "13/10",
+        "percentage": "43%",
+        "multiplier": "2.30x"
+      },
+      "trueOdds": 2.3,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "624741",
+          "name": "George Pickens",
+          "type": "Player",
+          "seoIdentifier": "George Pickens",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "147312"
+          }
+        }
+      ],
+      "sortOrder": 3002300,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--424956580": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118131' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
