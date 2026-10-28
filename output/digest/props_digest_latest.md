@@ -1,17 +1,18 @@
-# Props Pipeline Digest -- 2026-10-28T05:58:15Z
+# Props Pipeline Digest -- 2026-10-28T15:16:04Z
 
 ## Run summary
-- DraftKings ingestion: 362 rows across 8 events (OK)
+- DraftKings ingestion: 361 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 178 rows (OK)
-- Estimation: 540 rows written (from 540 ingested rows) -- status breakdown: {'estimated': 305, 'unsupported_market_first_scorer': 122, 'no_player_match': 53, 'unsupported_stat_type': 34, 'insufficient_history': 26}
-- CLV logging: 20 newly flagged, 0 newly closed, 42 still open (1287 total ever logged)
+- BetMGM ingestion (via Rotowire): 361 rows (OK)
+- Estimation: 722 rows written (from 722 ingested rows) -- status breakdown: {'estimated': 440, 'unsupported_market_first_scorer': 143, 'unsupported_stat_type': 56, 'no_player_match': 55, 'insufficient_history': 28}
+- CLV logging: 1 newly flagged, 0 newly closed, 43 still open (1288 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|anytd|19343 | betmgm | Caleb Douglas | anytd | over | 0.5374 | 0.2041 | 0.3333 | False | 2026-10-28T15:16:18Z |
 | draftkings|382665132|0QA382665132#2336049735_13L88808Q11141276074Q20 | draftkings | Sean Tucker | Anytime TD Scorer | over | 0.4919 | 0.1667 | 0.3252 | False | 2026-10-28T05:58:28Z |
 | draftkings|382689796|0QA382689796#2336199132_13L88808Q1-2072232579Q20 | draftkings | Keon Coleman | Anytime TD Scorer | over | 0.478 | 0.2 | 0.278 | False | 2026-10-28T05:58:28Z |
 | betmgm|anytd|18946 | betmgm | Anthony Tyus | anytd | over | 0.3198 | 0.0645 | 0.2553 | False | 2026-10-27T14:44:03Z |
