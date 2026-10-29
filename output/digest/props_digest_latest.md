@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-29T15:20:57Z
+# Props Pipeline Digest -- 2026-10-29T21:16:38Z
 
 ## Run summary
-- DraftKings ingestion: 689 rows across 8 events (OK)
+- DraftKings ingestion: 696 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 856 rows (OK)
-- Estimation: 1545 rows written (from 1545 ingested rows) -- status breakdown: {'estimated': 723, 'unsupported_market_first_scorer': 444, 'unsupported_stat_type': 215, 'no_player_match': 121, 'insufficient_history': 42}
-- CLV logging: 5 newly flagged, 0 newly closed, 75 still open (1321 total ever logged)
+- BetMGM ingestion (via Rotowire): 979 rows (OK)
+- Estimation: 1675 rows written (from 1675 ingested rows) -- status breakdown: {'estimated': 743, 'unsupported_market_first_scorer': 480, 'unsupported_stat_type': 279, 'no_player_match': 130, 'insufficient_history': 43}
+- CLV logging: 1 newly flagged, 0 newly closed, 75 still open (1322 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -14,7 +14,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 |---|---|---|---|---|---|---|---|---|---|
 | betmgm|recs|18545 | betmgm | Mitchell Evans | recs | over | 1.0 | 0.3414 | 0.6586 | False | 2026-10-29T15:21:11Z |
 | betmgm|recs|16036 | betmgm | Daniel Bellinger | recs | over | 1.0 | 0.4425 | 0.5575 | False | 2026-10-29T15:21:11Z |
-| betmgm|recs|19241 | betmgm | Jonah Coleman | recs | over | 1.0 | 0.5203 | 0.4797 | False | 2026-10-29T06:04:22Z |
+| betmgm|recs|15924 | betmgm | Charlie Kolar | recs | over | 1.0 | 0.4653 | 0.5347 | False | 2026-10-29T21:16:56Z |
 | draftkings|382709590|0QA382709590#2336304202_13L88808Q1-1846552455Q20 | draftkings | Mike Gesicki | Anytime TD Scorer | over | 0.6321 | 0.2326 | 0.3996 | False | 2026-10-28T21:14:02Z |
 | betmgm|anytd|19343 | betmgm | Caleb Douglas | anytd | over | 0.5374 | 0.2041 | 0.3333 | False | 2026-10-28T15:16:18Z |
 | draftkings|382665132|0QA382665132#2336049735_13L88808Q11141276074Q20 | draftkings | Sean Tucker | Anytime TD Scorer | over | 0.4919 | 0.1667 | 0.3252 | False | 2026-10-28T05:58:28Z |
