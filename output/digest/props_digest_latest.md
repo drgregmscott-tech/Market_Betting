@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-30T06:04:45Z
+# Props Pipeline Digest -- 2026-10-30T15:10:07Z
 
 ## Run summary
-- DraftKings ingestion: 706 rows across 8 events (OK)
+- DraftKings ingestion: 707 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
 - BetMGM ingestion (via Rotowire): 912 rows (OK)
-- Estimation: 1618 rows written (from 1618 ingested rows) -- status breakdown: {'estimated': 730, 'unsupported_market_first_scorer': 464, 'unsupported_stat_type': 264, 'no_player_match': 123, 'insufficient_history': 37}
-- CLV logging: 11 newly flagged, 0 newly closed, 71 still open (1333 total ever logged)
+- Estimation: 1619 rows written (from 1619 ingested rows) -- status breakdown: {'estimated': 730, 'unsupported_market_first_scorer': 463, 'unsupported_stat_type': 264, 'no_player_match': 127, 'insufficient_history': 35}
+- CLV logging: 1 newly flagged, 0 newly closed, 72 still open (1334 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -51,8 +51,8 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383436920|0QA383436920#2339401456_13L88808Q1503159412Q20 | draftkings | James Cook | 2+ TDs | over | 0.3101 | 0.2128 | 0.0973 | False | 2026-10-28T05:58:28Z |
 | draftkings|382689796|0QA382689796#2336199145_13L88808Q11714132096Q20 | draftkings | Josh Cuevas | Anytime TD Scorer | over | 0.2015 | 0.1053 | 0.0962 | False | 2026-10-28T05:58:28Z |
 | draftkings|382791058|0QA382791058#2336678345_13L88808Q1-458881524Q20 | draftkings | Travis Hunter | Anytime TD Scorer | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-28T21:14:02Z |
-| betmgm|anytd|19448 | betmgm | Nate Boerkircher | anytd | over | 0.2404 | 0.1481 | 0.0923 | False | 2026-10-28T21:14:02Z |
 | draftkings|382656185|0QA382656185#2336007924_13L88808Q1-914474805Q20 | draftkings | Jaleel McLaughlin | Anytime TD Scorer | over | 0.1479 | 0.0556 | 0.0923 | False | 2026-10-29T06:04:22Z |
+| betmgm|anytd|19448 | betmgm | Nate Boerkircher | anytd | over | 0.2404 | 0.1481 | 0.0923 | False | 2026-10-28T21:14:02Z |
 | draftkings|382796087|0QA382796087#2336703217_13L88808Q1791336936Q20 | draftkings | Dylan Laube | Anytime TD Scorer | over | 0.1575 | 0.0667 | 0.0909 | False | 2026-10-30T06:04:59Z |
 | draftkings|382641891|0QA382641891#2335870682_13L88808Q1472584472Q20 | draftkings | Sam LaPorta | Anytime TD Scorer | over | 0.4025 | 0.3125 | 0.09 | False | 2026-10-26T15:30:26Z |
 | draftkings|382665132|0QA382665132#2336049743_13L88808Q1-419764349Q20 | draftkings | Jahan Dotson | Anytime TD Scorer | over | 0.2795 | 0.1905 | 0.0891 | False | 2026-10-28T05:58:28Z |
@@ -79,6 +79,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383396208|0QA383396208#2339229662_13L88808Q1-416383636Q20 | draftkings | Bucky Irving | 2+ TDs | over | 0.2301 | 0.1818 | 0.0483 | False | 2026-10-28T05:58:28Z |
 | draftkings|383051429|0QA383051429#2337756864_13L88808Q1-558374750Q20 | draftkings | Sam LaPorta | 2+ TDs | over | 0.0948 | 0.0476 | 0.0472 | False | 2026-10-27T20:50:12Z |
 | draftkings|382709590|0QA382709590#2336304206_13L88808Q1219777051Q20 | draftkings | Joe Burrow | Anytime TD Scorer | over | 0.1675 | 0.125 | 0.0425 | False | 2026-10-28T05:58:28Z |
+| draftkings|383051429|0QA383051429#2337756861_13L88808Q11455054237Q20 | draftkings | Jahmyr Gibbs | 2+ TDs | over | 0.3802 | 0.339 | 0.0413 | False | 2026-10-30T15:10:21Z |
 | draftkings|382665132|0QA382665132#2336049734_13L88808Q1-1654530021Q20 | draftkings | Tez Johnson | Anytime TD Scorer | over | 0.2184 | 0.1818 | 0.0366 | False | 2026-10-28T05:58:28Z |
 | draftkings|382791058|0QA382791058#2336678341_13L88808Q1-271780635Q20 | draftkings | Brian Thomas Jr. | Anytime TD Scorer | over | 0.1675 | 0.1333 | 0.0342 | False | 2026-10-29T15:21:11Z |
 | draftkings|383704032|0QA383704032#2340424504_13L88808Q11611408856Q20 | draftkings | Ben Skowronek | 2+ TDs | over | 0.0422 | 0.009 | 0.0332 | False | 2026-10-29T06:04:22Z |
