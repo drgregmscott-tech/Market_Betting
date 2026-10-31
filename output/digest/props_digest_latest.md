@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-10-31T20:08:16Z
+# Props Pipeline Digest -- 2026-10-31T23:31:20Z
 
 ## Run summary
-- DraftKings ingestion: 707 rows across 8 events (OK)
+- DraftKings ingestion: 721 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1012 rows (OK)
-- Estimation: 1719 rows written (from 1719 ingested rows) -- status breakdown: {'estimated': 755, 'unsupported_market_first_scorer': 470, 'unsupported_stat_type': 320, 'no_player_match': 134, 'insufficient_history': 40}
-- CLV logging: 0 newly flagged, 0 newly closed, 74 still open (1338 total ever logged)
+- BetMGM ingestion (via Rotowire): 1007 rows (OK)
+- Estimation: 1728 rows written (from 1728 ingested rows) -- status breakdown: {'estimated': 756, 'unsupported_market_first_scorer': 471, 'unsupported_stat_type': 315, 'no_player_match': 146, 'insufficient_history': 40}
+- CLV logging: 3 newly flagged, 0 newly closed, 77 still open (1341 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -24,9 +24,10 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383652722|0QA383652722#2340252357_13L88808Q1-1016060448Q20 | draftkings | Mike Gesicki | 2+ TDs | over | 0.2642 | 0.0323 | 0.232 | False | 2026-10-28T21:14:02Z |
 | draftkings|382796087|0QA382796087#2336703213_13L88808Q12025358379Q20 | draftkings | Tre Tucker | Anytime TD Scorer | over | 0.5087 | 0.2778 | 0.2309 | False | 2026-10-30T06:04:59Z |
 | draftkings|382665132|0QA382665132#2336049742_13L88808Q1999478588Q20 | draftkings | Kyle Pitts Sr. | Anytime TD Scorer | over | 0.5555 | 0.3279 | 0.2276 | False | 2026-10-26T15:30:26Z |
+| draftkings|382796087|0QA382796087#2344798156_13L88808Q1-803711707Q20 | draftkings | Jack Bech | Anytime TD Scorer | over | 0.3677 | 0.1429 | 0.2248 | False | 2026-10-31T23:31:34Z |
 | draftkings|382641891|0QA382641891#2335870681_13L88808Q1480222870Q20 | draftkings | Jameson Williams | Anytime TD Scorer | over | 0.6068 | 0.3922 | 0.2146 | False | 2026-10-26T15:30:26Z |
-| draftkings|382665132|0QA382665132#2336049750_13L88808Q11180641602Q20 | draftkings | Nick Muse | Anytime TD Scorer | over | 0.2404 | 0.0345 | 0.2059 | False | 2026-10-28T05:58:28Z |
 | betmgm|anytd|16286 | betmgm | Nick Muse | anytd | over | 0.2404 | 0.0345 | 0.2059 | False | 2026-10-30T20:56:21Z |
+| draftkings|382665132|0QA382665132#2336049750_13L88808Q11180641602Q20 | draftkings | Nick Muse | Anytime TD Scorer | over | 0.2404 | 0.0345 | 0.2059 | False | 2026-10-28T05:58:28Z |
 | draftkings|382656185|0QA382656185#2336136653_13L88808Q1292660006Q20 | draftkings | Ben Skowronek | Anytime TD Scorer | over | 0.276 | 0.0714 | 0.2045 | False | 2026-10-29T06:04:22Z |
 | draftkings|383051429|0QA383051429#2337756863_13L88808Q1-106544391Q20 | draftkings | Jameson Williams | 2+ TDs | over | 0.2397 | 0.0588 | 0.1809 | False | 2026-10-27T14:44:03Z |
 | draftkings|382656185|0QA382656185#2336007907_13L88808Q1-1532462247Q20 | draftkings | Darnell Washington | Anytime TD Scorer | over | 0.4369 | 0.2564 | 0.1805 | False | 2026-10-28T21:14:02Z |
@@ -50,6 +51,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383765102|0QA383765102#2340705236_13L88808Q1806541095Q20 | draftkings | Mason Taylor | 2+ TDs | over | 0.132 | 0.0196 | 0.1124 | False | 2026-10-30T06:04:59Z |
 | draftkings|382689796|0QA382689796#2336199148_13L88808Q1-1199795272Q20 | draftkings | Devontez Walker | Anytime TD Scorer | over | 0.2015 | 0.0909 | 0.1106 | False | 2026-10-28T05:58:28Z |
 | draftkings|383436920|0QA383436920#2339401456_13L88808Q1503159412Q20 | draftkings | James Cook | 2+ TDs | over | 0.3101 | 0.2128 | 0.0973 | False | 2026-10-28T05:58:28Z |
+| draftkings|382665132|0QA382665132#2336049719_13L88808Q1666446492Q20 | draftkings | Bucky Irving | Anytime TD Scorer | over | 0.5963 | 0.5 | 0.0963 | False | 2026-10-31T23:31:34Z |
 | draftkings|382689796|0QA382689796#2336199145_13L88808Q11714132096Q20 | draftkings | Josh Cuevas | Anytime TD Scorer | over | 0.2015 | 0.1053 | 0.0962 | False | 2026-10-28T05:58:28Z |
 | draftkings|382791058|0QA382791058#2336678345_13L88808Q1-458881524Q20 | draftkings | Travis Hunter | Anytime TD Scorer | over | 0.2277 | 0.1333 | 0.0943 | False | 2026-10-28T21:14:02Z |
 | draftkings|382656185|0QA382656185#2336007924_13L88808Q1-914474805Q20 | draftkings | Jaleel McLaughlin | Anytime TD Scorer | over | 0.1479 | 0.0556 | 0.0923 | False | 2026-10-29T06:04:22Z |
@@ -69,6 +71,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|383074636|0QA383074636#2337864278_13L88808Q1759561049Q20 | draftkings | CeeDee Lamb | Anytime TD Scorer | over | 0.5677 | 0.5 | 0.0677 | False | 2026-10-28T21:14:02Z |
 | draftkings|382796087|0QA382796087#2336703206_13L88808Q12123082164Q20 | draftkings | Isaiah Williams | Anytime TD Scorer | over | 0.1232 | 0.0556 | 0.0676 | False | 2026-10-30T06:04:59Z |
 | draftkings|383754217|0QA383754217#2340615683_13L88808Q12056061885Q20 | draftkings | Javonte Williams | 2+ TDs | over | 0.36 | 0.2941 | 0.0658 | False | 2026-10-29T06:04:22Z |
+| draftkings|383765102|0QA383765102#2344798326_13L88808Q1-488560338Q20 | draftkings | Jack Bech | 2+ TDs | over | 0.0778 | 0.0132 | 0.0647 | False | 2026-10-31T23:31:34Z |
 | draftkings|382656185|0QA382656185#2336007920_13L88808Q1184390672Q20 | draftkings | Deshaun Watson | Anytime TD Scorer | over | 0.2184 | 0.1538 | 0.0646 | False | 2026-10-28T21:14:02Z |
 | draftkings|382665132|0QA382665132#2336049745_13L88808Q1-189550648Q20 | draftkings | Austin Hooper | Anytime TD Scorer | over | 0.1479 | 0.0833 | 0.0645 | False | 2026-10-28T05:58:28Z |
 | draftkings|383704032|0QA383704032#2340424346_13L88808Q1-162258478Q20 | draftkings | Pat Freiermuth | 2+ TDs | over | 0.1044 | 0.0435 | 0.0609 | False | 2026-10-28T21:14:02Z |
