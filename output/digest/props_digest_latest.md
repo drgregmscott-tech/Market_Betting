@@ -1,10 +1,10 @@
-# Props Pipeline Digest -- 2026-10-31T14:38:31Z
+# Props Pipeline Digest -- 2026-10-31T20:08:16Z
 
 ## Run summary
-- DraftKings ingestion: 698 rows across 8 events (OK)
+- DraftKings ingestion: 707 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1001 rows (OK)
-- Estimation: 1699 rows written (from 1699 ingested rows) -- status breakdown: {'estimated': 747, 'unsupported_market_first_scorer': 467, 'unsupported_stat_type': 317, 'no_player_match': 127, 'insufficient_history': 41}
+- BetMGM ingestion (via Rotowire): 1012 rows (OK)
+- Estimation: 1719 rows written (from 1719 ingested rows) -- status breakdown: {'estimated': 755, 'unsupported_market_first_scorer': 470, 'unsupported_stat_type': 320, 'no_player_match': 134, 'insufficient_history': 40}
 - CLV logging: 0 newly flagged, 0 newly closed, 74 still open (1338 total ever logged)
 
 ## Currently open flags
