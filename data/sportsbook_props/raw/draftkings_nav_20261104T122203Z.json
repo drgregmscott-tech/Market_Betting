@@ -1,0 +1,2740 @@
+{
+  "sports": [
+    {
+      "id": "3",
+      "name": "Football",
+      "sortOrder": 56,
+      "seoIdentifier": "Football"
+    }
+  ],
+  "leagues": [
+    {
+      "id": "88808",
+      "name": "NFL",
+      "sportId": "3",
+      "tags": [
+        "Featured"
+      ],
+      "sortOrder": 4847,
+      "seoIdentifier": "NFL",
+      "isTeamSwap": true
+    }
+  ],
+  "events": [
+    {
+      "id": "34118164",
+      "name": "JAX Jaguars @ BAL Ravens",
+      "participants": [
+        {
+          "id": "18495",
+          "name": "BAL Ravens",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "119",
+            "rosettaTeamId": "18495",
+            "rosettaTeamName": "Ravens",
+            "shortName": "BAL",
+            "teamColor": "#24135F",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#9E7C0C"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Ravens",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18489",
+          "name": "JAX Jaguars",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "118",
+            "rosettaTeamId": "18489",
+            "rosettaTeamName": "Jaguars",
+            "shortName": "JAX",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#006778",
+            "teamColorTertiary": "#9F792C"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Jaguars",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "5059a610-2523-49d5-98fe-bedbd46fb88a",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515980",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515980",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515980",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-06T01:15:00.0000000Z",
+      "seoIdentifier": "JAX Jaguars @ BAL Ravens"
+    },
+    {
+      "id": "34118128",
+      "name": "CIN Bengals @ ATL Falcons",
+      "participants": [
+        {
+          "id": "18297",
+          "name": "ATL Falcons",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "123",
+            "rosettaTeamId": "18297",
+            "rosettaTeamName": "Falcons",
+            "shortName": "ATL",
+            "teamColor": "#A71930",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Falcons",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18320",
+          "name": "CIN Bengals",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "122",
+            "rosettaTeamId": "18320",
+            "rosettaTeamName": "Bengals",
+            "shortName": "CIN",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#FB4F14",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Bengals",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71474296",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71474296",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71474296",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "e95452ac-14b5-4a53-90f4-f41014e7381a",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T14:30:00.0000000Z",
+      "seoIdentifier": "CIN Bengals @ ATL Falcons"
+    },
+    {
+      "id": "34118259",
+      "name": "NY Jets @ KC Chiefs",
+      "participants": [
+        {
+          "id": "18379",
+          "name": "KC Chiefs",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "129",
+            "rosettaTeamId": "18379",
+            "rosettaTeamName": "Chiefs",
+            "shortName": "KC",
+            "teamColor": "#E31837",
+            "teamColorSecondary": "#FFC208",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Chiefs",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18441",
+          "name": "NY Jets",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "128",
+            "rosettaTeamId": "18441",
+            "rosettaTeamName": "Jets",
+            "shortName": "NYJ",
+            "teamColor": "#115740",
+            "teamColorSecondary": "#FFFFFF",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Jets",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515986",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515986",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515986",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "fb80c11d-001a-47e6-93b1-1f9b5240bc80",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "NY Jets @ KC Chiefs"
+    },
+    {
+      "id": "34118198",
+      "name": "DET Lions @ MIA Dolphins",
+      "participants": [
+        {
+          "id": "18401",
+          "name": "MIA Dolphins",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "111",
+            "rosettaTeamId": "18401",
+            "rosettaTeamName": "Dolphins",
+            "shortName": "MIA",
+            "teamColor": "#008E97",
+            "teamColorSecondary": "#FC4C02",
+            "teamColorTertiary": "#005778"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Dolphins",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18348",
+          "name": "DET Lions",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "110",
+            "rosettaTeamId": "18348",
+            "rosettaTeamName": "Lions",
+            "shortName": "DET",
+            "teamColor": "#0076B6",
+            "teamColorSecondary": "#B0B7BC",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Lions",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515988",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515988",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515988",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "a1d3da02-131c-4e20-a37d-6b18213a83eb",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "DET Lions @ MIA Dolphins"
+    },
+    {
+      "id": "34118046",
+      "name": "DEN Broncos @ CAR Panthers",
+      "participants": [
+        {
+          "id": "18484",
+          "name": "CAR Panthers",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "105",
+            "rosettaTeamId": "18484",
+            "rosettaTeamName": "Panthers",
+            "shortName": "CAR",
+            "teamColor": "#0085CF",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#BFC0BF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Panthers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18342",
+          "name": "DEN Broncos",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "104",
+            "rosettaTeamId": "18342",
+            "rosettaTeamName": "Broncos",
+            "shortName": "DEN",
+            "teamColor": "#0A2343",
+            "teamColorSecondary": "#FC4C02",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Broncos",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515982",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515982",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515982",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "b1715b7a-8a7e-4497-aa61-4eea2954b66d",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "DEN Broncos @ CAR Panthers"
+    },
+    {
+      "id": "34118050",
+      "name": "LA Rams @ WAS Commanders",
+      "participants": [
+        {
+          "id": "18480",
+          "name": "WAS Commanders",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "113",
+            "rosettaTeamId": "18480",
+            "rosettaTeamName": "Commanders",
+            "shortName": "WAS",
+            "teamColor": "#5A1414",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Commanders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18397",
+          "name": "LA Rams",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "112",
+            "rosettaTeamId": "18397",
+            "rosettaTeamName": "Rams",
+            "shortName": "LAR",
+            "teamColor": "#003594",
+            "teamColorSecondary": "#FFD100",
+            "teamColorTertiary": "#FF8200"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Rams",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "672be66e-1fdf-41dc-9e9c-d381af94b69f",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515994",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515994",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515994",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "LA Rams @ WAS Commanders"
+    },
+    {
+      "id": "34118272",
+      "name": "DAL Cowboys @ IND Colts",
+      "participants": [
+        {
+          "id": "18372",
+          "name": "IND Colts",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "121",
+            "rosettaTeamId": "18372",
+            "rosettaTeamName": "Colts",
+            "shortName": "IND",
+            "teamColor": "#013369",
+            "teamColorSecondary": "#FFFFFF",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Colts",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18336",
+          "name": "DAL Cowboys",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "120",
+            "rosettaTeamId": "18336",
+            "rosettaTeamName": "Cowboys",
+            "shortName": "DAL",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#B0B7BC",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Cowboys",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515984",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515984",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515984",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "c1be45ef-ba9e-4268-aae3-0a005f861d19",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "DAL Cowboys @ IND Colts"
+    },
+    {
+      "id": "34118068",
+      "name": "NY Giants @ PHI Eagles",
+      "participants": [
+        {
+          "id": "18448",
+          "name": "PHI Eagles",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "117",
+            "rosettaTeamId": "18448",
+            "rosettaTeamName": "Eagles",
+            "shortName": "PHI",
+            "teamColor": "#004851",
+            "teamColorSecondary": "#A2AAAD",
+            "teamColorTertiary": "#ACC0C6"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Eagles",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18432",
+          "name": "NY Giants",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "116",
+            "rosettaTeamId": "18432",
+            "rosettaTeamName": "Giants",
+            "shortName": "NYG",
+            "teamColor": "#00338D",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Giants",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "0bfca30f-189b-45de-90e8-2181fde234d6",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515992",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515992",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515992",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "NY Giants @ PHI Eagles"
+    },
+    {
+      "id": "34118008",
+      "name": "CLE Browns @ NO Saints",
+      "participants": [
+        {
+          "id": "18423",
+          "name": "NO Saints",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "125",
+            "rosettaTeamId": "18423",
+            "rosettaTeamName": "Saints",
+            "shortName": "NO",
+            "teamColor": "#D3BC8D",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Saints",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18325",
+          "name": "CLE Browns",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "124",
+            "rosettaTeamId": "18325",
+            "rosettaTeamName": "Browns",
+            "shortName": "CLE",
+            "teamColor": "#FF3C00",
+            "teamColorSecondary": "#311D00",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Browns",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515990",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515990",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515990",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "f0733de7-d1d5-4017-ab46-f45a4053e82b",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T18:00:00.0000000Z",
+      "seoIdentifier": "CLE Browns @ NO Saints"
+    },
+    {
+      "id": "34118070",
+      "name": "LV Raiders @ SF 49ers",
+      "participants": [
+        {
+          "id": "18465",
+          "name": "SF 49ers",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "103",
+            "rosettaTeamId": "18465",
+            "rosettaTeamName": "49ers",
+            "shortName": "SF",
+            "teamColor": "#AA0000",
+            "teamColorSecondary": "#B5925D",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "49ers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18388",
+          "name": "LV Raiders",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "102",
+            "rosettaTeamId": "18388",
+            "rosettaTeamName": "Raiders",
+            "shortName": "LV",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#A5ACAF",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Raiders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515998",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515998",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515998",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "e982317b-ad53-4c43-bbe7-5ba1af55915a",
+          "mediaType": "MatchTracker"
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T21:05:00.0000000Z",
+      "seoIdentifier": "LV Raiders @ SF 49ers"
+    },
+    {
+      "id": "34118162",
+      "name": "HOU Texans @ LA Chargers",
+      "participants": [
+        {
+          "id": "18461",
+          "name": "LA Chargers",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "115",
+            "rosettaTeamId": "18461",
+            "rosettaTeamName": "Chargers",
+            "shortName": "LAC",
+            "teamColor": "#0080C6",
+            "teamColorSecondary": "#FFC20E",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Chargers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18500",
+          "name": "HOU Texans",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "114",
+            "rosettaTeamId": "18500",
+            "rosettaTeamName": "Texans",
+            "shortName": "HOU",
+            "teamColor": "#03202F",
+            "teamColorSecondary": "#C41230",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Texans",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "597e0e7b-f52f-4058-89f9-7b529ea0f578",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71515996",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515996",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71515996",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T21:05:00.0000000Z",
+      "seoIdentifier": "HOU Texans @ LA Chargers"
+    },
+    {
+      "id": "34118013",
+      "name": "ARI Cardinals @ SEA Seahawks",
+      "participants": [
+        {
+          "id": "18471",
+          "name": "SEA Seahawks",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "127",
+            "rosettaTeamId": "18471",
+            "rosettaTeamName": "Seahawks",
+            "shortName": "SEA",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#69BE28",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Seahawks",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18454",
+          "name": "ARI Cardinals",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "126",
+            "rosettaTeamId": "18454",
+            "rosettaTeamName": "Cardinals",
+            "shortName": "ARI",
+            "teamColor": "#97233F",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#FFB612"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Cardinals",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "2466a3a2-2ac8-42aa-9cb3-f87fb38126ad",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516002",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516002",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516002",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T21:25:00.0000000Z",
+      "seoIdentifier": "ARI Cardinals @ SEA Seahawks"
+    },
+    {
+      "id": "34118221",
+      "name": "GB Packers @ NE Patriots",
+      "participants": [
+        {
+          "id": "18415",
+          "name": "NE Patriots",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "107",
+            "rosettaTeamId": "18415",
+            "rosettaTeamName": "Patriots",
+            "shortName": "NE",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#B0B7BC"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Patriots",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18357",
+          "name": "GB Packers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "106",
+            "rosettaTeamId": "18357",
+            "rosettaTeamName": "Packers",
+            "shortName": "GB",
+            "teamColor": "#203731",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Packers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "6bff7768-3896-4c71-bbbe-ab32cb4d1dcc",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516000",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516000",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516000",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-08T21:25:00.0000000Z",
+      "seoIdentifier": "GB Packers @ NE Patriots"
+    },
+    {
+      "id": "34118027",
+      "name": "TB Buccaneers @ CHI Bears",
+      "participants": [
+        {
+          "id": "18312",
+          "name": "CHI Bears",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "101",
+            "rosettaTeamId": "18312",
+            "rosettaTeamName": "Bears",
+            "shortName": "CHI",
+            "teamColor": "#0B162A",
+            "teamColorSecondary": "#C83803",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Bears",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18474",
+          "name": "TB Buccaneers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "100",
+            "rosettaTeamId": "18474",
+            "rosettaTeamName": "Buccaneers",
+            "shortName": "TB",
+            "teamColor": "#A71930",
+            "teamColorSecondary": "#322F2B",
+            "teamColorTertiary": "#0A0A08"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Buccaneers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "38b2d2df-222b-4c95-80f1-79b2c3d9ecdf",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516004",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516004",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516004",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-09T01:20:00.0000000Z",
+      "seoIdentifier": "TB Buccaneers @ CHI Bears"
+    },
+    {
+      "id": "34118167",
+      "name": "BUF Bills @ MIN Vikings",
+      "participants": [
+        {
+          "id": "18409",
+          "name": "MIN Vikings",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "109",
+            "rosettaTeamId": "18409",
+            "rosettaTeamName": "Vikings",
+            "shortName": "MIN",
+            "teamColor": "#4F2683",
+            "teamColorSecondary": "#FFC62F",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Vikings",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18302",
+          "name": "BUF Bills",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "108",
+            "rosettaTeamId": "18302",
+            "rosettaTeamName": "Bills",
+            "shortName": "BUF",
+            "teamColor": "#00338D",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Bills",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "Simplebet",
+          "providerEventId": "4c3a29ce-e5af-4b63-836d-19d90879acc1",
+          "mediaType": "MatchTracker"
+        },
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516006",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516006",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516006",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "PlayerStack",
+        "PrePack",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-10T01:15:00.0000000Z",
+      "seoIdentifier": "BUF Bills @ MIN Vikings"
+    },
+    {
+      "id": "34118102",
+      "name": "WAS Commanders @ NY Giants",
+      "participants": [
+        {
+          "id": "18432",
+          "name": "NY Giants",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "135",
+            "rosettaTeamId": "18432",
+            "rosettaTeamName": "Giants",
+            "shortName": "NYG",
+            "teamColor": "#00338D",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Giants",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18480",
+          "name": "WAS Commanders",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "134",
+            "rosettaTeamId": "18480",
+            "rosettaTeamName": "Commanders",
+            "shortName": "WAS",
+            "teamColor": "#5A1414",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Commanders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516008",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516008",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516008",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-13T01:15:00.0000000Z",
+      "seoIdentifier": "WAS Commanders @ NY Giants"
+    },
+    {
+      "id": "34118220",
+      "name": "NE Patriots @ DET Lions",
+      "participants": [
+        {
+          "id": "18348",
+          "name": "DET Lions",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "139",
+            "rosettaTeamId": "18348",
+            "rosettaTeamName": "Lions",
+            "shortName": "DET",
+            "teamColor": "#0076B6",
+            "teamColorSecondary": "#B0B7BC",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Lions",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18415",
+          "name": "NE Patriots",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "138",
+            "rosettaTeamId": "18415",
+            "rosettaTeamName": "Patriots",
+            "shortName": "NE",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#B0B7BC"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Patriots",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71488892",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71488892",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71488892",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T14:30:00.0000000Z",
+      "seoIdentifier": "NE Patriots @ DET Lions"
+    },
+    {
+      "id": "34118232",
+      "name": "JAX Jaguars @ TEN Titans",
+      "participants": [
+        {
+          "id": "18366",
+          "name": "TEN Titans",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "147",
+            "rosettaTeamId": "18366",
+            "rosettaTeamName": "Titans",
+            "shortName": "TEN",
+            "teamColor": "#4B92DB",
+            "teamColorSecondary": "#C8102E"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Titans",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18489",
+          "name": "JAX Jaguars",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "146",
+            "rosettaTeamId": "18489",
+            "rosettaTeamName": "Jaguars",
+            "shortName": "JAX",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#006778",
+            "teamColorTertiary": "#9F792C"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Jaguars",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516022",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516022",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516022",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "JAX Jaguars @ TEN Titans"
+    },
+    {
+      "id": "34118132",
+      "name": "KC Chiefs @ ATL Falcons",
+      "participants": [
+        {
+          "id": "18297",
+          "name": "ATL Falcons",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "137",
+            "rosettaTeamId": "18297",
+            "rosettaTeamName": "Falcons",
+            "shortName": "ATL",
+            "teamColor": "#A71930",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Falcons",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18379",
+          "name": "KC Chiefs",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "136",
+            "rosettaTeamId": "18379",
+            "rosettaTeamName": "Chiefs",
+            "shortName": "KC",
+            "teamColor": "#E31837",
+            "teamColorSecondary": "#FFC208",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Chiefs",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516010",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516010",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516010",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "KC Chiefs @ ATL Falcons"
+    },
+    {
+      "id": "34118183",
+      "name": "BUF Bills @ NY Jets",
+      "participants": [
+        {
+          "id": "18441",
+          "name": "NY Jets",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "153",
+            "rosettaTeamId": "18441",
+            "rosettaTeamName": "Jets",
+            "shortName": "NYJ",
+            "teamColor": "#115740",
+            "teamColorSecondary": "#FFFFFF",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Jets",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18302",
+          "name": "BUF Bills",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "152",
+            "rosettaTeamId": "18302",
+            "rosettaTeamName": "Bills",
+            "shortName": "BUF",
+            "teamColor": "#00338D",
+            "teamColorSecondary": "#C60C30",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Bills",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516020",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516020",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516020",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "BUF Bills @ NY Jets"
+    },
+    {
+      "id": "34118165",
+      "name": "CAR Panthers @ NO Saints",
+      "participants": [
+        {
+          "id": "18423",
+          "name": "NO Saints",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "143",
+            "rosettaTeamId": "18423",
+            "rosettaTeamName": "Saints",
+            "shortName": "NO",
+            "teamColor": "#D3BC8D",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Saints",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18484",
+          "name": "CAR Panthers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "142",
+            "rosettaTeamId": "18484",
+            "rosettaTeamName": "Panthers",
+            "shortName": "CAR",
+            "teamColor": "#0085CF",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#BFC0BF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Panthers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516018",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516018",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516018",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "CAR Panthers @ NO Saints"
+    },
+    {
+      "id": "34118270",
+      "name": "MIA Dolphins @ IND Colts",
+      "participants": [
+        {
+          "id": "18372",
+          "name": "IND Colts",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "145",
+            "rosettaTeamId": "18372",
+            "rosettaTeamName": "Colts",
+            "shortName": "IND",
+            "teamColor": "#013369",
+            "teamColorSecondary": "#FFFFFF",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Colts",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18401",
+          "name": "MIA Dolphins",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "144",
+            "rosettaTeamId": "18401",
+            "rosettaTeamName": "Dolphins",
+            "shortName": "MIA",
+            "teamColor": "#008E97",
+            "teamColorSecondary": "#FC4C02",
+            "teamColorTertiary": "#005778"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Dolphins",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516016",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516016",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516016",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "MIA Dolphins @ IND Colts"
+    },
+    {
+      "id": "34118179",
+      "name": "MIN Vikings @ GB Packers",
+      "participants": [
+        {
+          "id": "18357",
+          "name": "GB Packers",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "131",
+            "rosettaTeamId": "18357",
+            "rosettaTeamName": "Packers",
+            "shortName": "GB",
+            "teamColor": "#203731",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Packers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18409",
+          "name": "MIN Vikings",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "130",
+            "rosettaTeamId": "18409",
+            "rosettaTeamName": "Vikings",
+            "shortName": "MIN",
+            "teamColor": "#4F2683",
+            "teamColorSecondary": "#FFC62F",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Vikings",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516014",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516014",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516014",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "MIN Vikings @ GB Packers"
+    },
+    {
+      "id": "34118093",
+      "name": "HOU Texans @ CLE Browns",
+      "participants": [
+        {
+          "id": "18325",
+          "name": "CLE Browns",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "133",
+            "rosettaTeamId": "18325",
+            "rosettaTeamName": "Browns",
+            "shortName": "CLE",
+            "teamColor": "#FF3C00",
+            "teamColorSecondary": "#311D00",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Browns",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18500",
+          "name": "HOU Texans",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "132",
+            "rosettaTeamId": "18500",
+            "rosettaTeamName": "Texans",
+            "shortName": "HOU",
+            "teamColor": "#03202F",
+            "teamColorSecondary": "#C41230",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Texans",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516012",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516012",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516012",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T18:00:00.0000000Z",
+      "seoIdentifier": "HOU Texans @ CLE Browns"
+    },
+    {
+      "id": "34118249",
+      "name": "SEA Seahawks @ LV Raiders",
+      "participants": [
+        {
+          "id": "18388",
+          "name": "LV Raiders",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "141",
+            "rosettaTeamId": "18388",
+            "rosettaTeamName": "Raiders",
+            "shortName": "LV",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#A5ACAF",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Raiders",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18471",
+          "name": "SEA Seahawks",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "140",
+            "rosettaTeamId": "18471",
+            "rosettaTeamName": "Seahawks",
+            "shortName": "SEA",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#69BE28",
+            "teamColorTertiary": "#A5ACAF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Seahawks",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516026",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516026",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516026",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T21:05:00.0000000Z",
+      "seoIdentifier": "SEA Seahawks @ LV Raiders"
+    },
+    {
+      "id": "34118111",
+      "name": "LA Rams @ ARI Cardinals",
+      "participants": [
+        {
+          "id": "18454",
+          "name": "ARI Cardinals",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "151",
+            "rosettaTeamId": "18454",
+            "rosettaTeamName": "Cardinals",
+            "shortName": "ARI",
+            "teamColor": "#97233F",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#FFB612"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Cardinals",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18397",
+          "name": "LA Rams",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "150",
+            "rosettaTeamId": "18397",
+            "rosettaTeamName": "Rams",
+            "shortName": "LAR",
+            "teamColor": "#003594",
+            "teamColorSecondary": "#FFD100",
+            "teamColorTertiary": "#FF8200"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Rams",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516024",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516024",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516024",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T21:05:00.0000000Z",
+      "seoIdentifier": "LA Rams @ ARI Cardinals"
+    },
+    {
+      "id": "34118134",
+      "name": "SF 49ers @ DAL Cowboys",
+      "participants": [
+        {
+          "id": "18336",
+          "name": "DAL Cowboys",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "155",
+            "rosettaTeamId": "18336",
+            "rosettaTeamName": "Cowboys",
+            "shortName": "DAL",
+            "teamColor": "#002244",
+            "teamColorSecondary": "#B0B7BC",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Cowboys",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18465",
+          "name": "SF 49ers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "154",
+            "rosettaTeamId": "18465",
+            "rosettaTeamName": "49ers",
+            "shortName": "SF",
+            "teamColor": "#AA0000",
+            "teamColorSecondary": "#B5925D",
+            "teamColorTertiary": "#000000"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "49ers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516028",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516028",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516028",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-15T21:25:00.0000000Z",
+      "seoIdentifier": "SF 49ers @ DAL Cowboys"
+    },
+    {
+      "id": "34118114",
+      "name": "PIT Steelers @ CIN Bengals",
+      "participants": [
+        {
+          "id": "18320",
+          "name": "CIN Bengals",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "149",
+            "rosettaTeamId": "18320",
+            "rosettaTeamName": "Bengals",
+            "shortName": "CIN",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#FB4F14",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Bengals",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18456",
+          "name": "PIT Steelers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "148",
+            "rosettaTeamId": "18456",
+            "rosettaTeamName": "Steelers",
+            "shortName": "PIT",
+            "teamColor": "#000000",
+            "teamColorSecondary": "#FFB612",
+            "teamColorTertiary": "#003087"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Steelers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516030",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516030",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516030",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-16T01:20:00.0000000Z",
+      "seoIdentifier": "PIT Steelers @ CIN Bengals"
+    },
+    {
+      "id": "34118177",
+      "name": "LA Chargers @ BAL Ravens",
+      "participants": [
+        {
+          "id": "18495",
+          "name": "BAL Ravens",
+          "venueRole": "Home",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "157",
+            "rosettaTeamId": "18495",
+            "rosettaTeamName": "Ravens",
+            "shortName": "BAL",
+            "teamColor": "#24135F",
+            "teamColorSecondary": "#000000",
+            "teamColorTertiary": "#9E7C0C"
+          },
+          "sortOrder": 2,
+          "seoIdentifier": "Ravens",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        },
+        {
+          "id": "18461",
+          "name": "LA Chargers",
+          "venueRole": "Away",
+          "type": "Team",
+          "metadata": {
+            "retailRotNumber": "156",
+            "rosettaTeamId": "18461",
+            "rosettaTeamName": "Chargers",
+            "shortName": "LAC",
+            "teamColor": "#0080C6",
+            "teamColorSecondary": "#FFC20E",
+            "teamColorTertiary": "#FFFFFF"
+          },
+          "sortOrder": 1,
+          "seoIdentifier": "Chargers",
+          "isNationalTeam": false,
+          "countryCode": "US"
+        }
+      ],
+      "eventParticipantType": "TwoTeam",
+      "eventScorecard": {
+        "scorecardComponentId": 1
+      },
+      "status": "NOT_STARTED",
+      "media": [
+        {
+          "providerName": "BetRadarStats",
+          "providerEventId": "71516032",
+          "mediaType": "Stats"
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516032",
+          "mediaType": "MatchTracker",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        },
+        {
+          "providerName": "BetRadarV3",
+          "providerEventId": "71516032",
+          "mediaType": "Scoreboard",
+          "metadata": {
+            "betRadarCoverage": "3"
+          }
+        }
+      ],
+      "metadata": {
+        "masterLeagueId": "40",
+        "numberOfParts": "4",
+        "secondsInOnePart": "900"
+      },
+      "tags": [
+        "FeaturedSubcategory",
+        "MatchTracker",
+        "OSB",
+        "SGP",
+        "Scoreboard",
+        "SgpDynamicOdds",
+        "Stats",
+        "YourBetEligible"
+      ],
+      "startEventDate": "2026-11-17T01:15:00.0000000Z",
+      "seoIdentifier": "LA Chargers @ BAL Ravens"
+    }
+  ]
+}
