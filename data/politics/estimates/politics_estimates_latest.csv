@@ -1,10 +1,10 @@
 race_id,tier,state,chamber,district,party,candidate_name,electindex_prob,electindex_model_status,hours_to_resolution,kalshi_raw_price_dem,kalshi_raw_price_rep,kalshi_corrected_prob_dem,kalshi_corrected_prob_rep,kalshi_slope_used_dem,kalshi_slope_used_rep,kalshi_edge_vs_raw_dem,kalshi_edge_vs_raw_rep,kalshi_edge_vs_electindex_dem,kalshi_edge_vs_electindex_rep,kalshi_model_status_dem,kalshi_model_status_rep,polymarket_raw_price_dem,polymarket_raw_price_rep,polymarket_corrected_prob_dem,polymarket_corrected_prob_rep,polymarket_slope_used_dem,polymarket_slope_used_rep,polymarket_edge_vs_raw_dem,polymarket_edge_vs_raw_rep,polymarket_edge_vs_electindex_dem,polymarket_edge_vs_electindex_rep,polymarket_model_status_dem,polymarket_model_status_rep
-STATE-LEG-CA-SENATE-26,Elections - State Legislature District,CA,Senate,26,DEM,Sara Hernandez,0.98,estimated,0.0,0.6,,0.6225,,1.2332,,0.0225,,-0.3575,,estimated,,,,,,,,,,,,no_market_price,
+STATE-LEG-CA-SENATE-26,Elections - State Legislature District,CA,Senate,26,DEM,Sara Hernandez,0.98,estimated,0.0,0.545,,0.5554,,1.2332,,0.0104,,-0.4246,,estimated,,,,,,,,,,,,no_market_price,
 STATE-LEG-CA-SENATE-26,Elections - State Legislature District,CA,Senate,26,REP,,0.02,estimated,0.0,,,,,,,,,,,,no_market_price,,,,,,,,,,,,no_market_price
-STATE-LEG-PA-HOUSE-12,Elections - State Legislature District,PA,House,12,DEM,Brandon Dukes,0.6783,estimated,0.0,0.25,,0.2051,,1.2332,,-0.0449,,-0.4732,,estimated,,,,,,,,,,,,no_market_price,
-STATE-LEG-PA-HOUSE-12,Elections - State Legislature District,PA,House,12,REP,Scott Timko,0.3217,estimated,0.0,,0.77,,0.8161,,1.2332,,0.0461,,0.4944,,estimated,,,,,,,,,,,,no_market_price
+STATE-LEG-PA-HOUSE-12,Elections - State Legislature District,PA,House,12,DEM,Brandon Dukes,0.6783,estimated,0.0,0.035,,0.0165,,1.2332,,-0.0185,,-0.6618,,estimated,,,,,,,,,,,,no_market_price,
+STATE-LEG-PA-HOUSE-12,Elections - State Legislature District,PA,House,12,REP,Scott Timko,0.3217,estimated,0.0,,0.965,,0.9835,,1.2332,,0.0185,,0.6618,,estimated,,,,,,,,,,,,no_market_price
 US-HOUSE-AK-01,Elections - US House District,AK,,1,DEM,(No Democrat),0.465,estimated,0.0,,,,,,,,,,,no_market_price,,,,,,,,,,,,no_market_price,
-US-HOUSE-AK-01,Elections - US House District,AK,,1,REP,Nick Begich III,0.535,estimated,0.0,,0.835,,0.8808,,1.2332,,0.0458,,0.3458,,estimated,,,,,,,,,,,,no_market_price
+US-HOUSE-AK-01,Elections - US House District,AK,,1,REP,Nick Begich III,0.535,estimated,0.0,,0.9435,,0.9699,,1.2332,,0.0264,,0.4349,,estimated,,,,,,,,,,,,no_market_price
 US-HOUSE-AL-01,Elections - US House District,AL,,1,DEM,Will the Democratic Party win the AL-01 House seat?,0.001,estimated,0.0,,,,,,,,,,,no_market_price,,0.0245,,0.0105,,1.2332,,-0.014,,0.0095,,estimated,
 US-HOUSE-AL-01,Elections - US House District,AL,,1,REP,Will the Republican Party win the AL-01 House seat?,0.9990000000000001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated
 US-HOUSE-AL-02,Elections - US House District,AL,,2,DEM,Will the Democratic Party win the AL-02 House seat?,0.675,estimated,0.0,,,,,,,,,,,no_market_price,,0.315,,0.2773,,1.2332,,-0.0377,,-0.3977,,estimated,
@@ -27,18 +27,18 @@ US-HOUSE-AR-03,Elections - US House District,AR,,3,DEM,Will the Democratic Party
 US-HOUSE-AR-03,Elections - US House District,AR,,3,REP,Will the Republican Party win the AR-03 House seat?,0.998,estimated,0.0,,,,,,,,,,,,no_market_price,,0.95,,0.9742,,1.2332,,0.0242,,-0.0238,,estimated
 US-HOUSE-AR-04,Elections - US House District,AR,,4,DEM,Will the Democratic Party win the AR-04 House seat?,0.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.0465,,0.0235,,1.2332,,-0.023,,0.0235,,estimated,
 US-HOUSE-AR-04,Elections - US House District,AR,,4,REP,Will the Republican Party win the AR-04 House seat?,1.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.935,,0.964,,1.2332,,0.029,,-0.036,,estimated
-US-HOUSE-AZ-01,Elections - US House District,AZ,,1,DEM,Amish Shah,0.882,estimated,0.0,0.9955,,0.9987,,1.2332,,0.0032,,0.1167,,estimated,,0.715,,0.7566,,1.2332,,0.0416,,-0.1254,,estimated,
-US-HOUSE-AZ-01,Elections - US House District,AZ,,1,REP,Jay Feely,0.11800000000000001,estimated,0.0,,0.0045,,0.0013,,1.2332,,-0.0032,,-0.1167,,estimated,,0.275,,0.2323,,1.2332,,-0.0427,,0.1143,,estimated
-US-HOUSE-AZ-02,Elections - US House District,AZ,,2,DEM,Jonathan Nez,0.78,estimated,0.0,0.88,,0.9211,,1.2332,,0.0411,,0.1411,,estimated,,0.285,,0.2434,,1.2332,,-0.0416,,-0.5366,,estimated,
-US-HOUSE-AZ-02,Elections - US House District,AZ,,2,REP,Eli Crane,0.22,estimated,0.0,,0.12,,0.0789,,1.2332,,-0.0411,,-0.1411,,estimated,,0.675,,0.7112,,1.2332,,0.0362,,0.4912,,estimated
+US-HOUSE-AZ-01,Elections - US House District,AZ,,1,DEM,Will the Democratic Party win the AZ-01 House seat?,0.882,estimated,0.0,,,,,,,,,,,no_market_price,,0.715,,0.7566,,1.2332,,0.0416,,-0.1254,,estimated,
+US-HOUSE-AZ-01,Elections - US House District,AZ,,1,REP,Will the Republican Party win the AZ-01 House seat?,0.11800000000000001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.275,,0.2323,,1.2332,,-0.0427,,0.1143,,estimated
+US-HOUSE-AZ-02,Elections - US House District,AZ,,2,DEM,Jonathan Nez,0.78,estimated,0.0,0.255,,0.2105,,1.2332,,-0.0445,,-0.5695,,estimated,,0.285,,0.2434,,1.2332,,-0.0416,,-0.5366,,estimated,
+US-HOUSE-AZ-02,Elections - US House District,AZ,,2,REP,Eli Crane,0.22,estimated,0.0,,0.745,,0.7895,,1.2332,,0.0445,,0.5695,,estimated,,0.675,,0.7112,,1.2332,,0.0362,,0.4912,,estimated
 US-HOUSE-AZ-03,Elections - US House District,AZ,,3,DEM,Will the Democratic Party win the AZ-03 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.9815,,0.9926,,1.2332,,0.0111,,-0.0074,,estimated,
 US-HOUSE-AZ-03,Elections - US House District,AZ,,3,REP,Will the Republican Party win the AZ-03 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0045,,0.0013,,1.2332,,-0.0032,,0.0013,,estimated
 US-HOUSE-AZ-04,Elections - US House District,AZ,,4,DEM,Will the Democratic Party win the AZ-04 House seat?,0.9990000000000001,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated,
 US-HOUSE-AZ-04,Elections - US House District,AZ,,4,REP,Will the Republican Party win the AZ-04 House seat?,0.001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.055,,0.0291,,1.2332,,-0.0259,,0.0281,,estimated
 US-HOUSE-AZ-05,Elections - US House District,AZ,,5,DEM,Will the Democratic Party win the AZ-05 House seat?,0.067,estimated,0.0,,,,,,,,,,,no_market_price,,0.085,,0.0507,,1.2332,,-0.0343,,-0.0163,,estimated,
 US-HOUSE-AZ-05,Elections - US House District,AZ,,5,REP,Will the Republican Party win the AZ-05 House seat?,0.9329999999999999,estimated,0.0,,,,,,,,,,,,no_market_price,,0.915,,0.9493,,1.2332,,0.0343,,0.0163,,estimated
-US-HOUSE-AZ-06,Elections - US House District,AZ,,6,DEM,JoAnna Mendoza,0.904,estimated,0.0,0.9955,,0.9987,,1.2332,,0.0032,,0.0947,,estimated,,0.825,,0.8713,,1.2332,,0.0463,,-0.0327,,estimated,
-US-HOUSE-AZ-06,Elections - US House District,AZ,,6,REP,Juan Ciscomani,0.096,estimated,0.0,,0.0095,,0.0032,,1.2332,,-0.0063,,-0.0928,,estimated,,0.175,,0.1287,,1.2332,,-0.0463,,0.0327,,estimated
+US-HOUSE-AZ-06,Elections - US House District,AZ,,6,DEM,Will the Democratic Party win the AZ-06 House seat?,0.904,estimated,0.0,,,,,,,,,,,no_market_price,,0.825,,0.8713,,1.2332,,0.0463,,-0.0327,,estimated,
+US-HOUSE-AZ-06,Elections - US House District,AZ,,6,REP,Will the Republican Party win the AZ-06 House seat?,0.096,estimated,0.0,,,,,,,,,,,,no_market_price,,0.175,,0.1287,,1.2332,,-0.0463,,0.0327,,estimated
 US-HOUSE-AZ-07,Elections - US House District,AZ,,7,DEM,Will the Democratic Party win the AZ-07 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.955,,0.9774,,1.2332,,0.0224,,-0.0226,,estimated,
 US-HOUSE-AZ-07,Elections - US House District,AZ,,7,REP,Will the Republican Party win the AZ-07 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.045,,0.0226,,1.2332,,-0.0224,,0.0226,,estimated
 US-HOUSE-AZ-08,Elections - US House District,AZ,,8,DEM,Will the Democratic Party win the AZ-08 House seat?,0.152,estimated,0.0,,,,,,,,,,,no_market_price,,0.16,,0.1146,,1.2332,,-0.0454,,-0.0374,,estimated,
@@ -135,8 +135,8 @@ US-HOUSE-CA-45,Elections - US House District,CA,,45,DEM,Will the Democratic Part
 US-HOUSE-CA-45,Elections - US House District,CA,,45,REP,Will the Republican Party win the CA-45 House seat?,0.001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.09,,0.0545,,1.2332,,-0.0355,,0.0535,,estimated
 US-HOUSE-CA-46,Elections - US House District,CA,,46,DEM,Will the Democratic Party win the CA-46 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.95,,0.9742,,1.2332,,0.0242,,-0.0258,,estimated,
 US-HOUSE-CA-46,Elections - US House District,CA,,46,REP,Will the Republican Party win the CA-46 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.055,,0.0291,,1.2332,,-0.0259,,0.0291,,estimated
-US-HOUSE-CA-47,Elections - US House District,CA,,47,DEM,Dave Min,0.9990000000000001,estimated,0.0,0.997,,0.9992,,1.2332,,0.0022,,0.0002,,estimated,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated,
-US-HOUSE-CA-47,Elections - US House District,CA,,47,REP,Jenny Le Roux,0.001,estimated,0.0,,0.006,,0.0018,,1.2332,,-0.0042,,0.0008,,estimated,,0.055,,0.0291,,1.2332,,-0.0259,,0.0281,,estimated
+US-HOUSE-CA-47,Elections - US House District,CA,,47,DEM,Will the Democratic Party win the CA-47 House seat?,0.9990000000000001,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated,
+US-HOUSE-CA-47,Elections - US House District,CA,,47,REP,Will the Republican Party win the CA-47 House seat?,0.001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.055,,0.0291,,1.2332,,-0.0259,,0.0281,,estimated
 US-HOUSE-CA-48,Elections - US House District,CA,,48,DEM,Will the Democratic Party win the CA-48 House seat?,0.987,estimated,0.0,,,,,,,,,,,no_market_price,,0.885,,0.9253,,1.2332,,0.0403,,-0.0617,,estimated,
 US-HOUSE-CA-48,Elections - US House District,CA,,48,REP,Will the Republican Party win the CA-48 House seat?,0.013000000000000001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.11,,0.0705,,1.2332,,-0.0395,,0.0575,,estimated
 US-HOUSE-CA-49,Elections - US House District,CA,,49,DEM,Will the Democratic Party win the CA-49 House seat?,0.9990000000000001,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated,
@@ -151,8 +151,8 @@ US-HOUSE-CO-01,Elections - US House District,CO,,1,DEM,Will the Democratic Party
 US-HOUSE-CO-01,Elections - US House District,CO,,1,REP,Will the Republican Party win the CO-01 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0205,,0.0084,,1.2332,,-0.0121,,0.0084,,estimated
 US-HOUSE-CO-02,Elections - US House District,CO,,2,DEM,Will the Democratic Party win the CO-02 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.95,,0.9742,,1.2332,,0.0242,,-0.0258,,estimated,
 US-HOUSE-CO-02,Elections - US House District,CO,,2,REP,Will the Republican Party win the CO-02 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0135,,0.005,,1.2332,,-0.0085,,0.005,,estimated
-US-HOUSE-CO-03,Elections - US House District,CO,,3,DEM,Dwayne Romero,0.5760000000000001,estimated,0.0,0.11,,0.0705,,1.2332,,-0.0395,,-0.5055,,estimated,,0.345,,0.312,,1.2332,,-0.033,,-0.264,,estimated,
-US-HOUSE-CO-03,Elections - US House District,CO,,3,REP,Jeff Hurd,0.424,estimated,0.0,,0.89,,0.9295,,1.2332,,0.0395,,0.5055,,estimated,,0.645,,0.6762,,1.2332,,0.0312,,0.2522,,estimated
+US-HOUSE-CO-03,Elections - US House District,CO,,3,DEM,Dwayne Romero,0.5760000000000001,estimated,0.0,0.011,,0.0039,,1.2332,,-0.0071,,-0.5721,,estimated,,0.345,,0.312,,1.2332,,-0.033,,-0.264,,estimated,
+US-HOUSE-CO-03,Elections - US House District,CO,,3,REP,Jeff Hurd,0.424,estimated,0.0,,0.9915,,0.9972,,1.2332,,0.0057,,0.5732,,estimated,,0.645,,0.6762,,1.2332,,0.0312,,0.2522,,estimated
 US-HOUSE-CO-04,Elections - US House District,CO,,4,DEM,Will the Democratic Party win the CO-04 House seat?,0.344,estimated,0.0,,,,,,,,,,,no_market_price,,0.37,,0.3416,,1.2332,,-0.0284,,-0.0024,,estimated,
 US-HOUSE-CO-04,Elections - US House District,CO,,4,REP,Will the Republican Party win the CO-04 House seat?,0.6559999999999999,estimated,0.0,,,,,,,,,,,,no_market_price,,0.63,,0.6584,,1.2332,,0.0284,,0.0024,,estimated
 US-HOUSE-CO-05,Elections - US House District,CO,,5,DEM,Will the Democratic Party win the CO-05 House seat?,0.319,estimated,0.0,,,,,,,,,,,no_market_price,,0.3,,0.2602,,1.2332,,-0.0398,,-0.0588,,estimated,
@@ -197,8 +197,8 @@ US-HOUSE-FL-11,Elections - US House District,FL,,11,DEM,Will the Democratic Part
 US-HOUSE-FL-11,Elections - US House District,FL,,11,REP,Will the Republican Party win the FL-11 House seat?,0.772,estimated,0.0,,,,,,,,,,,,no_market_price,,0.825,,0.8713,,1.2332,,0.0463,,0.0993,,estimated
 US-HOUSE-FL-12,Elections - US House District,FL,,12,DEM,Will the Democratic Party win the FL-12 House seat?,0.065,estimated,0.0,,,,,,,,,,,no_market_price,,0.085,,0.0507,,1.2332,,-0.0343,,-0.0143,,estimated,
 US-HOUSE-FL-12,Elections - US House District,FL,,12,REP,Will the Republican Party win the FL-12 House seat?,0.935,estimated,0.0,,,,,,,,,,,,no_market_price,,0.925,,0.9568,,1.2332,,0.0318,,0.0218,,estimated
-US-HOUSE-FL-13,Elections - US House District,FL,,13,DEM,Leela Gray,0.375,estimated,0.0,0.025,,0.0108,,1.2332,,-0.0142,,-0.3642,,estimated,,0.285,,0.2434,,1.2332,,-0.0416,,-0.1316,,estimated,
-US-HOUSE-FL-13,Elections - US House District,FL,,13,REP,Anna Paulina Luna,0.625,estimated,0.0,,0.982,,0.9928,,1.2332,,0.0108,,0.3678,,estimated,,0.72,,0.7622,,1.2332,,0.0422,,0.1372,,estimated
+US-HOUSE-FL-13,Elections - US House District,FL,,13,DEM,Will the Democratic Party win the FL-13 House seat?,0.375,estimated,0.0,,,,,,,,,,,no_market_price,,0.285,,0.2434,,1.2332,,-0.0416,,-0.1316,,estimated,
+US-HOUSE-FL-13,Elections - US House District,FL,,13,REP,Will the Republican Party win the FL-13 House seat?,0.625,estimated,0.0,,,,,,,,,,,,no_market_price,,0.72,,0.7622,,1.2332,,0.0422,,0.1372,,estimated
 US-HOUSE-FL-14,Elections - US House District,FL,,14,DEM,Will the Democratic Party win the FL-14 House seat?,0.915,estimated,0.0,,,,,,,,,,,no_market_price,,0.605,,0.6285,,1.2332,,0.0235,,-0.2865,,estimated,
 US-HOUSE-FL-14,Elections - US House District,FL,,14,REP,Will the Republican Party win the FL-14 House seat?,0.085,estimated,0.0,,,,,,,,,,,,no_market_price,,0.355,,0.3238,,1.2332,,-0.0312,,0.2388,,estimated
 US-HOUSE-FL-15,Elections - US House District,FL,,15,DEM,Will the Democratic Party win the FL-15 House seat?,0.011000000000000001,estimated,0.0,,,,,,,,,,,no_market_price,,0.0645,,0.0356,,1.2332,,-0.0289,,0.0246,,estimated,
@@ -393,8 +393,8 @@ US-HOUSE-MD-08,Elections - US House District,MD,,8,DEM,Will the Democratic Party
 US-HOUSE-MD-08,Elections - US House District,MD,,8,REP,Will the Republican Party win the MD-08 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.04,,0.0195,,1.2332,,-0.0205,,0.0195,,estimated
 US-HOUSE-ME-01,Elections - US House District,ME,,1,DEM,Will the Democratic Party win the ME-01 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0291,,estimated,
 US-HOUSE-ME-01,Elections - US House District,ME,,1,REP,Will the Republican Party win the ME-01 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.034,,0.0159,,1.2332,,-0.0181,,0.0159,,estimated
-US-HOUSE-ME-02,Elections - US House District,ME,,2,DEM,Matt Dunlap,0.39,estimated,0.0,0.012,,0.0043,,1.2332,,-0.0077,,-0.3857,,estimated,,,,,,,,,,,,no_market_price,
-US-HOUSE-ME-02,Elections - US House District,ME,,2,REP,Paul LePage,0.61,estimated,0.0,,0.992,,0.9974,,1.2332,,0.0054,,0.3874,,estimated,,,,,,,,,,,,no_market_price
+US-HOUSE-ME-02,Elections - US House District,ME,,2,DEM,Matt Dunlap,0.39,estimated,0.0,0.0015,,0.0003,,1.2332,,-0.0012,,-0.3897,,estimated,,,,,,,,,,,,no_market_price,
+US-HOUSE-ME-02,Elections - US House District,ME,,2,REP,Paul LePage,0.61,estimated,0.0,,0.9955,,0.9987,,1.2332,,0.0032,,0.3887,,estimated,,,,,,,,,,,,no_market_price
 US-HOUSE-MI-01,Elections - US House District,MI,,1,DEM,Will the Democratic Party win the MI-01 House seat?,0.057999999999999996,estimated,0.0,,,,,,,,,,,no_market_price,,0.08,,0.0469,,1.2332,,-0.0331,,-0.0111,,estimated,
 US-HOUSE-MI-01,Elections - US House District,MI,,1,REP,Will the Republican Party win the MI-01 House seat?,0.9420000000000001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.925,,0.9568,,1.2332,,0.0318,,0.0148,,estimated
 US-HOUSE-MI-02,Elections - US House District,MI,,2,DEM,Will the Democratic Party win the MI-02 House seat?,0.001,estimated,0.0,,,,,,,,,,,no_market_price,,0.008,,0.0026,,1.2332,,-0.0054,,0.0016,,estimated,
@@ -461,12 +461,12 @@ US-HOUSE-MS-03,Elections - US House District,MS,,3,DEM,Will the Democratic Party
 US-HOUSE-MS-03,Elections - US House District,MS,,3,REP,Will the Republican Party win the MS-03 House seat?,0.998,estimated,0.0,,,,,,,,,,,,no_market_price,,0.9695,,0.9862,,1.2332,,0.0167,,-0.0118,,estimated
 US-HOUSE-MS-04,Elections - US House District,MS,,4,DEM,Will the Democratic Party win the MS-04 House seat?,0.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.0285,,0.0127,,1.2332,,-0.0158,,0.0127,,estimated,
 US-HOUSE-MS-04,Elections - US House District,MS,,4,REP,Will the Republican Party win the MS-04 House seat?,1.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.9675,,0.985,,1.2332,,0.0175,,-0.015,,estimated
-US-HOUSE-MT-01,Elections - US House District,MT,,1,DEM,Sam Forstag,0.687,estimated,0.0,0.9925,,0.9976,,1.2332,,0.0051,,0.3106,,estimated,,0.375,,0.3475,,1.2332,,-0.0275,,-0.3395,,estimated,
-US-HOUSE-MT-01,Elections - US House District,MT,,1,REP,Aaron Flint,0.313,estimated,0.0,,0.002,,0.0005,,1.2332,,-0.0015,,-0.3125,,estimated,,0.62,,0.6465,,1.2332,,0.0265,,0.3335,,estimated
+US-HOUSE-MT-01,Elections - US House District,MT,,1,DEM,Will the Democratic Party win the MT-01 House seat?,0.687,estimated,0.0,,,,,,,,,,,no_market_price,,0.375,,0.3475,,1.2332,,-0.0275,,-0.3395,,estimated,
+US-HOUSE-MT-01,Elections - US House District,MT,,1,REP,Will the Republican Party win the MT-01 House seat?,0.313,estimated,0.0,,,,,,,,,,,,no_market_price,,0.62,,0.6465,,1.2332,,0.0265,,0.3335,,estimated
 US-HOUSE-MT-02,Elections - US House District,MT,,2,DEM,Will the Democratic Party win the MT-02 House seat?,0.003,estimated,0.0,,,,,,,,,,,no_market_price,,0.05,,0.0258,,1.2332,,-0.0242,,0.0228,,estimated,
 US-HOUSE-MT-02,Elections - US House District,MT,,2,REP,Will the Republican Party win the MT-02 House seat?,0.997,estimated,0.0,,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0261,,estimated
-US-HOUSE-NC-01,Elections - US House District,NC,,1,DEM,Don Davis,0.895,estimated,0.0,0.9995,,0.9999,,1.2332,,0.0004,,0.1049,,estimated,,0.615,,0.6405,,1.2332,,0.0255,,-0.2545,,estimated,
-US-HOUSE-NC-01,Elections - US House District,NC,,1,REP,Laurie Buckhout,0.105,estimated,0.0,,0.0005,,0.0001,,1.2332,,-0.0004,,-0.1049,,estimated,,0.385,,0.3595,,1.2332,,-0.0255,,0.2545,,estimated
+US-HOUSE-NC-01,Elections - US House District,NC,,1,DEM,Will the Democratic Party win the NC-01 House seat?,0.895,estimated,0.0,,,,,,,,,,,no_market_price,,0.615,,0.6405,,1.2332,,0.0255,,-0.2545,,estimated,
+US-HOUSE-NC-01,Elections - US House District,NC,,1,REP,Will the Republican Party win the NC-01 House seat?,0.105,estimated,0.0,,,,,,,,,,,,no_market_price,,0.385,,0.3595,,1.2332,,-0.0255,,0.2545,,estimated
 US-HOUSE-NC-02,Elections - US House District,NC,,2,DEM,Will the Democratic Party win the NC-02 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0291,,estimated,
 US-HOUSE-NC-02,Elections - US House District,NC,,2,REP,Will the Republican Party win the NC-02 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.037,,0.0177,,1.2332,,-0.0193,,0.0177,,estimated
 US-HOUSE-NC-03,Elections - US House District,NC,,3,DEM,Will the Democratic Party win the NC-03 House seat?,0.251,estimated,0.0,,,,,,,,,,,no_market_price,,0.14,,0.0963,,1.2332,,-0.0437,,-0.1547,,estimated,
@@ -573,8 +573,8 @@ US-HOUSE-NY-15,Elections - US House District,NY,,15,DEM,Will the Democratic Part
 US-HOUSE-NY-15,Elections - US House District,NY,,15,REP,Will the Republican Party win the NY-15 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0035,,0.0009,,1.2332,,-0.0026,,0.0009,,estimated
 US-HOUSE-NY-16,Elections - US House District,NY,,16,DEM,Will the Democratic Party win the NY-16 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.9915,,0.9972,,1.2332,,0.0057,,-0.0028,,estimated,
 US-HOUSE-NY-16,Elections - US House District,NY,,16,REP,Will the Republican Party win the NY-16 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.009,,0.003,,1.2332,,-0.006,,0.003,,estimated
-US-HOUSE-NY-17,Elections - US House District,NY,,17,DEM,Cait Conley,0.8340000000000001,estimated,0.0,0.9995,,0.9999,,1.2332,,0.0004,,0.1659,,estimated,,0.585,,0.6043,,1.2332,,0.0193,,-0.2297,,estimated,
-US-HOUSE-NY-17,Elections - US House District,NY,,17,REP,Mike Lawler,0.166,estimated,0.0,,0.0005,,0.0001,,1.2332,,-0.0004,,-0.1659,,estimated,,0.42,,0.4018,,1.2332,,-0.0182,,0.2358,,estimated
+US-HOUSE-NY-17,Elections - US House District,NY,,17,DEM,Cait Conley,0.8340000000000001,estimated,0.0,0.9965,,0.9991,,1.2332,,0.0026,,0.1651,,estimated,,0.585,,0.6043,,1.2332,,0.0193,,-0.2297,,estimated,
+US-HOUSE-NY-17,Elections - US House District,NY,,17,REP,Mike Lawler,0.166,estimated,0.0,,0.0035,,0.0009,,1.2332,,-0.0026,,-0.1651,,estimated,,0.42,,0.4018,,1.2332,,-0.0182,,0.2358,,estimated
 US-HOUSE-NY-18,Elections - US House District,NY,,18,DEM,Will the Democratic Party win the NY-18 House seat?,0.998,estimated,0.0,,,,,,,,,,,no_market_price,,0.9325,,0.9622,,1.2332,,0.0297,,-0.0358,,estimated,
 US-HOUSE-NY-18,Elections - US House District,NY,,18,REP,Will the Republican Party win the NY-18 House seat?,0.002,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0635,,0.0349,,1.2332,,-0.0286,,0.0329,,estimated
 US-HOUSE-NY-19,Elections - US House District,NY,,19,DEM,Will the Democratic Party win the NY-19 House seat?,0.995,estimated,0.0,,,,,,,,,,,no_market_price,,0.93,,0.9605,,1.2332,,0.0305,,-0.0345,,estimated,
@@ -777,8 +777,8 @@ US-HOUSE-TX-30,Elections - US House District,TX,,30,DEM,Will the Democratic Part
 US-HOUSE-TX-30,Elections - US House District,TX,,30,REP,Will the Republican Party win the TX-30 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0265,,0.0116,,1.2332,,-0.0149,,0.0116,,estimated
 US-HOUSE-TX-31,Elections - US House District,TX,,31,DEM,Will the Democratic Party win the TX-31 House seat?,0.008,estimated,0.0,,,,,,,,,,,no_market_price,,0.07,,0.0395,,1.2332,,-0.0305,,0.0315,,estimated,
 US-HOUSE-TX-31,Elections - US House District,TX,,31,REP,Will the Republican Party win the TX-31 House seat?,0.992,estimated,0.0,,,,,,,,,,,,no_market_price,,0.93,,0.9605,,1.2332,,0.0305,,-0.0315,,estimated
-US-HOUSE-TX-32,Elections - US House District,TX,,32,DEM,Dan Barrios,0.21899999999999997,estimated,0.0,0.0255,,0.0111,,1.2332,,-0.0144,,-0.2079,,estimated,,0.215,,0.1684,,1.2332,,-0.0466,,-0.0506,,estimated,
-US-HOUSE-TX-32,Elections - US House District,TX,,32,REP,Jace Yarbrough,0.7809999999999999,estimated,0.0,,0.975,,0.9892,,1.2332,,0.0142,,0.2082,,estimated,,0.78,,0.8265,,1.2332,,0.0465,,0.0455,,estimated
+US-HOUSE-TX-32,Elections - US House District,TX,,32,DEM,Will the Democratic Party win the TX-32 House seat?,0.21899999999999997,estimated,0.0,,,,,,,,,,,no_market_price,,0.215,,0.1684,,1.2332,,-0.0466,,-0.0506,,estimated,
+US-HOUSE-TX-32,Elections - US House District,TX,,32,REP,Will the Republican Party win the TX-32 House seat?,0.7809999999999999,estimated,0.0,,,,,,,,,,,,no_market_price,,0.78,,0.8265,,1.2332,,0.0465,,0.0455,,estimated
 US-HOUSE-TX-33,Elections - US House District,TX,,33,DEM,Will the Democratic Party win the TX-33 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.9625,,0.982,,1.2332,,0.0195,,-0.018,,estimated,
 US-HOUSE-TX-33,Elections - US House District,TX,,33,REP,Will the Republican Party win the TX-33 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.011,,0.0039,,1.2332,,-0.0071,,0.0039,,estimated
 US-HOUSE-TX-34,Elections - US House District,TX,,34,DEM,Will the Democratic Party win the TX-34 House seat?,0.9890000000000001,estimated,0.0,,,,,,,,,,,no_market_price,,0.745,,0.7895,,1.2332,,0.0445,,-0.1995,,estimated,
@@ -793,14 +793,14 @@ US-HOUSE-TX-38,Elections - US House District,TX,,38,DEM,Will the Democratic Part
 US-HOUSE-TX-38,Elections - US House District,TX,,38,REP,Will the Republican Party win the TX-38 House seat?,0.956,estimated,0.0,,,,,,,,,,,,no_market_price,,0.925,,0.9568,,1.2332,,0.0318,,0.0008,,estimated
 US-HOUSE-UT-01,Elections - US House District,UT,,1,DEM,Will the Democratic Party win the UT-01 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0291,,estimated,
 US-HOUSE-UT-01,Elections - US House District,UT,,1,REP,Will the Republican Party win the UT-01 House seat?,0.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.0435,,0.0216,,1.2332,,-0.0219,,0.0216,,estimated
-US-HOUSE-UT-02,Elections - US House District,UT,,2,DEM,Peter Crosby,0.002,estimated,0.0,0.005,,0.0015,,1.2332,,-0.0035,,-0.0005,,estimated,,0.045,,0.0226,,1.2332,,-0.0224,,0.0206,,estimated,
-US-HOUSE-UT-02,Elections - US House District,UT,,2,REP,Blake Moore,0.998,estimated,0.0,,0.985,,0.9943,,1.2332,,0.0093,,-0.0037,,estimated,,0.945,,0.9709,,1.2332,,0.0259,,-0.0271,,estimated
+US-HOUSE-UT-02,Elections - US House District,UT,,2,DEM,Will the Democratic Party win the UT-02 House seat?,0.002,estimated,0.0,,,,,,,,,,,no_market_price,,0.045,,0.0226,,1.2332,,-0.0224,,0.0206,,estimated,
+US-HOUSE-UT-02,Elections - US House District,UT,,2,REP,Will the Republican Party win the UT-02 House seat?,0.998,estimated,0.0,,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0271,,estimated
 US-HOUSE-UT-03,Elections - US House District,UT,,3,DEM,Will the Democratic Party win the UT-03 House seat?,0.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.055,,0.0291,,1.2332,,-0.0259,,0.0291,,estimated,
 US-HOUSE-UT-03,Elections - US House District,UT,,3,REP,Will the Republican Party win the UT-03 House seat?,1.0,estimated,0.0,,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0291,,estimated
 US-HOUSE-UT-04,Elections - US House District,UT,,4,DEM,Will the Democratic Party win the UT-04 House seat?,0.001,estimated,0.0,,,,,,,,,,,no_market_price,,0.04,,0.0195,,1.2332,,-0.0205,,0.0185,,estimated,
 US-HOUSE-UT-04,Elections - US House District,UT,,4,REP,Will the Republican Party win the UT-04 House seat?,0.9990000000000001,estimated,0.0,,,,,,,,,,,,no_market_price,,0.945,,0.9709,,1.2332,,0.0259,,-0.0281,,estimated
-US-HOUSE-VA-01,Elections - US House District,VA,,1,DEM,Shannon Taylor,0.5,estimated,0.0,0.9895,,0.9963,,1.2332,,0.0068,,0.4963,,estimated,,0.42,,0.4018,,1.2332,,-0.0182,,-0.0982,,estimated,
-US-HOUSE-VA-01,Elections - US House District,VA,,1,REP,Rob Wittman,0.5,estimated,0.0,,0.0075,,0.0024,,1.2332,,-0.0051,,-0.4976,,estimated,,0.535,,0.5431,,1.2332,,0.0081,,0.0431,,estimated
+US-HOUSE-VA-01,Elections - US House District,VA,,1,DEM,Will the Democratic Party win the VA-01 House seat?,0.5,estimated,0.0,,,,,,,,,,,no_market_price,,0.42,,0.4018,,1.2332,,-0.0182,,-0.0982,,estimated,
+US-HOUSE-VA-01,Elections - US House District,VA,,1,REP,Will the Republican Party win the VA-01 House seat?,0.5,estimated,0.0,,,,,,,,,,,,no_market_price,,0.535,,0.5431,,1.2332,,0.0081,,0.0431,,estimated
 US-HOUSE-VA-02,Elections - US House District,VA,,2,DEM,Will the Democratic Party win the VA-02 House seat?,0.884,estimated,0.0,,,,,,,,,,,no_market_price,,0.815,,0.8616,,1.2332,,0.0466,,-0.0224,,estimated,
 US-HOUSE-VA-02,Elections - US House District,VA,,2,REP,Will the Republican Party win the VA-02 House seat?,0.11599999999999999,estimated,0.0,,,,,,,,,,,,no_market_price,,0.17,,0.124,,1.2332,,-0.046,,0.008,,estimated
 US-HOUSE-VA-03,Elections - US House District,VA,,3,DEM,Will the Democratic Party win the VA-03 House seat?,1.0,estimated,0.0,,,,,,,,,,,no_market_price,,0.962,,0.9817,,1.2332,,0.0197,,-0.0183,,estimated,
