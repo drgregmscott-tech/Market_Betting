@@ -1,4 +1,4 @@
-# Politics Pipeline Digest -- 2026-11-06T20:06:52Z
+# Politics Pipeline Digest -- 2026-11-07T18:19:26Z
 
 ## Run summary
 - Race-market ingestion: 431 races (1 on both venues, 95 Kalshi series matched)
