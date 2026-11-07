@@ -1,18 +1,20 @@
-# Props Pipeline Digest -- 2026-11-06T21:41:12Z
+# Props Pipeline Digest -- 2026-11-07T06:17:12Z
 
 ## Run summary
-- DraftKings ingestion: 692 rows across 8 events (OK)
+- DraftKings ingestion: 684 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 997 rows (OK)
-- Estimation: 1689 rows written (from 1689 ingested rows) -- status breakdown: {'estimated': 780, 'unsupported_market_first_scorer': 483, 'unsupported_stat_type': 284, 'no_player_match': 116, 'insufficient_history': 26}
-- CLV logging: 2 newly flagged, 0 newly closed, 68 still open (1445 total ever logged)
+- BetMGM ingestion (via Rotowire): 1102 rows (OK)
+- Estimation: 1786 rows written (from 1786 ingested rows) -- status breakdown: {'estimated': 805, 'unsupported_market_first_scorer': 490, 'unsupported_stat_type': 341, 'no_player_match': 123, 'insufficient_history': 27}
+- CLV logging: 3 newly flagged, 0 newly closed, 71 still open (1448 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|recs|19445 | betmgm | Reggie Virgil | recs | over | 0.9912 | 0.4425 | 0.5487 | False | 2026-11-07T06:17:27Z |
 | betmgm|recs|13582 | betmgm | Josh Jacobs | recs | over | 1.0 | 0.5071 | 0.4929 | False | 2026-11-04T19:58:29Z |
+| betmgm|recs|11163 | betmgm | Demarcus Robinson | recs | over | 1.0 | 0.5203 | 0.4797 | False | 2026-11-07T06:17:27Z |
 | draftkings|385025617|0QA385025617#2346198696_13L88808Q1-1846552455Q20 | draftkings | Mike Gesicki | Anytime TD Scorer | over | 0.6321 | 0.2817 | 0.3504 | False | 2026-11-02T18:35:10Z |
 | draftkings|385032605|0QA385032605#2346227941_13L88808Q1-577361648Q20 | draftkings | Nate Adkins | Anytime TD Scorer | over | 0.4701 | 0.1333 | 0.3367 | False | 2026-11-03T19:40:49Z |
 | draftkings|385070262|0QA385070262#2346502170_13L88808Q1-533028316Q20 | draftkings | Kevin Coleman Jr. | Anytime TD Scorer | over | 0.357 | 0.1 | 0.257 | False | 2026-11-04T12:22:18Z |
@@ -69,6 +71,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|385070262|0QA385070262#2346502163_13L88808Q1354446541Q20 | draftkings | Ollie Gordon II | Anytime TD Scorer | over | 0.4823 | 0.4348 | 0.0475 | False | 2026-11-02T18:35:10Z |
 | betmgm|anytd|15459 | betmgm | Noah Gray | anytd | over | 0.2184 | 0.1739 | 0.0445 | False | 2026-11-05T00:59:13Z |
 | draftkings|385047734|0QA385047734#2346301479_13L88808Q11373713880Q20 | draftkings | Blake Corum | Anytime TD Scorer | over | 0.5084 | 0.4651 | 0.0432 | False | 2026-11-05T00:59:13Z |
+| draftkings|385025186|0QA385025186#2346191586_13L88808Q1-262322861Q20 | draftkings | Blake Whiteheart | Anytime TD Scorer | over | 0.1479 | 0.1053 | 0.0426 | False | 2026-11-07T06:17:27Z |
 | draftkings|386127772|0QA386127772#2351099786_13L88808Q11181433178Q20 | draftkings | Blake Corum | 2+ TDs | over | 0.1593 | 0.1176 | 0.0416 | False | 2026-11-05T00:59:13Z |
 | draftkings|385981278|0QA385981278#2350530203_13L88808Q1-477962024Q20 | draftkings | Darius Cooper | 2+ TDs | over | 0.0589 | 0.0179 | 0.041 | False | 2026-11-04T19:58:29Z |
 | draftkings|385047734|0QA385047734#2346301465_13L88808Q1111756323Q20 | draftkings | Jayden Daniels | Anytime TD Scorer | over | 0.3297 | 0.2899 | 0.0398 | False | 2026-11-02T18:35:10Z |
