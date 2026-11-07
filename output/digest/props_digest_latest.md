@@ -1,20 +1,21 @@
-# Props Pipeline Digest -- 2026-11-07T20:21:43Z
+# Props Pipeline Digest -- 2026-11-07T23:45:33Z
 
 ## Run summary
-- DraftKings ingestion: 688 rows across 8 events (OK)
+- DraftKings ingestion: 720 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1089 rows (OK)
-- Estimation: 1777 rows written (from 1777 ingested rows) -- status breakdown: {'estimated': 801, 'unsupported_market_first_scorer': 487, 'unsupported_stat_type': 334, 'no_player_match': 125, 'insufficient_history': 30}
-- CLV logging: 1 newly flagged, 0 newly closed, 72 still open (1449 total ever logged)
+- BetMGM ingestion (via Rotowire): 1132 rows (OK)
+- Estimation: 1852 rows written (from 1852 ingested rows) -- status breakdown: {'estimated': 812, 'unsupported_market_first_scorer': 496, 'unsupported_stat_type': 353, 'no_player_match': 154, 'insufficient_history': 37}
+- CLV logging: 2 newly flagged, 0 newly closed, 72 still open (1451 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|recs|12061 | betmgm | Tim Patrick | recs | over | 1.0 | 0.4165 | 0.5835 | False | 2026-11-07T23:45:48Z |
 | betmgm|recs|19445 | betmgm | Reggie Virgil | recs | over | 0.9912 | 0.4425 | 0.5487 | False | 2026-11-07T06:17:27Z |
 | betmgm|recs|13582 | betmgm | Josh Jacobs | recs | over | 1.0 | 0.5071 | 0.4929 | False | 2026-11-04T19:58:29Z |
-| betmgm|recs|11163 | betmgm | Demarcus Robinson | recs | over | 1.0 | 0.5203 | 0.4797 | False | 2026-11-07T06:17:27Z |
+| betmgm|recs|18536 | betmgm | Ben Yurosek | recs | over | 1.0 | 0.5575 | 0.4425 | False | 2026-11-07T23:45:48Z |
 | draftkings|385025617|0QA385025617#2346198696_13L88808Q1-1846552455Q20 | draftkings | Mike Gesicki | Anytime TD Scorer | over | 0.6321 | 0.2817 | 0.3504 | False | 2026-11-02T18:35:10Z |
 | draftkings|385032605|0QA385032605#2346227941_13L88808Q1-577361648Q20 | draftkings | Nate Adkins | Anytime TD Scorer | over | 0.4701 | 0.1333 | 0.3367 | False | 2026-11-03T19:40:49Z |
 | draftkings|385070262|0QA385070262#2346502170_13L88808Q1-533028316Q20 | draftkings | Kevin Coleman Jr. | Anytime TD Scorer | over | 0.357 | 0.1 | 0.257 | False | 2026-11-04T12:22:18Z |
@@ -57,7 +58,6 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|385070262|0QA385070262#2346502184_13L88808Q1-1939996255Q20 | draftkings | Jared Goff | Anytime TD Scorer | over | 0.1575 | 0.0909 | 0.0666 | False | 2026-11-04T12:22:18Z |
 | draftkings|385340515|0QA385340515#2347869308_13L88808Q1-1865349726Q20 | draftkings | Tee Higgins | 2+ TDs | over | 0.1915 | 0.125 | 0.0665 | False | 2026-11-03T12:08:57Z |
 | draftkings|385828865|0QA385828865#2350013752_13L88808Q11465906394Q20 | draftkings | Kevin Coleman Jr. | 2+ TDs | over | 0.0731 | 0.0083 | 0.0648 | False | 2026-11-04T12:22:18Z |
-| betmgm|anytd|11163 | betmgm | Demarcus Robinson | anytd | over | 0.3677 | 0.303 | 0.0646 | False | 2026-11-06T07:04:01Z |
 | draftkings|385032605|0QA385032605#2352345661_13L88808Q164075827Q20 | draftkings | Pat Bryant | Anytime TD Scorer | over | 0.2296 | 0.1667 | 0.063 | False | 2026-11-06T07:04:01Z |
 | draftkings|385340515|0QA385340515#2347869307_13L88808Q11526916627Q20 | draftkings | Ja'Marr Chase | 2+ TDs | over | 0.216 | 0.1538 | 0.0622 | False | 2026-11-03T12:08:57Z |
 | draftkings|385568967|0QA385568967#2348975176_13L88808Q1-2084365438Q20 | draftkings | Chuba Hubbard | 2+ TDs | over | 0.2257 | 0.1667 | 0.059 | False | 2026-11-03T19:40:49Z |
