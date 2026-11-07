@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-11-07T14:59:47Z
+# Props Pipeline Digest -- 2026-11-07T20:21:43Z
 
 ## Run summary
 - DraftKings ingestion: 688 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1102 rows (OK)
-- Estimation: 1790 rows written (from 1790 ingested rows) -- status breakdown: {'estimated': 805, 'unsupported_market_first_scorer': 490, 'unsupported_stat_type': 341, 'no_player_match': 127, 'insufficient_history': 27}
-- CLV logging: 0 newly flagged, 0 newly closed, 71 still open (1448 total ever logged)
+- BetMGM ingestion (via Rotowire): 1089 rows (OK)
+- Estimation: 1777 rows written (from 1777 ingested rows) -- status breakdown: {'estimated': 801, 'unsupported_market_first_scorer': 487, 'unsupported_stat_type': 334, 'no_player_match': 125, 'insufficient_history': 30}
+- CLV logging: 1 newly flagged, 0 newly closed, 72 still open (1449 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -48,6 +48,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|385070262|0QA385070262#2346502164_13L88808Q11579636272Q20 | draftkings | Malik Willis | Anytime TD Scorer | over | 0.3555 | 0.2597 | 0.0958 | False | 2026-11-02T18:35:10Z |
 | draftkings|385047734|0QA385047734#2346301482_13L88808Q1-822030320Q20 | draftkings | Davis Allen | Anytime TD Scorer | over | 0.3127 | 0.2174 | 0.0953 | False | 2026-11-04T19:58:29Z |
 | draftkings|385340515|0QA385340515#2347869298_13L88808Q1-703917339Q20 | draftkings | Kyle Pitts Sr. | 2+ TDs | over | 0.1336 | 0.0385 | 0.0951 | False | 2026-11-03T12:08:57Z |
+| draftkings|385025186|0QA385025186#2346191570_13L88808Q11438391772Q20 | draftkings | Bryce Lance | Anytime TD Scorer | over | 0.1783 | 0.0909 | 0.0874 | False | 2026-11-07T20:22:01Z |
 | draftkings|385032605|0QA385032605#2346227923_13L88808Q1294436062Q20 | draftkings | Darren Waller | Anytime TD Scorer | over | 0.2877 | 0.2041 | 0.0836 | False | 2026-11-03T19:40:49Z |
 | draftkings|385032605|0QA385032605#2346227933_13L88808Q11696076099Q20 | draftkings | J.K. Dobbins | Anytime TD Scorer | over | 0.3766 | 0.2941 | 0.0824 | False | 2026-11-03T19:40:49Z |
 | betmgm|anytd|11008 | betmgm | Dak Prescott | anytd | over | 0.2114 | 0.1333 | 0.0781 | False | 2026-11-04T19:58:29Z |
