@@ -1,20 +1,24 @@
-# Props Pipeline Digest -- 2026-11-10T12:50:17Z
+# Props Pipeline Digest -- 2026-11-10T21:53:58Z
 
 ## Run summary
 - DraftKings ingestion: 186 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 77 rows (OK)
-- Estimation: 263 rows written (from 263 ingested rows) -- status breakdown: {'estimated': 157, 'unsupported_market_first_scorer': 46, 'unsupported_stat_type': 27, 'no_player_match': 26, 'insufficient_history': 7}
-- CLV logging: 1 newly flagged, 0 newly closed, 23 still open (1491 total ever logged)
+- BetMGM ingestion (via Rotowire): 120 rows (OK)
+- Estimation: 306 rows written (from 306 ingested rows) -- status breakdown: {'estimated': 191, 'unsupported_market_first_scorer': 46, 'unsupported_stat_type': 35, 'no_player_match': 26, 'insufficient_history': 8}
+- CLV logging: 4 newly flagged, 0 newly closed, 27 still open (1495 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|anytd|19258 | betmgm | Jack Endries | anytd | over | 0.3677 | 0.0714 | 0.2962 | False | 2026-11-10T21:54:10Z |
 | draftkings|387480437|0QA387480437#2357394470_13L88808Q1-115201972Q20 | draftkings | Van Jefferson | Anytime TD Scorer | over | 0.4182 | 0.1333 | 0.2849 | False | 2026-11-09T06:56:58Z |
+| draftkings|387839216|0QA387839216#2359644663_13L88808Q1877705888Q20 | draftkings | Kirk Cousins | Anytime TD Scorer | over | 0.3371 | 0.0667 | 0.2704 | False | 2026-11-10T21:54:10Z |
 | betmgm|anytd|14430 | betmgm | Van Jefferson | anytd | over | 0.4182 | 0.1538 | 0.2644 | False | 2026-11-10T12:50:30Z |
 | draftkings|387480437|0QA387480437#2357394454_13L88808Q1-1809117535Q20 | draftkings | Isaiah Likely | Anytime TD Scorer | over | 0.537 | 0.3333 | 0.2037 | False | 2026-11-09T06:56:58Z |
+| draftkings|387839216|0QA387839216#2359067390_13L88808Q1-1213243313Q20 | draftkings | Jordan Love | Anytime TD Scorer | over | 0.2926 | 0.1111 | 0.1815 | False | 2026-11-10T21:54:10Z |
+| draftkings|387584920|0QA387584920#2357860056_13L88808Q1410823711Q20 | draftkings | Tony Pollard | Anytime TD Scorer | over | 0.6802 | 0.5 | 0.1802 | False | 2026-11-10T21:54:10Z |
 | draftkings|387554294|0QA387554294#2357739847_13L88808Q1480222870Q20 | draftkings | Jameson Williams | Anytime TD Scorer | over | 0.5312 | 0.3571 | 0.174 | False | 2026-11-09T18:58:36Z |
 | draftkings|387480437|0QA387480437#2357394460_13L88808Q1-534343686Q20 | draftkings | Theo Johnson | Anytime TD Scorer | over | 0.2296 | 0.0909 | 0.1387 | False | 2026-11-09T06:56:58Z |
 | draftkings|387560840|0QA387560840#2357763152_13L88808Q1999478588Q20 | draftkings | Kyle Pitts Sr. | Anytime TD Scorer | over | 0.3826 | 0.25 | 0.1326 | False | 2026-11-09T18:58:36Z |
