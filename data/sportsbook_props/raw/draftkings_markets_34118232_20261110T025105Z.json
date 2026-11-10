@@ -1,0 +1,339 @@
+{
+  "markets": [
+    {
+      "id": "387584920",
+      "eventId": "34118232",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--543590888",
+      "sortOrder": 1920,
+      "tags": [
+        "SGP",
+        "PlayerStack",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118232|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA387584920#2357860068_13L88808Q11230695518Q20",
+      "marketId": "387584920",
+      "label": "Bhayshul Tuten",
+      "displayOdds": {
+        "american": "\u2212140",
+        "decimal": "1.71",
+        "fractional": "5/7",
+        "percentage": "58%",
+        "multiplier": "1.71x"
+      },
+      "trueOdds": 1.71428572,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "886072",
+          "name": "Bhayshul Tuten",
+          "type": "Player",
+          "seoIdentifier": "Bhayshul Tuten",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 7,
+            "stringValue": "7.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "173048"
+          }
+        }
+      ],
+      "sortOrder": 3001710,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357860056_13L88808Q1410823711Q20",
+      "marketId": "387584920",
+      "label": "Tony Pollard",
+      "displayOdds": {
+        "american": "\u2212105",
+        "decimal": "1.95",
+        "fractional": "20/21",
+        "percentage": "51%",
+        "multiplier": "1.95x"
+      },
+      "trueOdds": 1.95238096,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "18062",
+          "name": "Tony Pollard",
+          "type": "Player",
+          "seoIdentifier": "Tony Pollard",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 6,
+            "stringValue": "6.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "54916"
+          }
+        }
+      ],
+      "sortOrder": 3001950,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357860069_13L88808Q1-849064763Q20",
+      "marketId": "387584920",
+      "label": "Parker Washington",
+      "displayOdds": {
+        "american": "\u2212105",
+        "decimal": "1.95",
+        "fractional": "20/21",
+        "percentage": "51%",
+        "multiplier": "1.95x"
+      },
+      "trueOdds": 1.95238096,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "694429",
+          "name": "Parker Washington",
+          "type": "Player",
+          "seoIdentifier": "Parker Washington",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 5,
+            "stringValue": "5.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123731"
+          }
+        }
+      ],
+      "sortOrder": 3001950,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357860070_13L88808Q1-1393332464Q20",
+      "marketId": "387584920",
+      "label": "Brenton Strange",
+      "displayOdds": {
+        "american": "+200",
+        "decimal": "3.00",
+        "fractional": "2/1",
+        "percentage": "33%",
+        "multiplier": "3.00x"
+      },
+      "trueOdds": 3,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "706539",
+          "name": "Brenton Strange",
+          "type": "Player",
+          "seoIdentifier": "Brenton Strange",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "145368"
+          }
+        }
+      ],
+      "sortOrder": 3003000,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357860071_13L88808Q1-992648746Q20",
+      "marketId": "387584920",
+      "label": "Jakobi Meyers",
+      "displayOdds": {
+        "american": "+200",
+        "decimal": "3.00",
+        "fractional": "2/1",
+        "percentage": "33%",
+        "multiplier": "3.00x"
+      },
+      "trueOdds": 3,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "17948",
+          "name": "Jakobi Meyers",
+          "type": "Player",
+          "seoIdentifier": "Jakobi Meyers",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "60876"
+          }
+        }
+      ],
+      "sortOrder": 3003000,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357859982_13L88808Q11703123874Q20",
+      "marketId": "387584920",
+      "label": "Carnell Tate",
+      "displayOdds": {
+        "american": "+245",
+        "decimal": "3.45",
+        "fractional": "49/20",
+        "percentage": "28%",
+        "multiplier": "3.45x"
+      },
+      "trueOdds": 3.45,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "957939",
+          "name": "Carnell Tate",
+          "type": "Player",
+          "seoIdentifier": "Carnell Tate",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 1,
+            "stringValue": "1.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "166109"
+          }
+        }
+      ],
+      "sortOrder": 3003450,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA387584920#2357860057_13L88808Q117668529Q20",
+      "marketId": "387584920",
+      "label": "Wan'Dale Robinson",
+      "displayOdds": {
+        "american": "+290",
+        "decimal": "3.90",
+        "fractional": "29/10",
+        "percentage": "25%",
+        "multiplier": "3.90x"
+      },
+      "trueOdds": 3.9,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640878",
+          "name": "Wan'Dale Robinson",
+          "type": "Player",
+          "seoIdentifier": "Wan'Dale Robinson",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "124930"
+          }
+        }
+      ],
+      "sortOrder": 3003900,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--543590888": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118232' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
