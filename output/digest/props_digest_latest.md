@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-11-14T15:15:33Z
+# Props Pipeline Digest -- 2026-11-14T20:50:37Z
 
 ## Run summary
-- DraftKings ingestion: 670 rows across 8 events (OK)
+- DraftKings ingestion: 687 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1022 rows (OK)
-- Estimation: 1692 rows written (from 1692 ingested rows) -- status breakdown: {'estimated': 773, 'unsupported_market_first_scorer': 465, 'unsupported_stat_type': 324, 'no_player_match': 106, 'insufficient_history': 24}
-- CLV logging: 0 newly flagged, 0 newly closed, 47 still open (1578 total ever logged)
+- BetMGM ingestion (via Rotowire): 1044 rows (OK)
+- Estimation: 1731 rows written (from 1731 ingested rows) -- status breakdown: {'estimated': 788, 'unsupported_market_first_scorer': 467, 'unsupported_stat_type': 337, 'no_player_match': 114, 'insufficient_history': 25}
+- CLV logging: 1 newly flagged, 0 newly closed, 48 still open (1579 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -51,6 +51,7 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|388124901|0QA388124901#2360343637_13L88808Q1637812501Q20 | draftkings | Darren Waller | 2+ TDs | over | 0.0979 | 0.0278 | 0.0701 | False | 2026-11-12T16:57:22Z |
 | draftkings|388124901|0QA388124901#2360343638_13L88808Q1372601323Q20 | draftkings | Tommy Tremble | 2+ TDs | over | 0.0849 | 0.0179 | 0.0671 | False | 2026-11-12T16:57:22Z |
 | betmgm|anytd|18647 | betmgm | Jordan Watkins | anytd | over | 0.2704 | 0.2041 | 0.0663 | False | 2026-11-13T22:04:26Z |
+| draftkings|387596455|0QA387596455#2357910875_13L88808Q11055160431Q20 | draftkings | Alvin Kamara | Anytime TD Scorer | over | 0.3258 | 0.2632 | 0.0627 | False | 2026-11-14T20:50:53Z |
 | draftkings|387842881|0QA387842881#2359090195_13L88808Q1-2072232579Q20 | draftkings | Keon Coleman | Anytime TD Scorer | over | 0.3212 | 0.2632 | 0.0581 | False | 2026-11-12T16:57:22Z |
 | draftkings|387569245|0QA387569245#2357803418_13L88808Q1-262322861Q20 | draftkings | Blake Whiteheart | Anytime TD Scorer | over | 0.116 | 0.0769 | 0.0391 | False | 2026-11-12T16:57:22Z |
 | draftkings|388124602|0QA388124602#2360342595_13L88808Q1806541095Q20 | draftkings | Mason Taylor | 2+ TDs | over | 0.0528 | 0.0152 | 0.0377 | False | 2026-11-12T16:57:22Z |
