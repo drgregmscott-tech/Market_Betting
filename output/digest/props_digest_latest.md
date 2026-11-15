@@ -1,17 +1,18 @@
-# Props Pipeline Digest -- 2026-11-14T20:50:37Z
+# Props Pipeline Digest -- 2026-11-15T06:52:01Z
 
 ## Run summary
-- DraftKings ingestion: 687 rows across 8 events (OK)
+- DraftKings ingestion: 710 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 1044 rows (OK)
-- Estimation: 1731 rows written (from 1731 ingested rows) -- status breakdown: {'estimated': 788, 'unsupported_market_first_scorer': 467, 'unsupported_stat_type': 337, 'no_player_match': 114, 'insufficient_history': 25}
-- CLV logging: 1 newly flagged, 0 newly closed, 48 still open (1579 total ever logged)
+- BetMGM ingestion (via Rotowire): 1078 rows (OK)
+- Estimation: 1788 rows written (from 1788 ingested rows) -- status breakdown: {'estimated': 801, 'unsupported_market_first_scorer': 470, 'unsupported_stat_type': 354, 'no_player_match': 134, 'insufficient_history': 29}
+- CLV logging: 1 newly flagged, 0 newly closed, 49 still open (1580 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
+| betmgm|recs|14636 | betmgm | Devin Duvernay | recs | over | 1.0 | 0.4335 | 0.5665 | False | 2026-11-15T06:52:17Z |
 | betmgm|anytd|16034 | betmgm | Teagan Quitoriano | anytd | over | 0.6002 | 0.0476 | 0.5525 | False | 2026-11-12T07:29:25Z |
 | betmgm|recs|13854 | betmgm | Ashton Dulin | recs | over | 0.9927 | 0.4554 | 0.5372 | False | 2026-11-13T22:04:26Z |
 | betmgm|recs|15229 | betmgm | Tutu Atwell | recs | over | 1.0 | 0.4797 | 0.5203 | False | 2026-11-13T22:04:26Z |
