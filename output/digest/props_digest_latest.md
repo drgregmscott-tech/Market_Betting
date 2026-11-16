@@ -1,29 +1,29 @@
-# Props Pipeline Digest -- 2026-11-15T21:09:05Z
+# Props Pipeline Digest -- 2026-11-16T06:52:45Z
 
 ## Run summary
-- DraftKings ingestion: 82 rows across 8 events (OK)
+- DraftKings ingestion: 175 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 542 rows (OK)
-- Estimation: 624 rows written (from 624 ingested rows) -- status breakdown: {'estimated': 282, 'unsupported_stat_type': 172, 'unsupported_market_first_scorer': 126, 'no_player_match': 36, 'insufficient_history': 8}
-- CLV logging: 6 newly flagged, 0 newly closed, 15 still open (1590 total ever logged)
+- BetMGM ingestion (via Rotowire): 90 rows (OK)
+- Estimation: 265 rows written (from 265 ingested rows) -- status breakdown: {'estimated': 134, 'unsupported_market_first_scorer': 75, 'unsupported_stat_type': 35, 'no_player_match': 14, 'insufficient_history': 7}
+- CLV logging: 15 newly flagged, 0 newly closed, 15 still open (1605 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_model_prob | first_flagged_market_price | first_flagged_edge | implied_prob_includes_field_vig | first_flagged_at |
 |---|---|---|---|---|---|---|---|---|---|
-| betmgm|recs|14636 | betmgm | Devin Duvernay | recs | over | 1.0 | 0.4335 | 0.5665 | False | 2026-11-15T06:52:17Z |
-| betmgm|anytd|16034 | betmgm | Teagan Quitoriano | anytd | over | 0.6002 | 0.0476 | 0.5525 | False | 2026-11-12T07:29:25Z |
-| betmgm|recs|15229 | betmgm | Tutu Atwell | recs | over | 1.0 | 0.4797 | 0.5203 | False | 2026-11-13T22:04:26Z |
-| betmgm|recs|15559 | betmgm | Simi Fehoko | recs | over | 0.9529 | 0.4425 | 0.5104 | False | 2026-11-13T22:04:26Z |
-| betmgm|recs|16897 | betmgm | Zach Charbonnet | recs | over | 1.0 | 0.5575 | 0.4425 | False | 2026-11-14T06:47:45Z |
-| betmgm|anytd|19258 | betmgm | Jack Endries | anytd | over | 0.3677 | 0.0714 | 0.2962 | False | 2026-11-10T21:54:10Z |
-| betmgm|anytd|14608 | betmgm | Charlie Woerner | anytd | over | 0.2277 | 0.087 | 0.1407 | False | 2026-11-12T07:29:25Z |
-| draftkings|387687955|0QA387687955#2358299677_13L88808Q11061966518Q20 | draftkings | Kyle Juszczyk | Anytime TD Scorer | over | 0.253 | 0.1333 | 0.1196 | False | 2026-11-15T21:09:21Z |
-| draftkings|387687955|0QA387687955#2358299679_13L88808Q1-1863661381Q20 | draftkings | Deebo Samuel | Anytime TD Scorer | over | 0.4316 | 0.3448 | 0.0868 | False | 2026-11-15T21:09:21Z |
-| draftkings|388118989|0QA388118989#2360320733_13L88808Q1-1442390665Q20 | draftkings | Christian McCaffrey | 2+ TDs | over | 0.4082 | 0.3279 | 0.0803 | False | 2026-11-15T21:09:21Z |
-| betmgm|anytd|18647 | betmgm | Jordan Watkins | anytd | over | 0.2704 | 0.2041 | 0.0663 | False | 2026-11-13T22:04:26Z |
-| draftkings|387687955|0QA387687955#2358299676_13L88808Q11030682857Q20 | draftkings | Jordan Watkins | Anytime TD Scorer | over | 0.2704 | 0.2083 | 0.062 | False | 2026-11-15T21:09:21Z |
-| draftkings|388118989|0QA388118989#2360320735_13L88808Q1-1288734733Q20 | draftkings | Deebo Samuel | 2+ TDs | over | 0.1105 | 0.0625 | 0.048 | False | 2026-11-15T21:09:21Z |
-| betmgm|anytd|13854 | betmgm | Ashton Dulin | anytd | over | 0.2404 | 0.2041 | 0.0363 | False | 2026-11-12T07:29:25Z |
-| draftkings|387687955|0QA387687955#2358299664_13L88808Q1795642865Q20 | draftkings | Dak Prescott | Anytime TD Scorer | over | 0.1652 | 0.1333 | 0.0319 | False | 2026-11-15T21:09:21Z |
+| draftkings|389630297|0QA389630297#2367290735_13L88808Q1-1461677560Q20 | draftkings | Foster Moreau | Anytime TD Scorer | over | 0.4831 | 0.1667 | 0.3165 | False | 2026-11-16T06:53:00Z |
+| draftkings|389630297|0QA389630297#2367290733_13L88808Q1-1444150535Q20 | draftkings | Xavier Hutchinson | Anytime TD Scorer | over | 0.4326 | 0.2703 | 0.1623 | False | 2026-11-16T06:53:00Z |
+| betmgm|anytd|16939 | betmgm | Derius Davis | anytd | over | 0.2114 | 0.0588 | 0.1526 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411024_13L88808Q1-1123329864Q20 | draftkings | Derius Davis | Anytime TD Scorer | over | 0.2114 | 0.0625 | 0.1489 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411007_13L88808Q1-1199795272Q20 | draftkings | Devontez Walker | Anytime TD Scorer | over | 0.2015 | 0.0588 | 0.1427 | False | 2026-11-16T06:53:00Z |
+| draftkings|389672552|0QA389672552#2367557392_13L88808Q1257323792Q20 | draftkings | Foster Moreau | 2+ TDs | over | 0.142 | 0.0164 | 0.1256 | False | 2026-11-16T06:53:00Z |
+| draftkings|389630297|0QA389630297#2367290748_13L88808Q1942374795Q20 | draftkings | Ashton Dulin | Anytime TD Scorer | over | 0.1881 | 0.0833 | 0.1047 | False | 2026-11-16T06:53:00Z |
+| draftkings|389630297|0QA389630297#2367290744_13L88808Q1-348566577Q20 | draftkings | Seth McGowan | Anytime TD Scorer | over | 0.3297 | 0.25 | 0.0797 | False | 2026-11-16T06:53:00Z |
+| draftkings|389672552|0QA389672552#2367557390_13L88808Q11497747421Q20 | draftkings | Xavier Hutchinson | 2+ TDs | over | 0.1111 | 0.0345 | 0.0766 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411014_13L88808Q1-1799172597Q20 | draftkings | Quentin Johnston | Anytime TD Scorer | over | 0.2184 | 0.1667 | 0.0517 | False | 2026-11-16T06:53:00Z |
+| draftkings|389630297|0QA389630297#2367290734_13L88808Q1401138925Q20 | draftkings | Kayshon Boutte | Anytime TD Scorer | over | 0.3031 | 0.2564 | 0.0467 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411006_13L88808Q1-700661814Q20 | draftkings | Matthew Hibner | Anytime TD Scorer | over | 0.116 | 0.0714 | 0.0446 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411016_13L88808Q1-1158159522Q20 | draftkings | Kimani Vidal | Anytime TD Scorer | over | 0.2156 | 0.1739 | 0.0417 | False | 2026-11-16T06:53:00Z |
+| draftkings|387706576|0QA387706576#2358411005_13L88808Q11714132096Q20 | draftkings | Josh Cuevas | Anytime TD Scorer | over | 0.1232 | 0.0833 | 0.0398 | False | 2026-11-16T06:53:00Z |
+| draftkings|389630297|0QA389630297#2367290743_13L88808Q11289716993Q20 | draftkings | Laquon Treadwell | Anytime TD Scorer | over | 0.2015 | 0.1667 | 0.0348 | False | 2026-11-16T06:53:00Z |
