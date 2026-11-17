@@ -1,0 +1,255 @@
+{
+  "markets": [
+    {
+      "id": "389627988",
+      "eventId": "34118202",
+      "sportId": "3",
+      "leagueId": "88808",
+      "name": "Anytime TD Scorer",
+      "subcategoryId": "12438",
+      "componentMapping": {
+        "primary": 18,
+        "fallback": 0
+      },
+      "marketType": {
+        "id": "11019",
+        "betOfferTypeId": 0,
+        "name": "Anytime Touchdown Scorer"
+      },
+      "subscriptionKey": "markets--1821764793",
+      "sortOrder": 1988,
+      "tags": [
+        "SGP",
+        "PlayerStack",
+        "YourBetEligible",
+        "Cashout",
+        "EarlyExit",
+        "EarlyExitPlus",
+        "FeaturedSubcategory",
+        "IgnoreSortOrderOnPush",
+        "OSB",
+        "PlayerProps"
+      ],
+      "correlatedId": "34118202|11019",
+      "dynamicMetadata": {}
+    }
+  ],
+  "selections": [
+    {
+      "id": "0QA389627988#2367276094_13L88808Q11826828834Q20",
+      "marketId": "389627988",
+      "label": "James Cook",
+      "displayOdds": {
+        "american": "\u2212195",
+        "decimal": "1.51",
+        "fractional": "20/39",
+        "percentage": "66%",
+        "multiplier": "1.51x"
+      },
+      "trueOdds": 1.51282052,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "640895",
+          "name": "James Cook",
+          "type": "Player",
+          "seoIdentifier": "James Cook III",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 9,
+            "stringValue": "9.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "123870"
+          }
+        }
+      ],
+      "sortOrder": 3001510,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA389627988#2367276093_13L88808Q1-677035407Q20",
+      "marketId": "389627988",
+      "label": "Josh Allen",
+      "displayOdds": {
+        "american": "\u2212160",
+        "decimal": "1.62",
+        "fractional": "5/8",
+        "percentage": "61%",
+        "multiplier": "1.62x"
+      },
+      "trueOdds": 1.625,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "11370",
+          "name": "Josh Allen",
+          "type": "Player",
+          "seoIdentifier": "Josh Allen",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 11,
+            "stringValue": "11.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "55094"
+          }
+        }
+      ],
+      "sortOrder": 3001620,
+      "tags": [
+        "SGP",
+        "2ndFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA389627988#2367276108_13L88808Q1354446541Q20",
+      "marketId": "389627988",
+      "label": "Ollie Gordon II",
+      "displayOdds": {
+        "american": "+110",
+        "decimal": "2.10",
+        "fractional": "11/10",
+        "percentage": "47%",
+        "multiplier": "2.10x"
+      },
+      "trueOdds": 2.1,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "875796",
+          "name": "Ollie Gordon II",
+          "type": "Player",
+          "seoIdentifier": "Ollie Gordon II",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 4,
+            "stringValue": "4.000",
+            "showRecentStats": true
+          },
+          "venueRole": "AwayPlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "159139"
+          }
+        }
+      ],
+      "sortOrder": 3002100,
+      "tags": [
+        "SGP",
+        "1stFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA389627988#2367276095_13L88808Q1-1945972036Q20",
+      "marketId": "389627988",
+      "label": "D.J. Moore",
+      "displayOdds": {
+        "american": "+150",
+        "decimal": "2.50",
+        "fractional": "6/4",
+        "percentage": "40%",
+        "multiplier": "2.50x"
+      },
+      "trueOdds": 2.5,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "20423",
+          "name": "D.J. Moore",
+          "type": "Player",
+          "seoIdentifier": "DJ Moore",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 3,
+            "stringValue": "3.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "112051"
+          }
+        }
+      ],
+      "sortOrder": 3002500,
+      "tags": [
+        "SGP",
+        "3rdFavorite",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "0QA389627988#2367276096_13L88808Q1-81077793Q20",
+      "marketId": "389627988",
+      "label": "Dalton Kincaid",
+      "displayOdds": {
+        "american": "+190",
+        "decimal": "2.90",
+        "fractional": "19/10",
+        "percentage": "34%",
+        "multiplier": "2.90x"
+      },
+      "trueOdds": 2.9,
+      "outcomeType": "ToScoreAnyTime",
+      "participants": [
+        {
+          "id": "699339",
+          "name": "Dalton Kincaid",
+          "type": "Player",
+          "seoIdentifier": "Dalton Kincaid",
+          "statistic": {
+            "prefix": "2026 TD",
+            "value": 2,
+            "stringValue": "2.000",
+            "showRecentStats": true
+          },
+          "venueRole": "HomePlayer",
+          "isNationalTeam": false,
+          "metadata": {
+            "sdid": "134816"
+          }
+        }
+      ],
+      "sortOrder": 3002900,
+      "tags": [
+        "SGP",
+        "EarlyExitPlus",
+        "EarlyExit",
+        "OSB"
+      ],
+      "metadata": {}
+    }
+  ],
+  "subscriptionPartials": {
+    "markets--1821764793": {
+      "entity": "markets",
+      "query": "$filter=eventId eq '34118202' AND clientMetadata/subCategoryId eq '12438' AND tags/all(t: t ne 'SportcastBetBuilder') and tags/any(t: t eq 'OSB')",
+      "locale": "en"
+    }
+  }
+}
