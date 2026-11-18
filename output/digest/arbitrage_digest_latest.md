@@ -1,8 +1,8 @@
-# Arbitrage Pipeline Digest -- 2026-11-17T21:46:34Z
+# Arbitrage Pipeline Digest -- 2026-11-18T21:23:49Z
 
 ## Run summary
-- Kalshi ingestion: 3411 rows kept (748 target series, 95 down-ballot)
-- Polymarket ingestion: 22180 rows
+- Kalshi ingestion: 3441 rows kept (751 target series, 95 down-ballot)
+- Polymarket ingestion: 22278 rows
 - Venue matching: 22 candidate pairs (12 elections-wide)
 - Detection: 1 flags (0 single-venue, 1 cross-venue) from 22 candidate pairs checked
 
