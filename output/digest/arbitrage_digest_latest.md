@@ -1,10 +1,10 @@
-# Arbitrage Pipeline Digest -- 2026-11-18T21:23:49Z
+# Arbitrage Pipeline Digest -- 2026-11-19T21:28:36Z
 
 ## Run summary
-- Kalshi ingestion: 3441 rows kept (751 target series, 95 down-ballot)
-- Polymarket ingestion: 22278 rows
-- Venue matching: 22 candidate pairs (12 elections-wide)
-- Detection: 1 flags (0 single-venue, 1 cross-venue) from 22 candidate pairs checked
+- Kalshi ingestion: 3222 rows kept (751 target series, 95 down-ballot)
+- Polymarket ingestion: 22528 rows
+- Venue matching: 10 candidate pairs (0 elections-wide)
+- Detection: 1 flags (0 single-venue, 1 cross-venue) from 10 candidate pairs checked
 
 ## This run's flagged opportunities
 Sizing is a manual step (`sizing_engine.py arbitrage size`, Session 3.3) -- this table is what to scan to pick a pair worth sizing.
