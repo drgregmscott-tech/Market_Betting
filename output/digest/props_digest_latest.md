@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-11-20T07:33:49Z
+# Props Pipeline Digest -- 2026-11-20T17:04:41Z
 
 ## Run summary
-- DraftKings ingestion: 706 rows across 8 events (OK)
+- DraftKings ingestion: 705 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 877 rows (OK)
-- Estimation: 1583 rows written (from 1583 ingested rows) -- status breakdown: {'estimated': 741, 'unsupported_market_first_scorer': 453, 'unsupported_stat_type': 268, 'no_player_match': 88, 'insufficient_history': 33}
-- CLV logging: 4 newly flagged, 0 newly closed, 78 still open (1689 total ever logged)
+- BetMGM ingestion (via Rotowire): 868 rows (OK)
+- Estimation: 1573 rows written (from 1573 ingested rows) -- status breakdown: {'estimated': 735, 'unsupported_market_first_scorer': 449, 'unsupported_stat_type': 268, 'no_player_match': 88, 'insufficient_history': 33}
+- CLV logging: 0 newly flagged, 0 newly closed, 76 still open (1689 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -23,7 +23,6 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|389635554|0QA389635554#2367321467_13L88808Q1666446492Q20 | draftkings | Bucky Irving | Anytime TD Scorer | over | 0.6986 | 0.4444 | 0.2542 | False | 2026-11-18T07:45:59Z |
 | draftkings|389625756|0QA389625756#2367262291_13L88808Q1214033643Q20 | draftkings | Audric Estime | Anytime TD Scorer | over | 0.4591 | 0.2083 | 0.2508 | False | 2026-11-17T23:36:43Z |
 | draftkings|390324753|0QA390324753#2370426262_13L88808Q1-416383636Q20 | draftkings | Bucky Irving | 2+ TDs | over | 0.3372 | 0.1 | 0.2372 | False | 2026-11-18T07:45:59Z |
-| draftkings|390207841|0QA390207841#2369787640_13L88808Q12057330150Q20 | draftkings | Teagan Quitoriano | 2+ TDs | over | 0.2336 | 0.004 | 0.2296 | False | 2026-11-18T07:45:59Z |
 | draftkings|389627988|0QA389627988#2367276119_13L88808Q11222312202Q20 | draftkings | Jalen Tolbert | Anytime TD Scorer | over | 0.2704 | 0.0556 | 0.2148 | False | 2026-11-17T13:42:12Z |
 | betmgm|anytd|18453 | betmgm | Andrew Armstrong | anytd | over | 0.2404 | 0.0476 | 0.1928 | False | 2026-11-18T17:25:01Z |
 | draftkings|389654195|0QA389654195#2367447996_13L88808Q1-985183007Q20 | draftkings | Andrew Armstrong | Anytime TD Scorer | over | 0.2404 | 0.0526 | 0.1878 | False | 2026-11-18T07:45:59Z |
@@ -66,7 +65,6 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|389648611|0QA389648611#2367417278_13L88808Q11550208160Q20 | draftkings | Daniel Bellinger | Anytime TD Scorer | over | 0.2059 | 0.1429 | 0.0631 | False | 2026-11-17T23:36:43Z |
 | draftkings|389625756|0QA389625756#2367262287_13L88808Q1138922171Q20 | draftkings | Devaughn Vele | Anytime TD Scorer | over | 0.2341 | 0.1739 | 0.0602 | False | 2026-11-17T23:36:43Z |
 | draftkings|389992033|0QA389992033#2368991842_13L88808Q11587218485Q20 | draftkings | Josh Allen | 2+ TDs | over | 0.3014 | 0.2439 | 0.0575 | False | 2026-11-17T13:42:12Z |
-| draftkings|390226233|0QA390226233#2369858151_13L88808Q12123082164Q20 | draftkings | Isaiah Williams | Anytime TD Scorer | over | 0.1813 | 0.125 | 0.0563 | False | 2026-11-20T07:34:12Z |
 | draftkings|390474625|0QA390474625#2371283440_13L88808Q1-773934870Q20 | draftkings | Roman Wilson | 2+ TDs | over | 0.0684 | 0.0179 | 0.0505 | False | 2026-11-19T01:58:02Z |
 | draftkings|389646238|0QA389646238#2367386935_13L88808Q1-700661814Q20 | draftkings | Matthew Hibner | Anytime TD Scorer | over | 0.116 | 0.0667 | 0.0494 | False | 2026-11-18T07:45:59Z |
 | betmgm|anytd|19631 | betmgm | Cyrus Allen | anytd | over | 0.2184 | 0.1739 | 0.0445 | False | 2026-11-18T17:25:01Z |
