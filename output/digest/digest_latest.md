@@ -1,9 +1,9 @@
-# Pipeline Digest -- 2026-11-21T01:24:40Z
+# Pipeline Digest -- 2026-11-21T12:31:36Z
 
 ## Run summary
-- Ingestion: 52579 rows (PrizePicks OK, Underdog OK)
-- Estimation: 52579 rows estimated (from 52579 ingested props)
-- CLV logging: 25 newly flagged, 0 newly closed, 89 still open (112338 total ever logged)
+- Ingestion: 52905 rows (PrizePicks OK, Underdog OK)
+- Estimation: 52905 rows estimated (from 52905 ingested props)
+- CLV logging: 0 newly flagged, 0 newly closed, 87 still open (112338 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
@@ -78,7 +78,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17248818 | prizepicks | Garrett Wilson | Rec Targets | under | 0.0483168914265828 | 2026-11-21T01:31:21Z | 2026-11-22T16:05:00.000-05:00 |
 | prizepicks|17062838 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.04762708868780563 | 2026-11-17T13:14:06Z | 2026-11-23T20:15:00.000-05:00 |
 | prizepicks|17248601 | prizepicks | Emeka Egbuka | Recs | under | 0.04762545486751779 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
-| prizepicks|17248595 | prizepicks | Emmett Johnson | Recs | under | 0.047411245235581934 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17061833 | prizepicks | Bryce Young | Rush Yards | under | 0.047291172718622376 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172897 | prizepicks | Colston Loveland | Rec Targets | under | 0.04606205650067807 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17048468 | prizepicks | Jeremiah Smith | Recs | under | 0.0451889882160037 | 2026-11-17T13:14:06Z | 2026-11-21T12:00:00.000-05:00 |
@@ -93,7 +92,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17248591 | prizepicks | Mark Andrews | Recs | under | 0.039029007973070184 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17238523 | prizepicks | Re'Shaun Sanford II | Rush Atts | under | 0.03832484148463389 | 2026-11-21T01:31:21Z | 2026-11-21T13:00:00.000-05:00 |
 | prizepicks|17248829 | prizepicks | Treylon Burks | Rec Targets | under | 0.03756172625102483 | 2026-11-21T01:31:21Z | 2026-11-23T20:15:00.000-05:00 |
-| prizepicks|17248825 | prizepicks | Dawson Knox | Rec Targets | under | 0.03725902608479703 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172889 | prizepicks | DJ Moore | Rec Targets | under | 0.03600478749616709 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172922 | prizepicks | Jameson Williams | Rec Targets | under | 0.03533413292464671 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172914 | prizepicks | Ryan Flournoy | Rec Targets | under | 0.03478762538563951 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
