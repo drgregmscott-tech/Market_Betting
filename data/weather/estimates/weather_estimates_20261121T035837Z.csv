@@ -1,0 +1,577 @@
+series_ticker,market_ticker,city_label,station_id,target_date,strike_type,floor_strike,cap_strike,yes_bid,yes_ask,no_bid,no_ask,forecast_kind,forecast_value_f,lead_days,model_sigma_f,sigma_source,model_prob_yes,model_status,pulled_at
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-T74,Phoenix High Temperature Daily,KPHX,2026-11-21,greater,74.0,,0.0,0.01,0.99,1.0,max,69.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-T67,Phoenix High Temperature Daily,KPHX,2026-11-21,less,,67.0,0.01,0.02,0.98,0.99,max,69.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-B73.5,Phoenix High Temperature Daily,KPHX,2026-11-21,between,73.0,74.0,0.0,0.01,0.99,1.0,max,69.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-B71.5,Phoenix High Temperature Daily,KPHX,2026-11-21,between,71.0,72.0,0.02,0.03,0.97,0.98,max,69.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-B69.5,Phoenix High Temperature Daily,KPHX,2026-11-21,between,69.0,70.0,0.5,0.51,0.49,0.5,max,69.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV21-B67.5,Phoenix High Temperature Daily,KPHX,2026-11-21,between,67.0,68.0,0.45,0.46,0.54,0.55,max,69.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-T77,Phoenix High Temperature Daily,KPHX,2026-11-20,greater,77.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-T70,Phoenix High Temperature Daily,KPHX,2026-11-20,less,,70.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-B76.5,Phoenix High Temperature Daily,KPHX,2026-11-20,between,76.0,77.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-B74.5,Phoenix High Temperature Daily,KPHX,2026-11-20,between,74.0,75.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-B72.5,Phoenix High Temperature Daily,KPHX,2026-11-20,between,72.0,73.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTPHX,KXHIGHTPHX-26NOV20-B70.5,Phoenix High Temperature Daily,KPHX,2026-11-20,between,70.0,71.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-T55,Low Temperature San Diego,KSAN,2026-11-21,greater,55.0,,0.01,0.02,0.98,0.99,min,49.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-T48,Low Temperature San Diego,KSAN,2026-11-21,less,,48.0,0.12,0.22,0.78,0.88,min,49.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-B54.5,Low Temperature San Diego,KSAN,2026-11-21,between,54.0,55.0,0.02,0.04,0.96,0.98,min,49.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-B52.5,Low Temperature San Diego,KSAN,2026-11-21,between,52.0,53.0,0.02,0.03,0.97,0.98,min,49.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-B50.5,Low Temperature San Diego,KSAN,2026-11-21,between,50.0,51.0,0.22,0.3,0.7,0.78,min,49.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV21-B48.5,Low Temperature San Diego,KSAN,2026-11-21,between,48.0,49.0,0.42,0.47,0.53,0.58,min,49.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-T55,Low Temperature San Diego,KSAN,2026-11-20,greater,55.0,,0.44,0.49,0.51,0.56,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-T48,Low Temperature San Diego,KSAN,2026-11-20,less,,48.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-B54.5,Low Temperature San Diego,KSAN,2026-11-20,between,54.0,55.0,0.38,0.45,0.55,0.62,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-B52.5,Low Temperature San Diego,KSAN,2026-11-20,between,52.0,53.0,0.02,0.03,0.97,0.98,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-B50.5,Low Temperature San Diego,KSAN,2026-11-20,between,50.0,51.0,0.01,0.02,0.98,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSAN,KXLOWTSAN-26NOV20-B48.5,Low Temperature San Diego,KSAN,2026-11-20,between,48.0,49.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-T42,Las Vegas Daily Low Temperature,KLAS,2026-11-21,greater,42.0,,0.27,0.35,0.65,0.73,min,40.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-T35,Las Vegas Daily Low Temperature,KLAS,2026-11-21,less,,35.0,0.0,0.02,0.98,1.0,min,40.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-B41.5,Las Vegas Daily Low Temperature,KLAS,2026-11-21,between,41.0,42.0,0.48,0.56,0.44,0.52,min,40.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-B39.5,Las Vegas Daily Low Temperature,KLAS,2026-11-21,between,39.0,40.0,0.13,0.14,0.86,0.87,min,40.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-B37.5,Las Vegas Daily Low Temperature,KLAS,2026-11-21,between,37.0,38.0,0.01,0.03,0.97,0.99,min,40.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV21-B35.5,Las Vegas Daily Low Temperature,KLAS,2026-11-21,between,35.0,36.0,0.0,0.02,0.98,1.0,min,40.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-T43,Las Vegas Daily Low Temperature,KLAS,2026-11-20,greater,43.0,,0.97,0.99,0.01,0.03,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-T36,Las Vegas Daily Low Temperature,KLAS,2026-11-20,less,,36.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-B42.5,Las Vegas Daily Low Temperature,KLAS,2026-11-20,between,42.0,43.0,0.01,0.03,0.97,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-B40.5,Las Vegas Daily Low Temperature,KLAS,2026-11-20,between,40.0,41.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-B38.5,Las Vegas Daily Low Temperature,KLAS,2026-11-20,between,38.0,39.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLV,KXLOWTLV-26NOV20-B36.5,Las Vegas Daily Low Temperature,KLAS,2026-11-20,between,36.0,37.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-T43,Lowest Temperature DC ,KDCA,2026-11-21,greater,43.0,,0.14,0.22,0.78,0.86,min,43.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-T36,Lowest Temperature DC ,KDCA,2026-11-21,less,,36.0,0.01,0.02,0.98,0.99,min,43.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-B42.5,Lowest Temperature DC ,KDCA,2026-11-21,between,42.0,43.0,0.47,0.52,0.48,0.53,min,43.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-B40.5,Lowest Temperature DC ,KDCA,2026-11-21,between,40.0,41.0,0.14,0.35,0.65,0.86,min,43.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-B38.5,Lowest Temperature DC ,KDCA,2026-11-21,between,38.0,39.0,0.04,0.06,0.94,0.96,min,43.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV21-B36.5,Lowest Temperature DC ,KDCA,2026-11-21,between,36.0,37.0,0.01,0.02,0.98,0.99,min,43.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-T41,Lowest Temperature DC ,KDCA,2026-11-20,greater,41.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-T34,Lowest Temperature DC ,KDCA,2026-11-20,less,,34.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-B40.5,Lowest Temperature DC ,KDCA,2026-11-20,between,40.0,41.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-B38.5,Lowest Temperature DC ,KDCA,2026-11-20,between,38.0,39.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-B36.5,Lowest Temperature DC ,KDCA,2026-11-20,between,36.0,37.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDC,KXLOWTDC-26NOV20-B34.5,Lowest Temperature DC ,KDCA,2026-11-20,between,34.0,35.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-T65,Highest temperature in NYC,KNYC,2026-11-21,greater,65.0,,0.05,0.06,0.94,0.95,max,64.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-T58,Highest temperature in NYC,KNYC,2026-11-21,less,,58.0,0.0,0.01,0.99,1.0,max,64.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-B64.5,Highest temperature in NYC,KNYC,2026-11-21,between,64.0,65.0,0.52,0.53,0.47,0.48,max,64.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-B62.5,Highest temperature in NYC,KNYC,2026-11-21,between,62.0,63.0,0.4,0.41,0.59,0.6,max,64.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-B60.5,Highest temperature in NYC,KNYC,2026-11-21,between,60.0,61.0,0.05,0.06,0.94,0.95,max,64.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV21-B58.5,Highest temperature in NYC,KNYC,2026-11-21,between,58.0,59.0,0.0,0.01,0.99,1.0,max,64.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-T69,Highest temperature in NYC,KNYC,2026-11-20,greater,69.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-T62,Highest temperature in NYC,KNYC,2026-11-20,less,,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-B68.5,Highest temperature in NYC,KNYC,2026-11-20,between,68.0,69.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-B66.5,Highest temperature in NYC,KNYC,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-B64.5,Highest temperature in NYC,KNYC,2026-11-20,between,64.0,65.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHNY,KXHIGHNY-26NOV20-B62.5,Highest temperature in NYC,KNYC,2026-11-20,between,62.0,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-T74,High Temperature San Diego,KSAN,2026-11-21,greater,74.0,,0.0,0.01,0.99,1.0,max,68.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-T67,High Temperature San Diego,KSAN,2026-11-21,less,,67.0,0.0,0.01,0.99,1.0,max,68.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-B73.5,High Temperature San Diego,KSAN,2026-11-21,between,73.0,74.0,0.01,0.02,0.98,0.99,max,68.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-B71.5,High Temperature San Diego,KSAN,2026-11-21,between,71.0,72.0,0.22,0.32,0.68,0.78,max,68.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-B69.5,High Temperature San Diego,KSAN,2026-11-21,between,69.0,70.0,0.61,0.68,0.32,0.39,max,68.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV21-B67.5,High Temperature San Diego,KSAN,2026-11-21,between,67.0,68.0,0.03,0.05,0.95,0.97,max,68.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-T72,High Temperature San Diego,KSAN,2026-11-20,greater,72.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-T65,High Temperature San Diego,KSAN,2026-11-20,less,,65.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-B71.5,High Temperature San Diego,KSAN,2026-11-20,between,71.0,72.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-B69.5,High Temperature San Diego,KSAN,2026-11-20,between,69.0,70.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-B67.5,High Temperature San Diego,KSAN,2026-11-20,between,67.0,68.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSAN,KXHIGHTSAN-26NOV20-B65.5,High Temperature San Diego,KSAN,2026-11-20,between,65.0,66.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-T31,Lowest temperature in Denver,KDEN,2026-11-21,greater,31.0,,0.01,0.05,0.95,0.99,min,32.0,0,1.91,real_measured,0.7001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-T24,Lowest temperature in Denver,KDEN,2026-11-21,less,,24.0,0.18,0.19,0.81,0.82,min,32.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-B30.5,Lowest temperature in Denver,KDEN,2026-11-21,between,30.0,31.0,0.02,0.06,0.94,0.98,min,32.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-B28.5,Lowest temperature in Denver,KDEN,2026-11-21,between,28.0,29.0,0.08,0.12,0.88,0.92,min,32.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-B26.5,Lowest temperature in Denver,KDEN,2026-11-21,between,26.0,27.0,0.23,0.34,0.66,0.77,min,32.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV21-B24.5,Lowest temperature in Denver,KDEN,2026-11-21,between,24.0,25.0,0.27,0.3,0.7,0.73,min,32.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-T38,Lowest temperature in Denver,KDEN,2026-11-20,greater,38.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-T31,Lowest temperature in Denver,KDEN,2026-11-20,less,,31.0,0.01,0.02,0.98,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-B37.5,Lowest temperature in Denver,KDEN,2026-11-20,between,37.0,38.0,0.07,0.15,0.85,0.93,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-B35.5,Lowest temperature in Denver,KDEN,2026-11-20,between,35.0,36.0,0.24,0.34,0.66,0.76,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-B33.5,Lowest temperature in Denver,KDEN,2026-11-20,between,33.0,34.0,0.25,0.33,0.67,0.75,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDEN,KXLOWTDEN-26NOV20-B31.5,Lowest temperature in Denver,KDEN,2026-11-20,between,31.0,32.0,0.14,0.24,0.76,0.86,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-T80,Dallas Maximum Temperature,KDFW,2026-11-21,greater,80.0,,0.0,0.01,0.99,1.0,max,75.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-T73,Dallas Maximum Temperature,KDFW,2026-11-21,less,,73.0,0.08,0.09,0.91,0.92,max,75.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-B79.5,Dallas Maximum Temperature,KDFW,2026-11-21,between,79.0,80.0,0.01,0.02,0.98,0.99,max,75.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-B77.5,Dallas Maximum Temperature,KDFW,2026-11-21,between,77.0,78.0,0.04,0.05,0.95,0.96,max,75.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-B75.5,Dallas Maximum Temperature,KDFW,2026-11-21,between,75.0,76.0,0.42,0.48,0.52,0.58,max,75.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV21-B73.5,Dallas Maximum Temperature,KDFW,2026-11-21,between,73.0,74.0,0.4,0.41,0.59,0.6,max,75.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-T79,Dallas Maximum Temperature,KDFW,2026-11-20,greater,79.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-T72,Dallas Maximum Temperature,KDFW,2026-11-20,less,,72.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-B78.5,Dallas Maximum Temperature,KDFW,2026-11-20,between,78.0,79.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-B76.5,Dallas Maximum Temperature,KDFW,2026-11-20,between,76.0,77.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-B74.5,Dallas Maximum Temperature,KDFW,2026-11-20,between,74.0,75.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDAL,KXHIGHTDAL-26NOV20-B72.5,Dallas Maximum Temperature,KDFW,2026-11-20,between,72.0,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-T82,Daily High Temperature Houston,KHOU,2026-11-21,greater,82.0,,0.0,0.01,0.99,1.0,max,77.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-T75,Daily High Temperature Houston,KHOU,2026-11-21,less,,75.0,0.01,0.02,0.98,0.99,max,77.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-B81.5,Daily High Temperature Houston,KHOU,2026-11-21,between,81.0,82.0,0.02,0.03,0.97,0.98,max,77.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-B79.5,Daily High Temperature Houston,KHOU,2026-11-21,between,79.0,80.0,0.23,0.24,0.76,0.77,max,77.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-B77.5,Daily High Temperature Houston,KHOU,2026-11-21,between,77.0,78.0,0.65,0.7,0.3,0.35,max,77.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV21-B75.5,Daily High Temperature Houston,KHOU,2026-11-21,between,75.0,76.0,0.08,0.09,0.91,0.92,max,77.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-T80,Daily High Temperature Houston,KHOU,2026-11-20,greater,80.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-T73,Daily High Temperature Houston,KHOU,2026-11-20,less,,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-B79.5,Daily High Temperature Houston,KHOU,2026-11-20,between,79.0,80.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-B77.5,Daily High Temperature Houston,KHOU,2026-11-20,between,77.0,78.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-B75.5,Daily High Temperature Houston,KHOU,2026-11-20,between,75.0,76.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTHOU,KXHIGHTHOU-26NOV20-B73.5,Daily High Temperature Houston,KHOU,2026-11-20,between,73.0,74.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-T56,Lowest temperature Dallas,KDFW,2026-11-21,greater,56.0,,0.47,0.5,0.5,0.53,min,56.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-T49,Lowest temperature Dallas,KDFW,2026-11-21,less,,49.0,0.0,0.01,0.99,1.0,min,56.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-B55.5,Lowest temperature Dallas,KDFW,2026-11-21,between,55.0,56.0,0.28,0.36,0.64,0.72,min,56.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-B53.5,Lowest temperature Dallas,KDFW,2026-11-21,between,53.0,54.0,0.17,0.18,0.82,0.83,min,56.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-B51.5,Lowest temperature Dallas,KDFW,2026-11-21,between,51.0,52.0,0.02,0.03,0.97,0.98,min,56.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV21-B49.5,Lowest temperature Dallas,KDFW,2026-11-21,between,49.0,50.0,0.01,0.02,0.98,0.99,min,56.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-T53,Lowest temperature Dallas,KDFW,2026-11-20,greater,53.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-T46,Lowest temperature Dallas,KDFW,2026-11-20,less,,46.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-B52.5,Lowest temperature Dallas,KDFW,2026-11-20,between,52.0,53.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-B50.5,Lowest temperature Dallas,KDFW,2026-11-20,between,50.0,51.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-B48.5,Lowest temperature Dallas,KDFW,2026-11-20,between,48.0,49.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTDAL,KXLOWTDAL-26NOV20-B46.5,Lowest temperature Dallas,KDFW,2026-11-20,between,46.0,47.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-T65,Boston Maximum Daily Temperature,KBOS,2026-11-21,greater,65.0,,0.0,0.01,0.99,1.0,max,60.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-T58,Boston Maximum Daily Temperature,KBOS,2026-11-21,less,,58.0,0.07,0.08,0.92,0.93,max,60.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-B64.5,Boston Maximum Daily Temperature,KBOS,2026-11-21,between,64.0,65.0,0.01,0.02,0.98,0.99,max,60.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-B62.5,Boston Maximum Daily Temperature,KBOS,2026-11-21,between,62.0,63.0,0.08,0.09,0.91,0.92,max,60.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-B60.5,Boston Maximum Daily Temperature,KBOS,2026-11-21,between,60.0,61.0,0.43,0.44,0.56,0.57,max,60.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV21-B58.5,Boston Maximum Daily Temperature,KBOS,2026-11-21,between,58.0,59.0,0.35,0.37,0.63,0.65,max,60.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-T69,Boston Maximum Daily Temperature,KBOS,2026-11-20,greater,69.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-T62,Boston Maximum Daily Temperature,KBOS,2026-11-20,less,,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-B68.5,Boston Maximum Daily Temperature,KBOS,2026-11-20,between,68.0,69.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-B66.5,Boston Maximum Daily Temperature,KBOS,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-B64.5,Boston Maximum Daily Temperature,KBOS,2026-11-20,between,64.0,65.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTBOS,KXHIGHTBOS-26NOV20-B62.5,Boston Maximum Daily Temperature,KBOS,2026-11-20,between,62.0,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-T40,Trenton Daily low temp ,KTTN,2026-11-21,greater,40.0,,0.08,0.09,0.91,0.92,min,39.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-T33,Trenton Daily low temp ,KTTN,2026-11-21,less,,33.0,0.0,0.02,0.98,1.0,min,39.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-B39.5,Trenton Daily low temp ,KTTN,2026-11-21,between,39.0,40.0,0.27,0.42,0.58,0.73,min,39.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-B37.5,Trenton Daily low temp ,KTTN,2026-11-21,between,37.0,38.0,0.29,0.37,0.63,0.71,min,39.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-B35.5,Trenton Daily low temp ,KTTN,2026-11-21,between,35.0,36.0,0.07,0.15,0.85,0.93,min,39.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV21-B33.5,Trenton Daily low temp ,KTTN,2026-11-21,between,33.0,34.0,0.02,0.08,0.92,0.98,min,39.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-T36,Trenton Daily low temp ,KTTN,2026-11-20,greater,36.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-T29,Trenton Daily low temp ,KTTN,2026-11-20,less,,29.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-B35.5,Trenton Daily low temp ,KTTN,2026-11-20,between,35.0,36.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-B33.5,Trenton Daily low temp ,KTTN,2026-11-20,between,33.0,34.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-B31.5,Trenton Daily low temp ,KTTN,2026-11-20,between,31.0,32.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTTTN,KXLOWTTTN-26NOV20-B29.5,Trenton Daily low temp ,KTTN,2026-11-20,between,29.0,30.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-T48,Lowest Temperature in LA,KLAX,2026-11-21,greater,48.0,,0.55,0.6,0.4,0.45,min,47.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-T41,Lowest Temperature in LA,KLAX,2026-11-21,less,,41.0,0.0,0.01,0.99,1.0,min,47.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-B47.5,Lowest Temperature in LA,KLAX,2026-11-21,between,47.0,48.0,0.32,0.38,0.62,0.68,min,47.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-B45.5,Lowest Temperature in LA,KLAX,2026-11-21,between,45.0,46.0,0.04,0.07,0.93,0.96,min,47.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-B43.5,Lowest Temperature in LA,KLAX,2026-11-21,between,43.0,44.0,0.01,0.02,0.98,0.99,min,47.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV21-B41.5,Lowest Temperature in LA,KLAX,2026-11-21,between,41.0,42.0,0.01,0.02,0.98,0.99,min,47.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-T51,Lowest Temperature in LA,KLAX,2026-11-20,greater,51.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-T44,Lowest Temperature in LA,KLAX,2026-11-20,less,,44.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-B50.5,Lowest Temperature in LA,KLAX,2026-11-20,between,50.0,51.0,0.88,0.94,0.06,0.12,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-B48.5,Lowest Temperature in LA,KLAX,2026-11-20,between,48.0,49.0,0.04,0.12,0.88,0.96,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-B46.5,Lowest Temperature in LA,KLAX,2026-11-20,between,46.0,47.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTLAX,KXLOWTLAX-26NOV20-B44.5,Lowest Temperature in LA,KLAX,2026-11-20,between,44.0,45.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-T87,Highest temperature in Miami,KMIA,2026-11-21,greater,87.0,,0.0,0.01,0.99,1.0,max,84.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-T80,Highest temperature in Miami,KMIA,2026-11-21,less,,80.0,0.01,0.02,0.98,0.99,max,84.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-B86.5,Highest temperature in Miami,KMIA,2026-11-21,between,86.0,87.0,0.05,0.06,0.94,0.95,max,84.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-B84.5,Highest temperature in Miami,KMIA,2026-11-21,between,84.0,85.0,0.41,0.42,0.58,0.59,max,84.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-B82.5,Highest temperature in Miami,KMIA,2026-11-21,between,82.0,83.0,0.44,0.46,0.54,0.56,max,84.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV21-B80.5,Highest temperature in Miami,KMIA,2026-11-21,between,80.0,81.0,0.07,0.08,0.92,0.93,max,84.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-T87,Highest temperature in Miami,KMIA,2026-11-20,greater,87.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-T80,Highest temperature in Miami,KMIA,2026-11-20,less,,80.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-B86.5,Highest temperature in Miami,KMIA,2026-11-20,between,86.0,87.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-B84.5,Highest temperature in Miami,KMIA,2026-11-20,between,84.0,85.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-B82.5,Highest temperature in Miami,KMIA,2026-11-20,between,82.0,83.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHMIA,KXHIGHMIA-26NOV20-B80.5,Highest temperature in Miami,KMIA,2026-11-20,between,80.0,81.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-T48,Lowest temperature in NYC,KNYC,2026-11-21,greater,48.0,,0.53,0.59,0.41,0.47,min,46.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-T41,Lowest temperature in NYC,KNYC,2026-11-21,less,,41.0,0.0,0.01,0.99,1.0,min,46.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-B47.5,Lowest temperature in NYC,KNYC,2026-11-21,between,47.0,48.0,0.23,0.38,0.62,0.77,min,46.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-B45.5,Lowest temperature in NYC,KNYC,2026-11-21,between,45.0,46.0,0.06,0.11,0.89,0.94,min,46.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-B43.5,Lowest temperature in NYC,KNYC,2026-11-21,between,43.0,44.0,0.03,0.13,0.87,0.97,min,46.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV21-B41.5,Lowest temperature in NYC,KNYC,2026-11-21,between,41.0,42.0,0.0,0.01,0.99,1.0,min,46.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-T48,Lowest temperature in NYC,KNYC,2026-11-20,greater,48.0,,0.95,0.98,0.02,0.05,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-T41,Lowest temperature in NYC,KNYC,2026-11-20,less,,41.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-B47.5,Lowest temperature in NYC,KNYC,2026-11-20,between,47.0,48.0,0.01,0.02,0.98,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-B45.5,Lowest temperature in NYC,KNYC,2026-11-20,between,45.0,46.0,0.03,0.04,0.96,0.97,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-B43.5,Lowest temperature in NYC,KNYC,2026-11-20,between,43.0,44.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNYC,KXLOWTNYC-26NOV20-B41.5,Lowest temperature in NYC,KNYC,2026-11-20,between,41.0,42.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-T47,Low Temperature Boston,KBOS,2026-11-21,greater,47.0,,0.01,0.02,0.98,0.99,min,44.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-T40,Low Temperature Boston,KBOS,2026-11-21,less,,40.0,0.01,0.02,0.98,0.99,min,44.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-B46.5,Low Temperature Boston,KBOS,2026-11-21,between,46.0,47.0,0.03,0.12,0.88,0.97,min,44.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-B44.5,Low Temperature Boston,KBOS,2026-11-21,between,44.0,45.0,0.34,0.45,0.55,0.66,min,44.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-B42.5,Low Temperature Boston,KBOS,2026-11-21,between,42.0,43.0,0.3,0.38,0.62,0.7,min,44.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV21-B40.5,Low Temperature Boston,KBOS,2026-11-21,between,40.0,41.0,0.06,0.13,0.87,0.94,min,44.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-T41,Low Temperature Boston,KBOS,2026-11-20,greater,41.0,,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-T34,Low Temperature Boston,KBOS,2026-11-20,less,,34.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-B40.5,Low Temperature Boston,KBOS,2026-11-20,between,40.0,41.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-B38.5,Low Temperature Boston,KBOS,2026-11-20,between,38.0,39.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-B36.5,Low Temperature Boston,KBOS,2026-11-20,between,36.0,37.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTBOS,KXLOWTBOS-26NOV20-B34.5,Low Temperature Boston,KBOS,2026-11-20,between,34.0,35.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-T78,New Orleans Max temp Daily,KMSY,2026-11-21,greater,78.0,,0.0,0.01,0.99,1.0,max,73.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-T71,New Orleans Max temp Daily,KMSY,2026-11-21,less,,71.0,0.01,0.02,0.98,0.99,max,73.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-B77.5,New Orleans Max temp Daily,KMSY,2026-11-21,between,77.0,78.0,0.01,0.02,0.98,0.99,max,73.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-B75.5,New Orleans Max temp Daily,KMSY,2026-11-21,between,75.0,76.0,0.33,0.34,0.66,0.67,max,73.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-B73.5,New Orleans Max temp Daily,KMSY,2026-11-21,between,73.0,74.0,0.63,0.65,0.35,0.37,max,73.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV21-B71.5,New Orleans Max temp Daily,KMSY,2026-11-21,between,71.0,72.0,0.03,0.05,0.95,0.97,max,73.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-T75,New Orleans Max temp Daily,KMSY,2026-11-20,greater,75.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-T68,New Orleans Max temp Daily,KMSY,2026-11-20,less,,68.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-B74.5,New Orleans Max temp Daily,KMSY,2026-11-20,between,74.0,75.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-B72.5,New Orleans Max temp Daily,KMSY,2026-11-20,between,72.0,73.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-B70.5,New Orleans Max temp Daily,KMSY,2026-11-20,between,70.0,71.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTNOLA,KXHIGHTNOLA-26NOV20-B68.5,New Orleans Max temp Daily,KMSY,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-T67,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,greater,67.0,,0.0,0.01,0.99,1.0,max,65.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-T60,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,less,,60.0,0.0,0.01,0.99,1.0,max,65.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-B66.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,between,66.0,67.0,0.15,0.21,0.79,0.85,max,65.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-B64.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,between,64.0,65.0,0.63,0.7,0.3,0.37,max,65.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-B62.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,between,62.0,63.0,0.09,0.12,0.88,0.91,max,65.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV21-B60.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-21,between,60.0,61.0,0.01,0.02,0.98,0.99,max,65.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-T71,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,greater,71.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-T64,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,less,,64.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-B70.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,between,70.0,71.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-B68.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-B66.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTEWR,KXHIGHTEWR-26NOV20-B64.5,"Newark, NJ (EWR) Daily Max Temp",KEWR,2026-11-20,between,64.0,65.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-T49,Highest temperature in Denver,KDEN,2026-11-21,greater,49.0,,0.02,0.03,0.97,0.98,max,45.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-T42,Highest temperature in Denver,KDEN,2026-11-21,less,,42.0,0.01,0.02,0.98,0.99,max,45.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-B48.5,Highest temperature in Denver,KDEN,2026-11-21,between,48.0,49.0,0.16,0.17,0.83,0.84,max,45.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-B46.5,Highest temperature in Denver,KDEN,2026-11-21,between,46.0,47.0,0.45,0.46,0.54,0.55,max,45.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-B44.5,Highest temperature in Denver,KDEN,2026-11-21,between,44.0,45.0,0.31,0.32,0.68,0.69,max,45.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV21-B42.5,Highest temperature in Denver,KDEN,2026-11-21,between,42.0,43.0,0.03,0.04,0.96,0.97,max,45.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-T64,Highest temperature in Denver,KDEN,2026-11-20,greater,64.0,,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-T57,Highest temperature in Denver,KDEN,2026-11-20,less,,57.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-B63.5,Highest temperature in Denver,KDEN,2026-11-20,between,63.0,64.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-B61.5,Highest temperature in Denver,KDEN,2026-11-20,between,61.0,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-B59.5,Highest temperature in Denver,KDEN,2026-11-20,between,59.0,60.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHDEN,KXHIGHDEN-26NOV20-B57.5,Highest temperature in Denver,KDEN,2026-11-20,between,57.0,58.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-T79,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,greater,79.0,,0.0,0.01,0.99,1.0,max,73.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-T72,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,less,,72.0,0.2,0.21,0.79,0.8,max,73.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-B78.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,between,78.0,79.0,0.01,0.02,0.98,0.99,max,73.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-B76.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,between,76.0,77.0,0.02,0.03,0.97,0.98,max,73.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-B74.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,between,74.0,75.0,0.29,0.3,0.7,0.71,max,73.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV21-B72.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-21,between,72.0,73.0,0.45,0.5,0.5,0.55,max,73.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-T80,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,greater,80.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-T73,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,less,,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-B79.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,between,79.0,80.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-B77.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,between,77.0,78.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-B75.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,between,75.0,76.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSATX,KXHIGHTSATX-26NOV20-B73.5,San Antonio Daily Maximum Temperature,KSAT,2026-11-20,between,73.0,74.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-T45,Low  temperature Minnesota,KMSP,2026-11-21,greater,45.0,,0.02,0.03,0.97,0.98,min,58.0,0,1.91,real_measured,1.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-T38,Low  temperature Minnesota,KMSP,2026-11-21,less,,38.0,0.0,0.01,0.99,1.0,min,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-B44.5,Low  temperature Minnesota,KMSP,2026-11-21,between,44.0,45.0,0.38,0.48,0.52,0.62,min,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-B42.5,Low  temperature Minnesota,KMSP,2026-11-21,between,42.0,43.0,0.34,0.45,0.55,0.66,min,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-B40.5,Low  temperature Minnesota,KMSP,2026-11-21,between,40.0,41.0,0.07,0.17,0.83,0.93,min,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV21-B38.5,Low  temperature Minnesota,KMSP,2026-11-21,between,38.0,39.0,0.01,0.02,0.98,0.99,min,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-T39,Low  temperature Minnesota,KMSP,2026-11-20,greater,39.0,,0.99,1.0,0.0,0.01,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-T32,Low  temperature Minnesota,KMSP,2026-11-20,less,,32.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-B38.5,Low  temperature Minnesota,KMSP,2026-11-20,between,38.0,39.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-B36.5,Low  temperature Minnesota,KMSP,2026-11-20,between,36.0,37.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-B34.5,Low  temperature Minnesota,KMSP,2026-11-20,between,34.0,35.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIN,KXLOWTMIN-26NOV20-B32.5,Low  temperature Minnesota,KMSP,2026-11-20,between,32.0,33.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-T72,Atlanta Max Temperature,KATL,2026-11-21,greater,72.0,,0.0,0.01,0.99,1.0,max,64.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-T65,Atlanta Max Temperature,KATL,2026-11-21,less,,65.0,0.9,0.91,0.09,0.1,max,64.0,0,1.91,real_measured,0.7001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-B71.5,Atlanta Max Temperature,KATL,2026-11-21,between,71.0,72.0,0.0,0.01,0.99,1.0,max,64.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-B69.5,Atlanta Max Temperature,KATL,2026-11-21,between,69.0,70.0,0.01,0.02,0.98,0.99,max,64.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-B67.5,Atlanta Max Temperature,KATL,2026-11-21,between,67.0,68.0,0.01,0.02,0.98,0.99,max,64.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV21-B65.5,Atlanta Max Temperature,KATL,2026-11-21,between,65.0,66.0,0.05,0.06,0.94,0.95,max,64.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-T74,Atlanta Max Temperature,KATL,2026-11-20,greater,74.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-T67,Atlanta Max Temperature,KATL,2026-11-20,less,,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-B73.5,Atlanta Max Temperature,KATL,2026-11-20,between,73.0,74.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-B71.5,Atlanta Max Temperature,KATL,2026-11-20,between,71.0,72.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-B69.5,Atlanta Max Temperature,KATL,2026-11-20,between,69.0,70.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTATL,KXHIGHTATL-26NOV20-B67.5,Atlanta Max Temperature,KATL,2026-11-20,between,67.0,68.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-T49,Low Temperature Phoenix,KPHX,2026-11-21,greater,49.0,,0.74,0.83,0.17,0.26,min,47.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-T42,Low Temperature Phoenix,KPHX,2026-11-21,less,,42.0,0.0,0.02,0.98,1.0,min,47.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-B48.5,Low Temperature Phoenix,KPHX,2026-11-21,between,48.0,49.0,0.11,0.14,0.86,0.89,min,47.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-B46.5,Low Temperature Phoenix,KPHX,2026-11-21,between,46.0,47.0,0.02,0.04,0.96,0.98,min,47.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-B44.5,Low Temperature Phoenix,KPHX,2026-11-21,between,44.0,45.0,0.02,0.04,0.96,0.98,min,47.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV21-B42.5,Low Temperature Phoenix,KPHX,2026-11-21,between,42.0,43.0,0.01,0.02,0.98,0.99,min,47.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-T53,Low Temperature Phoenix,KPHX,2026-11-20,greater,53.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-T46,Low Temperature Phoenix,KPHX,2026-11-20,less,,46.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-B52.5,Low Temperature Phoenix,KPHX,2026-11-20,between,52.0,53.0,0.97,0.99,0.01,0.03,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-B50.5,Low Temperature Phoenix,KPHX,2026-11-20,between,50.0,51.0,0.0,0.03,0.97,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-B48.5,Low Temperature Phoenix,KPHX,2026-11-20,between,48.0,49.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHX,KXLOWTPHX-26NOV20-B46.5,Low Temperature Phoenix,KPHX,2026-11-20,between,46.0,47.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-T54,Low Temperature Oklahoma City,KOKC,2026-11-21,greater,54.0,,0.26,0.27,0.73,0.74,min,52.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-T47,Low Temperature Oklahoma City,KOKC,2026-11-21,less,,47.0,0.0,0.01,0.99,1.0,min,52.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-B53.5,Low Temperature Oklahoma City,KOKC,2026-11-21,between,53.0,54.0,0.38,0.44,0.56,0.62,min,52.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-B51.5,Low Temperature Oklahoma City,KOKC,2026-11-21,between,51.0,52.0,0.29,0.34,0.66,0.71,min,52.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-B49.5,Low Temperature Oklahoma City,KOKC,2026-11-21,between,49.0,50.0,0.03,0.04,0.96,0.97,min,52.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV21-B47.5,Low Temperature Oklahoma City,KOKC,2026-11-21,between,47.0,48.0,0.01,0.02,0.98,0.99,min,52.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-T50,Low Temperature Oklahoma City,KOKC,2026-11-20,greater,50.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-T43,Low Temperature Oklahoma City,KOKC,2026-11-20,less,,43.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-B49.5,Low Temperature Oklahoma City,KOKC,2026-11-20,between,49.0,50.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-B47.5,Low Temperature Oklahoma City,KOKC,2026-11-20,between,47.0,48.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-B45.5,Low Temperature Oklahoma City,KOKC,2026-11-20,between,45.0,46.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTOKC,KXLOWTOKC-26NOV20-B43.5,Low Temperature Oklahoma City,KOKC,2026-11-20,between,43.0,44.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-T71,Lowest temperature in Miami,KMIA,2026-11-21,greater,71.0,,0.41,0.43,0.57,0.59,min,71.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-T64,Lowest temperature in Miami,KMIA,2026-11-21,less,,64.0,0.0,0.01,0.99,1.0,min,71.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-B70.5,Lowest temperature in Miami,KMIA,2026-11-21,between,70.0,71.0,0.43,0.56,0.44,0.57,min,71.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-B68.5,Lowest temperature in Miami,KMIA,2026-11-21,between,68.0,69.0,0.03,0.11,0.89,0.97,min,71.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-B66.5,Lowest temperature in Miami,KMIA,2026-11-21,between,66.0,67.0,0.01,0.02,0.98,0.99,min,71.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV21-B64.5,Lowest temperature in Miami,KMIA,2026-11-21,between,64.0,65.0,0.0,0.01,0.99,1.0,min,71.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-T72,Lowest temperature in Miami,KMIA,2026-11-20,greater,72.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-T65,Lowest temperature in Miami,KMIA,2026-11-20,less,,65.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-B71.5,Lowest temperature in Miami,KMIA,2026-11-20,between,71.0,72.0,0.97,1.0,0.0,0.03,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-B69.5,Lowest temperature in Miami,KMIA,2026-11-20,between,69.0,70.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-B67.5,Lowest temperature in Miami,KMIA,2026-11-20,between,67.0,68.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTMIA,KXLOWTMIA-26NOV20-B65.5,Lowest temperature in Miami,KMIA,2026-11-20,between,65.0,66.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-T56,Lowest temperature in Austin,KAUS,2026-11-21,greater,56.0,,0.0,0.02,0.98,1.0,min,53.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-T49,Lowest temperature in Austin,KAUS,2026-11-21,less,,49.0,0.04,0.05,0.95,0.96,min,53.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-B55.5,Lowest temperature in Austin,KAUS,2026-11-21,between,55.0,56.0,0.03,0.07,0.93,0.97,min,53.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-B53.5,Lowest temperature in Austin,KAUS,2026-11-21,between,53.0,54.0,0.24,0.25,0.75,0.76,min,53.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-B51.5,Lowest temperature in Austin,KAUS,2026-11-21,between,51.0,52.0,0.43,0.47,0.53,0.57,min,53.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV21-B49.5,Lowest temperature in Austin,KAUS,2026-11-21,between,49.0,50.0,0.2,0.26,0.74,0.8,min,53.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-T53,Lowest temperature in Austin,KAUS,2026-11-20,greater,53.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-T46,Lowest temperature in Austin,KAUS,2026-11-20,less,,46.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-B52.5,Lowest temperature in Austin,KAUS,2026-11-20,between,52.0,53.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-B50.5,Lowest temperature in Austin,KAUS,2026-11-20,between,50.0,51.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-B48.5,Lowest temperature in Austin,KAUS,2026-11-20,between,48.0,49.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTAUS,KXLOWTAUS-26NOV20-B46.5,Lowest temperature in Austin,KAUS,2026-11-20,between,46.0,47.0,0.99,1.0,0.0,0.01,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-T75,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,greater,75.0,,0.0,0.01,0.99,1.0,max,70.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-T68,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,less,,68.0,0.36,0.37,0.63,0.64,max,70.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-B74.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,between,74.0,75.0,0.01,0.02,0.98,0.99,max,70.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-B72.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,between,72.0,73.0,0.02,0.03,0.97,0.98,max,70.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-B70.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,between,70.0,71.0,0.19,0.2,0.8,0.81,max,70.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV21-B68.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-21,between,68.0,69.0,0.4,0.43,0.57,0.6,max,70.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-T74,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,greater,74.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-T67,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,less,,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-B73.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,between,73.0,74.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-B71.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,between,71.0,72.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-B69.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,between,69.0,70.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTOKC,KXHIGHTOKC-26NOV20-B67.5,Oklahoma City Maximum High Temperature,KOKC,2026-11-20,between,67.0,68.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-T53,Seattle Maximum Temperature Daily,KSEA,2026-11-21,greater,53.0,,0.0,0.01,0.99,1.0,max,50.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-T46,Seattle Maximum Temperature Daily,KSEA,2026-11-21,less,,46.0,0.02,0.03,0.97,0.98,max,50.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-B52.5,Seattle Maximum Temperature Daily,KSEA,2026-11-21,between,52.0,53.0,0.02,0.03,0.97,0.98,max,50.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-B50.5,Seattle Maximum Temperature Daily,KSEA,2026-11-21,between,50.0,51.0,0.26,0.27,0.73,0.74,max,50.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-B48.5,Seattle Maximum Temperature Daily,KSEA,2026-11-21,between,48.0,49.0,0.41,0.45,0.55,0.59,max,50.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV21-B46.5,Seattle Maximum Temperature Daily,KSEA,2026-11-21,between,46.0,47.0,0.2,0.21,0.79,0.8,max,50.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-T53,Seattle Maximum Temperature Daily,KSEA,2026-11-20,greater,53.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-T46,Seattle Maximum Temperature Daily,KSEA,2026-11-20,less,,46.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-B52.5,Seattle Maximum Temperature Daily,KSEA,2026-11-20,between,52.0,53.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-B50.5,Seattle Maximum Temperature Daily,KSEA,2026-11-20,between,50.0,51.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-B48.5,Seattle Maximum Temperature Daily,KSEA,2026-11-20,between,48.0,49.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSEA,KXHIGHTSEA-26NOV20-B46.5,Seattle Maximum Temperature Daily,KSEA,2026-11-20,between,46.0,47.0,0.01,0.02,0.98,0.99,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-T70,Highest temperature in Philadelphia,KPHL,2026-11-21,greater,70.0,,0.0,0.01,0.99,1.0,max,66.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-T63,Highest temperature in Philadelphia,KPHL,2026-11-21,less,,63.0,0.0,0.01,0.99,1.0,max,66.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-B69.5,Highest temperature in Philadelphia,KPHL,2026-11-21,between,69.0,70.0,0.08,0.09,0.91,0.92,max,66.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-B67.5,Highest temperature in Philadelphia,KPHL,2026-11-21,between,67.0,68.0,0.56,0.57,0.43,0.44,max,66.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-B65.5,Highest temperature in Philadelphia,KPHL,2026-11-21,between,65.0,66.0,0.28,0.29,0.71,0.72,max,66.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV21-B63.5,Highest temperature in Philadelphia,KPHL,2026-11-21,between,63.0,64.0,0.06,0.07,0.93,0.94,max,66.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-T71,Highest temperature in Philadelphia,KPHL,2026-11-20,greater,71.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-T64,Highest temperature in Philadelphia,KPHL,2026-11-20,less,,64.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-B70.5,Highest temperature in Philadelphia,KPHL,2026-11-20,between,70.0,71.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-B68.5,Highest temperature in Philadelphia,KPHL,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-B66.5,Highest temperature in Philadelphia,KPHL,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHPHIL,KXHIGHPHIL-26NOV20-B64.5,Highest temperature in Philadelphia,KPHL,2026-11-20,between,64.0,65.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-T75,HIGHEST Temperature Louisville,KSDF,2026-11-21,greater,75.0,,0.0,0.03,0.97,1.0,max,70.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-T68,HIGHEST Temperature Louisville,KSDF,2026-11-21,less,,68.0,0.01,0.02,0.98,0.99,max,70.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-B74.5,HIGHEST Temperature Louisville,KSDF,2026-11-21,between,74.0,75.0,0.18,0.25,0.75,0.82,max,70.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-B72.5,HIGHEST Temperature Louisville,KSDF,2026-11-21,between,72.0,73.0,0.6,0.61,0.39,0.4,max,70.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-B70.5,HIGHEST Temperature Louisville,KSDF,2026-11-21,between,70.0,71.0,0.15,0.23,0.77,0.85,max,70.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV21-B68.5,HIGHEST Temperature Louisville,KSDF,2026-11-21,between,68.0,69.0,0.02,0.03,0.97,0.98,max,70.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-T73,HIGHEST Temperature Louisville,KSDF,2026-11-20,greater,73.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-T66,HIGHEST Temperature Louisville,KSDF,2026-11-20,less,,66.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-B72.5,HIGHEST Temperature Louisville,KSDF,2026-11-20,between,72.0,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-B70.5,HIGHEST Temperature Louisville,KSDF,2026-11-20,between,70.0,71.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-B68.5,HIGHEST Temperature Louisville,KSDF,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSDF,KXHIGHTSDF-26NOV20-B66.5,HIGHEST Temperature Louisville,KSDF,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-T67,Minneapolis Daily High Temperature,KMSP,2026-11-21,greater,67.0,,0.0,0.01,0.99,1.0,max,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-T60,Minneapolis Daily High Temperature,KMSP,2026-11-21,less,,60.0,0.01,0.02,0.98,0.99,max,58.0,0,1.91,real_measured,0.853,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-B66.5,Minneapolis Daily High Temperature,KMSP,2026-11-21,between,66.0,67.0,0.01,0.03,0.97,0.99,max,58.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-B64.5,Minneapolis Daily High Temperature,KMSP,2026-11-21,between,64.0,65.0,0.06,0.07,0.93,0.94,max,58.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-B62.5,Minneapolis Daily High Temperature,KMSP,2026-11-21,between,62.0,63.0,0.65,0.69,0.31,0.35,max,58.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV21-B60.5,Minneapolis Daily High Temperature,KMSP,2026-11-21,between,60.0,61.0,0.16,0.17,0.83,0.84,max,58.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-T69,Minneapolis Daily High Temperature,KMSP,2026-11-20,greater,69.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-T62,Minneapolis Daily High Temperature,KMSP,2026-11-20,less,,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-B68.5,Minneapolis Daily High Temperature,KMSP,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-B66.5,Minneapolis Daily High Temperature,KMSP,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-B64.5,Minneapolis Daily High Temperature,KMSP,2026-11-20,between,64.0,65.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTMIN,KXHIGHTMIN-26NOV20-B62.5,Minneapolis Daily High Temperature,KMSP,2026-11-20,between,62.0,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-T81,Highest temperature in Austin,KAUS,2026-11-21,greater,81.0,,0.0,0.01,0.99,1.0,max,75.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-T74,Highest temperature in Austin,KAUS,2026-11-21,less,,74.0,0.35,0.36,0.64,0.65,max,75.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-B80.5,Highest temperature in Austin,KAUS,2026-11-21,between,80.0,81.0,0.01,0.02,0.98,0.99,max,75.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-B78.5,Highest temperature in Austin,KAUS,2026-11-21,between,78.0,79.0,0.02,0.03,0.97,0.98,max,75.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-B76.5,Highest temperature in Austin,KAUS,2026-11-21,between,76.0,77.0,0.21,0.22,0.78,0.79,max,75.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV21-B74.5,Highest temperature in Austin,KAUS,2026-11-21,between,74.0,75.0,0.4,0.41,0.59,0.6,max,75.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-T81,Highest temperature in Austin,KAUS,2026-11-20,greater,81.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-T74,Highest temperature in Austin,KAUS,2026-11-20,less,,74.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-B80.5,Highest temperature in Austin,KAUS,2026-11-20,between,80.0,81.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-B78.5,Highest temperature in Austin,KAUS,2026-11-20,between,78.0,79.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-B76.5,Highest temperature in Austin,KAUS,2026-11-20,between,76.0,77.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHAUS,KXHIGHAUS-26NOV20-B74.5,Highest temperature in Austin,KAUS,2026-11-20,between,74.0,75.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-T42,Lowest temperature in Philadelphia,KPHL,2026-11-21,greater,42.0,,0.54,0.56,0.44,0.46,min,43.0,0,1.91,real_measured,0.7001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-T35,Lowest temperature in Philadelphia,KPHL,2026-11-21,less,,35.0,0.0,0.02,0.98,1.0,min,43.0,0,1.91,real_measured,0.0,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-B41.5,Lowest temperature in Philadelphia,KPHL,2026-11-21,between,41.0,42.0,0.39,0.44,0.56,0.61,min,43.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-B39.5,Lowest temperature in Philadelphia,KPHL,2026-11-21,between,39.0,40.0,0.02,0.03,0.97,0.98,min,43.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-B37.5,Lowest temperature in Philadelphia,KPHL,2026-11-21,between,37.0,38.0,0.01,0.02,0.98,0.99,min,43.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV21-B35.5,Lowest temperature in Philadelphia,KPHL,2026-11-21,between,35.0,36.0,0.0,0.02,0.98,1.0,min,43.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-T40,Lowest temperature in Philadelphia,KPHL,2026-11-20,greater,40.0,,0.99,1.0,0.0,0.01,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-T33,Lowest temperature in Philadelphia,KPHL,2026-11-20,less,,33.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-B39.5,Lowest temperature in Philadelphia,KPHL,2026-11-20,between,39.0,40.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-B37.5,Lowest temperature in Philadelphia,KPHL,2026-11-20,between,37.0,38.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-B35.5,Lowest temperature in Philadelphia,KPHL,2026-11-20,between,35.0,36.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTPHIL,KXLOWTPHIL-26NOV20-B33.5,Lowest temperature in Philadelphia,KPHL,2026-11-20,between,33.0,34.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-T70,Washington DC Daily Max Temp,KDCA,2026-11-21,greater,70.0,,0.0,0.01,0.99,1.0,max,66.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-T63,Washington DC Daily Max Temp,KDCA,2026-11-21,less,,63.0,0.01,0.02,0.98,0.99,max,66.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-B69.5,Washington DC Daily Max Temp,KDCA,2026-11-21,between,69.0,70.0,0.08,0.09,0.91,0.92,max,66.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-B67.5,Washington DC Daily Max Temp,KDCA,2026-11-21,between,67.0,68.0,0.38,0.39,0.61,0.62,max,66.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-B65.5,Washington DC Daily Max Temp,KDCA,2026-11-21,between,65.0,66.0,0.45,0.46,0.54,0.55,max,66.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV21-B63.5,Washington DC Daily Max Temp,KDCA,2026-11-21,between,63.0,64.0,0.07,0.08,0.92,0.93,max,66.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-T73,Washington DC Daily Max Temp,KDCA,2026-11-20,greater,73.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-T66,Washington DC Daily Max Temp,KDCA,2026-11-20,less,,66.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-B72.5,Washington DC Daily Max Temp,KDCA,2026-11-20,between,72.0,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-B70.5,Washington DC Daily Max Temp,KDCA,2026-11-20,between,70.0,71.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-B68.5,Washington DC Daily Max Temp,KDCA,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTDC,KXHIGHTDC-26NOV20-B66.5,Washington DC Daily Max Temp,KDCA,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-T35,Low Temperature Seattle,KSEA,2026-11-21,greater,35.0,,0.02,0.04,0.96,0.98,min,34.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-T28,Low Temperature Seattle,KSEA,2026-11-21,less,,28.0,0.0,0.02,0.98,1.0,min,34.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-B34.5,Low Temperature Seattle,KSEA,2026-11-21,between,34.0,35.0,0.33,0.4,0.6,0.67,min,34.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-B32.5,Low Temperature Seattle,KSEA,2026-11-21,between,32.0,33.0,0.37,0.45,0.55,0.63,min,34.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-B30.5,Low Temperature Seattle,KSEA,2026-11-21,between,30.0,31.0,0.08,0.17,0.83,0.92,min,34.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV21-B28.5,Low Temperature Seattle,KSEA,2026-11-21,between,28.0,29.0,0.01,0.03,0.97,0.99,min,34.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-T36,Low Temperature Seattle,KSEA,2026-11-20,greater,36.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-T29,Low Temperature Seattle,KSEA,2026-11-20,less,,29.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-B35.5,Low Temperature Seattle,KSEA,2026-11-20,between,35.0,36.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-B33.5,Low Temperature Seattle,KSEA,2026-11-20,between,33.0,34.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-B31.5,Low Temperature Seattle,KSEA,2026-11-20,between,31.0,32.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSEA,KXLOWTSEA-26NOV20-B29.5,Low Temperature Seattle,KSEA,2026-11-20,between,29.0,30.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-T73,Highest temperature in Chicago,KMDW,2026-11-21,greater,73.0,,0.0,0.01,0.99,1.0,max,69.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-T66,Highest temperature in Chicago,KMDW,2026-11-21,less,,66.0,0.01,0.02,0.98,0.99,max,69.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-B72.5,Highest temperature in Chicago,KMDW,2026-11-21,between,72.0,73.0,0.02,0.03,0.97,0.98,max,69.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-B70.5,Highest temperature in Chicago,KMDW,2026-11-21,between,70.0,71.0,0.48,0.49,0.51,0.52,max,69.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-B68.5,Highest temperature in Chicago,KMDW,2026-11-21,between,68.0,69.0,0.43,0.44,0.56,0.57,max,69.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV21-B66.5,Highest temperature in Chicago,KMDW,2026-11-21,between,66.0,67.0,0.06,0.07,0.93,0.94,max,69.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-T73,Highest temperature in Chicago,KMDW,2026-11-20,greater,73.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-T66,Highest temperature in Chicago,KMDW,2026-11-20,less,,66.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-B72.5,Highest temperature in Chicago,KMDW,2026-11-20,between,72.0,73.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-B70.5,Highest temperature in Chicago,KMDW,2026-11-20,between,70.0,71.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-B68.5,Highest temperature in Chicago,KMDW,2026-11-20,between,68.0,69.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHCHI,KXHIGHCHI-26NOV20-B66.5,Highest temperature in Chicago,KMDW,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-T68,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,greater,68.0,,0.01,0.02,0.98,0.99,max,64.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-T61,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,less,,61.0,0.01,0.02,0.98,0.99,max,64.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-B67.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,between,67.0,68.0,0.18,0.25,0.75,0.82,max,64.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-B65.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,between,65.0,66.0,0.48,0.56,0.44,0.52,max,64.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-B63.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,between,63.0,64.0,0.12,0.19,0.81,0.88,max,64.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV21-B61.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-21,between,61.0,62.0,0.02,0.03,0.97,0.98,max,64.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-T70,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,greater,70.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-T63,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,less,,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-B69.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,between,69.0,70.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-B67.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,between,67.0,68.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-B65.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,between,65.0,66.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTTTN,KXHIGHTTTN-26NOV20-B63.5,"Trenton, NJ Daily Max Temp",KTTN,2026-11-20,between,63.0,64.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-T55,Low Temperature Atlanta,KATL,2026-11-21,greater,55.0,,0.37,0.46,0.54,0.63,min,54.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-T48,Low Temperature Atlanta,KATL,2026-11-21,less,,48.0,0.01,0.02,0.98,0.99,min,54.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-B54.5,Low Temperature Atlanta,KATL,2026-11-21,between,54.0,55.0,0.45,0.5,0.5,0.55,min,54.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-B52.5,Low Temperature Atlanta,KATL,2026-11-21,between,52.0,53.0,0.05,0.12,0.88,0.95,min,54.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-B50.5,Low Temperature Atlanta,KATL,2026-11-21,between,50.0,51.0,0.01,0.02,0.98,0.99,min,54.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV21-B48.5,Low Temperature Atlanta,KATL,2026-11-21,between,48.0,49.0,0.01,0.02,0.98,0.99,min,54.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-T54,Low Temperature Atlanta,KATL,2026-11-20,greater,54.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-T47,Low Temperature Atlanta,KATL,2026-11-20,less,,47.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-B53.5,Low Temperature Atlanta,KATL,2026-11-20,between,53.0,54.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-B51.5,Low Temperature Atlanta,KATL,2026-11-20,between,51.0,52.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-B49.5,Low Temperature Atlanta,KATL,2026-11-20,between,49.0,50.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTATL,KXLOWTATL-26NOV20-B47.5,Low Temperature Atlanta,KATL,2026-11-20,between,47.0,48.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-T61,Las Vegas Max Daily Temperature,KLAS,2026-11-21,greater,61.0,,0.0,0.01,0.99,1.0,max,57.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-T54,Las Vegas Max Daily Temperature,KLAS,2026-11-21,less,,54.0,0.0,0.01,0.99,1.0,max,57.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-B60.5,Las Vegas Max Daily Temperature,KLAS,2026-11-21,between,60.0,61.0,0.03,0.04,0.96,0.97,max,57.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-B58.5,Las Vegas Max Daily Temperature,KLAS,2026-11-21,between,58.0,59.0,0.46,0.47,0.53,0.54,max,57.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-B56.5,Las Vegas Max Daily Temperature,KLAS,2026-11-21,between,56.0,57.0,0.53,0.54,0.46,0.47,max,57.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV21-B54.5,Las Vegas Max Daily Temperature,KLAS,2026-11-21,between,54.0,55.0,0.01,0.02,0.98,0.99,max,57.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-T63,Las Vegas Max Daily Temperature,KLAS,2026-11-20,greater,63.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-T56,Las Vegas Max Daily Temperature,KLAS,2026-11-20,less,,56.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-B62.5,Las Vegas Max Daily Temperature,KLAS,2026-11-20,between,62.0,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-B60.5,Las Vegas Max Daily Temperature,KLAS,2026-11-20,between,60.0,61.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-B58.5,Las Vegas Max Daily Temperature,KLAS,2026-11-20,between,58.0,59.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTLV,KXHIGHTLV-26NOV20-B56.5,Las Vegas Max Daily Temperature,KLAS,2026-11-20,between,56.0,57.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-T70,Highest temperature in Los Angeles,KLAX,2026-11-21,greater,70.0,,0.13,0.14,0.86,0.87,max,68.0,0,1.91,real_measured,0.147,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-T63,Highest temperature in Los Angeles,KLAX,2026-11-21,less,,63.0,0.0,0.01,0.99,1.0,max,68.0,0,1.91,real_measured,0.0044,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-B69.5,Highest temperature in Los Angeles,KLAX,2026-11-21,between,69.0,70.0,0.52,0.53,0.47,0.48,max,68.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-B67.5,Highest temperature in Los Angeles,KLAX,2026-11-21,between,67.0,68.0,0.32,0.33,0.67,0.68,max,68.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-B65.5,Highest temperature in Los Angeles,KLAX,2026-11-21,between,65.0,66.0,0.02,0.03,0.97,0.98,max,68.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV21-B63.5,Highest temperature in Los Angeles,KLAX,2026-11-21,between,63.0,64.0,0.0,0.01,0.99,1.0,max,68.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-T69,Highest temperature in Los Angeles,KLAX,2026-11-20,greater,69.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-T62,Highest temperature in Los Angeles,KLAX,2026-11-20,less,,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-B68.5,Highest temperature in Los Angeles,KLAX,2026-11-20,between,68.0,69.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-B66.5,Highest temperature in Los Angeles,KLAX,2026-11-20,between,66.0,67.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-B64.5,Highest temperature in Los Angeles,KLAX,2026-11-20,between,64.0,65.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHLAX,KXHIGHLAX-26NOV20-B62.5,Highest temperature in Los Angeles,KLAX,2026-11-20,between,62.0,63.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-T41,Lowest Temperature SDX,KSDF,2026-11-21,greater,41.0,,0.3,0.36,0.64,0.7,min,41.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-T34,Lowest Temperature SDX,KSDF,2026-11-21,less,,34.0,0.0,0.01,0.99,1.0,min,41.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-B40.5,Lowest Temperature SDX,KSDF,2026-11-21,between,40.0,41.0,0.36,0.53,0.47,0.64,min,41.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-B38.5,Lowest Temperature SDX,KSDF,2026-11-21,between,38.0,39.0,0.1,0.19,0.81,0.9,min,41.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-B36.5,Lowest Temperature SDX,KSDF,2026-11-21,between,36.0,37.0,0.02,0.04,0.96,0.98,min,41.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV21-B34.5,Lowest Temperature SDX,KSDF,2026-11-21,between,34.0,35.0,0.01,0.02,0.98,0.99,min,41.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-T41,Lowest Temperature SDX,KSDF,2026-11-20,greater,41.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-T34,Lowest Temperature SDX,KSDF,2026-11-20,less,,34.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-B40.5,Lowest Temperature SDX,KSDF,2026-11-20,between,40.0,41.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-B38.5,Lowest Temperature SDX,KSDF,2026-11-20,between,38.0,39.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-B36.5,Lowest Temperature SDX,KSDF,2026-11-20,between,36.0,37.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSDF,KXLOWTSDF-26NOV20-B34.5,Lowest Temperature SDX,KSDF,2026-11-20,between,34.0,35.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-T56,Lowest Temperature SATX,KSAT,2026-11-21,greater,56.0,,0.25,0.45,0.55,0.75,min,55.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-T49,Lowest Temperature SATX,KSAT,2026-11-21,less,,49.0,0.0,0.02,0.98,1.0,min,55.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-B55.5,Lowest Temperature SATX,KSAT,2026-11-21,between,55.0,56.0,0.31,0.41,0.59,0.69,min,55.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-B53.5,Lowest Temperature SATX,KSAT,2026-11-21,between,53.0,54.0,0.16,0.27,0.73,0.84,min,55.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-B51.5,Lowest Temperature SATX,KSAT,2026-11-21,between,51.0,52.0,0.03,0.07,0.93,0.97,min,55.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV21-B49.5,Lowest Temperature SATX,KSAT,2026-11-21,between,49.0,50.0,0.01,0.02,0.98,0.99,min,55.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-T54,Lowest Temperature SATX,KSAT,2026-11-20,greater,54.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-T47,Lowest Temperature SATX,KSAT,2026-11-20,less,,47.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-B53.5,Lowest Temperature SATX,KSAT,2026-11-20,between,53.0,54.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-B51.5,Lowest Temperature SATX,KSAT,2026-11-20,between,51.0,52.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-B49.5,Lowest Temperature SATX,KSAT,2026-11-20,between,49.0,50.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSATX,KXLOWTSATX-26NOV20-B47.5,Lowest Temperature SATX,KSAT,2026-11-20,between,47.0,48.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-T62,San Francisco High Temperature Daily,KSFO,2026-11-21,greater,62.0,,0.0,0.01,0.99,1.0,max,58.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-T55,San Francisco High Temperature Daily,KSFO,2026-11-21,less,,55.0,0.01,0.02,0.98,0.99,max,58.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-B61.5,San Francisco High Temperature Daily,KSFO,2026-11-21,between,61.0,62.0,0.01,0.02,0.98,0.99,max,58.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-B59.5,San Francisco High Temperature Daily,KSFO,2026-11-21,between,59.0,60.0,0.29,0.3,0.7,0.71,max,58.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-B57.5,San Francisco High Temperature Daily,KSFO,2026-11-21,between,57.0,58.0,0.61,0.63,0.37,0.39,max,58.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV21-B55.5,San Francisco High Temperature Daily,KSFO,2026-11-21,between,55.0,56.0,0.07,0.08,0.92,0.93,max,58.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-T62,San Francisco High Temperature Daily,KSFO,2026-11-20,greater,62.0,,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-T55,San Francisco High Temperature Daily,KSFO,2026-11-20,less,,55.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-B61.5,San Francisco High Temperature Daily,KSFO,2026-11-20,between,61.0,62.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-B59.5,San Francisco High Temperature Daily,KSFO,2026-11-20,between,59.0,60.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-B57.5,San Francisco High Temperature Daily,KSFO,2026-11-20,between,57.0,58.0,0.99,1.0,0.0,0.01,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXHIGHTSFO,KXHIGHTSFO-26NOV20-B55.5,San Francisco High Temperature Daily,KSFO,2026-11-20,between,55.0,56.0,0.0,0.01,0.99,1.0,max,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-T47,Lowest Temperature San Francisco,KSFO,2026-11-21,greater,47.0,,0.01,0.02,0.98,0.99,min,44.0,0,1.91,real_measured,0.0578,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-T40,Lowest Temperature San Francisco,KSFO,2026-11-21,less,,40.0,0.02,0.03,0.97,0.98,min,44.0,0,1.91,real_measured,0.0179,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-B46.5,Lowest Temperature San Francisco,KSFO,2026-11-21,between,46.0,47.0,0.05,0.11,0.89,0.95,min,44.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-B44.5,Lowest Temperature San Francisco,KSFO,2026-11-21,between,44.0,45.0,0.43,0.5,0.5,0.57,min,44.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-B42.5,Lowest Temperature San Francisco,KSFO,2026-11-21,between,42.0,43.0,0.31,0.37,0.63,0.69,min,44.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV21-B40.5,Lowest Temperature San Francisco,KSFO,2026-11-21,between,40.0,41.0,0.04,0.08,0.92,0.96,min,44.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-T50,Lowest Temperature San Francisco,KSFO,2026-11-20,greater,50.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-T43,Lowest Temperature San Francisco,KSFO,2026-11-20,less,,43.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-B49.5,Lowest Temperature San Francisco,KSFO,2026-11-20,between,49.0,50.0,0.44,0.64,0.36,0.56,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-B47.5,Lowest Temperature San Francisco,KSFO,2026-11-20,between,47.0,48.0,0.34,0.4,0.6,0.66,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-B45.5,Lowest Temperature San Francisco,KSFO,2026-11-20,between,45.0,46.0,0.02,0.07,0.93,0.98,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTSFO,KXLOWTSFO-26NOV20-B43.5,Lowest Temperature San Francisco,KSFO,2026-11-20,between,43.0,44.0,0.01,0.02,0.98,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-T44,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,greater,44.0,,0.46,0.54,0.46,0.54,min,44.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-T37,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,less,,37.0,0.01,0.02,0.98,0.99,min,44.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-B43.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,between,43.0,44.0,0.26,0.36,0.64,0.74,min,44.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-B41.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,between,41.0,42.0,0.05,0.15,0.85,0.95,min,44.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-B39.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,between,39.0,40.0,0.02,0.05,0.95,0.98,min,44.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV21-B37.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-21,between,37.0,38.0,0.02,0.03,0.97,0.98,min,44.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-T43,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,greater,43.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-T36,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,less,,36.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-B42.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,between,42.0,43.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-B40.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,between,40.0,41.0,0.98,1.0,0.0,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-B38.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,between,38.0,39.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTEWR,KXLOWTEWR-26NOV20-B36.5,"Newark, NJ (EWR) Daily Low Temp",KEWR,2026-11-20,between,36.0,37.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-T51,Lowest Temperature Chicago,KMDW,2026-11-21,greater,51.0,,0.19,0.2,0.8,0.81,min,51.0,0,1.91,real_measured,0.5,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-T44,Lowest Temperature Chicago,KMDW,2026-11-21,less,,44.0,0.0,0.01,0.99,1.0,min,51.0,0,1.91,real_measured,0.0001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-B50.5,Lowest Temperature Chicago,KMDW,2026-11-21,between,50.0,51.0,0.45,0.51,0.49,0.55,min,51.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-B48.5,Lowest Temperature Chicago,KMDW,2026-11-21,between,48.0,49.0,0.24,0.35,0.65,0.76,min,51.0,0,1.91,real_measured,0.0893,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-B46.5,Lowest Temperature Chicago,KMDW,2026-11-21,between,46.0,47.0,0.01,0.05,0.95,0.99,min,51.0,0,1.91,real_measured,0.0136,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV21-B44.5,Lowest Temperature Chicago,KMDW,2026-11-21,between,44.0,45.0,0.0,0.01,0.99,1.0,min,51.0,0,1.91,real_measured,0.0007,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-T47,Lowest Temperature Chicago,KMDW,2026-11-20,greater,47.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-T40,Lowest Temperature Chicago,KMDW,2026-11-20,less,,40.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-B46.5,Lowest Temperature Chicago,KMDW,2026-11-20,between,46.0,47.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-B44.5,Lowest Temperature Chicago,KMDW,2026-11-20,between,44.0,45.0,0.99,1.0,0.0,0.01,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-B42.5,Lowest Temperature Chicago,KMDW,2026-11-20,between,42.0,43.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTCHI,KXLOWTCHI-26NOV20-B40.5,Lowest Temperature Chicago,KMDW,2026-11-20,between,40.0,41.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-T63,NOLA Low Temperature,KMSY,2026-11-21,greater,63.0,,0.02,0.03,0.97,0.98,min,62.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-T56,NOLA Low Temperature,KMSY,2026-11-21,less,,56.0,0.0,0.02,0.98,1.0,min,62.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-B62.5,NOLA Low Temperature,KMSY,2026-11-21,between,62.0,63.0,0.28,0.38,0.62,0.72,min,62.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-B60.5,NOLA Low Temperature,KMSY,2026-11-21,between,60.0,61.0,0.38,0.41,0.59,0.62,min,62.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-B58.5,NOLA Low Temperature,KMSY,2026-11-21,between,58.0,59.0,0.12,0.17,0.83,0.88,min,62.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV21-B56.5,NOLA Low Temperature,KMSY,2026-11-21,between,56.0,57.0,0.03,0.05,0.95,0.97,min,62.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-T62,NOLA Low Temperature,KMSY,2026-11-20,greater,62.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-T55,NOLA Low Temperature,KMSY,2026-11-20,less,,55.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-B61.5,NOLA Low Temperature,KMSY,2026-11-20,between,61.0,62.0,0.98,0.99,0.01,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-B59.5,NOLA Low Temperature,KMSY,2026-11-20,between,59.0,60.0,0.01,0.02,0.98,0.99,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-B57.5,NOLA Low Temperature,KMSY,2026-11-20,between,57.0,58.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTNOLA,KXLOWTNOLA-26NOV20-B55.5,NOLA Low Temperature,KMSY,2026-11-20,between,55.0,56.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-T60,Low Temperature Houston,KHOU,2026-11-21,greater,60.0,,0.2,0.41,0.59,0.8,min,59.0,0,1.91,real_measured,0.2999,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-T53,Low Temperature Houston,KHOU,2026-11-21,less,,53.0,0.0,0.02,0.98,1.0,min,59.0,0,1.91,real_measured,0.0008,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-B59.5,Low Temperature Houston,KHOU,2026-11-21,between,59.0,60.0,0.46,0.52,0.48,0.54,min,59.0,0,1.91,real_measured,0.2001,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-B57.5,Low Temperature Houston,KHOU,2026-11-21,between,57.0,58.0,0.1,0.33,0.67,0.9,min,59.0,0,1.91,real_measured,0.1529,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-B55.5,Low Temperature Houston,KHOU,2026-11-21,between,55.0,56.0,0.01,0.05,0.95,0.99,min,59.0,0,1.91,real_measured,0.0398,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV21-B53.5,Low Temperature Houston,KHOU,2026-11-21,between,53.0,54.0,0.01,0.02,0.98,0.99,min,59.0,0,1.91,real_measured,0.0035,estimated,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-T57,Low Temperature Houston,KHOU,2026-11-20,greater,57.0,,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-T50,Low Temperature Houston,KHOU,2026-11-20,less,,50.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-B56.5,Low Temperature Houston,KHOU,2026-11-20,between,56.0,57.0,0.98,0.99,0.01,0.02,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-B54.5,Low Temperature Houston,KHOU,2026-11-20,between,54.0,55.0,0.0,0.02,0.98,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-B52.5,Low Temperature Houston,KHOU,2026-11-20,between,52.0,53.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
+KXLOWTHOU,KXLOWTHOU-26NOV20-B50.5,Low Temperature Houston,KHOU,2026-11-20,between,50.0,51.0,0.0,0.01,0.99,1.0,min,,-1,,,,target_date_passed,2026-11-21T03:58:37.966492+00:00
