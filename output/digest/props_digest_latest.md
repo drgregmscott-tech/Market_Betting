@@ -1,11 +1,11 @@
-# Props Pipeline Digest -- 2026-11-21T21:45:31Z
+# Props Pipeline Digest -- 2026-11-22T07:09:39Z
 
 ## Run summary
-- DraftKings ingestion: 691 rows across 8 events (OK)
+- DraftKings ingestion: 711 rows across 8 events (OK)
 - FanDuel ingestion: 0 rows (OK)
-- BetMGM ingestion (via Rotowire): 963 rows (OK)
-- Estimation: 1654 rows written (from 1654 ingested rows) -- status breakdown: {'estimated': 762, 'unsupported_market_first_scorer': 447, 'unsupported_stat_type': 319, 'no_player_match': 94, 'insufficient_history': 32}
-- CLV logging: 0 newly flagged, 0 newly closed, 77 still open (1692 total ever logged)
+- BetMGM ingestion (via Rotowire): 1014 rows (OK)
+- Estimation: 1725 rows written (from 1725 ingested rows) -- status breakdown: {'estimated': 783, 'unsupported_market_first_scorer': 456, 'unsupported_stat_type': 335, 'no_player_match': 112, 'insufficient_history': 39}
+- CLV logging: 1 newly flagged, 0 newly closed, 78 still open (1693 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this table is what to scan to pick a flag worth sizing. `implied_prob_includes_field_vig` matters here more than for the other tracks: a row still reporting True carries a real, separate uncertainty (Session 6.4's `PROPS_FIELD_VIG_UNRESOLVED_MULTIPLIER` dampener) that a bigger raw edge number does not describe.
@@ -36,9 +36,10 @@ Sizing is a manual step (`sizing_engine.py props size`, Session 6.4) -- this tab
 | draftkings|390226233|0QA390226233#2369858152_13L88808Q1433051443Q20 | draftkings | Jeremy Ruckert | Anytime TD Scorer | over | 0.1813 | 0.0435 | 0.1378 | False | 2026-11-20T07:34:12Z |
 | draftkings|389757758|0QA389757758#2367965630_13L88808Q11627968604Q20 | draftkings | Darius Cooper | Anytime TD Scorer | over | 0.2307 | 0.0952 | 0.1354 | False | 2026-11-18T17:25:01Z |
 | draftkings|389635554|0QA389635554#2367321456_13L88808Q1480222870Q20 | draftkings | Jameson Williams | Anytime TD Scorer | over | 0.4389 | 0.3077 | 0.1312 | False | 2026-11-16T18:44:30Z |
+| draftkings|389757758|0QA389757758#2374195385_13L88808Q197731504Q20 | draftkings | Will Shipley | Anytime TD Scorer | over | 0.2404 | 0.1111 | 0.1293 | False | 2026-11-22T07:09:56Z |
 | draftkings|390474625|0QA390474625#2371008754_13L88808Q1-162258478Q20 | draftkings | Pat Freiermuth | 2+ TDs | over | 0.1605 | 0.0323 | 0.1282 | False | 2026-11-18T17:25:01Z |
-| draftkings|389627988|0QA389627988#2367276104_13L88808Q11235745545Q20 | draftkings | Keleki Latu | Anytime TD Scorer | over | 0.171 | 0.0435 | 0.1275 | False | 2026-11-17T13:42:12Z |
 | betmgm|anytd|18906 | betmgm | Keleki Latu | anytd | over | 0.171 | 0.0435 | 0.1275 | False | 2026-11-17T13:42:12Z |
+| draftkings|389627988|0QA389627988#2367276104_13L88808Q11235745545Q20 | draftkings | Keleki Latu | Anytime TD Scorer | over | 0.171 | 0.0435 | 0.1275 | False | 2026-11-17T13:42:12Z |
 | draftkings|389635554|0QA389635554#2367321468_13L88808Q1621783265Q20 | draftkings | Emeka Egbuka | Anytime TD Scorer | over | 0.3555 | 0.2439 | 0.1116 | False | 2026-11-18T07:45:59Z |
 | draftkings|389625756|0QA389625756#2367262289_13L88808Q1873985604Q20 | draftkings | Juwan Johnson | Anytime TD Scorer | over | 0.2934 | 0.1818 | 0.1115 | False | 2026-11-17T23:36:43Z |
 | draftkings|390277636|0QA390277636#2370133595_13L88808Q11659488704Q20 | draftkings | Audric Estime | 2+ TDs | over | 0.1267 | 0.0217 | 0.105 | False | 2026-11-18T07:45:59Z |
