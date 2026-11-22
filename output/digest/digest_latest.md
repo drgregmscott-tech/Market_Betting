@@ -1,9 +1,9 @@
-# Pipeline Digest -- 2026-11-22T06:33:12Z
+# Pipeline Digest -- 2026-11-22T16:13:03Z
 
 ## Run summary
-- Ingestion: 32277 rows (PrizePicks OK, Underdog OK)
-- Estimation: 32277 rows estimated (from 32277 ingested props)
-- CLV logging: 6 newly flagged, 0 newly closed, 80 still open (112344 total ever logged)
+- Ingestion: 33825 rows (PrizePicks OK, Underdog OK)
+- Estimation: 33825 rows estimated (from 33825 ingested props)
+- CLV logging: 2 newly flagged, 0 newly closed, 81 still open (112346 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
@@ -12,9 +12,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 |---|---|---|---|---|---|---|---|
 | underdog|00b55c3f-8b0c-4d3b-b154-5539e4b0cb6a | underdog | Josh Allen | Pass Yards | under | 0.4 | 2026-11-16T06:19:05Z | 2026-11-22T18:00:00Z |
 | prizepicks|17061845 | prizepicks | Caleb Williams | Pass Yards | under | 0.35094246505677495 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
+| prizepicks|17247808 | prizepicks | Charlie Smyth | Fantasy Score | under | 0.35094246505677495 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17209810 | prizepicks | Justin Herbert | Pass+Rush+Rec TDs | under | 0.35094246505677495 | 2026-11-20T07:05:43Z | 2026-11-22T16:05:00.000-05:00 |
 | prizepicks|17061851 | prizepicks | Fernando Mendoza | Pass Yards | under | 0.35094246505677495 | 2026-11-17T13:14:06Z | 2026-11-22T16:25:00.000-05:00 |
-| prizepicks|17247808 | prizepicks | Charlie Smyth | Fantasy Score | under | 0.35094246505677495 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17061840 | prizepicks | Aaron Rodgers | Pass Yards | under | 0.3252779099272486 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17061852 | prizepicks | Bo Nix | Pass Yards | under | 0.3207875090752025 | 2026-11-17T13:14:06Z | 2026-11-22T16:25:00.000-05:00 |
 | prizepicks|17061849 | prizepicks | Jared Goff | Pass Yards | under | 0.2998952886937002 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
@@ -29,9 +29,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17108500 | prizepicks | Josh Allen | Pass+Rush+Rec TDs | under | 0.15592492640886924 | 2026-11-18T07:21:08Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172918 | prizepicks | Jonah Coleman | Rec Targets | under | 0.14978688180069022 | 2026-11-19T12:57:27Z | 2026-11-22T16:25:00.000-05:00 |
 | prizepicks|17211171 | prizepicks | Matthew Stafford | Pass Yards | under | 0.14419129979406875 | 2026-11-20T07:05:43Z | 2026-11-25T20:00:00.000-05:00 |
+| prizepicks|17316379 | prizepicks | Tre' Harris | Rec Targets | under | 0.1398519146960211 | 2026-11-22T16:14:42Z | 2026-11-22T16:05:00.000-05:00 |
 | prizepicks|17248811 | prizepicks | Elic Ayomanor | Rec Targets | under | 0.12915827014313408 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17279285 | prizepicks | Ollie Gordon II | Rec Targets | under | 0.1196228330640291 | 2026-11-22T06:35:39Z | 2026-11-22T13:00:00.000-05:00 |
-| prizepicks|17173329 | prizepicks | Carnell Tate | Rec Targets | under | 0.11936405589873289 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17248821 | prizepicks | Breece Hall | Rec Targets | under | 0.11553094976662859 | 2026-11-21T01:31:21Z | 2026-11-22T16:05:00.000-05:00 |
 | underdog|1c3ab1ad-e32d-483c-ba65-a163b75164ae | underdog | Javonte Williams | Rush Yards | under | 0.11519863917518858 | 2026-11-16T06:19:05Z | 2026-11-22T18:00:00Z |
 | prizepicks|17172934 | prizepicks | Rashee Rice | Rec Targets | under | 0.11021925715465086 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
@@ -45,6 +45,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17248814 | prizepicks | Chimere Dike | Rec Targets | under | 0.09177504146213011 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172879 | prizepicks | Elijah Higgins | Rec Targets | under | 0.09033332967696128 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17279286 | prizepicks | T.J. Hockenson | Rec Targets | under | 0.08973245004510766 | 2026-11-22T06:35:39Z | 2026-11-22T20:20:00.000-05:00 |
+| prizepicks|17108253 | prizepicks | Malik Washington | Recs | under | 0.08960270731713293 | 2026-11-18T07:21:08Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17208894 | prizepicks | Chris Godwin Jr. | Rec Targets | under | 0.08728266970728604 | 2026-11-20T07:05:43Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17119127 | prizepicks | Jacoby Brissett | Pass Attempts | under | 0.08559829317755474 | 2026-11-20T07:05:43Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17248828 | prizepicks | Pat Bryant | Rec Targets | under | 0.08472459040450653 | 2026-11-21T01:31:21Z | 2026-11-22T16:25:00.000-05:00 |
@@ -59,7 +60,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17062820 | prizepicks | Trey McBride | Rec Yards | under | 0.06498754344887514 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17208893 | prizepicks | Cade Otton | Rec Targets | under | 0.06396227145584843 | 2026-11-20T07:05:43Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172930 | prizepicks | Parker Washington | Rec Targets | under | 0.0633590315023902 | 2026-11-19T12:57:27Z | 2026-11-22T16:25:00.000-05:00 |
-| prizepicks|17248593 | prizepicks | Carnell Tate | Recs | under | 0.06293821087167073 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17061832 | prizepicks | Jared Goff | Rush Yards | over | 0.060379424163094386 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172886 | prizepicks | Rashod Bateman | Rec Targets | under | 0.05903617850266274 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17061958 | prizepicks | Javonte Williams | Rush Yards | under | 0.05867691672271225 | 2026-11-17T13:14:06Z | 2026-11-22T13:00:00.000-05:00 |
@@ -67,6 +67,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17164365 | prizepicks | Derrick Henry | Rush TDs | over | 0.055743913320280725 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17172916 | prizepicks | Evan Engram | Rec Targets | under | 0.055149375824596114 | 2026-11-19T12:57:27Z | 2026-11-22T16:25:00.000-05:00 |
 | prizepicks|17172882 | prizepicks | Trey McBride | Rec Targets | under | 0.05110290304981535 | 2026-11-19T12:57:27Z | 2026-11-22T13:00:00.000-05:00 |
+| prizepicks|17072089 | prizepicks | Tony Pollard | Recs | under | 0.049936141644510434 | 2026-11-22T16:14:42Z | 2026-11-22T13:00:00.000-05:00 |
 | prizepicks|17248818 | prizepicks | Garrett Wilson | Rec Targets | under | 0.0483168914265828 | 2026-11-21T01:31:21Z | 2026-11-22T16:05:00.000-05:00 |
 | prizepicks|17062838 | prizepicks | Ja'Marr Chase | Rec Yards | under | 0.04762708868780563 | 2026-11-17T13:14:06Z | 2026-11-23T20:15:00.000-05:00 |
 | prizepicks|17248601 | prizepicks | Emeka Egbuka | Recs | under | 0.04762545486751779 | 2026-11-21T01:31:21Z | 2026-11-22T13:00:00.000-05:00 |
