@@ -1,0 +1,25 @@
+platform,source_event_id,source_market_id,source_selection_id,player_name,team,sport,stat_type,prop_category,line,over_american_odds,under_american_odds,game_id,game_start_time,status,pulled_at
+betmgm,2978803,anytd,15183,Ja'Marr Chase,CIN,NFL,anytd,player_touchdown,,210,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,16934,Chase Brown,CIN,NFL,anytd,player_touchdown,,230,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,15802,Rachaad White,WAS,NFL,anytd,player_touchdown,,360,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,18811,Jacory Croskey-Merritt,WAS,NFL,anytd,player_touchdown,,350,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,10133,Stefon Diggs,WAS,NFL,anytd,player_touchdown,,270,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,17692,Jayden Daniels,WAS,NFL,anytd,player_touchdown,,270,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,12401,Austin Ekeler,WAS,NFL,anytd,player_touchdown,,650,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,16042,Chig Okonkwo,WAS,NFL,anytd,player_touchdown,,340,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,19237,Antonio Williams,WAS,NFL,anytd,player_touchdown,,425,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,11698,Samaje Perine,CIN,NFL,anytd,player_touchdown,,390,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,12764,Mike Gesicki,CIN,NFL,anytd,player_touchdown,,500,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,15896,Treylon Burks,WAS,NFL,anytd,player_touchdown,,500,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,19247,Dohnte Meyers,CIN,NFL,anytd,player_touchdown,,850,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,14442,Joe Burrow,CIN,NFL,anytd,player_touchdown,,1050,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,17833,Ben Sinnott,WAS,NFL,anytd,player_touchdown,,1600,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,13809,Drew Sample,CIN,NFL,anytd,player_touchdown,,1650,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,14430,Van Jefferson,WAS,NFL,anytd,player_touchdown,,1400,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,19258,Jack Endries,CIN,NFL,anytd,player_touchdown,,1200,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,15289,John Bates,WAS,NFL,anytd,player_touchdown,,2500,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,17820,Luke McCaffrey,WAS,NFL,anytd,player_touchdown,,2500,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,19447,Colbie Young,CIN,NFL,anytd,player_touchdown,,1500,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,16834,Mitchell Tinsley,CIN,NFL,anytd,player_touchdown,,2800,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,18160,Colson Yankoff,WAS,NFL,anytd,player_touchdown,,3300,,2978803,,,2026-11-24T02:59:55.413247+00:00
+betmgm,2978803,anytd,18519,Tahj Brooks,CIN,NFL,anytd,player_touchdown,,3500,,2978803,,,2026-11-24T02:59:55.413247+00:00
