@@ -1,19 +1,18 @@
-# Pipeline Digest -- 2026-11-25T00:35:37Z
+# Pipeline Digest -- 2026-11-25T14:11:29Z
 
 ## Run summary
-- Ingestion: 40427 rows (PrizePicks OK, Underdog OK)
-- Estimation: 40427 rows estimated (from 40427 ingested props)
-- CLV logging: 10 newly flagged, 0 newly closed, 70 still open (112425 total ever logged)
+- Ingestion: 63460 rows (PrizePicks OK, Underdog OK)
+- Estimation: 63460 rows estimated (from 63460 ingested props)
+- CLV logging: 3 newly flagged, 0 newly closed, 71 still open (112428 total ever logged)
 
 ## Currently open flags
 Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to scan to pick a pair worth sizing.
 
 | flag_id | platform | player_name | stat_type | flagged_side | first_flagged_edge | first_flagged_at | game_start_time |
 |---|---|---|---|---|---|---|---|
-| prizepicks|17376736 | prizepicks | Joe Milton III | Pass TDs | under | 0.35094246505677495 | 2026-11-24T14:47:41Z | 2026-11-26T16:30:00.000-05:00 |
-| prizepicks|17371820 | prizepicks | Anthony Richardson Sr. | Pass Yards | under | 0.35094246505677495 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
-| prizepicks|17371806 | prizepicks | Anthony Richardson Sr. | Rush Yards | under | 0.35094246505677495 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
 | prizepicks|17446306 | prizepicks | Veronika Erjavec | Break Points Won | under | 0.35094246505677495 | 2026-11-25T00:43:43Z | 2026-11-25T13:00:00.000-05:00 |
+| prizepicks|17371820 | prizepicks | Anthony Richardson Sr. | Pass Yards | under | 0.35094246505677495 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
+| prizepicks|17376736 | prizepicks | Joe Milton III | Pass TDs | under | 0.35094246505677495 | 2026-11-24T14:47:41Z | 2026-11-26T16:30:00.000-05:00 |
 | prizepicks|17433884 | prizepicks | Baker Mayfield | Pass+Rush+Rec TDs | under | 0.33619322591662215 | 2026-11-25T00:43:43Z | 2026-11-30T20:15:00.000-05:00 |
 | prizepicks|17371817 | prizepicks | Michael Penix Jr. | Pass Yards | under | 0.3322469500724762 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
 | prizepicks|17371821 | prizepicks | Cam Ward | Pass Yards | under | 0.29940984744104104 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
@@ -39,7 +38,6 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17372145 | prizepicks | Nico Collins | Rec Yards | under | 0.12214502875029642 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
 | prizepicks|17368911 | prizepicks | Rashee Rice | Rec Targets | under | 0.11367790298741587 | 2026-11-24T14:47:41Z | 2026-11-26T20:20:00.000-05:00 |
 | prizepicks|17374492 | prizepicks | Hunter Luepke | Rush+Rec Yds | over | 0.11349189597497333 | 2026-11-24T14:47:41Z | 2026-11-26T16:30:00.000-05:00 |
-| prizepicks|17435600 | prizepicks | Tristan Schoolkate | Break Points Won | under | 0.10423747051885313 | 2026-11-25T00:43:43Z | 2026-11-24T19:30:00.000-05:00 |
 | prizepicks|17424869 | prizepicks | Caleb Williams | Fantasy Score | under | 0.09915000911388916 | 2026-11-25T00:43:43Z | 2026-11-26T13:00:00.000-05:00 |
 | prizepicks|17372747 | prizepicks | Amon-Ra St. Brown | Recs | under | 0.09858384545439602 | 2026-11-24T14:47:41Z | 2026-11-26T13:00:00.000-05:00 |
 | prizepicks|17211188 | prizepicks | Tucker Kraft | Rec Yards | under | 0.09637535679363307 | 2026-11-20T07:05:43Z | 2026-11-25T20:00:00.000-05:00 |
@@ -61,6 +59,7 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17372156 | prizepicks | KC Concepcion Jr. | Rec Yards | under | 0.06650304459863476 | 2026-11-24T14:47:41Z | 2026-11-29T20:20:00.000-05:00 |
 | prizepicks|17435193 | prizepicks | Jaylen Waddle | Recs | under | 0.06530391369667332 | 2026-11-25T00:43:43Z | 2026-11-27T15:00:00.000-05:00 |
 | prizepicks|17368916 | prizepicks | Tutu Atwell | Rec Targets | under | 0.06401471703420925 | 2026-11-24T14:47:41Z | 2026-11-25T20:00:00.000-05:00 |
+| prizepicks|17334936 | prizepicks | Matthew Golden | Recs | under | 0.062489100210955995 | 2026-11-25T14:15:10Z | 2026-11-25T20:00:00.000-05:00 |
 | prizepicks|17372073 | prizepicks | Omarion Hampton | Rush Yards | under | 0.05826369784344709 | 2026-11-24T14:47:41Z | 2026-11-29T16:05:00.000-05:00 |
 | prizepicks|17372746 | prizepicks | Luther Burden III | Recs | under | 0.05479051799806922 | 2026-11-24T14:47:41Z | 2026-11-26T13:00:00.000-05:00 |
 | prizepicks|17372152 | prizepicks | Trey McBride | Rec Yards | under | 0.05443598118688209 | 2026-11-24T14:47:41Z | 2026-11-29T16:25:00.000-05:00 |
@@ -73,7 +72,9 @@ Sizing is a manual step (sizing_engine.py, Session 2.6) -- this table is what to
 | prizepicks|17373290 | prizepicks | Jahmyr Gibbs | Rec Targets | under | 0.04472872162225283 | 2026-11-24T14:47:41Z | 2026-11-26T13:00:00.000-05:00 |
 | prizepicks|17372147 | prizepicks | Chris Olave | Rec Yards | under | 0.04392985951025752 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
 | prizepicks|17368921 | prizepicks | Tyler Higbee | Rec Targets | under | 0.04034320992524143 | 2026-11-24T14:47:41Z | 2026-11-25T20:00:00.000-05:00 |
+| prizepicks|17372751 | prizepicks | DJ Moore | Recs | under | 0.040099541406974915 | 2026-11-25T14:15:10Z | 2026-11-26T20:20:00.000-05:00 |
 | prizepicks|17375680 | prizepicks | DJ Moore | Rush Yards | over | 0.040094841349221144 | 2026-11-24T14:47:41Z | 2026-11-26T20:20:00.000-05:00 |
+| prizepicks|17417668 | prizepicks | John Mateer | Pass Attempts | under | 0.0388929627739093 | 2026-11-25T14:15:10Z | 2026-11-28T16:15:00.000-05:00 |
 | prizepicks|17373291 | prizepicks | Jameson Williams | Rec Targets | under | 0.03888526726404218 | 2026-11-24T14:47:41Z | 2026-11-26T13:00:00.000-05:00 |
 | prizepicks|17372137 | prizepicks | Malik Nabers | Rec Yards | under | 0.037999440713761046 | 2026-11-24T14:47:41Z | 2026-11-29T13:00:00.000-05:00 |
 | prizepicks|17372748 | prizepicks | Sam LaPorta | Recs | under | 0.036857342929897396 | 2026-11-24T14:47:41Z | 2026-11-26T13:00:00.000-05:00 |
